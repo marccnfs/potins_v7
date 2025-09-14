@@ -63,27 +63,6 @@ class CatalogController extends AbstractController
         }
 
         // pagination
-        $qbCount = clone $qb;
-        $qbCount
-            ->resetDQLPart('orderBy')   // <-- IMPORTANT
-            ->resetDQLPart('groupBy')   // au cas où
-            ->resetDQLPart('having');   // au cas où
-
-
-
-        //$qbCount->select('COUNT(e.id)');
-        //$total = (int) $qbCount->getQuery()->getSingleScalarResult();
-
-        /*$games = $qb
-            ->setFirstResult(($page - 1) * $perPage)
-            ->setMaxResults($perPage)
-            ->getQuery()->getResult();
-
-        $pages = (int) max(1, ceil($total / $perPage));
-*/
-        $perPage = 9;
-        $page    = max(1, (int) $req->query->get('page', 1));
-
         $qb->setFirstResult(($page - 1) * $perPage)
             ->setMaxResults($perPage);
 
