@@ -10,7 +10,8 @@
 /vendor/
 /migrations/
 /old_migration/
-/public/.*./
+/public/
+/templates/svg/
 ###< symfony/framework-bundle ###
 
 ###> symfony/webpack-encore-bundle ###
