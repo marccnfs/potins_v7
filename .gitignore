@@ -10,7 +10,10 @@
 /vendor/
 /migrations/
 /old_migration/
-/public/
+/public/*
+!/public/index.php
+!/public/.htaccess
+!/public/robots.txt
 /templates/svg/
 ###< symfony/framework-bundle ###
 
