@@ -1,0 +1,118 @@
+{# templates/escape/garden.html.twig #}
+{% block body %}
+<div class="_wb">
+    <div class="container_bo_member">
+        <div class="bo_content">
+            {% set total = 6 %}
+            {% set done = 0 %}
+            {% set steps = {
+                1: 'Cryptex numérique',
+                2: 'QR code géolocalisé',
+                3: 'Puzzle numérique',
+                4: 'Formulaire logique',
+                5: 'Vidéo interactive',
+                6: 'Code HTML minimal'
+            } %}
+
+            {# calc progression #}
+            {% for i in 1..total %}
+                {% set p = eg.getPuzzleByStep(i) %}
+                {% if p and p.ready %}{% set done = done + 1 %}{% endif %}
+            {% endfor %}
+            {% set pct = (done / total * 100) | round(0, 'floor') %}
+            <div class="play-layout">
+                {# --- Colonne INFO --- #}
+                <aside class="play-aside">
+                    <div class="card">
+                        <h3>🏆 Meilleurs scores</h3>
+                        <ol class="lb">
+                            {% for row in topSessions %}
+                                <li>
+                                    <span class="nick">{{ row.participant.nickname ?? 'Joueur ' ~ row.participant.id }}</span>
+                                    <span class="pts">{{ row.score }} pts</span>
+                                    <span class="d">{{ (row.durationMs/1000)|round }} s</span>
+                                </li>
+                            {% else %}
+                                <li class="muted">Aucun score pour l’instant.</li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </aside>
+                <div class="entry-layout">
+
+                <header class="entry-hero">
+                    <div class="hero-body">
+                        <h1 class="hero-title">{{ eg.title }}</h1>
+                        {% if eg.universe %}
+                            <p class="hero-sub">{{ eg.universe|join(' ') }}</p> {# ou eg.universe|nl2br selon ton format #}
+                        {% else %}
+                            <p class="hero-sub">Prêt·e pour l’aventure ? Résous 6 épreuves pour dévoiler le secret…</p>
+                        {% endif %}
+                        <div class="hero-actions">
+                            <a class="btn btn-primary" href="{{ path('play_step', { slug: eg.shareSlug, step: 1 }) }}">Commencer →</a>
+                            {% if done > 0 and done < total %}
+                                <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: done + 1 }) }}">Reprendre à l’étape {{ done + 1 }}</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="hero-progress">
+                        <div class="bar"><span class="fill" style="width: {{ pct }}%"></span></div>
+                        <div class="bar-caption">{{ done }}/{{ total }} épreuves complétées</div>
+                    </div>
+                </header>
+
+                <main class="entry-main">
+                    <section class="card">
+                        <h2>Les épreuves</h2>
+                        <ol class="steps-list">
+                            {% for i in 1..total %}
+                                {% set p = eg.getPuzzleByStep(i) %}
+                                {% set ready = p and p.ready %}
+                                <li class="step-item {{ ready ? 'is-ready' : 'is-locked' }}">
+                                    <div class="step-head">
+                                        <div class="step-index">{{ i }}</div>
+                                        <div class="step-title">{{ steps[i] }}</div>
+                                        <div class="step-status">
+                                            {% if ready %}
+                                                <span class="badge badge-success">Prête</span>
+                                            {% else %}
+                                                <span class="badge">Bientôt…</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="step-actions">
+                                        {% if ready %}
+                                            <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: i }) }}">Jouer l’étape {{ i }}</a>
+                                        {% else %}
+                                            <button class="btn" disabled>Indisponible</button>
+                                        {% endif %}
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    </section>
+
+                    <section class="card ambience">
+                        <h2>Briefing</h2>
+                        <p class="muted">Lis attentivement : chaque épreuve te donnera un indice pour la suivante. Tu peux revenir à cette page à tout moment.</p>
+                        <details class="tip">
+                            <summary>Conseils pour réussir</summary>
+                            <ul>
+                                <li>Observe tout : lettres, chiffres, couleurs, sons.</li>
+                                <li>Parle avec ton équipe et partage vos idées.</li>
+                                <li>Si tu bloques, fais une pause de 30 secondes, puis réessaie.</li>
+                            </ul>
+                        </details>
+                    </section>
+                </main>
+
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% use "js/js_escape.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

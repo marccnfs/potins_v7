@@ -1,0 +1,59 @@
+<header role="banner" class="HO header-app user_menu2" id="ptn_menu">
+    <div class="pos_menu2">
+
+        <div class="block-space_potins"> </div>
+
+        <div class="bar_potins">
+            <ul class="af-menu-content">
+                <li class="level-1">
+                    <a href="{{ path('potins_index') }}" class="link-bar {{ vartwig.linkbar[0]}}">Accueil</a>
+                </li>
+
+                <li class="level-abs">
+                    <div class="link-bar{{ vartwig.linkbar[1]}}">Les potins<i class="fa fa-chevron-down firstEt"></i></div>
+                    <ul class="_hov">
+                        <li class="level-1more">
+                            <a href="{{ path('events_all') }}" class="souslink-bar">Les prochains potins</a>
+                        </li>
+                        <li class="level-1more">
+                            <a href="{{ path('board_all') }}" class="souslink-bar">les derniers potins</a>
+                        </li>
+                    </ul>
+                </li>
+                {#
+                <li class="level-1">
+                    <a href="{{ path('events_all') }}" class="link-bar {{ vartwig.linkbar[1]}}">Les prochains potins</a>
+                </li>
+                <li class="level-1">
+                    <a href="{{ path('board_all') }}" class="link-bar {{ vartwig.linkbar[2]}}">les derniers potins</a>
+                </li>
+                #}
+                <li class="level-1">
+                    <a href="{{ path('ressources') }}" class="link-bar {{ vartwig.linkbar[3]}}">Ressources</a>
+                </li>
+                <li class="level-1">
+                    <a href="{{ path('cnfs') }}" class="link-bar {{ vartwig.linkbar[4]}}">cnfs</a>
+                </li>
+                <li class="level-1">
+                    <a href="{{ path('noticezer') }}" class="link-bar {{ vartwig.linkbar[4]}}">info local</a>
+                </li>
+
+            </ul>
+        </div>
+
+
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            {{include('desk/pop/pop_menu_accueil.html.twig') }}
+       {% else %}
+        <div class="space_connect">
+               <a href="{{ path('new_identify') }}" class="btn-connect">inscrivez-vous</a>
+        </div>
+           {% endif %}
+
+
+    </div>
+</header>
+{{ include('elements/logo_potins_small_left_and_vague_orange.html.twig') }}
+{#
+{{ include('elements/vague_bottom_right.html.twig') }}
+#}

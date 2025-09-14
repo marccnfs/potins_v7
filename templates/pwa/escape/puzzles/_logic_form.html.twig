@@ -1,0 +1,27 @@
+{# pwa/escape/puzzles/_logic_form.html.twig #}
+{% set cfgsafe   = cfg is defined and cfg ? cfg : {} %}
+{% set questions = (cfgsafe.questions is defined and cfgsafe.questions is iterable) ? cfgsafe.questions : [] %}
+{% set okMsg     = cfgsafe.okMessage|default('Bravo !') %}
+{% set failMsg   = cfgsafe.failMessage|default('Réessaie.') %}
+
+<section data-controller="logic-form"
+         data-logic-form-questions-value='{{ questions|json_encode|e("html_attr") }}'
+         data-logic-form-ok-message-value="{{ okMsg }}"
+         data-logic-form-fail-message-value="{{ failMsg }}">
+    <div data-logic-form-target="container"></div>
+
+    <button data-logic-form-target="button"
+            data-action="click->logic-form#submit"
+            {% if questions is empty %}disabled title="Aucune question définie"{% endif %}>
+        Valider
+    </button>
+
+    <div data-logic-form-target="msg" class="mt-2"></div>
+
+    {% if questions is empty %}
+        <p class="muted mt-2">
+            Aucune question n’est définie pour l’instant. Enregistre l’étape avec un JSON valide
+            (ex. l’exemple proposé dans l’éditeur), puis reviens sur l’aperçu.
+        </p>
+    {% endif %}
+</section>

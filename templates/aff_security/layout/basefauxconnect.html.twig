@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <title>{% block title %}hand ball club du lac{% endblock %}</title>
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="shortcut icon" href="{{ asset('favicon/favicon.ico') }}" type="image/x-icon">
+        <link rel="icon" href="{{ asset('favicon/favicon.png') }}" type="image/png">
+        <link rel="icon" sizes="32x32" href="{{ asset('favicon/favicon-32.png') }}" type="image/png">
+        <link rel="icon" sizes="64x64" href="{{ asset('favicon/favicon-64.png') }}" type="image/png">
+        <link rel="icon" sizes="96x96" href="{{ asset('favicon/favicon-96.png') }}" type="image/png">
+        <link rel="icon" sizes="196x196" href="{{ asset('favicon/favicon-196.png') }}" type="image/png">
+        <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('favicon/apple-touch-icon.png') }}">
+        <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('favicon/apple-touch-icon-60x60.png') }}">
+        <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('favicon/apple-touch-icon-76x76.png') }}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('favicon/apple-touch-icon-114x114.png') }}">
+        <link rel="apple-touch-icon" sizes="120x120" href="{{ asset('favicon/apple-touch-icon-120x120.png') }}">
+        <link rel="apple-touch-icon" sizes="144x144" href="{{ asset('favicon/apple-touch-icon-144x144.png') }}">
+        <meta name="msapplication-TileImage" content="favicon-144.png">
+        <meta name="msapplication-TileColor" content="#FFFFFF">
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('./_service-worker.js').then(function(registration) {
+                // Registration was successful
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }, function(err) {
+                // registration failed :(
+                console.log('ServiceWorker registration failed: ', err);
+            });
+        });
+    }
+</script>
+<div  class="one_univers">
+    <h1 class="center-text color-black ultrabold uppercase bottom-0 fa-2x">Hand Ball Club du Lac</h1>
+    <div class="svg-bulle_open">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="80"/>
+        </svg>
+        <div class="center_mdp_logo_mb">
+            {{ include('svg/mdpaffideco.html.twig') }}
+        </div>
+        <div class="content_login_affi_mb">
+            {% block log %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    {{ encore_entry_script_tags('app') }}
+    <script>
+        $(document).ready(function(){
+            let go=$('#affilog'),
+                mdp=$('#api_inputPassword'),
+                user=$('#api_inputEmail'),
+                token=$('#api_token'),
+                formapi=$('#api_form');
+            let affi=$("input[name='_affi_token']"),
+                httpRequest;
+
+
+            go.on('click', function(e){
+
+                if(user.val()!=="" && mdp.val()!==""){
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                    let fd = new FormData();
+                    fd.append("user", "fi.nbcom");
+                    fd.append("mdp", "coco");
+                   // let data={user:"fifi"};
+
+                    $.ajax({
+                        method: "POST",
+                        dataType: 'json',
+                        processData: false,
+                        contentType: false,
+                        url: "http://localhost/affichange2020/public/testoauthwebsite",
+                        data: fd,
+                        success: function(result){
+                            console.log (result)
+                        }
+                    });
+
+                    /*
+                    let fd = new FormData();
+                    fd.append("user", "fi.nbcom");
+                    fd.append("mdp", "coco");
+                    for(var pair of fd.entries()) {
+                        console.log(pair[0]+ ', '+ pair[1]);
+                    }
+
+                    let xhr = new XMLHttpRequest();
+                    //xhr.responseType = 'json';
+                    xhr.withCredentials = false;
+
+                    xhr.addEventListener("readystatechange", function() {
+                        if(this.readyState === 4) {
+                            let response = JSON.parse(xhr.responseText);
+                            console.log(xhr, response.user);
+                        }
+                    });
+
+                    xhr.open("POST", "http://localhost/affichange2020/public/testoauthwebsite");
+                   // xhr.setRequestHeader("Content-Type", "multipart/form-data");
+                    xhr.setRequestHeader("Content-Type", "application/json");
+
+                    xhr.send(data);
+                }
+
+                function alertContents() {
+                    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                        if (httpRequest.status === 200) {
+                            alert(httpRequest.responseText);
+                        } else {
+                            alert('Il y a eu un problème avec la requête.');
+                        }
+                    }*/
+                }
+            });
+        });
+    </script>
+{% endblock %}
+</body>
+</html>

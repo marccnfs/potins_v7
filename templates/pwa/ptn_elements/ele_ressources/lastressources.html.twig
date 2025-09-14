@@ -1,0 +1,24 @@
+{% for potinary in ressources %}
+        <a href="{{ path('show_ressource',{"id":potinary.id}) }}" class="potinary_card_mob">
+                <div class="inner-potinary_mob">
+                        <h3 class="goaff_potinary-fix_mob min30 card-{{potinary.categorie.coul }}">{{ potinary.categorie.name }}</h3>
+                        <div class="w_titlpotinary_mob">
+                                <h2 title="evenement de {{ potinary.titre }}">{{ potinary.titre|lower|capitalize }}</h2>
+                                {% if potinary.composition is not same as (" ") %}
+                                        <h3>{{ potinary.composition|raw|lower|capitalize }}</h3> {# {{post.subject|u.truncate(80, '...')|lower|capitalize}} #}
+                                {% endif %}
+                        </div>
+                        <div class="potinary-b_mob">{{ potinary.descriptif|u.truncate(80, '...')|lower|capitalize }}</div>
+                        <div class="author">categorie : {{ potinary.categorie.name }}</div>
+                </div>
+                <div class="illustr-potinary_card_mob" >
+                        <div class="e_pictfull_card">
+                                {% if potinary.pict is not null %}
+                                        <div class="pict_event" style="background-image: url('{{ asset('spaceweb/template/'~potinary.pict.namefile) }}')"></div>
+                                {% endif %}
+                        </div>
+                </div>
+        </a>
+{%  endfor %}
+
+

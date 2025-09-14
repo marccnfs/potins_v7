@@ -1,0 +1,38 @@
+{#idem mobile#}
+{% if agent=="desk" %}
+<div class="outblur"></div>
+<div class="borderblur"></div>
+{% endif %}
+<div class="content-wb_glass">
+    {{ include('headers/header-back-msg.html.twig') }}
+    <div class="iner-content">
+        <h2 class="_title til_mdl">derniers messages</h2>
+        <div class="form-groupfields glass-label">
+            {% if  msgs is defined %}
+                {% for msg in msgs %}
+                    <div class="_gr-c2">
+                        <div class="_fx-nC" >
+                            <div>{{ msg.subject }}</div>
+                            <span>{{ msg.createAt|date('Y-m-d') }}</span>
+                            {% if msg.isspaceweb %}
+                                <div><p>Message d'un spaceweb : {{ msg.spacewebexpe.name }}</p></div>
+                            {% else %}
+                                <div><p>Message d'un nouveau contact : {{ msg.contactexp.useridentity.firstname }} {{ msg.contactexp.emailCanonical }}</p></div>
+                            {% endif %}
+                        </div>
+                        <div class="stape_order_menu middlegrid">
+                            <a class="stape_bull" href="{{path('read_msg', {'id': msg.id,'slug':website.slug})}}">
+                                <h5>lire</h5>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <h6>pas de message</h6>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+

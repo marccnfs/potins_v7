@@ -1,0 +1,91 @@
+{% block body %}
+<div class="container-showpost">
+    <div class="header-showpost">
+        <h1>{{ post.titre|lower|capitalize }}</h1>
+        <time itemprop="startDate" class="datepotin">Mis en ligne le : {{ post.createAt|date("d-m-Y") }}</time>
+    </div>
+
+    <div class="content-grid">
+        <!-- 🟢 Contenu principal -->
+        <div class="main-content">
+            <div class="af_flx fx-c">
+                <div class="wb-logo-lite">
+                    {% if post.author.customer.profil.avatar %}
+                        <div  class="bkgrndlogo" style="background-image: url('{{ asset(vich_uploader_asset(post.author.customer.profil.avatar, 'imageFile' )) }}')"></div>
+                    {% else %}
+                        <div class="bkgrndlogo" style="background-image: url('{{ asset('img/pinsaffi.png') }}')"></div>
+                    {% endif %}
+                </div>
+                <div class="author">&thinsp;atelier animé par : {{ post.author.customer.profil.firstname }}</div>
+            </div>
+            {% if  post.gpreview.media.imagejpg is defined and post.gpreview.media.imagejpg|length >0 %}
+                <div class="w_review">
+                    <div class="pict_wall">
+                        {% if post.gpreview.media.imagejpg is defined %}
+                            {% for pict in post.gpreview.media.imagejpg %}
+                                <div class="wall_litlepict">
+                                    <img class="pictsmall" src="{{ asset(pict.getWebPath) }}" alt="image atelier">
+                               {# <div class="medium-pic-block" style="background-image: url({{ asset(pict.getWebPath) }})"></div>  #}
+                                </div>
+                                <div class="pictlarge"></div>
+                            {% endfor %}
+                        {%  endif %}
+                    </div>
+                </div>
+            {%  endif %}
+            <h3>📚 Ressources associées</h3>
+
+            <div class="list_content">
+                {% if  post.gpressources is not null %}
+                    {%  for ressource in post.gpressources.articles %}
+                        {{ include('desk/ptn_elements/ele_ressources/widget_ressources.html.twig') }}
+                    {%  endfor %}
+                {% endif %}
+
+                {% if  post.gpreview is not null %}
+                    <ul class="bk_content fx-col">
+                        {% for rw in post.gpreview.reviews %}
+                            <li>{{rw.titre}}
+                                {% set typ =  rw.type?"1":"0"%}
+                                <a class="btn btn-primary" href="{{path('show_potin_review_pdf',{type:typ, slug:post.slug, id:post.id,  })}}"><i class="fa fa-eye"></i></a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+            </div>
+        </div>
+
+        <!-- 🟢 Sidebar des ressources -->
+        <aside class="sidebar">
+            <h3>📚 Téléchargements</h3>
+                {% for tabevent in events %}
+
+                <time itemprop = "startDate" class="datepotin">date potin :
+                        {{ tabevent['event'].appointment.starttime|date("d-m-Y") }} -
+                </time>
+                <div class="regester-ptn">
+                    <div class="flcol">
+                        <div class="pos-incub-l">
+                            {% for order in tabevent['orders'] %}
+                                {%  for list in order.listproducts %}
+                                    {{ include('desk/ptn_public/show/listdocshistory.html.twig') }}
+                                {%  endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {%  endfor %}
+        </aside>
+    {#
+        <div class="with_lit">
+            {{ include('desk/ptn_elements/ele_potins/tabOrderPotins.html.twig') }}
+        </div>
+    #}
+</div>
+{{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+{%  endblock body %}
+{% use "js/js_public_lite.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

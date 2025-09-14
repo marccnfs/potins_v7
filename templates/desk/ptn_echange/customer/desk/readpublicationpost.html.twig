@@ -1,0 +1,45 @@
+{% block body %}
+    <div class="_wb">
+        <div class="container-bo_v5">
+            {{ include('aff_messagery/menu/messagemenu_customer.html.twig') }}
+            <section class="_wb-ospace">
+                <div class="head-msg-space-free">
+                    <div class="inf_msg">
+                        <div class="af_flx-W">
+                            <div class="logo_msg_blog">
+                                <div class="wb-logo-pop">
+                                    {% if msgwb[0].template.logo %}
+                                        <div   class="wb_logo" style="background-image: url('{{ asset('spaceweb/template/'~msgwb[0].template.logo.namefile ) }}')"></div>
+                                    {% else %}
+                                        <div  class="wb_logo" style="background-image: url('{{ asset('img/pinsaffi.png') }}')"></div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="origin">
+                                <div class="origin">
+                                    <span>Panneau : {{msgwb[0].namewebsite }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="zone-inf-msg">
+
+                            <div class="op-msg">
+                                <div class="pop_op-msg" >Conversation sur l'affiche&nbsp;:&nbsp;{{ msgwb[1].tabpublication.post.titre }}</div>
+                                {% if msgwb[1].isdispatchsender %}
+                                    <div>ouvert le {{ msgwb[1].createAt|date('d/m/Y') }} par&nbsp;:&nbsp;{{msgwb[1].tballmsgp.dispatch.name }}</div>
+                                {%  else %}
+                                    <div>ouvert le {{ msgwb[1].createAt|date('d/m/Y') }} par (contact):{{msgwb[1].tballmsgp.contact.emailCanonical  }}</div>
+                                {%  endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ include('aff_messagery/customer/view/readmessagepublicationpost.html.twig') }}
+            </section>
+        </div>
+    </div>
+{% endblock %}
+{% use('js/js_customer.html.twig') %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

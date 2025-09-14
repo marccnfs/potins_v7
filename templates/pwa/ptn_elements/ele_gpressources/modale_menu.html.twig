@@ -1,0 +1,67 @@
+<div class="wp-event">
+    {#
+    <div class="pict_menu">
+        <div class="zone-lit-command">
+            <div class="goaff_v6 _bulle-act">
+                <i class="fa fa-link" aria-hidden="true"></i>
+                <h3>Réservez</h3>
+            </div>
+        </div>
+        {% if menu.formule.pictformule.namefile is defined %}
+            <img  class="" src="{{ asset('upload/module/'~menu.formule.pictformule.namefile ) }}" alt="">
+        {% else%}
+            <img  class="" src="{{ asset('spaceweb/template/ccec7f38ec542f83ad1e32407de3288b81a870f8.jpg' ) }}" alt="">
+        {% endif %}
+    </div>
+    #}
+    <div class="_ctn-menu">
+        <div class="ol-aft">
+            <h3>{{ menu.formule.name }}</h3>
+            <a class="pop_button" href="{{ path('show_found',{'slugcity':board.locality.slugcity,'slug':board.slug,'id':menu.formule.id}) }}">voir
+                <i class="fa fa-flag"></i>
+            </a>
+            <h5 class="provd_pitch_v5">du {{ menu.formule.parution.starttime|date("d-m-Y") }} au {{ menu.formule.parution.endtime|date("d-m-Y") }}</h5>
+            <div class="_fx-R_v6">
+                {%  for declin in menu.formule.catformules %}
+                    <div class="info-catform">
+                        <h5>{{ declin.declinaison.name }}</h5>
+                        <span class="price-form">{{ declin.prix }} €</span>
+                    </div>
+                {%  endfor %}
+            </div>
+        </div>
+
+        <div class="menu-list">
+            <div class="info-plat">
+
+                <div class="ineer-plat">
+                    {% for entree in menu.entrees %}
+                            {% if loop.first %}
+                                <h5>Entrée</h5>
+                            {% endif %}
+                            <div class="nn">{{ entree.titre }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="ineer-plat">
+                    {% for plat in menu.plats %}
+                            {% if loop.first %}
+                                <h5>Plats</h5>
+                            {% endif %}
+                            <div class="nn">{{ plat.titre }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="ineer-plat">
+                    {% for dessert in menu.desserts %}
+                        {% if loop.first %}
+                            <h5>Dessert</h5>
+                        {% endif %}
+                        <div class="nn">{{ dessert.titre }}</div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

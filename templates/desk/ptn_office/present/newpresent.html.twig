@@ -1,0 +1,17 @@
+{% block body %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
+            <div class="bo_content">
+                <div id="offtar" data-content="" data-offre={{offre.id}} data-edit={{ edit }}></div>
+                <section class="ptn_content">
+                    {{ include('desk/ptn_office/present/formpresent.html.twig') }}
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock body%}
+{% use "js/js-presents.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

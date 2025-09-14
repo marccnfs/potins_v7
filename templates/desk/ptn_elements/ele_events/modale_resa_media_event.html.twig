@@ -1,0 +1,23 @@
+<div class="resa-modal">
+    <div class="modal-header">
+        <h3>Réservation pour {{ event.titre|capitalize }}</h3>
+        <p>Date : {{ date|date('d/m/Y') }}</p>
+    </div>
+    <div class="modal-body">
+        <div class="event-info">
+            <p>Description : {{ event.description|raw|default('Aucune description') }}</p>
+            <p>Lieu : {{ event.locatemedia.nameboard|default('Non défini') }}</p>
+            <p>Âge minimum : {{ event.potin.agepotin|default('N/A') }} ans</p>
+        </div>
+        <div class="event-image">
+            {% if event.potin.media.imagejpg|length > 0 %}
+                <img src="{{ asset('upload/module/' ~ event.potin.media.imagejpg[0].namefile) }}" alt="Image de l'événement">
+            {% else %}
+                <p>Aucune image disponible</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="modal-footer">
+        {{ include('desk/ptn_media/resa/form/resapotinform.html.twig') }}
+    </div>
+</div>

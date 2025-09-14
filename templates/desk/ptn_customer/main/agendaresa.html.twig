@@ -1,0 +1,26 @@
+{% block body %}
+    <div class="_pg_wb-pb_v6">
+        {% if orders|length >0 %}
+            <div class="tgl-100">
+                <div class="fx-content_rep_potinary">
+                    {{ include('desk/ptn_elements/ele_events/agenda_customer.html.twig') }}
+                </div>
+            </div>
+        {%  else %}
+            <div class="tgl-100">
+                <div class="fx-content_rep_potinary">
+                    <div class="flex-board">
+                        <div class="flex-notb_v6-fix">
+                            <h3>  Aucune réservation en cours</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {{ include('desk/ptn_public/footer/potins_footer.html.twig') }}
+    </div>
+{%  endblock body %}
+{% use('js/js_account.html.twig') %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

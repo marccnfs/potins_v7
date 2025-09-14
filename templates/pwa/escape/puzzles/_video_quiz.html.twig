@@ -1,0 +1,16 @@
+<section data-controller="video-quiz"
+         data-video-quiz-src-value="{{ asset(cfg.videoPath) }}"
+         data-video-quiz-cues-value='{{ cfg.cues|json_encode|e('html_attr') }}'
+         data-video-quiz-ok-message-value="{{ cfg.okMessage|default('Bravo !') }}">
+    <video data-video-quiz-target="video" controls preload="metadata" style="max-width:100%;width:100%">
+        <source src="{{ asset(cfg.videoPath) }}" type="video/mp4">
+    </video>
+    <div data-video-quiz-target="overlay" class="vq-overlay" hidden></div>
+    <div data-video-quiz-target="msg" class="mt-2"></div>
+</section>
+
+<style>
+    .vq-overlay{ position:relative; margin-top:.5rem; }
+    .vq-card{ padding:1rem; border:1px solid #ccc; border-radius:.75rem; display:flex; gap:.5rem; flex-wrap:wrap; background:#fff; box-shadow:0 4px 12px rgba(0,0,0,.12); }
+    .vq-card button{ padding:.4rem .7rem; border-radius:.5rem; border:1px solid #ddd; cursor:pointer; }
+</style>

@@ -1,0 +1,26 @@
+<div class="module-container">
+    {% set modules = [
+        { 'name': 'Conversations', 'icon': 'fa-comments-o', 'desc': 'Centralisez votre communication grâce à un lien unique.', 'key': 'module_mail', 'route': 'process_contact' },
+        { 'name': 'Affichage', 'icon': 'fa-telegram', 'desc': 'Affichez vos articles et rendez-les visibles dans votre localité.', 'key': 'module_blog', 'route': 'new_postation' },
+        { 'name': 'Boutique', 'icon': 'fa-shopping-basket', 'desc': 'Mettez en avant vos produits et services.', 'key': 'module_shop', 'route': 'addmodule_website', 'param': 'module_shop' },
+        { 'name': 'Ressources', 'icon': 'fa-cutlery', 'desc': 'Publiez vos ressources d’information.', 'key': 'module_ressources', 'route': 'addmodule_website', 'param': 'module_found' },
+        { 'name': 'Événements', 'icon': 'fa-tags', 'desc': 'Informez en temps réel sur vos événements locaux.', 'key': 'module_event', 'route': 'addmodule_website', 'param': 'module_event' }
+    ] %}
+
+    {% for module in modules %}
+        <div class="module-card {{ tabmodule[module.key] ? 'active' : 'inactive' }}">
+            <div class="module-header">
+                <i class="fa {{ module.icon }}"></i> {{ module.name }}
+            </div>
+            <p>{{ module.desc }}</p>
+
+            <div class="module-actions">
+                {% if tabmodule[module.key] %}
+                    <a href="" class="btn btn-danger">Désactiver</a>
+                {% else %}
+                    <a href="{{ path(module.route, {'activ': module.param ?? '', 'id': board.id}) }}" class="btn btn-success">Activer</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>

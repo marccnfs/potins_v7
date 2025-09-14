@@ -1,0 +1,55 @@
+<div class="confirmation-container">
+    <!-- Titre principal -->
+    <div class="confirmation-header">
+        <h2>Confirmation de votre réservation</h2>
+        <h3>{{ event.titre|capitalize }}</h3>
+        {% if event.description is not same as (" ") %}
+            <p class="event-description">{{ event.potin.subject|raw }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Informations sur l'événement -->
+    <div class="event-info">
+        <div class="info-item">
+            <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 12c2.486 0 4.5-2.014 4.5-4.5S14.486 3 12 3a4.499 4.499 0 00-4.5 4.5C7.5 9.986 9.514 12 12 12zm0 2.25c-3.004 0-9 1.508-9 4.5v1.75a.5.5 0 00.5.5h17a.5.5 0 00.5-.5v-1.75c0-2.992-5.996-4.5-9-4.5z"/>
+            </svg>
+            <p>Date : {{ sub.starttime|date('d-m-Y') }}</p>
+        </div>
+        <div class="info-item">
+            <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 12c2.486 0 4.5-2.014 4.5-4.5S14.486 3 12 3a4.499 4.499 0 00-4.5 4.5C7.5 9.986 9.514 12 12 12zm0 2.25c-3.004 0-9 1.508-9 4.5v1.75a.5.5 0 00.5.5h17a.5.5 0 00.5-.5v-1.75c0-2.992-5.996-4.5-9-4.5z"/>
+            </svg>
+            <p>Âge minimum : à partir de 10 ans</p>
+        </div>
+        <div class="info-item">
+            <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 12c2.486 0 4.5-2.014 4.5-4.5S14.486 3 12 3a4.499 4.499 0 00-4.5 4.5C7.5 9.986 9.514 12 12 12zm0 2.25c-3.004 0-9 1.508-9 4.5v1.75a.5.5 0 00.5.5h17a.5.5 0 00.5-.5v-1.75c0-2.992-5.996-4.5-9-4.5z"/>
+            </svg>
+            <p>Lieu : {{ event.locatemedia.nameboard }} - {{ event.locatemedia.locality.city }}</p>
+        </div>
+    </div>
+
+    <!-- Liste des participants -->
+    <div class="participants">
+        <h4>Participants :</h4>
+        <ul>
+            {% for part in order.listproducts %}
+                <li>{{ part.registered.firstname }} {{ part.registered.lastname }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Matériel requis -->
+    <div class="materials">
+        <h4>Matériel :</h4>
+        <p>Pas de matériel nécessaire, juste votre bonne humeur. Merci et à très bientôt !</p>
+    </div>
+
+    <!-- Image de l'événement -->
+    <div class="event-image">
+        {% if event.potin.media.imagejpg|length > 0 %}
+            <img src="{{ asset('upload/module/' ~ event.potin.media.imagejpg[0].namefile) }}" alt="Image de l'événement">
+        {% endif %}
+    </div>
+</div>

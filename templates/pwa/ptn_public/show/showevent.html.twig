@@ -1,0 +1,35 @@
+{% block body %}
+<div class="container-websit">
+    <div class="before_board"></div>
+    {%  set entity, typ = post, "blog" %}
+    <div class="potin_pg_mb">
+        <div class="wp-potin_mb">
+
+            <div class="event-resa">
+                {{ include('pwa/ptn_elements/ele_events/modale_widg_event.html.twig') }}
+
+                <div class="w_resa">
+                    {{ include('pwa/ptn_elements/ele_events/event_resa.html.twig') }}
+                </div>
+            </div>
+
+            <article class="w-event">
+                {{ include('pwa/ptn_elements/ele_potins/modale_potin.html.twig') }}
+            </article>
+        </div>
+
+    </div>
+        {{ include('pwa/ptn_elements/ele_potins/tabOrderPotins.html.twig') }}
+</div>
+
+
+{%  endblock body %}
+
+    {% block footer %}
+        {{ include ('pwa/footer/potins_footer.html.twig') }}
+    {% endblock footer %}
+
+{% use "js/js_public_wb.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

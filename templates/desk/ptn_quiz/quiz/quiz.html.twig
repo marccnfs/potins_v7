@@ -1,0 +1,43 @@
+{% block body %}
+<div id="pagehome" class="homepage-wrapper--desk" data-agent="{{ agent }}">
+    <div class="fx-cent_pag">
+    <div class="templ_cnfs">
+        <div class="cadre_title">
+            <h2>Quiz</h2>
+        </div>
+        <div class="cadre_content">
+            <div class="arg-cont-bk">
+                <div class="text_cadre">
+                    <form id="quiz-form" action="{{ path('quiz_submit') }}" method="post">
+                        {% for question in questions %}
+                            <div class="question" data-question-id="{{ question.id }}">
+                                <p>{{ question.question }}</p>
+                                {% if question.type == 'multiple_choice' %}
+                                    <button type="button" class="btn btn-primary" data-value="A">{{ question.optionA }}</button>
+                                    <button type="button" class="btn btn-secondary" data-value="B">{{ question.optionB }}</button>
+                                    <button type="button" class="btn btn-success" data-value="C">{{ question.optionC }}</button>
+                                    <button type="button" class="btn btn-danger" data-value="D">{{ question.optionD }}</button>
+                                {% elseif question.type == 'true_false' %}
+                                    <button type="button" class="btn btn-primary" data-value="true">True</button>
+                                    <button type="button" class="btn btn-secondary" data-value="false">False</button>
+                                {% endif %}
+                                <input type="hidden" name="question_{{ question.id }}" id="answer_{{ question.id }}" required>
+                            </div>
+                        {% endfor %}
+                        <button type="button" id="prev-btn" class="btn btn-secondary" disabled>Previous</button>
+                        <button type="button" id="next-btn" class="btn btn-primary">Next</button>
+                        <button type="submit" id="submit-btn" class="btn btn-success" disabled>Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="bk-separate"></div>
+{{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+</div>
+{%  endblock body %}
+{% use "js/js_public_quiz.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,40 @@
+{% block body %}
+    <section class="_wb-board_mob">
+        <!-- head du board -->
+        <div class="head-wb_mob">
+            <div class="head-1 _fx-R">
+                {{ include('aff_website/elements/'~agent~'/logoboard.html.twig') }}
+            </div>
+        </div>
+
+        <div class="map-wb_mob">
+            <div class="wp-info">
+                <div class="inner-info">
+                    <div class="w_titleinfo">
+                        <h2>{{ website.template.description }}</h2>
+                        <h2 title="info de {{ website.namewebsite }}">{{ website.template.activities }}</h2>
+                        {% if website.template.sector.adresse[0] is defined %}
+                            {%  set adr = website.template.sector.adresse[0] %}
+                            <h3 class="adrrss"> {#  {{ adr.numero }} {{ adr.nomvoie }} #} {{ adr.codepostal }} {{ adr.nomcommune }} </h3>
+                        {% else %}
+                            <h3 class="adrrss">retrouvez nous chez nos partenaires</h3>
+                        {%  endif %}
+                        <a href="tel.{{ website.template.telephonespaceweb }}">{{ website.template.telephonespaceweb }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- fin head -->
+
+        <div class="_wb-module-first_mob">
+            <div class="ol-2">
+                    {%  set titpage= "Messagerie" %}
+                    {{ include('aff_messagery/board/form/form_contact_simple.html.twig') }}
+            </div>
+        </div>
+</section>
+{%  endblock body %}
+{% use "js/js_public_wb.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

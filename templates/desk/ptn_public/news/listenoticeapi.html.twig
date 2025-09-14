@@ -1,0 +1,32 @@
+{# page news de l'acces publique #}
+
+{% if  not notice.media.imagejpg[0] is defined %}
+    {% set style="Z" %}
+{% endif %}
+<a href="{{ path('chow_news_api',{'id':notice.id}) }}" id="{{notice.id}}" class="titi timeline-news post-stap{{ style }} all{{ style }}" data-post="{{ notice.id }}">
+    <div class="pict_resume{{ style }}">   {# zone image depart notice #}
+        {% if style=="Z" %}
+            <div class="picture-nexs pictarea{{ style }}"></div>
+        {%  else %}
+            <div class="picture-nexs pictarea{{ style }}" style="background-image: url( {{notice.media.imagejpg[0].apiPath ??"" }} )">
+                <div class="eping-fix" style="background-image: url('{{asset('images/epinigle-affi.png') }}')"></div>
+            </div>
+        {% endif%}
+    </div>
+    <div class="post-resume{{ style }}">
+        <h3 class="title-comment newsfield" data-news="{{notice.id}}">{{notice.titre}}</h3>
+        <p class="resume-post">{% if notice['subject'] %}{{notice['subject']|u.truncate(80, '...')}}{% endif%}</p>
+        <div class="resume-post-long">{% if notice['content'] %}{{notice['content']|raw}}{% endif%}</div>
+    </div>
+    <div class="userHome">
+        <em>publié par {{notice.author.name| upper}}</em>
+        <span> - </span>
+        <span class="litledate">  {{notice.createAt|date('\\l\\e j:m:Y')}}</span>
+        {% for taguerie in notice.tagueries %}
+            <em class="tag-comment bg-green-dark theme-post grid-center-left">{{taguerie.name}} </em>
+        {% endfor %}
+    </div>
+    <article class="article-post">
+    </article>
+</a>
+

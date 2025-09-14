@@ -1,0 +1,29 @@
+{% block body %}
+    <div class="_wb">
+        <div class="container-bo_v5">
+            {{ include('aff_customer/menu/'~agent~'/websitemenu.html.twig') }}
+            <section class="_wb-ospace">
+                {{ include('aff_websiteadmin/shop/form/offreedit.html.twig') }}
+        </section>
+    </div>
+</div>
+{% endblock %}
+{% use "js/js-offre.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

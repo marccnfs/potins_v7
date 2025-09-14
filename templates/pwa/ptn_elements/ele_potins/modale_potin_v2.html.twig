@@ -1,0 +1,34 @@
+<div class="illustr-potin" >
+    <div class="pt_pict_rec">
+        {% if potin.media.imagejpg[0].namefile is defined %}
+            <div class="bac_img" style="background-image: url({{ asset(potin.media.imagejpg[0].getWebPath) }})"></div>
+        {% else %}
+            {% if potin.imageName %}
+                <div class="bac_img" style="background-image: url('{{ vich_uploader_asset(potin, 'ImageFile') }}');"></div>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+{%  if contents|length > 0 %}
+    {%  for content in contents %}
+        <div class="inner-post_mb">
+            {% if content is not same as ("") %}
+                <div class="_post_content_mb">
+                    <div class="article_content_mb">
+                        {#  {{ include('bacasable/content.html.twig')|raw }} #}
+                        {{ content|raw }}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        {%  if loop.index == 1  %}
+            <div class="videoWrapper" >{{ potin.iframevideo|raw }}</div>
+        {% endif %}
+    {%  endfor %}
+{% else %}
+    <div class="illustr-potin" >{{ potin.iframevideo }}</div>
+{% endif %}
+
+
+

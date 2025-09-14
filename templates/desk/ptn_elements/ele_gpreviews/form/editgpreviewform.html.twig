@@ -1,0 +1,17 @@
+<div class="content-form-post">
+    <div class="white-tab">
+
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+        <div class="white-tab">
+    {{ form_row(form.titre) }}
+        </div>
+        <div class="white-tab">
+    {{ form_row(form.subject) }}
+        </div>
+        <div class="white-tab">
+    {{ form_row(form.save, { 'label': 'valider' }) }}
+        </div>
+{{ form_end(form) }}
+    </div>
+</div>

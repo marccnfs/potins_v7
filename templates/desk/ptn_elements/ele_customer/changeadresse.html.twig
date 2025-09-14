@@ -1,0 +1,38 @@
+<div class="flcol">
+    <div class="O_list-cube">
+        <div class="list-incub fx-c">
+            {% if adresses|length > 0  %}
+                <h1 class="tit-cib-lg">Mon adresse</h1>
+                <p>Renseignez votre adresse de facturation</p>
+                <em>Cette information est privée et n'est pas visible sur le réseau affichange.com</em>
+                {% set adr=["","Principale","etablissement","livraison","facturation"] %}
+                <h5>Adresse {{ adr[adresses[0].choiceadress] }} :</h5>
+                <div class="list-adress">
+                    <div class="dtl-adress">
+                        <div class="adrrss" id="{{ adresses[0].idMap }}">{{ adresses[0].label }}</div>
+                    </div>
+                </div>
+                <div class="separatemini"></div>
+                <div class="btn-adress">
+                    <a data-adress="{{ adresses[0].id }}" href="{{ path('delete_adress_custo_fac',{'id':adresses[0].id}) }}" class="deleted btn btn-warning">modifier</a>
+                </div>
+            {% else %}
+                <h1 class="tit-cib-lg">Mon adresse</h1>
+                <p>Renseignez votre adresse de facturation</p>
+                <em>Cette information est privée et n'est pas visible sur le réseau affichange.com</em>
+                <div class="new-adress_add">
+                    <x-adress class="w100" name="no"  id="{{dispatch.id}}" module="_dispatch"></x-adress>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{#
+{% if adresses | length < 1 %}
+               <button id="newadress" class="btn btn-light">ajouter une adresse</button>
+           {% endif %}
+
+<button data-adress="{{ adrss.idMap }}"  class="modified btn btn-light">modifier cette adresse</button>
+<button id="newadress" class="btn btn-light">ajouter une adresse</button>
+#}

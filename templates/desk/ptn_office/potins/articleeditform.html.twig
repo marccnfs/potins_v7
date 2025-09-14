@@ -1,0 +1,20 @@
+<div class="stape_bull" id="postar" data-content="{{ content }}" data-post="{{ post.id }}" data-art="{{ art.id }}"></div>
+<form class="form-elastic" enctype="multipart/form-data" method="post" name="fileinfo">
+    <div class="content-form-post">
+        <div class="white-tab">
+            <label>contenu de l'article</label>
+           <div id="articlenews">
+                {{ include('WysiWyg/toolbar.html.twig') }}
+                <div id="editor"></div>
+            </div>
+        </div>
+    </div>
+    <div class="gp-form-row-col2">
+        <div class="progress">
+            <div id="loader-icon"><img src="{{asset('svg/LoaderIcon.gif')}}"  alt="loader"/></div>
+        </div>
+        <div class="iner-bt">
+            <button id="post-news" class="btn-send">Enregistrez</button>
+        </div>
+    </div>
+</form>

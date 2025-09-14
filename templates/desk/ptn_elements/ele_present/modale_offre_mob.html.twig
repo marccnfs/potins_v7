@@ -1,0 +1,32 @@
+<div class="wp-post_mob">
+    <div class="_fx-R">
+        <div class="inner-post_mob">
+            <div class="w_titlpost_mob">
+                <h2 title="offre de {{ website.namewebsite }}">{{ offre.titre|lower|capitalize }}</h2>
+                <div class="fast-price dkprice">
+                    {%  set state = offre.product.tabcarac|split(',') %}
+                    <div class="li-tit">état : <span class="li-dy">{{ state[0] }}</span></div>
+                    {% if offre.product.price == 0 %}
+                        <div class="li-tit">Prix : <span class=new-price">{{ offre.product.oldprice|raw|number_format(2,',', '.')}} €</span></div>
+                    {% else %}
+                        <div class="li-tit">Prix  : <span class="new-price">{{ offre.product.price|raw|number_format(2,',', '.')}} €</span></div>
+                    {% endif %}
+                </div>
+                {% if offre.descriptif is not same as ("") %}
+                    <h3>{{ offre.descriptif|raw|lower|capitalize }}</h3> {# {{post.subject|u.truncate(80, '...')|lower|capitalize}} #}
+                {% endif %}
+            </div>
+            <time itemprop = "startDate" class="datepost">mis en ligne le : {{ offre.createAt|date("d-m-Y") }}</time>
+            <div class="author">par : {{ offre.author.name }}</div>
+
+        </div>
+
+        <div class="illustr-post" >
+            <div class="w_pictfull">
+                {% if offre.media.imagejpg|length > 0 and offre.media.imagejpg[0].namefile is defined %}
+                    <img src="{{ asset(offre.media.imagejpg[0].getWebPath) }}" alt="image affiche">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

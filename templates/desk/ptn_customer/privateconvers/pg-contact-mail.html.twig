@@ -1,0 +1,146 @@
+    <div class="content-glass">
+        <div class="form-groupfields glass-label">
+            <div class="glass-title_form">
+                <h3>Votre message</h3>
+                <i class="fa fa-envelope heading-icon font-20"></i>
+            </div>
+
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            {% if not is_granted('ROLE_USER') %}
+            <div class="intro-glass_form">
+                <div class="glass-field-col-3">
+                    <i class="fas fa-at"></i>
+                    {{ form_label(form.email, "email :") }}
+                    {{ form_widget(form.email, {'attr': {'class': 'glass-input'}}) }}
+                    <span id="loading" style="display: none;"><i class="fas fa-spinner fa-spin"></i></span>
+                </div>
+            </div>
+
+            <div class="form-play-none">
+                <h4 class="glass-text">Vos coordonnées</h4>
+                <div class="bg-glass-op">
+                    <div class="intro-glass_form">
+                        <div class="glass-field-col-3">
+                        <i class="fa fa-user"></i>
+                        {{ form_label(form.username, "votre nom :") }}
+                        {{ form_widget(form.username, {'attr': {'class': 'glass-input'}}) }}
+                        </div>
+                    </div>
+
+                    <div class="intro-glass_form">
+                        <div class="glass-field-col-3">
+                        <i class="fa fa-phone"></i>
+                        {{ form_label(form.telephone, "telephone :") }}
+                        {{ form_widget(form.telephone, {'attr': {'class': 'glass-input'}}) }}
+                        </div>
+                    </div>
+
+                    <div class="intro-glass_form">
+                        <span id="city-container">
+                                {{ form_label(form.sectorcode, "Votre demande porte sur quelle localité") }}
+                            {{ form_widget(form.sectorcode, {'attr': {'class': 'glass-input'}}) }}
+                        </span>
+
+                        <input name="city-hidden" type="hidden" />
+                    </div>
+                </div>
+
+                <div class="bg-glass-op">
+                    <div class="intro-glass_form">
+                        <p class="glass-text">Un service en particulier ? :</p>
+                        <div class="glass-field-col">
+                            {{ form_label(form.subject, "") }}
+                            {{ form_widget(form.subject, {'attr': {'class': 'glass-input'}}) }}
+                        </div>
+                    </div>
+
+                     <div class="intro-glass_form">
+                        <div class="glass-field-col">
+                            {{ form_label(form.energies, "") }}
+                            {{ form_widget(form.energies, {'attr': {'class': ''}}) }}
+                        </div>
+                     </div>
+
+                     <div class="intro-glass_form">
+                        <div class="glass-field-col">
+                            {{ form_label(form.content, "votre message :") }}
+                            {{ form_widget(form.content, {'attr': {'class': 'glass-input'}}) }}
+                        </div>
+                     </div>
+                </div>
+
+                <div class="glass-field">
+                    <button type="submit" class="glass-button btn-glss-submit">Postez</button>
+                </div>
+            </div>
+            {% else %}
+
+
+            <div class="bg-glass-op">
+                <div class="intro-glass_form">
+                    <p class="glass-text">Un service en particulier ? :</p>
+                    <div class="glass-field-col">
+                        {{ form_label(form.subject, "") }}
+                        {{ form_widget(form.subject, {'attr': {'class': 'glass-input'}}) }}
+                    </div>
+                </div>
+
+                 <div class="intro-glass_form">
+                    <div class="glass-field-col">
+                        {{ form_label(form.energies, "") }}
+                        {{ form_widget(form.energies, {'attr': {'class': ''}}) }}
+                    </div>
+                 </div>
+
+                 <div class="intro-glass_form">
+                    <div class="glass-field-col">
+                        {{ form_label(form.content, "votre message :") }}
+                        {{ form_widget(form.content, {'attr': {'class': 'glass-input'}}) }}
+                    </div>
+                 </div>
+            </div>
+
+            <div class="glass-field">
+                <button type="submit" class="glass-button btn-glss-submit">Postez</button>
+            </div>
+            {% endif %}
+
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+
+
+        <div class="footer-information-form">
+            <address>
+                <div class="space_grid_link">
+                    <div class="space-link">
+                        <a class="stape_order_link" href="{{ provider.template.link }}" target="_blank">
+                            <div class="stape_link">
+                                <h5>site weeb</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </address>
+            <link itemprop = "url" href="{{ provider.template.link }}">
+            {% for adrr in  provider.template.sector.adresse %}
+            <div class="adrrss-form">
+                <strong>Adresses</strong>
+                <p>
+                    {{ adrr.numero }}, {{ adrr.nomVoie }}
+                    <br>{{ adrr.codePostal|upper}} {{ adrr.nomCommune|upper}}
+                    <br>{{ provider.name|upper}}
+                </p>
+            </div>
+            {% endfor %}
+            <div class="adrrss-form">
+                <strong>Contact</strong>
+                <p>
+                    <a href="tel: +{{ provider.template.telephoneprovider|phone_number_format('NATIONAL') }}"><i class="fa fa-phone-square color-green-dark"></i> {{ provider.template.telephoneprovider|phone_number_format('NATIONAL') }}</a>
+                    <a href="mailto:{{ provider.template.emailprovider }}"><i class="fa fa-envelope-square color-blue-dark"></i> {{ provider.template.emailprovider }}</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

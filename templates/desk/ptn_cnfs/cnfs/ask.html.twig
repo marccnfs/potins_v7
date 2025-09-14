@@ -1,0 +1,51 @@
+{% block body %}
+    <div class="tgl-100">
+        <div class="fx-content_rep_potinary">
+
+            <div class="templ_bleu">
+                <div class="arg-content_cor4">
+                    <div class="arg-cont-bk">
+                        <h2 class="h2-tit2 rub1">Ouvrez une conversation avec votre conseiller numérique</h2>
+                        <div class="cont-arg">
+                            Des questions, une idée, vous recherchez des partenaires, des informations techniques, échangez sur un sujet en particulier, bloqué pour faire une démarche administratives....
+                        </div>
+                        <nav class="relational_bt">
+                            <div class="lite-cmd">
+                                {% if  board.contactation is not null %}
+                                    <div class=" button-wp" >
+                                        <button class="bulletoggle pop_button" data-affitgl="tgl_9">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> nouvelle conversation
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </nav>
+                    </div>
+                    <div class="bk-pict_cor4">
+                        <section class="eyes">
+                            <div class="blk-img_vrt4" style="background-image: url({{ asset('imgdoc/potins/social.png') }}">
+                                <div class="_in-eyes">
+                                    {#<h1 class="tit-sit">Végétal</h1>#}
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <div class="templ_bleu">
+            </div>
+            <div class="cnfs_echanges">
+                {{ include('desk/ptn_elements/ele_echanges/cnfs_echange.html.twig') }}
+            </div>
+        </div>
+    </div>
+{%  endblock body %}
+
+    {% block footer %}
+        {{ include ('desk/ptn_public/footer/potins_footer.html.twig') }}
+    {% endblock footer %}
+
+{% use "js/js_public_log.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

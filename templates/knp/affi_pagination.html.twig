@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * affi pagination
+ *
+ */
+#}
+{% if pageCount > 1 %}
+    <nav class="affi_page">
+        <ul class="pg_ul">
+            {% if previous is defined %}
+                <li class="pg-li">
+                    <a class="link_page prev" rel="prev" href="{{ path(route, query|merge({(pageParameterName): previous})) }}"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
+                </li>
+            {% endif %}
+            <h5>Page {{ current }}... sur : {{ pagesInRange|length}}</h5>
+            {% if next is defined %}
+                <li class="pg-li">
+                    <a class="link_page next" rel="next" href="{{ path(route, query|merge({(pageParameterName): next})) }}"><i class="fa fa-plus-circle" aria-hidden="true"></i></a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}

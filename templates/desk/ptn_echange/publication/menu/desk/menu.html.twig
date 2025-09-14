@@ -1,0 +1,32 @@
+<div class="navadmin">
+    <div class="navaffi-bk">
+        <div class="afnav-fl">
+            <a href="{{ path('cargo_public',{'slugcity':board.locality.slugcity}) }}" class="navlogo_affi">
+                <div class="navlogo-svg">{{ include('svg/50x50_AfCHG_bleu.html.twig') }}</div>
+            </a>
+        </div>
+
+        <div class="afnav-fl">
+            <div class="head-bull_admin">
+                <a href="{{ path('ospace',{'city':board.locality.slugcity,'nameboard':board.slug}) }}">
+                    <h2>{{ website.namewebsite }}</h2>
+                </a>
+            </div>
+        </div>
+
+        <div class="tools-menu">
+            <a class="e-tool" title="parmaetre du panneau" href="{{ path('members',{'id':board.id}) }}"><i class="fa fa-users" aria-hidden="true"></i></a>
+            <a class="e-tool" title="messagerie"  href="{{path('board_board',{'id': board.id }) }}"><i class="fa fa-comment-o" aria-hidden="true"></i></a>
+            {#   <a class="e-tool" title="messagerie" href="{{ path('search_partner',{'id':board.id}) }}"><i class="fa fa-cloud" aria-hidden="true"></i></a> #}
+            <a class="e-tool" title="paramètres" href="{{ path('parameters',{'id':board.id}) }}"><i class="fa fa-cog" aria-hidden="true"></i></a>
+        </div>
+    </div>
+    <div class="navaffi-bk">
+        {{ include('aff_menu/pop/'~agent~'/modal-pop-customer.html.twig') }}
+        <div class="afnav-fl">
+            <div class="afnav-link-brd">
+                <a href="{{ path('show_website',{'city':board.locality.slugcity,'nameboard':board.slug}) }}" class="afnav-alk">voir le panneau public</a>
+            </div>
+        </div>
+    </div>
+</div>

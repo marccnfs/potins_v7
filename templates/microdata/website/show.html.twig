@@ -1,0 +1,30 @@
+<script type="application/ld+json">
+    {
+        "@context" : "https://schema.org",
+        {% if board.template.tagueries|length >0 %}
+        "type": " {{board.template.tagueries[0].name }}",
+        {% else %}
+        "type": "",
+        {%  endif %}
+        "name": "{{board.nameboard}}",
+        "description": "{{board.template.description}}",
+        {% if board.locality | length >0 %}
+        "adress": {
+              "@type": "PostalAddress",
+              "streetAddress":"",
+              "addressLocality": "{{board.locality[locatecity]?board.locality[locatecity].city():""}}",
+              "addressRegion": "",
+              "postalCode": "{{board.locality[locatecity]?board.locality[locatecity].code():""}}",
+              "addressCountry": "FR"
+                },
+        "geo":{
+            "@type": "GeoCoordinates",
+            "latitude": "{{board.locality[locatecity]?board.locality[locatecity].latloc:""}}",
+            "longitude": "{{board.locality[locatecity]?board.locality[locatecity].lonloc:""}}"
+        },
+        {%  endif %}
+        "url": "{{board.url}}"
+     }
+</script>
+
+{# "imag,e" : "{{ asset('spaceweb/template/'~board.template.background.namefile ??)  }}", #}

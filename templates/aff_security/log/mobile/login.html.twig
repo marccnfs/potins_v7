@@ -1,0 +1,48 @@
+{% block body %}
+<div class="login_mob" id="machina" data-identify="{{ app.session.get('identify') }}">
+    <div class="svg-bulle_open">
+        <div class="content_login_affi_mob">
+
+            <form method="post" class="form_connector">
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+        {#
+                    {% if app.user %}
+                        <div class="mb-3">
+                            <a href="{{ path('app_logout') }}">fermez votre espace</a>
+                        </div>
+                    {% endif %}
+        #}
+
+                    <h5 class="glass-field_identify"></h5>
+                    <div class="field_log">
+                        <div class="iner-fiels"><i class="fa fa-at"></i><label for="inputEmail" class="label-log">identifiant</label></div>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="adresse mail" required autofocus>
+                    </div>
+                    <div class="field_log">
+                        <div class="iner-fiels">
+                        <i class="fa fa-lock"></i><label for="inputPassword" class="label-log">mot de passe</label>
+                        </div>
+                        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                    </div>
+                    <div class="bottom-10"></div>
+                    <a class="forget_mdp" href="{{ path('forget_password_request') }}">mot de passe oublié ?</a>
+                    <div class="checkerrember">
+                        <h5>Restez connecté</h5>
+                        <span class="switcher switcher-2">
+                           <input type="checkbox" id="remember_me" name="_remember_me" checked/>
+                           <label for="remember_me"></label>
+                        </span>
+                    </div>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <button class="bul-go" type="submit">go</button>
+                </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+

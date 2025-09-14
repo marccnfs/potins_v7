@@ -1,0 +1,37 @@
+
+{{ include('aff_website/pop/bullator.html.twig') }}
+{{ include('aff_website/shop/view/modale_offre.html.twig') }}
+<div class="_wb-module-first">
+    <div class="ol-2 tglaff"  id="tgl_9" style="display: none">
+        {% if dispatch is null %}
+            {{ include('aff_messagery/board/form/form_contact_offre.html.twig') }}
+
+            {#
+            {%  set titpage= "Messagerie" %}
+            {{ include('aff_messagery/conversations/form/form_msg-affiche.html.twig') }}
+            #}
+        {%  else %}
+            <div id="adcomment">
+                <add-comment slug="{{ website.slug }}" id="{{ offre.id }}" module="_shop"></add-comment>
+            </div>
+        {%  endif %}
+    </div>
+</div>
+
+{% if content is not same as ("") %}
+    <div class="_post_content">
+        <div class="article_content">
+            {{ content|raw }}
+        </div>
+    </div>
+{% endif %}
+
+
+
+
+
+
+
+
+
+

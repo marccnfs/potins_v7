@@ -1,0 +1,39 @@
+{% block body %}
+    <main class="affibodyfixed_v5">
+        <div class="vagmenu nav-af" id="stripped" data-agent="{{ agent }}">
+            {{ include('svg/'~agent~'/vaguenocityt.html.twig') }}
+        </div>
+    </main>
+    <div class="_wb">
+        <div class="container-bo_v5">
+            {{ include('aff_notification/menu/messagemenu.html.twig') }}
+            <section class="_wb-ospace">
+                <div class="head-msg-space">
+                    <div class="web-inf">
+                        <div class="zone-inf-msg">
+                            <div class="op-msg">
+                                <div class="pop_op-msg" >conversation ouverte le : {{ msgwb.createAt|date('d/m/Y') }} sur le board : {{ msgwb.websitedest }}
+                                </div>
+                                {% if msgwb.isspaceweb %}
+                                    <div>par :{{msgwb.tballmsgs.dispatch.name }}</div>
+                                {%  else %}
+                                    <div>par (contact):{{msgwb.tballmsgs.contact.emailCanonical  }}</div>
+                                {%  endif %}
+                            </div>
+                            <div class="tools-msg">
+                                <a class="e-tool" title="parmaetre du panneau" href=""><i class="fa fa-cog" aria-hidden="true"></i></a>
+                                <a class="e-tool" title="messagerie" href=""><i class="fa fa-comment-o" aria-hidden="true"></i></a>
+                                <a class="e-tool" title="messagerie" href=""><i class="fa fa-cloud" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ include('aff_messagery/customer/view/readmessage.html.twig') }}
+            </section>
+        </div>
+    </div>
+{% endblock %}
+{% use('js/js_customer.html.twig') %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

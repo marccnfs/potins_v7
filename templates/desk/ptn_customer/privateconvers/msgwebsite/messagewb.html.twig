@@ -1,0 +1,29 @@
+{% block body %}
+
+    <div class="vagmenu">
+        {{ include('svg/desk/vagueonly.html.twig') }}
+    </div>
+    <div class="universaff_v3">
+        <div class="_ct-wbG_v3">
+            <div class="filterblur_v3"></div>
+            <div class="borderblur_v3"></div>
+                <div class="vaiss-lib_v3">
+                    {{ include('website/public/'~agent~'headerWb/blockWbdesk.html.twig') }}
+                    <div class="_pg_wb">
+                        {{ include('navigation/'~agent~'actionLinkWb.html.twig') }}
+                        <div class="fx-pw">
+                            {{ include('navigation/'~agent~'ColLeft_msg.html.twig') }}
+                            <div class="mesg-fx">
+                                {{ include('website/commun/conversall.html.twig') }}
+                                {{ include('website/public/'~agent~'conversations/msgwebsite/'~action~'.html.twig') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+{% endblock %}
+{% use "js/js-webmessage.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

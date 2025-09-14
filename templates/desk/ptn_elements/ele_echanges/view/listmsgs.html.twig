@@ -1,0 +1,13 @@
+<div class="w100">
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        {%  if msgs is defined %}
+        {% for msg in msgs %}
+            {% apply spaceless %}
+            <a class="ax-m {{ msg.sender ?"":"ax-m-no"}}" href="{{ path('read_msg_board',{'slug':website.slug,'id':msg.id})}}">
+                {{ include('aff_messagery/board/elements/listmessageboard.html.twig') }}
+            </a>
+            {% endapply %}
+        {% endfor %}
+    {% endif %}
+    {% endif %}
+</div>

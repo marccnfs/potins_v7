@@ -1,0 +1,14 @@
+{% block body %}
+    <section class="_pg-account_mob">
+        {{ include('aff_menu/menus/mobile/titleaccount_mob.html.twig') }}
+        <div class="space-inner-account">
+            <div class="af_flx-C-W fx-c">
+                {{ include('aff_account/registration/view/'~agent~'/initboard.html.twig') }}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% use "js/js-creawebsite.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

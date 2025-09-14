@@ -1,0 +1,40 @@
+{# pas utilisé - à mettre dans un real-stat pour bande de menu horizontal icone et texte bleu ciel#}
+<div class="real_stat_v2">
+    <div class="fx-cub_v2">
+        <div class="act-ct_v2">
+            <div class="cbe-fx_v2">
+                <div class="cbe_cnt_v2">
+                    <div class="c_i_b_v2">
+                        <div class="in_cibS bd-bt_v2">
+                            {% if website.sector is defined %}
+                            <div class="bta-lk_mb">
+                                <div class="logo_wb no-law"><i class="fas fa-map-marker-alt"></i> où</div>
+                            </div>
+                            {% endif %}
+                            {% if website.event is defined %}
+                            <div class="bta-lk_mb">
+                                <div class="logo_wb no-law"><i class="fas fa-clock" aria-hidden="true"></i> Agenda</div>
+                            </div>
+                            {% endif %}
+                            {% if website.reservation is defined %}
+                            <div class="bta-lk_mb">
+                                <div class="logo_wb no-law"><i class="fas fa-clock" aria-hidden="true"></i> Réservation</div>
+                            </div>
+                            {% endif %}
+                            {% if website.bulleday is defined %}  {#bulle#}
+                            <div class="bta-lk_mb">
+                                <div class="logo_wb no-law"><i class="fas fa-clock" aria-hidden="true"></i> Aujourd'hui</div>
+                            </div>
+                            {% endif %}
+                            {% if website.market is defined %}
+                            <div class="bta-lk_mb">
+                                <div class="logo_wb no-law"><i class="fas fa-store"></i> Marché</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

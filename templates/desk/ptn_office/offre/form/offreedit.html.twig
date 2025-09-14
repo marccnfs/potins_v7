@@ -1,0 +1,122 @@
+
+<div class="stape_bull" id="websit"></div>
+    <div id="initoffert" data-twigtbunique="{{ tabunique }}" data-taboffre="{{ taboffre }}"></div>
+
+        <form class="form-elastic" enctype="multipart/form-data" method="post" name="fileinfo">
+            <div class="content-form-post">
+                <div class="white-tab">
+                    <label for="titreoffre">Titre de l'offre</label>
+                    <input type="text" class="form-affi" value="{{ offre.titre }}" name="titreoffre" id="titreoffre" placeholder="titre....." required="required">
+                    <span class="error" aria-live="polite"></span>
+                </div>
+            </div>
+
+            <div class="content-form-post">
+                <div class="white-tab">
+                    <label for="legende">détails de l'offre</label>
+                    <textarea class="form-affi" name="legende" id="legende"
+                              placeholder="Entrez une description courte" rows="1" >{{ offre.descriptif }}</textarea>
+                    <span class="error" aria-live="polite"></span>
+                    <label for="unit">quantité proposée</label>
+                    <input type="number"  class="form-affi" value="{{ offre.product.unit }}" minlength="1" maxlength="10" name="unit" id="unit">
+                    <span class="error" aria-live="polite"></span>
+                    <label for="oldprice">prix en euro (format : 0,00)</label>
+                    <input type="text"  class="form-affi" value="{{ offre.product.oldprice|number_format(2,',', '')}}" name="oldprice" id="oldprice" pattern="[0-9]+[,.][0-9]{2}">
+                    <span class="error" aria-live="polite"></span>
+                </div>
+            </div>
+
+            <div class="content-form-post">
+                <h5>information sur l'état du produit</h5>
+                <div class="white-tab _fx-R _fx-center">
+                    <div class="rad-af">
+                        <input type="radio" required class="radiocenter" name="etat" id="carac1" value="occasion" {# {{ etat is same as("occasion")?"checked":"" }} #}>
+                        <label class="labelcenter" for="carac1">occasion</label>
+                    </div>
+                    <div class="rad-af">
+                        <input type="radio" required class="radiocenter" name="etat" id="carac2" value="neuf" {# {{ etat is same as("neuf")?"checked":"" }} #}>
+                        <label class="labelcenter" for="carac2">neuf</label>
+                    </div>
+                </div>
+            </div>
+            <div class="white-tab _fx-R _fx-center">
+                <div class="op-avanc colapsaffi" data-afficolapse="more" data-toggle="collapse" data-target="#collapseOpmore" aria-expanded="false" aria-controls="collapseOpmore"><i class="fastrong fa fa-caret-square-o-down" aria-hidden="true"></i> plus d'informations (optionnel)</div>
+                <div class="collapse" id="collapseOpmore">
+                    <div class="card-form">
+
+                        <div class="form-cube">
+                            <div class="content-form-cube">
+                                {{ include('aff_websiteadmin/shop/talk/cube-form-calendar.html.twig') }}
+                            </div>
+                        </div>
+
+                        <div class="form-cube">
+                            <div class="content-form-cube">
+                                {{ include('aff_websiteadmin/shop/talk/cube-form-produit.html.twig') }}
+                            </div>
+                        </div>
+
+                        <div class="form-cube">
+                            <div class="content-form-cube">
+                                {{ include('aff_websiteadmin/shop/talk/cube-form-link.html.twig') }}
+                            </div>
+                        </div>
+
+                        <div class="form-cube">
+                            <div class="content-form-cube">
+                                {{ include('aff_websiteadmin/shop/talk/cube-form-promo.html.twig') }}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="token" value="{{ csrf_token('edit-offre') }}"/>
+        </form>
+
+        <div class="content-form-post">
+            <div class="white-tab">
+                <div class="tbb-post">
+                    <div class="title_bubble">Ajoutez/modifiez une image</div>
+                    <input id="uploadImage" type="file" name="uploadImage" accept=".jpg, .jpeg, .png" style="display:none"/>
+                    <label id="media-img" class="cmd-btn-media smalbtblue fa fa-camera" for="uploadImage"></label>
+                </div>
+                {% if offre.media.imagejpg|length >0 %}
+                    <div class="preview">
+                        <img src="{{ asset(offre.media.imagejpg[0].getWebPAth) }}" alt="image post">
+                    </div>
+                {% else %}
+                    <div class="preview"></div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-elastic">
+            <div class="content-form-post">
+                <div class="white-tab _fx-R _fx-center">
+                    <div class="op-avanc" data-toggle="collapse" data-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent"> ajoutez un contenu</div>
+                    <div class="collapse" id="collapseContent">
+                        <div class="card-form">
+                            <div id="articlenews">
+                                {{ include('WysiWyg/toolbar.html.twig') }}
+                                <div id="editor"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="gp-form-row-col2">
+            <div class="progress">
+                <div id="loader-icon"><img src="{{asset('svg/LoaderIcon.gif')}}"  alt="loader"/></div>
+            </div>
+            <div class="iner-bt">
+                <button id="post-news" class="btn-send">Enregistrez</button>
+            </div>
+        </div>
+
+
+
+
+

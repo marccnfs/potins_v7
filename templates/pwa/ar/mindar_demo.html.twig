@@ -1,0 +1,30 @@
+<section class="container mx-auto p-4">
+    <h1>Démo MindAR – Lotus Respire</h1>
+    <p>Scannez l’image-cible fournie pendant l’atelier.</p>
+</section>
+
+
+<!-- A-Frame + MindAR (servis depuis /build/mindar/ grâce à copyFiles) -->
+<script src="/build/mindar/mindar-image-aframe.prod.js"></script>
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+
+
+<a-scene mindar-image="imageTargetSrc: /build/mindar/targets/demo.mind; filterMinCF:0.0001;"
+         color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights"
+         vr-mode-ui="enabled: false"
+         device-orientation-permission-ui="enabled: true">
+    <a-assets>
+        <a-asset-item id="lotus" src="/build/models/lotus.glb"></a-asset-item>
+        <audio id="ambience" src="/build/audio/forest.mp3"></audio>
+    </a-assets>
+
+
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+
+    <a-entity mindar-image-target="targetIndex: 0">
+        <a-gltf-model src="#lotus" position="0 0 0" scale="0.5 0.5 0.5"
+                      animation__breath="property=scale; dir=alternate; dur=4000; loop=true; to=0.6 0.6 0.6"></a-gltf-model>
+        <a-entity sound="src: #ambience; autoplay: false; loop: true"></a-entity>
+    </a-entity>
+</a-scene>

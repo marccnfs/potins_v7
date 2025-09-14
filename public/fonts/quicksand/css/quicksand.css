@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Quicksand', sans-serif;
+    /* src: //url('/public/fonts/quicksand/Quicksand-VariableFont_wght.ttf') format('ttf supports variations'),*/
+    src: url('../fonts/Quicksand_Bold.otf') format('otf'),
+    url("../fonts/Quicksand_Bold_Oblique.otf") format("otf"),
+    url("../fonts/Quicksand_Book.otf") format("otf"),
+    url("../fonts/Quicksand_Book_Oblique.otf") format("otf"),
+    url("../fonts/Quicksand_Dash.otf") format("otf"),
+    url("../fonts/Quicksand_Light.otf") format("otf"),
+    url("../fonts/Quicksand_Light_Oblique.otf") format("otf");
+    font-weight: normal;
+    font-stretch: normal;
+}

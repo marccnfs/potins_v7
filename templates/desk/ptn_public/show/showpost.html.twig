@@ -1,0 +1,120 @@
+{% block body %}
+    <div class="container-showpost">
+        <div class="header-showpost">
+            <h1>{{ potin.titre|lower|capitalize }}</h1>
+            <time itemprop="startDate" class="datepotin">Mis en ligne le : {{ potin.createAt|date("d-m-Y") }}</time>
+        </div>
+
+        <div class="content-grid">
+            <!-- 🟢 Contenu principal -->
+            <div class="main-content">
+                {{ include('desk/ptn_elements/ele_potins/modale_potinv2.html.twig') }}
+            </div>
+
+            <!-- 🟢 Sidebar des ressources -->
+            <aside class="sidebar">
+                <h3>📚 Ressources associées</h3>
+                {% for ressource in ressources %}
+                    {{ include('desk/ptn_elements/ele_ressources/widget_lite_ressources.html.twig') }}
+                {% endfor %}
+                <!-- 🟢 Accès réservé aux participants -->
+                <div class="access-section">
+                    <div class="author">🔒 Retour sur les ateliers<br>(accès réservé aux participants)</div>
+
+                    <button class="link_code"><i class="fa fa-sign-in" id="goaccess"></i></button>
+
+                    <div class="pop_code" id="codeaccess" data-post="{{ potin.id }}" style="display:none">
+                        <button class="close_pop" id="closecode">
+                            <i class="fa fa-times"></i>
+                        </button>
+                        <h2>Entrez votre code d'accès :</h2>
+                        <div id="testcode"></div>
+                        <test-access></test-access>
+                    </div>
+                </div>
+
+                {%  if  potin.link is not null %}
+                    <div class="list_content">
+                        <h3>🎲 Crée ton escape game ici !</h3>
+                        <div class="bk_content">
+                            <a class="btn-view-pdf" href={{ potin.link }}>
+                                ⛳ Go
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- 🟢 Bloc des prévisualisations / revues -->
+                {% if potin.gpreview is not null %}
+                    {% if potin.gpreview.media.imagejpg is defined %}
+                        <div class="w_review">
+                            <div class="pict_wall">
+                                {% for pict in potin.gpreview.media.imagejpg %}
+                                    <div class="little-pic-block" style="background-image: url({{ asset(pict.getWebPath) }})"></div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {%  if  potin.gpreview.reviews|length > 0 %}
+                        <div class="list_content">
+                            <h3>📄 Documents associés</h3>
+                            <ul class="bk_content">
+                                {% for rw in potin.gpreview.reviews %}
+                                    <li>
+                                        {{ rw.titre }}
+                                        {% set typ = rw.type ? "1" : "0" %}
+                                        <a class="btn-view-pdf" href="{{ path('show_potin_review_pdf', {type: typ, slug: potin.slug, id: potin.id}) }}">
+                                            <i class="fa fa-eye"></i> Voir
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </aside>
+        </div>
+
+        <!-- 🟢 Autres ateliers -->
+      {#   <section class="related-posts">
+            <h3>📌 Autres ateliers à découvrir</h3>
+            {{ include('desk/ptn_elements/ele_potins/tabOrderPotins.html.twig') }}
+        </section>
+      #}
+
+        <div class="cadre_title related-posts">
+            <h3>📌 Autres ateliers à découvrir</h3>
+        </div>
+
+        {% if potins|length >0 %}
+            <div class="tgl-100">
+                <div class="fx-content_rep_potinary">
+                    {{ include('desk/ptn_elements/ele_potins/lastpotinslist.html.twig') }}
+                </div>
+            </div>
+        {%  else %}
+            <div class="tgl-100">
+                <div class="fx-content_rep_potinary">
+                    <div class="flex-board">
+                        <div class="flex-notb_v6-fix">
+                            <h3>  Aucun potin disponible</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+
+
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+{% endblock %}
+
+{% use "js/js_public_codeaccess.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

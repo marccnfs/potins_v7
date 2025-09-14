@@ -1,0 +1,16 @@
+{% block body %}
+<div class="_pg_wb-pb_v6">
+    <div class="act-mem">
+    </div>
+    <div class="tgl-100">
+        <div class="fx-content_rep_potinary">
+            {{ include('desk/ptn_elements/ele_events/modale_confirm_resa_event.html.twig') }}
+        </div>
+    </div>
+</div>
+    {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+{%  endblock body %}
+{% use "js/js_customer.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

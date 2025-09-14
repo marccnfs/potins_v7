@@ -1,0 +1,64 @@
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   viewBox="0 0 1280 280"
+   id="svg5586">
+  <defs
+     id="defs5588">
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter5654">
+      <feGaussianBlur
+         in="SourceGraphic"
+         stdDeviation="3"
+         result="result6"
+         id="feGaussianBlur5656" />
+      <feColorMatrix
+         in="SourceGraphic"
+         result="result7"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0 "
+         id="feColorMatrix5658" />
+      <feComposite
+         in2="result7"
+         operator="in"
+         in="result6"
+         id="feComposite5660" />
+    </filter>
+    <filter
+       x="-0.021403266"
+       y="-0.11227696"
+       width="1.0428065"
+       height="1.2245539"
+       color-interpolation-filters="sRGB"
+       id="filter5670">
+      <feGaussianBlur
+         id="feGaussianBlur5672"
+         stdDeviation="14.360749" />
+    </filter>
+    <filter
+       x="-0.13714287"
+       y="-0.13714287"
+       width="1.2742857"
+       height="1.2742857"
+       color-interpolation-filters="sRGB"
+       id="filter3803">
+      <feGaussianBlur
+         id="feGaussianBlur3805"
+         stdDeviation="22.886579" />
+    </filter>
+  </defs>
+  <g
+     style="opacity:0.25;fill:#b3b3b3;stroke:#000000;stroke-width:13.38967419;stroke-miterlimit:4;stroke-opacity:0.9359606;stroke-dasharray:none;filter:url(#filter5670)"
+     id="g3602-8"
+     transform="matrix(0.7948802,0,0,0.70171101,309.28064,68.61926)" />
+  <g
+     style="opacity:1;fill:#000080"
+     id="g3602"
+     transform="matrix(0.7948802,0,0,0.70171101,305.55335,69.66629)">
+    <path
+       style="fill:#000080"
+       id="path3604"
+       d="M -383.89363,-96.984339 C -371.12243,428.24912 706.27183,195.85806 1228.6393,57.100626 l 4.6881,-154.576802 z" />
+  </g>
+</svg>

@@ -1,0 +1,25 @@
+{% block body %}
+    <div class="log-machina_mob">
+        <div class="svg-bulle_open">
+            <div class="content_login_affi_mob">
+                 <div class="stape stape_mob">
+                     <h2>Presque fini...</h2>
+                    <div class="sous_connector">
+                        <h4>Confirmez votre adresse e-mail</h4>
+                        <p>Un e-mail a été envoyé à l'adresse : <br><div class="link_reg">{{ user.emailCanonical }}</div><br>
+                            Il contient un lien d'activation sur lequel il vous faut cliquer afin d'activer votre compte.</p>
+                        <p>à tout de suite...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+    <script>
+        window.onunload = function() {
+            localStorage.clear();
+        }
+    </script>
+{% endblock %}

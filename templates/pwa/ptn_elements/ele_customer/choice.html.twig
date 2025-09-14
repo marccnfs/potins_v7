@@ -1,0 +1,52 @@
+<div class="flrow">
+    <div class="O_list-cube">
+
+        <div class="list-incub fx-c">
+
+
+                    <h1 class="tit-cib-lg">{{vartwig.title}}</h1>
+                    <p>Votre panneau par defaut : <h2>{{ board.nameboard }}</h2></p>
+                    <a class="pop-mn _cl-cl" href="{{ path('officeboard_member', {'board':board.id}) }}">
+                        {% if board.template.logo %}
+                            <div  class="bkgrndlogo" style="background-image: url('{{ asset('spaceweb/template/'~board.template.logo.namefile ) }}')"></div>
+                        {% else %}
+                            <div class="bkgrndlogo" style="
+                                    background-image: url('{{ asset('img/pinsaffi.png') }}')"></div>
+                        {% endif %}
+                    </a>
+
+
+        </div>
+    </div>
+    <div class="list-incub">
+            <p>Changez de panneau : </p>
+            <div class="pos-incub-i">
+                <div class="af_flx-W fx-c">
+
+                    {%  if  member.boardslist|length > 1 %}
+                    {% for pw in member.boardslist %}
+                        {%  if  pw.board.id is not same as board.id %}
+                        <a class="pop-mn {{pw.isadmin??'activ'}} _cl-cl" href="{{ path('change_board', {'id':pw.board.id}) }}">
+                            {% if pw.board.template.logo %}
+                                <div  class="bkgrndlogo" style="background-image: url('{{ asset('spaceweb/template/'~pw.board.template.logo.namefile ) }}')"></div>
+                            {% else %}
+                                <div class="bkgrndlogo" style="
+                                        background-image: url('{{ asset('img/pinsaffi.png') }}')"></div>
+                            {% endif %}
+                            <div class="inerlink">{{ pw.board.nameboard|capitalize }}</div>
+                        </a>
+                        {%  endif %}
+                    {%  endfor %}
+                    {%  endif %}
+                        <a href="{{path('add_board')}}" class="bt-andestand">J'ouvre un nouveau panneau</a>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+
+
+
+
+

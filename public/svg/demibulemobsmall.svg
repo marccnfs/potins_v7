@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   height="100"
+   width="320"
+   id="demibulle"
+   viewBox="0 0 319.99999 100"
+   version="1.1">
+  <metadata
+     id="metadata865">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs5588">
+    <filter
+       id="filter5654"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         id="feGaussianBlur5656"
+         result="result6"
+         stdDeviation="3"
+         in="SourceGraphic" />
+      <feColorMatrix
+         id="feColorMatrix5658"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0 "
+         result="result7"
+         in="SourceGraphic" />
+      <feComposite
+         id="feComposite5660"
+         in="result6"
+         operator="in"
+         in2="result7" />
+    </filter>
+    <filter
+       id="filter5670"
+       color-interpolation-filters="sRGB"
+       height="1.2245539"
+       width="1.0428065"
+       y="-0.11227696"
+       x="-0.021403266">
+      <feGaussianBlur
+         stdDeviation="14.360749"
+         id="feGaussianBlur5672" />
+    </filter>
+    <filter
+       id="filter3803"
+       color-interpolation-filters="sRGB"
+       height="1.2742857"
+       width="1.2742857"
+       y="-0.13714287"
+       x="-0.13714287">
+      <feGaussianBlur
+         stdDeviation="22.886579"
+         id="feGaussianBlur3805" />
+    </filter>
+  </defs>
+  <g
+     transform="matrix(0.7948802,0,0,0.70171101,307.59667,70.605982)"
+     id="g3602-8"
+     style="opacity:0.25;fill:#b3b3b3;stroke:#000000;stroke-width:13.3897;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.935961;filter:url(#filter5670)" />
+  <g
+     transform="matrix(0.2149745,0,0,0.44182402,81.725122,44.193059)"
+     id="g3602"
+     style="opacity:1;fill:#000080">
+    <path
+       d="m -380.15831,-100.02412 c -2.68534,301.77928 1487.59541,301.77928 1488.54501,0 z"
+       id="path3604"
+       style="fill:#175fad;fill-opacity:1;stroke-width:0.902358" />
+  </g>
+</svg>

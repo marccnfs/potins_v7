@@ -1,0 +1,29 @@
+<div class="flex-notb_v6-fix">
+
+    {% if lastsnotice is iterable and lastsnotice|length > 0 %}
+        {% for notice in lastsnotice %}
+            {% set hasPost  = notice.post  ?? null %}
+            {% set hasOffre = notice.offre ?? null %}
+
+            {% if hasPost %}
+                <div class="last-postall_v6-fix">
+                    {{ include('desk/ptn_elements/ele_potins/noticecity.html.twig', {
+                        notice: notice
+                    }, with_context = false) }}
+                </div>
+
+            {% elseif hasOffre %}
+                <div class="last-postall_v6-fix">
+                    {{ include('desk/ptn_elements/ele_potins/offrecity.html.twig', {
+                        notice: notice
+                    }, with_context = false) }}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+    {% else %}
+        <div class="flex-board">
+            <h3>Pas de nouvelle affiche actuellement sur {{ (city ?? '')|capitalize }}</h3>
+        </div>
+    {% endif %}
+</div>

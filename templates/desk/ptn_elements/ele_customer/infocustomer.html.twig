@@ -1,0 +1,71 @@
+<div class="container_bo">
+    <div class="contain_prof">
+        <div class="list-incub">
+            <div class="pos-incub-i">
+                <div class="pos-incub-l-inf">
+                    <div class="inf-pos-cub">{{ customer.profil.sex == "1" ? "Mme" :"Mr" }}</div>
+                    <div class="inf-pos-cub">nom : <span class="inf-strong">{{ customer.profil.lastname }}</span></div>
+                    <div class="inf-pos-cub">prenom : <span class="inf-strong"> {{ customer.profil.firstname }}</span></div>
+                </div>
+            </div>
+            <div class="cadre var--no-top var--blanc">
+                <div class="pt-dm">
+                    <div class="large-text-right">
+                        <a class="btn-nav-nivo4" href="{{ path('edit_profil_customer') }}">Modifier</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ss-titl">mes infos de contact</div>
+        <div class="list-incub">
+
+            <div class="pos-incub-i">
+                <div class="pos-incub-l-inf">
+                    <div class="inf-pos-cub">email : <span class="inf-strong">{{ customer.profil.emailfirst }} </span></div>
+                    <div class="inf-pos-cub">tel.fixe :<span class="inf-strong">{{ customer.profil.telephonefixe }}</span></div>
+                    <div class="inf-pos-cub">tel.mobile :<span class="inf-strong">{{ customer.profil.telephonemobile }}</span></div>
+                </div>
+            </div>
+            <div class="cadre var--no-top var--blanc">
+                <div class="pt-dm">
+                    <div class="large-text-right">
+                        <a class="btn-nav-nivo4" href="{{ path('edit_profil_customer') }}">Modifier</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ss-titl">mes infos personnelles</div>
+        <div class="list-incub">
+            <div class="pos-incub-i">
+                <div class="pos-incub-l-inf">
+                    <div class="inf-pos-cub">date de naissance : <span class="inf-strong">{{ customer.profil.birthdate|date('j/m/Y') }}</span></div>
+                    <div class="inf-pos-cub">activité : <span class="inf-strong">{{ customer.profil.job }}</span></div>
+                </div>
+            </div>
+            <div class="cadre var--no-top var--blanc">
+                <div class="pt-dm">
+                    <div class="large-text-right">
+                        <a class="btn-nav-nivo4" href="{{ path('edit_profil_customer') }}">Modifier</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ss-titl">mon adresse de facturation</div>
+        <div class="list-incub">
+
+
+            <div class="pos-incub-i">
+                <div class="pos-incub-l-inf">
+                    <div class="inf-pos-cub">Votre adresse de facturation<br><em>Cette adresse reste confidentielle et ne peut être vue par d'autres utilisateurs</em></div>
+                </div>
+            </div>
+            <div class="cadre var--no-top var--blanc">
+                <div class="pt-dm">
+                    <div class="large-text-right">
+                        <a id="modifadress" class="btn-nav-nivo4" href="{{ path('edit_adress') }}">ajouter/modifier</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

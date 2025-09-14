@@ -1,0 +1,15 @@
+{% block body %}
+    <section class="_wb-admin_mob">
+        {{ include('aff_websiteadmin/header/mobile/headparameter.html.twig') }}
+        <div class="ii_cub">
+            {{ include('aff_websiteadmin/cubes/actions.html.twig') }}
+            <div class="contener-cube">
+                {{ include('aff_websiteadmin/cubes/initmodule.html.twig') }}
+            </div>
+        </div>
+    </section>
+{%  endblock body %}
+{% use "js/js_edit_website.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

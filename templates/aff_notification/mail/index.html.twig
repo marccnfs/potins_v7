@@ -1,0 +1,86 @@
+{% extends 'layout.html.twig' %}
+
+{% block header_title %}
+    {% block title %}Discussions{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 col-md-8 col-sm-12">
+        <div class="section_7">
+            <div class="sorting_block var2 clearfix">
+                <h2 class="section_title section_title_big">Discussions</h2>
+            </div>
+            
+            <!-- Infos -->
+            {% if app.session.hasFlash('message_create') %}
+            <div class="alert alert-success">
+                <button class="close" data-dismiss="alert" type="button"><i class="fa fa-times"></i></button>
+                <p><strong><i class="fa fa-check"></i></strong> {{ app.session.flash('message_create') | raw | nl2br }}</p>
+            </div><br />
+            {% endif %}
+
+            <table class="table_type_1 var2">
+                <tr class="f_size_large">
+                    <th>Objet</th>
+                    <th>Contact</th>
+                </tr>
+                {% if messages|length > 0 %}
+                    {% for message in messages %}
+                        {% set read = false %}
+                        {% if((message.idMessageSubject.idUserSender and message.idMessageSubject.idUserSender.id == app.user.id and message.idMessageSubject.isSenderRead) or
+                            (message.idMessageSubject.idUserDest.id == app.user.id and message.idMessageSubject.isDestRead)) %}
+                            {% set read = true %}
+                        {% endif %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('message_show', {id: message.idMessageSubject.id}) }}"><h5>{{ message.idMessageSubject.subject }}</h5></a>
+                                <div>{{ message.idMessageSubject.dateUpdate|date('d/m/Y \à H:i') }}</div>
+                            </td>
+                            <td>
+                                <div class="clearfix">
+                                    <figure>
+                                        {% if(message.idMessageSubject.idUserSender and message.idMessageSubject.idUserSender.id == app.user.id) %}
+                                            {% if message.idMessageSubject.idUserDest.idImage %}
+                                                <img width="50px" src="{{ message.idMessageSubject.idUserDest.getImageWebPath() | imagine_filter('sidebar_right') }}" alt="" />
+                                            {% else %}
+                                                <img width="50px" src="{{ asset('bundles/appnoticeboardfrontend/img/imagenoneAffi.jpg') }}" alt="" />
+                                            {% endif %}
+                                        {% else %}
+                                            {% if message.idMessageSubject.idUserSender and message.idMessageSubject.idUserSender.idImage %}
+                                                <img width="50px" src="{{ message.idMessageSubject.idUserSender.getImageWebPath() | imagine_filter('sidebar_right') }}" alt="" />
+                                            {% else %}
+                                                <img width="50px" src="{{ asset('bundles/appnoticeboardfrontend/img/imagenoneAffi.jpg') }}" alt="" />
+                                            {% endif %}
+                                        {% endif %}
+                                    </figure>
+
+                                    <p><a href="">{{ (message.idMessageSubject.idUserDest) ? message.idMessageSubject.idUserDest.username : '' }}</a></p>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-info">Aucun message.</div>
+                {% endif %}
+            </table>
+            <div id="paginate-messagerie" class="paginate"></div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-4 col-sm-12">
+        {% include 'User:sidebar-show.html.twig' %}
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{{ parent() }}
+{% include 'Partial:js/pagination.js.twig' with {
+    pagination_id: '#paginate-messagerie',
+    pagination_currentPage: app.request.get('page'),
+    pagination_totalItems: total,
+    pagination_byPage: byPage,
+    pagination_location: path('message')
+} %}
+{% endblock %}

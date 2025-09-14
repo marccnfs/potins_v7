@@ -1,0 +1,59 @@
+<form class="w100" enctype="multipart/form-data" method="post" name="fileinfo">
+        <div class="form_all_affi">
+            <h1>Ajouter un document :</h1>
+            <div class="bk-form-all">
+
+                <div class="form-group">
+                    <label for="fichier">nom du fichier</label>
+                    <input type="text" class="form-affi" name="fichier" id="fichier" placeholder="fichier....." required="required">
+                    <span class="error" aria-live="polite"></span>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="type" class="required">Type</label>
+                    <select id="type" name="type">
+                        <option value="">--sélectionnez le type de fichier</option>
+                        <option value="image">"image"</option>
+                        <option value="pdf">"pdf"</option>
+                        <option value="video">"video"</option>
+                    </select>
+
+                    <span class="error" aria-live="polite"></span>
+                </div>
+
+                <div class="form-pictandcontent">
+
+                    <div class="form-group">
+                        <div class="blk_upload">
+                            <div class="btn_upload">
+                                <label id="media-img" class="cmd-btn-media smalbtblue fa fa-camera" for="uploadImage"></label>
+                                <span>image d'illustration :</span>
+                                <input id="uploadImage" type="file" name="uploadImage" accept=".jpg, .jpeg, .png" style="display:none"/>
+                            </div>
+                            <div class="preview"></div>
+                        </div>
+                    </div>
+            </div>
+            <div class="gp-form-row-col2">
+                <div class="progress">
+                    <div id="loader-icon"><img src="{{asset('svg/LoaderIcon.gif')}}"  alt="loader"/></div>
+                </div>
+                <div class="iner-bt">
+                    <button id="add" class="btn-send">Enregistrez</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+ 
+
+            
+        
+
+
+
+
+

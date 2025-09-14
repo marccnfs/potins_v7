@@ -1,0 +1,22 @@
+{% block body %}
+    <div class="log-machina">
+        <h1 class="title_log">{{vartwig.title}}</h1>
+        <div class="svg-bulle_open">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">{# <circle cx="100" cy="100" r="80"/>#}</svg>
+            <div class="content_login_affi">
+                <div class="title-affi">
+                    <h4>confirmation inscription</h4>
+                </div>
+                <h2>Pour accéder à vos services {{ user }}, vous devez confirmer votre identitée !</h2>
+                <div class="sous_connector">
+                    <h4>Pour cela : </h4>
+                    <p>Un e-mail a été envoyé à l''adresse {{ user }}.<br>
+                        Il contient un lien d''activation sur lequel il vous faudra cliquer afin d'activer votre compte.</p>
+                    <p>à tout de suite sur AffiChange</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+{% endblock %}

@@ -1,0 +1,32 @@
+<div class="w100">
+    {%  if notifs is defined %}
+        {% for notif in notifs %}
+            {% if notif.tballmsgs is not null %}
+                {%  set msg=notif.tballmsgs %}
+                {% apply spaceless %}
+                    <a class="ax-m {{ msg.sender ?"":"ax-m-no"}}" href="{{ path('read_msg_board_other',{'slug':msg.websitedest.slug,'id':msg.id})}}">
+                        <div class="_gr_row  inf-msg {{ msg.sender ?"gxcsal":""}}">
+                            <div class="_bb-msg {{ msg.sender ?"_bg-Wfilt":"_bg-R"}}" ></div>
+                            <div class="_li-fx fx-cst">
+                                <div class="_gr-Ax">
+                                    <div class="{{ msg.sender ?"":"_co-bk"}}">{{- msg.tballmsgs.dispatch.name|trim -}}</div>
+                                    <div class="obje">{{- msg.subject|u.truncate(20, '...', false) -}}</div>
+                                    {% if msg.createAt|format_datetime('short', 'none', locale='fr') is same as ("now"|format_datetime('short', 'none', locale='fr')) %}
+                                        <div>{{- msg.createAt|format_datetime('none', 'short', locale='fr') -}}</div>
+                                    {% else %}
+                                        <div>{{- msg.createAt|format_datetime('medium', 'none', locale='fr')|slice(0,-4) -}}</div>
+                                    {% endif %}
+                                </div>
+                                {% if msg.pj is defined %}
+                                    <div class="andel">
+                                        <div><p>pièce jointe</p></div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                {% endapply %}
+            {%  endif %}
+        {% endfor %}
+    {% endif %}
+</div>

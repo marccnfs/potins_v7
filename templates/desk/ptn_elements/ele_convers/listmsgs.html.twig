@@ -1,0 +1,80 @@
+<div class="msg-head-dsk" id="af_navdk">
+    <div class="msg_col_head">
+        <div class="pag_head_dsk">
+
+            <div class="bta-lk_v2">
+                <a href="{{ path('messagery_spwb',{'slug':website.slug}) }}" class="mn-logo_wb mn-bb"><i class="fa fa-comments-o" aria-hidden="true"></i>tous</a>
+            </div>
+
+            <div id="mormsg">
+            {{ knp_pagination_render(pagination) }}
+            </div>
+
+            {%  if member %}
+                <div class="bta-lk_v2 affitoggle " data-affitgl="tgl_1" id="afftgl" data-inf="msg-memberwebsite">
+                    <div class="mn-logo_wb mn-bb"><i class="fa fa-comment-o" aria-hidden="true"></i>demarrer une conversation</div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="ox">
+            <div class="_gr_row  inf-msg  _co-gy gxcsal">
+                <div class="_bb-msg _bg-Wfilt_bg-R"></div>
+                <div class="_fx-C fx-cst">
+                    <div class="_gr-Ax">
+                        <div class="_co-bk">de</div>
+                        <div class="obje">objet</div>
+                        <div>date</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="_scrollflow _p w100 mrg0">
+    <div class="list_publi">
+        <div class="wb_header centered {# flowscrl #}">
+            <div id="id-choicacces">
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    {%  if msgs is defined %}
+                    {% for msg in msgs %}
+                        {% apply spaceless %}
+                        <a class="Ax {{ msg.sender ?"":"Ax-no"}}" href="{{ path('read_msg',{'slug':website.slug,'id':msg.id})}}">
+                            <div class="_gr_row  inf-msg {{ msg.sender ?" _co-gy gxcsal":""}}">
+                                <div class="_bb-msg {{ msg.sender ?"_bg-Wfilt":"_bg-R"}}" ></div>
+                                <div class="_fx-C fx-cst">
+                                {% if not msg.isspaceweb %}
+                                    <div class="{{ msg.sender ?"_co-gy":"_co-bk"}}">Nouveau contact</div>
+                                {% endif %}
+                                    <div class="_gr-Ax">
+                                        {% if msg.isspaceweb %}
+                                            <div class="{{ msg.sender ?"_co-gy":"_co-bk"}}">{{- msg.spacewebexpe.name|trim -}}</div>
+                                        {% else %}
+                                        <div class="{{ msg.sender ?"_co-gy":"_co-bk"}}">{{- msg.contactexp.useridentity.firstname|trim -}}</div>
+                                        {% endif %}
+                                        <div class="obje">{{- msg.subject|u.truncate(20, '...', false) -}}</div>
+                                        {% if msg.createAt|format_datetime('short', 'none', locale='fr') is same as ("now"|format_datetime('short', 'none', locale='fr')) %}
+                                            <div>{{- msg.createAt|format_datetime('none', 'short', locale='fr') -}}</div>
+                                        {% else %}
+                                            <div>{{- msg.createAt|format_datetime('medium', 'none', locale='fr')|slice(0,-4) -}}</div>
+                                        {% endif %}
+                                    </div>
+                                {% if msg.pj is defined %}
+                                    <div class="andel">
+                                        <div><p>pièce jointe</p></div>
+                                    </div>
+                                {% endif %}
+                                </div>
+                            </div>
+                        </a>
+                        {% endapply %}
+                    {% endfor %}
+                    {% endif %}
+                {% else %}
+                    <div class="tab-info_rd">
+                        {{ include('website/public/desk/conversations/view/conversations-contact-desk.html.twig') }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

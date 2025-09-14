@@ -1,0 +1,38 @@
+<div class="cub-form">
+    <div class="act-ct">
+        <div class="cbe-fx">
+            <div class="cbe_cnt">
+                <div class="c_i_b">
+                    <div class="in_cib">
+                        <div class="form-groupfields glass-label">
+                            <div class="glass-title_form">
+                                <h3>Website</h3>
+                            </div>
+                            <div class="process-module_glass">
+                                <div class="stape-process-lit" >
+                                    <h5>Client <strong>{{ website.namewebsite }}</strong></h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="act-mem">
+                {% for message in app.flashes('notice') %}
+                    <div class="_fx-Tflhs">
+                        <div class="comd-flhs">
+                            <h5>attention !</h5>
+                            <div class="_rlm-a">
+                                <div class="msg-flhs">{{ message }}.</div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

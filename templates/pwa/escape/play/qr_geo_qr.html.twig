@@ -1,0 +1,24 @@
+<section class="card">
+    <h3>Scanne ce QR avec ton téléphone</h3>
+    <img src="{{ qr }}" alt="QR code" width="280" height="280">
+    <p class="muted">Ce lien est valable jusqu’à {{ link.expiresAt ? link.expiresAt|date('H:i') : 'bientôt' }} et ne fonctionne que pour ton profil.</p>
+
+    <div id="qr-status" class="muted">En attente de validation sur mobile…</div>
+</section>
+
+<script>
+    // Polling léger toutes les 2s (SSE possible si tu veux)
+    const statusEl = document.getElementById('qr-status');
+    const url = '{{ path('mobile_link_status', { token: link.token }) }}';
+    let timer = setInterval(async () => {
+        const r = await fetch(url, { headers: { 'X-Requested-With':'XMLHttpRequest' }});
+        if (!r.ok) return;
+        const j = await r.json();
+        if (j.status === 'used') {
+            statusEl.textContent = '✅ Validé depuis le mobile, bravo !';
+            clearInterval(timer);
+            // TODO: coche l’étape / redirige vers étape suivante
+            // window.location.href = '{{ path('play_step', { slug: eg.shareSlug, step: 3 }) }}';
+        }
+    }, 2000);
+</script>

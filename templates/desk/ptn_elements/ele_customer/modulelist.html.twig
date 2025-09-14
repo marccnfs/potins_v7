@@ -1,0 +1,121 @@
+<div class="container-bo_v5">
+    <div class="flrow">
+        <div class="fx-cub ii_cub2">
+            <div class="O_list-cube">
+
+                <div class="list-incub">
+                    <div class="pos-incub-i">
+                        <div class="pos-incub-l">
+                            <h1 class="tit-cib-lg">{{vartwig.title}}</h1>
+                            <p>Les services permettent de disposer sur vos panneaux des modules de publication. Les modules AffiChe, Follow et Mail sont installés par défaut à la creation de votre espace AffiChanGe. D'autres modules sont optionnels.{#  Pour ajoutez ces services à vos panneaux, suivez le guide d'installation#}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="list-incub">
+                    <div class="pos-incub-l">
+
+                        <div class="mod-incub">
+                            <div class="pos-incub-i">
+                                <div class="pos-incub-l w-cb1">
+                                    <div class="tit-pos-cub">AffiChe</div>
+                                    <div class="inf_cub">Affichez vos informations sur le panneau de votre localité.</div>
+                                </div>
+                                <div class="pos-incub-px w-cb2">
+                                    <div class="account_module">
+                                        <p>free</p>
+                                    </div>
+                                </div>
+                                <div class="pos-incub-px w-cb3">
+                                    <div class="majof oftmj">disponible</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mod-incub">
+                            <div class="pos-incub-i">
+                                <div class="pos-incub-l w-cb1">
+                                    <div class="tit-pos-cub">follow me</div>
+                                    <div class="inf_cub">Informez sur vos évenements à venir, sur votre position en temps réel : sur un marché, point de vente et de drive...</div>
+                                </div>
+                                <div class="pos-incub-px w-cb2">
+                                    <div class="account_module">
+                                        <p>free</p>
+                                    </div>
+                                </div>
+                                <div class="pos-incub-px w-cb3">
+                                    <div class="majof oftmj">disponible</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mod-incub">
+                            <div class="pos-incub-i">
+                                <div class="pos-incub-l w-cb1">
+                                    <div class="tit-pos-cub">Messagerie</div>
+                                    <div class="inf_cub">Disposez d'une messagerie privée pour échanger avec les autres membres du réseau affichange.</div>
+                                </div>
+                                <div class="pos-incub-px w-cb2">
+                                    <div class="account_module">
+                                        <p>free</p>
+                                    </div>
+                                </div>
+                                <div class="pos-incub-px w-cb3">
+                                    <div class="majof oftmj">disponible</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mod-incub">
+                            <div class="pos-incub-i">
+                                <div class="pos-incub-l w-cb1">
+                                    <div class="tit-pos-cub">e-boutique</div>
+                                    <div class="inf_cub">Utilisez AffChanGe pour afficher et vendre vos produits en ligne</div>
+                                </div>
+                                <div class="pos-incub-px w-cb2">
+                                    <div class="account_module">
+                                        <p>commission sur transaction </p>
+                                        <button>en savoir plus</button>
+                                    </div>
+                                </div>
+                                <div class="pos-incub-px w-cb3">
+                                {%  if  isActivity('module_shop',services) %}
+                                    <div class="maj oftmj">désactiver</div>
+                                    {#  <button id="convers" class="maj onmj">installer</button> #}
+                                {% else %}
+                                    <a href="{{ path('new_cmd_customer',{'md':'module_shop'} )}}" class="maj onmj">Installer</a>
+                                {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mod-incub">
+                            <div class="pos-incub-i">
+                                <div class="pos-incub-l w-cb1">
+                                    <div class="tit-pos-cub">e-menu</div>
+                                    <div class="inf_cub">Proposez vos menus du jour et gérer vos commandes en ligne</div>
+                                </div>
+                                <div class="pos-incub-px w-cb2">
+                                    <div class="account_module">
+                                        <p>commission sur réservation</p>
+                                        <button>en savoir plus</button>
+                                    </div>
+                                </div>
+                                <div class="pos-incub-px w-cb3">
+                                    {%  if  isActivity('module_found',services) %}
+                                        <div class="maj oftmj">désactiver</div>
+
+                                {% else %}
+                                    <a href="{{ path('new_cmd_customer',{'md':'module_found'} )}}" class="maj onmj">Installer</a>
+                                {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

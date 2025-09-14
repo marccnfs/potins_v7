@@ -1,0 +1,10 @@
+{% block body %}
+    <div class="_o_media">
+        {{ include('desk/ptn_media/resa/form/editresapotinform.html.twig') }}
+    </div>
+    {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+{%  endblock body %}
+{% use "js/js_modifresapotinparticpants.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

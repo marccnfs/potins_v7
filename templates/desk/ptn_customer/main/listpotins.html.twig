@@ -1,0 +1,64 @@
+{% block body %}
+    <div class="_pg_wb-pb_v6">
+        <div class="act-mem">
+            {% for message in app.flashes('notice') %}
+                <div class="_fx-Tflhs">
+                    <div class="comd-flhs">
+                        <h5>attention !</h5>
+                        <div class="_rlm-a">
+                            <div class="msg-flhs">{{ message }}.</div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% if potins|length >0 %}
+            <div class="tgl-100">
+                <div class="fx-content_rep_potinary">
+                    {{ include('desk/ptn_elements/ele_customer/potins_list_customer.html.twig') }}
+                </div>
+            </div>
+        {%  else %}
+            <div class="tgl-100">
+                <div class="fx-content_rep_potinary">
+                    <div class="flex-board">
+                        <div class="flex-notb_v6-fix">
+                            <h3>  Aucun potin réalisé</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {{ include('desk/ptn_public/footer/potins_footer.html.twig') }}
+    </div>
+{%  endblock body %}
+{% use "js/js_website.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+ {#   <div class="_wb">
+        <div class="container-bo_v5">
+
+            <section class="_wb-ospace">
+                <div class="head-wb-space"></div>
+                <div class="vaiss-lib">
+                    <div class="_pg-act">
+                        <div class="fx-cub ii_cub">
+                            {{ include('desk/ptn_elements/ele_customer/actionmember.html.twig') }}
+                            {{ include('desk/ptn_elements/ele_customer/potins_list_customer.html.twig') }}
+                                {{ include('aff_master/contents/cube-infoweb.html.twig') }}
+                                    {{ include('aff_master/contents/cube-annonce.html.twig') }}
+                                    {{ include('aff_master/contents/cube-lrg.html.twig') }}
+                                    {{ include('aff_master/contents/cube-text.html.twig') }}
+                                    {{ include('aff_master/contents/cube-link.html.twig') }}
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div> #}
+
+
+

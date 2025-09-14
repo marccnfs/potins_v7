@@ -1,0 +1,680 @@
+[
+    {
+        "term": "A/B Testing",
+        "definition": "Méthode de comparaison de deux versions différentes d'une page web, d'un email ou d'une annonce pour déterminer laquelle est la plus efficace."
+    },
+    {
+        "term": "Ad Copy",
+        "definition": "Texte publicitaire apparaissant dans une annonce, conçu pour attirer l'attention de l'utilisateur et le convaincre de cliquer."
+    },
+    {
+        "term": "Ad Extensions",
+        "definition": "Extensions d'annonce ajoutant des informations supplémentaires telles que des liens supplémentaires, des informations de contact ou des avis clients aux annonces."
+    },
+    {
+        "term": "Ad Group",
+        "definition": "Groupe d'annonces regroupant des annonces partageant un ensemble commun de mots-clés et de ciblage."
+    },
+    {
+        "term": "Ad Rank",
+        "definition": "Position d'une annonce dans les résultats de recherche, déterminée par son Quality Score et son enchère."
+    },
+    {
+        "term": "Affiliate Marketing",
+        "definition": "Programme de marketing dans lequel une entreprise rémunère des affiliés pour chaque visiteur ou client apporté par leurs efforts de marketing."
+    },
+    {
+        "term": "Algorithme",
+        "definition": "Ensemble d'instructions ou de règles permettant d'accomplir une tâche ou de résoudre un problème spécifique."
+    },
+    {
+        "term": "Alpha/Beta Testing",
+        "definition": "Tests réalisés par des testeurs internes ou externes pour identifier et corriger les problèmes de gameplay, de performance ou de stabilité avant la sortie officielle du jeu."
+    },
+    {
+        "term": "Analyse décisionnelle",
+        "definition": "Cette analyse vise à fournir des informations pertinentes et fiables pour aider à la prise de décision. Elle intègre souvent des éléments des autres types d'analyse pour fournir des recommandations ou des insights exploitables."
+    },
+    {
+        "term": "Analyse descriptive",
+        "definition": "Cette analyse consiste à décrire et résumer les données de manière concise afin de comprendre leur nature et leurs caractéristiques. Elle inclut souvent des techniques telles que les statistiques descriptives, les graphiques et les tableaux récapitulatifs."
+    },
+    {
+        "term": "A/B, Testing",
+        "definition": "Méthode de comparaison de deux versions différentes d'une page web, d'un email ou d'une annonce pour déterminer laquelle est la plus efficace."
+    },
+    {
+        "term": "Ad Copy",
+        "definition": "Texte publicitaire apparaissant dans une annonce, conçu pour attirer l'attention de l'utilisateur et le convaincre de cliquer."
+    },
+    {
+        "term": "Ad Extensions",
+        "definition": "Extensions d'annonce ajoutant des informations supplémentaires telles que des liens supplémentaires, des informations de contact ou des avis clients aux annonces."
+    },
+    {
+        "term": "Ad Group",
+        "definition": "Groupe d'annonces regroupant des annonces partageant un ensemble commun de mots-clés et de ciblage."
+    },
+    {
+        "term": "Ad Rank",
+        "definition": "Position d'une annonce dans les résultats de recherche, déterminée par son Quality Score et son enchère."
+    },
+    {
+        "term": "Affiliate Marketing",
+        "definition": "Programme de marketing dans lequel une entreprise rémunère des affiliés pour chaque visiteur ou client apporté par leurs efforts de marketing."
+    },
+    {
+        "term": "Algorithme",
+        "definition": "Ensemble d'instructions ou de règles permettant d'accomplir une tâche ou de résoudre un problème spécifique."
+    },
+    {
+        "term": "Alpha/Beta Testing",
+        "definition": "Tests réalisés par des testeurs internes ou externes pour identifier et corriger les problèmes de gameplay, de performance ou de stabilité avant la sortie officielle du jeu."
+    },
+    {
+        "term": "Analyse décisionnelle",
+        "definition": "Cette analyse vise à fournir des informations pertinentes et fiables pour aider à la prise de décision. Elle intègre souvent des éléments des autres types d'analyse pour fournir des recommandations ou des insights exploitables."
+    },
+    {
+        "term": "Analyse descriptive",
+        "definition": "Cette analyse consiste à décrire et résumer les données de manière concise afin de comprendre leur nature et leurs caractéristiques. Elle inclut souvent des techniques telles que les statistiques descriptives, les graphiques et les tableaux récapitulatifs."
+    },
+    {
+        "term": "Analyse des données",
+        "definition": "Processus visant à inspecter, nettoyer et modéliser des données pour en extraire des informations utiles."
+    },
+    {
+        "term": "Analyse diagnostique",
+        "definition": "L'analyse diagnostique cherche à identifier les causes sous-jacentes des tendances ou des modèles observés dans les données. Elle est souvent utilisée pour comprendre pourquoi certains événements se produisent en examinant les facteurs qui y contribuent."
+    },
+    {
+        "term": "Analyse exploratoire",
+        "definition": "L'analyse exploratoire vise à explorer les données de manière approfondie pour détecter des modèles, des tendances ou des relations qui pourraient être intéressants. Elle implique souvent l'utilisation de techniques de visualisation de données avancées et des méthodes d'exploration de données."
+    },
+    {
+        "term": "Analyse des performances",
+        "definition": "Évaluation des résultats et des indicateurs clés de performance (KPIs) d'une stratégie social media pour mesurer l'efficacité des actions menées."
+    },
+    {
+        "term": "Analyse prédictive",
+        "definition": "Cette analyse utilise des modèles statistiques et des algorithmes d'apprentissage automatique pour prédire des résultats futurs en se basant sur des données historiques. Elle est largement utilisée dans des domaines tels que la prévision des ventes, la détection de fraudes et la gestion des risques."
+    },
+    {
+        "term": "Analytics",
+        "definition": "Collecte, mesure et analyse des données relatives à la performance d'une campagne marketing ou d'un site web."
+    },
+    {
+        "term": "API (Application Programming Interface)",
+        "definition": "Interface de programmation permettant à différentes parties d'un logiciel de communiquer et d'interagir entre elles, souvent utilisée pour intégrer des services tiers dans une application."
+    },
+    {
+        "term": "Application Mobile",
+        "definition": "Programme informatique conçu pour être utilisé sur un appareil mobile tel qu'un smartphone ou une tablette. Les applications mobiles sont généralement téléchargées depuis des plateformes de distribution d'applications telles que l'App Store (iOS) ou Google Play (Android) et offrent une expérience utilisateur optimisée pour les écrans tactiles et les fonctionnalités des appareils mobiles."
+    },
+    {
+        "term": "Application Web",
+        "definition": "Application logicielle accessible via un navigateur web et hébergée sur un serveur distant. Contrairement aux applications mobiles, les applications web ne nécessitent pas de téléchargement et d'installation sur un appareil, mais peuvent être utilisées directement via une connexion internet. Elles offrent une portabilité accrue et sont compatibles avec une large gamme de dispositifs et de plateformes."
+    },
+    {
+        "term": "As-a-service ou ass",
+        "definition": "expression utilisée lorsqu'un tiers se charge de fournir un service de Cloud Computing qui centralisera un certain nombre de tâches pour alléger la gestion d'une infrastructure sur site. Il existe trois principaux types de cloud computing « as-a-Service », chacun offrant un certain degré de gestion"
+    },
+    {
+        "term": "Assets (développement de jeux vidéos)",
+        "definition": "Ressources utilisées dans un jeu, telles que des modèles 3D, des textures, des animations, des sons, des musiques, des scripts, etc."
+    },
+    {
+        "term": "Asset Pipeline (développement de jeux vidéos)",
+        "definition": "Processus de gestion et d'intégration des actifs (assets) dans le jeu, y compris leur importation, leur organisation, leur optimisation et leur déploiement."
+    },
+    {
+        "term": "Backend",
+        "definition": "Partie d'une application web ou d'un site internet responsable du traitement des requêtes des utilisateurs, de l'accès aux bases de données et de la logique métier, souvent réalisée avec des langages tels que Python, Ruby, Java, PHP ou Node.js."
+    },
+    {
+        "term": "Backlog Produit",
+        "definition": "Liste priorisée des fonctionnalités, des tâches et des exigences à réaliser dans le cadre d'un projet de développement de produit ou de logiciel. Il représente essentiellement la liste des éléments à livrer pour répondre aux besoins des utilisateurs et atteindre les objectifs du projet. Le Chef de Produit, le Chef de Projet, ou même les développeurs, peuvent également contribuer à la gestion du backlog produit."
+    },
+    {
+        "term": "Base de Données",
+        "definition": "Système de stockage structuré permettant de stocker et de gérer des données, généralement utilisé pour stocker des informations dans les applications web."
+    },
+    {
+        "term": "Brief Client",
+        "definition": "Document qui décrit les objectifs, les attentes et les exigences d'un client concernant un projet spécifique. Il s'agit d'une synthèse des informations fournies par le client, qui permet de clarifier les attentes et de définir les grandes lignes du projet."
+    },
+    {
+        "term": "Business intelligence (BI)",
+        "definition": "Ensemble de méthodes, de processus et de technologies qui permettent aux entreprises de collecter, d'analyser et de transformer leurs données en informations exploitables pour prendre des décisions stratégiques et opérationnelles. Cela inclut la collecte, l'analyse, le nettoyage, la transformation et la visualisation des données. La business intelligence joue un rôle crucial dans la transformation numérique des entreprises en leur permettant de tirer parti de leurs données pour obtenir un avantage concurrentiel, prendre des décisions plus éclairées et stimuler l'innovation. Elle est largement utilisée dans divers domaines tels que le marketing, les ventes, la finance, la gestion des ressources humaines, la logistique et la gestion des opérations."
+    },
+    {
+        "term": "C++",
+        "definition": "Langage de programmation largement utilisé dans le développement de jeux vidéo pour sa performance, sa flexibilité et son contrôle bas niveau sur le matériel."
+    },
+    {
+        "term": "C#",
+        "definition": "Langage de programmation populaire pour le développement de jeux vidéo sur la plateforme Unity, offrant une syntaxe similaire à celle du C++ avec des fonctionnalités orientées objet et une intégration étroite avec l'environnement de développement Unity."
+    },
+    {
+        "term": "Calendrier Editorial",
+        "definition": "Planification des publications et du contenu à partager sur les réseaux sociaux, généralement organisée par date, thème et plateforme."
+    },
+    {
+        "term": "Call to Action (CTA)",
+        "definition": "Élément d'une page web ou d'un email incitant les utilisateurs à effectuer une action spécifique, telle que s'inscrire à une newsletter ou acheter un produit."
+    },
+    {
+        "term": "Carte thermique (Heat map)",
+        "definition": "Un graphique qui utilise des couleurs pour représenter les valeurs d'une matrice de données, où les couleurs plus chaudes représentent des valeurs plus élevées et les couleurs plus froides représentent des valeurs plus faibles."
+    },
+    {
+        "term": "Chef de Projet Digital",
+        "definition": "Professionnel chargé de coordonner et de gérer les projets liés au numérique, tels que le développement de sites web, les campagnes marketing en ligne et les applications mobiles."
+    },
+    {
+        "term": "Cloud computing",
+        "definition": "Fourniture de services informatiques via internet, permettant l'accès à des ressources telles que le stockage et le calcul à la demande."
+    },
+    {
+        "term": "Clustering",
+        "definition": "Technique d'analyse de données largement utilisée dans différents métiers pour découvrir des structures et des patterns dans les données, permettant ainsi de prendre des décisions éclairées et de développer des stratégies efficaces."
+    },
+    {
+        "term": "CMS (Content Management System)",
+        "definition": "Système de gestion de contenu permettant de créer, modifier et organiser facilement le contenu d'un site web."
+    },
+    {
+        "term": "Community Management",
+        "definition": "Gestion quotidienne des interactions, des commentaires et des messages des utilisateurs sur les réseaux sociaux, visant à maintenir une relation positive avec la communauté."
+    },
+    {
+        "term": "Conversion",
+        "definition": "Action souhaitée (objectif défini par l'entreprise) réalisée par un utilisateur après avoir cliqué sur une annonce, telle que l'achat d'un produit, la soumission d'un formulaire, l'inscription à une newsletter..."
+    },
+    {
+        "term": "Conversion Rate",
+        "definition": "Taux de conversion, pourcentage d'utilisateurs ayant réalisé une conversion par rapport au nombre total de clics sur une annonce."
+    },
+    {
+        "term": "Contenu",
+        "definition": "Publications, articles, images, vidéos et autres éléments partagés sur les réseaux sociaux pour informer, divertir ou engager la communauté."
+    },
+    {
+        "term": "CPC (Cost Per Click)",
+        "definition": "Coût par clic, montant payé par l'annonceur chaque fois qu'un utilisateur clique sur une annonce."
+    },
+    {
+        "term": "CTR (Click-Through Rate)",
+        "definition": "Taux de clics, pourcentage d'utilisateurs qui cliquent sur une annonce par rapport au nombre total d'impressions."
+    },
+    {
+        "term": "Community Manager",
+        "definition": "Professionnel chargé de gérer et d'animer la présence d'une marque ou d'une entreprise sur les réseaux sociaux, en interagissant avec la communauté d'utilisateurs et en créant du contenu engageant."
+    },
+    {
+        "term": "Content Marketing",
+        "definition": "Stratégie marketing visant à créer et à distribuer du contenu pertinent et précieux pour attirer et fidéliser un public cible."
+    },
+    {
+        "term": "Conversion Rate Optimization (CRO)",
+        "definition": "Processus visant à augmenter le taux de conversion d'un site web en optimisant ses éléments et son expérience utilisateur."
+    },
+    {
+        "term": "Cryptographie",
+        "definition": "Science et art de protéger les communications et les données en les rendant illisibles pour les personnes non autorisées. La cryptographie est étroitement liée à plusieurs métiers dans le domaine de la sécurité informatique et de la protection des données."
+    },
+    {
+        "term": "CSS (Cascading Style Sheets)",
+        "definition": "Langage utilisé pour définir la présentation et l'apparence visuelle d'une page web, en complément de HTML."
+    },
+    {
+        "term": "Cybersécurité",
+        "definition": "Pratiques visant à protéger les systèmes informatiques, les réseaux et les données contre les attaques et les intrusions."
+    },
+    {
+        "term": "D3.js",
+        "definition": "Bibliothèque JavaScript populaire pour la création de visualisations de données dynamiques et interactives dans le navigateur web."
+    },
+    {
+        "term": "daily stand-up",
+        "definition": "pour discuter de ce qui a été réalisé depuis la dernière réunion, des obstacles rencontrés et des objectifs pour la journée à venir. À la fin de chaque sprint, l'équipe organise une revue de sprint pour présenter les résultats au Product Owner et aux parties prenantes, suivie d'une rétrospective pour évaluer le processus et identifier les domaines d'amélioration"
+    },
+    {
+        "term": "Dashboard (Tableau de bord)",
+        "definition": "Une interface graphique qui regroupe et affiche des informations clés de manière synthétique et visuelle pour faciliter la compréhension des données et la prise de décision."
+    },
+    {
+        "term": "Data Science",
+        "definition": "Discipline interdisciplinaire qui utilise des méthodes scientifiques, des algorithmes et des systèmes pour extraire des connaissances et des insights à partir de données structurées et non structurées."
+    },
+    {
+        "term": "Dataviz",
+        "definition": " Processus de représentation visuelle des données et des informations afin de les rendre plus compréhensibles et significatives pour les utilisateurs. La dataviz (data visualization)  utilise des éléments graphiques tels que des graphiques, des tableaux, des cartes et des diagrammes pour communiquer des tendances, des modèles et des insights à partir des données."
+    },
+
+
+    {
+        "term": "Deep Learning",
+        "definition": "Sous-ensemble du machine learning basé sur des réseaux de neurones artificiels profonds, capable d'apprendre des représentations de données à différents niveaux d'abstraction."
+    },
+    {
+        "term": "Déploiement",
+        "definition": "Processus de mise en ligne et de configuration d'une application web ou d'un site internet sur un serveur ou une plateforme de cloud computing, permettant son accès aux utilisateurs."
+    },
+    {
+        "term": "Développeur Fullstack",
+        "definition": "Professionnel capable de travailler sur le développement tant du côté client (frontend) que du côté serveur (backend) d'une application web ou d'un site internet."
+    },
+    {
+        "term": "Développement web",
+        "definition": "Processus de création et de maintenance de sites web, applications web et autres solutions en ligne."
+    },
+    {
+        "term": "DevOps",
+        "definition": "Approche visant à rapprocher les équipes de développement (Dev) et d'exploitation (Ops) pour améliorer la collaboration et accélérer la livraison des logiciels."
+    },
+    {
+        "term": "Drag-and-Drop",
+        "definition": "Interface utilisateur permettant de déplacer et de placer des éléments graphiques sur une surface de travail sans avoir à écrire de code, utilisée dans de nombreux outils no-code pour concevoir des interfaces utilisateur."
+    },
+    {
+        "term": "E-commerce",
+        "definition": "Pratique commerciale consistant à acheter et vendre des produits ou services en ligne."
+    },
+    {
+        "term": "Emailing ou Email Marketing",
+        "definition": "Utilisation de l'email pour promouvoir des produits ou services, communiquer avec les clients et les prospects, et renforcer la relation client."
+    },
+    {
+        "term": "Engagement",
+        "definition": "Mesure de l'interaction des utilisateurs avec le contenu et les publications d'une marque sur les réseaux sociaux, comprenant les likes, les commentaires, les partages, etc."
+    },
+    {
+        "term": "Ensemble Learning (analyse de données et intelligence artificielle)",
+        "definition": "Technique en apprentissage automatique où plusieurs modèles d'apprentissage sont combinés pour améliorer les performances globales du système. Cette approche peut souvent améliorer la performance prédictive par rapport à l'utilisation d'un seul modèle."
+    },
+    {
+        "term": "Exploration de données (Data Exploration)",
+        "definition": "Processus d'analyse exploratoire des données pour découvrir des tendances, des modèles et des relations cachées."
+    },
+    {
+        "term": "FabLab",
+        "definition": "Espace ouvert au public équipé de divers outils et machines, permettant à chacun de concevoir, prototyper et fabriquer des objets, favorisant ainsi la créativité, l'innovation et le partage des connaissances."
+    },
+    {
+        "term": "FabLab manager",
+        "definition": "Personne responsable de la gestion et de la coordination des activités au sein d'un FabLab. Ses tâches incluent l'entretien des équipements, l'organisation des ateliers et des formations, l'accueil et l'accompagnement des utilisateurs, ainsi que la promotion de la collaboration et du partage des connaissances au sein de la communauté du FabLab."
+    },
+    {
+        "term": "Feedback Client",
+        "definition": "Retour d'information fourni par le client sur les résultats, les performances et l'expérience utilisateur d'un projet digital."
+    },
+    {
+        "term": "Feature Engineering (ingénierie des caractéristiques / analyse de données et intelligence artificielle)",
+        "definition": "Processus de création et de sélection des caractéristiques pertinentes à partir des données brutes pour être utilisées dans des modèles d'apprentissage automatique. L'objectif est de présenter au modèle des données de haute qualité et informatives qui permettront d'obtenir de meilleures performances prédictives."
+    },
+    {
+        "term": "Firewall",
+        "definition": "Dispositif de sécurité réseau permettant de contrôler et de filtrer le trafic entrant et sortant pour protéger un réseau contre les attaques."
+    },
+    {
+        "term": "FPS (Frames Per Second)",
+        "definition": "Images par seconde, une mesure de la fluidité du jeu en indiquant le nombre d'images affichées par seconde."
+    },
+    {
+        "term": "Framework",
+        "definition": "Ensemble d'outils, de composants et de bibliothèques logicielles facilitant le développement d'applications web ou mobiles."
+    },
+    {
+        "term": "Framework Backend",
+        "definition": "Cadre de développement fournissant des fonctionnalités prêtes à l'emploi pour faciliter la création d'applications web côté serveur, tels que Django (Python), Ruby on Rails (Ruby), Spring (Java), Laravel (PHP), etc."
+    },
+    {
+        "term": "Framework Frontend",
+        "definition": "Bibliothèque de code préécrit facilitant le développement d'interfaces utilisateur côté client, tels que React.js, Angular, Vue.js, etc."
+    },
+    {
+        "term": "Front-end",
+        "definition": "Partie d'une application web ou d'un site internet avec laquelle l'utilisateur interagit directement, généralement constituée de HTML, CSS et JavaScript."
+    },
+    {
+        "term": "Game Engine",
+        "definition": "Moteur de jeu, un logiciel utilisé pour créer et développer des jeux vidéo en fournissant des fonctionnalités de base telles que la gestion des graphismes, de la physique, de l'audio, etc."
+    },
+    {
+        "term": "Gameplay",
+        "definition": "Jouabilité, l'expérience interactive offerte aux joueurs lorsqu'ils interagissent avec le jeu, y compris les mécaniques de jeu, les contrôles, les objectifs, etc."
+    },
+    {
+        "term": "Google Data Studio",
+        "definition": "Outil gratuit de Google permettant de créer des rapports et des visualisations de données personnalisés à partir de différentes sources de données."
+    },
+    {
+        "term": "Google Sheets",
+        "definition": "Application de tableur en ligne développée par Google. Elle fait partie de la suite bureautique Google Workspace (anciennement G Suite) et permet aux utilisateurs de créer, de modifier et de partager des feuilles de calcul en ligne."
+    },
+    {
+        "term": "Grid system",
+        "definition": "Structure de mise en page utilisée dans la conception de sites web et d'applications pour organiser et aligner les éléments de manière cohérente sur une grille basée sur des colonnes et des lignes. Cette approche permet de créer des mises en page plus esthétiques, cohérentes et facilement adaptables à différents écrans et tailles d'appareils."
+    },
+    {
+        "term": "HLSL/GLSL",
+        "definition": "Langages de shaders utilisés pour programmer les shaders graphiques dans les moteurs de jeu, permettant de contrôler l'apparence visuelle des objets et des effets dans le jeu."
+    },
+    {
+        "term": "HTML (HyperText Markup Language)",
+        "definition": "Langage de balisage utilisé pour créer et structurer le contenu d'une page web."
+    },
+    {
+        "term": "HUD (Heads-Up Display)",
+        "definition": "Interface graphique affichée à l'écran pendant le jeu pour fournir des informations aux joueurs, telles que la santé du personnage, le score, les objectifs, etc."
+    },
+    {
+        "term": "IaaS (Infrastructure as a Service)",
+        "definition": "Offre des ressources informatiques virtualisées sur Internet, comme des serveurs, du stockage et des réseaux. Les utilisateurs peuvent louer et gérer ces ressources sans avoir à acheter de matériel physique."
+    },
+    {
+        "term": "JavaScript",
+        "definition": "Langage de programmation utilisé pour rendre les pages web interactives et dynamiques."
+    },
+    {
+        "term": "Journalisation (Logging)",
+        "definition": "Enregistrement systématique des événements et des activités sur un système informatique afin de détecter les comportements suspects et d'enquêter sur les incidents de sécurité."
+    },
+    {
+        "term": "Implémentation (langage de développement)",
+        "definition": "Création effective et la mise en œuvre pratique d'une solution logicielle en utilisant des technologies de programmation spécifiques."
+    },
+    {
+        "term": "Impressions",
+        "definition": "Nombre de fois qu'une annonce est affichée aux utilisateurs."
+    },
+    {
+        "term": "Impression de profil (Profile Impressions)",
+        "definition": "Nombre total de fois où le profil d'un utilisateur a été affiché à d'autres utilisateurs sur la plateforme de médias sociaux (dans les résultats de recherche, sur les pages de profil d'autres utilisateurs, dans les listes de suivi, etc.) peu importe s'ils ont interagi avec celui-ci ou non."
+    },
+    {
+        "term": "Inbound Marketing",
+        "definition": "Approche marketing axée sur la création de contenu de qualité pour attirer les clients potentiels plutôt que de les solliciter de manière intrusive."
+    },
+    {
+        "term": "Influenceur",
+        "definition": "Personne disposant d'une forte audience et d'une crédibilité dans un domaine spécifique, utilisée pour promouvoir une marque ou un produit sur les réseaux sociaux."
+    },
+    {
+        "term": "Insight",
+        "definition": " Observation ou une découverte significative tirée de l'analyse des données."
+    },
+    {
+        "term": "Intelligence artificielle (IA)",
+        "definition": "Domaine de l'informatique visant à créer des systèmes capables d'imiter le comportement humain et d'exécuter des tâches intelligentes."
+    },
+    {
+        "term": "Interface utilisateur",
+        "definition": "la partie visible et interactive d'un produit numérique qui permet à l'utilisateur d'interagir avec le produit."
+    },
+    {
+        "term": "IoT (Internet des objets) ",
+        "definition": "Réseau d'objets physiques connectés à internet et capables d'échanger des données entre eux."
+    },
+    {
+        "term": "Keyword Research",
+        "definition": "Recherche de mots-clés pertinents pour les campagnes publicitaires, basée sur leur volume de recherche, leur compétitivité et leur pertinence."
+    },
+    {
+        "term": "Landing Page",
+        "definition": "Page web conçue spécifiquement pour convertir les visiteurs en leads ou en clients, souvent utilisée dans le cadre de campagnes publicitaires."
+    },
+    {
+        "term": "Lead",
+        "definition": "Prospects ou clients potentiels qui ont manifesté un intérêt pour les produits ou les services d'une entreprise en fournissant leurs coordonnées de contact ou en effectuant une action spécifique. Les leads sont souvent considérés comme des opportunités de vente pour une entreprise, car ils représentent des personnes qui ont exprimé un intérêt actif pour ce qu'elle propose."
+    },
+    {
+        "term": "Lead Magnet",
+        "definition": "Offre gratuite proposée aux visiteurs en échange de leurs coordonnées, utilisée pour générer des leads."
+    },
+    {
+        "term": "Level Design (développement de jeux vidéos)",
+        "definition": "Conception de niveaux, le processus de création des environnements de jeu, des décors, des obstacles et des défis pour les joueurs."
+    },
+    {
+        "term": "Low-Code",
+        "definition": "Approche de développement de logiciels qui utilise un minimum de code pour accélérer le processus de développement, en combinant des outils de développement visuel avec des capacités de codage."
+    },
+    {
+        "term": "Lua",
+        "definition": "Souvent utilisé comme langage de scripting dans les moteurs de jeu tels que Unity et CryEngine, permettant aux développeurs de personnaliser le comportement des jeux sans avoir à modifier le code source principal."
+    },
+    {
+        "term": "Machine Learning",
+        "definition": "Branche de l'intelligence artificielle qui permet aux systèmes informatiques d'apprendre et de s'améliorer automatiquement à partir de l'expérience sans être explicitement programmés."
+    },
+    {
+        "term": "Malware",
+        "definition": "Logiciel malveillant conçu pour causer des dommages, voler des données ou compromettre la sécurité d'un système informatique."
+    },
+    {
+        "term": "Maquette (ou mockup)",
+        "definition": "Représentation visuelle statique d'une interface web, généralement créée en amont du développement."
+    },
+    {
+        "term": "Marketing digital",
+        "definition": "Utilisation de canaux numériques tels que les réseaux sociaux, les moteurs de recherche et les sites web pour promouvoir des produits ou services."
+    },
+    {
+        "term": "Matplotlib",
+        "definition": "Bibliothèque de visualisation de données Python largement utilisée pour créer des graphiques statiques et des tracés de données."
+    },
+    {
+        "term": "Méthodologie Scrum",
+        "definition": "Cadre de gestion de projet agile largement utilisé dans le développement logiciel et d'autres domaines où le travail est complexe et adaptatif. Scrum se concentre sur la collaboration, la flexibilité et la livraison incrémentielle de produits de haute qualité. Les équipes Scrum sont auto-organisées et multifonctionnelles pour exécuter et livrer le travail sans supervision directe. Les projets Scrum sont organisés en itérations appelées "
+    },
+    {
+        "term": "sprints",
+        "definition": " généralement de deux à quatre semaines. À la fin de chaque sprint, une version fonctionnelle du produit est livrée. Chaque jour, l'équipe tient une réunion quotidienne appelée "
+    },
+    {
+        "term": "Modélisation prédictive (analyse de données et intelligence artificielle)",
+        "definition": "Technique d'analyse de données qui utilise des modèles statistiques et des algorithmes d'apprentissage automatique pour prévoir ou estimer des résultats futurs en se basant sur des données historiques. Cette approche vise à identifier des relations entre les variables d'entrée et de sortie, ce qui permet de formuler des prédictions ou des estimations sur de nouvelles données."
+    },
+    {
+        "term": "Negative Keywords",
+        "definition": "Mots-clés pour lesquels une annonce ne doit pas être diffusée, afin d'éviter les impressions non pertinentes et les clics inutiles."
+    },
+    {
+        "term": "Nettoyage de données (Data Cleaning / analyse de données)",
+        "definition": "Processus de détection, de correction et de suppression des incohérences, des erreurs et des valeurs aberrantes dans un ensemble de données. C'est une étape essentielle dans le processus d'analyse de données et de modélisation prédictive, car des données brutes et non traitées peuvent contenir des imperfections qui peuvent fausser les résultats des analyses."
+    },
+    {
+        "term": "No-Code",
+        "definition": "Approche de développement de logiciels qui permet de créer des applications sans écrire de code traditionnellement requis, en utilisant des outils visuels et des interfaces graphiques intuitives."
+    },
+    {
+        "term": "NoSQL",
+        "definition": "Système de gestion de base de données conçu pour stocker et récupérer des données de manière flexible et évolutive, souvent utilisé pour des applications nécessitant une grande scalabilité ou une structure de données non relationnelle."
+    },
+    {
+        "term": "PaaS (Platform as a Service)",
+        "definition": "Fournit une plateforme complète avec des outils de développement, des systèmes d'exploitation et des bases de données, permettant aux développeurs de créer, déployer et gérer des applications sans se soucier de l'infrastructure sous-jacente."
+    },
+    {
+        "term": "Patch (développement de jeux vidéos)",
+        "definition": "Correctif logiciel publié pour résoudre des bugs ou des problèmes dans un jeu existant."
+    },
+    {
+        "term": "Phishing",
+        "definition": "Technique d'attaque consistant à tromper les utilisateurs pour leur faire divulguer des informations confidentielles telles que des mots de passe ou des informations financières."
+    },
+    {
+        "term": "Physics Engine",
+        "definition": "Moteur physique, un composant logiciel utilisé pour simuler les lois de la physique dans un jeu, telles que la gravité, les collisions, les mouvements, etc."
+    },
+    {
+        "term": "Plateforme No-Code",
+        "definition": "Outil ou service en ligne permettant de créer des applications sans avoir à écrire de code, en offrant des fonctionnalités telles que la création de formulaires, de flux de travail, de bases de données, etc."
+    },
+    {
+        "term": "Plotly",
+        "definition": "Bibliothèque graphique open source pour Python, R et JavaScript qui permet de créer des visualisations de données interactives."
+    },
+    {
+        "term": "Portée de profil (Profile Reach)",
+        "definition": "Nombre total d'utilisateurs uniques qui ont vu le contenu publié par un profil sur les médias sociaux pendant une période donnée."
+    },
+    {
+        "term": "Post-processing (développement de jeux vidéos)",
+        "definition": "Application d'effets visuels et de corrections d'image à une scène rendue pour améliorer l'apparence visuelle, notamment avec des effets de flou, de bloom, de tonemapping, de vignettage, etc."
+    },
+    {
+        "term": "Power BI",
+        "definition": "Suite d'outils de business intelligence (BI) développée par Microsoft. Elle permet aux utilisateurs de visualiser et d'analyser leurs données de manière interactive, de créer des rapports et des tableaux de bord personnalisés, et de partager des informations avec d'autres utilisateurs au sein de leur organisation."
+    },
+    {
+        "term": "Publicité Sociale",
+        "definition": "Promotion payante de contenu sur les réseaux sociaux, permettant d'atteindre un public ciblé et d'augmenter la visibilité de la marque ou de l'entreprise."
+    },
+    {
+        "term": "Quality Score (score de qualité)",
+        "definition": "Mesure utilisée dans le domaine du marketing en ligne, en particulier dans les plateformes de publicité en ligne telles que Google Ads (anciennement AdWords) et Facebook Ads. Ce score est attribué à chaque annonce, mot-clé ou groupe d'annonces, et il évalue la pertinence et la qualité de l'élément par rapport aux critères définis par la plateforme publicitaire."
+    },
+    {
+        "term": "Qlik Sense",
+        "definition": "Plateforme de business intelligence qui offre des fonctionnalités avancées de visualisation de données et d'analyse."
+    },
+    {
+        "term": "Rapport d'Avancement",
+        "definition": "Document fournissant une mise à jour sur l'état et l'avancement d'un projet digital, y compris les réalisations, les obstacles et les prochaines étapes."
+    },
+    {
+        "term": "Rasterisation (développement de jeux vidéos)",
+        "definition": "Méthode de rendu qui convertit les objets tridimensionnels en pixels à l'écran en utilisant des techniques telles que le z-buffering pour déterminer la profondeur des objets et le calcul des éclairages par vertex ou par pixel."
+    },
+    {
+        "term": "Ray Tracing (développement de jeux vidéos)",
+        "definition": "Technique de rendu utilisée en graphisme informatique pour simuler le comportement de la lumière dans un environnement tridimensionnel. Le ray tracing permet de générer des images photoréalistes en prenant en compte des phénomènes tels que la réflexion, la réfraction, les ombres, les caustiques et les effets atmosphériques, ce qui donne aux scènes virtuelles une apparence réaliste et naturelle."
+    },
+    {
+        "term": "Rendering (développement de jeux vidéos)",
+        "definition": "Rendu, le processus de création d'images graphiques à partir de modèles 3D, de textures, d'éclairages, etc., pour afficher le jeu à l'écran."
+    },
+    {
+        "term": "Réseaux sociaux",
+        "definition": "Plateformes en ligne permettant aux utilisateurs de créer et de partager du contenu, ainsi que d'interagir avec d'autres utilisateurs."
+    },
+    {
+        "term": "Responsive design (conception adaptable)",
+        "definition": "Approche de conception web qui vise à créer des sites web et des applications mobiles qui s'adaptent et répondent de manière dynamique aux différentes tailles d'écrans et aux différents appareils sur lesquels ils sont consultés. L'objectif principal du responsive design est d'offrir une expérience utilisateur optimale, quelle que soit la taille de l'écran ou le périphérique utilisé pour accéder au site."
+    },
+    {
+        "term": "ROI (Return on Investment)",
+        "definition": "Mesure du rendement financier généré par une campagne marketing par rapport à son coût."
+    },
+    {
+        "term": "Rust",
+        "definition": "Langage de programmation système développé par Mozilla Research, principalement conçu pour être sécurisé, performant et concurrent. Il a été créé en réponse aux défis rencontrés par les développeurs dans la programmation des systèmes bas niveau, tels que les systèmes d'exploitation, les moteurs de jeux, les navigateurs web, etc."
+    },
+    {
+        "term": "SaaS (Software as a Service)",
+        "definition": "Propose des applications logicielles complètes accessibles via Internet. Les utilisateurs peuvent utiliser ces applications sans se soucier de l'installation, de la maintenance ou de la gestion des logiciels."
+    },
+    {
+        "term": "Scripting",
+        "definition": "L'écriture de scripts ou de lignes de code pour créer des fonctionnalités spécifiques dans un jeu, telles que des mécaniques de jeu, des comportements d'IA, des événements, etc."
+    },
+    {
+        "term": "Scrum Master (projet digital)",
+        "definition": "Personne chargée de faciliter le processus de développement Agile d'un projet, en veillant à ce que l'équipe respecte les principes et les pratiques de la méthodologie Scrum."
+    },
+    {
+        "term": "SEA (Search Engine Advertising)",
+        "definition": "Publicité en ligne basée sur les mots-clés, généralement réalisée à travers des annonces payantes sur les moteurs de recherche."
+    },
+    {
+        "term": "SEM (Search Engine Marketing)",
+        "definition": "Stratégie marketing combinant SEO et SEA pour augmenter la visibilité d'un site web dans les moteurs de recherche."
+    },
+    {
+        "term": "SEO (Search Engine Optimization)",
+        "definition": "Ensemble de techniques visant à améliorer le classement d'un site web dans les résultats des moteurs de recherche."
+    },
+    {
+        "term": "Shader programming (développement de jeux vidéos)",
+        "definition": "Programmation de shaders utilisée pour créer des effets visuels avancés et personnalisés en manipulant les pixels et les vertex dans le processus de rendu."
+    },
+    {
+        "term": "Sigma",
+        "definition": "Dans le contexte de l'analyse de données et des statistiques, Sigma (σ) fait référence à l'écart type d'un ensemble de données, une mesure de la dispersion des valeurs par rapport à la moyenne. Il est utilisé pour évaluer la variabilité ou la dispersion des données dans un ensemble, permettant ainsi de mieux comprendre la répartition des valeurs et les écarts par rapport à la moyenne."
+    },
+    {
+        "term": "SMM (Social Media Marketing)",
+        "definition": "Utilisation des réseaux sociaux pour promouvoir une marque, un produit ou un service."
+    },
+    {
+        "term": "Sprint (projet digital)",
+        "definition": "Période de temps définie (généralement de deux à quatre semaines) pendant laquelle une équipe Agile travaille sur un ensemble spécifique de tâches ou de fonctionnalités dans le cadre d'un projet."
+    },
+    {
+        "term": "SQL (Structured Query Language)",
+        "definition": "Langage de requête structuré utilisé pour interagir avec les bases de données relationnelles, telles que MySQL, PostgreSQL, Oracle, etc."
+    },
+    {
+        "term": "Stack Technologique (développement fullstack)",
+        "definition": "Ensemble de technologies utilisées pour développer une application web, comprenant souvent des frameworks, des bibliothèques et des outils côté frontend et backend."
+    },
+    {
+        "term": "Stratégie Social Media",
+        "definition": "Plan détaillant les objectifs, les tactiques et les activités à mettre en œuvre pour promouvoir une marque ou une entreprise sur les réseaux sociaux."
+    },
+    {
+        "term": "Swift",
+        "definition": "Langage de programmation développé par Apple pour le développement d'applications iOS, macOS, watchOS et tvOS."
+    },
+    {
+        "term": "Taux d'Engagement (Engagement Rate)",
+        "definition": "Dans le contexte du SEM, le taux d'engagement se réfère au pourcentage d'utilisateurs qui interagissent avec une annonce après l'avoir vue. Cela peut inclure des actions telles que les clics sur l'annonce, les interactions avec les extensions d'annonce, les partages ou les commentaires (dans le cas de publicités sur les réseaux sociaux)."
+    },
+    {
+        "term": "Taux d'Impression (Impression Rate)",
+        "definition": "Le taux d'impression dans le SEM représente le pourcentage d'affichages d'une annonce par rapport au nombre total d'opportunités d'affichage. Il mesure la portée potentielle d'une annonce, indiquant combien de fois elle a été vue par rapport au nombre total de recherches ou de consultations de pages où elle aurait pu être diffusée."
+    },
+    {
+        "term": "Transformation digitale",
+        "definition": "Adoption de technologies numériques pour transformer les processus métier et améliorer les performances organisationnelles."
+    },
+    {
+        "term": "UI (User Interface)",
+        "definition": "Interface utilisateur, désignant la partie d'un logiciel ou d'une application avec laquelle l'utilisateur interagit."
+    },
+    {
+        "term": "UX (User Experience)",
+        "definition": "Expérience utilisateur, désignant la qualité de l'interaction entre un utilisateur et un produit ou service."
+    },
+    {
+        "term": "Validation croisée (Cross-validation /analyse de données et intelligence artificielle)",
+        "definition": "Technique utilisée dans l'apprentissage automatique pour évaluer les performances d'un modèle prédictif. Son objectif est d'estimer à quel point les résultats du modèle sont généralisables à de nouvelles données non vues."
+    },
+    {
+        "term": "Veille Sociale",
+        "definition": "Surveillance régulière des discussions, des tendances et des mentions de la marque sur les réseaux sociaux, afin de rester informé et réactif aux actualités et aux événements pertinents."
+    },
+    {
+        "term": "Version Control (versioning ou contrôle de version)",
+        "definition": "Système qui enregistre et gère les différentes versions d'un ensemble de fichiers ou de documents au fil du temps. Son objectif est de permettre aux développeurs de travailler en collaboration sur un projet, de suivre les modifications apportées aux fichiers, de revenir à des versions antérieures si nécessaire, et de coordonner efficacement les contributions de l'équipe."
+    },
+    {
+        "term": "Visualisation de données (Data Visualization)",
+        "definition": "Représentation graphique des données et des résultats d'analyse pour faciliter la compréhension et la communication des informations."
+    },
+    {
+        "term": "Wireframe",
+        "definition": "Schéma simplifié représentant la structure et l'agencement des éléments d'une interface, sans détails graphiques."
+    },
+    {
+        "term": "Workflow",
+        "definition": "Séquence d'étapes ou de processus organisés de manière logique et systématique, utilisée pour accomplir une tâche ou atteindre un objectif spécifique dans un domaine donné."
+    },
+    {
+        "term": "Z-buffering (développement de jeux vidéos)",
+        "definition": "Technique utilisée en graphisme informatique pour déterminer la profondeur des objets dans une scène 3D lors du processus de rendu. Elle est également connue sous le nom de depth buffering"
+    }
+]

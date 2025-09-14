@@ -1,0 +1,42 @@
+{% block body %}
+    <main class="affibodyfixed_v5">
+        <div class="vagmenu nav-af" id="stripped" data-agent="{{ agent }}">
+            {{ include('svg/'~agent~'/vaguenocityt.html.twig') }}
+        </div>
+    </main>
+    <div class="_wb">
+        <div class="container-bo_v5">
+            {{ include('aff_notification/menu/messagemenu.html.twig') }}
+            <section class="_wb-ospace">
+                <div class="head-msg-space">
+                    <div class="web-inf">
+                        <div class="zone-inf-msg">
+                            <div class="nav-msg">
+                                <div class="pop_op-msg" >Toutes vos conversations ...</div>
+                                {% if pagination is defined %}
+                                    <div id="mormsg" id="af_navdk">
+                                        {{ knp_pagination_render(pagination) }}
+                                    </div>
+                                {%  endif %}
+                            </div>
+                            <div class="tools-msg">
+                                <a class="e-tool" title="parmaetre du panneau" href=""><i class="fa fa-cog" aria-hidden="true"></i></a>
+                                <a class="e-tool" title="messagerie" href=""><i class="fa fa-reply" aria-hidden="true"></i></a>
+                                <a class="e-tool" title="messagerie" href=""><i class="fa fa-cloud" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="msg_cub" id="typeform" data-type="ctc">
+                    <div class="contener-msg list-msg">
+                        {{ include('aff_messagery/customer/view/list_board_notifications.html.twig') }}
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{%  endblock body %}
+{% use('js/js_customer.html.twig') %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

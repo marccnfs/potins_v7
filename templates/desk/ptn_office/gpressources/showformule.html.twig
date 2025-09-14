@@ -1,0 +1,18 @@
+{% block body %}
+    <div class="fx_wb-c">
+        <section class="affi_board">
+            {{ include('aff_website/elements/'~agent~'/zonecommand.html.twig') }}
+            <article class="w-post">
+                {{ include('aff_website/formule/'~agent~'showmenudesk.html.twig') }}
+            </article>
+
+          {#   {{ include('aff_website/formule/'~agent~'/showmenuothers.html.twig') }}  #}
+        </section>
+    </div>
+{%  endblock body %}
+{% use "js/js_public_wb.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+

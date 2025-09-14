@@ -1,0 +1,24 @@
+<div class="log-machina" id="machina" data-identify="{{ app.session.get('identify') }}">
+    <h1 class="title_log">{{vartwig.title}}</h1>
+    <div class="content_login_affi">
+        <div class="stape">
+            <p>Donnez un nom à votre mur des potins</p>
+        </div>
+        <div class="stape">
+            <div class="sous_connector">
+                {{ form_start(form)}}
+                    <div class="group-form-profil">
+                        <div class="field-glass">
+                            {{ form_widget(form.namewebsite) }}
+                        </div>
+                    </div>
+
+                        {{form_rest(form)}}
+                        <input type="submit" value="envoyer" class="large-text-right btn-action-nivo1"/>
+
+
+                {{form_end(form)}}
+            </div>
+        </div>
+    </div>
+</div>

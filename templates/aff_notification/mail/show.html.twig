@@ -1,0 +1,133 @@
+{% extends 'layout.html.twig' %}
+
+{% block header_title %}
+    {% block title %}{{ entity.subject }}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 col-md-8 col-sm-12">
+        <div class="section_7">
+            <div class="section">
+                <h2 class="section_title section_title_big">{{ entity.subject }}</h2>
+                <p>Posté à : <a href="{{ path('user_about', {id: entity.idUserDest.id}) }}" title="{{ entity.idUserDest.username }}">{{ entity.idUserDest.username }}</a></p>
+
+                <form id="new-message" action="{{ path('message_create_answer') }}" method="post" {{ form_enctype(form) }} novalidate>
+                    <input type="hidden" name="subject" value="{{ entity.id }}" />
+                    <textarea id="message" name="message" rows="4" class="span12 validate[required, minSize[3]] text-input"
+                          placeholder="Tapez votre message"></textarea>
+                    <button id="submit-comment" class="button button_type_icon_medium button_orange" type="submit">
+                        <i class="fa fa-pencil"></i>
+                        Répondre
+                    </button>
+                </form>
+            </div>
+
+            <div class="section_6">
+                <table class="table_type_1 var4">
+
+                    {% for message in entity.getIdMessage|reverse %}
+                    <tr>
+                        <td>
+                            <div class="clearfix">
+                                <div class="topic_author">
+                                    <figure>
+                                        {% if message.ownerOfSubject %}
+                                            {% if entity.idUserSender %}
+                                                <a href="{{ path('user_about', {id: entity.idUserSender.id}) }}" title="{{ entity.idUserSender.username }}">
+                                                    {% if entity.idUserSender.idImage %}
+                                                        <img width="87px" src="{{ entity.idUserSender.getImageWebPath() | imagine_filter('sidebar_right') }}" alt="" />
+                                                    {% else %}
+                                                        <img width="87px" src="{{ asset('build/img/imagenoneAffi.jpg') }}" alt="" />
+                                                    {% endif %}
+                                                </a>
+                                            {% else %}
+                                            <a href="#" title="">
+                                                <img width="87px" src="{{ asset('build/img/imagenoneAffi.jpg') }}" alt="" />
+                                            </a>
+                                            {% endif %}
+                                        {% else %}
+                                            <a href="{{ path('user_about', {id: entity.idUserDest.id}) }}" title="{{ entity.idUserDest.username }}">
+                                                {% if entity.idUserDest.idImage %}
+                                                    <img width="87px" src="{{ entity.idUserDest.getImageWebPath() | imagine_filter('sidebar_right') }}" alt="" />
+                                                {% else %}
+                                                    <img width="87px" src="{{ asset('build/img/imagenoneAffi.jpg') }}" alt="" />
+                                                {% endif %}
+                                            </a>
+                                        {% endif %}
+                                    </figure>
+                                </div>
+                                <div class="wrapper">
+                                    <div class="clearfix topic_text">
+                                        <div class="f_left">
+                                            {% if message.ownerOfSubject %}
+                                                {% if entity.idUserSender %}
+                                                    <a href="{{ path('user_about', {id: entity.idUserDest.id}) }}" title="Voir"><h5>{{ entity.idUserSender.username }}</h5></a>
+                                                {% endif %}
+                                            {% else %}
+                                                <a href="{{ path('user_about', {id: entity.idUserDest.id}) }}" title="Voir"><h5>{{ entity.idUserDest.username }}</h5></a>
+                                            {% endif %}
+                                            <span class="event_date"><span>le</span> {{ message.dateCreate|date('d/m/Y \à H:i') }}</span>
+                                        </div>
+                                    </div>
+                                    <p>{{ message.content | raw | nl2br }}</p>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-4 col-sm-12">
+        {% include 'User:sidebar-show.html.twig' %}
+    </div>
+</div>
+
+
+
+    {#<div class="btn-right">
+        <div class="btn-group">
+            {% if(entity.idUserSender and entity.idUserSender.id == app.user.id) %}
+                <a class="btn btn-primary" href="{{ path('user_about', {id: entity.idUserDest.id}) }}" title="Voir son profil">
+                    {% if entity.idUserDest.idImage %}
+                        <img width="20px" src="{{ entity.idUserDest.getImageWebPath() | imagine_filter('sidebar_right') }}" alt="" />
+                    {% else %}
+                        <img width="20px" src="{{ asset('build/img/imagenoneAffi.jpg') }}" alt="" />
+                    {% endif %}  
+                    {{ (entity.idUserDest) ? entity.idUserDest.username : '' }}
+                </a>
+            {% else %}
+                <a class="btn btn-primary" href="{{ path('user_about', {id: entity.idUserSender.id}) }}" title="Voir son profil">
+                    {% if entity.idUserSender.idImage %}
+                        <img width="20px" src="{{ entity.idUserSender.getImageWebPath() | imagine_filter('sidebar_right') }}" alt="" />
+                    {% else %}
+                        <img width="20px" src="{{ asset('build/img/imagenoneAffi.jpg') }}" alt="" />
+                    {% endif %}  
+                    {{ (entity.idUserSender) ? entity.idUserSender.username : '' }}
+                </a>
+            {% endif %}
+            
+            {% if entity.idUserSender and app.user.id == entity.idUserSender.id %}
+                {% set url = path('message_answer', {idMessageSubject: entity.id, owner: '1'}) %}
+            {% else %}
+                {% set url = path('message_answer', {idMessageSubject: entity.id, owner: '0'}) %}
+            {% endif %}
+            <a class="btn btn-primary" href="{{ url }}" title="Répondre">
+                <i class="icon-share-alt icon-white"></i> Répondre
+            </a>
+        </div>  
+    </div>#}
+{% endblock %}
+
+{% block script %}
+{{ parent() }}
+<script>
+    $(document).ready(function() {
+        $("form#new-message").validationEngine();
+        $('form .tooltip-info').tooltip();
+    });
+</script>
+{% endblock %}

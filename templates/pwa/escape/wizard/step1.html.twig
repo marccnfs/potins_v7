@@ -1,0 +1,132 @@
+{# templates/escape/garden.html.twig #}
+{% block body %}
+    {% set cfg = puzzle.config is iterable ? puzzle.config : {} %}
+
+    <div class="_wb">
+        <div class="container_bo_member">
+            <div class="bo_content">
+                <div class="step-layout">
+                        <div class="step-sidebar">
+                            {% include 'pwa/escape/wizard/_infos_step.html.twig' with { step: 1, eg: eg, puzzle: puzzle } %}
+                        </div>
+
+                        <div class="step-main">
+
+                            <header style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin-bottom:.75rem">
+                                <div>
+                                    <h1 style="margin:0">Étape 1 — Cryptex numérique</h1>
+                                    {% if puzzle.prompt %}<p class="text-muted" style="margin:.25rem 0 0">{{ puzzle.prompt }}</p>{% endif %}
+                                </div>
+                                <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+                                    {% if puzzle.ready %}
+                                        <a class="btn btn-light" href="{{ path('wizard_preview_step', { id: eg.id, step: 1 }) }}" target="_blank" rel="noopener">Aperçu admin</a>
+                                    {% endif %}
+                                    {% if eg.published and eg.shareSlug %}
+                                        <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: 1 }) }}" target="_blank" rel="noopener">Voir côté joueur</a>
+                                    {% endif %}
+                                </div>
+                            </header>
+
+                            <section class="card" style="margin-bottom:1rem">
+                                <h3 style="margin:0 0 .5rem">Aperçu</h3>
+                                <section id="preview-cryptex"
+                                         data-controller="cryptex"
+                                         data-cryptex-solution-value="{{ cfg.hashMode|default(false) ? '' : (cfg.solution|default('CODE')) }}"
+                                         data-cryptex-hash-value="{{ cfg.hashMode|default(false) ? (cfg.solutionHash|default('')) : '' }}"
+                                         data-cryptex-alphabet-value="{{ (cfg.alphabet|default('ABCDEFGHIJKLMNOPQRSTUVWXYZ'))|upper }}"
+                                         data-cryptex-scramble-value="{{ (cfg.scramble|default(true)) ? 'true':'false' }}"
+                                         data-cryptex-autocheck-value="{{ (cfg.autocheck|default(true)) ? 'true':'false' }}"
+                                         data-cryptex-success-message-value="{{ cfg.successMessage|default('Bravo !') }}">
+                                    <div data-cryptex-target="rings" class="cryptex"></div>
+                                    <div class="cryptex-status" data-cryptex-target="status" aria-live="polite"></div>
+                                    <button class="cryptex-reveal" data-cryptex-target="reveal" data-action="click->cryptex#reveal" hidden>Voir le message</button>
+                                    <div data-cryptex-target="secret" hidden><p>{{ cfg.successMessage|default('Bravo !') }}</p></div>
+                                </section>
+                            </section>
+
+                            {{ form_start(form, { attr: { id: 'form-step1' } }) }}
+                            <section class="card">
+                                <div class="grid" style="grid-template-columns:minmax(260px,1fr) minmax(320px,1fr)">
+                                    <div>
+                                        {{ form_row(form.title) }}
+                                        {{ form_row(form.prompt) }}
+                                        {{ form_row(form.solution) }}
+                                        {{ form_row(form.hashMode) }}
+                                    </div>
+                                    <div>
+                                        {{ form_row(form.alphabet) }}
+                                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+                                            {{ form_row(form.scramble) }}
+                                            {{ form_row(form.autocheck) }}
+                                        </div>
+                                        {{ form_row(form.successMessage) }}
+                                    </div>
+                                </div>
+                                {#
+                                <div class="form-actions" style="display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem">
+                                    <button class="btn btn-primary">Enregistrer</button>
+                                    {% if puzzle.id %}
+                                        <a class="btn" href="{{ path('wizard_preview_step', { id: eg.id, step: 1 }) }}" target="_blank" rel="noopener">Aperçu admin</a>
+                                    {% endif %}
+                                </div>
+                                #}
+                            </section>
+                            {{ form_end(form) }}
+
+                            <div class="sticky-save">
+                                <div class="sticky-inner">
+                                    <span class="text-muted">Étape 1 — Cryptex</span>
+                                    <div style="display:flex;gap:.5rem">
+                                        <button form="form-step1" class="btn btn-primary">Enregistrer</button>
+                                        {% if puzzle.ready %}<a class="btn btn-light" href="{{ path('wizard_preview_step', { id: eg.id, step: 1 }) }}" target="_blank">Aperçu</a>{% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function(){
+            const f = document.getElementById('form-step1');
+            if (!f) return;
+            const ids = {
+                solution: '{{ form.solution.vars.id }}',
+                hashMode: '{{ form.hashMode.vars.id }}',
+                alphabet: '{{ form.alphabet.vars.id }}',
+                scramble: '{{ form.scramble.vars.id }}',
+                autocheck:'{{ form.autocheck.vars.id }}',
+                success:  '{{ form.successMessage.vars.id }}',
+            };
+            let t; const deb=(fn)=>{clearTimeout(t); t=setTimeout(fn,180);};
+            function refresh(){
+                const root=document.getElementById('preview-cryptex'); if(!root) return;
+                const c=root.cloneNode(false); c.id='preview-cryptex';
+                const g=id=>document.getElementById(id);
+                const hash=g(ids.hashMode).checked;
+                c.setAttribute('data-controller','cryptex');
+                c.setAttribute('data-cryptex-solution-value', hash?'':(g(ids.solution).value||'CODE').toUpperCase());
+                c.setAttribute('data-cryptex-hash-value', hash? '': '');
+                c.setAttribute('data-cryptex-alphabet-value',(g(ids.alphabet).value||'ABCDEFGHIJKLMNOPQRSTUVWXYZ').toUpperCase());
+                c.setAttribute('data-cryptex-scramble-value', g(ids.scramble).checked?'true':'false');
+                c.setAttribute('data-cryptex-autocheck-value', g(ids.autocheck).checked?'true':'false');
+                c.setAttribute('data-cryptex-success-message-value', g(ids.success).value||'Bravo !');
+                c.innerHTML = `
+      <div data-cryptex-target="rings" class="cryptex"></div>
+      <div class="cryptex-status" data-cryptex-target="status" aria-live="polite"></div>
+      <button class="cryptex-reveal" data-cryptex-target="reveal" data-action="click->cryptex#reveal" hidden>Voir le message</button>
+      <div data-cryptex-target="secret" hidden><p>${g(ids.success).value||'Bravo !'}</p></div>`;
+                root.replaceWith(c);
+            }
+            f.addEventListener('input', ()=>deb(refresh));
+        })();
+    </script>
+
+{% endblock %}
+{% use "js/js_escape.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

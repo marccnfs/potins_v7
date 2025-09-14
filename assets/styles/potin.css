@@ -1,0 +1,82 @@
+/* 🟢 Conteneur principal */
+.container-showpost {
+    max-width: 1100px;
+    margin: auto;
+}
+
+/* 🟢 Titre principal */
+.header-showpost {
+    text-align: center;
+    margin-bottom: 2rem;
+    margin-top: 92px;
+}
+.potin-subject{
+    padding: 8px 0 45px;
+}
+.potin-media{
+    padding-bottom: 15px;
+    height: 450px;
+    width: 100%;
+}
+.masonry-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: #111; /* Fond sombre futuriste */
+}
+
+.tool-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    transition: transform 0.5s ease-in-out, opacity 0.5s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.tool-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.tool-card p {
+    font-size: 1.2rem;
+    opacity: 0.8;
+    color:white!important;
+}
+
+.tool-card img {
+    width: 80%;
+    max-height: 150px;
+    object-fit: contain;
+    margin-top: 10px;
+}
+
+/* ANIMATIONS */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.tool-card:nth-child(odd) {
+    animation: float 3s ease-in-out infinite;
+}
+
+.tool-card:nth-child(even) {
+    animation: float 4s ease-in-out infinite alternate;
+}
+.tool-card {
+    opacity: 0;
+    transform: scale(0.8);
+}

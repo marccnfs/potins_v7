@@ -1,0 +1,38 @@
+{# version mobile #}
+<!DOCTYPE html>
+<html lang="FR">
+<head>
+    {% block head %}
+        <title>{% block title %}{{vartwig.title}}{% endblock %}</title>
+            {{ include('head/head.html.twig') }}
+    {% endblock head %}
+</head>
+<script>
+if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+                navigator.serviceWorker.register('./_service-worker.js').then(function(registration) {
+                        // Registration was successful
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function(err) {
+                        // registration failed :(
+                        console.log('ServiceWorker registration failed: ', err);
+                });
+        });
+}
+</script>
+<body class="wbesitemob">
+<div class="wb-inf-" data-replacejs="no"></div>
+<main class="content-constrain2" id="page">
+{% block menu %}
+{% endblock menu %}
+{% block core %}
+        {% block body %}
+        {% endblock body %}
+        {% block footer %}
+        {% endblock footer %}
+{% endblock core %}
+</main>
+{% block javascripts %}
+{% endblock %}
+</body>
+</html>

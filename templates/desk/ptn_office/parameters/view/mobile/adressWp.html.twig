@@ -1,0 +1,71 @@
+<div class="inf_modul_mob">
+    <h2 class="_title til_mdl">Localisation de votre point info</h2>
+
+        <p>Vous devez renseigner au moins une adresse principale</p>
+        {% if not board.statut %}
+            <h5>note : Certains services ne sont activés qu'en fonction des informations renseignées</h5>
+            <p></p>
+        {% endif %}
+
+
+
+        {% if board.template.sector.adresse is defined %}
+            <div class="content_tab_mob" id="listadressgp">
+                {% set adr=["","Principale","etablissement","livraison","facturation"] %}
+                <div class="list-incub_mob">
+                <table class="aff_table_mob t_size_list">
+                        <thead>
+                        <tr>
+                            <th>adresse </th>
+                            <th><i class="fa fa-cog"></i></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for adrss in board.template.sector.adresse %}
+                            <tr>
+                                <td>
+                                    <div class="af_flx-C">
+                                        <h5 data-adresse="in">Adresse {{ adr[adrss.choiceadress] }} :</h5>
+                                        <div class="dtl-adress">
+                                            <div class="adrrss" id="{{ adrss.idMap }}">{{ adrss.label }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button data-adress="{{ adrss.idMap }}" class="btn btn-primary mrg-r5"><i class="fa fa-edit"></i></button>
+                                   <button data-adress="{{ adrss.id }}" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+            </div>
+            </div>
+
+
+        {% else %}
+            <div class="content_tab_mob">
+                <p>Entrez une adresse pour localiser votre point Info</p>
+                <em>Champ obiligatoire</em>
+                <em>Cette adresse sera visible sur vos modules publics</em>
+                <div class="new-adress_add">
+                    <x-adress class="w100" name="no"  id="{{board.id}}" module="_website"></x-adress>
+                </div>
+            </div>
+        {% endif %}
+
+
+        <div class="separatemini"></div>
+
+        {% if board.template.sector.adresse | length < 3 %}
+            <div class="new-adress_add">
+                <x-adress name="no"  id="{{board.id}}" module="_website"></x-adress>
+            </div>
+        {% endif %}
+</div>
+
+
+
+
+

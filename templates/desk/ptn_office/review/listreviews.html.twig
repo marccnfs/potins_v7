@@ -1,0 +1,57 @@
+<div class="stape_bull" id="gpreview" data-post="{{ post.id }}" data-gp="{{ gpreview.id }}"></div>
+
+<div class="flcol">
+
+     <div class="bk_content">
+         <div class="tab_lit_bo">
+             {%  if post.media.imagejpg[0] is defined  %}
+                 {%  set ill= post.media.imagejpg[0].getwebPath %}
+             {%  else %}
+                 {%  set ill= "img/AffiChange.png" %}
+             {% endif %}
+
+             <div class="pot_bo sha_lgt">
+                 <div class="w-cb1">
+                     <img src="{{ asset(ill) }}" alt="">
+                     {#  <div  id="addpict" class="btn btn-primary btn-func_abs">ajouter une image au mur</div> #}
+                 </div>
+                 <div class="pos-incub-px">
+                     <div class="account_module">
+                         <h5>{{ post.titre }}</h5>
+                         <p>le : {{ post.createAt|date("j-m-Y") }}</p>
+                     </div>
+                 </div>
+             </div>
+
+         </div>
+     </div>
+
+    <div class="bk_content">
+        <div class="form_input_gp">
+            <div class="gpform" title="titre" >
+                <input type="text" class="false_input" value="{{ gpreview.titre }}" placeholder="titre" readonly>
+            </div>
+            <div class="gpform" title="titre" >
+                <input type="text" class="false_input" value="{{ gpreview.subject }}" placeholder="sujet" readonly>
+            </div>
+            <div class="gpform" title="titre" >
+                <input type="text" class="false_input" value="{{ gpreview.author }}" placeholder="author" readonly>
+            </div>
+        </div>
+        <div class="tools-msg">
+            <a class="e-tool" title="edition de l'affiche" href="{{ path('edit_group_review', {'id':gpreview.id}) }}">
+                <i class=" fa fa-edit" data-descr="editer.."></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="w100">
+    {{ include('/desk/ptn_elements/ele_gpreviews/tabreviews.html.twig') }}
+    {{ include('/desk/ptn_elements/ele_gpreviews/form/addjpg_gpreviews.html.twig') }}
+    {{ include('/desk/ptn_elements/ele_gpreviews/fiches_reviews.html.twig') }}
+    </div>
+
+</div>
+
+
+{#  <div  id="addpict" class="btn btn-primary btn-func_abs">ajouter une image au mur</div> #}

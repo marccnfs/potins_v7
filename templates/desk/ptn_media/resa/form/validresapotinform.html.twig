@@ -1,0 +1,33 @@
+<div class="resa-container">
+    <!-- Titre de la réservation -->
+    <div class="resa-title">
+        <h3>Réservation du {{ preorder.resaAt|date('j/m/Y') }} - {{ event.titre|capitalize }}</h3>
+    </div>
+
+    <!-- Section des participants -->
+    <div class="participant-section">
+        <div class="participant-header">
+            {% if registered > 1 %}
+                <h4>Ajoutez les {{ registered }} participants :</h4>
+            {% else %}
+                <h4>Ajoutez un participant :</h4>
+            {% endif %}
+        </div>
+
+        <!-- Formulaire des participants -->
+        <div class="participant-form">
+            {{ form_start(form) }}
+
+            <!-- Liste des participants -->
+            <ul class="tags"
+                data-index="{{ form.listproducts|length > 0 ? form.listproducts|last.vars.name + 1 : 0 }}"
+                data-prototype="{{ form_widget(form.listproducts.vars.prototype)|e('html_attr') }}">
+            </ul>
+
+            <!-- Autres champs restants -->
+            {{ form_rest(form) }}
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>

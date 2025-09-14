@@ -1,0 +1,43 @@
+<div class="address-container">
+    <h2 class="section-title">Localisation de votre point info</h2>
+    <p class="section-subtitle">Vous devez renseigner au moins une adresse principale.</p>
+
+    {% if not board.statut %}
+        <div class="alert alert-warning">
+            <p>Note : Certains services sont activés uniquement si vous renseignez une adresse.</p>
+        </div>
+    {% endif %}
+
+    <div class="address-list">
+        {% if sector.adresse[0] is defined %}
+            {% set adr_types = ["", "Principale", "Établissement", "Livraison", "Facturation"] %}
+
+            {% for adrss in sector.adresse %}
+                <div class="address-item">
+                    <h5>Adresse {{ adr_types[adrss.choiceadress] }}</h5>
+                    <div class="address-content">
+                        <p>{{ adrss.label }}</p>
+                        <div class="address-actions">
+                            <button data-adress="{{ adrss.idMap }}" class="btn btn-light modified">Modifier</button>
+                            {% if loop.index > 1 %}
+                                <button data-adress="{{ adrss.id }}" class="btn btn-danger deleted">Supprimer</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            {% if sector.adresse | length < 3 %}
+                <button id="newadress" class="btn btn-primary">Ajouter une adresse</button>
+            {% endif %}
+        {% else %}
+            <p>Aucune adresse enregistrée.</p>
+            <button id="modifadress" class="btn btn-primary">Ajouter une adresse</button>
+        {% endif %}
+    </div>
+
+    <!-- Formulaire d'ajout d'adresse -->
+    <div class="new-address-form">
+        <x-adress name="no" id="{{ board.id }}" module="_website"></x-adress>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+
+    <div class="profile">
+        <header class="head">
+            <h1>Mon profil participant</h1>
+            <p class="muted">Personnalise ton avatar et tes infos visibles dans tes escapes.</p>
+        </header>
+
+        <section class="card">
+            {{ form_start(form, { attr: { enctype: 'multipart/form-data' } }) }}
+
+            <div class="grid2">
+                <div>
+                    <label class="avatar">
+                        <div class="avatar__preview">
+                            {% if participant.avatarName %}
+                                <img id="avatar-preview" src="{{ vich_uploader_asset(participant, 'avatarFile') }}" alt="Avatar">
+                            {% else %}
+                                <div id="avatar-preview" class="avatar__ph">🧩</div>
+                            {% endif %}
+                        </div>
+                        <div class="avatar__controls">
+                            {{ form_row(form.avatarFile, { label: 'Changer d’avatar' }) }}
+                            {{ form_row(form.removeAvatar) }}
+                            <p class="muted">JPG/PNG/WebP/GIF — 5 Mo max. Image carrée conseillée (512×512).</p>
+                        </div>
+                    </label>
+                </div>
+
+                <div>
+                    {{ form_row(form.nickname) }}
+                    {{ form_row(form.bio) }}
+                    {#
+                    <div class="grid2 small">
+                        {{ form_row(form.website) }}
+                        {{ form_row(form.twitter) }}
+                        {{ form_row(form.mastodon) }}
+                    </div>
+                    #}
+                    <hr>
+                    <div class="grid2 small">
+                        {{ form_row(form.prefLang) }}
+                        {{ form_row(form.prefTheme) }}
+                    </div>
+                    {{ form_row(form.allowContact) }}
+                </div>
+            </div>
+
+            <div class="actions">
+                <a class="btn" href="{{ path('dashboard_my_escapes') }}">Retour</a>
+                <button class="btn btn-primary">Enregistrer</button>
+            </div>
+
+            {{ form_end(form) }}
+        </section>
+    </div>
+
+
+    <script>
+        document.addEventListener('change', function(e){
+            if (e.target && e.target.id === '{{ form.avatarFile.vars.id }}' && e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                const url = URL.createObjectURL(file);
+                const node = document.getElementById('avatar-preview');
+                if (node.tagName === 'IMG') { node.src = url; } else {
+                    const img = document.createElement('img'); img.src = url; img.alt = 'Avatar';
+                    node.replaceWith(img);
+                    img.id = 'avatar-preview';
+                    img.style.width='100%'; img.style.height='100%'; img.style.objectFit='cover';
+                }
+            }
+        });
+    </script>
+

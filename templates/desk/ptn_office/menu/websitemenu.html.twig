@@ -1,0 +1,36 @@
+<div class="menu-bo_sp">
+    <div class="menu-container">
+        <div class="menu-item {{ vartwig.m1 ? 'menu-active' : '' }}">
+            <a href="{{ path('office_member') }}">
+                <i class="fa fa-home"></i> Affiches
+            </a>
+        </div>
+        <div class="menu-item {{ vartwig.m2 ? 'menu-active' : '' }}">
+            <a href="{{ path('module_event') }}">
+                <i class="fa fa-calendar"></i> Événements
+            </a>
+        </div>
+        {#
+        <div class="menu-item {{ vartwig.m2 ? 'menu-active' : '' }}">
+            <a href="{{ path('module_offre') }}">
+                <i class="fa fa-tags"></i> Offre
+            </a>
+        </div>
+        #}
+        <div class="menu-item {{ vartwig.m3 ? 'menu-active' : '' }}">
+            {% if isActivity('module_found', vartwig.tabActivities) %}
+                <a href="{{ path('module_ressources') }}">
+                    <i class="fa fa-database"></i> Ressources
+                </a>
+            {% else %}
+                <h3>Vos Menus</h3>
+                <a href="{{ path('addmodule_website', {'activ': 'module_found', 'id': board.id}) }}" class="btn btn-install">Installer</a>
+            {% endif %}
+        </div>
+        <div class="menu-item">
+            <a href="{{ path('registration_mediatheque_stpone') }}">
+                <i class="fa fa-folder"></i> Nouvelle médiathèque
+            </a>
+        </div>
+    </div>
+</div>

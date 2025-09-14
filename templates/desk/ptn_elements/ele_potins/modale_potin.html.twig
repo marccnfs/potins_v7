@@ -1,0 +1,31 @@
+<div class="titlpotin">
+    {#   <h2 title="post de {{ website.namewebsite }}">{{ post.titre|lower|capitalize }}</h2>  #}
+    {% if post.subject is not same as (" ") %}
+        <h3>{{ post.subject|raw|lower|capitalize }}</h3> {# {{post.subject|u.truncate(80, '...')|lower|capitalize}} #}
+    {% endif %}
+</div>
+
+<div class="illustr-potin" >
+    <div class="pt_pict_rec">
+        {% if post.media.imagejpg|length > 0 and post.media.imagejpg[0].namefile is defined %}
+        <div class="bac_img" style="background-image: url({{ asset(post.media.imagejpg[0].getWebPath) }})"></div>
+       {#    <img src="{{ asset(post.media.imagejpg[0].getWebPath) }}" alt="image affiche"> '/upload/module/'~post.media.imagejpg[0].namefile #}
+        {% endif %}
+    </div>
+</div>
+
+<div class="inner-post">
+    {% if content is not same as ("") %}
+        <div class="_post_content">
+            <div class="article_content">
+                {#  {{ include('bacasable/content.html.twig')|raw }} #}
+                {{ content|raw }}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+
+
+
+

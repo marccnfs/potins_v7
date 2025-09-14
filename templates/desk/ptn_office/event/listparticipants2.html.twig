@@ -1,0 +1,73 @@
+{% set sexe = { 1: 'Mr', 2: 'Mme' } %}
+
+{% for order in orders %}
+    <div class="block-tab">
+        <div class="allrow">
+            Contact:
+            {% if order.numclient.idcustomer.profil.sex is not null %}
+                {{ sexe[order.numclient.idcustomer.profil.sex] }}
+            {% endif %}
+            {{ order.numclient.idcustomer.profil.firstname }}
+            {{ order.numclient.idcustomer.profil.lastname }}
+            tél: {{ order.numclient.idcustomer.profil.telephonemobile }}
+            <br>
+            email : {{ order.numclient.idcustomer.emailcontact }}
+        </div>
+
+        <table class="table lite_tab">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Date de naissance</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for participant in order.listproducts %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ participant.registered.firstname }}</td>
+                    <td>{{ participant.registered.lastname }}</td>
+                    <td>{{ participant.registered.birthdate|date('d/m/Y') }}</td>
+                    <td>
+                        <div class="tab_ptn_cmd">
+                            <a href="{{ path('add_doc', {'orderprodid': participant.id}) }}" class="cmd_add btn" title="description">ajouter un doc</a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        {% for doc in participant.docs | sort((a, b) => a.nomOriginal <=> b.nomOriginal) %}
+                            {% set ko = doc.taille / 1000 %}
+                            <div class="liste">
+                                <div class="tab-col-2">
+                                    <div class="ele_tab-col">
+                                        {{ doc.name }}
+                                    </div>
+                                    <div class="ele_tab-col">
+                                        {{ doc.dateEnvoi | date("d-m-Y à H:i:s") }}
+                                    </div>
+                                    <div class="ele_tab-col">
+                                        {{ doc.extension }}
+                                    </div>
+                                    <div class="ele_tab-col">
+                                        {{ ko }} ko
+                                    </div>
+                                    <div class="ele_tab-col">
+                                        <a href="{{ path('download_doc', {'id': doc.id, 'idevent': event.id}) }}"><i class="bi bi-download text-black"></i><i class="fa fa-download"></i></a>
+                                    </div>
+                                    <div class="ele_tab-col">
+                                        <a href="{{ path('delete_doc', {'id': doc.id, 'idevent': event.id}) }}"><i class="fa fa-trash"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endfor %}

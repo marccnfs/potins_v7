@@ -1,0 +1,41 @@
+{% block body %}
+<div class="search_ressource"></div>
+
+    {% if ai_tools is not empty %}
+        <div class="masonry-grid">
+            {% for tool in ai_tools %}
+                <div class="tool-card">
+                    <h2>{{ tool.name }}</h2>
+                    <p>{{ tool.description }}</p>
+                    <p><strong>Catégorie :</strong> {{ tool.category.name ?? 'Non classé' }}</p>
+                    <p><strong>Prix :</strong> {{ tool.priceModel }}</p>
+                    <img src="https://or4.fr{{ tool.imageUrl ?? '/images/default.png' }}" alt="{{ tool.name }}">
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Aucun outil IA trouvé.</p>
+    {% endif %}
+
+
+{% block footer %}
+    {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+    {# {{ include ('desk/ptn_public/footer/potins_footer.html.twig') }}  #}
+{% endblock footer %}
+{%  endblock body %}
+{% use "js/js_public.html.twig" %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let cards = document.querySelectorAll(".tool-card");
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.style.opacity = 1;
+                card.style.transform = "scale(1)";
+            }, index * 200); // Décalage progressif
+        });
+    });
+</script>
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

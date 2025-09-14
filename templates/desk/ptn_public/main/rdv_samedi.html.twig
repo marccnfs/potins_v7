@@ -1,0 +1,112 @@
+{% block body %}
+<div id="pagehome" class="homepage-wrapper--desk" data-agent="{{ agent }}">
+
+    <div class="fx-pag">
+        <div class="fx-row-pag">
+            <div class="left_row">
+                <div class="cadre_pict">
+                    <div class="bkg_cadre" style="background-image: url({{ asset('imgdoc/potins/social.png') }}">
+                    </div>
+                </div>
+                <nav class="relational-center_absR">
+                    <a href="{{ path('events_all') }}" class="nav1 btn" title="les prochains potins"><i class="fa fa-arrow-circle-o-right"></i>  les prochains potins</a>
+                </nav>
+                <div class="cadre_title">
+                    <h1>Les potins numériques, des rencontres, des technologies</h1>
+                </div>
+                <div class="cadre_content">
+                     <div class="arg-cont-bk">
+
+                         <div class="text_cadre">
+                           Chez les potins numériques, on aime les nouvelles technologies. Et c'est autour d'ateliers au sein des 3 médiathèques que ça se passe. Et parce que l'on apprend mieux en pratiquant, nous avons mis en place des ateliers numériques tout public pour découvrir de nouvelles tendances numériques.
+                             Chaque semaine, un nouveau thème. Retrouverez nos derniers potins sur le site pour revenir sur un atelier pour en découvrir d'autres.
+                         </div>
+
+                    </div>
+                 </div>
+                <div class="cadre_content_lith">
+                    <div class="block_locate_grey_lith">
+                        {%  for media in medias %}
+                            <a  class="in_locate_grey_lith" href="{{ path('media_page',{'slug':media.slug}) }}">
+                               {# <div class="tit-media_lith">{{media.nameboard}}</div> #}
+                                <div class="iner_where_lith">
+                                    {% if  media.template.logo is not null %}
+                                        <div class="pict_in_where" style="background-image: url( {{ asset(media.template.logo.getWebPath) }} )"></div>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        {%  endfor %}
+                    </div>
+
+
+                </div>
+
+
+
+
+            </div>
+            <div class="right_row">
+                <div class="pic_right">
+                     <div class="bkg_right" style="background-image: url({{ asset('imgdoc/potins/3d_1.JPG') }}"></div>
+                </div>
+            </div>
+         </div>
+    </div>
+    <div class="fx-pag_cnt">
+
+        <div class="cadre_title">
+            <h2>Quoi et pour qui ?</h2>
+        </div>
+
+        <div class="cadre_content">
+            <div class="arg-cont-bk">
+                <div class="text_cadre">
+
+                    <div class="tit_list">Pour tous les âges, pour toutes les curiosités. Les potins proposent pendant deux heures chaque samedi matin, par roulement dans les bibliothèques de Saint Jean de Boiseau, La Montagne et du Pellerin, autour d'une thématique, un moment pour découvrir, mettre en application un sujet autour du numérique.
+                        <ul>
+                            <li>La modélisation avec l'impression 3D</li>
+                            <li>le codage avec scratch et la programmation de robots</li>
+                            <li>Les activités artistiques assistées par ordinateur, comme la MAO, la photo numérique…</li>
+                            <li>Des ateliers ludiques avec l'aide de l'électronique comme les Makey-Makey, Arduino…</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cadre_title">
+            <h2>Les derniers Potins :</h2>
+        </div>
+
+        {% if potins|length >0 %}
+            <div class="tgl-100">
+                <div class="fx-content_rep_potinary">
+                    {{ include('desk/ptn_elements/ele_potins/lastpotinslist.html.twig') }}
+                </div>
+            </div>
+        {%  else %}
+            <div class="tgl-100">
+                <div class="fx-content_rep_potinary">
+                    <div class="flex-board">
+                        <div class="flex-notb_v6-fix">
+                            <h3>  Aucun potin disponible</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+    {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+    {# {{ include ('desk/ptn_public/footer/potins_footer.html.twig') }}  #}
+{% endblock footer %}
+
+{% use "js/js_potins.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

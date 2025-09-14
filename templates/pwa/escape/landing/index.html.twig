@@ -1,0 +1,209 @@
+
+    {# Variables attendues (toutes optionnelles) :
+   - featuredGames: EscapeGame[] publiés et “mis en avant”
+   - recentGames: EscapeGame[] derniers publiés
+   - myGames: EscapeGame[] (si app.user), jeux créés par l’utilisateur
+   - lastPlayed: { slug: string, title: string } (optionnel)
+    #}
+
+    <div class="home">
+
+        {# --- HERO immersif --- #}
+        <header class="hero">
+            <div class="hero-inner">
+                <p class="kicker">Escape Game numérique</p>
+                <h1>Joue. Crée. Partage.</h1>
+                <p class="subtitle">Résous des énigmes en ligne, ou conçois les tiennes en 6 étapes ludiques. Seul·e ou en équipe.</p>
+
+                <div class="cta">
+                    <a class="btn btn-primary" href="{{ path('catalog') }}">🎮 Jouer maintenant</a>
+
+                    {% if participant %}
+                        <a class="btn" href="{{ path('wizard_start') }}">🛠️ Créer un escape</a>
+                        {% if lastPlayed is defined and lastPlayed %}
+                            <a class="btn btn-light" href="{{ path('play_entry', { slug: lastPlayed.slug }) }}">⏱️ Reprendre : {{ lastPlayed.title|default('ma partie') }}</a>
+                        {% endif %}
+                   {# {% else %}
+                        <a class="btn" href="{{ path('participant_entry') }}">🛠️ Créer un escape</a>
+                        <a class="btn btn-light" href="{{ path('participant_login') }}">Se connecter</a>
+                   #}
+                    {% endif %}
+                </div>
+
+                <form class="search" method="get" action="{{ path('catalog') }}">
+                    <input name="q" type="search" placeholder="Rechercher un escape (IA, Histoire, Enigmes...)">
+                    <button class="btn" type="submit">Rechercher</button>
+                </form>
+
+                <ul class="trust">
+                    <li>✨ 6 épreuves prêtes à l’emploi</li>
+                    <li>🧩 100% jouable dans le navigateur</li>
+                    <li>📲 Partage par simple lien</li>
+                </ul>
+            </div>
+        </header>
+
+        {# --- VITRINE : Jeux mis en avant --- #}
+        {% set list = featuredGames|default([]) %}
+        {% if list|length %}
+            <section class="section">
+                <h2>À la une</h2>
+                <div class="cards">
+                    {% for eg in list %}
+                        <article class="card">
+                            <div class="thumb" aria-hidden="true">
+                                {# si tu as une image d’univers: eg.coverPath #}
+                                {% if eg.coverPath is defined and eg.coverPath %}
+                                    <img src="{{ asset(eg.coverPath) }}" alt="">
+                                {% else %}
+                                    <div class="ph"></div>
+                                {% endif %}
+                            </div>
+                            <div class="meta">
+                                <h3 class="title">{{ eg.title }}</h3>
+                                <p class="desc">{{ eg.universe ? eg.universe|join(' ') : 'Plonge dans une aventure…' }}</p>
+                            </div>
+                            <div class="actions">
+                                <a class="btn btn-primary" href="{{ path('play_entry', { slug: eg.shareSlug }) }}">Jouer</a>
+                                <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: 1 }) }}">Commencer</a>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+
+        {# --- SECTION double : Comment ça marche (Jouer / Créer) --- #}
+        <section class="section grid2">
+            <div class="panel">
+                <h2>Jouer, c’est simple</h2>
+                <ol class="steps">
+                    <li><span class="step-index">1</span> Choisis un escape et lis le briefing.</li>
+                    <li><span class="step-index">2</span> Résous 6 épreuves : cryptex, QR géoloc, puzzle, logique, vidéo, HTML.</li>
+                    <li><span class="step-index">3</span> Gagne et partage ton score 🎉</li>
+                </ol>
+                <div class="micro-cta">
+                    <a class="btn" href="{{ path('catalog') }}">Voir le catalogue</a>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Créer en 6 étapes</h2>
+                <ol class="steps">
+                    <li><span class="step-index">1</span> Définis l’univers et la consigne.</li>
+                    <li><span class="step-index">2</span> Ajoute tes énigmes (texte, image, vidéo…)</li>
+                    <li><span class="step-index">3</span> Paramètre indices, validation et messages.</li>
+                    <li><span class="step-index">4</span> Publie & partage par lien.</li>
+                </ol>
+                <div class="micro-cta">
+                    {% if app.user %}
+                        <a class="btn btn-primary" href="{{ path('participant_entry') }}">Démarrer la création</a>
+                    {% else %}
+                        <a class="btn btn-primary" href="{{ path('participant_entry') }}">Créer un compte</a>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        {# --- Si utilisateur connecté : Mes escapes --- #}
+        {% if participant and (myGames|default([]))|length %}
+            <section class="section">
+                <h2>Mes escapes</h2>
+                <div class="cards">
+                    {% for eg in myGames %}
+                        <article class="card">
+                            <div class="thumb">
+                                {% set illu = eg.illustrations|first %}
+                                {% if illu %}
+                                    <img src="{{ vich_uploader_asset(illu, 'imageFile') }}" alt="{{ eg.title }}">
+                                {% else %}
+                                    <div class="ph"></div>
+                                {% endif %}
+                            </div>
+
+                            <div class="meta">
+                                <h3 class="title">{{ eg.title }}</h3>
+                                <p class="desc muted">{{ eg.published ? 'Publié' : 'Brouillon' }} · {{ eg.shareSlug }}</p>
+                            </div>
+                            <div class="actions">
+                                <a class="btn" href="{{ path('wizard_overview', { id: eg.id }) }}">Modifier</a>
+                                {% if eg.published and eg.shareSlug %}
+                                    <a class="btn btn-light" href="{{ path('play_entry', { slug: eg.shareSlug }) }}">Voir côté joueur</a>
+                                {% else %}
+                                    <a class="btn btn-light" href="{{ path('wizard_overview', { id: eg.id }) }}">Continuer</a>
+                                {% endif %}
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+
+        {# --- Nouveautés récentes --- #}
+        {% set recent = recentGames|default([]) %}
+        {% if recent|length %}
+            <section class="section">
+                <h2>Nouveautés</h2>
+                <div class="cards">
+                    {% for eg in recent %}
+                        <article class="card">
+                            <div class="thumb">
+                                {% set illu = eg.illustrations|first %}
+                                {% if illu %}
+                                    <img src="{{ vich_uploader_asset(illu, 'imageFile') }}" alt="{{ eg.title }}">
+                                {% else %}
+                                    <div class="ph"></div>
+                                {% endif %}
+                            </div>
+                            <div class="meta">
+                                <h3 class="title">{{ eg.title }}</h3>
+                                <p class="desc">{{ eg.universe ? eg.universe|join(' ') : 'Nouvelle aventure disponible.' }}</p>
+                            </div>
+                            <div class="actions">
+                                <a class="btn btn-primary" href="{{ path('play_entry', { slug: eg.shareSlug }) }}">Jouer</a>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+
+        {# --- Bloc “Pour les animateurs / enseignants” --- #}
+        <section class="section teach">
+            <h2>Pour les animateurs & enseignants</h2>
+            <ul class="bullets">
+                <li>Atelier <strong>“Crée ton escape game”</strong> prêt à l’emploi (6 étapes guidées).</li>
+                <li>Fonctionne en **classe entière** ou **petits groupes**.</li>
+                <li>Partage en un clic, **sans installation**.</li>
+            </ul>
+            <div class="micro-cta">
+                <a class="btn" href="{{ path('participant_entry') }}">Lancer un atelier</a>
+                <a class="btn btn-light" href="{{ path('docs_workshop') }}">Voir le guide</a>
+            </div>
+        </section>
+
+        {# --- FAQ rapide --- #}
+        <section class="section faq">
+            <h2>Questions fréquentes</h2>
+            <details>
+                <summary>Est-ce gratuit ?</summary>
+                <p>Oui pour jouer. La création est incluse dans l’atelier. Certaines options avancées peuvent être activées par l’animateur.</p>
+            </details>
+            <details>
+                <summary>Faut-il un compte pour jouer ?</summary>
+                <p>Non. Un simple lien suffit. Pour <em>créer</em> un escape, un compte est nécessaire.</p>
+            </details>
+            <details>
+                <summary>Combien de temps dure un escape ?</summary>
+                <p>Entre 10 et 30 minutes selon la difficulté et le nombre d’indices utilisés.</p>
+            </details>
+        </section>
+
+        {# --- Footer simple --- #}
+        <footer class="footer">
+            <p>© {{ "now"|date("Y") }} — Escape numérique. <a href="{{ path('legal_mentions') }}">Mentions légales</a> · <a href="{{ path('privacy') }}">Vie privée</a></p>
+        </footer>
+    </div>
+
+
+

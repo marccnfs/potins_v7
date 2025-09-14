@@ -1,0 +1,35 @@
+<div class="container-bo_v5">
+    <div class="flrow">
+        <div class="fx-cub ii_cub2">
+            <div class="O_list-cube">
+                <h1 class="tit-cib-lg">Mes Préférences</h1>
+                <p>Votre localité par défaut : <h2>{{ city }}</h2></p>
+
+                <div class="list-incub">
+                    <div class="pos-incub-i">
+                        <div class="pos-incub-l">
+                            <div class="tit-pos-cub">changez de localité (atention : le changement de votre localité modifiera l'emplacement de vos publication, votre board principal sera aussi modifié)</div>
+                            <div class="up-rocket">
+
+                                <a href="{{path('spaceweb_charte')}}" class="bt-andestand">Je renseigne une ville en particulier </a>
+                                <div class="bt-andestand">
+                                    {{ include('aff_menu/'~agent~'/poplocateuser_v6.html.twig') }}
+                                </div>
+                                <a href="{{path('cargo_public')}}" class="bt-andestand">là où je suis quand je me connecte</a>
+                                {#  <div class="titl-publ">{{  city ? city : "" }}</div> #}
+                                {{ include('/aff_search/'~agent~'/bullercity.html.twig') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+

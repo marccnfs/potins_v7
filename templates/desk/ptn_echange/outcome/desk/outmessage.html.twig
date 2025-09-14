@@ -1,0 +1,74 @@
+{% block body %}
+<div class="fx_wb-c">
+    <section class="_wb-board">
+        {{ include('aff_website/elements/'~agent~'/zonecommandesimple.html.twig') }}
+        <!-- head du board -->
+        <div class="head-wb">
+            <div class="head-l">
+                {% if  website.template.background %}
+                    {% set style = website.template.background.getWebPath %}
+                {%  else %}
+                    {% set style = '#0a53be' %}
+                {%  endif %}
+
+                <div class="website-sh" style="background-image: url({{ style}})">
+                    <div class="wbsite-inf">
+                        {% if pw %}
+                            {{ include('aff_menu/pop/'~agent~'/logoliteadm.html.twig') }}
+                        {%  else %}
+                            {{ include('aff_menu/pop/'~agent~'/logolite.html.twig') }}
+                        {%  endif %}
+                        <div>
+                            <h1>{{ website.namewebsite }}</h1>
+                            <h2>{{ website.template.description }}</h2>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="map-wb">
+                <div class="wp-info">
+                    <div class="inner-info">
+                        <div class="w_titleinfo">
+                            <h2 title="info de {{ website.namewebsite }}">{{ website.template.activities }}</h2>
+
+                            {{ include('aff_website/generies/opencity.html.twig') }}
+
+                            {% if website.template.sector.adresse[0] is defined %}
+                                {%  set adr = website.template.sector.adresse[0] %}
+                                <h3 class="adrrss"> {#  {{ adr.numero }} {{ adr.nomvoie }} #} {{ adr.codepostal }} {{ adr.nomcommune }} </h3>
+                            {% else %}
+                                <h3 class="adrrss">retrouvez nous chez nos partenaires</h3>
+                            {%  endif %}
+                            <a href="tel.{{ website.template.telephonespaceweb }}">{{ website.template.telephonespaceweb }}</a>
+                        </div>
+                    </div>
+
+                    {#
+                    <div class="illustr-info" >
+                        <div class="e_pictinfo">
+                            {% if website.template.logo.namefile is defined %}
+                                <div class="bkgrndlogo" style="background-image: url('{{ asset('spaceweb/template/'~website.template.logo.namefile??"" ) }}')"></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    #}
+                </div>
+            </div>
+        </div>
+
+        <!-- fin head -->
+        <div class="_wb-module-all">
+            <div class="ol-2">
+                {{ include('aff_messagery/board/form/form_contact_simple.html.twig') }}
+            </div>
+        </div>
+    </section>
+</div>
+{%  endblock body %}
+{% use "js/js_public_wb.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

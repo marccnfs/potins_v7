@@ -1,0 +1,20 @@
+<div class="zone-bar-show">
+    <a href="" class="in_bar_board">
+        <div class="af_flx fx-c">
+            <div class="wb-logo-lite">
+                {% if board.template.logo %}
+                    <div  class="bkgrndlogo" style="background-image: url('{{ asset('spaceweb/template/'~board.template.logo.namefile ) }}')"></div>
+                {% else %}
+                    <div class="bkgrndlogo" style="background-image: url('{{ asset('img/pinsaffi.png') }}')"></div>
+                {% endif %}
+            </div>
+            <h3 class="in-txt-bar_left">{{ board.nameboard }}</h3>
+        </div>
+    </a>
+    <div class="in_bar_board">
+        <div class="af_flx fx-c">
+            <i class="fa fa-th" aria-hidden="true"></i>
+            <h3 class="in-txt-bar_right">{{ vartwig.title }}</h3>
+        </div>
+    </div>
+</div>

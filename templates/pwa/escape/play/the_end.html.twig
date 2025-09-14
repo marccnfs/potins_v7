@@ -1,0 +1,77 @@
+{# templates/escape/garden.html.twig #}
+{% block body %}
+<div class="_wb">
+    <div class="container_bo_member">
+        <div class="bo_content">
+
+    {% set total = 6 %}
+    {% set steps = {
+        1: 'Cryptex numérique',
+        2: 'QR code géolocalisé',
+        3: 'Puzzle numérique',
+        4: 'Formulaire logique',
+        5: 'Vidéo interactive',
+        6: 'Code HTML minimal'
+    } %}
+
+    <div class="end-layout" data-controller="confetti share">
+        <canvas class="confetti-canvas" data-confetti-target="canvas"></canvas>
+
+        <section class="end-hero card">
+            <h1 class="end-title">Félicitations 🎉</h1>
+            <p class="end-text">
+                Tu as terminé <strong>{{ eg.title }}</strong> !
+                {% if eg.universe %}<br><span class="muted">{{ eg.universe|join(' ') }}</span>{% endif %}
+            </p>
+
+            <div class="end-stats">
+                <div class="stat">
+                    <div class="stat-value">6/6</div>
+                    <div class="stat-label">Épreuves réussies</div>
+                </div>
+                {# Option : durée si tu l’enregistres (localStorage ou BDD). On tente un affichage depuis localStorage. #}
+                <div class="stat">
+                    <div class="stat-value" data-share-target="duration">—</div>
+                    <div class="stat-label">Temps total</div>
+                </div>
+            </div>
+
+            <div class="end-actions">
+                <a class="btn btn-primary" href="{{ path('play_entry', { slug: eg.shareSlug }) }}">Rejouer</a>
+                <button class="btn btn-light" data-action="share#copy">Partager le lien</button>
+                <a class="btn" href="{{ path('wizard_overview', { id: eg.id }) }}">Retour à l’atelier</a>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Récapitulatif des épreuves</h2>
+            <ol class="steps-list">
+                {% for i in 1..total %}
+                    <li class="step-item">
+                        <span class="badge badge-success">Terminé</span>
+                        <span class="step-index">{{ i }}</span>
+                        <span class="step-title">{{ steps[i] }}</span>
+                        <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: i }) }}">Revoir</a>
+                    </li>
+                {% endfor %}
+            </ol>
+        </section>
+
+        <section class="card tip">
+            <h2>Envie d’aller plus loin ?</h2>
+            <ul class="bullets">
+                <li>Ajoute des <strong>indices</strong> supplémentaires sur les étapes difficiles.</li>
+                <li>Personnalise la page d’accueil avec des <strong>images</strong> et un <strong>teaser</strong>.</li>
+                <li>Propose un <strong>score</strong> (temps ou indices utilisés) pour challenger les équipes.</li>
+            </ul>
+        </section>
+    </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% use "js/js_escape.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

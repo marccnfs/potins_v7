@@ -1,0 +1,121 @@
+{% macro pageUrl(q, difficulty, duration, sort, page) -%}
+    {{ path('catalog', { q:q, difficulty:difficulty, duration:duration, sort:sort, page:page }) }}
+{%- endmacro %}
+{% import _self as m %}
+
+<div class="catalog">
+
+        <header class="cat-hero">
+            <h1>Catalogue</h1>
+            <p class="muted">Explore les escapes publiés. Filtre par durée ou difficulté, ou cherche un thème précis.</p>
+            <form class="filters" method="get" action="{{ path('catalog') }}">
+                <input type="search" name="q" value="{{ q }}" placeholder="Rechercher (IA, Histoire, code...)">
+                <select name="difficulty">
+                    <option value="">Difficulté</option>
+                    <option value="easy"   {{ difficulty=='easy'?'selected' }} >Facile</option>
+                    <option value="medium" {{ difficulty=='medium'?'selected' }}>Moyenne</option>
+                    <option value="hard"   {{ difficulty=='hard'?'selected' }} >Difficile</option>
+                </select>
+                <select name="duration">
+                    <option value="">Durée</option>
+                    <option value="short"  {{ duration=='short'?'selected' }} >≤ 15 min</option>
+                    <option value="medium" {{ duration=='medium'?'selected' }}>16–30 min</option>
+                    <option value="long"   {{ duration=='long'?'selected' }} >30+ min</option>
+                </select>
+                <select name="sort">
+                    <option value="new"     {{ sort=='new'?'selected' }}>Nouveaux</option>
+                    <option value="popular" {{ sort=='popular'?'selected' }}>Populaires</option>
+                    <option value="title"   {{ sort=='title'?'selected' }}>Titre A→Z</option>
+                </select>
+                <button class="btn btn-primary" type="submit">Filtrer</button>
+                {% if q or difficulty or duration or sort!='new' %}
+                    <a class="btn btn-light" href="{{ path('catalog') }}">Réinitialiser</a>
+                {% endif %}
+            </form>
+            <div class="count muted">{{ total }} résultat{{ total>1?'s':'' }}</div>
+        </header>
+
+        {% if games|length %}
+            <section class="cards">
+                {% for eg in games %}
+                    <article class="card">
+                        <a class="thumb" href="{{ path('play_entry', { slug: eg.shareSlug }) }}">
+                            {% if eg.coverPath is defined and eg.coverPath %}
+                                <img src="{{ asset(eg.coverPath) }}" alt="">
+                            {% else %}
+                                <div class="ph"></div>
+                            {% endif %}
+                        </a>
+                        <div class="meta">
+                            <h3 class="title">
+                                <a href="{{ path('play_entry', { slug: eg.shareSlug }) }}">{{ eg.title }}</a>
+                            </h3>
+                            <p class="desc">
+                                par <strong>{{ eg.owner ? (eg.owner.nickname ?? 'Anonyme') : '—' }}</strong>
+                                · {{ eg.universe ? eg.universe|join(' ') : '...' }}
+                            </p>
+
+                        </div>
+                        <div class="badges">
+                            {% if eg.difficulty is defined and eg.difficulty %}
+                                <span class="badge">{{ eg.difficulty|capitalize }}</span>
+                            {% endif %}
+                            {% if eg.durationMinutes is defined and eg.durationMinutes %}
+                                <span class="badge">{{ eg.durationMinutes }} min</span>
+                            {% endif %}
+                            {% if eg.playsCount is defined and eg.playsCount %}
+                                <span class="badge">▶ {{ eg.playsCount }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="actions">
+                            <a class="btn btn-primary" href="{{ path('play_entry', { slug: eg.shareSlug }) }}">Jouer</a>
+                            <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: 1 }) }}">Commencer</a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </section>
+
+            {% if pages > 1 %}
+                {% set prev = page > 1 ? page - 1 : 1 %}
+                {% set next = page < pages ? page + 1 : pages %}
+
+                {# fenêtre centrée autour de la page courante, bornée à [1 ; pages] #}
+                {% set start = page - 2 %}
+                {% if start < 1 %}{% set start = 1 %}{% endif %}
+                {% set end = page + 2 %}
+                {% if end > pages %}{% set end = pages %}{% endif %}
+
+                <nav class="pagination">
+                    <a class="page {{ page==1 ? 'is-disabled' : '' }}"
+                       href="{{ path('catalog', { q:q, difficulty:difficulty, duration:duration, sort:sort, page: 1 }) }}">«</a>
+
+                    <a class="page {{ page==1 ? 'is-disabled' : '' }}"
+                       href="{{ path('catalog', { q:q, difficulty:difficulty, duration:duration, sort:sort, page: prev }) }}">‹</a>
+
+                    {% for p in start..end %}
+                        <a class="page {{ p==page ? 'is-current' : '' }}"
+                           href="{{ path('catalog', { q:q, difficulty:difficulty, duration:duration, sort:sort, page: p }) }}">
+                            {{ p }}
+                        </a>
+                    {% endfor %}
+
+                    <a class="page {{ page==pages ? 'is-disabled' : '' }}"
+                       href="{{ path('catalog', { q:q, difficulty:difficulty, duration:duration, sort:sort, page: next }) }}">›</a>
+
+                    <a class="page {{ page==pages ? 'is-disabled' : '' }}"
+                       href="{{ path('catalog', { q:q, difficulty:difficulty, duration:duration, sort:sort, page: pages }) }}">»</a>
+                </nav>
+            {% endif %}
+
+
+
+        {% else %}
+            <section class="empty">
+                <p>Aucun résultat. Essaie d’autres mots-clés ou enlève des filtres.</p>
+                <a class="btn" href="{{ path('catalog') }}">Tout afficher</a>
+            </section>
+        {% endif %}
+
+    </div>
+
+

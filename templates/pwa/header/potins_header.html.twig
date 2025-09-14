@@ -1,0 +1,25 @@
+<nav class="gnav gnav_mob" id="gnav-main-container" aria-label="Principal">
+    <div data-gnav-region="Main">
+        <a href="{{ path('potins_index') }}" class="svg_logo_mob">
+            {{ include('svg/potins/base logo_ini_potins_pp_fdwhite.html.twig') }}
+        </a>
+        <div class="header_ptn_mb">
+            <div class="header_ptn_mb-block">
+                {% if search is defined %}
+                <a href="">
+                    <div class="ptn-toolbar-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" data-icon-name="icon-loupe" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" role="img">
+                            <title>find</title>
+                            <path fill="none" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                        {#   <span class="sf-toolbar-value">n/a</span> #}
+                    </div>
+                </a>
+                {%  endif %}
+            </div>
+            <div class="header_ptn_mb-block">
+                {{ include('pwa/pop/menutopbarr_all_mob.html.twig') }}
+            </div>
+        </div>
+    </div>
+</nav>

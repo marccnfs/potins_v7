@@ -1,0 +1,55 @@
+<div class="container">
+    <article class="card" style="max-width: 860px; margin: 0 auto;" data-controller="enrollment">
+        <header>
+            <h1>{{ e.title }}</h1>
+            {% if not e.published %}<span class="badge">Brouillon</span>{% endif %}
+            <div class="muted">
+                {{ startsLocal|date(e.isAllDay ? 'd F Y' : 'd F Y, H:i') }}
+                —
+                {{ endsLocal|date(e.isAllDay ? 'd F Y' : 'H:i') }}
+                • {{ e.category|capitalize }}
+                {% if e.communeCode is defined %}
+                    <span class="badge">{{ e.communeCode|upper }}</span>
+                {% endif %}
+            </div>
+        </header>
+
+        {% if e.locationName %}
+            <p><strong>Lieu :</strong> {{ e.locationName }}{% if e.locationAddress %}, {{ e.locationAddress }}{% endif %}</p>
+        {% endif %}
+
+        {% if e.description %}
+            <div class="prose">{{ e.description|raw }}</div>
+        {% endif %}
+
+        <hr>
+
+        <div class="actions" style="display:flex; gap:8px; flex-wrap:wrap;">
+            <a class="btn" href="{{ path('event_ics', {slug: e.slug}) }}">Ajouter à mon agenda (.ics)</a>
+            {% if canManage %}
+                <a class="btn btn-light" href="{{ path('event_edit', {slug: e.slug}) }}">Éditer</a>
+            {% endif %}
+        </div>
+
+        <hr>
+
+        {% if enrollment is defined %}
+            {% if enrollment %}
+                <p>Vous êtes inscrit(e) — statut : <strong>{{ enrollment.status }}</strong></p>
+                <form method="post"
+                      action="{{ path('event_cancel_enrollment', {slug: e.slug}) }}"
+                      data-enrollment-target="cancelForm">
+                    <input type="hidden" name="_token" value="{{ csrf_token('cancel_enrollment_' ~ e.slug) }}">
+                    <button class="btn btn-danger" data-action="enrollment#submit">Annuler mon inscription</button>
+                </form>
+            {% else %}
+                <form method="post"
+                      action="{{ path('event_enroll', {slug: e.slug}) }}"
+                      data-enrollment-target="enrollForm">
+                    <input type="hidden" name="_token" value="{{ csrf_token('enroll_' ~ e.slug) }}">
+                    <button class="btn" data-action="enrollment#submit">M’inscrire</button>
+                </form>
+            {% endif %}
+        {% endif %}
+    </article>
+</div>

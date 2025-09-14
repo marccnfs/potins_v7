@@ -1,0 +1,23 @@
+<div class="cnfs-iner_echanges">
+    <div class="ol-2 tglaff"  id="tgl_9" style="display: none">
+        {% if customer is null or member is null %}
+            {{ include('pwa/ptn_elements/ele_echanges/form_contact_cnfs.html.twig') }}
+        {%  else %}
+            <div id="adcomment">
+                <add-comment slug="{{ board.slug }}" id="{{ board.id }}" module="_board"></add-comment>
+            </div>
+        {%  endif %}
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+

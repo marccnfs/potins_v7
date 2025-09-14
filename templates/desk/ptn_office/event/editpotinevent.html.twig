@@ -1,0 +1,18 @@
+{% block body %}
+<div class="_wb">
+    <div class="container_bo_member">
+        {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
+        <section class="bo_content">
+            <div class="regester-bk">
+                <x-eventpotin board="{{ board.id }}" potin="{{ potin.id }}" event="{{event|serialize(format = 'json') }}"></x-eventpotin>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
+{% use "js/js-eventpotin.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+

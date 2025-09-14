@@ -1,0 +1,22 @@
+{% block javascripts %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $(".pictsmall").click(function () {
+        let SourcePetiteImage = $(this).attr('src');
+        let SourceGrandeImage = SourcePetiteImage.replace("pictsmall", "pictlarge");
+        $(".pictlarge").html("<img src='" + SourceGrandeImage + "'>");
+        $(".pictlarge").fadeIn("slow").css("display", "flex");
+        $(".pg_other").hide();
+      });
+
+      $(".pictlarge").click(function () {
+        $(".pictlarge").fadeOut("fast");
+        $(".pg_other").show();
+      });
+
+    });
+  </script>
+    {{ encore_entry_script_tags('affi') }}
+    {{ encore_entry_script_tags('site') }}
+{% endblock %}

@@ -1,0 +1,35 @@
+<div class="_scrollflownew _dk _post w100">
+    <div class="board-list-replace">
+        <div class="flex-notb_v6-fix">
+    {% for notice in notices.taball %}
+
+
+        {%  if notice.promo is not defined %}
+
+            {%  set otherpost = notice %}
+
+            <div class="last-postall_v6-fix">
+                {{include('pwa/ptn_elements/ele_boards/poppost.html.twig')}}
+            </div>
+
+        {%  else %}
+            {%  set otheroffre = notice %}
+            <div class="last-postall_v6-fix">
+                {{include('pwa/ptn_elements/ele_boards/popshop.html.twig')}}
+            </div>
+        {%  endif %}
+
+
+    {%  else %}
+        <div class="block_choice">
+            <a href="{{ path('new_postation',{'board':board.id}) }}" class="block_one">
+                <h1>Publiez</h1>
+                <div class="inblock_one">
+                    <h2>Pas de publication</h2>
+                </div>
+            </a>
+        </div>
+    {%  endfor %}
+    </div>
+    </div>
+</div>

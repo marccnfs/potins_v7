@@ -1,0 +1,30 @@
+<div class="bk_content">
+    {{ include('desk/ptn_office/potins/link_bar_post.html.twig',{city:'null'}) }}
+
+        <form class="w100" enctype="multipart/form-data" method="post" name="fileinfo">
+            <div class="form_all_affi">
+                <div class="bk-form-all">
+                    <div class="form-group ">
+                        <div class="label-upimg">ajoutez/modifier le code video</div>
+                        <div class="form-textearea_all">
+                            <label for="link">iframe</label>
+                            <input type="text" class="form-affi" name="link" id="link" required="required" placeholder="Entrez l'url"  value="{{ post.link ?? "" }}">
+                            <span class="error" aria-live="polite"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gp-form-row-col2">
+                    <div class="progress">
+                        <div id="loader-icon"><img src="{{asset('svg/LoaderIcon.gif')}}"  alt="loader"/></div>
+                    </div>
+                    <div class="iner-bt">
+                        <button id="post-news" class="btn-send">Enregistrez</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+</div>
+
+
+

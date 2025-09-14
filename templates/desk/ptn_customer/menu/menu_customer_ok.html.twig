@@ -1,0 +1,25 @@
+<div class="navadmin">
+    <div class="navaffi-bk">
+        <div class="afnav-fl">
+            <a href="{{ path('potins_index') }}" class="navlogo_affi">
+                <div class="navlogo-svg">{{ include('svg/potins/logopotins_svg_small.html.twig') }}</div>
+            </a>
+        </div>
+
+        <div class="afnav-fl">
+            <div class="head-bull_admin">
+                    {%  if customer.profil.firstname is not null %}
+                    <h2>{{ customer.profil.firstname }}</h2>
+                    {%  else %}
+                        <h2>{{ customer.profil.emailfirst }}</h2>
+                    {%  endif %}
+            </div>
+        </div>
+
+        <div class="tools-menu">
+         </div>
+    </div>
+    <div class="navaffi-bk">
+        {{ include('desk/pop/pop_menu_accueil.html.twig') }}
+    </div>
+</div>

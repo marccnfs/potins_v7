@@ -1,0 +1,24 @@
+<form class="w100" enctype="multipart/form-data" method="post" name="fileinfo">
+    <div class="file-uploader">
+        <div class="labels_form">
+            <input id="uploadImage" type="file" name="uploadImage" accept=".jpg, .jpeg, .png, .gif" style="display:none"/>
+            <label id="media-img" class="btn btn-primary btn-func_abs" for="uploadImage">ajouter une image au mur</label>
+        </div>
+        <div class="fx_preview">
+            <div class="preview"></div>
+            <div class="gp-form-save">
+                <div class="progress">
+                    <div id="loader-icon"><img src="{{asset('svg/LoaderIcon.gif')}}"  alt="loader"/></div>
+                </div>
+                <div class="flx-fc">
+                    <div class="iner-bt">
+                        <button id="addpict" class="btn-send send">Enregistrez</button>
+                    </div>
+                    <div class="iner-bt">
+                        <button id="abandon" class="btn-send annule">annuler</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

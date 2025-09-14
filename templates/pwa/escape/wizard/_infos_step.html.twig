@@ -1,0 +1,147 @@
+{# templates/pwa/escape/wizard/_infos_step.html.twig #}
+{# Usage: {% include 'pwa/escape/wizard/_infos_step.html.twig' with { step: 3, eg: eg, puzzle: puzzle } %} #}
+
+<aside class="step-card">
+    {% include 'pwa/escape/wizard/_mode_emploi.html.twig' with { step: step } %}
+
+    {% set s = step|default(0) %}
+    <div class="step-section">
+        <h3>Ce que tu dois préparer</h3>
+        <ul class="checklist">
+            {% if s == 1 %}
+                <li>Un <strong>mot secret</strong> (4–8 lettres conseillées)</li>
+                <li>Un <strong>message</strong> qui s’affichera si le mot est trouvé</li>
+            {% elseif s == 2 %}
+                <li>Un <strong>lieu précis</strong> (sur la carte) et un <strong>rayon</strong> (ex. 100 m)</li>
+                <li>Un <strong>QR code</strong> pointant vers cette étape (à imprimer)</li>
+            {% elseif s == 3 %}
+                <li>Une <strong>image</strong> (jpeg/png/webp) de bonne qualité</li>
+                <li>Le <strong>nombre de cases</strong> (ex. 3×3)</li>
+            {% elseif s == 4 %}
+                <li>1–3 <strong>questions</strong> avec <strong>réponses</strong> (cases à cocher)</li>
+                <li>La <strong>combinaison correcte</strong> (must / mustNot)</li>
+            {% elseif s == 5 %}
+                <li>Une <strong>vidéo .mp4</strong> courte (15–60 s idéal)</li>
+                <li>Les <strong>moments</strong> où poser les questions (en secondes)</li>
+            {% elseif s == 6 %}
+                <li>Un <strong>code de départ</strong> (HTML simple)</li>
+                <li>Les <strong>règles</strong> à vérifier (sélecteurs/texte)</li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="step-section">
+        <h3>Paramètres clés</h3>
+        <ul class="bullets">
+            {% if s == 1 %}
+                <li>Mot secret, alphabet, mélange, validation auto, message succès.</li>
+            {% elseif s == 2 %}
+                <li>Latitude/longitude, rayon (m), messages OK / hors zone / HTTPS.</li>
+            {% elseif s == 3 %}
+                <li>Image, lignes × colonnes, message succès.</li>
+            {% elseif s == 4 %}
+                <li>Questions[], options (id/label), solution: must[], mustNot[], messages OK/KO.</li>
+            {% elseif s == 5 %}
+                <li>Vidéo, cues: { time, question, options[], answer, feedbackOk/Ko }, message final.</li>
+            {% elseif s == 6 %}
+                <li>HTML de départ, checks: selectorExists / textIncludes / selectorCountAtLeast, message final.</li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="step-section">
+        <h3>Astuces</h3>
+        <ul class="bullets">
+            {% if s == 1 %}
+                <li>Privilégie 4–6 lettres pour que ce soit fun mais pas trop dur.</li>
+                <li>Le message succès peut contenir un <em>indice</em> pour l’étape suivante.</li>
+            {% elseif s == 2 %}
+                <li>Teste sur <strong>HTTPS</strong> (obligatoire pour le GPS) — localhost OK en dev.</li>
+                <li>Prévois un petit <em>indice de direction</em> si les joueurs sont hors zone.</li>
+            {% elseif s == 3 %}
+                <li>Évite les images trop uniformes ; des zones contrastées aident à jouer.</li>
+                <li>3×3 pour enfants, 4×4 ou 5×5 pour plus de défi.</li>
+            {% elseif s == 4 %}
+                <li>Des intitulés courts et clairs. 1 piège max par question 😉</li>
+                <li>Explique dans l’énoncé ce que tu attends (ex. “Coche les vraies affirmations”).</li>
+            {% elseif s == 5 %}
+                <li>Pose 1 question toutes les 10–20 secondes, pas plus.</li>
+                <li>La réponse doit vraiment dépendre de la **vidéo** (ce qu’on voit/entend).</li>
+            {% elseif s == 6 %}
+                <li>Donne un exemple dans le starter (ex. un &lt;h1&gt; déjà présent à compléter).</li>
+                <li>Commence par 1–2 checks maximum pour rester accessible.</li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="step-section subtle">
+        <h3>Pièges fréquents</h3>
+        <ul class="bullets">
+            {% if s == 1 %}
+                <li>Mot vide ou trop long : le cadenas devient pénible.</li>
+            {% elseif s == 2 %}
+                <li>Essayer en HTTP : la géoloc est bloquée.</li>
+            {% elseif s == 3 %}
+                <li>Image trop petite → floue une fois découpée.</li>
+            {% elseif s == 4 %}
+                <li>JSON mal formé (pense aux virgules et guillemets).</li>
+            {% elseif s == 5 %}
+                <li>Vidéo lourde : pense à compresser (H.264, 720p suffit).</li>
+            {% elseif s == 6 %}
+                <li>Selector incorrect (ex. <code>#id</code> qui n’existe pas).</li>
+            {% endif %}
+        </ul>
+    </div>
+
+    {# Exemples prêts à copier (pour 4,5,6) #}
+    {% if s in [4,5,6] %}
+        <div class="step-section">
+            <h3>Exemple</h3>
+            {% if s == 4 %}
+                <pre class="code" data-copy>
+Format A (simple) :
+[
+  {
+    "label":"Coche le vrai",
+    "options":[{"id":"A","label":"2+2=4"},{"id":"B","label":"2+2=5"}],
+    "solution":{"must":["A"],"mustNot":["B"]}
+  }
+]
+
+Format B (objet) :
+{
+  "questions": [
+    {
+      "label":"Coche le vrai",
+      "options":[{"id":"A","label":"2+2=4"},{"id":"B","label":"2+2=5"}],
+      "solution":{"must":["A"],"mustNot":["B"]}
+    }
+  ]
+}
+        </pre>
+            {% elseif s == 5 %}
+                <pre class="code" data-copy>
+[
+  {
+    "time":12,
+    "question":"Mot à l'écran ?",
+    "options":[{"id":"A","label":"ALPHA"},{"id":"B","label":"BETA"}],
+    "answer":"B",
+    "feedbackOk":"Exact !",
+    "feedbackKo":"Regarde bien."
+  }
+]
+        </pre>
+            {% elseif s == 6 %}
+                <pre class="code" data-copy>
+[
+  {"type":"selectorExists","selector":"h1"},
+  {"type":"textIncludes","selector":"h1","text":"SECRET"},
+  {"type":"selectorCountAtLeast","selector":"a","count":1}
+]
+        </pre>
+            {% endif %}
+            <button type="button" class="btn btn-light btn-copy" data-action="click->copy#run">Copier</button>
+        </div>
+    {% endif %}
+</aside>

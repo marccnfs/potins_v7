@@ -1,0 +1,31 @@
+<div class="menu-bo_sp">
+    <div class="pop-tab_menu_act">
+        <div class="af_flx-C">
+            <div class="menu_act_msg">
+                <div class="button-wp">
+                    <a class="pop_button_act" href="{{ path('board_board',{'id':board.id }) }}">
+                        <i class="fa fa-comments"></i>
+                        <h5>&nbsp;Tous les Messages du board</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h5 class="sous_menu">Autres</h5>
+    {%  for spw in dispatch.spwsite %}
+        {%  if spw.website.id != board.id %}
+        <div class="pop-tab_menu _cl-cl">
+            <div class="af_flx-C">
+                <div class="bubble-menu-litt-rock mn-border {{ vartwig.m2 ? "actsel" :"" }}">
+                    <div class="button-wp">
+                        <a class="pop_button" href="{{ path('board_board',{'id':spw.website.id } ) }}">
+                            <i class="fa fa-comments"></i>
+                            {{ spw.website.namewebsite }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {%  endif %}
+    {%  endfor %}
+</div>

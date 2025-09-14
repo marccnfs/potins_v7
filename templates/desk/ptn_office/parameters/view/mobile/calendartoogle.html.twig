@@ -1,0 +1,14 @@
+<div class="content-form-calendar">
+    <ul id="tab-nav">
+        <li><a href="#" data-tab="onglet1" class="tab-nav-active">par mois</a></li>
+        <li><a href="#" data-tab="onglet2">par date</a></li>
+    </ul>
+    <div id="onglet1" class="tab tab-active">
+    {{ include('aff_websiteadmin/parameters/view/calendarmonth.html.twig') }}
+    </div>
+    <div id="onglet2" class="tab">
+    {{ include('aff_websiteadmin/parameters/view/calendaryear.html.twig') }}
+    </div>
+</div>
+
+

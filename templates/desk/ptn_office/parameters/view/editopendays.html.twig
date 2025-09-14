@@ -1,0 +1,42 @@
+<div class="cont_admin" id="nameprovider" data-twigtbunique="{{ twigtbunique|json_encode() }}" data-twigconges="{{ twigconges|json_encode() }}"></div>
+
+
+<div class="opendays-container">
+    <h2 class="section-title">Gestion des horaires</h2>
+
+    <!-- Horaires d'ouverture -->
+    <div class="section-block">
+        {{ include('desk/ptn_office/parameters/view/daytimev-1.html.twig') }}
+    </div>
+
+    <!-- Jours et mois fermés -->
+    <h2 class="section-title">Jours et mois de fermeture</h2>
+    <div class="calendar-container">
+        <div class="calendar-tabs">
+            <button class="tab-btn active" data-tab="month">Mois</button>
+            <button class="tab-btn" data-tab="year">Dates précises</button>
+        </div>
+        <div class="calendar-content">
+            <div id="calendar-month" class="calendar-section active">
+                {{ include('desk/ptn_office/parameters/view/calendarmonth.html.twig') }}
+            </div>
+            <div id="calendar-year" class="calendar-section">
+                {{ include('desk/ptn_office/parameters/view/calendaryear.html.twig') }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications et validation -->
+    <h2 class="section-title">Contrôle et validation</h2>
+    <div class="section-block">
+        {{ include('desk/ptn_office/parameters/view/notify.html.twig') }}
+    </div>
+
+    <div class="form-actions">
+        <button id="post-opendays" class="btn btn-primary">Enregistrer</button>
+    </div>
+</div>
+
+
+
+

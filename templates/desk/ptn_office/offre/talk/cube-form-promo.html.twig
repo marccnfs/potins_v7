@@ -1,0 +1,67 @@
+<div class="cbe_cnt">
+    <div class="c_i_b">
+        <div class="in_cib">
+
+        <div class="in-cib-lrg-tit">
+            <div class="tit-cib-lg">Promotion</div>
+        </div>
+
+            <div class="Rt3Tbf">
+                <div class="nX2Utf">
+                    <span class="GlMVdd" aria-label="par défaut votre offre sera publiée dès validation et pour une période de 8 jours jour(s)"> Afficher une promotion</span>
+                </div>
+            </div>
+
+            <div class="bt-cub" role="button">
+                <div class="FKF6mc TpQm9d">
+                <div class="in_cibS-Vd"></div>
+                <div class="in_cibS-bot"></div>
+                    <span class="in_cibS-spn1">
+                    <span class="in_cibS-spn2 colapsaffi" data-afficolapse="promo" data-toggle="collapse" data-target="#collapsePromo" aria-expanded="false" aria-controls="collapsePromo">
+                        <span class="tit-cb" >promotion</span>
+                    </span>
+                </span>
+                </div>
+            </div>
+            <div class="collapse" id="collapsePromo">
+                <div class="card-from">
+                    {# <div class="white-tab _fx-R _fx-center">
+                       <div class="rad-af">
+                            <input type="radio" required class="" name="promstate" id="promoon" value="promo" {{ promstate is same as("promo")?"checked":"" }}>
+                            <label for="promoon">promotion</label>
+                        </div>
+                        <div class="rad-af">
+                            <input type="radio" required class="" name="promstate" id="promoof" value="sans promo" {{ promstate is same as("sans promo")?"checked":"" }}>
+                            <label for="promoof">sans promo</label>
+                        </div>
+
+                    </div> #}
+                    <div class="white-tab" id="promonatid">
+                        <label for="promonat">Nature de la promotion ?<abbr title="Ce champ est obligatoire">*</abbr></label>
+                        <select name="natpromo" class="natpromo promo" id="promonat">
+                            <option value="choice" selected>selectionnez le motif de la promo...</option>
+                            <option value="destok">Destokage</option>
+                            <option value="expo">Modele expo</option>
+                            <option value="liquidation">Liquidation</option>
+                            <option value="solde">Solde</option>
+                        </select>
+                        {#
+                        <input type="text" id="promonat" name="promonat" list="l1" value="{{ promonat }}" required pattern="[Dd]estokage|[Mm]odele expo|[Ll]iquidation|[Ss]olde">
+                        <datalist id="l1">
+                            <option>Destokage</option>
+                            <option>Modele expo</option>
+                            <option>Liquidation</option>
+                            <option>Solde</option>
+                        </datalist>
+                        #}
+
+
+                        <label for="price">prix de l'offre en euro (format : 0,00)</label>
+                        <input type="text"  class="form-affi promo" value="{{ offre.isPromo ? offre.product.price|number_format(2,',', ''):"0.00" }}" name="price" id="price" pattern="[0-9]+[,.][0-9]{2}">
+                        <span class="error" aria-live="polite"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

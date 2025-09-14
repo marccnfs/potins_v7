@@ -1,0 +1,52 @@
+<div class="process-module_glass">
+    <div class="stape-process" >
+       {% if  test1 %}
+        <div class="test_mdl">
+            <div class="state_mdl">
+                <div class="green"><i class="fa fa-circle" aria-hidden="true"></i></div>
+            </div>
+            <div class="inti_mdl">
+                <h5>adresse mail de destination : </h5>
+                <div class="inf-mail">{{ email }}</div>
+            </div>
+            <a class="stape_order_menu middlegrid stapemodif" href="{{path('website_edit',{'id': website.id})}}"> modifier</a>
+        </div>
+        {% else %}
+        <div class="test_mdl">
+            <div class="state_mdl">
+                <div class="reed"><i class="fa fa-circle" aria-hidden="true"></i></div>
+            </div>
+            <div class="inti_mdl">
+                <h5>adresse e-mail non renseignée : </h5>
+                <div class="inf-mail">pas d\'adresse mail</div>
+            </div>
+            <a class="stape_order_menu middlegrid stapemaj stape_bull" href="{{path('website_edit',{'id': website.id})}}">mettre a jour</a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="stape-process" >
+        {% if  test2 %}
+        <div class="test_mdl">
+            <div class="state_mdl">
+                <div class="green"><i class="fa fa-circle" aria-hidden="true"></i></div>
+            </div>
+            <div class="inti_mdl">
+                <h5>Profil Space Info ok</h5>
+                <div class="inf-name">{{ website.namewebsite }}</div>
+            </div>
+            <a class="stape_order_menu middlegrid stapemodif" href="{{path('website_edit',{'id': website.id})}}">modifier</a>
+        </div>
+        {% else %}
+        <div class="test_mdl">
+            <div class="state_mdl">
+                <div class="reed"><i class="fa fa-arrow"></i></div>
+            </div>
+            <div class="inti_mdl">
+                <h5>Profil Space Info incomplet : </h5>
+                <div class="inf-name">{{ website.namewebsite }}</div>
+            </div>
+            <a class="stape_order_menu middlegrid stapemaj stape_bull" href="{{path('website_edit',{'id': website.id})}}">mettre a jour</a>
+        </div>
+        {% endif %}
+    </div>
+</div>

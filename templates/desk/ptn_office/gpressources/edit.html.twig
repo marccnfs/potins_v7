@@ -1,0 +1,97 @@
+{% block body %}
+<div class="_wb">
+    <div class="container_bo_member">
+        {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
+         <section class="bo_content">
+            <div class="head-wb-space"></div>
+            {{ include('desk/ptn_elements/ele_gpressources/form/editformule.html.twig') }}
+        </section>
+    </div>
+{% endblock %}
+{% use "js/js_potin_off.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+<script>
+    $(document).ready(function() {
+   // let $container = $('div#formules_catformules');
+   // let index = $container.find(':input').length;
+    let tabarticle=[];
+    let poporessources=$('.pop_ressource');
+
+    class Compo {
+        constructor(){
+            this.list= []
+        /*    "1":[],
+            "2":[],
+            "3":[],
+            "4":[]
+            };
+
+         */
+        }
+
+        addcarte(carte){
+        //let cat=carte.attr("data-ctg");
+        let art=carte.attr("data-carte");
+        let index = this.list.indexOf(art);
+            if (index === -1) {
+                this.list.push(art);
+            }
+        this.changevalue()
+        }
+
+        deletecarte(carte){
+        //let cat=carte.attr("data-ctg");
+        let art=carte.attr("data-carte");
+        let index = this.list.indexOf(art);
+            if (index > -1) {
+            this.list.splice(index, 1);
+            }
+        this.changevalue()
+        }
+
+        init(tab){
+            poporessources.each(function (index){
+                for(const ele of tab){
+               // console.log(ele)
+                let art =$(this).data('carte')
+                    if (art === ele){
+                    $(this).addClass("selectpop")
+                    compo.addcarte($(this))
+                    }
+                }
+            })
+        }
+
+        changevalue(){
+            listarticle.val(JSON.stringify(this.list))
+        }
+    }
+
+    let compo = new Compo();
+
+    let listarticle=$('#gp_ressource_listarticle');
+
+    if(listarticle.val()!=="{}"){
+        tabarticle =JSON.parse(listarticle.val());
+        console.log(tabarticle)
+        compo.init(tabarticle)
+    }
+
+    poporessources.on('click', function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        let carte=$(this)
+        if(! carte.hasClass("selectpop")){
+            carte.addClass("selectpop")
+            compo.addcarte(carte)
+        }else{
+            carte.removeClass("selectpop")
+            compo.deletecarte(carte)
+        }
+    })
+    })
+
+
+</script>
+{% endblock %}

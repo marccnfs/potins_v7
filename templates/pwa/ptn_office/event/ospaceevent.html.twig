@@ -1,0 +1,15 @@
+{% block body %}
+<div class="_wb">
+    <div class="container_bo_member">
+        {{ include('pwa/ptn_office/menu/websitemenu.html.twig') }}
+        <section class="bo_content">
+            <!-- events publiés -->
+            <div class="head-wb-space"></div>
+                {{ include('pwa/ptn_office/event/eventofboard.html.twig') }}
+        </section>
+    </div>
+{%  endblock body %}
+{% use "js/js_customer_wb.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

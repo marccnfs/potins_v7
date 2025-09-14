@@ -1,0 +1,17 @@
+{% block body %}
+<div class="_wb">
+    <div class="container_bo_member">
+        {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
+        <section class="bo_content">
+            <div class="head-wb-space"></div>
+            <!-- affiches du board customer -->
+            {{ include('desk/ptn_office/review/reviewedit.html.twig') }}
+        </section>
+    </div>
+</div>
+{% endblock %}
+{% use "js/js_review.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

@@ -1,0 +1,16 @@
+<div class="littlespacevague_lrg_v5">
+    <a href="{{ path('cargo_public') }}" class="_fx-abs _sz250 glob_affi _co-B">
+        <div class="_ext-p shtf">
+            <div class="_i-Wbs bulletoggle " data-affitgl="tgl_10">{{ include('svg/50x50_AfCHG_blanc.html.twig') }}</div>
+            {% if dispatch.locality %}
+                <span class="locate">{{dispatch.locality.city}}</span>
+            {% endif %}
+        </div>
+    </a>
+    {{ include('aff_customer/header/header_customer_titlepage.html.twig') }}
+    {{ include('aff_customer/pop/bell_msg.html.twig') }}
+    {{ include('aff_menu/'~agent~'/profilnav.html.twig') }}
+    {{ include('aff_menu/'~agent~'/popcustomer.html.twig') }}
+</div>
+
+

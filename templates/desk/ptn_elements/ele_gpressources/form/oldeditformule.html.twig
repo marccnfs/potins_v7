@@ -1,0 +1,113 @@
+<div class="_scrollflow _dk w100 mrg0">
+    <div class="stape_order_bulle">
+        <div class="in_form">
+            <div class="glass-title_form">
+                <h3>edition {{ formule.name }}</h3>
+            </div>
+            {{ form_start(form, { 'attr': {'class': 'baba'} }) }}
+            <div class="field-board">
+                <div class="stape-process-lit" >
+                    <h5>panneau : <strong>{{ website.namewebsite }}</strong></h5>
+                </div>
+                <div class="info-form">
+                    <div class="field-info">
+                        <div class="_t-c _m-lr-5">
+                            <div class="til_rlt">Nom du menu</div>
+                        </div>
+                        <div class="timdate_pos">
+                            {{ form_widget(form.name, {'attr': {'class': 'form-hbclnews','placeholder':'"menu du jour"'}}) }}
+                        </div>
+                    </div>
+                    {#
+                    <div class="field-info">
+                        <div class="_t-c _m-lr-5">
+                            <div class="til_rlt">prix</div>
+                        </div>
+                        <div class="timdate_pos">
+                            {{ form_widget(form.theprice, {'attr': {'class': 'form-hbclnews'}}) }}
+                        </div>
+                    #}
+                    </div>
+                    <div class="field-info">
+                        <div class="_t-c _m-lr-5">
+                            <div class="til_rlt">Dates parution</div>
+                        </div>
+                        <div class="timdate_pos">
+                            {{ form_widget(form.start, {'attr': {'class': 'form-hbclnews','placeholder':'""'}}) }}
+                        </div>
+                        <div class="timdate_pos">
+                            {{ form_widget(form.end, {'attr': {'class': 'form-hbclnews','placeholder':'""'}}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="_items-form">
+                <h5>Entrée</h5>
+                <div class="pop-field">
+                    <div class="inpop-prview">
+                        <div class="preview">
+                            {% if formule.articles[0].pict.getWebPath is not defined %}
+                            <img id="uploadpreview1" style="width: 100px; height: auto;" src="data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Csvg%20width%3D%22153%22%20height%3D%22153%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%20%3Cg%3E%0A%20%20%3Ctitle%3ENo%20image%3C/title%3E%0A%20%20%3Crect%20id%3D%22externRect%22%20height%3D%22150%22%20width%3D%22150%22%20y%3D%221.5%22%20x%3D%221.500024%22%20stroke-width%3D%223%22%20stroke%3D%22%23666666%22%20fill%3D%22%23e1e1e1%22/%3E%0A%20%20%3Ctext%20transform%3D%22matrix%286.66667%2C%200%2C%200%2C%206.66667%2C%20-960.5%2C%20-1099.33%29%22%20xml%3Aspace%3D%22preserve%22%20text-anchor%3D%22middle%22%20font-family%3D%22Fantasy%22%20font-size%3D%2214%22%20id%3D%22questionMark%22%20y%3D%22181.249569%22%20x%3D%22155.549819%22%20stroke-width%3D%220%22%20stroke%3D%22%23666666%22%20fill%3D%22%23000000%22%3E%3F%3C/text%3E%0A%20%3C/g%3E%0A%3C/svg%3E" alt="Image preview" />
+                            {% else %}
+                            <img id="uploadpreview1" style="width: 100px; height: auto;" src="{{ asset(formule.articles[0].pict.getWebPath) }}" alt="Image preview" />
+                            {%  endif %}
+                        </div>
+                    </div>
+                    <div class="inpop-content" id="art0">
+                        {{ form_row(form.articles[0], {'attr': {'class': ''}}) }}
+                    </div>
+                </div>
+                <h5>Plat</h5>
+                <div class="pop-field">
+                    <div class="inpop-prview">
+                        <div class="preview">
+                            {% if formule.articles[1].pict.getWebPath is not defined %}
+                            <img id="uploadpreview2" style="width: 100px; height: auto;" src="data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Csvg%20width%3D%22153%22%20height%3D%22153%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%20%3Cg%3E%0A%20%20%3Ctitle%3ENo%20image%3C/title%3E%0A%20%20%3Crect%20id%3D%22externRect%22%20height%3D%22150%22%20width%3D%22150%22%20y%3D%221.5%22%20x%3D%221.500024%22%20stroke-width%3D%223%22%20stroke%3D%22%23666666%22%20fill%3D%22%23e1e1e1%22/%3E%0A%20%20%3Ctext%20transform%3D%22matrix%286.66667%2C%200%2C%200%2C%206.66667%2C%20-960.5%2C%20-1099.33%29%22%20xml%3Aspace%3D%22preserve%22%20text-anchor%3D%22middle%22%20font-family%3D%22Fantasy%22%20font-size%3D%2214%22%20id%3D%22questionMark%22%20y%3D%22181.249569%22%20x%3D%22155.549819%22%20stroke-width%3D%220%22%20stroke%3D%22%23666666%22%20fill%3D%22%23000000%22%3E%3F%3C/text%3E%0A%20%3C/g%3E%0A%3C/svg%3E" alt="Image preview" />
+                            {% else %}
+                            <img id="uploadpreview2" style="width: 100px; height: auto;" src="{{ asset(formule.articles[1].pict.getWebPath) }}" alt="Image preview" />
+                            {%  endif %}
+                        </div>
+                    </div>
+                    <div class="inpop-content" id="art1">
+                        {{ form_row(form.articles[1], {'attr': {'class': ''}}) }}
+                    </div>
+                </div>
+                <h5>Dessert</h5>
+                <div class="pop-field">
+                    {% if formule.articles[2] is defined %}
+                    <div class="inpop-prview">
+                        <div class="preview">
+                            {% if formule.articles[2].pict.getWebPath is not defined %}
+                            <img id="uploadpreview3" style="width: 100px; height: auto;" src="data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Csvg%20width%3D%22153%22%20height%3D%22153%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%20%3Cg%3E%0A%20%20%3Ctitle%3ENo%20image%3C/title%3E%0A%20%20%3Crect%20id%3D%22externRect%22%20height%3D%22150%22%20width%3D%22150%22%20y%3D%221.5%22%20x%3D%221.500024%22%20stroke-width%3D%223%22%20stroke%3D%22%23666666%22%20fill%3D%22%23e1e1e1%22/%3E%0A%20%20%3Ctext%20transform%3D%22matrix%286.66667%2C%200%2C%200%2C%206.66667%2C%20-960.5%2C%20-1099.33%29%22%20xml%3Aspace%3D%22preserve%22%20text-anchor%3D%22middle%22%20font-family%3D%22Fantasy%22%20font-size%3D%2214%22%20id%3D%22questionMark%22%20y%3D%22181.249569%22%20x%3D%22155.549819%22%20stroke-width%3D%220%22%20stroke%3D%22%23666666%22%20fill%3D%22%23000000%22%3E%3F%3C/text%3E%0A%20%3C/g%3E%0A%3C/svg%3E" alt="Image preview" />
+                            {% else %}
+                            <img id="uploadpreview3" style="width: 100px; height: auto;" src="{{ asset(formule.articles[2].pict.getWebPath) }}" alt="Image preview" />
+                            {%  endif %}
+                        </div>
+                    </div>
+                    <div class="inpop-content" id="art2">
+                        {{ form_row(form.articles[2], {'attr': {'class': ''}}) }}
+                    </div>
+                    {%  endif %}
+                </div>
+
+                {{form_rest(form)}}
+                <div class="gp-form-row-col2">
+                    <div class="iner-bt">
+                        <button type="submit" id="forumule-news" class="btn-send">Enregistrez</button>
+                    </div>
+
+                   {#  <div class="form-group">
+                        <button type="submit" id="forumule-news" class="bt_affi btn-lg btn-info">enregistrer <i class="fa fa-paper-plane"></i></button>
+                    </div>
+                   #}
+
+                </div>
+                {{form_end(form)}}
+            </div>
+        </div>
+    </div>
+    <div class="wait">
+        <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+    </div>
+</div>
+

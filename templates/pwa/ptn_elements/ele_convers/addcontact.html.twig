@@ -1,0 +1,26 @@
+<div class="form-groupfields">
+    <div class="glass-title_form">
+        <h3>Vos informations</h3>
+    </div>
+    <form name="contact_msg">
+        <div class="bg-glass-mk">
+            <div class="infer-form">
+                <div class="formtest contacter">
+                    <i class="_m-t-10 fa fa-at" aria-hidden="true"></i>
+                    <label for="contact_email" class="required">Entrez votre adress mail :</label>
+                    <input type="email" id="contact_email" name="contact_email" autocomplete="off" required="required" data-rule="email" data-msg="adresse mail invalide">
+                    <div class="validate"></div>
+                    <span id="loading" style="display: none;"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i></span>
+                    <div class="form-play-contact">
+                        <i class="_m-t-10 fa fa-user" aria-hidden="true"></i>
+                        <label for="contact_name" class="required">Votre nom :</label>
+                        <input type="text" id="contact_name" name="contact_name" autocomplete="off" required="required" data-rule="minlen:8" data-msg="8 caractères minimum" placeholder="">
+                        <div class="validate"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="contact-go"  class="btn-glss-submit" disabled=""><span class="arw-tx">suivant&nbsp;</span><i class="fa fa-arrow-circle-right"></i></div>
+    </form>
+</div>

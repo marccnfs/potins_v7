@@ -1,0 +1,10 @@
+{% block body %}
+    <section class="_wb-admin_mob">
+        {{ include('aff_websiteadmin/header/mobile/headparameter.html.twig') }}
+        {{ include('website/member/desk/admin/content/list-commande.html.twig') }}
+    </section>
+{%  endblock body %}
+{% use "js/js_wb.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

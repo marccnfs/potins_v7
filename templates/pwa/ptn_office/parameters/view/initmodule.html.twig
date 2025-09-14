@@ -1,0 +1,52 @@
+<div class="fx-pw">
+    <div class="">
+        <div class="inf_modul">
+            <h2 class="_title til_mdl">Vos modules</h2>
+            <div class="content-prov-modul">
+                <div class="w100" id="module_1">
+                    <div class="inf_modul">
+                        <h2 class="_title til_mdl">{{ module.title }}</h2>
+                        <div class="fx-content">
+                            <div class="content-prov-modul">
+                                <div class="prov-modul">
+                                    <p>{{ module.desc }}</p>
+                                    <div class="_cTm-Wb">
+                                        {% if module.link is same as "module_mail" %}
+                                            {% if  board.contactation.active %}
+                                                <div class="state-item" >
+                                                    <em>lien :</em>
+                                                    <cite class="-ct_b">{{board.module.contactation.linkone }}</cite>
+                                                </div>
+                                                <a class="stape_order_menu middlegrid stape_bull" href="{{path('process_contact',{'id':board.id}) }}">modifier</a>
+                                            {% else %}
+                                                <div class="state-item" >
+                                                    <h6>pas de module actif</h6>
+                                                </div>
+                                                <a class="stape_order_menu middlegrid stape_bull" href="{{path('process_contact',{'id':board.id}) }}">creer</a>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if status %}
+                                                <div class="state-item" >
+                                                    <em>lien :</em>
+                                                    <cite class="-ct_b">activez ce module pour l'utiliser</cite>
+                                                </div>
+                                                <button id="btnmodule" data-module="{{ module.link }}" class="stape_order_menu middlegrid stape_bull" >installer</button>
+                                            {% else %}
+                                                <div class="state-item" >
+                                                    <h6>Ajouter ce service à mon compte</h6>
+                                                    <p>{{ module.price }}</p>
+                                                </div>
+                                                <a class="stape_order_menu middlegrid stape_bull" href="{{ path('new_cmd_customer',{'md':module.link}) }}">j'ajoute ce service</a>
+                                            {% endif %}
+                                        {%  endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

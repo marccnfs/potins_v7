@@ -1,0 +1,35 @@
+<a class="affiche" href="{{path('show_potin',{'slug':notice.post.slug,'id':notice.post.id}) }}">
+<div class="evnet_titre_v8">{{notice.post.titre|lower|capitalize}}</div>
+    {% if notice.post.subject is not same as (" ") %}
+        <div class="_fx-R_v2 _fx-convers_inv_v5">
+            <div class="info-post_v5">
+                <div class="event_second_titl_v8">{{notice.post.subject|u.truncate(80, '...')|lower|capitalize}}</div>
+            </div>
+        </div>
+    {% endif %}
+{% if notice.post.media.imagejpg[0].namefile is defined %}
+    <img  class="img-allnotice" src="{{ asset('upload/module/'~notice.post.media.imagejpg[0].namefile ) }}" alt="image affiche">
+{% endif %}
+
+</a>
+
+<div class="boarder">
+    {#
+    <a class="flx-lik-_v5" href="{{ path('show_board', {"slugboard":notice.board.slug }) }}">
+
+        <div class="wb-logo-lite">
+            {% if notice.board.template.logo %}
+                <div class="bkgrndlogo" style="background-image: url('{{ asset('spaceweb/template/'~notice.board.template.logo.namefile ) }}')"></div>
+            {% endif %}
+        </div>
+
+        <div class="wb_event_v5">{{notice.board.nameboard}}</div>
+
+    </a>
+    #}
+    <div class="flx-lik-_v5">
+        <div class="wb-logo-lite">
+        </div>
+        <div class="wb_event_v5"></div>
+    </div>
+</div>

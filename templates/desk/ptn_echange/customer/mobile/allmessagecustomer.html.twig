@@ -1,0 +1,23 @@
+{% block body %}
+    {{ include('aff_menu/menus/'~agent~'/modale_mob_customer.html.twig') }}
+    <section class="_wb-ospace_mob">
+        <div class="ii_cub">
+            <div class="pop_op-msg_mob" >Toutes vos conversations ...</div>
+            {% if pagination is defined %}
+                <div id="mormsg" id="af_navdk">
+                    {{ knp_pagination_render(pagination) }}
+                </div>
+            {%  endif %}
+            <div class="msg_cub" id="typeform" data-type="ctc">
+                <div class="contener-msg_mob">
+                    {{ include('aff_messagery/customer/view/list_allmessage_mob.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </section>
+
+{%  endblock body %}
+{% use('js/js_customer.html.twig') %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,9 @@
+{% block body %}
+    <div class="fx_wb-c">
+            {{include('desk/ptn_account/view/newmediaboard.html.twig')}}
+    </div>
+{% endblock %}
+{% use "js/js_new_mediaboard.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

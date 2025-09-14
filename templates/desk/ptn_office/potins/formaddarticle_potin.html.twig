@@ -1,0 +1,32 @@
+<form class="w100" enctype="multipart/form-data" method="post" name="fileinfo">
+        <div class="form_all_affi">
+            <div class="bk-form-all">
+                <div class="form-group ">
+                    <div class="label-upimg">ajoutez un contenu</div>
+                    <div id="articlenews">
+                        {{ include('WysiWyg/toolbar.html.twig') }}
+                        <div id="editor"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="gp-form-row-col2">
+                <div class="progress">
+                    <div id="loader-icon"><img src="{{asset('svg/LoaderIcon.gif')}}"  alt="loader"/></div>
+                </div>
+                <div class="iner-bt">
+                    <button id="post-news" class="btn-send">Enregistrez</button>
+                </div>
+            </div>
+        </div>
+</form>
+
+
+ 
+
+            
+        
+
+
+
+
+

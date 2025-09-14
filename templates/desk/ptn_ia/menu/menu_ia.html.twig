@@ -1,0 +1,15 @@
+<nav class="logo_accueil" id="accueil">
+    <div class="logo_link" id="link_force">
+    </div>
+
+    <div class="compte">
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        {{include('desk/pop/pop_menu_accueil.html.twig') }}
+    {% else %}
+        <div class="space_connect">
+            <a href="{{ path('new_identify') }}" class="btn-connect">inscrivez-vous</a>
+        </div>
+    {% endif %}
+    </div>
+</nav>
+

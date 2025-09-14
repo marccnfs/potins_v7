@@ -1,0 +1,103 @@
+{% set nbreview=tabreviews|length %}
+{#
+<pre>
+    {{ dump(nbreview) }}
+</pre>
+#}
+{%  if nbreview > 0 %}
+
+
+    {% if nbreview == 1 %}
+        <table class="aff_table t_size_list">
+            <tbody>
+            {%  for key, rw in tabreviews %}
+                {% if rw.type %}
+                    <tr>
+                        <td>{{ rw.titre }}</td>
+                        <td><a href="{{path('manage_review_resume',{id:rw.id,gp:gpreview.id}) }}" class="btn btn-primary">editer</a>
+                            <form method="post" action="{{path('form-delete_review', {id: rw.id})}}" style="display: inline-block"; onsubmit="return confirm('voulez vraiment supprimer cet élèment ?')">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rw.id) }}">
+                                <button class="btn btn-danger">supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="stp_b_orange">trame animation</td>
+                        <td>
+                            <a href="{{path('manage_review_trame',{id:'new',gp:gpreview.id})}}" class="btn btn-primary">créer</a>
+                        </td>
+                    </tr>
+
+                {% else %}
+
+                    <tr>
+                        <td class="stp_b_orange">fiche résumé</td>
+                        <td><a href="{{ path('manage_review_resume',{id:'new',gp:gpreview.id}) }}" class="btn btn-primary">créer</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ rw.titre }}</td>
+                        <td><a href="{{path('manage_review_trame',{id:rw.id,gp:gpreview.id})}}" class="btn btn-primary">editer</a>
+                            <form method="post" action="{{path('form-delete_review', {id: rw.id})}}" style="display: inline-block"; onsubmit="return confirm('voulez vraiment supprimer cet élèment ?')">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rw.id) }}">
+                                <button class="btn btn-danger">supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor%}
+            </tbody>
+        </table>
+
+    {% elseif nbreview == 2 %}
+
+        <table class="aff_table t_size_list">
+            <tbody>
+            {%  for key, rw in tabreviews %}
+                {% if rw.type %}
+                    <tr>
+                        <td>{{ rw.titre }} </td>
+                        <td>
+                            <a href="{{ path('manage_review_resume',{id:rw.id , gp:gpreview.id}) }}" class="btn btn-primary">editer</a>
+                            <form method="post" action="{{path('form-delete_review', {id: rw.id})}}" style="display: inline-block"; onsubmit="return confirm('voulez vraiment supprimer cet élèment ?')">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rw.id) }}">
+                                <button class="btn btn-danger">supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td>{{  rw.titre }}</td>
+                        <td><a href="{{path('manage_review_trame',{id:rw.id , gp:gpreview.id}) }}" class="btn btn-primary">editer</a>
+                            <form method="post" action="{{path('form-delete_review', {id: rw.id})}}" style="display: inline-block"; onsubmit="return confirm('voulez vraiment supprimer cet élèment ?')">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rw.id) }}">
+                                <button class="btn btn-danger">supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    {%  endif %}
+{% else %}
+    <table class="aff_table t_size_list">
+        <tbody>
+        <tr>
+            <td class="stp_b_orange">fiche résumé</td>
+            <td><a href="{{ path('manage_review_resume',{'id':'new','gp':gpreview.id}) }}" class="btn btn-primary">créer</a>
+            </td>
+        </tr>
+        <tr>
+            <td class="stp_b_orange">trame animation</td>
+            <td>
+                <a href="{{path('manage_review_trame',{'id':'new','gp':gpreview.id}) }}" class="btn btn-primary">créer</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{%  endif %}

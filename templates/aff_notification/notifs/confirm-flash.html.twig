@@ -1,0 +1,18 @@
+<div class="content-form_glass">
+    <div class="filterblur filter_blue"></div>
+    <div class="borderblur"></div>
+    <div class="process-locate_glass">
+        <div class="stape-locate_process" >
+            <h5>yeahhh..</h5>
+            <div class="group-form-glass">
+                <div class="field-glass">
+                    {% for message in app.flashes('meil') %}
+                        <div class="flash-notice">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

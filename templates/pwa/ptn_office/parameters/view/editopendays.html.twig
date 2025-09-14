@@ -1,0 +1,38 @@
+    <div class="cont_admin" id="nameprovider" data-twigtbunique="{{ twigtbunique|json_encode() }}" data-twigconges="{{ twigconges|json_encode() }}">
+        <div class="stape_order_post">
+            <h2>Jours et horaires d'ouverture</h2>
+        </div>
+        <div class="block-saisie" id="newsclub" data-prov="{{board.id}}">
+            <div class="form_datecalendar">
+            {{ include('desk/ptn_office/parameters/view/daytimev-1.html.twig') }}
+            </div>
+        </div>
+<!---calendar--->
+        <div class="stape_order_post">
+            <h2>Jours et/ou mois fermés</h2>
+        </div>
+        {{ include('desk/ptn_office/parameters/view/calendartoogle.html.twig') }}
+<!--fin calendar--->
+<!--notify--->
+        <div class="stape_order_post">
+            <h2>Controle :</h2>
+        </div>
+    {{ include('desk/ptn_office/parameters/view/notify.html.twig') }}
+<!--fin notify--->
+<!--valid--->
+        <div class="gp-form-row-col2">
+            <div class="iner-bt">
+                <button id="post-opendays" class="btn-send">Enregistrez</button>
+            </div>
+        </div>
+        {#
+
+        <div class="stape_order_post">
+            <button id="post-opendays" class="bt_affi _w-15c bt_affi-primary"><i class="fa fa-paper-plane"></i></button>
+        </div>
+        #}
+<!--fin valid--->
+    </div>
+
+
+

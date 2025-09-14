@@ -1,0 +1,63 @@
+<a class="affiche" href="{{path('show_post',{'id':post.id}) }}">
+<div class="head-wb">
+        {#
+        {% if  website.template.background %}
+            {% set style = '/spaceweb/template/'~website.template.background.namefile %}
+        {%  else %}
+            {% set style = '#0a53be' %}
+        {%  endif %}
+        #}
+        {% if  website.template.background is not null and website.template.background.namefile is defined %}
+
+        <div class="website-sh_board desktop mosaic-provider-jobcards" style="background-image: url({{ '/spaceweb/template/'~website.template.background.namefile}})">
+            <div class="wbsite-inf_card">
+                <div class="navaffi-bk">
+                    {{ include('aff_website/elements/logo_wb_nolink.html.twig') }}
+                    <div>
+                        <h1>{{ website.namewebsite }}</h1>
+                        <h2>{{ website.template.description }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {%  else %}
+            <div class="website-sh_board_nopict desktop" style="background-image: url('#0a53be')">
+                <div class="wbsite-inf_card">
+                    <div class="navaffi-bk">
+                        {{ include('aff_website/elements/logo_wb_nolink.html.twig') }}
+                        <div>
+                            <h1>{{ website.namewebsite }}</h1>
+                            <h2>{{ website.template.description }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {%  endif %}
+
+        <div class="map-wb_board">
+            <div class="wp-info">
+                <div class="inner-info">
+                    <div class="w_titleinfo">
+                        <h2 title="info de {{ website.namewebsite }}">{{ website.template.activities }}</h2>
+
+                     {#    {{ include('aff_website/generies/opencity.html.twig') }}  #}
+
+                        {% if website.template.sector.adresse[0] is defined %}
+                            {%  set adr = website.template.sector.adresse[0] %}
+                            <h3 class="adrrss"> {#  {{ adr.numero }} {{ adr.nomvoie }} #} {{ adr.codepostal }} {{ adr.nomcommune }} </h3>
+                        {%  endif %}
+                    {#     <a href="tel.{{ website.template.telephonespaceweb }}">{{ website.template.telephonespaceweb }}</a> #}
+                    </div>
+                    {#
+                    <div class="button-wp">
+                        <button class="bulletoggle pop_button" data-affitgl="tgl_9">Contactez
+                            <i class="fa fa-flag"></i>
+                        </button>
+                    </div>
+                    #}
+                </div>
+            </div>
+        </div>
+    </div>
+</a>

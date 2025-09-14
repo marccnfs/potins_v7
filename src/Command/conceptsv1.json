@@ -1,0 +1,410 @@
+[
+  {
+    "id": "1",
+    "keyword": "IA",
+    "concepts": [
+      "Intelligence artificielle",
+      "Apprentissage automatique",
+      "Réseaux neuronaux",
+      "Vision par ordinateur"
+    ],
+    "definition": "Domaine de l'informatique visant à créer des systèmes capables d'imiter le comportement humain et d'exécuter des tâches intelligentes."
+  },
+  {
+    "id": "2",
+    "keyword": "Prochains Potins",
+    "concepts": [
+      "Planning des ateliers",
+      "Inscription en ligne",
+      "Événements numériques"
+    ],
+    "definition": "Définition non disponible."
+  },
+  {
+    "id": "3",
+    "keyword": "Les Bons Clics",
+    "concepts": [
+      "Accompagnement numérique",
+      "Tutoriels en ligne",
+      "Tests de compétences numériques"
+    ],
+    "definition": "Définition non disponible."
+  },
+  {
+    "id": "4",
+    "keyword": "HTML",
+    "concepts": [
+      "Langage de balisage",
+      "Création de sites web",
+      "Structure de page"
+    ],
+    "definition": "Langage de balisage utilisé pour créer et structurer le contenu d'une page web."
+  },
+  {
+    "id": "5",
+    "keyword": "CSS",
+    "concepts": [
+      "Feuilles de style",
+      "Design web",
+      "Mise en page"
+    ],
+    "definition": "Langage utilisé pour définir la présentation et l'apparence visuelle d'une page web, en complément de HTML."
+  },
+  {
+    "id": "6",
+    "keyword": "JavaScript",
+    "concepts": [
+      "Langage de programmation",
+      "Interactions web",
+      "Frameworks (React, Angular)"
+    ],
+    "definition": "Langage de programmation utilisé pour rendre les pages web interactives et dynamiques."
+  },
+  {
+    "id": "7",
+    "keyword": "Python",
+    "concepts": [
+      "Langage de programmation",
+      "IA et machine learning",
+      "Développement back-end"
+    ],
+    "definition": "Langage polyvalent apprécié pour sa simplicité et utilisé dans des domaines variés comme l'IA, le web et l'analyse de données."
+  },
+  {
+    "id": "8",
+    "keyword": "RGPD",
+    "concepts": [
+      "Protection des données",
+      "Conformité légale",
+      "Vie privée"
+    ],
+    "definition": "Règlement général sur la protection des données garantissant les droits des citoyens européens en matière de données personnelles."
+  },
+  {
+    "id": "9",
+    "keyword": "SEO",
+    "concepts": [
+      "Référencement naturel",
+      "Optimisation des moteurs de recherche",
+      "Marketing numérique"
+    ],
+    "definition": "Stratégie visant à améliorer la visibilité d'un site web dans les résultats des moteurs de recherche de manière organique."
+  },
+  {
+    "id": "10",
+    "keyword": "CRM",
+    "concepts": [
+      "Gestion de la relation client",
+      "Logiciels CRM",
+      "Automatisation des ventes"
+    ],
+    "definition": "Outil ou stratégie permettant de gérer les interactions avec les clients et prospects pour optimiser les relations commerciales."
+  },
+  {
+    "id": "11",
+    "keyword": "UX/UI",
+    "concepts": [
+      "Expérience utilisateur",
+      "Interface utilisateur",
+      "Design ergonomique"
+    ],
+    "definition": "Conception visant à optimiser l'expérience utilisateur tout en assurant une interface intuitive et agréable."
+  },
+  {
+    "id": "12",
+    "keyword": "VPN",
+    "concepts": [
+      "Sécurité en ligne",
+      "Connexion privée",
+      "Anonymat sur Internet"
+    ],
+    "definition": "Technologie permettant de sécuriser une connexion internet en créant un tunnel chiffré entre l'utilisateur et le réseau."
+  },
+  {
+    "id": "13",
+    "keyword": "Impression 3D",
+    "concepts": [
+      "Fabrication additive",
+      "Logiciels de modélisation",
+      "Prototypage rapide"
+    ],
+    "definition": "Technique de fabrication qui crée des objets physiques en superposant des couches de matière à partir de modèles numériques."
+  },
+  {
+    "id": "14",
+    "keyword": "MAO",
+    "concepts": [
+      "Création musicale",
+      "Enregistrement audio",
+      "Mixage"
+    ],
+    "definition": "Utilisation d'outils numériques pour composer, enregistrer et produire de la musique."
+  },
+  {
+    "id": "15",
+    "keyword": "CMS",
+    "concepts": [
+      "Systèmes de gestion de contenu",
+      "WordPress",
+      "Drupal"
+    ],
+    "definition": "Plateforme logicielle facilitant la gestion et la mise à jour de contenu sur un site web."
+  },
+  {
+    "id": "16",
+    "keyword": "Cloud",
+    "concepts": [
+      "Stockage en ligne",
+      "Sécurité dans le cloud",
+      "Services cloud (IaaS, PaaS)"
+    ],
+    "definition": "Ensemble de services informatiques accessibles via Internet, incluant le stockage, le calcul et les logiciels à la demande."
+  },
+  {
+    "id": "17",
+    "keyword": "Cybersécurité",
+    "concepts": [
+      "Protection des données",
+      "Hameçonnage",
+      "Sécurité des réseaux"
+    ],
+    "definition": "Discipline dédiée à la protection des systèmes informatiques et des données contre les cybermenaces et attaques."
+  },
+  {
+    "id": "18",
+    "keyword": "Open Source",
+    "concepts": [
+      "Logiciels libres",
+      "Collaboration",
+      "Code partagé"
+    ],
+    "definition": "Logiciels dont le code source est librement accessible et modifiable par tous, favorisant l'innovation collaborative."
+  },
+  {
+    "id": "19",
+    "keyword": "Formation Numérique",
+    "concepts": [
+      "Ateliers pratiques",
+      "Initiation à l'informatique",
+      "Cours en ligne"
+    ],
+    "definition": "Processus visant à renforcer les compétences des individus dans l'utilisation des outils et services numériques."
+  },
+  {
+    "id": "20",
+    "keyword": "Potins Numériques",
+    "concepts": [
+      "Accompagnement local",
+      "Communauté numérique",
+      "Partage de compétences"
+    ],
+    "definition": "Programme visant à encourager l'autonomie numérique grâce à des ateliers, formations et initiatives locales."
+  },
+  {
+    "id": "21",
+    "keyword": "Intelligence Artificielle",
+    "concepts": [
+      "Apprentissage automatique",
+      "Réseaux neuronaux",
+      "Applications dans la santé",
+      "Ethique de l'IA"
+    ],
+    "definition": "Branche de l'informatique qui vise à développer des systèmes capables de simuler des comportements intelligents."
+  },
+  {
+    "id": "22",
+    "keyword": "Réseaux Sociaux",
+    "concepts": [
+      "Marketing numérique",
+      "Engagement utilisateur",
+      "Algorithmes de recommandation",
+      "Vie privée"
+    ],
+    "definition": "Plateformes permettant aux utilisateurs de partager du contenu tout en interagissant avec d'autres."
+  },
+  {
+    "id": "23",
+    "keyword": "Big Data",
+    "concepts": [
+      "Analyse des données massives",
+      "Visualisation des données",
+      "Stockage distribué",
+      "Data Mining"
+    ],
+    "definition": "Ensemble des données volumineuses collectées et analysées pour identifier des tendances et prendre des décisions."
+  },
+  {
+    "id": "24",
+    "keyword": "E-commerce",
+    "concepts": [
+      "Paiement en ligne",
+      "Optimisation des ventes",
+      "Expérience utilisateur",
+      "SEO pour le commerce en ligne"
+    ],
+    "definition": "Commerce électronique permettant la vente et l'achat de biens et services via des plateformes numériques."
+  },
+  {
+    "id": "25",
+    "keyword": "Blockchain",
+    "concepts": [
+      "Cryptomonnaies",
+      "Transactions décentralisées",
+      "Contrats intelligents",
+      "Sécurité et transparence"
+    ],
+    "definition": "Technologie décentralisée de stockage d'informations sécurisée et immuable, utilisée notamment pour les cryptomonnaies."
+  },
+  {
+    "id": "26",
+    "keyword": "IoT (Internet des Objets)",
+    "concepts": [
+      "Appareils connectés",
+      "Automatisation",
+      "Sécurité IoT",
+      "Communication M2M (Machine to Machine)"
+    ],
+    "definition": "Réseau d'objets connectés interagissant entre eux via Internet pour partager des données et automatiser des tâches."
+  },
+  {
+    "id": "27",
+    "keyword": "JavaScript",
+    "concepts": [
+      "Langage de programmation",
+      "Interactions web",
+      "Frameworks (React, Angular)"
+    ],
+    "definition": "Langage de programmation permettant de créer des pages web interactives et dynamiques."
+  },
+  {
+    "id": "28",
+    "keyword": "Python",
+    "concepts": [
+      "Langage de programmation",
+      "IA et machine learning",
+      "Développement back-end"
+    ],
+    "definition": "Langage polyvalent apprécié pour sa simplicité et utilisé dans des domaines variés comme l'IA, le web et l'analyse de données."
+  },
+  {
+    "id": "29",
+    "keyword": "RGPD",
+    "concepts": [
+      "Protection des données",
+      "Conformité légale",
+      "Vie privée"
+    ],
+    "definition": "Règlement général sur la protection des données garantissant les droits des citoyens européens en matière de données personnelles."
+  },
+  {
+    "id": "30",
+    "keyword": "SEO",
+    "concepts": [
+      "Référencement naturel",
+      "Optimisation des moteurs de recherche",
+      "Marketing numérique"
+    ],
+    "definition": "Techniques visant à optimiser la visibilité d'un site web sur les moteurs de recherche de manière organique."
+  },
+  {
+    "id": "31",
+    "keyword": "CRM",
+    "concepts": [
+      "Gestion de la relation client",
+      "Logiciels CRM",
+      "Automatisation des ventes"
+    ],
+    "definition": "Outil ou stratégie permettant de gérer les interactions avec les clients et prospects pour optimiser les relations commerciales."
+  },
+  {
+    "id": "32",
+    "keyword": "UX/UI",
+    "concepts": [
+      "Expérience utilisateur",
+      "Interface utilisateur",
+      "Design ergonomique"
+    ],
+    "definition": "Conception visant à optimiser l'expérience utilisateur tout en assurant une interface intuitive et agréable."
+  },
+  {
+    "id": "33",
+    "keyword": "VPN",
+    "concepts": [
+      "Sécurité en ligne",
+      "Connexion privée",
+      "Anonymat sur Internet"
+    ],
+    "definition": "Technologie permettant de sécuriser une connexion internet en créant un tunnel chiffré entre l'utilisateur et le réseau."
+  },
+  {
+    "id": "34",
+    "keyword": "Impression 3D",
+    "concepts": [
+      "Fabrication additive",
+      "Logiciels de modélisation",
+      "Prototypage rapide"
+    ],
+    "definition": "Technique de fabrication qui crée des objets physiques en superposant des couches de matière à partir de modèles numériques."
+  },
+  {
+    "id": "35",
+    "keyword": "MAO",
+    "concepts": [
+      "Création musicale",
+      "Enregistrement audio",
+      "Mixage"
+    ],
+    "definition": "Utilisation d'outils numériques pour composer, enregistrer et produire de la musique."
+  },
+  {
+    "id": "36",
+    "keyword": "CMS",
+    "concepts": [
+      "Systèmes de gestion de contenu",
+      "WordPress",
+      "Drupal"
+    ],
+    "definition": "Plateforme logicielle facilitant la gestion et la mise à jour de contenu sur un site web."
+  },
+  {
+    "id": "37",
+    "keyword": "Cloud",
+    "concepts": [
+      "Stockage en ligne",
+      "Sécurité dans le cloud",
+      "Services cloud (IaaS, PaaS)"
+    ],
+    "definition": "Ensemble de services informatiques accessibles via Internet, incluant le stockage, le calcul et les logiciels à la demande."
+  },
+  {
+    "id": "38",
+    "keyword": "Cybersécurité",
+    "concepts": [
+      "Protection des données",
+      "Hameçonnage",
+      "Sécurité des réseaux"
+    ],
+    "definition": "Discipline dédiée à la protection des systèmes informatiques et des données contre les cybermenaces et attaques."
+  },
+  {
+    "id": "39",
+    "keyword": "Open Source",
+    "concepts": [
+      "Logiciels libres",
+      "Collaboration",
+      "Code partagé"
+    ],
+    "definition": "Logiciels dont le code source est librement accessible et modifiable par tous, favorisant l'innovation collaborative."
+  },
+  {
+    "id": "40",
+    "keyword": "Formation Numérique",
+    "concepts": [
+      "Ateliers pratiques",
+      "Initiation à l'informatique",
+      "Cours en ligne"
+    ],
+    "definition": "Processus visant à renforcer les compétences des individus dans l'utilisation des outils et services numériques."
+  }
+
+]

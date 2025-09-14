@@ -1,0 +1,30 @@
+<div class="pos-incub-l_mob">
+    <h2 class="tit-cib-lg">Donnez un nom à votre panneau (marque de votre entreprise, association ...)</h2>
+    <p>En créant un panneau public sur AffiChanGe, il sera accessible à tous les utilisateurs du web et référencé par les
+        moteurs de recherche du web.</p>
+    <p>Sur votre panneau, postez vos informations locales, annonces et offres de proximités, ouvrez des conversations avec
+        vos membres et contacts.<br>
+    </p>
+    <div class="list-inmob">
+    {{ form_start(form) }}
+    <div class="pos-incub-i">
+        <div class="pos-incub-l">
+
+            <div class="group-form-profil">
+                <div class="field-glass">
+                    {{ form_widget(form.namewebsite) }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="cadre var--no-top var--blanc">
+        <div class="pt-dm">
+            {{ form_rest(form) }}
+            <input type="submit" value="envoyer" class="large-text-right btn-action-nivo1"/>
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>
+</div>
+

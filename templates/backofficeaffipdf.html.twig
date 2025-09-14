@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="FR">
+<head>
+    {% block head %}
+    <title>{% block title %}commande{% endblock %}</title>
+        <meta charset="UTF-8" />
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1,text/html,charset=utf-8"/>
+        <meta name="description" content="commande pdf">
+        <meta name="country" content="France">
+        <meta name="geo.country" content="FR">
+        <meta name="keywords" content="commande">
+        <meta content="IE=edge" http-equiv="X-UA-Compatible">
+        <meta name="author" content="AffiChange.sas">
+        <link rel= "shotcut icon" href="{{asset('app/icons/favicon.ico')}}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('app/icons/affi-192x192.png') }}">
+        <link rel="stylesheet" href="{{ asset('fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+        <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto|Roboto+Condensed:400,700|Source+Sans+Pro" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    {% endblock head %}
+    {{ encore_entry_link_tags('app') }}
+</head>
+{%  set agent = app.session.get('agent') %}
+<body>
+<div class="wb-inf-" data-agent="{{ agent }}" data-pg="{{ pg??'hm' }}" data-customer="{{ customer.id }}"></div>
+    {% block menu %}
+    {% endblock menu %}
+    {% block core %}
+            {% block website %}
+            {% endblock %}
+            {%  block content %}
+            {% endblock %}
+        {% block javascripts %}
+        {% endblock %}
+    {% endblock core %}
+</body>
+</html>

@@ -1,0 +1,16 @@
+twig:
+    file_name_pattern: '*.twig'
+    # en dev
+    cache: false
+    # en prod (exemple)
+    # cache: '%kernel.cache_dir%/twig'
+    auto_reload: true
+    default_path: '%kernel.project_dir%/templates'
+    globals:
+        app_affi: '%env(APP_AFFI)%'
+        key_admin: '%env(KEY_ADMIN)%'
+        app_affi_form: '%env(APP_FORM)%'
+
+when@test:
+    twig:
+        strict_variables: true

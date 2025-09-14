@@ -1,0 +1,37 @@
+{% for message in app.flashes('newmsg') %}
+    <div class="_fx-Tflhs">
+        <div class="comd-flhs">
+            <h5>info !</h5>
+            <div class="_rlm-a">
+                <div class="msg-flhs">{{ message }}.</div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+<h3 class="the_q">Votre demande a bien été adressé</h3>
+<a href=""> </a>
+<hr>
+<h1>suivre vos échanges</h1>
+<div class="_bk-0">
+    <div class="row mt">
+        <a class="col-lg-4 centered si slideUp" href="">
+            <i class="fa fa-heart"></i>
+            <h4></h4>
+            <p></p>
+        </a>
+
+        <a class="col-lg-4 centered si slideUp" href="{{ path('app_login') }}">
+            <i class="fa fa-users" aria-hidden="true"></i>
+            <h4></h4>
+            <p></p>
+        </a>
+
+        <a class="col-lg-4 centered si slideUp" href="{{ path('cargo_public') }}">
+            <i class="fa fa-globe" aria-hidden="true"></i>
+            <h4></h4>
+            <p></p>
+        </a>
+
+    </div>
+</div>

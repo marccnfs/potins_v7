@@ -1,0 +1,60 @@
+{% block body %}
+<div class="log-machina">
+    <div class="title_log">
+        {{ include('svg/potins/base logo_ini_potins_pp_fdwhite.html.twig') }}
+        <h1>{{vartwig.title|capitalize}}</h1>
+    </div>
+
+
+            <form method="post" class="form_connector_old">
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+                    {% if app.user %}
+                        <div class="mb-3">
+                            <a href="{{ path('app_logout') }}">fermez votre espace</a>
+                        </div>
+                    {% endif %}
+                    <div class="field_log sous_connector">
+                        <div class="iner-fiels"><i class="fa fa-at"></i><label for="inputEmail" class="label-log">identifiant</label></div>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="adresse mail" required autofocus>
+                    </div>
+                    <div class="field_log sous_connector">
+                        <div class="iner-fiels">
+                        <i class="fa fa-lock"></i><label for="password" class="label-log">mot de passe</label>
+                        </div>
+                            <div class="toggle-password-container" {{ stimulus_controller('my-toggle-password_controller') }}>
+                        <input
+                                id="password"
+                                type="password"
+                                name="password"
+                                class="pt_form-control" placeholder="...." required
+                        {{ stimulus_controller('symfony/ux-toggle-password/toggle-password', {
+                            visibleLabel: '',
+                            hiddenLabel: '',
+                            visibleIcon: 'Default',
+                            hiddenIcon: 'Default',
+                            buttonClasses: ['toggle-password-button'],
+                        }) }}
+                        >
+                        </div>
+                    </div>
+                    <div class="bottom-10"></div>
+                    <a class="forget_mdp" href="{{ path('forget_password_request') }}">mot de passe oublié ?</a>
+                    <div class="checkerrember">
+                        <h5>Restez connecté</h5>
+                        <span class="switcher switcher-2">
+                           <input type="checkbox" id="remember_me" name="_remember_me" checked/>
+                           <label for="remember_me"></label>
+                        </span>
+                    </div>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <button class="bul-go" type="submit">go</button>
+                </form>
+
+</div>
+{% endblock %}
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+

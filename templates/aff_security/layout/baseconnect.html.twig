@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    {% block stylesheets %}
+    <title>{% block title %}Affichange connect{% endblock %}</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1,text/html,charset=utf-8"/>
+    <meta name="description" content="intitalisation">
+    <meta name="country" content="France">
+    <meta name="geo.country" content="FR">
+    <meta name="keywords" content="affichange">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta name="author" content="AffiChange.sas">
+    <link rel= "shotcut icon" href="{{asset('app/icons/favicon.ico')}}">
+    <link rel=canonical" href="https://affichange.com{{ app.request.pathinfo }}/">
+    <link rel="manifest" href="{{ asset('_manifest.json') }}" data-pwa-version="set_by_pwa.js">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('app/icons/affi-192x192.png') }}">
+    <link rel="stylesheet" href="{{ asset('fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('fonts/googlefont/style.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+</head>
+<body class="connect">
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('./_service-worker.js').then(function(registration) {
+                // Registration was successful
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }, function(err) {
+                // registration failed :(
+                console.log('ServiceWorker registration failed: ', err);
+            });
+        });
+    }
+</script>
+{%  set agent = app.session.get('agent') %}
+
+<div class="vagmenu nav-af" data-agent="{{ agent }}">
+    {{ include('svg/'~agent~'/vagueonly.html.twig') }}
+</div>
+<main class="{{ agent=='desk/'? 'affibody' : 'connect_mob' }}">
+
+    {% if agent=='desk/' %}
+        <div class="vagdesk">
+            <div class="center_mdp_logo_mb_ext-p">
+                {{ include('svg/50x50_AfCHG_blanc.html.twig') }}
+            </div>
+        </div>
+    {% else %}
+        <div class="_fx-abs fx-c _bg-op-trs _sz6 _bdrad glob_affi_mb _co-B">
+            <div class="_ext-p shtf">
+                <div class="_i-Wbs">{{ include('svg/50x50_AfCHG_blanc.html.twig') }}</div>
+            </div>
+        </div>
+    {% endif %}
+    <h1 class="h3 title_log">{{ titleidf }}</h1>
+
+    <div class="svg-bulle_open">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">{# <circle cx="100" cy="100" r="80"/>#}</svg>
+        <div class="content_login_affi">
+            {% block log %}
+            {% endblock %}
+        </div>
+    </div>
+
+</main>
+{% block javascripts %}
+ {{ encore_entry_script_tags('app') }}
+{% endblock %}
+</body>
+</html>

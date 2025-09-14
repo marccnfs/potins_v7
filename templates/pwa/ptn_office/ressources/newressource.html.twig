@@ -1,0 +1,23 @@
+{% block body %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            {{ include('pwa/ptn_office/menu/websitemenu.html.twig') }}
+            <section class="bo_content">
+                <div id="postar" data-content="" data-post={{post}}></div>
+                <section class="ptn_content">
+                    {{ include('pwa/ptn_office/ressources/formaddressource.html.twig') }}
+                </section>
+
+                {#
+                <div class="regester-bk">
+                    {{ include('desk/ptn_elements/ele_ressources/form/addarticleformule.html.twig') }}
+                </div>
+                #}
+            </section>
+        </div>
+    </div>
+{% endblock body%}
+{% use "js/js-rss.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,24 @@
+{% for potinary in potinaries %}
+    <a href="{{ path('show_ressource',{"id":potinary.id}) }}" class="ressource_card">
+            <div class="inner-list_ress">
+                    <div class="goaff_potinary-fix min30 card-{{potinary.categorie.coul }}">{{ potinary.categorie.name }}</div>
+                    <div class="w_titl_ress" title="{{ potinary.titre }}">{{ potinary.titre|lower|capitalize }}</div>
+                           {#  {% if potinary.composition is not same as (" ") %}
+                                    <h3>{{ potinary.composition|raw|lower|capitalize }}</h3>
+                            {% endif %}
+                           #}
+                    <div class="ressource_descp">{{ potinary.descriptif|u.truncate(80, '...')|lower|capitalize }}</div>
+                  {#   <div class="author">categorie : {{ potinary.categorie.name }}</div> #}
+            </div>
+            <div class="illustr-potinary_card" >
+                    <div class="e_pictfull_card">
+                            {% if potinary.pict is not null %}
+                                    <div class="pict_ressource" style="background-image: url('{{ asset('spaceweb/template/'~potinary.pict.namefile) }}')"></div>
+                                {#    <img src="{{ asset(potinary.pict.getWebPath) }}" alt="image affiche"> #}
+                            {% endif %}
+                    </div>
+            </div>
+    </a>
+{%  endfor %}
+
+

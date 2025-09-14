@@ -1,0 +1,56 @@
+{% block body %}
+    <main class="affibodyfixed_v5">
+        <div class="vagmenu nav-af" id="stripped" data-agent="{{ agent }}">
+                {{ include('svg/'~agent~'/vaguenocityt.html.twig') }}
+        </div>
+    </main>
+    <div class="_pg_wb-pb_v6">
+            <div class="pi-switch">
+                <div class="fx-pw-dk-col">
+                    <div class="content"><!--<span style="color:white;">-->
+                        <h2>Mentions légales</h2>
+                        <h3>Conforméments aux dispositions des articles 6-III et 19 de la loi pour la confiance dans l’économie numérique</h3><br>
+                        <p><br><strong>EDITEUR</strong></p>
+                        <p>NBCOM, SAS au capital de 1000 euros, immatriculé au registre du commerce de SAINT NAZAIRE sous le numéro 795 072 115, ayant son siège Parc d'activité estuaire sud, rue du camp d'aviation, 44320 SAINT VIAUD, prise en la personne de son représentant légal, domicilié en cette qualité audit siège et éditeur et fournisseur du service AFFICHANGE.</p>
+                        <P><strong>Directeur de la publication</strong></p>
+                        <p>Le directeur de la publication de AFFICHANGE est monsieur Marc DE JESUS. Pour toutes questions sur l'entreprise, vous pouvez contacter  : contact@affichange.com<p>
+                        <P><strong>Hébergeur du Site</strong></p>
+                        <p>Le Site est hébergé par la Société OVH dont les coordonnées sont les suivantes :
+                            Société OVH - SAS au capital de 10 000 000 Euros - RCS de ROUBAIX-TOURCOING   sous le numéro 424 761 419 - Dont le siège social est fixé au   2 rue Kellermann – 59100 ROUBAIX.</p>
+                        <P><strong>Développement</strong></p>
+                        <p><br><br></p>
+                    </div>
+                    {{ include('aff_public/page/desk/cgU.html.twig') }}
+                    <!-- warpperTemoignages-->
+                    <div class="warpperTemoignages2">
+                        <div class="container">
+                            <div class="row bloc2">
+                                <div class="col-md-12"><span class="cgu">AffiChange en quelques mots...</span> </div>
+                                <div class="col-lg-10 col-lg-offset-1">
+                                    <div class="temoignage">
+                                        <span class="date"><br><br>Inscription</span>
+                                        <p>
+                                            Pour accéder aux fonctionnalités du Site Internet Affichange.com ou à d'autres éléments des Services, vous devez vous inscrire sur le Site internet.</p>
+                                    </div>
+                                    <div class="temoignage">
+                                        <span class="date">Vos annonces et panneaux d'information</span>
+                                        <p>Publiez gratuitement vos annonces sur AffiChange. Particulier à la recherche d'une aide, d'un prestataire ou professionnel pour proposer vos services, vous faire connaitre. Animateur, auxiliaire de vie, etudiant, formateur...publiez vos articles sur le réseau, ouvrez des panneaux entre membres pour partager vos expériences, vos idées et projets. Inscrivez-vous et publiez, c'est Gratuit.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- container-->
+                    </div><!-- warpperTemoignages-->
+                </div>
+            </div>
+        </div>
+    {{ include('footer/desk/affichange_footer.html.twig') }}
+{%  endblock body %}
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    {{ encore_entry_script_tags('affi') }}
+{% endblock %}
+
+
+
+
+

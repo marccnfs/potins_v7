@@ -1,0 +1,72 @@
+<div class="stape_bull" id="postar" data-post="{{ post.id }}"></div>
+<form class="form-elastic" enctype="multipart/form-data" method="post" name="fileinfo">
+
+        <div class="content-form-post">
+            <div class="white-tab">
+                <label for="titrenews">Titre</label>
+                <input type="text" class="form-affi" value="{{ post.titre }}" name="titre" id="titrenews" placeholder="titre....." required="required">
+                <span class="error" aria-live="polite"></span>
+            </div>
+        </div>
+
+        <div class="content-form-post">
+            <div class="white-tab">
+                <label for="contentOne">Légende</label>
+                <textarea class="form-affi" name="contentOne" id="contentOne" required="required"
+                          placeholder="Entrez une description courte" rows="1" >{{ post.subject }}</textarea>
+                <span class="error" aria-live="polite"></span>
+            </div>
+        </div>
+
+        <div class="content-form-post">
+            <div class="white-tab">
+                <label for="numberpart" class="required">Nombre de participants</label>
+                <input type="text" id="numberpart" name="numberpart" required="required" inputmode="decimal" value={{ 0+post.numberpart }}>
+                <span class="error" aria-live="polite"></span>
+            </div>
+        </div>
+
+        <div class="content-form-post">
+            <div class="white-tab">
+                <label for="agepotin" class="required">dès : (âge)</label>
+                <input type="text" id="agepotin" name="agepotin" required="required" inputmode="decimal" value={{ 0+post.agepotin }}>
+                <span class="error" aria-live="polite"></span>
+            </div>
+        </div>
+
+        <div class="content-form-post">
+            <div class="white-tab">
+                <div class="tbb-post">
+                    <input id="uploadImage" type="file" name="uploadImage" accept=".jpg, .jpeg, .png" style="display:none"/>
+                    <label id="media-img" class="cmd-btn-media smalbtblue fa fa-camera" for="uploadImage"></label>
+                </div>
+                {% if post.media.imagejpg[0] is defined %}
+                    <div class="preview">
+                        <img src="{{ asset(post.media.imagejpg[0].getWebPAth) }}" alt="image post">
+                    </div>
+                {% else %}
+                    <div class="preview"></div>
+                {% endif %}
+            </div>
+        </div>
+    {#
+        <div class="content-form-post">
+            <div class="white-tab">
+                <label>Ajoutez un contenu (optionnel)</label>
+               <div id="articlenews">
+                    {{ include('WysiWyg/toolbar.html.twig') }}
+                    <div id="editor"></div>
+                </div>
+
+            </div>
+        </div>
+    #}
+        <div class="gp-form-row-col2">
+            <div class="progress">
+                <div id="loader-icon"><img src="{{asset('svg/LoaderIcon.gif')}}"  alt="loader"/></div>
+            </div>
+            <div class="iner-bt">
+                <button id="post-news" class="btn-send">Enregistrez</button>
+            </div>
+        </div>
+    </form>

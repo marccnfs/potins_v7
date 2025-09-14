@@ -1,0 +1,38 @@
+{% block body %}
+<div class="log-machina">
+    <div class="board_blocks">
+    <div class="block_choice">
+        <a href="{{ path('new_identify_stape_usager') }}" class="block_one">
+            <div class="import1">Vous êtes un particulier</div>
+            <div class="inblock_one">
+                <div class="import2">Inscrivez-vous aux potins de votre choix</div>
+                <div class="bt_block">Participez</div>
+            </div>
+        </a>
+    </div>
+    <div class="block_choice">
+        <a href="{{ path('new_identify_stape_mediator') }}" class="block_one">
+            <div class="import1">Vous êtes médiateur numérique</div>
+            {#
+            <div class="board-pict-team">
+                <div  class="board-add-gteam pictvierge" style="background-image:url('{{asset('imgdoc/potins/mepotinsone.jpg') }}');"></div>
+            </div>
+            #}
+            <div class="inblock_one">
+                <div class="import2">Mettez en ligne vos potins et agenda</div>
+                <div class="bt_block">organisez</div>
+            </div>
+        </a>
+    </div>
+</div>
+    <a class="middle__block-center" href="{{ path('app_login') }}">
+        <h4>J'ai déjà un compte</h4>
+        <div class="import2">Je me connecte</div>
+    </a>
+
+</div>
+    {%  endblock body %}
+    {% use('js/js_loc_customer.html.twig') %}
+    {% block javascripts %}
+    {{ parent() }}
+{% endblock %}

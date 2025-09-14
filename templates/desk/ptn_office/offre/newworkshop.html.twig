@@ -1,0 +1,16 @@
+{% block body %}
+    <div class="_wb">
+        <div class="container-bo_v5">
+            {{ include('aff_customer/menu/'~agent~'/websitemenu.html.twig') }}
+            <div class="_wb-ospace">
+                <div class="head-wb-space">
+                </div>
+                {{ include('aff_websiteadmin/shop/form/formaddworkshop.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock body%}
+{% use "js/js-workshop.html.twig" %}
+{% block javascripts %}
+{{ parent() }}
+{% endblock %}

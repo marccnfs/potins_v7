@@ -1,0 +1,66 @@
+<div class="titlpotin">
+     <h2 title="ressouce : {{ offre[0].titre }}">{{ offre[0].titre|lower|capitalize }}</h2>
+</div>
+
+{%  for ressource in offre[0].gppresents.articles %}
+<div class="illustr-ressourc" >
+    <div class="como">
+        {% if ressource.composition is not same as (" ") %}
+            <h3>{{ ressource.composition|raw|lower|capitalize }}</h3> {# {{post.subject|u.truncate(80, '...')|lower|capitalize}} #}
+        {% endif %}
+    </div>
+    <div class="iner_compo">
+
+        <div class="gallery" data-ce-columns="1" data-ce-images="1">
+            <div class="compo-row">
+                <div class="compo-column">
+                    <figure role="group" aria-label="{{ressource.titre}}">
+                        {% if ressource.pict is not null %}
+                            <img src="{{ asset(ressource.pict.getwebpath) }}" alt="{{ressource.titre}}">
+                            <figcaption class="caption">{{ressource.titre}}</figcaption>
+                        {% endif %}
+                    </figure>
+                </div>
+            </div>
+        </div>
+
+        <div class="txt_r1">
+            <p>{{ ressource.composition }}</p>
+        </div>
+
+    </div>
+
+    {#
+    <div class="pt_pict_ressourc">
+        {% if ressource.pict is not null %}
+        <div class="bac_img" style="background-image: url('{{ asset('spaceweb/template/'~ressource.pict.namefile) }}')"></div>
+        {% endif %}
+    </div>
+    #}
+</div>
+
+
+<div class="inner-ressourc">
+        <div class="ressourc_content">
+            <div class="r_ctnt">
+                <p class="iner_list">{{ressource.descriptif}}</p>
+            </div>
+        </div>
+</div>
+{%  endfor %}
+{#
+<div class="inner-post">
+    {% if content is not same as ("") %}
+        <div class="_post_content">
+            <div class="article_content">
+                {{ content|raw }}
+            </div>
+        </div>
+    {% endif %}
+</div>
+#}
+
+
+
+
+

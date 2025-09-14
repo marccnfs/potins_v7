@@ -1,0 +1,9 @@
+{% block body %}
+<section class="_wb-ospace_mob">
+{{ include('aff_websiteadmin/parameters/view/'~agent~'/form_update.html.twig') }}
+</section>
+{%  endblock body %}
+{% use "js/js_edit_website.html.twig" %}
+{% block javascripts %}
+{{ parent() }}
+{% endblock %}

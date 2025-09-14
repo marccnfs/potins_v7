@@ -1,0 +1,67 @@
+<div class="cbe-fx4 cube-bd">
+    <div class="cbe_cnt">
+        <div class="c_i_b">
+            <div class="in_cib">
+
+            <div class="in-cib-lrg-tit">
+                <div class="tit-cib-lg">{{ module.title }}</div>
+            </div>
+            <div class="_t-c _m-lr-5">
+                <div class="til_rlt">{{ module.desc }}</div>
+                <div class="space_tag_loc">
+
+                        <div class="bull_tag active" >
+                            <div class="-br-Ma">{{ module.price }}</div>
+                        </div>
+                </div>
+            </div>
+            <div class="Rt3Tbf">
+                <div class="nX2Utf">
+                    <span class="GlMVdd" aria-label="{{ module.desc }}">{{ module.desc }}</span>
+                    <div class="kxr9cf"></div>
+                </div>
+            </div>
+                {% if module.link is same as "module_mail" %}
+                {% if  board.contactation.active %}
+                    <div class="state-item" >
+                        <em>lien :{{ board.contactation.link }}</em>
+                        <cite class="-ct_b">{{board.module.contactation.linkone }}</cite>
+                    </div>
+                    <a class="stape_order_menu middlegrid stape_bull" href="{{path('process_contact',{'id':board.id}) }}">modifier</a>
+                {% else %}
+                    <div class="state-item" >
+                        <h6>pas de module actif</h6>
+                    </div>
+                    <a class="stape_order_menu middlegrid stape_bull" href="{{path('process_contact',{'id':board.id}) }}">creer</a>
+                {% endif %}
+                {% else %}
+                    {% if status %}
+                        <div class="bt-cub" role="button">
+                            <div class="FKF6mc TpQm9d" id="btnmodule" data-module="{{ module.link }}">
+                                <div class="in_cibS-Vd"></div>
+                                <div class="in_cibS-bot"></div>
+                                <span class="in_cibS-spn1">
+                        <span class="in_cibS-spn2">activez ce module
+                            <span class="tit-cb">-></span>
+                        </span>
+                    </span>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="bt-cub" role="button">
+                            <a class="FKF6mc TpQm9d" href="{{ path('new_cmd_customer',{'md':module.link}) }}">
+                                <div class="in_cibS-Vd"></div>
+                                <div class="in_cibS-bot"></div>
+                                <span class="in_cibS-spn1">Ajouter ce service à mon compte
+                        <span class="in_cibS-spn2">{{ module.price }}
+                            <span class="tit-cb">j'ajoute ce service</span>
+                        </span>
+                    </span>
+                            </a>
+                        </div>
+                    {% endif %}
+                {%  endif %}
+            </div>
+        </div>
+    </div>
+</div>

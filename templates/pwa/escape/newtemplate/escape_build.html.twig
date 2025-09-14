@@ -1,0 +1,40 @@
+<main class="escape-container">
+
+    <section class="cryptex-wrap" data-controller="cryptex"
+             data-cryptex-solution-value="LIVRE"
+             data-cryptex-alphabet-value="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+             data-cryptex-scramble-value="true"
+             data-cryptex-autocheck-value="true">
+        <h2 class="cryptex-title">Cryptex</h2>
+        <div id="cryptex" class="cryptex" data-cryptex-target="root"></div>
+        <div class="cryptex-status" data-cryptex-target="status" aria-live="polite"></div>
+        <button class="cryptex-reveal" data-action="click->cryptex#reveal" data-cryptex-target="reveal" hidden>Voir le message</button>
+        <div class="cryptex-secret" data-cryptex-target="secret" hidden>
+            <p>Bravo ! Indice suivant : va à l’étagère <strong>B</strong>, 3ᵉ rangée, près du globe.</p>
+        </div>
+    </section>
+{#
+    <section class="cryptex-wrap">
+        <h2 class="cryptex-title">Cryptex</h2>
+
+        <!-- Config via data-* -->
+        <div id="cryptex"
+             class="cryptex"
+             data-solution="LIVRE"
+             data-alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+             data-scramble="true"
+             data-autocheck="true"
+             aria-label="Cryptex, tournez les bagues pour trouver le bon mot"
+             role="group">
+        </div>
+
+        <div id="cryptex-status" class="cryptex-status" aria-live="polite"></div>
+
+        <button id="reveal" class="cryptex-reveal" hidden>Voir le message</button>
+
+        <div id="secret" class="cryptex-secret" hidden>
+            <p>Bravo ! Indice suivant : va à l’étagère <strong>B</strong>, 3ᵉ rangée, près du globe.</p>
+        </div>
+    </section>
+#}
+</main>

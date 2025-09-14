@@ -1,0 +1,30 @@
+<div class="form-groupfields glass-label">
+    <div class="glass-title_form">
+        <h3>modifier</h3>
+    </div>
+
+    <div class="process-resa-potin">
+        <div class="stape-process-lit" >
+            <h5>Potin : <strong>{{ event.titre }}</strong></h5>
+        </div>
+        {{ form_start(form) }}
+
+        <h3>Réservation du {{ order.listproducts[0].subscription.starttime|date('j.m.Y') }}</h3>
+
+        <ul class="tags" data-index="{{ form.listproducts|length > 0 ? form.listproducts|last.vars.name + 1 : 0 }}"
+            data-prototype="{{ form_widget(form.listproducts.vars.prototype)|e('html_attr') }}">
+        </ul>
+        <button type="button" class="add_item_link" data-collection-holder-class="tags">Add a tag</button>
+        <ul class="block_form_row">
+        {%  for prod in form.listproducts %}
+            <li class="block_form_col" id={{ loop.index0 }}>
+                {{ form_widget(form.listproducts[loop.index0]) }}
+                <button class="deletor" data-del="{{ loop.index0 }}">Delete this tag</button>
+            </li>
+        {%  endfor %}
+        </ul>
+
+        {{form_rest(form)}}
+        {{ form_end(form) }}
+    </div>
+</div>

@@ -1,0 +1,89 @@
+{{ form_start(form, {'attr': {'class': 'form-elastic'}}) }}
+
+
+    {{ form_row(form.name, {'attr': {'class': 'form-affi','placeholder':'"...."'}}) }}
+    {{ form_row(form.description, {'attr': {'class': 'form-affi','placeholder':'"...."'}}) }}
+{#
+    <div class="field-info-date">
+        <div class="field-date-label">Pour la période du : </div>
+        <div class="timdate_form">
+            {{ form_widget(form.start, {'attr': {'class': 'form-date'}}) }}
+        </div>
+        <div class="field-date-label">au : </div>
+        <div class="timdate_form">
+            {{ form_widget(form.end, {'attr': {'class': 'form-date'}}) }}
+        </div>
+    </div>
+#}
+
+
+{#
+<div class="field-info">
+    {{ form_widget(form.catformules) }}
+    <div class="declin"></div>
+</div>
+#}
+{#
+<div class="text-center">
+    <button id="add_formule" class="btn-send">Ajoutez une déclinaison</button>
+</div>
+#}
+
+<div class="_buble-form">
+    <h5>selectionez des ressources :</h5>
+    <div class="buble-field">
+        <div class="inpop-content">
+            <div class="choice-flex">
+                {%  for key in tabcarte|keys %}
+                <div class="bul-go_f bull-sz-lit bulletoggle" data-affitgl="tgl_15" id="afftgl">
+
+                    <div class="">{{ key }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            <section class="tglaff blok_pop-carte" id="tgl_15" style="display: none">
+                <div class="_fx-R_v6">
+                    {%  for catg in tabcarte %}
+                        <div class="_fx-R_v6">
+                            {%  for carte in catg %}
+                                <div class="pop-carte" data-carte="{{ carte.id }}" data-ctg="{{carte.categorie.id}}">{{ carte.titre }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </section>
+            {#
+            <section class="tglaff blok_pop-carte" id="tgl_11" style="display: none">
+                <div class="_fx-R_v6">
+                    {%  for carte in tabcarte.plat %}
+                        <div class="pop-carte" data-carte="{{carte.id}}" data-ctg="{{carte.categorie.id}}">{{carte.titre}}</div>
+                    {% endfor %}
+                </div>
+            </section>
+            <section class="tglaff blok_pop-carte" id="tgl_12" style="display: none">
+                <div class="_fx-R_v6">
+                    {%  for carte in tabcarte.dessert %}
+                          <div class="pop-carte" data-carte="{{ carte.id }}" data-ctg="{{carte.categorie.id}}">{{ carte.titre }}</div>
+                    {% endfor %}
+                </div>
+            </section>
+            <section class="tglaff blok_pop-carte" id="tgl_14" style="display: none">
+                <div class="_fx-R_v6">
+                    {%  for carte in tabcarte.boisson %}
+                            <div class="pop-carte" data-carte="{{ carte.id }}" data-ctg="{{carte.categorie.id}}">{{ carte.titre }}</div>
+                    {% endfor %}
+                </div>
+            </section>
+            #}
+        </div>
+    </div>
+</div>
+{#
+<div class="field-services _buble-form">
+    <h5>Cette formule est disponible :</h5>
+    {{ form_row(form.services) }}
+</div>
+#}
+{{form_rest(form)}}
+{{form_end(form)}}

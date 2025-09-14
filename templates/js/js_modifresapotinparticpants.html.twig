@@ -1,0 +1,132 @@
+{% block javascripts %}
+    <script type="text/javascript">
+
+        const addFormToCollection = (e) => {
+            const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+            const item = document.createElement('li');
+            item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g,collectionHolder.dataset.index);
+            collectionHolder.appendChild(item);
+            collectionHolder.dataset.index++;
+            addTagFormDeleteLink(item);
+        };
+
+        document
+            .querySelectorAll('.add_item_link')
+            .forEach(btn => {
+                btn.addEventListener("click", addFormToCollection)
+            });
+
+        document
+            .querySelectorAll('ul.tags li')
+            .forEach((tag) => {
+                addTagFormDeleteLink(tag)
+            })
+
+        const deleteRegistered=(del)=>{
+            document.getElementById(del).remove();
+        }
+
+        const deletor=document.querySelectorAll('.deletor');
+
+        deletor.forEach(function(del) {
+                del.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        deleteRegistered(del.dataset.del)
+                    })
+                }
+            )
+
+
+
+        const addTagFormDeleteLink = (item) => {
+            const removeFormButton = document.createElement('button');
+            removeFormButton.innerText = 'Delete this tag';
+            item.append(removeFormButton);
+            removeFormButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                // remove the li for the tag form
+                item.remove();
+            });
+        }
+
+    </script>
+{% endblock %}
+
+{#
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
+        var $container = $('div#worder_potin_participants_listproducts');
+        var $nbregisterd=$('#registered').attr('data-number');
+        console.log($nbregisterd)
+        let i=0;
+        while(i<$nbregisterd){
+            console.log(i)
+            addCategory($container);
+            i+=1;
+        }
+
+        // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
+        var index = $container.find(':input').length;
+
+        // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
+        $('#add_category').click(function(e) {
+            addCategory($container);
+
+            e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+            return false;
+        });
+
+        // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
+        if (index === 0) {
+            addCategory($container);
+        } else {
+            // S'il existe déjà des catégories, on ajoute un lien de suppression pour chacune d'entre elles
+            $container.children('div').each(function() {
+                addDeleteLink($(this));
+            });
+        }
+
+        // La fonction qui ajoute un formulaire CategoryType
+        function addCategory($container) {
+            // Dans le contenu de l'attribut « data-prototype », on remplace :
+            // - le texte "__name__label__" qu'il contient par le label du champ
+            // - le texte "__name__" qu'il contient par le numéro du champ
+            var template = $container.attr('data-prototype')
+                .replace(/__name__label__/g, 'Participant(e) n°' + (index+1))
+                .replace(/__name__/g,        index)
+            ;
+
+            // On crée un objet jquery qui contient ce template
+            var $prototype = $(template);
+
+            // On ajoute au prototype un lien pour pouvoir supprimer la catégorie
+            addDeleteLink($prototype);
+
+            // On ajoute le prototype modifié à la fin de la balise <div>
+            $container.append($prototype);
+
+            // Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
+            index++;
+        }
+
+        // La fonction qui ajoute un lien de suppression d'une catégorie
+        function addDeleteLink($prototype) {
+            // Création du lien
+            var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
+
+            // Ajout du lien
+            $prototype.append($deleteLink);
+
+            // Ajout du listener sur le clic du lien pour effectivement supprimer la catégorie
+            $deleteLink.click(function(e) {
+                $prototype.remove();
+
+                e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+                return false;
+            });
+        }
+    });
+#}

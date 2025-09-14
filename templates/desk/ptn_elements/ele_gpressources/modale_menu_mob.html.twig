@@ -1,0 +1,61 @@
+{%  set menu =notices['menu'] %}
+
+{%  if notices.resa %}
+    {{ include('aff_website/generies/generyresa_v6.html.twig') }}
+{% endif %}
+
+{% if menu.formule.pictformule.namefile is defined %}
+    {%  set pict=  asset('upload/module/'~menu.formule.pictformule.namefile ) %}
+{%  else %}
+    {% set pict=  asset('spaceweb/template/ccec7f38ec542f83ad1e32407de3288b81a870f8.jpg' ) %}
+{% endif %}
+<div class="wp-event">
+    <div class="inner-event">
+ {#  <div class="pict_menu_mob" style="background-image: url({{ pict }})"></div>   #}
+        <h3 class="goaff_event_mob">à Table !</h3>
+        <div class="w_titlevent_mob">
+        <h2>{{ menu.formule.name }}</h2>
+        <time itemprop = "startDate" pubdate><b>du {{ menu.formule.parution.starttime|date("d-m-Y") }} au {{  menu.formule.parution.endtime|date("d-m-Y") }}</b></time>
+
+        {%  for declin in menu.formule.catformules %}
+                <h3>{{ declin.declinaison.name }}</h3>
+                <span class="price-form_mob">{{ declin.prix }} €</span>
+        {%  endfor %}
+{#
+        <div class="bt-live">
+            <i class="fa fa-link" aria-hidden="true"></i>
+            <h3>Réservez</h3>
+        </div>
+#}
+
+    <div class="menu-list_mob">
+        <div class="info-plat">
+            <div class="ineer-plat">
+                {% for entree in menu.entrees %}
+                        {% if loop.first %}
+                            <h5>Entrée</h5>
+                        {% endif %}
+                        <div class="nn">{{ entree.titre }}</div>
+                {% endfor %}
+            </div>
+            <div class="ineer-plat">
+                {% for plat in menu.plats %}
+                        {% if loop.first %}
+                            <h5>Plats</h5>
+                        {% endif %}
+                        <div class="nn">{{ plat.titre }}</div>
+                {% endfor %}
+            </div>
+            <div class="ineer-plat">
+                {% for dessert in menu.desserts %}
+                    {% if loop.first %}
+                        <h5>Dessert</h5>
+                    {% endif %}
+                    <div class="nn">{{ dessert.titre }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    </div>
+</div>

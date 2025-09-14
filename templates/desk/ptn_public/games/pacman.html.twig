@@ -1,0 +1,91 @@
+{% block body %}
+<div id="pagehome" class="homepage-wrapper--desk" data-agent="{{ agent }}">
+
+    <div class="templ_game">
+        <div class="tablemain">
+
+    <div class="tablecontent">
+
+        <div class="pacwrap">
+            <script src="{{ asset('js/jquery-3.5.1.min.js') }}"></script>
+            <script src="{{ asset('js/buzz.min.js') }}"></script>
+            <script src="{{ asset('js/pacman-game.min.js') }}"></script>
+
+            <div id="sound"></div>
+
+            <div id="home" style="display: none;">
+                <div class="pactitle">Pac-Man</div>
+                <canvas id="canvas-home-title-pacman" width="115" height="100"></canvas>
+                <div id="presentation">
+                    <div id="presentation-titles" style="">personnage / surnom</div>
+                    <canvas id="canvas-presentation-blinky" width="50" height="50" style=""></canvas>
+                    <div id="presentation-character-blinky">ombre</div>
+                    <div id="presentation-name-blinky">clignotant</div>
+                    <canvas id="canvas-presentation-pinky" width="50" height="50" style=""></canvas>
+                    <div id="presentation-character-pinky">rapide</div>
+                    <div id="presentation-name-pinky">"pinky"</div>
+                    <canvas id="canvas-presentation-inky" width="50" height="50" style=""></canvas>
+                    <div id="presentation-character-inky">- timide</div>
+                    <div id="presentation-name-inky">"encre"</div>
+                    <canvas id="canvas-presentation-clyde" width="50" height="50" style=""></canvas>
+                    <div id="presentation-character-clyde"> minable</div>
+                    <div id="presentation-name-clyde" style="">"clyde"</div>
+                </div>
+                <canvas id="trailer" width="500" height="50"></canvas>
+                <a class="sound" href="javascript:void(0);" data-sound="off"><img src="img/sound-off.png" alt="" ></a>
+            </div>
+
+            <div id="panel" style="">
+                <div class="pactitle">Pac-Man</div>
+                <canvas id="canvas-panel-title-pacman" width="38" height="32"></canvas>
+                <div id="score"><div class="h2">score</div><span>0</span></div>
+                <div id="highscore"><div class="h2">cumulé</div><span>0</span></div>
+                <div id="board">
+                    <canvas id="canvas-board" width="550" height="550"></canvas>
+                    <canvas id="canvas-paths" width="550" height="550"></canvas>
+                    <canvas id="canvas-bubbles" width="550" height="550"></canvas>
+                    <canvas id="canvas-fruits" width="550" height="550"></canvas>
+                    <canvas id="canvas-pacman" width="550" height="550"></canvas>
+                    <canvas id="canvas-ghost-blinky" width="550" height="550"></canvas>
+                    <canvas id="canvas-ghost-pinky" width="550" height="550"></canvas>
+                    <canvas id="canvas-ghost-inky" width="550" height="550"></canvas>
+                    <canvas id="canvas-ghost-clyde" width="550" height="550"></canvas>
+                    <div id="control-up-big"></div>
+                    <div id="control-down-big"></div>
+                    <div id="control-left-big"></div>
+                    <div id="control-right-big"></div>
+                </div>
+                <div id="control">
+                    <div id="control-up"></div>
+                    <div id="control-up-second"></div>
+                    <div id="control-down"></div>
+                    <div id="control-down-second"></div>
+                    <div id="control-left"></div>
+                    <div id="control-right"></div>
+                </div>
+                <canvas id="canvas-lifes" width="120" height="30"></canvas>
+                <canvas id="canvas-level-fruits" width="265" height="30"></canvas>
+                <div id="message" class="red">game over</div>
+                <a class="sound" href="javascript:void(0);" data-sound="off"><img src="img/sound-off.png" alt=""></a>
+            </div>
+        </div>
+
+
+
+
+        <div style="clear:both"></div>
+
+    </div>
+    <!-- end tablecontent -->
+
+</div>
+    </div>
+</div>
+{% endblock %}
+{% block footer %}
+    {{ include ('desk/ptn_public/footer/potins_footer.html.twig') }}
+{% endblock footer %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}

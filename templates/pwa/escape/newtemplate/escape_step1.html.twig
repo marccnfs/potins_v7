@@ -1,0 +1,42 @@
+<main class="escape-container">
+
+    <h1>Étape 1 · Cryptex</h1>
+
+    {{ form_start(form, { attr: { id: 'cryptex-form' } }) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.prompt) }}
+
+    <div class="grid">
+        <div>
+            {{ form_row(form.solution) }}
+            {{ form_row(form.hashMode) }}
+            {{ form_row(form.alphabet) }}
+            {{ form_row(form.scramble) }}
+            {{ form_row(form.autocheck) }}
+            {{ form_row(form.successMessage) }}
+        </div>
+
+        <div>
+            <h3>Aperçu</h3>
+            <section class="cryptex-wrap">
+                <div id="cryptex"
+                     class="cryptex"
+                     data-solution="{{ (puzzle.config.hashMode ? '' : puzzle.config.solution ?? '')|upper }}"
+                     data-hash="{{ puzzle.config.hashMode ? (puzzle.config.solutionHash ?? '') : '' }}"
+                     data-alphabet="{{ (puzzle.config.alphabet ?? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')|upper }}"
+                     data-scramble="{{ puzzle.config.scramble is defined ? (puzzle.config.scramble ? 'true' : 'false') : 'true' }}"
+                     data-autocheck="{{ puzzle.config.autocheck is defined ? (puzzle.config.autocheck ? 'true' : 'false') : 'true' }}">
+                </div>
+                <div id="cryptex-status" class="cryptex-status" aria-live="polite"></div>
+                <button id="reveal" class="cryptex-reveal" hidden>Voir le message</button>
+                <div id="secret" class="cryptex-secret" hidden>
+                    <p>{{ puzzle.config.successMessage ?? 'Bravo !' }}</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <button class="btn btn-primary">Enregistrer cette étape</button>
+    {{ form_end(form) }}
+
+</main>

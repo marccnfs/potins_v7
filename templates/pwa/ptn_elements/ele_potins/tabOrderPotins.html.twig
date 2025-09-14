@@ -1,0 +1,21 @@
+<div class="pg_other">
+    <div class="board-list-replace_mob">
+
+        <nav class="other_mob">
+            <div class="nogo"><h3>et aussi</h3></div>
+        </nav>
+
+        <div class="flex-notb_v6">
+            {% for otherpost in potins|slice(0, 6) %}
+                <div class="last-potin_mob">
+                    {{include('pwa/ptn_elements/ele_boards/poppost.html.twig')}}
+                </div>
+            {% else %}
+                <div class="affiche">
+                    <div class="evnet_titre_mob">pas d'autre potin actuellement !!</div>
+                </div>
+            {%  endfor %}
+        </div>
+
+    </div>
+</div>

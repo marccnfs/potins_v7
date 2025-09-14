@@ -1,0 +1,37 @@
+{% for message in app.flashes('newmsg') %}
+    <div class="_fx-Tflhs">
+        <div class="comd-flhs">
+            <h5>info !</h5>
+            <div class="_rlm-a">
+                <div class="msg-flhs">{{ message }}.</div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+<h3 class="the_q">Votre demande a bien été adressé</h3>
+<a href="{{path('show_website',{'slug':website.slug}) }}"> retour vers le comptoir {{ website.namewebsite }}</a>
+<hr>
+<h1>suivre vos échanges</h1>
+<div class="_bk-0">
+    <div class="row mt">
+        <a class="col-lg-4 centered si slideUp" href="{{ path('show_website',{'slug':website.slug}) }}">
+            <i class="fa fa-heart"></i>
+            <h4>{{ website.namewebsite }}</h4>
+            <p>{{ website.template.description }}</p>
+        </a>
+
+        <a class="col-lg-4 centered si slideUp" href="{{ path('app_login') }}">
+            <i class="fa fa-users" aria-hidden="true"></i>
+            <h4>Activez votre compte</h4>
+            <p>Retrouvez le fil de vos conversations dés à présent sur votre espace privé</p>
+        </a>
+
+        <a class="col-lg-4 centered si slideUp" href="{{ path('cargo_public') }}">
+            <i class="fa fa-globe" aria-hidden="true"></i>
+            <h4>{{ website.locality.city }}</h4>
+            <p>Les autres comptoir d'info sur cette localité. Et pourquoi pas vous ?</p>
+        </a>
+
+    </div>
+</div>
+</div>

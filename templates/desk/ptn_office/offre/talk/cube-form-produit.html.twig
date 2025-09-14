@@ -1,0 +1,50 @@
+<div class="cbe_cnt">
+    <div class="c_i_b">
+        <div class="in_cib">
+
+        <div class="in-cib-lrg-tit">
+            <div class="tit-cib-lg">fiche produit</div>
+        </div>
+
+            <div class="Rt3Tbf">
+                <div class="nX2Utf">
+                    <span class="GlMVdd" aria-label="par défaut votre offre sera publiée dès validation et pour une période de 8 jours
+jour(s)">ajouter la description de votre produit, marque, référence...</span>
+                </div>
+            </div>
+
+            <div class="bt-cub" role="button">
+                <div class="FKF6mc TpQm9d">
+                <div class="in_cibS-Vd"></div>
+                <div class="in_cibS-bot"></div>
+                    <span class="in_cibS-spn1">
+                    <span class="in_cibS-spn2 colapsaffi" data-afficolapse="prod" data-toggle="collapse" data-target="#collapseProduct" aria-expanded="false" aria-controls="collapseProduct">
+                        <span class="tit-cb" >descriptif</span>
+                    </span>
+                </span>
+                </div>
+            </div>
+            <div class="collapse" id="collapseProduct">
+                <div class="card-form">
+                    <h5>Description du produit :</h5>
+                    <div class="white-tab">
+                        <label for="nameproduct">Nom/référence du produit ou service</label>
+                        <input type="text" class="form-affi prod" value="{{ offre.product.nameproduct }}" name="nameproduct" id="nameproduct">
+                        <span class="error" aria-live="polite"></span>
+                    </div>
+                    <div class="white-tab">
+                        <label for="designprod">votre avis</label>
+                        <textarea class="form-affi prod" name="designprod" maxlength="250" id="designprod" rows="10" >{{ offre.product.description }}</textarea>
+                        <span class="error" aria-live="polite"></span>
+                    </div>
+                    <div class="white-tab">
+                        <label for="tagsprod">Tags (mots clés)</label>
+                        <textarea class="form-affi prod" name="tagsprod" id="tagsprod" rows="1" ></textarea>
+                        <span class="error" aria-live="polite"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

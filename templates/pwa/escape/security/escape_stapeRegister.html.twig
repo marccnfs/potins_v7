@@ -1,0 +1,43 @@
+
+<main class="register-container">
+    <h1>👤 Espace Participant – Escape Game</h1>
+
+    <section id="choice-section">
+        <p>Que veux-tu faire ?</p>
+        <button id="btn-register">🆕 Créer un compte</button>
+        <button id="btn-login">🔐 Me connecter</button>
+    </section>
+
+    <section id="register-form" class="hidden">
+        <h2>🆕 Inscription</h2>
+        <form method="post" action="{{ path('participant_register') }}">
+            <label>Ton prénom ou pseudo :</label><br>
+            <input type="text" name="prenom" required><br><br>
+
+            <label>Code atelier :</label><br>
+            <input type="text" name="code_atelier" required><br><br>
+
+            <label>Code secret (4 chiffres) :</label><br>
+            <input type="password" name="code_secret" pattern="\d{4}" maxlength="4" required><br><br>
+
+            <button type="submit">Créer mon espace</button>
+        </form>
+    </section>
+
+    <section id="login-form" class="hidden">
+        <h2>🔐 Connexion</h2>
+        <form method="post" action="{{ path('participant_login') }}">
+            <label>Ton prénom ou pseudo :</label><br>
+            <input type="text" name="prenom" required><br><br>
+
+            <label>Code atelier :</label><br>
+            <input type="text" name="code_atelier" required><br><br>
+
+            <label>Code secret :</label><br>
+            <input type="password" name="code_secret" pattern="\d{4}" maxlength="4" required><br><br>
+
+            <button type="submit">Entrer dans mon escape</button>
+        </form>
+    </section>
+</main>
+

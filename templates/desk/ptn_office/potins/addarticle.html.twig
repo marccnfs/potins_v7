@@ -1,0 +1,17 @@
+{% block body %}
+<div class="_wb">
+    <div class="container_bo_member">
+        {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
+        <div class="bo_content">
+            <div id="postar" data-content="" data-post={{post.id}}></div>
+            <section class="ptn_content">
+            {{ include('desk/ptn_office/potins/articlenew_potin.html.twig') }}
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock body%}
+{% use "js/js-article.html.twig" %}
+{% block javascripts %}
+{{ parent() }}
+{% endblock %}

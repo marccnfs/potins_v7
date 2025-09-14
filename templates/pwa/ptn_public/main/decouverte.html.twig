@@ -1,0 +1,58 @@
+{% block body %}
+<div id="pagehome" class="homepage-wrapper--mob" data-agent="{{ agent }}">
+
+    <div class="fx-pag_mb">
+
+        <div class="fx-row-pag_mb">
+
+            <div class="left_row_mb">
+
+                <div class="cadre_pict_mb">
+                    <div class="bkg_cadre" style="background-image: url({{ asset('imgdoc/potins/social.png') }}">
+                    </div>
+                </div>
+
+                <div class="cadre_title_mb">
+                    <h1>Découvrez</h1>
+                </div>
+            </div>
+
+            <div class="left_col_mb">
+                <div class="cadre_content">
+                    <div class="arg-cont-bk">
+                        <div class="text_cadre">
+                       Chez les potins numériques, on aime les nouvelles technologies. Et c'est autour d'ateliers au sein des 3 médiathèques que ça se passe. Et parce que l'on apprend mieux en pratiquant, nous avons mis en place des ateliers numériques tout public pour découvrir de nouvelles tendances numériques.
+                         Chaque semaine, un nouveau thème. Retrouverez nos derniers potins sur le site pour revenir sur un atelier pour en découvrir d'autres.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pict_row_mb">
+                <div class="pic_right_mb">
+                 <div class="bkg_right" style="background-image: url({{ asset('imgdoc/potins/3d_1.JPG') }}"></div>
+            </div>
+
+            </div>
+
+                <div class="bk-separate"></div>
+                <div class="cadre_title_mb">
+                    <h2>Retrouvez tous les derniers Potins</h2>
+                </div>
+         </div>
+
+    </div>
+    <div class="bk-separate"></div>
+  {#  {{ include('pwa/ptn_elements/ele_potins/tabOrderPotins.html.twig') }} #}
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {{ include ('pwa/footer/potins_footer.html.twig') }}
+{% endblock footer %}
+
+{% use "js/js_public_wb.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

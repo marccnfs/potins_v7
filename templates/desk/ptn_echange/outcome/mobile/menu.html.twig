@@ -1,0 +1,23 @@
+{{ include('elements/zone-header-wb-mod.html.twig') }}
+<div class="nav_see_mob_abs">
+    {{ include('aff_search/'~agent~'/just-see.website.html.twig',{city:website.locality.slugcity}) }}
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        <div class="menu-af_mb af_mb-wbcol">
+            {{ include('aff_menu/pop/'~agent~'/all_bell_msg.html.twig') }}
+            {% if pw %}
+                {{ include('aff_menu/pop/'~agent~'/bandospace.html.twig') }}
+            {%  else %}
+                {{ include('aff_menu/pop/'~agent~'/bandcustomer.html.twig') }}
+            {%  endif %}
+            {{ include('aff_menu/pop/'~agent~'/profilnav.html.twig') }}
+        </div>
+    {%  else %}
+        <div class="menu-af_mb">
+            {{ include('aff_menu/pop/'~agent~'/profilnav.html.twig') }}
+            {{ include('aff_menu/pop/'~agent~'/bandnoconnect.html.twig') }}
+        </div>
+    {%  endif %}
+</div>
+
+
+{{ include('aff_website/header/header-website-mob.html.twig') }}

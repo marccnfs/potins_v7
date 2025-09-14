@@ -1,0 +1,18 @@
+<div><pre class="sf-dump" id="sf-dump-1672871578" data-indent-pad="  " tabindex="0" style="margin-top: 0.5em; margin-bottom: 0.5em; padding: 10px; border: var(--border); font-size: var(--font-size-monospace); font-family: var(--font-family-monospace); color: var(--color-text); font-variant-ligatures: var(--font-variant-ligatures-monospace); background: var(--page-background); text-wrap: wrap; z-index: 99999; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-variant-position: normal; font-stretch: normal; line-height: 1.4; overflow-wrap: break-word; position: relative; word-break: break-all;"><div><pre><font color="#000000"><b>Atelier : Crée ton propre jeu vidéo avec Scratch !</b></font><br />
+<br />
+<font color="#000000">Tu as toujours rêvé de créer ton propre jeu vidéo ? Cet atelier est fait pour toi ! Rejoins-nous à la médiathèque pour une aventure passionnante où tu apprendras à concevoir et programmer ton propre jeu grâce à Scratch, un langage de programmation ludique et intuitif.</font><br />
+<br />
+<font color="#000000"><b>Qu'est-ce qu'on va faire ? </b> </font><br />
+<font color="#000000">Durant cet atelier de 2 heures, tu vas découvrir les bases de la création de jeux vidéo avec Scratch. Tu apprendras à utiliser des blocs de code pour faire bouger tes personnages, créer des interactions et des niveaux, et même ajouter des sons et des effets visuels pour rendre ton jeu unique et amusant. À la fin de l'atelier, tu repartiras avec ton propre jeu, prêt à être partagé avec tes amis et ta famille !</font><br />
+<br />
+<font color="#000000"><b>Pour qui ?</b>  </font><br />
+<font color="#000000">Cet atelier est ouvert aux enfants à partir de 8 ans qui connaissent déjà les bases du fonctionnement d'un ordinateur PC. Que tu sois un débutant curieux ou déjà un petit génie de l'informatique, cet atelier est l'occasion parfaite pour développer ta créativité et tes compétences en programmation tout en t'amusant.</font><br />
+<br />
+<font color="#000000"><b>Pourquoi participer ?</b>  </font><br />
+<font color="#000000">- Découvre comment créer un jeu vidéo de A à Z.  </font><br />
+<font color="#000000">- Apprends à programmer en t'amusant.  </font><br />
+<font color="#000000">- Développe ta créativité et ton esprit logique.  </font><br />
+<font color="#000000">- Partage un moment ludique et éducatif avec d'autres enfants.  </font><br />
+<br />
+<font color="#000000">Viens libérer ton imagination et créer des mondes incroyables avec Scratch !</font></pre><br />
+</div></pre></div>

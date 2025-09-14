@@ -1,0 +1,62 @@
+<div class="card-wb_mb">
+    <div class="head-wb{#  flex-fix#}">
+        {% if  board.template.background is not null %}
+            {% set style = board.template.background.getWebPath %}
+        {%  else %}
+            {% set style = '#0a53be' %}
+        {%  endif %}
+
+        <div class="mediatheq-sh" style="background-image: url({{ style}})">
+            <div class="mediatheq-inf">
+                <h1>{{ board.nameboard }}</h1>
+            </div>
+
+        </div>
+
+        <div class="map-wb">
+            <div class="wp-info">
+                    <div class="mediath-titleinfo">
+                        <h2 title="info de {{ board.nameboard }}">{{ board.template.description|raw }}</h2>
+
+                        <div class="info_mediath">
+
+                            {% if sector.adresse[0] is defined %}
+                                {%  set adr = sector.adresse[0] %}
+                                {%  if adr.typeadress is same as "street" %}
+                                    <h5 class="adrrss"> {{ adr.label }}</h5>
+                                {% else %}
+                                    <h5 class="adrrss"> {{ adr.numero }} {{ adr.nomvoie }} {{ adr.codepostal }} {{ adr.nomcommune }} </h5>
+                                {%  endif %}
+                            {% else %}
+                                <h3 class="adrrss">{{ board.locality.city }}</h3>
+                            {%  endif %}
+
+                            {%  if board.attached %}
+                                {{ include('desk/ptn_elements/ele_times/opencity.html.twig') }}
+                            {%  endif %}
+                            <h5 class="adrrss">{{ board.template.telephonespaceweb }}</h5>
+                            {%  if  board.url is defined and  board.url is not null %}
+                                <a class="pop_button com_a_col" href="{{ board.url }}">
+                                    <i class="fa fa-link"></i>
+                                    <div class="com_a_in">voir le site web</div>
+                                </a>
+                            {% endif %}
+
+                        </div>
+
+
+                    {#
+                    <a href="{{ path('info_board', {'slugboard':board.slug }) }}" class="pop_button com_a_col">
+                        <i class="fa fa-star"></i>
+                        <div class="com_a_in">à propos</div>
+                    </a>
+                    #}
+
+                    </div>
+                    <div class="text_cadre">
+                        {{ board.template.activities|raw }}
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="timeline-msg msg-memberwebsite">
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+    <div class="bg-glass-W">
+        <div class="">
+            <div class="formmsg mailtest">
+                <i class="fa fa-envelope heading-icon font-20"></i><span> Nouvelle conversation :</span><br>
+                {{ form_label(form.subject, "objet:") }}
+                {{ form_widget(form.subject, {'attr': {'class': 'iner-subject'}}) }}
+                {{ form_label(form.content, "votre contenu :") }}
+                {{ form_widget(form.content, {'attr': {'class': 'iner-conversone'}}) }}
+                <div class="validate"></div>
+                <div class="form-send">
+                    {#    <div class="g-recaptcha" data-sitekey="6LfPKvAUAAAAAIopX1KBsmBtSrI8FekLD-u-s4N5"></div> #}
+                    <i class="fab fa-telegram-plane" id="postform"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_rest(form) }}
+    <div class="loading"></div>
+    <div class="error-message"></div>
+    {{ form_end(form) }}
+</div>
+<div class="wait">
+    <i class="fas fa-spinner fa-spin"></i>
+</div>

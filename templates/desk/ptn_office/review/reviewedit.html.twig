@@ -1,0 +1,63 @@
+<div class="stape_bull" id="infreview" data-type="{{ rw.type }}" data-rw="{{ rw.id }}" data-content="{{ content }}" data-gp="{{ gprw.id }}" data-post="{{ post }}"></div>
+{% if rw.type %}
+    <h1> édition fiche Résumé</h1>
+{% else %}
+    <h1> édition fiche trame</h1>
+{% endif %}
+<form class="form-elastic" enctype="multipart/form-data" method="post" name="reviewform">
+
+        <div class="content-form-post">
+            <div class="white-tab">
+                <label for="titrenews">Titre</label>
+                <input type="text" class="form-affi" value="{{ rw.titre }}" name="titre" id="titrereview" placeholder="titre....." required="required">
+                <span class="error" aria-live="polite"></span>
+            </div>
+        </div>
+
+    <div class="content-form-post">
+        <div class="white-tab">
+            <label for="titrenews">Sous Titre</label>
+            <input type="text" class="form-affi" value="{{ rw.soustitre }}" name="soustitre" id="soustitre" placeholder="sous titre....." required="required">
+            <span class="error" aria-live="polite"></span>
+        </div>
+    </div>
+
+        <div class="content-form-post">
+            <div class="white-tab">
+                <div class="tbb-post">
+                    <input id="uploadImage" type="file" name="uploadImage" accept=".jpg, .jpeg, .png" style="display:none"/>
+                    <label id="media-img" class="cmd-btn-media smalbtblue fa fa-camera" for="uploadImage"></label>
+                </div>
+                {% if rw.pict is defined %}
+                    {% if rw.pict is not null %}
+                    <div class="preview">
+                        <img src="{{ asset(rw.pict.getWebPAth) }}" alt="image post">
+                    </div>
+                    {% else %}
+                        <div class="preview"></div>
+                    {% endif %}
+                {% else %}
+                    <div class="preview"></div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="content-form-post">
+            <div class="white-tab">
+                <label>Ajoutez un contenu (optionnel)</label>
+               {#  <textarea id="mytextarea">{{ content }}</textarea>  #}
+               <div id="articlenews">
+                    {{ include('WysiWyg/toolbar.html.twig') }}
+                    <div id="editor"></div>
+                </div>
+
+            </div>
+        </div>
+        <div class="gp-form-row-col2">
+            <div class="progress">
+                <div id="loader-icon"><img src="{{asset('svg/LoaderIcon.gif')}}"  alt="loader"/></div>
+            </div>
+            <div class="iner-bt">
+                <button id="post-review" class="btn-send">Enregistrez</button>
+            </div>
+        </div>
+    </form>

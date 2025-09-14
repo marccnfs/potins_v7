@@ -1,0 +1,23 @@
+<div class="w-iner_echanges">
+    <div class="ol-2 tglaff"  id="tgl_9" style="display: none">
+        {% if customer is null or member is null %}
+            {{ include('desk/ptn_elements/ele_echanges/form_contact_post.html.twig') }}
+        {%  else %}
+            <div id="adcomment">
+                <add-comment slug="{{ board.slug }}" id="{{ post.id }}" module="_blog"></add-comment>
+            </div>
+        {%  endif %}
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+

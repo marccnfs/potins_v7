@@ -1,0 +1,71 @@
+<div class="container-bo_v5">
+    {{ include('aff_account/menu/accountmenu.html.twig') }}
+    <div class="flrow">
+        <div class="fx-cub ii_cub2">
+            <div class="O_list-cube">
+                <h1 class="tit-cib-lg">Mes informations de contact</h1>
+
+                <div class="list-incub">
+                    <div class="pos-incub-i">
+                        <div class="pos-incub-l">
+                            <div class="tit-pos-cub">votre espace {{ dispatch.name }}</div>
+
+
+                            <div class="process-module_glass">
+
+<div class="stape-process-lit" >
+    <div id="listadressgp">
+
+        {% if identity.sector.adresse is defined %}
+
+
+            {% set adr=["","Principale","etablissement","livraison","facturation"] %}
+            {% for adrss in identity.sector.adresse %}
+                <h5>Adresse {{ adr[adrss.choiceadress] }} :</h5>
+                <div class="list-adress">
+                    <div class="dtl-adress">
+                        <div class="adrrss" id="{{ adrss.idMap }}">{{ adrss.label }}</div>
+                    </div>
+                    <div class="btn-adress">
+                        <button data-adress="{{ adrss.idMap }}"  class="modified btn btn-light">modifier cette adresse</button>
+                        {% if loop.index > 1 %}
+                            <button data-adress="{{ adrss.id }}"  class="deleted btn btn-alerte">supprimer</button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="separatemini"></div>
+            {% if identity.sector.adresse | length < 3 %}
+                <button id="newadress" class="btn btn-light">ajouter une adresse</button>
+            {% endif %}
+        {% else %}
+
+            <p>Voulez vous précisez votre localisation par une adresse compléte</p>
+            <em>Cette adresse ne sera visible sur vos modules publics</em>
+            <button id="newadress" class="btn btn-light">ajouter une adresse</button>
+        {% endif %}
+    </div>
+    <div class="new-adress">
+        <div class="group-form-glass_lit">
+            <div class="field-glass">
+                <label for="labeladress">Tapez votre adresse :</label>
+                <input type="text"  name="labeladress" class="form-hbclnews form-control" id="labeladress" placeholder="Entrez une adresse" autocomplete="off">
+                <div class="limit">
+                    <div class="resuladress" data-spwb="#labeladress">
+                        <div class="adresslist" data-spwb-adresse></div>
+                    </div>
+                </div>
+            </div>
+            <button id="validadress" class="btn btn-light">valider cette adresse</button>
+        </div>
+    </div>
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+<div class="wizard-layout"
+     data-controller="agenda-nav agenda-calendar"
+     data-agenda-nav-view-value="{{ view }}"
+     data-agenda-nav-date-value="{{ date|date('Y-m-d') }}"
+     data-agenda-calendar-fetch-url-value="{{ path('agenda_feed') }}"
+     data-agenda-calendar-view-value="{{ view }}"
+     data-agenda-calendar-date-value="{{ date|date('Y-m-d') }} ">
+
+    <aside class="wizard-aside">
+        <div class="card">
+            <h2 class="aside-title">🗓️ Agenda</h2>
+            <ol class="aside-steps">
+                <li class="{{ view == 'month' ? 'is-current' : '' }}">
+                    <a class="label" data-action="agenda-nav#setView"
+                       data-view-param="month" href="#"
+                    >Vue mois</a>
+                </li>
+                <li class="{{ view == 'week' ? 'is-current' : '' }}">
+                    <a class="label" data-action="agenda-nav#setView"
+                       data-view-param="week" href="#"
+                    >Vue semaine</a>
+                </li>
+                <li class="{{ view == 'day' ? 'is-current' : '' }}">
+                    <a class="label" data-action="agenda-nav#setView"
+                       data-view-param="day" href="#"
+                    >Vue jour</a>
+                </li>
+            </ol>
+        </div>
+
+        <div class="card tip">
+            <h3>Filtres</h3>
+            <form data-controller="agenda-filters">
+                <label>Catégorie</label>
+                <select data-agenda-filters-target="category">
+                    <option value="">Toutes</option>
+                    <option value="atelier">Ateliers</option>
+                    <option value="rdv">RDV</option>
+                    <option value="externe">Événements externes</option>
+                    <option value="autre">Autres</option>
+                </select>
+            </form>
+        </div>
+    </aside>
+
+    <main class="wizard-main">
+        <div class="card"
+>
+            <div class="agenda-header">
+                <div class="controls">
+                    <button class="btn" data-action="agenda-nav#prev">‹</button>
+                    <input type="date" data-agenda-nav-target="datePicker">
+                    <button class="btn" data-action="agenda-nav#next">›</button>
+                    <button class="btn btn-light" data-action="agenda-nav#today">Aujourd’hui</button>
+                </div>
+                <h1 data-agenda-nav-target="headline"></h1>
+            </div>
+            <div data-agenda-calendar-target="grid" class="event-list"></div>
+        </div>
+    </main>
+
+</div>

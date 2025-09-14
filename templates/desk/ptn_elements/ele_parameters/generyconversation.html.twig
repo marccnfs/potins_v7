@@ -1,0 +1,21 @@
+<div class="_in-l-bb2_mb">
+    {% if  post.partners is defined %}
+        {% for part in post.partners %}  {# le part est un website #}
+            <div class="space_tag_when_mb">
+                <div class="space-tag">
+                    <div class="bull_tag active" >
+                        <a href="{{ path("show_website",{'slug':part.slug}) }}" class="-br-Ma">{{part.namewebsite}}</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% if  website.module.contactation.linkone is defined %}
+    <div class="bta-lk_mb">
+        <a class="logo_wb" href="{{ website.module.contactation.linkone }}"><i class="far fa-comment"></i>Conversation</a>
+    </div>
+    <div class="bta-lk">
+        <div class="logo_wb no-law"><i class="fas fa-map-marker-alt"></i> où</div>
+    </div>
+    {% endif %}
+</div>

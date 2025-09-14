@@ -1,0 +1,10 @@
+{% block body %}
+    <div class="fx_wb-c">
+            {{include('pwa/ptn_account/view/newboard.html.twig')}}
+    </div>
+{% endblock %}
+{% use "js/js_customer.html.twig" %}
+{# {% use "js/js-creawebsite.html.twig" %}  #}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

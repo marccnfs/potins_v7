@@ -1,0 +1,40 @@
+<!doctype html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Validation géolocalisée</title>
+<style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial;color:#111;margin:0;padding:1rem}
+    .card{border:1px solid #e5e7eb;border-radius:12px;padding:1rem;background:#fff}
+    .btn{display:inline-block;padding:.6rem 1rem;border-radius:.6rem;border:1px solid #111;background:#111;color:#fff;text-decoration:none}
+    .muted{opacity:.7}
+</style>
+
+<section class="card">
+    <h1>Valider ta position</h1>
+    <p>Appuie sur “Vérifier ma position”. Si tu es dans la bonne zone, l’étape sera validée.</p>
+    <button id="go" class="btn">Vérifier ma position</button>
+    <p id="out" class="muted"></p>
+</section>
+
+<script>
+    const out = document.getElementById('out');
+    document.getElementById('go').addEventListener('click', () => {
+        if (!('geolocation' in navigator)) {
+            out.textContent = 'La géolocalisation n’est pas disponible sur ce téléphone.'; return;
+        }
+        out.textContent = 'Recherche de la position…';
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+            const fd = new FormData();
+            fd.append('lat', pos.coords.latitude);
+            fd.append('lng', pos.coords.longitude);
+            const r = await fetch('{{ path('mobile_verify',{ token: link.token }) }}', { method:'POST', body:fd, headers:{'X-Requested-With':'XMLHttpRequest'} });
+            const j = await r.json();
+            if (j.ok) {
+                out.textContent = '✅ Position validée ! Tu peux retourner sur le PC.';
+            } else {
+                out.textContent = '❌ Tu es hors zone (' + Math.round(j.distance) + ' m). Approche-toi et réessaie.';
+            }
+        }, (err) => {
+            out.textContent = 'Erreur: ' + err.message + '. Active la localisation puis réessaie.';
+        }, { enableHighAccuracy:true, maximumAge:0, timeout:8000 });
+    });
+</script>

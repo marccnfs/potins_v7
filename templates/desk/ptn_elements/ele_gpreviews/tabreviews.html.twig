@@ -1,0 +1,31 @@
+{% if gpreview.media.imagejpg is defined %}
+
+    {%  set nbpict=gpreview.media.imagejpg|length %}
+
+    {%  if nbpict >=5 %}
+        {%  set nbpict='x' %}
+    {% endif %}
+
+    {%  if nbpict >=2 %}
+        {%  set fxtype='col' %}
+    {% else %}
+        {%  set fxtype='row' %}
+    {% endif %}
+
+    <div class="wallpicts wall{{ fxtype }}">
+        {% for image in gpreview.media.imagejpg %}
+            <div class="w_pict nbpict{{ nbpict }}">
+                <img class="pict-illustr imgnb{{ nbpict }}" src="{{ asset(image.getWebPath) }}" alt="">
+            </div>
+        {% endfor %}
+    </div>
+
+{% else %}
+    <div class="wallpicts wall0"></div>
+{% endif %}
+
+
+
+
+
+

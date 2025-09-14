@@ -1,0 +1,45 @@
+{% block body %}
+<div class="login_mob">
+    <h5>{{vartwig.title}}</h5>
+<section class="choice_sign_mob">
+    <div class="onech_mob">
+        <a href="{{ path('new_identify_stape_usager') }}" class="ref_choice_mob">
+            <h1>Participez</h1>
+            <div class="board-pict-team_mob">
+                    <div  class="board-add-gteam_mob pictvierge" style="background-image:url('{{asset('imgdoc/potins/vr.jpg') }}');"></div>
+            </div>
+            <div class="zoneinfo-board-team_mob">
+                <h2 class="board-info_team_mob">
+                    Inscrivez-vous aux potins de vos choix
+                </h2>
+                <div class="list-ch-team_mb">
+                    <em class="tt-coach_mb">Public</em>
+                    retrouvez vos ressources, l'agenda...
+                </div>
+            </div>
+
+        </a>
+    </div>
+    <div class="onech_mob">
+        <a href="{{ path('new_identify_stape_mediator') }}" class="ref_choice_mob">
+            <h1>Organisez</h1>
+            <div class="board-pict-team_mob">
+                <div  class="board-add-gteam_mob pictvierge" style="background-image:url('{{asset('imgdoc/potins/mepotinsone.jpg') }}');"></div>
+            </div>
+            <div class="zoneinfo-board-team_mob">
+                <h2 class="board-info_team_mob">
+                    Vous êtes médiateur numérique, CNFS...
+                </h2>
+                <div class="list-ch-team_mb">
+                    <em class="tt-coach_mb">parainage</em>
+                    Mettez en ligne le programme de vos animations, gérez les inscriptions...
+                </div>
+            </div>
+        </a>
+    </div>
+</section>
+{%  endblock body %}
+{% use('js/js_loc_customer.html.twig') %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

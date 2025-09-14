@@ -1,0 +1,25 @@
+{% block body %}
+    <div class="search-section">
+        <h2 class="section-title">Rechercher une ressource technique</h2>
+        <div class="search-container">
+            <x-ressources class="w100" cat="all"></x-ressources>
+        </div>
+    </div>
+
+    {% if ressources|length > 0 %}
+        <div class="ressource-container">
+            {{ include('desk/ptn_elements/ele_ressources/allressources.html.twig') }}
+        </div>
+    {% else %}
+        <div class="no-ressources">
+            <h3>Aucune ressource disponible</h3>
+        </div>
+    {% endif %}
+    {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+   {#  {{ include('desk/ptn_public/footer/potins_footer.html.twig') }} #}
+{%  endblock body %}
+{% use "js/js_public.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

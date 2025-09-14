@@ -1,0 +1,15 @@
+<script type="application/ld+json">
+    {
+        "@context" : "https://schema.org",
+        "@type" : "Article",
+        "name" : "{{ post.titre|raw }}",
+        "author" : {
+            "@type" : "Person",
+            "name" : "{{ post.author.name }}"
+        },
+        "datePublished" : "{{ post.createAt|date("d-m-Y") }}",
+        "image" : {% if post.media.imagejpg[0] is defined  %}{{ asset(post.media.imagejpg[0].getWebPath)  }}
+    {%  else %}""{%  endif %},
+        "articleBody" : "{{ post.subject|raw }}"
+    }
+</script>

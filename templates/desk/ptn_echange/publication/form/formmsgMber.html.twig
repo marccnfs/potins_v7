@@ -1,0 +1,25 @@
+<div class="timeline-msg_dk {# msg-memberwebsite #}">
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+    <div class="bg-glass-W">
+        <div class="intro_form">
+            <div class="formmsg mailtest">
+              {#  {{ form_label(form.subject, "objet:") }}
+                {{ form_widget(form.subject, {'attr': {'class': 'iner-subject'}}) }}#}
+                {{ form_label(form.content, "votre message :") }}
+                {{ form_widget(form.content, {'attr': {'class': 'iner-conversone'}}) }}
+                <div class="validate"></div>
+                <div class="iner-bt">
+                    <div class=" form-send btn-glss-submit" id="postform"><i class="fa fa-telegram"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_rest(form) }}
+    <div class="loading"></div>
+    <div class="error-message"></div>
+    {{ form_end(form) }}
+</div>
+<div class="wait">
+    <i class="fa fa-spinner fa-spin"></i>
+</div>

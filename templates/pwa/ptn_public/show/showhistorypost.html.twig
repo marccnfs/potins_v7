@@ -1,0 +1,118 @@
+{% block body %}
+<div class="_pg_ptn_mob">
+    <div class="col_mob">
+        <p>Retour sur l'atelier...</p>
+        <div class="content_mob_all">
+                <div class="header_show_mb">
+                    <h2>{{ post.titre|lower|capitalize }}</h2>
+                </div>
+                <div class="zone-info-potin_mb">
+                    <div class="zone-bar-author">
+                        <div class="in_bar_board">
+                            <div class="af_flx fx-c">
+                                <div class="wb-logo-lite">
+                                    {% if post.author.customer.profil.avatar %}
+                                        <div  class="bkgrndlogo" style="background-image: url('{{ asset(vich_uploader_asset(post.author.customer.profil.avatar, 'imageFile' )) }}')"></div>
+                                    {% else %}
+                                        <div class="bkgrndlogo" style="background-image: url('{{ asset('img/pinsaffi.png') }}')"></div>
+                                    {% endif %}
+                                </div>
+                                <div class="author">&thinsp;atelier animé par : {{ post.author.customer.profil.firstname }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="zone-info-potin_mb">
+                    <div class="potin_ressources">
+                        <div class="form-groupfields glass-label">
+                            <div class="process-module_glass">
+                                <div class="stape-process-lit" >
+                                    <h5>Ressources</h5>
+                                </div>
+                            </div>
+                        </div>
+                        {% if  post.gpressources is not null %}
+                            {%  for ressource in post.gpressources.articles %}
+                                {{ include('pwa/ptn_elements/ele_ressources/widget_ressources.html.twig') }}
+                            {%  endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="potin_ressources">
+                    <div class="form-groupfields glass-label">
+                        <div class="process-module_glass">
+                            <div class="stape-process-lit" >
+                                <h5>Téléchargements</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="zone-info-potin_mb">
+                    {% for tabevent in events %}
+                        <time itemprop = "startDate" class="datepotin">date de l'atelier :
+                            {{ tabevent['event'].appointment.starttime|date("d-m-Y") }} -
+                        </time>
+                        <div class="regester-ptn">
+                            <div class="flcol">
+                                <div class="pos-incub-l">
+                                    <table class="ptn_table t_size_list">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>fichier</th>
+                                            <th></th>
+                                            <th>type</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                    {% for order in tabevent['orders'] %}
+                                        {%  for list in order.listproducts %}
+                                            {{ include('pwa/ptn_public/show/listdocshistory.html.twig') }}
+                                        {%  endfor %}
+                                    {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    {%  endfor %}
+                </div>
+                {% if  post.gpreview.reviews is not null %}
+                    <div class="list_content">
+                    <ul class="bk_content fx-col">
+                        {% for rw in post.gpreview.reviews %}
+                            <li>{{rw.titre}}
+                                {% set typ =  rw.type?"1":"0"%}
+                                <a class="btn btn-primary" href="{{path('show_potin_review_pdf',{type:typ, slug:post.slug, id:post.id,  })}}"><i class="fa fa-eye"></i></a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                <article>
+                    {% if  post.gpreview is not null %}
+                        <div class="w_review_mb">
+                            <div class="pict_wall_mb">
+                                {% if post.gpreview.media.imagejpg is defined %}
+                                    {% for pict in post.gpreview.media.imagejpg %}
+                                        <div class="wall_litlepict">
+                                            <img class="pictsmall" src="{{ asset(pict.getWebPath) }}" alt="image atelier">
+                                            {# <div class="little-pic-block_mb" style="background-image: url({{ asset(pict.getWebPath) }})"></div> #}
+                                        </div>
+                                        <div class="pictlarge"></div>
+                                    {% endfor %}
+                                {%  endif %}
+                            </div>
+                        </div>
+                    {%  endif %}
+                </article>
+                {#{{ include('pwa/ptn_elements/ele_potins/tabOrderPotins.html.twig') }}#}
+        </div>
+            {{ include ('pwa/footer/potins_footer.html.twig') }}
+    </div>
+</div>
+{%  endblock body %}
+{% use "js/js_public_lite.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

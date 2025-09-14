@@ -1,0 +1,20 @@
+{% if pw  %}
+    <div class="comd">
+        <h5>Merci de Confirmer la duplication de ce menu</h5>
+        <div class="_trl2-R">
+            <div class="bullehead-wb-desk">
+                {{ form(form) }}
+            </div>
+        </div>
+    </div>
+    <div class="_sp-gl"></div>
+{% else %}
+    <div class="comd cm-of">
+        <h5>Vous n'avez pas les autorisations pour réaliser cette action</h5>
+        <div class="_trl2-R">
+            <div class="bullehead-wb-desk">
+                <div class="logo_wbo">voir droits admintrateur.</div>
+            </div>
+        </div>
+    </div>
+{% endif %}

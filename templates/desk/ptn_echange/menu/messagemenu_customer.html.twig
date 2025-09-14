@@ -1,0 +1,32 @@
+<div class="menu-bo_sp">
+
+    <div class="pop-tab_menu_act">
+        <div class="af_flx-C">
+            <div class="menu_act_msg">
+                <div class="button-wp">
+                    <a class="pop_button_act" href="{{ path('all_message_customer') }}"><i class="fa fa-arrow-right"></i>&nbsp;Mes messages (privés)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h5 class="sous_menu">Messages de mes boards</h5>
+{%  for spw in dispatch.spwsite %}
+
+
+    <div class="pop-tab_menu _cl-cl">
+        <div class="af_flx-C">
+            <div class="bubble-menu-litt-rock mn-border {{ vartwig.m2 ? "actsel" :"" }}">
+                <div class="button-wp">
+                    <a class="pop_button" href="{{ path('board_board',{'id':spw.website.id } ) }}">
+                        <i class="fa fa-comments"></i>
+                        {{ spw.website.namewebsite }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{%  endfor %}
+
+</div>

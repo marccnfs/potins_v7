@@ -1,0 +1,11 @@
+{% block body %}
+    <div class="bknav"></div>
+    <div class="admin_content">
+        {{ include('aff_websiteadmin/modules/view/process-contact.html.twig') }}
+    </div>
+
+{% endblock %}
+{% use "js/js_edit_website.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

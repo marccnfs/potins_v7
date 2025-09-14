@@ -1,0 +1,8 @@
+{% extends 'customer.html.twig' %}
+{% block stylesheets %}{{ parent() }}
+    <link href="{{ asset('scripts/external/google-code-prettify/prettify.css') }}" rel="stylesheet">
+{% endblock %}
+{% use 'aff_messagery/menu.html.twig' %}
+{% block core %}
+    {{ include('aff_messagery/'~directory~'/'~agent~'/'~vartwig.maintwig~'.html.twig') }}
+{% endblock core%}

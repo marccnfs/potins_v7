@@ -1,0 +1,17 @@
+<div class="w100">
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        {%  if msgs is defined %}
+        {% for msg in msgs %}
+            {% apply spaceless %}
+            <a class="ax-m {{ msg.sender ?"":"ax-m-no"}}" href="{{ path('read_msg',{'slug':website.slug,'id':msg.id})}}">
+                {{ include('aff_messagery/elements/listmessageboard.html.twig') }}
+            </a>
+            {% endapply %}
+        {% endfor %}
+        {% endif %}
+    {% else %}
+        <div class="tab-info_rd">
+            {{ include('aff_messagery/conversations/view/conversations-contact-desk.html.twig') }}
+        </div>
+    {% endif %}
+</div>

@@ -1,0 +1,38 @@
+<nav class="HO header-app user_menu2">
+    <div class="pos_menu2">
+
+        <div class="block-space_potins"> </div>
+
+        <div class="bar_potins">
+            <ul class="af-menu-content">
+                <li class="level-1">
+                    <a href="{{ path('potins_index') }}" class="link-bar {{ vartwig.linkbar[0]}}">Accueil</a>
+                </li>
+                <li class="level-1">
+                    <a href="{{ path('events_all') }}" class="link-bar {{ vartwig.linkbar[1]}}">Les prochains potins</a>
+                </li>
+                <li class="level-1">
+                    <a href="{{ path('board_all') }}" class="link-bar {{ vartwig.linkbar[2]}}">les derniers potins</a>
+                </li>
+
+                <li class="level-1">
+                    <a href="{{ path('potinaries') }}" class="link-bar {{ vartwig.linkbar[3]}}">Ressources</a>
+                </li>
+
+            </ul>
+        </div>
+
+
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                {{include('desk/pop/pop_menu_accueil.html.twig') }}
+           {% else %}
+        <div class="space_connect">
+               <a href="{{ path('new_identify') }}" class="btn-connect">inscrivez-vous</a>
+        </div>
+           {% endif %}
+
+
+    </div>
+</nav>
+{{ include('elements/logo_potins_small_left_and_vague_orange.html.twig') }}
+{{ include('elements/vague_bottom_right.html.twig') }}

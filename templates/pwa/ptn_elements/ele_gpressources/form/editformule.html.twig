@@ -1,0 +1,99 @@
+<div class="in_form">
+            {{ form_start(form, {'attr': {'class': 'form-elastic'}}) }}
+
+            <div class="fieldset-titledate">
+                <div class="field-title">
+                    {{ form_row(form.name, {'attr': {'class': 'form-affi','placeholder':'"menu du jour"'}}) }}
+                </div>
+                <div class="field-info-date">
+
+                    <div class="field-date-label">Pour la période du : </div>
+
+                    <div class="timdate_form">
+                        {{ form_widget(form.start, {'attr': {'class': 'form-date'}}) }}
+                    </div>
+
+                    <div class="field-date-label">au : </div>
+
+                    <div class="timdate_form">
+                        {{ form_widget(form.end, {'attr': {'class': 'form-date'}}) }}
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="field-info">
+
+                <div class="_fx-R fx-cbtw">
+                    {{ form_row(form.catformules) }}
+                </div>
+            </div>
+
+
+            <div class="text-center">
+                <button id="add_formule" class="btn-send">Ajoutez une déclinaison</button>
+            </div>
+
+
+            <div class="_buble-form">
+                <h5>selectionez les entrées, plats, desserts et boissons pour cette formule</h5>
+                <div class="buble-field">
+                    <div class="inpop-content">
+                        <div class="choice-flex">
+                            <div class="bul-go_f bull-sz-lit bulletoggle" data-affitgl="tgl_15" id="afftgl15">
+
+                                <div class="">Entrée</div>
+                            </div>
+                            <div class="bul-go_f bull-sz-lit bulletoggle" data-affitgl="tgl_11" id="afftgl11">
+
+                                <div class="">Plat</div>
+                            </div>
+                            <div class="bul-go_f bull-sz-lit bulletoggle" data-affitgl="tgl_12" id="afftgl12">
+
+                                <div class="">Dessert</div>
+                            </div>
+                            <div class="bul-go_f bull-sz-lit bulletoggle" data-affitgl="tgl_14" id="afftgl14">
+
+                                <div class="">Boisson</div>
+                            </div>
+                        </div>
+                        <section class="tglaff blok_pop-carte" id="tgl_15" style="display: none">
+                            <div class="_fx-R_v6">
+                                {%  for carte in tabcarte.entree %}
+                                    <div class="pop-carte" data-carte="{{ carte.id }}" data-ctg="{{carte.categorie.id}}">{{ carte.titre }}</div>
+                                {% endfor %}
+                            </div>
+                        </section>
+                        <section class="tglaff blok_pop-carte" id="tgl_11" style="display: none">
+                            <div class="_fx-R_v6">
+                                {%  for carte in tabcarte.plat %}
+                                    <div class="pop-carte" data-carte="{{carte.id}}" data-ctg="{{carte.categorie.id}}">{{carte.titre}}</div>
+                                {% endfor %}
+                            </div>
+                        </section>
+                        <section class="tglaff blok_pop-carte" id="tgl_12" style="display: none">
+                            <div class="_fx-R_v6">
+                                {%  for carte in tabcarte.dessert %}
+                                    <div class="pop-carte" data-carte="{{ carte.id }}" data-ctg="{{carte.categorie.id}}">{{ carte.titre }}</div>
+                                {% endfor %}
+                            </div>
+                        </section>
+                        <section class="tglaff blok_pop-carte" id="tgl_14" style="display: none">
+                            <div class="_fx-R_v6">
+                                {%  for carte in tabcarte.boisson %}
+                                    <div class="pop-carte" data-carte="{{ carte.id }}" data-ctg="{{carte.categorie.id}}">{{ carte.titre }}</div>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <div class="field-services _buble-form">
+                <h5>Cette formule est disponible :</h5>
+                {{ form_row(form.services) }}
+            </div>
+            {{form_rest(form)}}
+            {{form_end(form)}}
+        </div>
+

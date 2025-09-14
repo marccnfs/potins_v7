@@ -1,0 +1,18 @@
+<div class="zone-bar-show">
+    <div class="bar-item">
+        <div class="bar-logo">
+            <div class="logo-image">
+                {% if board.template.logo %}
+                    <img src="{{ asset('spaceweb/template/' ~ board.template.logo.namefile) }}" alt="Logo">
+                {% else %}
+                    <img src="{{ asset('img/pinsaffi.png') }}" alt="Logo par défaut">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="bar-item">
+        <a href="#" class="btn btn-primary">
+            <i class="fa fa-plus"></i> Liste des potins programmés
+        </a>
+    </div>
+</div>

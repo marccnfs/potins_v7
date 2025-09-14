@@ -1,0 +1,31 @@
+{% block body %}
+<div class="_wb">
+    <div class="container-bo_v5">
+        {{ include('aff_messagery/menu/messagemenu.html.twig') }}
+        <section class="_wb-ospace">
+            <div class="head-msg-space">
+                <div class="web-inf">
+                    <div class="zone-inf-msg">
+                        <div class="op-msg">
+                            <div class="pop_op-msg" >conversation ouverte le : {{ msgwb.createAt|date('d/m/Y') }}
+                            </div>
+                            {% if msgwb.isspaceweb %}
+                                <div>par :{{msgwb.tballmsgs.dispatch.name }}</div>
+                            {%  else %}
+                                <div>par (contact):{{msgwb.tballmsgs.contact.emailCanonical  }}</div>
+                            {%  endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{ include('aff_messagery/board/view/readmessage.html.twig') }}
+
+        </section>
+    </div>
+    {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+</div>
+{% endblock %}
+{% use "js/js_website.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

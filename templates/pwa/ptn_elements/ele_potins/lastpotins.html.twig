@@ -1,0 +1,34 @@
+<div class="pg_other">
+    <div class="board-list-replace_mob">
+
+
+
+        {% for potin in potins %}
+            <a href="{{ path('show_potin',{"slug":potin.slug, "id":potin.id}) }}" class="potinary_card_mb">
+                <div class="inner-potinary_mb">
+                    <h3 class="goaff_potinary-fix_mb min30 card-{{potin.agePotin }}">{{ potin.agePotin }}</h3>
+                    <div class="w_titlpotinary_mb">
+                        <h3 title="evenement de {{ potin.titre }}">{{ potin.titre|lower|capitalize }}</h3>
+                        {% if potin.subject is not same as (" ") %}
+                            <h5>{{ potin.subject|raw|lower|capitalize }}</h5> {# {{post.subject|u.truncate(80, '...')|lower|capitalize}} #}
+                        {% endif %}
+                    </div>
+                    <div class="potinary-b_mb">{{ potin.createAt|date('j/m/Y')|lower|capitalize }}</div>
+                    {#   <div class="author">categorie : {{ potinary.categorie.name }}</div> #}
+                </div>
+                <div class="illustr-potinary_card_mb" >
+                    <div class="e_pictfull_card_mb">
+                        {% if potin.media.imagejpg[0].namefile is defined %}
+                            <div class="pict_event_mb" style="background-image: url('{{ asset(potin.media.imagejpg[0].getWebPath) }}')"></div>
+                        {% else %}
+                            {% if potin.imageName %}
+                                <div class="pict_event_mb" style="background-image: url('{{ vich_uploader_asset(potin, 'ImageFile') }}');"></div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+        {%  endfor %}
+
+    </div>
+</div>

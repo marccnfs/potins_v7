@@ -1,0 +1,7 @@
+{% block body %}
+{{include('/desk/ptn_office/review/ficheresumepourpdf.html.twig') }}
+{%  endblock body %}
+{% use "js/js_pdfviewer.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

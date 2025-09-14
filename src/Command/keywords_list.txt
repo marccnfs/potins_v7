@@ -1,0 +1,203 @@
+IA
+Prochains Potins
+Les Bons Clics
+HTML
+CSS
+JavaScript
+Python
+RGPD
+SEO
+CRM
+UX/UI
+VPN
+Impression 3D
+MAO
+CMS
+Cloud
+Cybersécurité
+Open Source
+Formation Numérique
+Potins Numériques
+Intelligence Artificielle
+Réseaux Sociaux
+Cloud Computing
+Big Data
+Développement Web
+Programmation
+Blockchain
+E-commerce
+IoT (Internet des Objets)
+POTINS NUMERIQUES
+MONTAGE VIDEO
+INTELLIGENCE ARTIFICIELLE
+MAO (Musique Assistée par Ordinateur)
+Ateliers Numériques
+Autonomie Numérique
+Réalité Virtuelle
+Sécurité Numérique
+Formation en Ligne
+Création de Sites Web
+Animation Vidéo
+Jeux Vidéo
+Imprimantes 3D
+Bureautique
+Montage Photo
+Cryptomonnaies
+Télétravail
+A/B Testing
+Ad Copy
+Ad Extensions
+Ad Group
+Ad Rank
+Affiliate Marketing
+Algorithme
+Alpha/Beta Testing
+Analyse décisionnelle
+Analyse descriptive
+A/B, Testing
+Analyse des données
+Analyse diagnostique
+Analyse exploratoire
+Analyse des performances
+Analyse prédictive
+Analytics
+API (Application Programming Interface)
+Application Mobile
+Application Web
+As-a-service ou ass
+Assets (développement de jeux vidéos)
+Asset Pipeline (développement de jeux vidéos)
+Backend
+Backlog Produit
+Base de Données
+Brief Client
+Business intelligence (BI)
+C++
+C#
+Calendrier Editorial
+Call to Action (CTA)
+Carte thermique (Heat map)
+Chef de Projet Digital
+Cloud computing
+Clustering
+CMS (Content Management System)
+Community Management
+Conversion
+Conversion Rate
+Contenu
+CPC (Cost Per Click)
+CTR (Click-Through Rate)
+Community Manager
+Content Marketing
+Conversion Rate Optimization (CRO)
+Cryptographie
+CSS (Cascading Style Sheets)
+D3.js
+daily stand-up
+Dashboard (Tableau de bord)
+Data Science
+Dataviz
+Deep Learning
+Déploiement
+Développeur Fullstack
+Développement web
+DevOps
+Drag-and-Drop
+Emailing ou Email Marketing
+Engagement
+Ensemble Learning (analyse de données et intelligence artificielle)
+Exploration de données (Data Exploration)
+FabLab
+FabLab manager
+Feedback Client
+Feature Engineering (ingénierie des caractéristiques / analyse de données et intelligence artificielle)
+Firewall
+FPS (Frames Per Second)
+Framework
+Framework Backend
+Framework Frontend
+Front-end
+Game Engine
+Gameplay
+Google Data Studio
+Google Sheets
+Grid system
+HLSL/GLSL
+HTML (HyperText Markup Language)
+HUD (Heads-Up Display)
+IaaS (Infrastructure as a Service)
+Journalisation (Logging)
+Implémentation (langage de développement)
+Impressions
+Impression de profil (Profile Impressions)
+Inbound Marketing
+Influenceur
+Insight
+Intelligence artificielle (IA)
+Interface utilisateur
+IoT (Internet des objets) 
+Keyword Research
+Landing Page
+Lead
+Lead Magnet
+Level Design (développement de jeux vidéos)
+Low-Code
+Lua
+Machine Learning
+Malware
+Maquette (ou mockup)
+Marketing digital
+Matplotlib
+Méthodologie Scrum
+sprints
+Modélisation prédictive (analyse de données et intelligence artificielle)
+Negative Keywords
+Nettoyage de données (Data Cleaning / analyse de données)
+No-Code
+NoSQL
+PaaS (Platform as a Service)
+Patch (développement de jeux vidéos)
+Phishing
+Physics Engine
+Plateforme No-Code
+Plotly
+Portée de profil (Profile Reach)
+Post-processing (développement de jeux vidéos)
+Power BI
+Publicité Sociale
+Quality Score (score de qualité)
+Qlik Sense
+Rapport d'Avancement
+Rasterisation (développement de jeux vidéos)
+Ray Tracing (développement de jeux vidéos)
+Rendering (développement de jeux vidéos)
+Réseaux sociaux
+Responsive design (conception adaptable)
+ROI (Return on Investment)
+Rust
+SaaS (Software as a Service)
+Scripting
+Scrum Master (projet digital)
+SEA (Search Engine Advertising)
+SEM (Search Engine Marketing)
+SEO (Search Engine Optimization)
+Shader programming (développement de jeux vidéos)
+Sigma
+SMM (Social Media Marketing)
+Sprint (projet digital)
+SQL (Structured Query Language)
+Stack Technologique (développement fullstack)
+Stratégie Social Media
+Swift
+Taux d'Engagement (Engagement Rate)
+Taux d'Impression (Impression Rate)
+Transformation digitale
+UI (User Interface)
+UX (User Experience)
+Validation croisée (Cross-validation /analyse de données et intelligence artificielle)
+Veille Sociale
+Version Control (versioning ou contrôle de version)
+Visualisation de données (Data Visualization)
+Wireframe
+Workflow
+Z-buffering (développement de jeux vidéos)

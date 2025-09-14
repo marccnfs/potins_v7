@@ -1,0 +1,42 @@
+{% block body %}
+<div class="_pg_ptn_mob">
+
+    <div class="col_mob">
+        <h2>Les ressources des Potins</h2>
+        <p>Retrouvez tous les logiciels, applis et matériels, les astuces et tutos...</p>
+
+        <div class="content_mob_all">
+            <div class="search_ressource_mb">
+                <div class="ressource_imput_mb">
+                    <x-ressources cat="all"></x-ressources>
+                </div>
+            </div>
+
+            {% if ressources|length >0 %}
+        <div class="tgl-100">
+            <div class="fx-content_rep_potinary_mob">
+                {{ include('pwa/ptn_elements/ele_ressources/lastressources.html.twig') }}
+            </div>
+        </div>
+    {%  else %}
+        <div class="tgl-100">
+            <div class="fx-content_rep_potinary_mob">
+                <div class="flex-board">
+                    <div class="flex-notb_v6-fix">
+                        <h3>  Aucune ressource disponible</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+        </div>
+    {{ include ('pwa/footer/potins_footer.html.twig') }}
+    </div>
+</div>
+{%  endblock body %}
+{% use "js/js_public.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

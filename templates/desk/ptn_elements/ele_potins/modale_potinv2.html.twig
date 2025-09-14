@@ -1,0 +1,86 @@
+{#
+<div class="fx-row-ress">
+    <div class="left_row_ress">
+          <div class="titlpotin">
+            <h2 title="ressouce : {{ potin.titre }}">{{ potin.titre|lower|capitalize }}</h2>
+        </div>
+
+        <div class="cadre_content">
+            <div class="text_cadre">
+                {% if potin.subject is not same as ("") %}
+                    <h3 class="potin-subject">{{ potin.subject|raw|lower|capitalize }}</h3>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="right_row_ress">
+        <div class="pic_right_ress">
+            {% if potin.media.imagejpg|length > 0 and potin.media.imagejpg[0].namefile is defined %}
+                <figure role="group" aria-label="image article">
+                    <img src="{{ asset(potin.media.imagejpg[0].getWebPath) }}" alt="illustration dall_e">
+                    <figcaption class="caption">"illustration dall_e"</figcaption>
+                </figure>
+            {% else %}
+                <figure role="group" aria-label="image article">
+                    {% if potin.imageName %}
+                        <img src="{{ vich_uploader_asset(potin, 'ImageFile') }}" alt="illustration dall_e">
+                        <figcaption class="caption">"illustration dall_e"</figcaption>
+                    {% endif %}
+                </figure>
+            {%  endif %}
+        </div>
+    </div>
+</div>
+#}
+<div class="potin-container">
+    {% if potin.subject is not same as (" ") %}
+        <h3 class="potin-subject">{{ potin.subject|raw|lower|capitalize }}</h3>
+    {% endif %}
+
+    <div class="potin-media">
+        {% if potin.media.imagejpg[0].namefile is defined %}
+                <div class="potin-image" style="background-image: url({{ asset(potin.media.imagejpg[0].getWebPath) }})"></div>
+        {% else %}
+            {% if potin.imageName %}
+             <div class="potin-image" style="background-image: url('{{ vich_uploader_asset(potin, 'ImageFile') }}');"></div>
+            {% endif %}
+        {%  endif %}
+    </div>
+
+    <!-- Affichage des articles (chapitres) -->
+    <div class="articles-container">
+        {% for article in potin.htmlcontent %}
+            <div class="article-block">
+                <h2>{{ article.titre }}</h2>
+                <div class="article-content">
+                    {{ article.contenu|raw }}
+                </div>
+
+                {% if article.mediaName is not null %}
+                    <div class="article-media">
+                        {% if article.mediaName matches '/\.(jpg|jpeg|png|gif)$/i' %}
+                            <img src="{{ asset('uploads/articles/' ~ article.mediaName) }}" alt="Illustration de {{ article.titre }}">
+                        {% elseif article.mediaName matches '/\.(mp4|webm|ogg)$/i' %}
+                            <video controls>
+                                <source src="{{ asset('uploads/articles/' ~ article.mediaName) }}" type="video/mp4">
+                                Votre navigateur ne supporte pas la lecture de vidéos.
+                            </video>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="potin-content">
+        {% if contents|length > 0 %}
+            {% for content in contents %}
+                <div class="article-potin">{{ content|raw }}</div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    {% if potin.iframevideo is not null %}
+        <div class="potin-video">{{ potin.iframevideo|raw }}</div>
+    {% endif %}
+</div>

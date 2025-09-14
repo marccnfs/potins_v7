@@ -1,0 +1,25 @@
+<div class="close-b moregoa">
+    <i class="fa fa-close" aria-hidden="true"></i>
+</div>
+
+<div class="info-commande af_flx-C fx-c">
+    {{include('translate/inforegistration/beforecmddirect.html.twig')}}
+</div>
+
+
+    {# todo creation d'une commande #}
+            {#
+
+            <div class="" title="option" data-offert="{{ offre.slug }}"></div>
+       {% if is_granted('ROLE_CUSTOMER') %}
+           <a class="logo_wb" href="{{ path('new_option_market',{'id':offre.id}) }}">{{ include('svg/40x40_AFG_rw.html.twig') }}</a>
+       {% else %}
+           <a class="logo_wb" href="{{ path('pre_option_market',{'id':offre.id}) }}">{{ include('svg/40x40_AFG_rw.html.twig') }}</a>
+       {%  endif %}
+
+       <div class="ctc-seller">
+           <h3>Passer la commande</h3>
+           <div class="" title="option" data-offert="{{ offre.slug }}"></div>
+           <a class="logo_wb" href="{{ path('option-offert-market',{'id':offre.id,'idw':website.id,'op':'buy' }) }}">{{ include('svg/40x40_AFG_rw.html.twig') }}</a>
+       </div>
+            #}

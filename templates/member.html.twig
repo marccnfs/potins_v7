@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="FR">
+<head>
+    {% block head %}
+        <title>{% block title %}{{vartwig.title}}{% endblock %}</title>
+        {{ include('head/head.html.twig') }}
+            {%  if anotherhead is defined %}
+       {{ include('head/head'~anotherhead~'.html.twig') }}
+            {%  endif %}
+    {% endblock head %}
+    {{ encore_entry_link_tags('app') }}
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P171X7Q4YQ"></script>
+<script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-P171X7Q4YQ');
+</script>
+<script>
+        if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                        navigator.serviceWorker.register('./_service-worker.js').then(function(registration) {
+                                // Registration was successful
+                                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                        }, function(err) {
+                                // registration failed :(
+                                console.log('ServiceWorker registration failed: ', err);
+                        });
+                });
+        }
+</script>
+{%  if scr is defined %}
+        <!-- Initialisation de CKEditor -->
+        <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                        document.querySelectorAll(".ckeditor").forEach((textarea) => {
+                                ClassicEditor.create(textarea);
+                        });
+                });
+        </script>
+{% endif %}
+{%  set agent = app.session.get('agent') %}
+{%  set city = app.session.get('city') %}
+<body class="wpbocusto">
+<div class="wb-inf-" data-idwb="{{ board.id }}" data-slugwb="{{ board.slug }}" data-namewb="{{ board.nameboard }}" data-agent="{{ agent }}" data-pg="{{ pg??'hm' }}" data-member="{{ member.id }}" data-replacejs="{{ replacejs?'yes':'no' }}"></div>
+{% block menu %}
+{% endblock menu %}
+{% block core %}
+        {% block body %}
+        {% endblock body %}
+        {% block javascripts %}
+        {% endblock %}
+{% endblock core %}
+</body>
+</html>

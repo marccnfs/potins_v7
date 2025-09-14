@@ -1,0 +1,62 @@
+<div class="cub-form">
+    <div class="act-ct">
+        <div class="cbe-fx">
+            <div class="cbe_cnt">
+                <div class="c_i_b">
+                    <div class="in_cib">
+
+                        <div class="form-groupfields glass-label">
+                            <div class="glass-title_form">
+                                <h3>Sélectionez une date</h3>
+                            </div>
+
+
+                            <div class="process-module_glass">
+                                <div class="stape-process-lit" >
+                                    <h5>atelier : <strong>{{ post.titre }}</strong></h5>
+                                </div>
+                                {{ form_start(form) }}
+                                {{ form_errors(form) }}
+
+
+
+                                <select name="{{ field_name(form.daychoice) }}" required class="form-control">
+                                    <option value="">{{ field_label(form.daychoice) }}</option>
+
+                                    {% for label, value in field_choices(form.daychoice) %}
+                                        <option value="{{ value }}">{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                                {#
+
+                                <select name="inscription_potins[daychoice]" required="" class="form-control">
+                                    <option value="">Date disponible :</option>
+                                {% for label, value in tabdateevent %}
+                                    <option value="{{ label }}">{{ value|date('j/m/Y') }}</option>
+                                {% endfor %}
+                                </select>
+
+                                #}
+                                {#
+                                <ul class="ul_check">
+                                    <fieldset>
+                                {%  for date in taborder %}
+                                    <li class="list-check">
+                                        <input type="checkbox" id={{ date|date('j/m/Y') }} name="date[]" value={{ date|date('j/m/Y') }}>
+                                        <label class="label_check" for={{ date|date('j/m/Y') }}>{{ date|date('j/m/Y') }}</label>
+                                    </li>
+                                {%  endfor %}
+                                    </fieldset>
+                                </ul>
+                                #}
+
+                                {{form_rest(form)}}
+                                {{ form_end(form) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

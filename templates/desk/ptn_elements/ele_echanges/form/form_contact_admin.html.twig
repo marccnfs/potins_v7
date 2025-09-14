@@ -1,0 +1,41 @@
+<div class="ii_cub" id="typeform" data-type="ctc">
+    <div class="contener-msg">
+       {{ include('aff_messagery/conversations/view/listmsgs.html.twig') }}
+    </div>
+    <div class="tglaff w100" id="tgl_11" style="display: none">
+        {{include('aff_messagery/conversations/view/listcontact.html.twig')}}
+    </div>
+    <div class="tglaff w100" id="tgl_12" style="display: none">
+        {%  if dispatch is not null %}
+            <div class="bta-lk_v2">
+                <a href="{{ path('module_mail',{'id':website.id}) }}" class="mn-logo_wb mn-bb"><i class="fa fa-comments-o" aria-hidden="true"></i>tous</a>
+            </div>
+            <div class="bta-lk_v2 affitoggle " data-affitgl="tgl_11" id="afftgl" data-inf="msg-memberwebsite">
+                <div class="mn-logo_wb mn-bb"><i class="fa fa-comment-o" aria-hidden="true"></i>demarrez la conversation</div>
+            </div>
+        {% endif %}
+        {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <add-comment slug="{{ website.slug }}"></add-comment>
+         {#    {{ include('aff_messagery/conversations/form/formmsgPublic.html.twig') }} #}
+        {% else %}
+            <add-comment slug="{{ website.slug }}"></add-comment>
+          {#   {{ include('aff_messagery/conversations/form/formmsgMber.html.twig') }}  #}
+        {% endif %}
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

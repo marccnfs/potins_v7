@@ -1,0 +1,33 @@
+<div class="content-form-calendar">
+    <h3>Horaires d'ouverture</h3>
+
+    <!-- Sélection d'un horaire global -->
+    <div class="global-hours">
+        <h5>Appliquer un horaire pour tous les jours :</h5>
+        <div class="grid-time_hrz">
+            <div class="t1">
+                <label for="appt-time-deb">Heure de début :</label>
+                <input id="appt-time-deb" type="time" name="appt-time-deb" value="08:30">
+            </div>
+            <div class="t1">
+                <label for="appt-time-end">Heure de fin :</label>
+                <input id="appt-time-end" type="time" name="appt-time-end" value="18:00">
+            </div>
+        </div>
+        <button class="btn btn-secondary" id="submitclokAll">Valider</button>
+    </div>
+
+    <!-- Sélection des jours d'ouverture -->
+    <div class="weekly-selection">
+        <h5>Jours d'ouverture :</h5>
+        <ul class="week-days">
+            <li><button class="thisday-block" data-dateday="Lun">Lundi</button></li>
+            <li><button class="thisday-block" data-dateday="Mar">Mardi</button></li>
+            <li><button class="thisday-block" data-dateday="Mer">Mercredi</button></li>
+            <li><button class="thisday-block" data-dateday="Jeu">Jeudi</button></li>
+            <li><button class="thisday-block" data-dateday="Ven">Vendredi</button></li>
+            <li><button class="thisday-block" data-dateday="Sam">Samedi</button></li>
+            <li><button class="thisday-block" data-dateday="Dim">Dimanche</button></li>
+        </ul>
+    </div>
+</div>

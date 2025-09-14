@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>{% block title %}{{vartwig.title}}{% endblock %}</title>
+    {{include('aff_potins/head/head.html.twig')}}
+    {{ encore_entry_link_tags('app') }}
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P171X7Q4YQ"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-P171X7Q4YQ');
+</script>
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('./_service-worker.js').then(function(registration) {
+                // Registration was successful
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }, function(err) {
+                // registration failed :(
+                console.log('ServiceWorker registration failed: ', err);
+            });
+        });
+    }
+</script>
+<body>
+{{ encore_entry_script_tags('app') }}
+<main id="page" class="content-constrain2">
+	<header class="HO shadow-large header-app user_menu2">
+         <label class="sandw-left" data-menu="menu">
+            <span class="_header-main--trigger_icon">
+                <i class="_header-main--cross_hatch4 _hatch4"></i>
+            </span>
+        </label>
+        {{ include('aff_potins/menu/menuPotins.html.twig') }}
+    </header>
+      {{ include ('aff_potins/menu/menu_prod.html.twig') }}
+
+     <div role="main">
+      	{% block body %}{% endblock %}
+    </div>
+</main>
+        {% block javascripts %}
+        {{ encore_entry_script_tags('site') }}
+        {{ encore_entry_script_tags('titleanimate') }}
+        {{ encore_entry_script_tags('home') }}
+        {{ encore_entry_script_tags('index') }}
+        {% endblock %}
+    </body>
+</html>

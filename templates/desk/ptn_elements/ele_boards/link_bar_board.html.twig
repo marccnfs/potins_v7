@@ -1,0 +1,26 @@
+<div class="zone-bar-show">
+    <a href="" class="in_bar_board">
+        <div class="af_flx fx-c">
+            <div class="wb-logo-lite">
+
+                {% set imgFromBoard =
+                    (board.template is defined
+                    and board.template.logo
+                    and board.template.logo.namefile is defined)
+                    ? asset('spaceweb/template/'~board.template.logo.namefile)
+                    : asset('imgdoc/potins/logopotins.png')
+                %}
+
+                <div  class="bkgrndlogo" style="background-image: url('{{ imgFromBoard }}')"></div>
+
+            </div>
+            <h3 class="in-txt-bar_left">{{ board.nameboard }}</h3>
+        </div>
+    </a>
+    <div class="in_bar_board">
+        <div class="af_flx fx-c">
+            <i class="fa fa-th" aria-hidden="true"></i>
+            <h3 class="in-txt-bar_right"> le panneau</h3>
+        </div>
+    </div>
+</div>

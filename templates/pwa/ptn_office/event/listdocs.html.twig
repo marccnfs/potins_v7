@@ -1,0 +1,24 @@
+<div class="allrow">Potin du {{ event.appointment.starttime|date('d/m/Y') }}</div>
+<table class="ptn_table t_size_list">
+    <thead>
+    <tr>
+        <th></th>
+        <th>fichier</th>
+        <th></th>
+        <th>type</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {%  for doc in docs %}
+        <tr>
+            <td><img class="illustr-pict" src="{{ asset(doc.pict.getWebPath) }}"></td>
+            <td>{{ doc.fichier }}</td>
+            <td><a href="{{ asset('/archives/video/'~doc.fichier) }}" download="video"><i class="fa fa-download"></i></a></td>
+            <td>{{doc.type}}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+

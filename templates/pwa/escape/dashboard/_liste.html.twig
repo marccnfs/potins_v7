@@ -1,0 +1,15 @@
+{# templates/escape/garden.html.twig #}
+{% block body %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            {#   {{ include('pwa/escape/newtemplate/ateliermenu.html.twig') }} #}
+            <div class="bo_content">
+                {{ include('pwa/escape/dashboard/liste.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% use "js/js_escape.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

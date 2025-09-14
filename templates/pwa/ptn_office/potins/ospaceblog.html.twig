@@ -1,0 +1,15 @@
+{% block body %}
+<div class="_wb">
+    <div class="container_bo_member">
+        {{ include('pwa/ptn_office/menu/websitemenu.html.twig') }}
+        <section class="bo_content">
+        <!-- potins publiés -->
+            {{ include('pwa/ptn_office/potins/affi_blog.html.twig') }}
+        </section>
+    </div>
+</div>
+{%  endblock body %}
+{% use "js/js_customer.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

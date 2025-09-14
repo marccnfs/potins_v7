@@ -1,0 +1,83 @@
+Fiche activités makey makey<br><br />
+<br><br />
+Qu’est-ce que c’est ?<br><br />
+Il s’agit d’un circuit imprimé inventé par deux étudiants du MIT 5 (Massachusetts Institute of<br><br />
+Technology). Il permet de transformer n’importe quel objet conducteur (le corps humain, les fruits et<br><br />
+légumes, les plantes, la pâte à modeler, les mines de crayons, les objets métalliques) en « manette de<br><br />
+contrôle » ou « bouton de lecture» et de l’associer à un son ou à une directive.<br><br />
+Une fois la carte branchée à l’ordinateur et aux objets choisis, elle se substitue à la souris, au clavier, à<br><br />
+une manette de jeu. Il n’y a pas de logiciel nécessaire, seul le branchement USB suffit. Contrairement<br><br />
+aux apparences, aucune connaissance technique n’est nécessaire et l’utilisation ne représente aucune<br><br />
+difficulté. Il n'y a pas de limite autre que l’imagination<br><br />
+Objectif<br><br />
+Un dispositif Makey Makey en bibliothèque publique a l'atout de pouvoir être monté de façon rapide<br><br />
+et simple. En proposant une animation préparée par les bibliothécaires dans un espace visible, il attire<br><br />
+naturellement les jeunes et leurs parents, intéressés par l'aspect ludique ou intrigués par la<br><br />
+technologie.<br><br />
+ Il permet de faire réfléchir, de stimuler l'imaginaire, de rendre créatif.<br><br />
+ Il permet des valorisations originales des collections, faites soi-même, à faible coût.<br><br />
+ Il participe à l’éducation à l’usage des TIC, à leur compréhension.<br><br />
+ Il rend les publics participatifs et transmetteurs de savoir-faire, dans une dimension<br><br />
+intergénérationnelle.<br><br />
+ Il peut être un levier pour la construction et l'animation de communautés.<br><br />
+Mode d’emploi<br><br />
+Contenu d’un kit<br><br />
+1 carte et son étui de protection, 7 clips alligator, 1 cable usb, 6 fils blancs, 1 notice.<br><br />
+Il est possible d’emprunter 3 packs de 4 kits<br><br />
+Comment ça marche ?<br><br />
+Pour commencer, il est nécessaire de brancher une pince crocodile sur la partie basse de la carte,<br><br />
+notée « earth », cette pince devra être connectée à la terre, ce sera le cas par exemple si vous la tenez<br><br />
+dans une de vos mains. Si la terre n’est pas connectée, rien ne se passera.<br><br />
+Ensuite, branchez une deuxième pince crocodile sur une des options proposée sur la face avant de la<br><br />
+carte (space, ou espace, click, flèches directionnelles…). Si vous tenez la prise de terre dans une de vos<br><br />
+mains et la deuxième pince dans l’autre, la fonction à laquelle elle est connectée devrait fonctionner.<br><br />
+Essayez la fonction espace ou direction sur un traitement de texte.<br><br />
+Si vous retournez la carte, vous remarquez de petits connecteurs noirs, vous pouvez y connecter les<br><br />
+petits câbles blancs du kit pour commander quelques fonctions. Attention, les lettres indiquées sur<br><br />
+celui de gauche (WASDFG), correspondent à un clavier anglo-saxon (que lequel les lettres ne sont pas<br><br />
+dans le même ordre que sur un clavier français), sur un ordinateur français elles correspondront<br><br />
+respectivement aux lettres ZQSDFG. Il est possible de re programmer cette fonction<br><br />
+Et après ?<br><br />
+Une fois le test fait sur traitement de texte, essayez donc de vous connecter sur ce lien :<br><br />
+https://apps.makeymakey.com/piano/<br><br />
+Et oui ! Vous pouvez jouer du piano avec votre Makey-Makey !<br><br />
+https://apps.makeymakey.com/sampler/<br><br />
+Il s’’agit d’un sampler, une banque de sons que vous pouvez commander à l’aide de votre carte MakeyMakey<br><br />
+Pour d’autres applications en ligne, rendez-vous ici :<br><br />
+https://skateprof.com/makey-makey-apps/<br><br />
+https://makeymakey.com/blogs/how-to-instructions/apps-for-plug-and-play<br><br />
+Vous remarquez que plusieurs de ces applications sont codées grâce à l’application « scratch »<br><br />
+(utilisable en ligne). Scratch est une application conçue pour apprendre aux enfants et adolescents les<br><br />
+bases du codage. Cependant, elle est tellement puissante et polyvalente, que certains développeurs<br><br />
+ont codé des jeux dessus. L’utilisation de Scratch est relativement aisée même pour un néophyte, si<br><br />
+vous êtes un peu à l’aise avec l’informatique, vous pouvez expérimenter, sinon vous pouvez voir la<br><br />
+fiche tutoriel. Scratch sera presque indispensable si vous souhaitez réaliser des activités cités plus bas<br><br />
+Il est possible de « re-mapper » votre Makey Makey, c’est-à-dire de changer l’affectation des<br><br />
+commandes. C’est utile dans de nombreux cas de figure, notamment si vous voulez faire correspondre<br><br />
+les lettres de la carte à celles d’un clavier Français.<br><br />
+La procédure est expliquée étape par étape sur ce site :<br><br />
+https://makeymakey.com/pages/remap<br><br />
+https://makeymakey.com/blogs/how-to-instructions/remap<br><br />
+Que faire avec Makey Makey ?<br><br />
+Surprendre avec la musique...<br><br />
+Proposer un atelier de création musicale : vous pourrez transformer les objets insolites de la<br><br />
+bibliothèque en instruments de musique.<br><br />
+Par exemple, vous pouvez connecter des fruits, ou morceaux de pâte à modeler aux différentes<br><br />
+commandes du Makey Makey, afin de les « relier » à des commandes de l’ordinateur. Une batterie ou<br><br />
+un piano pourront soir être programmés sur Scratch, soit commander un logiciel de création musicale<br><br />
+sur l’ordinateur (Garageband, Ableton ou autre), soit, plus simplement, commander un logiciel en ligne<br><br />
+déjà programmé comme ceux de la liste ci-dessous.<br><br />
+https://makeymakey.com/blogs/how-to-instructions/apps-for-plug-and-play<br><br />
+Faire parler les collections...<br><br />
+Concevoir des bornes d’écoute pour tout type de contenus : DVD, CD, manga, expositions, livres popup, ressources numériques. A l'occasion d'ateliers avec vos publics, vous pourrez enregistrer des<br><br />
+critiques, citations, interviews d’auteurs.<br><br />
+Réaliser une histoire augmentée à partir d’un dessin, d'une page d'un livre : l’histoire pourra être<br><br />
+enrichie de bruitages, dialogues, ambiances sonores.<br><br />
+Pour cette activité, une utilisation basique de Scratch sera nécessaire afin de relier une commande du<br><br />
+makey makey à un son enregistré.<br><br />
+S'initier à la technologie...<br><br />
+Découvrir le langage informatique : sensibiliser au code avec Scratch, langage de programmation qui<br><br />
+facilite la création d’histoires interactives, de dessins animés, de jeux, de compositions musicales, de<br><br />
+simulations numériques et leur partage sur le Web.<br><br />
+Concevoir et réaliser un projet technologique : reconnaitre le matériel, comprendre le branchement,<br><br />
+le logiciel, rechercher des ressources en lignes, mettre en œuvre, créer un tutoriel, partager...

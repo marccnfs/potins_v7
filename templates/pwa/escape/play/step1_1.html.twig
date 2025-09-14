@@ -1,0 +1,30 @@
+{# templates/escape/garden.html.twig #}
+{% block body %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            <div class="bo_content">
+                <section data-controller="playflow">
+
+                    <h2>Étape {{ step }} —  {% if puzzle.title  %} {{ puzzle.title }} {% endif %}</h2>
+                    {% if puzzle.prompt %}<p class="text-muted">{{ puzzle.prompt|nl2br }}</p>{% endif %}
+
+
+                    {% include 'pwa/escape/puzzles/_' ~ puzzle.type ~ '.html.twig' with { cfg: puzzle.config, eg: eg, step: step } %}
+
+                    <div data-playflow-target="next" hidden class="mt-4">
+                        {% if step < 6 %}
+                            <a class="btn btn-primary" href="{{ path('play_step', {slug: eg.shareSlug, step: step+1}) }}">Étape suivante</a>
+                        {% else %}
+                            <div class="alert alert-success">🎉 Terminé !</div>
+                        {% endif %}
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% use "js/js_escape.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

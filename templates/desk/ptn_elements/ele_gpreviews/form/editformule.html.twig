@@ -1,0 +1,27 @@
+<div class="in_form">
+            {{ form_start(form, {'attr': {'class': 'form-elastic'}}) }}
+            <div class="_buble-form">
+                <h5>sélectionnez les articles pour ce potin</h5>
+                <div class="buble-field">
+                    <div class="inpop-content">
+                        <div class="choice-flex">
+                            <div class="bul-go_f bull-sz-lit" >
+
+                                <div class="">liste articles :</div>
+                            </div>
+
+                        </div>
+                        <section class="tglaff blok_pop-carte">
+                            <div class="_fx-R_v6">
+                                {%  for carte in tabcarte %}
+                                    <div class="pop-carte" data-carte="{{ carte.id }}" data-ctg="{{carte.categorie.id}}">{{ carte.titre }}</div>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            {{form_rest(form)}}
+            {{form_end(form)}}
+        </div>
+

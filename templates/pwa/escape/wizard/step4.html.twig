@@ -1,0 +1,114 @@
+{% block body %}
+    {% set cfg = puzzle.config is iterable ? puzzle.config : {} %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            <div class="bo_content">
+                <div class="step-layout">
+                    <div class="step-sidebar">
+                        {% include 'pwa/escape/wizard/_infos_step.html.twig' with { step: 4, eg: eg, puzzle: puzzle } %}
+                    </div>
+
+                    <div class="step-main">
+
+                        <header style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin-bottom:.75rem">
+                            <div>
+                                <h1 style="margin:0">Étape 4 — Formulaire à piège logique</h1>
+                                {% if puzzle.prompt %}<p class="text-muted" style="margin:.25rem 0 0">{{ puzzle.prompt }}</p>{% endif %}
+                            </div>
+                            <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+                                {% if puzzle.ready %}
+                                    <a class="btn btn-light" href="{{ path('wizard_preview_step', { id: eg.id, step: 4 }) }}" target="_blank" rel="noopener">Aperçu admin</a>
+                                {% endif %}
+                                {% if eg.published and eg.shareSlug %}
+                                    <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: 4 }) }}" target="_blank" rel="noopener">Voir côté joueur</a>
+                                {% endif %}
+                            </div>
+                        </header>
+
+                        <section class="card" style="margin-bottom:1rem">
+                            <h3 style="margin:0 0 .5rem">Aperçu</h3>
+                            <section id="preview-logic"
+                                     data-controller="logic-form"
+                                     data-logic-form-questions-value='{{ (cfg.questions|default([]))|json_encode|e('html_attr') }}'
+                                     data-logic-form-ok-message-value="{{ cfg.okMessage|default('Bravo !') }}"
+                                     data-logic-form-fail-message-value="{{ cfg.failMessage|default('Réessaie.') }}">
+                                <div data-logic-form-target="container"></div>
+                                <button data-logic-form-target="button" data-action="click->logic-form#submit">Valider</button>
+                                <div data-logic-form-target="msg" class="mt-2"></div>
+                            </section>
+                        </section>
+
+                        {{ form_start(form, { attr: { id: 'form-step4' } }) }}
+                        <section class="card">
+                            <div class="grid" style="grid-template-columns:minmax(260px,1fr) minmax(320px,1fr)">
+                                <div>
+                                    {{ form_row(form.title) }}
+                                    {{ form_row(form.prompt) }}
+                                    {{ form_row(form.questionsJson) }}
+                                </div>
+                                <div>
+                                    {{ form_row(form.okMessage) }}
+                                    {{ form_row(form.failMessage) }}
+                                    {# <p class="text-muted" style="margin-top:.5rem">Accepte <strong>soit</strong> <code>[ ... ]</code> <strong>soit</strong> <code>{"questions":[ ... ]}</code>.</p> #}
+                                </div>
+                            </div>
+                            {#
+                            <div class="form-actions" style="display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem">
+                                <button class="btn btn-primary">Enregistrer</button>
+                                {% if puzzle.id %}
+                                    <a class="btn" href="{{ path('wizard_preview_step', { id: eg.id, step: 4 }) }}" target="_blank" rel="noopener">Aperçu admin</a>
+                                {% endif %}
+                            </div>
+                            #}
+                        </section>
+                        {{ form_end(form) }}
+
+                        <div class="sticky-save">
+                            <div class="sticky-inner">
+                                <span class="text-muted">Étape 4 — Formulaire logique</span>
+                                <div style="display:flex;gap:.5rem">
+                                    <button form="form-step4" class="btn btn-primary">Enregistrer</button>
+                                    {% if puzzle.ready %}<a class="btn btn-light" href="{{ path('wizard_preview_step', { id: eg.id, step: 4 }) }}" target="_blank">Aperçu</a>{% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function(){
+            const f=document.getElementById('form-step4'); if(!f) return;
+            const idJson='{{ form.questionsJson.vars.id }}', idOk='{{ form.okMessage.vars.id }}', idFail='{{ form.failMessage.vars.id }}';
+            let t; const deb=(fn)=>{clearTimeout(t); t=setTimeout(fn,220);};
+            function refresh(){
+                const root=document.getElementById('preview-logic'); if(!root) return;
+                const c=root.cloneNode(false); c.id='preview-logic';
+                let questions=[]; try{ questions = JSON.parse(document.getElementById(idJson).value||'[]'); }catch(e){}
+                // Supporte aussi {questions:[...]}
+                if (!Array.isArray(questions)) { questions = (questions && Array.isArray(questions.questions)) ? questions.questions : []; }
+                c.setAttribute('data-controller','logic-form');
+                c.setAttribute('data-logic-form-questions-value', JSON.stringify(questions));
+                c.setAttribute('data-logic-form-ok-message-value', document.getElementById(idOk).value || 'Bravo !');
+                c.setAttribute('data-logic-form-fail-message-value', document.getElementById(idFail).value || 'Réessaie.');
+                c.innerHTML = `<div data-logic-form-target="container"></div>
+                   <button data-logic-form-target="button" data-action="click->logic-form#submit">Valider</button>
+                   <div data-logic-form-target="msg" class="mt-2"></div>`;
+                root.replaceWith(c);
+            }
+            document.getElementById(idJson)?.addEventListener('input', ()=>deb(refresh));
+            document.getElementById(idOk)?.addEventListener('input', ()=>deb(refresh));
+            document.getElementById(idFail)?.addEventListener('input', ()=>deb(refresh));
+        })();
+    </script>
+{% endblock %}
+{% use "js/js_escape.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

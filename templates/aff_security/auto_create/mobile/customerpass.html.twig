@@ -1,0 +1,14 @@
+{% block body %}
+    <div class="log-machina_mob">
+        <div class="svg-bulle_open">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">{# <circle cx="100" cy="100" r="80"/>#}</svg>
+            <div class="content_login_affi_mob">
+                    {{ include('aff_account/registration/view/chartev8.html.twig') }}
+            </div>
+        </div>
+    </div>
+{%  endblock body %}
+{% use('js/js_loc_customer.html.twig') %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

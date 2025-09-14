@@ -1,0 +1,91 @@
+
+    <div id="typeform" data-type="ctc">
+            {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <div class="wb_header centered">
+                    <div class="_bk-0_mob" id="id-choicacces">
+                        <div class="space_inf_msg">
+                            <div class="tab-info_rd">
+                                {{ include('aff_messagery/board/view/conversations-contact-desk.html.twig') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-msg_dk msg_register" id="register" data-register="{{ website.id }}">
+                    {{ include('aff_messagery/board/form/addmember.html.twig') }}
+                </div>
+                <span id="loadingregister" style="display: none;font-size: 25px;"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i></span>
+                <div class="timeline-msg_dk msg_contact" id="contact">
+                    {{ include('aff_messagery/board/form/addcontact.html.twig') }}
+                </div>
+                {{ include('aff_messagery/board/view/infregister.html.twig') }}
+            {% else %}
+
+                {% if not member %}
+                    <div class="alert"></div>
+                    <div class="content-form-post" id="choicead">
+                        <h5>voulez-vous rejoindre ce website ?</h5>
+                        <div class="white-tab _fx-R _fx-center">
+                            <div class="rad-af">
+                                <input type="radio" required class="" name="addwb" id="addwb1" value="oui" checked>
+                                <label for="addwb1">oui, j'ajoute ce website à ma liste pour suivre mes conversations par la suite</label>
+                            </div>
+                            <div class="rad-af">
+                                <input type="radio" required class="" name="addwb" id="addwb2" value="non">
+                                <label for="addwb2">non, je veux envoyer juste un message</label>
+                            </div>
+                            <div class="rad-af">
+                                <div class="btn bt_affi-primary" id="addwbchoice">Validez</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="_fx-C _m-15 fx-rgt" id="aduserconvers" style="display: none">
+                        <div class="bull_msg" id="bl-nw" data-inf="msg-memberwebsite">
+                            <div class="bl-msg"><i class="fas fa-edit"></i>nouvelle conversation</div>
+                        </div>
+                    </div>
+                    {{ include('aff_messagery/board/view/listmsgs.html.twig') }}
+
+                {% else %}
+                    {{ include('aff_messagery/board/view/listmsgs.html.twig') }}
+                {% endif %}
+
+            {% endif %}
+
+        </div>
+
+    <div class="tglaff w100" id="tgl_11" style="display: none">
+        {{include('aff_messagery/board/view/listcontact.html.twig')}}
+    </div>
+    <div class="tglaff w100" id="tgl_12" style="display: none">
+        {%  if dispatch is not null %}
+            <div class="bta-lk_v2">
+                <a href="{{ path('module_mail',{'id':website.id}) }}" class="mn-logo_wb mn-bb"><i class="fa fa-comments-o" aria-hidden="true"></i>tous</a>
+            </div>
+            <div class="bta-lk_v2 affitoggle " data-affitgl="tgl_11" id="afftgl" data-inf="msg-memberwebsite">
+                <div class="mn-logo_wb mn-bb"><i class="fa fa-comment-o" aria-hidden="true"></i>demarrez la conversation</div>
+            </div>
+        {% endif %}
+        {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <add-comment slug="{{ website.slug }}"></add-comment>
+        {% else %}
+            <add-comment slug="{{ website.slug }}"></add-comment>
+        {% endif %}
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

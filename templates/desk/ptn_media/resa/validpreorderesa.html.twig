@@ -1,0 +1,14 @@
+{% block body %}
+    <div class="_o_media">
+        <div class="act-mem">
+        </div>
+        <div id="registered" data-number="{{ registered }}">
+        </div>
+        {{ include('desk/ptn_media/resa/form/validresapotinform.html.twig') }}
+    </div>
+    {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+{%  endblock body %}
+{% use "js/js_resapotinparticpants.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

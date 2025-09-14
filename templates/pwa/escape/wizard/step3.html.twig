@@ -1,0 +1,158 @@
+{# templates/escape/garden.html.twig #}
+{% block body %}
+    {% set cfg = puzzle.config is iterable ? puzzle.config : {} %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            <div class="bo_content">
+                <div class="step-layout">
+                    <div class="step-sidebar">
+                        {% include 'pwa/escape/wizard/_infos_step.html.twig' with { step: 3, eg: eg, puzzle: puzzle } %}
+                    </div>
+
+                    <div class="step-main">
+
+                        <header style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin-bottom:.75rem">
+                            <div>
+                                <h1 style="margin:0">Étape 3 — Puzzle (image en tuiles)</h1>
+                                {% if puzzle.prompt %}<p class="text-muted" style="margin:.25rem 0 0">{{ puzzle.prompt }}</p>{% endif %}
+                            </div>
+                            <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+                                {% if puzzle.ready %}
+                                    <a class="btn btn-light" href="{{ path('wizard_preview_step', { id: eg.id, step: 3 }) }}" target="_blank" rel="noopener">Aperçu admin</a>
+                                {% endif %}
+                                {% if eg.published and eg.shareSlug %}
+                                    <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: 3 }) }}" target="_blank" rel="noopener">Voir côté joueur</a>
+                                {% endif %}
+                            </div>
+                        </header>
+
+                        {# --- Carte PREVIEW --- #}
+                        <section class="card" style="margin-bottom:1rem">
+                            <div style="display:flex;justify-content:space-between;align-items:center;gap:.75rem">
+                                <h3 style="margin:0">Aperçu du puzzle</h3>
+                                {% if cfg.imagePath is defined and cfg.imagePath %}
+                                    <span class="text-muted" style="font-size:.9rem">Image actuelle : {{ cfg.imagePath|split('/')|last }}</span>
+                                {% else %}
+                                    <span class="text-muted" style="font-size:.9rem">Téléverse une image puis enregistre pour l’activer ici</span>
+                                {% endif %}
+                            </div>
+
+                            <div style="margin-top:.75rem">
+                                <section id="preview-slider"
+                                         data-controller="slider-puzzle"
+                                         data-slider-puzzle-image-value="{{ asset(cfg.imagePath|default('/placeholder.png')) }}"
+                                         data-slider-puzzle-rows-value="{{ cfg.rows|default(3) }}"
+                                         data-slider-puzzle-cols-value="{{ cfg.cols|default(3) }}"
+                                         data-slider-puzzle-ok-message-value="{{ cfg.okMessage|default('Bravo !') }}">
+                                    <div data-slider-puzzle-target="grid" class="slider-grid"></div>
+                                    <div data-slider-puzzle-target="msg" class="mt-2"></div>
+                                </section>
+                            </div>
+                        </section>
+
+                        {# --- Carte FORMULAIRE --- #}
+                        {{ form_start(form, { attr: { id: 'form-step3', enctype: 'multipart/form-data' } }) }}
+                        <section class="card">
+                            <div class="grid" style="grid-template-columns:minmax(260px, 1fr) minmax(320px, 1fr)">
+                                <div>
+                                    {{ form_row(form.title) }}
+                                    {{ form_row(form.prompt) }}
+                                    {{ form_row(form.imageFile) }}
+                                    <p class="text-muted" style="margin-top:.5rem">
+                                        Formats conseillés : <code>.jpg</code>, <code>.png</code>, <code>.webp</code> — 1600px de large minimum.
+                                    </p>
+                                    {{ form_row(form.hintsJson) }}
+                                    <p class="text-muted" style="margin-top:.25rem">
+                                        Exemple : <code>["Commence par les bords","Repère les couleurs fortes","Regarde le coin en bas à droite"]</code>
+                                    </p>
+                                </div>
+                                <div>
+                                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+                                        {{ form_row(form.rows) }}
+                                        {{ form_row(form.cols) }}
+                                    </div>
+                                    {{ form_row(form.okMessage) }}
+                                    <p class="text-muted" style="margin:.5rem 0 0">3×3 pour commencer ; 4×4 pour les plus costauds 😉</p>
+                                </div>
+                            </div>
+{#
+                            <div class="form-actions" style="display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem">
+                                <button class="btn btn-primary">Enregistrer</button>
+                                {% if puzzle.id %}
+                                    <a class="btn" href="{{ path('wizard_preview_step', { id: eg.id, step: 3 }) }}" target="_blank" rel="noopener">Aperçu admin</a>
+                                {% endif %}
+                            </div>
+#}
+                        </section>
+                        {{ form_end(form) }}
+
+                        {# --- Barre d’action collante (confort) --- #}
+                        <div class="sticky-save">
+                            <div class="sticky-inner">
+                                <span class="text-muted">Étape 3 — Puzzle</span>
+                                <div style="display:flex;gap:.5rem">
+                                    <button form="form-step3" class="btn btn-primary">Enregistrer</button>
+                                    {% if puzzle.ready %}
+                                        <a class="btn btn-light" href="{{ path('wizard_preview_step', { id: eg.id, step: 3 }) }}" target="_blank" rel="noopener">Aperçu</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function(){
+            const f = document.getElementById('form-step3');
+            if (!f) return;
+
+            const idRows = '{{ form.rows.vars.id }}';
+            const idCols = '{{ form.cols.vars.id }}';
+            const idOk   = '{{ form.okMessage.vars.id }}';
+
+            let t;
+            const debounce = (fn, ms=200)=>{ clearTimeout(t); t=setTimeout(fn, ms); };
+
+
+            function refresh(){
+                const root = document.getElementById('preview-slider');
+                if (!root) return;
+                const clone = root.cloneNode(false);
+
+                const rows = document.getElementById('{{ form.rows.vars.id }}').value || '3';
+                const cols = document.getElementById('{{ form.cols.vars.id }}').value || '3';
+                const okm  = document.getElementById('{{ form.okMessage.vars.id }}').value || 'Bravo !';
+
+                clone.id = 'preview-slider';
+                clone.setAttribute('data-controller','slider-puzzle');
+                clone.setAttribute('data-slider-puzzle-rows-value', rows);
+                clone.setAttribute('data-slider-puzzle-cols-value', cols);
+                clone.setAttribute('data-slider-puzzle-ok-message-value', okm);
+                clone.setAttribute('data-slider-puzzle-image-value', root.getAttribute('data-slider-puzzle-image-value'));
+
+                clone.innerHTML = `
+      <div data-slider-puzzle-target="grid" class="slider-grid"></div>
+      <div data-slider-puzzle-target="msg" class="mt-2"></div>
+    `;
+                root.replaceWith(clone);
+            }
+
+            ['input','change'].forEach(evt=>{
+                document.getElementById(idRows)?.addEventListener(evt, ()=>debounce(refresh));
+                document.getElementById(idCols)?.addEventListener(evt, ()=>debounce(refresh));
+                document.getElementById(idOk)?.addEventListener(evt,   ()=>debounce(refresh));
+            });
+        })();
+    </script>
+
+{% endblock %}
+{% use "js/js_escape.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

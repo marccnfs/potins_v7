@@ -1,0 +1,69 @@
+{# templates/play/_help_step.html.twig #}
+
+{% set t = type|default('') %}
+{% set cfgsafe = cfg is defined and cfg ? cfg : {} %}
+{% set hints = cfgsafe.hints is defined ? cfgsafe.hints : [] %}
+{% if hints is not iterable %}
+    {% set hints = [] %}
+{% endif %}
+
+{% if t == 'cryptex' %}
+    <h3>Que faire ?</h3>
+    <p>Tourne les anneaux pour écrire le <strong>bon mot</strong>. Quand il est correct, le coffre s’ouvre.</p>
+    <ul><li>Astuce : commence par les lettres que tu es sûr·e d’avoir.</li></ul>
+
+{% elseif t == 'qr_geo' %}
+    <h3>Que faire ?</h3>
+    <p>Autorise la <strong>géolocalisation</strong>, puis appuie sur “Vérifier ma position”. Avance jusqu’à être dans la zone.</p>
+    <ul><li>Astuce : un cercle autour du lieu — rapproche-toi pour voir le message.</li></ul>
+
+{% elseif t == 'slider_puzzle' %}
+    <h3>Que faire ?</h3>
+    <p><strong>Glisse-dépose</strong> les morceaux pour reconstituer l’image. Quand c’est bon, un message apparaît.</p>
+    <ul><li>Astuce : commence par les <em>bords</em> et les couleurs uniques.</li></ul>
+
+{% elseif t == 'logic_form' %}
+    <h3>Que faire ?</h3>
+    <p>Coche uniquement les <strong>bonnes réponses</strong>, puis clique “Valider”.</p>
+    <ul><li>Astuce : relis bien l’énoncé, certaines réponses semblent vraies mais cachent un piège.</li></ul>
+
+{% elseif t == 'video_quiz' %}
+    <h3>Que faire ?</h3>
+    <p>Regarde la vidéo. À certains moments, une <strong>question</strong> apparaît : réponds pour continuer.</p>
+    <ul><li>Astuce : écoute les mots, observe les détails (affiches, chiffres, symboles…).</li></ul>
+
+{% elseif t == 'html_min' %}
+    <h3>Que faire ?</h3>
+    <p>Écris/modifie un petit <strong>code HTML</strong> pour satisfaire les règles. Utilise “Tester” pour vérifier.</p>
+    <ul><li>Astuce : essaye <code>&lt;h1&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;a href&gt;</code>, etc.</li></ul>
+
+{% else %}
+    <h3>Mode d’emploi</h3>
+    <p>Lis la consigne puis interagis avec la zone de jeu à droite.</p>
+{% endif %}
+
+{% if hints|length %}
+    <hr>
+    <h3>Indices</h3>
+    <div data-controller="hints"
+         data-hints-slug-value="{{ eg.shareSlug }}"
+         data-hints-step-value="{{ step|default(1) }}"
+         data-hints-total-value="{{ hints|length }}">
+        <ul class="hints-list">
+            {% if hints|length > 0 %}
+                <h3>Besoin d’un coup de pouce ?</h3>
+                <ol class="hints">
+                    {% for h in hints %}
+                        <li class="hint-item" data-hints-target="hint" hidden>{{ h }}</li>
+                    {% endfor %}
+                </ol>
+            {% else %}
+                <p class="muted">Aucun indice pour cette épreuve.</p>
+            {% endif %}
+        </ul>
+        <div class="hints-actions">
+            <button class="btn btn-light" data-action="click->hints#revealNext">Afficher un indice</button>
+            <span class="muted" data-hints-target="counter"></span>
+        </div>
+    </div>
+{% endif %}

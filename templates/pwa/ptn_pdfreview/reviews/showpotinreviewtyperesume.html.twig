@@ -1,0 +1,18 @@
+{% block body %}
+<div class="_pg_ptn_mob">
+    <div class="col_mob">
+        <button class="btn btn-primary" onclick="history.back();"><i class="fa fa-arrow-circle-o-left"> Retour</i></button>
+    </div>
+</div>
+<div class="bk-separate_mb"></div>
+<div style="top:75px;">
+    <iframe onresize="ajustIframe()" onload="ajustIframe()" id="iFrameAjust" src="/js/pdfjs/viewer.html?file=/review/pdf/potins-gp-rw/datafiche{{ pdfreview }}" allowfullscreen="" style="position: absolute; width: 100%; border: 0px; height: calc(100% - 140px);"></iframe>
+</div>
+
+{{ include ('pwa/footer/potins_footer.html.twig') }}
+
+{%  endblock body %}
+{% use "js/js_pdfviewer.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

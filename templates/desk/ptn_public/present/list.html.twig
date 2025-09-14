@@ -1,0 +1,29 @@
+{% block body %}
+<div class="search_ressource">
+</div>
+
+        {% if potinaries|length >0 %}
+            <div class="tgl-100">
+                <div class="fx-content_rep_potinary">
+                    {{ include('desk/ptn_elements/ele_present/lastpresent.html.twig') }}
+                </div>
+            </div>
+        {%  else %}
+            <div class="tgl-100">
+                <div class="fx-content_rep_potinary">
+                    <div class="flex-board">
+                        <div class="flex-notb_v6-fix">
+                            <h3>  Aucun cadeau disponible</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+</div>
+    {{ include('desk/ptn_public/footer/potins_footer.html.twig') }}
+{%  endblock body %}
+{% use "js/js_public.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

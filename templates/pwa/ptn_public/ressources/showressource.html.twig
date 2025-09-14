@@ -1,0 +1,49 @@
+{% block body %}
+    <div class="_pg_ptn_mob">
+        <div class="col_mob">
+            <button class="btn btn-secondary" onclick="history.back();"><i class="fa fa-arrow-circle-o-left">Retour</i></button>
+        </div>
+    </div>
+    {#
+    <div class="search_ressource">
+        <div class="ressource_imput">
+            <x-ressources class="w100" cat="all"></x-ressources>
+        </div>
+    </div>
+    #}
+
+    <div class="wp-ressourc_mb">
+
+        <div class="potin_ressourc_mb">
+            <article class="w-ressourc_mb">
+                {{ include('pwa/ptn_elements/ele_ressources/modale_ressource.html.twig') }}
+            </article>
+        </div>
+
+        <div class="other_resourc_blk_mb r_ctnt_mb">
+            <div class="title-block_mb">
+                <h2 class="title_mb">voir aussi</h2>
+            </div>
+
+            <div class="other_resourc_mb">
+                {%  for ressource in ressources %}
+                    {{ include('pwa/ptn_elements/ele_ressources/widget_ressources.html.twig') }}
+                {%  endfor %}
+            </div>
+
+        </div>
+        {#
+        todo liste d'autres ressources dans la meme categorie
+              {{ include('desk/ptn_elements/ele_potinaries/tabOrderPotins.html.twig') }}
+        #}
+    </div>
+{%  endblock body %}
+
+    {% block footer %}
+        {{ include ('pwa/footer/potins_footer.html.twig') }}
+    {% endblock footer %}
+
+{% use "js/js_public.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

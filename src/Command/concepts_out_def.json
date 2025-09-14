@@ -1,0 +1,1777 @@
+[
+    {
+        "keyword": "IA",
+        "concepts": [
+            "Intelligence artificielle",
+            "Apprentissage automatique",
+            "Réseaux neuronaux",
+            "Vision par ordinateur"
+        ]
+    },
+    {
+        "keyword": "HTML",
+        "concepts": [
+            "Langage de balisage",
+            "Structure de pages web",
+            "Sémantique web",
+            "Intégration multimédia"
+        ]
+    },
+    {
+        "keyword": "CSS",
+        "concepts": [
+            "Feuilles de style en cascade",
+            "Mise en page responsive",
+            "Animation web",
+            "Personnalisation visuelle"
+        ]
+    },
+    {
+        "keyword": "JavaScript",
+        "concepts": [
+            "Langage de programmation",
+            "Interactivité web",
+            "DOM manipulation",
+            "Frameworks (React, Angular)"
+        ]
+    },
+    {
+        "keyword": "Python",
+        "concepts": [
+            "Langage polyvalent",
+            "Analyse de données",
+            "Développement web",
+            "Machine Learning"
+        ]
+    },
+    {
+        "keyword": "RGPD",
+        "concepts": [
+            "Protection des données personnelles",
+            "Conformité réglementaire",
+            "Droits des citoyens européens",
+            "Traitement des données sensibles"
+        ]
+    },
+    {
+        "keyword": "SEO",
+        "concepts": [
+            "Référencement naturel",
+            "Optimisation de contenu",
+            "Mots-clés pertinents",
+            "Analyse des performances"
+        ]
+    },
+    {
+        "keyword": "CRM",
+        "concepts": [
+            "Gestion de la relation client",
+            "Automatisation des ventes",
+            "Outils de suivi client",
+            "Analyse des données clients"
+        ]
+    },
+    {
+        "keyword": "UX/UI",
+        "concepts": [
+            "Design d'expérience utilisateur",
+            "Prototypage d'interfaces",
+            "Tests d'utilisabilité",
+            "Conception ergonomique"
+        ]
+    },
+    {
+        "keyword": "VPN",
+        "concepts": [
+            "Connexion sécurisée",
+            "Protection de la vie privée",
+            "Navigation anonyme",
+            "Chiffrement des données"
+        ]
+    },
+    {
+        "keyword": "Impression 3D",
+        "concepts": [
+            "Fabrication additive",
+            "Prototypage rapide",
+            "Matériaux d'impression",
+            "Logiciels de modélisation"
+        ]
+    },
+    {
+        "keyword": "MAO",
+        "concepts": [
+            "Musique numérique",
+            "Enregistrement audio",
+            "Création musicale",
+            "Mixage et mastering"
+        ]
+    },
+    {
+        "keyword": "CMS",
+        "concepts": [
+            "Gestion de contenu",
+            "Outils comme WordPress",
+            "Création de blogs",
+            "Personnalisation de sites web"
+        ]
+    },
+    {
+        "keyword": "Cloud",
+        "concepts": [
+            "Stockage en ligne",
+            "Services SaaS",
+            "Infrastructure cloud",
+            "Sécurité dans le cloud"
+        ]
+    },
+    {
+        "keyword": "Cybersécurité",
+        "concepts": [
+            "Protection des données",
+            "Prévention des cyberattaques",
+            "Pare-feu et antivirus",
+            "Conformité réglementaire"
+        ]
+    },
+    {
+        "keyword": "Open Source",
+        "concepts": [
+            "Code partagé",
+            "Logiciels libres",
+            "Collaborations ouvertes",
+            "Innovations technologiques"
+        ]
+    },
+    {
+        "keyword": "Formation Numérique",
+        "concepts": [
+            "Apprentissage des outils numériques",
+            "Ateliers pratiques",
+            "Compétences numériques",
+            "Certifications en ligne"
+        ]
+    },
+    {
+        "keyword": "Potins Numériques",
+        "concepts": [
+            "Communauté d'entraide",
+            "Ateliers collaboratifs",
+            "Partage de savoirs",
+            "Découverte des outils numériques"
+        ]
+    },
+    {
+        "keyword": "Intelligence Artificielle",
+        "concepts": [
+            "Apprentissage supervisé",
+            "Analyse prédictive",
+            "Reconnaissance d'images",
+            "Éthique dans l'IA"
+        ]
+    },
+    {
+        "keyword": "Réseaux Sociaux",
+        "concepts": [
+            "Engagement utilisateur",
+            "Gestion des communautés",
+            "Campagnes publicitaires",
+            "Création de contenu viral"
+        ]
+    },
+
+    {
+        "keyword": "Cloud Computing",
+        "concepts": [
+            "Infrastructure as a Service (IaaS)",
+            "Stockage et calcul en ligne",
+            "Sécurité des données",
+            "Migration vers le cloud"
+        ]
+    },
+    {
+        "keyword": "Big Data",
+        "concepts": [
+            "Analyse des données massives",
+            "Stockage distribué",
+            "Visualisation de données",
+            "Traitement en temps réel"
+        ]
+    },
+    {
+        "keyword": "Développement Web",
+        "concepts": [
+            "HTML, CSS et JavaScript",
+            "Frameworks modernes (React, Angular)",
+            "Sécurité des applications web",
+            "Optimisation des performances"
+        ]
+    },
+    {
+        "keyword": "Programmation",
+        "concepts": [
+            "Langages populaires (Python, Java)",
+            "Développement orienté objet",
+            "Debugging et optimisation",
+            "Design patterns"
+        ]
+    },
+    {
+        "keyword": "Blockchain",
+        "concepts": [
+            "Registres distribués",
+            "Sécurisation des transactions",
+            "Contrats intelligents",
+            "Cryptomonnaies"
+        ]
+    },
+    {
+        "keyword": "E-commerce",
+        "concepts": [
+            "Optimisation des ventes en ligne",
+            "Intégration de paiements",
+            "Expérience utilisateur",
+            "SEO pour boutiques en ligne"
+        ]
+    },
+    {
+        "keyword": "IoT (Internet des Objets)",
+        "concepts": [
+            "Objets connectés",
+            "Automatisation intelligente",
+            "Sécurité des réseaux IoT",
+            "Communication M2M (Machine-to-Machine)"
+        ]
+    },
+    {
+        "keyword": "POTINS NUMERIQUES",
+        "concepts": [
+            "Accompagnement numérique",
+            "Initiatives locales",
+            "Ateliers d'apprentissage",
+            "Partage d'expertise"
+        ]
+    },
+    {
+        "keyword": "MONTAGE VIDEO",
+        "concepts": [
+            "Techniques de post-production",
+            "Effets spéciaux",
+            "Édition pour YouTube",
+            "Logiciels de montage (Premiere, Final Cut)"
+        ]
+    },
+    {
+        "keyword": "MAO (Musique Assistée par Ordinateur)",
+        "concepts": [
+            "Instruments virtuels",
+            "Logiciels audio (Ableton, Logic Pro)",
+            "Enregistrement multipistes",
+            "Mixage et mastering"
+        ]
+    },
+    {
+        "keyword": "Ateliers Numériques",
+        "concepts": [
+            "Initiation aux tablettes",
+            "Apprentissage collaboratif",
+            "Utilisation d'outils bureautiques",
+            "Création de contenu numérique"
+        ]
+    },
+    {
+        "keyword": "Autonomie Numérique",
+        "concepts": [
+            "Accès aux outils en ligne",
+            "Gestion des identités numériques",
+            "Éducation à la sécurité",
+            "Utilisation des services publics numériques"
+        ]
+    },
+    {
+        "keyword": "Réalité Virtuelle",
+        "concepts": [
+            "Immersion totale",
+            "Création d'environnements VR",
+            "Applications éducatives",
+            "Matériel nécessaire (casques, capteurs)"
+        ]
+    },
+    {
+        "keyword": "Sécurité Numérique",
+        "concepts": [
+            "Gestion des mots de passe",
+            "Protéger ses données personnelles",
+            "Antivirus et firewalls",
+            "Navigation sécurisée"
+        ]
+    },
+    {
+        "keyword": "Formation en Ligne",
+        "concepts": [
+            "Plateformes éducatives",
+            "Certifications numériques",
+            "Gestion du temps d'apprentissage",
+            "Apprentissage collaboratif"
+        ]
+    },
+    {
+        "keyword": "Création de Sites Web",
+        "concepts": [
+            "Référencement SEO",
+            "Hébergement de sites",
+            "Design responsive",
+            "Intégration avec CMS (WordPress)"
+        ]
+    },
+    {
+        "keyword": "Animation Vidéo",
+        "concepts": [
+            "Techniques de motion design",
+            "Rendu 3D",
+            "Logiciels d'animation",
+            "Création d'effets visuels"
+        ]
+    },
+    {
+        "keyword": "Jeux Vidéo",
+        "concepts": [
+            "Design de niveaux",
+            "Moteurs de jeu (Unity, Unreal)",
+            "Création de personnages",
+            "Programmation de gameplay"
+        ]
+    },
+    {
+        "keyword": "Imprimantes 3D",
+        "concepts": [
+            "Conception assistée par ordinateur (CAO)",
+            "Réglages d'impression",
+            "Types de matériaux d'impression",
+            "Entretien des imprimantes"
+        ]
+    },
+    {
+        "keyword": "Bureautique",
+        "concepts": [
+            "Traitement de texte",
+            "Feuilles de calcul",
+            "Création de présentations",
+            "Collaboration en temps réel"
+        ]
+    },
+    {
+        "keyword": "Montage Photo",
+        "concepts": [
+            "Retouche d'images",
+            "Utilisation des calques",
+            "Techniques de détourage",
+            "Effets visuels avancés"
+        ]
+    },
+    {
+        "keyword": "Cryptomonnaies",
+        "concepts": [
+            "Bitcoin et Ethereum",
+            "Portefeuilles numériques",
+            "Transactions sécurisées",
+            "Investissements en actifs numériques"
+        ]
+    },
+    {
+        "keyword": "Télétravail",
+        "concepts": [
+            "Outils de visioconférence",
+            "Gestion des projets à distance",
+            "Sécurité des connexions",
+            "Organisation personnelle"
+        ]
+    },
+    {
+        "keyword": "A/B Testing",
+        "concepts": [
+            "Comparaison de versions",
+            "Analyse des performances",
+            "Optimisation de conversion",
+            "Tests utilisateurs"
+        ]
+    },
+    {
+        "keyword": "Ad Copy",
+        "concepts": [
+            "Rédaction publicitaire",
+            "Optimisation des clics",
+            "Tests A/B sur le contenu",
+            "Appels à l'action (CTA)"
+        ]
+    },
+    {
+        "keyword": "Ad Extensions",
+        "concepts": [
+            "Liens supplémentaires",
+            "Extensions d'appels",
+            "Affichage des avis clients",
+            "Optimisation des annonces"
+        ]
+    },
+    {
+        "keyword": "Ad Group",
+        "concepts": [
+            "Organisation des annonces",
+            "Ciblage par mots-clés",
+            "Analyse des groupes d'annonces",
+            "Optimisation des campagnes"
+        ]
+    },
+    {
+        "keyword": "Ad Rank",
+        "concepts": [
+            "Score de qualité",
+            "Positionnement des annonces",
+            "Enchères au coût par clic",
+            "Optimisation des performances publicitaires"
+        ]
+    },
+    {
+        "keyword": "Affiliate Marketing",
+        "concepts": [
+            "Réseaux d'affiliation",
+            "Partenariats commerciaux",
+            "Génération de leads",
+            "Commission sur les ventes"
+        ]
+    },
+    {
+        "keyword": "Algorithme",
+        "concepts": [
+            "Structures de données",
+            "Tri et recherche",
+            "Algorithmes d'apprentissage",
+            "Optimisation des calculs"
+        ]
+    },
+    {
+        "keyword": "Alpha/Beta Testing",
+        "concepts": [
+            "Tests internes",
+            "Feedback utilisateur",
+            "Corrections des bugs",
+            "Préparation au déploiement"
+        ]
+    },
+    {
+        "keyword": "Analyse décisionnelle",
+        "concepts": [
+            "Tableaux de bord",
+            "Aide à la décision",
+            "Analyse des KPI",
+            "Rapports d'activités"
+        ]
+    },
+    {
+        "keyword": "Analyse descriptive",
+        "concepts": [
+            "Statistiques descriptives",
+            "Résumé des données",
+            "Visualisation graphique",
+            "Analyse exploratoire"
+        ]
+    },
+    {
+        "keyword": "Analyse des données",
+        "concepts": [
+            "Nettoyage des données",
+            "Modélisation statistique",
+            "Extraction de connaissances",
+            "Outils d'analyse (Excel, Python)"
+        ]
+    },
+    {
+        "keyword": "Analyse exploratoire",
+        "concepts": [
+            "Visualisation des relations",
+            "Détection des tendances",
+            "Hypothèses sur les données",
+            "Techniques de clustering"
+        ]
+    },
+    {
+        "keyword": "Analytics",
+        "concepts": [
+            "Collecte de données",
+            "Suivi des performances",
+            "Segmentation des audiences",
+            "Optimisation des campagnes"
+        ]
+    },
+    {
+        "keyword": "API (Application Programming Interface)",
+        "concepts": [
+            "Intégration de services",
+            "Documentation API",
+            "Appels RESTful",
+            "Authentification et sécurité"
+        ]
+    },
+    {
+        "keyword": "Application Mobile",
+        "concepts": [
+            "Développement natif",
+            "Expérience utilisateur mobile",
+            "Publication sur stores (App Store, Google Play)",
+            "Gestion des notifications"
+        ]
+    },
+    {
+        "keyword": "Application Web",
+        "concepts": [
+            "Applications accessibles via navigateur",
+            "Frameworks (Django, Ruby on Rails)",
+            "Design adaptatif",
+            "Déploiement sur serveur"
+        ]
+    },
+    {
+        "keyword": "As-a-service ou ass",
+        "concepts": [
+            "Infrastructure as a Service (IaaS)",
+            "Software as a Service (SaaS)",
+            "Plateformes de Cloud",
+            "Modèles d'abonnement"
+        ]
+    },
+
+    {
+        "keyword": "Assets (développement de jeux vidéos)",
+        "concepts": [
+            "Modèles 3D",
+            "Textures et shaders",
+            "Animations des personnages",
+            "Sons et musiques"
+        ]
+    },
+    {
+        "keyword": "Asset Pipeline (développement de jeux vidéos)",
+        "concepts": [
+            "Organisation des ressources",
+            "Optimisation des fichiers",
+            "Intégration dans le moteur",
+            "Automatisation des processus"
+        ]
+    },
+    {
+        "keyword": "Backend",
+        "concepts": [
+            "Gestion des bases de données",
+            "API RESTful",
+            "Authentification des utilisateurs",
+            "Serveurs et hébergement"
+        ]
+    },
+    {
+        "keyword": "Backlog Produit",
+        "concepts": [
+            "Liste des fonctionnalités",
+            "Priorisation des tâches",
+            "Gestion des sprints",
+            "Suivi des progrès"
+        ]
+    },
+    {
+        "keyword": "Base de Données",
+        "concepts": [
+            "SQL et NoSQL",
+            "Conception de schémas",
+            "Interrogation des données",
+            "Optimisation des performances"
+        ]
+    },
+    {
+        "keyword": "Brief Client",
+        "concepts": [
+            "Résumé des attentes",
+            "Définition des objectifs",
+            "Alignement des parties prenantes",
+            "Planification initiale"
+        ]
+    },
+    {
+        "keyword": "Business intelligence (BI)",
+        "concepts": [
+            "Analyse des données",
+            "Visualisation des KPI",
+            "Outils BI (Tableau, Power BI)",
+            "Prise de décisions stratégiques"
+        ]
+    },
+    {
+        "keyword": "C++",
+        "concepts": [
+            "Programmation système",
+            "Développement de jeux",
+            "Optimisation des performances",
+            "Gestion de la mémoire"
+        ]
+    },
+    {
+        "keyword": "C#",
+        "concepts": [
+            "Développement avec Unity",
+            "Applications Windows",
+            "Langage orienté objet",
+            "Intégration dans des moteurs de jeux"
+        ]
+    },
+    {
+        "keyword": "Calendrier Editorial",
+        "concepts": [
+            "Planification des contenus",
+            "Stratégie de publication",
+            "Suivi des campagnes",
+            "Organisation par plateformes"
+        ]
+    },
+    {
+        "keyword": "Call to Action (CTA)",
+        "concepts": [
+            "Incitation à l'action",
+            "Optimisation des clics",
+            "Messages engageants",
+            "Analyse des conversions"
+        ]
+    },
+    {
+        "keyword": "Carte thermique (Heat map)",
+        "concepts": [
+            "Visualisation des interactions",
+            "Analyse des clics",
+            "Optimisation de l'ergonomie",
+            "Cartographie des zones chaudes"
+        ]
+    },
+    {
+        "keyword": "Chef de Projet Digital",
+        "concepts": [
+            "Coordination des équipes",
+            "Planification des livrables",
+            "Gestion des budgets",
+            "Suivi des performances"
+        ]
+    },
+    {
+        "keyword": "Cloud computing",
+        "concepts": [
+            "Stockage à distance",
+            "Applications SaaS",
+            "Virtualisation des serveurs",
+            "Sécurité dans le cloud"
+        ]
+    },
+    {
+        "keyword": "Clustering",
+        "concepts": [
+            "Segmentation des données",
+            "Techniques de regroupement",
+            "Analyse exploratoire",
+            "Applications en marketing"
+        ]
+    },
+    {
+        "keyword": "CMS (Content Management System)",
+        "concepts": [
+            "Gestion de contenu web",
+            "Personnalisation des thèmes",
+            "SEO intégré",
+            "Extensions et plugins"
+        ]
+    },
+    {
+        "keyword": "Community Management",
+        "concepts": [
+            "Gestion des réseaux sociaux",
+            "Création de contenu engageant",
+            "Interactions avec la communauté",
+            "Analyse des performances sociales"
+        ]
+    },
+    {
+        "keyword": "Conversion",
+        "concepts": [
+            "Transformation des prospects",
+            "Analyse des taux de conversion",
+            "Optimisation des parcours utilisateurs",
+            "Tests A/B"
+        ]
+    },
+    {
+        "keyword": "Conversion Rate",
+        "concepts": [
+            "Taux de transformation",
+            "Facteurs d'influence",
+            "Suivi des performances",
+            "Optimisation continue"
+        ]
+    },
+    {
+        "keyword": "Contenu",
+        "concepts": [
+            "Création de contenu engageant",
+            "Rédaction SEO",
+            "Publication sur les réseaux sociaux",
+            "Stratégies de contenu viral"
+        ]
+    },
+    {
+        "keyword": "CPC (Cost Per Click)",
+        "concepts": [
+            "Modèle de facturation publicitaire",
+            "Optimisation des clics",
+            "Suivi des coûts",
+            "Campagnes Google Ads"
+        ]
+    },
+    {
+        "keyword": "CTR (Click-Through Rate)",
+        "concepts": [
+            "Analyse des clics",
+            "Optimisation des annonces",
+            "Amélioration des taux d'engagement",
+            "Stratégies de ciblage"
+        ]
+    },
+    {
+        "keyword": "Community Manager",
+        "concepts": [
+            "Animation de communautés",
+            "Modération des contenus",
+            "Planification des publications",
+            "Analyse des performances sociales"
+        ]
+    },
+    {
+        "keyword": "Content Marketing",
+        "concepts": [
+            "Stratégie de contenu",
+            "Création de blogs",
+            "Engagement des audiences",
+            "Optimisation des conversions"
+        ]
+    },
+    {
+        "keyword": "Conversion Rate Optimization (CRO)",
+        "concepts": [
+            "Analyse des comportements utilisateurs",
+            "Amélioration des parcours clients",
+            "Tests A/B et multivariés",
+            "Optimisation des taux de conversion"
+        ]
+    },
+    {
+        "keyword": "Cryptographie",
+        "concepts": [
+            "Chiffrement des données",
+            "Protocole SSL/TLS",
+            "Clés de sécurité",
+            "Confidentialité des communications"
+        ]
+    },
+    {
+        "keyword": "CSS (Cascading Style Sheets)",
+        "concepts": [
+            "Personnalisation des interfaces",
+            "Transitions et animations CSS",
+            "Mise en page flexbox et grid",
+            "Design responsive"
+        ]
+    },
+    {
+        "keyword": "D3.js",
+        "concepts": [
+            "Visualisation de données",
+            "Création de graphiques interactifs",
+            "Gestion des transitions",
+            "Représentation avancée des données"
+        ]
+    },
+    {
+        "keyword": "daily stand-up",
+        "concepts": [
+            "Réunions quotidiennes en Agile",
+            "Suivi des progrès de l'équipe",
+            "Identification des blocages",
+            "Coordination des tâches"
+        ]
+    },
+    {
+        "keyword": "Dashboard (Tableau de bord)",
+        "concepts": [
+            "Suivi des KPI",
+            "Visualisation des données",
+            "Rapports automatisés",
+            "Analyse des performances"
+        ]
+    },
+    {
+        "keyword": "Data Science",
+        "concepts": [
+            "Analyse prédictive",
+            "Machine learning",
+            "Traitement des big data",
+            "Visualisation des insights"
+        ]
+    },
+    {
+        "keyword": "Dataviz",
+        "concepts": [
+            "Création de graphiques",
+            "Outils de visualisation (Tableau, Power BI)",
+            "Représentation des tendances",
+            "Communication des résultats"
+        ]
+    },
+    {
+        "keyword": "Deep Learning",
+        "concepts": [
+            "Réseaux de neurones profonds",
+            "Apprentissage supervisé",
+            "Reconnaissance d'images",
+            "Applications en IA"
+        ]
+    },
+    {
+        "keyword": "Déploiement",
+        "concepts": [
+            "Mise en production",
+            "Automatisation avec CI/CD",
+            "Surveillance des déploiements",
+            "Gestion des environnements"
+        ]
+    },
+    {
+        "keyword": "Développeur Fullstack",
+        "concepts": [
+            "Maîtrise du frontend et backend",
+            "Intégration des API",
+            "Optimisation des performances",
+            "Conception d'applications complètes"
+        ]
+    },
+    {
+        "keyword": "Développement web",
+        "concepts": [
+            "Création de sites dynamiques",
+            "Frameworks modernes",
+            "Intégration backend",
+            "Optimisation mobile"
+        ]
+    },
+    {
+        "keyword": "DevOps",
+        "concepts": [
+            "Collaboration entre équipes Dev et Ops",
+            "Automatisation des déploiements",
+            "Surveillance des systèmes",
+            "Culture d'amélioration continue"
+        ]
+    },
+    {
+        "keyword": "Drag-and-Drop",
+        "concepts": [
+            "Interfaces utilisateurs intuitives",
+            "Personnalisation sans code",
+            "Gestion des éléments visuels",
+            "Utilisation dans les CMS modernes"
+        ]
+    },
+    {
+        "keyword": "Emailing ou Email Marketing",
+        "concepts": [
+            "Création de campagnes",
+            "Gestion des listes d'abonnés",
+            "Automatisation des emails",
+            "Analyse des taux d'ouverture"
+        ]
+    },
+    {
+        "keyword": "Engagement",
+        "concepts": [
+            "Interactions sociales",
+            "Mesure des likes et partages",
+            "Taux de participation",
+            "Stratégies de contenu engageant"
+        ]
+    },
+    {
+        "keyword": "Ensemble Learning (analyse de données et intelligence artificielle)",
+        "concepts": [
+            "Combinaison de modèles",
+            "Réduction des erreurs",
+            "Bagging et boosting",
+            "Applications en classification"
+        ]
+    },
+    {
+        "keyword": "Exploration de données (Data Exploration)",
+        "concepts": [
+            "Nettoyage des données",
+            "Analyse des relations",
+            "Détection des valeurs aberrantes",
+            "Préparation des données pour l'analyse"
+        ]
+    },
+    {
+        "keyword": "FabLab",
+        "concepts": [
+            "Espace de fabrication numérique",
+            "Impression 3D",
+            "Prototypage rapide",
+            "Collaborations créatives"
+        ]
+    },
+    {
+        "keyword": "FabLab manager",
+        "concepts": [
+            "Gestion des équipements",
+            "Organisation des ateliers",
+            "Accueil des utilisateurs",
+            "Maintenance des machines"
+        ]
+    },
+    {
+        "keyword": "Feedback Client",
+        "concepts": [
+            "Collecte des avis",
+            "Amélioration des services",
+            "Enquêtes de satisfaction",
+            "Analyse des besoins"
+        ]
+    },
+    {
+        "keyword": "Feature Engineering (ingénierie des caractéristiques / analyse de données et intelligence artificielle)",
+        "concepts": [
+            "Création de variables pertinentes",
+            "Sélection des caractéristiques",
+            "Préparation pour le machine learning",
+            "Amélioration des performances des modèles"
+        ]
+    },
+    {
+        "keyword": "Firewall",
+        "concepts": [
+            "Protection réseau",
+            "Filtrage des données",
+            "Prévention des intrusions",
+            "Configurations de sécurité"
+        ]
+    },
+    {
+        "keyword": "FPS (Frames Per Second)",
+        "concepts": [
+            "Fluidité des jeux vidéo",
+            "Optimisation des graphismes",
+            "Mesure des performances",
+            "Réduction des lags"
+        ]
+    },
+    {
+        "keyword": "Framework",
+        "concepts": [
+            "Base pour le développement",
+            "Facilitation des tâches courantes",
+            "Frameworks populaires (React, Angular)",
+            "Outils de support pour les développeurs"
+        ]
+    },
+    {
+        "keyword": "Framework Backend",
+        "concepts": [
+            "Gestion des API",
+            "Frameworks comme Django, Flask",
+            "Connexion aux bases de données",
+            "Authentification des utilisateurs"
+        ]
+    },
+    {
+        "keyword": "Framework Frontend",
+        "concepts": [
+            "Création d'interfaces utilisateur",
+            "Frameworks comme React, Vue.js",
+            "Gestion du DOM",
+            "Performances optimisées"
+        ]
+    },
+    {
+        "keyword": "Front-end",
+        "concepts": [
+            "Langages de base (HTML, CSS, JS)",
+            "Design adaptatif",
+            "Interactions utilisateur",
+            "Intégration avec le backend"
+        ]
+    },
+    {
+        "keyword": "Game Engine",
+        "concepts": [
+            "Moteurs comme Unity, Unreal",
+            "Gestion des graphismes",
+            "Physiques des objets",
+            "Optimisation des jeux"
+        ]
+    },
+    {
+        "keyword": "Gameplay",
+        "concepts": [
+            "Design des mécaniques de jeu",
+            "Expérience utilisateur dans le jeu",
+            "Tests de jouabilité",
+            "Création de défis interactifs"
+        ]
+    },
+    {
+        "keyword": "Google Data Studio",
+        "concepts": [
+            "Création de rapports interactifs",
+            "Connexion aux sources de données",
+            "Visualisation avancée",
+            "Partage en temps réel"
+        ]
+    },
+    {
+        "keyword": "Google Sheets",
+        "concepts": [
+            "Feuilles de calcul collaboratives",
+            "Formules et automatisations",
+            "Création de graphiques",
+            "Intégration avec d'autres outils Google"
+        ]
+    },
+    {
+        "keyword": "Grid system",
+        "concepts": [
+            "Mise en page structurée",
+            "Alignement des éléments",
+            "Création de designs flexibles",
+            "Utilisation dans CSS frameworks (Bootstrap)"
+        ]
+    },
+    {
+        "keyword": "HLSL/GLSL",
+        "concepts": [
+            "Programmation des shaders",
+            "Effets graphiques avancés",
+            "Contrôle de l'apparence visuelle",
+            "Utilisation dans les moteurs de jeux"
+        ]
+    },
+    {
+        "keyword": "HTML (HyperText Markup Language)",
+        "concepts": [
+            "Langage de balisage",
+            "Structure des pages web",
+            "Sémantique des balises",
+            "Compatibilité avec CSS et JavaScript"
+        ]
+    },
+    {
+        "keyword": "HUD (Heads-Up Display)",
+        "concepts": [
+            "Interface graphique des jeux",
+            "Affichage des informations en temps réel",
+            "Éléments comme la santé et le score",
+            "Conception ergonomique"
+        ]
+    },
+    {
+        "keyword": "IaaS (Infrastructure as a Service)",
+        "concepts": [
+            "Ressources cloud virtualisées",
+            "Gestion des serveurs distants",
+            "Flexibilité et évolutivité",
+            "Pay-as-you-go"
+        ]
+    },
+    {
+        "keyword": "Journalisation (Logging)",
+        "concepts": [
+            "Surveillance des systèmes",
+            "Enregistrement des événements",
+            "Analyse des incidents",
+            "Outils comme Logstash"
+        ]
+    },
+    {
+        "keyword": "Implémentation (langage de développement)",
+        "concepts": [
+            "Codage des fonctionnalités",
+            "Choix des technologies",
+            "Tests unitaires",
+            "Optimisation des performances"
+        ]
+    },
+    {
+        "keyword": "Impressions",
+        "concepts": [
+            "Nombre d'affichages d'une annonce",
+            "Mesure de la portée",
+            "Analyse des impressions",
+            "Optimisation des campagnes publicitaires"
+        ]
+    },
+    {
+        "keyword": "Impression de profil (Profile Impressions)",
+        "concepts": [
+            "Visibilité du profil",
+            "Analyse des visiteurs uniques",
+            "Optimisation des pages personnelles",
+            "Suivi des performances sociales"
+        ]
+    },
+    {
+        "keyword": "Inbound Marketing",
+        "concepts": [
+            "Création de contenu attractif",
+            "Attirer des prospects naturellement",
+            "Stratégies non intrusives",
+            "Conversion en leads qualifiés"
+        ]
+    },
+    {
+        "keyword": "Influenceur",
+        "concepts": [
+            "Collaboration avec les marques",
+            "Promotion sur les réseaux sociaux",
+            "Création de contenu authentique",
+            "Engagement des audiences"
+        ]
+    },
+    {
+        "keyword": "Insight",
+        "concepts": [
+            "Analyse des données clients",
+            "Découverte des tendances",
+            "Optimisation des stratégies",
+            "Informations exploitables"
+        ]
+    },
+    {
+        "keyword": "Intelligence artificielle (IA)",
+        "concepts": [
+            "Systèmes autonomes",
+            "Applications en vision par ordinateur",
+            "Traitement du langage naturel",
+            "Apprentissage supervisé"
+        ]
+    },
+    {
+        "keyword": "Interface utilisateur",
+        "concepts": [
+            "Design interactif",
+            "Prototypage rapide",
+            "Expérience utilisateur",
+            "Ergonomie visuelle"
+        ]
+    },
+    {
+        "keyword": "IoT (Internet des objets)",
+        "concepts": [
+            "Communication entre appareils connectés",
+            "Automatisation des tâches",
+            "Sécurité des données IoT",
+            "Applications dans la maison intelligente"
+        ]
+    },
+    {
+        "keyword": "Keyword Research",
+        "concepts": [
+            "Identification des mots-clés pertinents",
+            "Analyse des volumes de recherche",
+            "Outils de recherche (SEMrush, Ahrefs)",
+            "Optimisation du contenu SEO"
+        ]
+    },
+    {
+        "keyword": "Landing Page",
+        "concepts": [
+            "Pages dédiées à la conversion",
+            "Conception axée sur les CTA",
+            "Optimisation des taux de conversion",
+            "Test A/B des contenus"
+        ]
+    },
+    {
+        "keyword": "Lead",
+        "concepts": [
+            "Prospects qualifiés",
+            "Capture via formulaires",
+            "Segmentation des audiences",
+            "Suivi des opportunités"
+        ]
+    },
+    {
+        "keyword": "Lead Magnet",
+        "concepts": [
+            "Offres gratuites pour capturer des leads",
+            "Contenu téléchargeable",
+            "Optimisation des formulaires",
+            "Suivi des performances"
+        ]
+    },
+    {
+        "keyword": "Level Design (développement de jeux vidéos)",
+        "concepts": [
+            "Création des environnements de jeu",
+            "Design des obstacles et défis",
+            "Équilibrage des niveaux",
+            "Tests de jouabilité"
+        ]
+    },
+    {
+        "keyword": "Low-Code",
+        "concepts": [
+            "Développement rapide",
+            "Utilisation minimale de code",
+            "Outils visuels de création",
+            "Prototypage d'applications"
+        ]
+    },
+    {
+        "keyword": "Lua",
+        "concepts": [
+            "Langage de script léger",
+            "Personnalisation des jeux",
+            "Intégration avec des moteurs de jeu",
+            "Flexibilité pour les développeurs"
+        ]
+    },
+    {
+        "keyword": "Machine Learning",
+        "concepts": [
+            "Apprentissage supervisé et non supervisé",
+            "Modèles prédictifs",
+            "Traitement des données",
+            "Optimisation des algorithmes"
+        ]
+    },
+    {
+        "keyword": "Malware",
+        "concepts": [
+            "Logiciels malveillants",
+            "Protection antivirus",
+            "Détection des menaces",
+            "Analyse des attaques"
+        ]
+    },
+    {
+        "keyword": "Maquette (ou mockup)",
+        "concepts": [
+            "Représentation visuelle d'une interface",
+            "Prototypage rapide",
+            "Tests d'ergonomie",
+            "Itérations avec les parties prenantes"
+        ]
+    },
+    {
+        "keyword": "Marketing digital",
+        "concepts": [
+            "Stratégies en ligne",
+            "SEO et SEA",
+            "Analyse des performances",
+            "Engagement sur les réseaux sociaux"
+        ]
+    },
+    {
+        "keyword": "Matplotlib",
+        "concepts": [
+            "Visualisation des données en Python",
+            "Création de graphiques 2D",
+            "Personnalisation des tracés",
+            "Analyse visuelle des datasets"
+        ]
+    },
+    {
+        "keyword": "Méthodologie Scrum",
+        "concepts": [
+            "Gestion de projet Agile",
+            "Itérations courtes (sprints)",
+            "Rétrospectives d'équipe",
+            "Livraison incrémentale"
+        ]
+    },
+    {
+        "keyword": "sprints",
+        "concepts": [
+            "Cycles de développement",
+            "Objectifs définis",
+            "Suivi des progrès",
+            "Amélioration continue"
+        ]
+    },
+    {
+        "keyword": "Modélisation prédictive (analyse de données et intelligence artificielle)",
+        "concepts": [
+            "Prévision des résultats",
+            "Utilisation des algorithmes",
+            "Analyse des données historiques",
+            "Applications en finance et marketing"
+        ]
+    },
+    {
+        "keyword": "Negative Keywords",
+        "concepts": [
+            "Exclusion des mots-clés non pertinents",
+            "Optimisation des campagnes publicitaires",
+            "Réduction des coûts inutiles",
+            "Amélioration du ciblage"
+        ]
+    },
+    {
+        "keyword": "Nettoyage de données (Data Cleaning / analyse de données)",
+        "concepts": [
+            "Élimination des doublons",
+            "Correction des erreurs",
+            "Préparation des données pour l'analyse",
+            "Amélioration de la qualité des datasets"
+        ]
+    },
+    {
+        "keyword": "No-Code",
+        "concepts": [
+            "Création d'applications sans coder",
+            "Utilisation de plateformes visuelles",
+            "Prototypage rapide",
+            "Accessibilité pour les non-développeurs"
+        ]
+    },
+    {
+        "keyword": "NoSQL",
+        "concepts": [
+            "Bases de données non relationnelles",
+            "Flexibilité des structures de données",
+            "Scalabilité horizontale",
+            "Applications temps réel"
+        ]
+    },
+    {
+        "keyword": "PaaS (Platform as a Service)",
+        "concepts": [
+            "Développement sur le cloud",
+            "Gestion des outils de déploiement",
+            "Flexibilité pour les développeurs",
+            "Plateformes populaires (Heroku, AWS Elastic Beanstalk)"
+        ]
+    },
+    {
+        "keyword": "Patch (développement de jeux vidéos)",
+        "concepts": [
+            "Mise à jour logicielle",
+            "Correction des bugs",
+            "Ajout de contenu",
+            "Amélioration des performances"
+        ]
+    },
+    {
+        "keyword": "Phishing",
+        "concepts": [
+            "Attaques par hameçonnage",
+            "Détection des emails frauduleux",
+            "Sensibilisation des utilisateurs",
+            "Protection des informations sensibles"
+        ]
+    },
+    {
+        "keyword": "Physics Engine",
+        "concepts": [
+            "Simulation des lois de la physique",
+            "Gestion des collisions",
+            "Effets réalistes dans les jeux",
+            "Optimisation des calculs physiques"
+        ]
+    },
+    {
+        "keyword": "Plateforme No-Code",
+        "concepts": [
+            "Création d'applications",
+            "Interfaces visuelles simplifiées",
+            "Automatisation des processus",
+            "Intégrations avec des outils tiers"
+        ]
+    },
+    {
+        "keyword": "Plotly",
+        "concepts": [
+            "Visualisations interactives",
+            "Support de Python et R",
+            "Création de tableaux de bord",
+            "Personnalisation des graphiques"
+        ]
+    },
+    {
+        "keyword": "Portée de profil (Profile Reach)",
+        "concepts": [
+            "Analyse des vues uniques",
+            "Suivi des performances sur les réseaux sociaux",
+            "Optimisation des contenus publiés",
+            "Stratégies d'engagement"
+        ]
+    },
+    {
+        "keyword": "Post-processing (développement de jeux vidéos)",
+        "concepts": [
+            "Ajout d'effets visuels",
+            "Correction de l'éclairage",
+            "Optimisation des rendus graphiques",
+            "Techniques avancées (bloom, vignettage)"
+        ]
+    },
+    {
+        "keyword": "Power BI",
+        "concepts": [
+            "Visualisation des données",
+            "Création de tableaux de bord interactifs",
+            "Analyse des performances",
+            "Partage des rapports"
+        ]
+    },
+    {
+        "keyword": "Publicité Sociale",
+        "concepts": [
+            "Promotion sur les réseaux sociaux",
+            "Ciblage des audiences",
+            "Analyse des campagnes",
+            "Augmentation de la visibilité"
+        ]
+    },
+    {
+        "keyword": "Quality Score (score de qualité)",
+        "concepts": [
+            "Évaluation des annonces",
+            "Optimisation des mots-clés",
+            "Impact sur le coût par clic",
+            "Amélioration des performances publicitaires"
+        ]
+    },
+    {
+        "keyword": "Qlik Sense",
+        "concepts": [
+            "Outils de business intelligence",
+            "Analyse des données en temps réel",
+            "Visualisation intuitive",
+            "Partage collaboratif des insights"
+        ]
+    },
+    {
+        "keyword": "Rapport d'Avancement",
+        "concepts": [
+            "Suivi des projets",
+            "Présentation des résultats",
+            "Gestion des deadlines",
+            "Alignement avec les objectifs"
+        ]
+    },
+    {
+        "keyword": "Rasterisation (développement de jeux vidéos)",
+        "concepts": [
+            "Conversion des modèles 3D en pixels",
+            "Gestion des ombrages",
+            "Optimisation des graphismes",
+            "Techniques de rendu en temps réel"
+        ]
+    },
+    {
+        "keyword": "Ray Tracing (développement de jeux vidéos)",
+        "concepts": [
+            "Rendu photoréaliste",
+            "Simulation des reflets et des ombres",
+            "Gestion des éclairages réalistes",
+            "Amélioration des graphismes"
+        ]
+    },
+    {
+        "keyword": "Rendering (développement de jeux vidéos)",
+        "concepts": [
+            "Processus de rendu 3D",
+            "Gestion des textures et des lumières",
+            "Optimisation des performances",
+            "Techniques de rendu avancées"
+        ]
+    },
+    {
+        "keyword": "Réseaux sociaux",
+        "concepts": [
+            "Plateformes de partage",
+            "Engagement communautaire",
+            "Marketing d'influence",
+            "Analyse des performances sociales"
+        ]
+    },
+    {
+        "keyword": "Responsive design (conception adaptable)",
+        "concepts": [
+            "Adaptation aux différentes tailles d'écran",
+            "Design mobile-friendly",
+            "Optimisation pour tablettes et smartphones",
+            "Amélioration de l'expérience utilisateur"
+        ]
+    },
+    {
+        "keyword": "ROI (Return on Investment)",
+        "concepts": [
+            "Mesure de la rentabilité",
+            "Analyse des investissements",
+            "Optimisation des campagnes",
+            "Calcul du retour sur investissement"
+        ]
+    },
+    {
+        "keyword": "Rust",
+        "concepts": [
+            "Langage système sécurisé",
+            "Gestion de la mémoire",
+            "Performance pour le développement bas niveau",
+            "Applications dans les moteurs de jeux"
+        ]
+    },
+    {
+        "keyword": "SaaS (Software as a Service)",
+        "concepts": [
+            "Applications cloud",
+            "Modèle par abonnement",
+            "Accessibilité en ligne",
+            "Maintenance centralisée"
+        ]
+    },
+    {
+        "keyword": "Scripting",
+        "concepts": [
+            "Automatisation des tâches",
+            "Création de scripts personnalisés",
+            "Langages comme Python, Bash",
+            "Applications dans les jeux et les systèmes"
+        ]
+    },
+    {
+        "keyword": "Scrum Master (projet digital)",
+        "concepts": [
+            "Facilitation des sprints",
+            "Coordination des équipes",
+            "Respect des principes Agile",
+            "Amélioration des processus"
+        ]
+    },
+    {
+        "keyword": "SEA (Search Engine Advertising)",
+        "concepts": [
+            "Publicité payante sur les moteurs de recherche",
+            "Ciblage par mots-clés",
+            "Analyse des clics",
+            "Optimisation des campagnes"
+        ]
+    },
+    {
+        "keyword": "SEM (Search Engine Marketing)",
+        "concepts": [
+            "Combinaison de SEO et SEA",
+            "Maximisation de la visibilité",
+            "Gestion des campagnes publicitaires",
+            "Analyse des performances marketing"
+        ]
+    },
+    {
+        "keyword": "SEO (Search Engine Optimization)",
+        "concepts": [
+            "Optimisation des moteurs de recherche",
+            "Recherche de mots-clés",
+            "Création de contenu de qualité",
+            "Analyse des performances SEO"
+        ]
+    },
+    {
+        "keyword": "Shader programming (développement de jeux vidéos)",
+        "concepts": [
+            "Programmation des effets visuels",
+            "Gestion des ombres et lumières",
+            "Création de shaders personnalisés",
+            "Optimisation graphique dans les moteurs de jeux"
+        ]
+    },
+    {
+        "keyword": "Sigma",
+        "concepts": [
+            "Analyse statistique",
+            "Évaluation des écarts types",
+            "Optimisation des processus",
+            "Applications dans la gestion de la qualité"
+        ]
+    },
+    {
+        "keyword": "SMM (Social Media Marketing)",
+        "concepts": [
+            "Promotion sur les réseaux sociaux",
+            "Engagement communautaire",
+            "Création de contenu viral",
+            "Analyse des performances"
+        ]
+    },
+    {
+        "keyword": "Sprint (projet digital)",
+        "concepts": [
+            "Itérations courtes",
+            "Suivi des objectifs",
+            "Livraison incrémentale",
+            "Amélioration continue"
+        ]
+    },
+    {
+        "keyword": "SQL (Structured Query Language)",
+        "concepts": [
+            "Interrogation des bases de données",
+            "Gestion des relations",
+            "Optimisation des requêtes",
+            "Applications dans les systèmes d'information"
+        ]
+    },
+    {
+        "keyword": "Stack Technologique (développement fullstack)",
+        "concepts": [
+            "Ensemble des outils et frameworks",
+            "Frontend et backend",
+            "Gestion des bases de données",
+            "Intégration des API"
+        ]
+    },
+    {
+        "keyword": "Stratégie Social Media",
+        "concepts": [
+            "Planification des contenus",
+            "Engagement des audiences",
+            "Mesure des KPIs sociaux",
+            "Optimisation des publications"
+        ]
+    },
+    {
+        "keyword": "Swift",
+        "concepts": [
+            "Langage de programmation iOS",
+            "Développement d'applications mobiles",
+            "Gestion des ressources Apple",
+            "Conception d'interfaces utilisateur"
+        ]
+    },
+    {
+        "keyword": "Taux d'Engagement (Engagement Rate)",
+        "concepts": [
+            "Mesure de l'interaction",
+            "Analyse des likes et partages",
+            "Optimisation du contenu",
+            "Stratégies d'engagement"
+        ]
+    },
+    {
+        "keyword": "Taux d'Impression (Impression Rate)",
+        "concepts": [
+            "Mesure de la visibilité",
+            "Optimisation des campagnes",
+            "Analyse des performances publicitaires",
+            "Ciblage des audiences"
+        ]
+    },
+    {
+        "keyword": "Transformation digitale",
+        "concepts": [
+            "Adoption des technologies numériques",
+            "Optimisation des processus métier",
+            "Applications cloud et mobiles",
+            "Formation des collaborateurs"
+        ]
+    },
+    {
+        "keyword": "UI (User Interface)",
+        "concepts": [
+            "Design des interfaces utilisateur",
+            "Prototypage rapide",
+            "Expérience visuelle",
+            "Conception ergonomique"
+        ]
+    },
+    {
+        "keyword": "UX (User Experience)",
+        "concepts": [
+            "Optimisation de l'expérience utilisateur",
+            "Conception centrée sur l'utilisateur",
+            "Tests d'utilisabilité",
+            "Création de parcours intuitifs"
+        ]
+    },
+    {
+        "keyword": "Validation croisée (Cross-validation /analyse de données et intelligence artificielle)",
+        "concepts": [
+            "Évaluation des modèles prédictifs",
+            "Division des datasets en ensembles d'entraînement et de test",
+            "Amélioration des performances des algorithmes",
+            "Applications en apprentissage automatique"
+        ]
+    },
+    {
+        "keyword": "Veille Sociale",
+        "concepts": [
+            "Suivi des tendances",
+            "Analyse des mentions de marque",
+            "Stratégies réactives",
+            "Outils de veille (Hootsuite, Talkwalker)"
+        ]
+    },
+    {
+        "keyword": "Version Control (versioning ou contrôle de version)",
+        "concepts": [
+            "Gestion des versions de fichiers",
+            "Suivi des modifications",
+            "Collaboration entre développeurs",
+            "Utilisation d'outils comme Git"
+        ]
+    },
+    {
+        "keyword": "Visualisation de données (Data Visualization)",
+        "concepts": [
+            "Création de graphiques interactifs",
+            "Représentation des tendances",
+            "Analyse des datasets",
+            "Outils de visualisation (Tableau, Power BI)"
+        ]
+    },
+    {
+        "keyword": "Wireframe",
+        "concepts": [
+            "Planification des interfaces utilisateur",
+            "Création de maquettes basse fidélité",
+            "Organisation des éléments graphiques",
+            "Tests d'ergonomie"
+        ]
+    },
+    {
+        "keyword": "Workflow",
+        "concepts": [
+            "Automatisation des processus",
+            "Suivi des tâches",
+            "Collaboration entre équipes",
+            "Optimisation des flux de travail"
+        ]
+    },
+    {
+        "keyword": "Z-buffering (développement de jeux vidéos)",
+        "concepts": [
+            "Gestion de la profondeur dans les scènes 3D",
+            "Optimisation des graphismes",
+            "Techniques de rendu en temps réel",
+            "Applications dans les moteurs de jeux"
+        ]
+    }
+]
+
+
+
+
+
+
+
+
+

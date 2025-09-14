@@ -1,0 +1,115 @@
+<nav class="gnav" id="gnav-main-container" aria-label="Principal">
+
+    <div class="gnav-header-1edw8my eu4oa1w0">
+
+            <div class="gnav-header-1i8lng e37uo190">
+                <div class="gnav-header-1i8lng e37uo190"></div>
+            <div>
+
+            <div class="gnav-header-1lf4lmt e37uo190">
+            <button aria-label="Compte" aria-expanded="true" id="nav_user" data-gnav-element-name="AccountMenu"
+                    data-gnav-action="close" class="gnav-header-1axrydf e8ju0x51">
+                {% if app.session.get('avatar') %}
+                    <div class="avataff" style="background-image: url('{{ asset(vich_uploader_asset(customer.profil.avatar, 'imageFile')) }}')"></div>
+                {%  else %}
+                <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img" fill="currentColor"
+                     viewBox="0 0 24 24" aria-hidden="true" class="gnav-header-1ob2qzx e18c60hj0">
+                    <path d="M12 12c2.486 0 4.5-2.014 4.5-4.5S14.486 3 12 3a4.499 4.499 0 00-4.5 4.5C7.5 9.986 9.514 12 12 12zm0 2.25c-3.004 0-9 1.508-9 4.5v1.75a.5.5 0 00.5.5h17a.5.5 0 00.5-.5v-1.75c0-2.992-5.996-4.5-9-4.5z"></path>
+                </svg>
+                {%  endif %}
+            </button>
+        </div>
+
+            <div class="gnav-header-zdnqiv eu4oa1w0"></div>
+
+            <div class="gnav-header-292yik e37uo190" id="popuser"  style="display: none">
+
+                    {% if is_granted('ROLE_MEDIA') %}
+
+                        <a href="{{path('parameters')}}" class="gnav-header-4xmsmh e8ju0x51">
+                            {{ include('svg/afficone/a_profil.svg') }}
+                            <div class="gnav-header-1bervdr e37uo190">
+                                <span class="gnav-header-1q5cndk e1wnkr790">Paramètres</span>
+                                <span class="gnav-header-1buw0ih e1wnkr790"></span>
+                            </div>
+                        </a>
+                        <a href="{{path('office_media')}}" class="gnav-header-4xmsmh e8ju0x51">
+                            {{ include('svg/afficone/a_euro.svg') }}
+                            <div class="gnav-header-1bervdr e37uo190"><span class="gnav-header-1q5cndk e1wnkr790">Planning Potins</span><span
+                                        class="gnav-header-1buw0ih e1wnkr790"></span></div>
+                        </a>
+                        <hr aria-hidden="true" class="gnav-header-1i8vcdu eu4oa1w0">
+                        <a href="{{ path('app_logout') }}" class="gnav-header-hrsci0 e8ju0x51"><span aria-hidden="false">Déconnexion</span></a>
+
+                    {%  elseif is_granted('ROLE_MEMBER') %}
+
+                      {#  <span id="UserEmail" class="gnav-header-mv9rzh e1wnkr790">{{  app.session.get('namespaceweb')}}</span> #}
+
+                        <a href="{{path('profil_customer')}}" class="gnav-header-4xmsmh e8ju0x51">
+                            {{ include('svg/afficone/a_profil.svg') }}
+                            <div class="gnav-header-1bervdr e37uo190">
+                                <span class="gnav-header-1q5cndk e1wnkr790">Profil</span>
+                                <span class="gnav-header-1buw0ih e1wnkr790"></span>
+                            </div>
+                        </a>
+                        <a href="{{path('office_member')}}" class="gnav-header-4xmsmh e8ju0x51">
+                            {{ include('svg/afficone/a_euro.svg') }}
+                            <div class="gnav-header-1bervdr e37uo190"><span class="gnav-header-1q5cndk e1wnkr790">Mon Panneau</span><span
+                                        class="gnav-header-1buw0ih e1wnkr790"></span>
+                            </div>
+                        </a>
+                        <hr aria-hidden="true" class="gnav-header-1i8vcdu eu4oa1w0">
+                        <a href="{{ path('app_logout') }}" class="gnav-header-hrsci0 e8ju0x51"><span aria-hidden="false">Déconnexion</span></a>
+
+
+                    {%  elseif is_granted('ROLE_CUSTOMER') %}
+
+                       {#  <span id="UserEmail" class="gnav-header-mv9rzh e1wnkr790">{{  app.session.get('namespaceweb')}}</span> #}
+
+                        <a href="{{path('profil_customer')}}" class="gnav-header-4xmsmh e8ju0x51 info_event">
+                            {{ include('svg/afficone/avatar.svg') }}
+                            <div class="gnav-header-1bervdr e37uo190">
+                                <span class="gnav-header-1q5cndk e1wnkr790">Profil</span>
+                                <span class="gnav-header-1buw0ih e1wnkr790"></span>
+                            </div>
+                        </a>
+                        <a href="{{path('customer_agenda')}}" class="gnav-header-4xmsmh e8ju0x51 info_event">
+                            {{ include('svg/afficone/calendar.svg') }}
+                            <div class="gnav-header-1bervdr e37uo190">
+                                <span class="gnav-header-1q5cndk e1wnkr790">Mon agenda</span>
+                                <span class="gnav-header-1buw0ih e1wnkr790"></span>
+                            </div>
+                        </a>
+                        <a href="{{path('customer_space')}}" class="gnav-header-4xmsmh e8ju0x51 info_event">
+                            {{ include('svg/afficone/a_boards.svg') }}
+                            <div class="gnav-header-1bervdr e37uo190">
+                                <span class="gnav-header-1q5cndk e1wnkr790">Mes potins</span>
+                                <span class="gnav-header-1buw0ih e1wnkr790"></span>
+                            </div>
+                        </a>
+                        <hr aria-hidden="true" class="gnav-header-1i8vcdu eu4oa1w0">
+                        <a href="{{ path('app_logout') }}" class="gnav-header-hrsci0 e8ju0x51"><span aria-hidden="false">Déconnexion</span></a>
+
+                    {%  else %}
+
+                        <div class="gnav-header-mv9rzh infoinscr">à vos potins !</div>
+                        <a href="{{ path('new_identify') }}" class="gnav-header-hrsci0 e8ju0x51"><span aria-hidden="false">Inscrivez-vous</span></a>
+                        <hr aria-hidden="true" class="gnav-header-1i8vcdu eu4oa1w0">
+                        <a href="{{ path('app_login') }}" class="gnav-header-hrsci0 e8ju0x51">
+                            <span aria-hidden="false">Connexion</span>
+                        </a>
+
+                    {%  endif %}
+
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                        <a class="gnav-header-4xmsmh e8ju0x51" href="{{path('back_admin',{'keyboard':key_admin}) }}">
+                            <i class="fa fa-times-circle-o gnav-header-19yzbvj e18c60hj0"></i>
+                            <div class="gnav-header-1bervdr e37uo190">
+                                <span class="gnav-header-1q5cndk e1wnkr790">Backoffice</span>
+                                <span class="gnav-header-1buw0ih e1wnkr790"></span>
+                            </div>
+                        </a>
+                    {% endif %}
+            </div>
+    </div>
+</nav>

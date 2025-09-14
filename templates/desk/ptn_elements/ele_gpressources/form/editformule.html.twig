@@ -1,0 +1,47 @@
+<div class="flcol">
+
+    <div class="bk_content">
+        <div class="tab_lit_bo">
+            {%  if post.media.imagejpg[0] is defined  %}
+                {%  set ill= post.media.imagejpg[0].getwebPath %}
+            {%  else %}
+                {%  set ill= "img/AffiChange.png" %}
+            {% endif %}
+
+            <div class="pot_bo sha_lgt">
+                <div class="w-cb1">
+                    <img src="{{ asset(ill) }}" alt="">
+                    {#  <div  id="addpict" class="btn btn-primary btn-func_abs">ajouter une image au mur</div> #}
+                </div>
+                <div class="pos-incub-px">
+                    <div class="account_module">
+                        <h5>{{ post.titre }}</h5>
+                        <p>le : {{ post.createAt|date("j-m-Y") }}</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="in_form">
+    {{ form_start(form, {'attr': {'class': 'form-elastic'}}) }}
+    <div class="_buble-form">
+        <h5>sélectionnez les ressources pour ce potin</h5>
+        <div class="buble-field">
+            <div class="inpop-content">
+                 <h2 class="">liste ressources :</h2>
+                <section class="tglaff blok_pop-carte">
+                    <div class="r_100">
+                        {%  for carte in tabcarte %}
+                            <div class="pop_ressource" data-carte="{{ carte.id }}" data-ctg="{{carte.categorie.id}}">{{ carte.titre }}</div>
+                        {% endfor %}
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    {{form_rest(form)}}
+    {{form_end(form)}}
+</div>
+</div>

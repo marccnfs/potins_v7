@@ -1,0 +1,20 @@
+{% extends "security/layout/baseconnect.html.twig" %}
+
+{% block title %}nouveau mot de passe{% endblock %}
+
+{% block log %}
+
+    <h4>Pour changer votre mot de passe {{ user.emailCanonical }}</h4>
+    <em>
+        allez dans votre messagerie<br />
+    </em>
+
+    <div class="sous_connector">
+        <h4>Un e-mail a été envoyé</h4>
+        <p>Il contient un lien sur lequel il vous faudra cliquer pour réinitialiser votre mot de passe.</p>
+        <h2>Remarque :</h2><p>Vous ne pouvez demander un nouveau mot de passe que toutes les %tokenLifetime% heures.</p>
+        <h5>Si vous ne recevez pas un email, vérifiez votre dossier spam ou essayez à nouveau.</h5>
+
+    </div>
+
+{% endblock %}

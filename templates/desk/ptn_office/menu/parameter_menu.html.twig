@@ -1,0 +1,29 @@
+<div class="menu-sidebar">
+    <ul class="menu-list">
+        <li class="{{ vartwig.m1 ? 'active' : '' }}">
+            <a href="{{ path('parameters', { 'id': board.id }) }}">
+                <i class="fa fa-cog"></i> Paramètres généraux
+            </a>
+        </li>
+        <li class="{{ vartwig.m2 ? 'active' : '' }}">
+            <a href="{{ path('spaceweb_mod', { 'id': board.id }) }}">
+                <i class="fa fa-puzzle-piece"></i> Modules
+            </a>
+        </li>
+        <li class="{{ vartwig.m3 ? 'active' : '' }}">
+            <a href="{{ path('spaceweblocalize_init', { 'id': board.id }) }}">
+                <i class="fa fa-map-marker"></i> Adresse
+            </a>
+        </li>
+        <li class="{{ vartwig.m4 ? 'active' : '' }}">
+            <a href="{{ path('website_edit', { 'id': board.id }) }}">
+                <i class="fa fa-id-card"></i> Informations
+            </a>
+        </li>
+        <li class="{{ vartwig.m5 ? 'active' : '' }}">
+            <a href="{{ path('opendays_edit', { 'id': board.id }) }}">
+                <i class="fa fa-calendar"></i> Horaires
+            </a>
+        </li>
+    </ul>
+</div>

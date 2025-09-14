@@ -1,0 +1,47 @@
+<div class="stape-process" >
+        {% if  test1 %}
+        <div class="test_mdl">
+            <div class="inti_mdl">
+                <h5>adresse mail du website : </h5>
+                <div class="blk-recap">
+                    <div class="inf-txt">{{ email }}</div>
+                </div>
+            </div>
+            <a class="stape_order_menu middlegrid stapemodif" href="{{path('website_edit',{'id': board.id})}}">modifier</a>
+        </div>
+
+        {% else %}
+        <div class="test_mdl">
+            <div class="inti_mdl">
+                <h5>adresse e-mail non renseignée : </h5>
+                <div class="blk-recap">
+                    <div class="inf-txt">pas d\'adresse mail</div>
+                </div>
+            </div>
+            <a class="stape_order_menu middlegrid stapemaj stape_bull" href="{{path('website_edit',{'id': board.id})}}">mettre a jour</a>
+        </div>
+        {% endif %}
+
+
+        {% if  test2 %}
+        <div class="test_mdl">
+            <div class="inti_mdl">
+                <h5>Profil renseigné</h5>
+                <div class="blk-recap">
+                    <div class="inf-txt">{{ board.nameboard }}</div>
+                </div>
+            </div>
+            <a class="stape_order_menu middlegrid stapemodif" href="{{path('website_edit',{'id': board.id})}}">modifier</a>
+        </div>
+        {% else %}
+        <div class="test_mdl">
+                <div class="inti_mdl">
+                    <h5>Profil incomplet : </h5>
+                    <div class="blk-recap">
+                        <div class="inf-txt">{{ board.nameboard }}</div>
+                    </div>
+                </div>
+                <a class="stape_order_menu middlegrid stapemaj stape_bull" href="{{path('website_edit',{'id': board.id})}}">mettre a jour</a>
+        </div>
+        {% endif %}
+</div>

@@ -1,0 +1,49 @@
+{% block body %}
+<div id="pagehome" class="homepage-wrapper--desk" data-agent="{{ agent }}">
+
+    <div class="fx-pag">
+        <div class="fx-row-pag">
+            <div class="left_row">
+                <div class="cadre_pict">
+                    <div class="bkg_cadre" style="background-image: url({{ asset('imgdoc/potins/social.png') }}">
+                    </div>
+                </div>
+                <div class="cadre_title">
+                    <h1>Découvrez</h1>
+                </div>
+                <div class="cadre_content">
+                     <div class="arg-cont-bk">
+
+                         <div class="text_cadre">
+                           Chez les potins numériques, on aime les nouvelles technologies. Et c'est autour d'ateliers au sein des 3 médiathèques que ça se passe. Et parce que l'on apprend mieux en pratiquant, nous avons mis en place des ateliers numériques tout public pour découvrir de nouvelles tendances numériques.
+                             Chaque semaine, un nouveau thème. Retrouverez nos derniers potins sur le site pour revenir sur un atelier pour en découvrir d'autres.
+                         </div>
+
+                    </div>
+                 </div>
+                <div class="cadre_title">
+                    <h2>Retrouvez tous les derniers Potins</h2>
+                </div>
+            </div>
+            <div class="right_row">
+                <div class="pic_right">
+                     <div class="bkg_right" style="background-image: url({{ asset('imgdoc/potins/3d_1.JPG') }}"></div>
+                </div>
+            </div>
+         </div>
+
+    </div>
+    <div class="bk-separate"></div>
+    {{ include('desk/ptn_elements/ele_potins/tabOrderPotins.html.twig') }}
+</div>
+{% endblock %}
+
+{% block footer %}
+    {{ include ('desk/ptn_public/footer/potins_footer.html.twig') }}
+{% endblock footer %}
+
+{% use "js/js_public_wb.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

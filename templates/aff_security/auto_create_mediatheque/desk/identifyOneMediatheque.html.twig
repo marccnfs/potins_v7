@@ -1,0 +1,56 @@
+{% form_theme form 'aff_security/form/affi_label.html.twig' %}
+{% trans_default_domain 'affi' %}
+{% block body %}
+    <div class="log-machina" id="machina" data-identify="{{ app.session.get('identify') }}" data-choice="{{ choice }}">
+        <h1 class="title_log">{{vartwig.title}}</h1>
+
+        <div class="content_login_affi">
+
+            <div class="stape">
+                <h2>Adresse mail de la médiathèque : </h2>
+                <div id="testmail"></div>
+                <test-mail></test-mail>
+            </div>
+
+            <a class='full-btbtn-send-log' href={{ 'office_member' }}'/login'>retour</a>
+
+            <div class="stape" style="display: none">
+
+                {#   <div class="sous_connector">  #}
+                {{ form_start(form) }}
+                <h2>Entrez un mot de passe</h2>
+                {#
+                {% set terms_link %}<a href="{{ path('cgu') }}">{% trans %}services described{% endtrans %}</a>{% endset %}
+                {% set general_terms_and_conditions %}{{ "consent_checkbox"|trans({ '%general_terms_and_conditions%': terms_link })|raw }}{% endset %}
+                #}
+                {{ form_widget(form.email) }}
+                {#  {{ form_label(form.plainPassword, 'form.plainPassword'|trans, {'label_attr': {'class': 'label-log'}}) }}
+                        {{ form_widget(form.plainPassword,{'attr': {'class': 'nopad'}}) }}  #}
+                {{ form_row(form.plainPassword.first,{
+                    'label': 'mot de passe'
+                }) }}
+                {{ form_row(form.plainPassword.second,{
+                    'label': 'confirmer le  mot de passe'
+                }) }}
+
+
+                <div class="password-icon">
+                    <i data-feather="eye">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </i>
+                    <i data-feather="eye-off">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye-off"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                    </i>
+                </div>
+                {{form_rest(form)}}
+                <input type="submit" value="Go"/>
+                {{ form_end(form) }}
+                {#  </div>    #}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% use "js/js_auto_create.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

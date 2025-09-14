@@ -1,0 +1,47 @@
+{% set post = notice.post ?? null %}
+
+{% if post %}
+
+    <a class="affiche_potin" href="{{ path('show_potin', { slug: post.slug, id: post.id }) }}">
+        {% if post.imageName %}
+            <img class="img-allnotice" src="{{ vich_uploader_asset(post, 'ImageFile') }}" alt="image affiche">
+        {% else %}
+            {# fallback image #}
+
+            {% set imgFromMedia =
+                (post.media is defined
+                and post.media
+                and post.media.imagejpg is defined
+                and post.media.imagejpg|length > 0
+                and post.media.imagejpg[0] is defined
+                and post.media.imagejpg[0].namefile is defined)
+                ? asset('upload/module/' ~ post.media.imagejpg[0].namefile)
+                : asset('imgdoc\potins\logopotins.png')
+            %}
+
+
+            <img class="img-allnotice" src="{{ imgFromMedia }}" alt="image affiche">
+
+        {% endif %}
+
+
+    <div class="evnet_titre_v8">{{ (post.titre ?? '')|lower|capitalize }}</div>
+
+
+
+
+    {% if (post.subject ?? '')|trim != '' %}
+        <div class="event_second_titl_v8">
+          {{ (post.subject ?? '')|u.truncate(80, '...')|lower|capitalize }}
+        </div>
+    {% endif %}
+
+
+    <div class="boarder">
+        <div class="flx-lik-_v5">
+            <div class="wb-logo-lite"></div>
+            <div class="wb_event_v5"></div>
+        </div>
+    </div>
+</a>
+{% endif %}

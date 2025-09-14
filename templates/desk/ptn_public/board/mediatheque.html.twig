@@ -1,0 +1,40 @@
+{% block body %}
+<div id="pagehome" class="homepage-wrapper--desk" data-agent="{{ agent }}"></div>
+
+<div class="mediatheque-wrapper">
+            <div class="left-column">
+                {{ include('desk/ptn_elements/ele_boards/card_website_new.html.twig') }}
+            </div>
+
+            <div class="right-column">
+                <div class="event-section">
+                    <h3 class="section-title">Prochains Potins</h3>
+
+                    {% if notices|length > 0 %}
+                        <div class="events-grid">
+                            {% for event in notices %}
+                                {{ include('desk/ptn_elements/ele_events/modale_event.html.twig') }}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p>Aucun événement à venir.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+
+        {#   {{ include('desk/ptn_elements/ele_potins/tabOrderPotins.html.twig') }}  #}
+
+{% endblock %}
+
+{% block footer %}
+    {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+    {# {{ include ('desk/ptn_public/footer/potins_footer.html.twig') }}  #}
+{% endblock footer %}
+
+{% use "js/js_public_wb.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

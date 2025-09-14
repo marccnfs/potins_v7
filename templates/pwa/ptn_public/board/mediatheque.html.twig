@@ -1,0 +1,42 @@
+{% block body %}
+<div class="_pg_ptn_mob">
+
+    <div class="col_mob">
+        <div class="content_mob_all">
+
+            {{ include('pwa/ptn_elements/ele_boards/card_website_new.html.twig') }}
+            <div class="_wb-module-first-col_mb">
+                {%  if notices|length >0 %}
+                    {# {%  set event =notices|first %}  #}
+                    <div class="wp-event">
+                        <h3 class="ptn_event">Prochains Potins</h3>
+                        {%  for event in notices %}
+                            {{ include('pwa/ptn_elements/ele_events/modale_event.html.twig') }}
+                        {%  endfor %}
+                    </div>
+                {%  else %}
+                    <div class="wp-event">
+                        <h3 class="ptn_event">Prochains Potins</h3>
+                        <h5>pas de nouvelle date actuellement</h5>
+                    </div>
+                {%  endif %}
+                {#
+                {%  if notices['menu'] is defined and notices['menu']|length >0 %}
+                    {%  set menu =notices['menu'] %}
+                    {{ include('aff_website/formule/view/modale_menu.html.twig') }}
+                {%  endif %}
+                #}
+            </div>
+        </div>
+
+        {{ include ('pwa/footer/potins_footer.html.twig') }}
+    </div>
+</div>
+{%  endblock body %}
+{% use "js/js_public.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+
+

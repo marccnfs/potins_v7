@@ -1,0 +1,16 @@
+{# templates/puzzles/_html_min.html.twig #}
+{% set cfg = cfg|default({}) %}
+<section class="htmlmin-player"
+         data-controller="html-min"
+         data-html-min-starter-value='{{ (cfg.starterHtml|default("<h1>Titre</h1><p>Ajoute un lien &lt;a&gt;…</p>"))|e('html_attr') }}'
+         data-html-min-checks-value='{{ (cfg.checks|default([]))|json_encode|e('html_attr') }}'
+         data-html-min-ok-message-value="{{ cfg.okMessage|default('Bravo !') }}">
+    <p class="muted">Écris/modifie le code HTML, puis clique <strong>Aperçu</strong> et <strong>Tester</strong>.</p>
+    <textarea data-html-min-target="editor" rows="10" style="width:100%;font-family:ui-monospace,monospace"></textarea>
+    <div class="mt-2" style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button class="btn" data-action="click->html-min#render">Aperçu</button>
+        <button class="btn btn-primary" data-action="click->html-min#test">Tester</button>
+    </div>
+    <iframe data-html-min-target="frame" sandbox="allow-scripts allow-same-origin" style="width:100%;min-height:260px;border:1px solid #ddd;border-radius:.5rem;margin-top:.5rem"></iframe>
+    <div data-html-min-target="msg" class="mt-2"></div>
+</section>

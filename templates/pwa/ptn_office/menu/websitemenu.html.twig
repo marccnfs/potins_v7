@@ -1,0 +1,33 @@
+<div class="menu-bo_sp">
+    <div class="pop-tab_menu _cl-cl">
+        <div class="af_flx-C">
+            {#
+            <div class="bubble-menu-litt-rock mn-border {{ vartwig.m1 ? "actsel" :"" }}">
+                <a class="mn-link" href="{{path('office_member',{'board':board.nameboard})}}">Le panneau</a>
+            </div>
+            #}
+            <div class="bubble-menu-litt-rock mn-border {{ vartwig.m1 ? "actsel" :"" }}">
+                <a class="mn-link" href="{{path('module_blog',{'board':board.id})}}">Affiches</a>
+            </div>
+            <div class="bubble-menu-litt-rock mn-border {{ vartwig.m2 ? "actsel" :"" }}">
+                <a class="mn-link" href="{{path('module_event',{'board':board.id})}}">Evenements</a>
+            </div>
+            {#
+            <div class="bubble-menu-litt-rock mn-border {{ vartwig.m4 ? "actsel" :"" }}">
+                {%  if isActivity('module_shop', vartwig.tabActivities) %}
+                    <a class="mn-link" href="{{path('module_shop',{'board':board.id})}}">Boutique</a>
+                {% else %}
+                    <h3>Boutique</h3><a href="{{ path('addmodule_website',{'activ':'module_shop','id':board.id}) }}" class="maj onmj">Installer</a>
+                {% endif %}
+            </div>
+            #}
+            <div class="bubble-menu-litt-rock mn-border {{ vartwig.m3 ? "actsel" :"" }}">
+                {%  if isActivity('module_found', vartwig.tabActivities) %}
+                    <a class="mn-link" href="{{path('module_ressources',{'board':board.id})}}">Ressources</a>
+                {% else %}
+                    <h3>Vos Menus</h3><a href="{{ path('addmodule_website',{'activ':'module_found','id':board.id}) }}" class="maj onmj">Installer</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+{# idem mobile #}
+
+<div class="util-custo">
+    <h2>cela ne prendra que quelques instants... :</h2>
+
+    <div class="opt-choice">
+        <div class="info-space"><h2 class="title-affi">Privé ou public ?</h2></div>
+        <div class="space-glass back_spacetxt">
+            <button id="publicwebsite" type="button" class="btn btn-lg btn-info" data-space="pblc">je crée un panneau Public</button>
+            <div class="content-space">
+                <p>En créant un panneau public sur Affichange, il sera accessible à tous les utilisateurs du web et référencé par les moteurs de recherche du web.</p>
+                <p>Sur votre panneau, postez vos informations locales, annonces et offres de proximités, ouvrez des conversations avec vos membres et contacts.<br>
+                </p>
+            </div>
+        </div>
+        <div class="space-glass">
+            <button id="privatewebsite" type="button" class="btn btn-light btn-lg" data-space="pblc">je crée un Space Club Privé</button>
+            <div class="content-space">
+                <p>Il n'est pas visible sur l'espace public AffiChanGe. Il n'est donc pas référençeable sur le web, tous comme les contenus qui y sont publiés.*<br>
+                     Attention, l'utilisation d'un panneau privé vous engage à respecter les mêmes régles concernant la nature des contenus et le respect de la charte affichage.
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    {{ form_start(form)}}
+    <div class="opt-choice">
+        <div class="space-glass">
+            <div class="info-space">
+                <h5>donnez un nom à votre panneau (marque de votre entreprise, association ...)</h5></div>
+            <hr>
+            <div class="content-space">
+                <div class="group-form-glass">
+                    <div class="field-glass">
+                        {{ form_widget(form.namewebsite) }}
+                    </div>
+                </div>
+                <div class="bottom-10"></div>
+            </div>
+        </div>
+    </div>
+
+    {{form_rest(form)}}
+    <div class="gp-form-row-col2">
+        <div class="iner-bt">
+            <button type="submit" id="subform" class="btn-send">Intialisation</button>
+        </div>
+    </div>
+    {{form_end(form)}}
+</div>

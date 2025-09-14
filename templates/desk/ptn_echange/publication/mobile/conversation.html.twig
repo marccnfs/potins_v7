@@ -1,0 +1,26 @@
+{% block body %}
+    {{ include ('aff_messagery/board/menu/'~agent~'/menu.html.twig') }}
+    <section class="_wb-ospace_mob">
+        <div class="ii_cub">
+            <div class="pop_op-msg_mob" >Vos messages sur</div>
+            <div class="web-inf_mob">
+                <div class="zone-inf-msg_mob">
+                    <div class="op-msg">
+                        <h1>{{ website.namewebsite }}</h1>
+                    </div>
+                </div>
+            </div>
+            {% if pagination is defined %}
+                <div id="mormsg" id="af_navdk">
+                    {{ knp_pagination_render(pagination) }}
+                </div>
+            {%  endif %}
+            <div class="msg_cub" id="typeform" data-type="ctc">
+                <div class="contener-msg_mob">
+        {{ include('aff_messagery/board/view/listmsgs.html.twig') }}
+    </section>
+{%  endblock body %}
+{% use "js/js_website.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

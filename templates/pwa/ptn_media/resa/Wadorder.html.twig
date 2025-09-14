@@ -1,0 +1,26 @@
+{% block body %}
+<div class="_pg_wb-pb_v6">
+    <div class="act-mem">
+        {% for message in app.flashes('notice') %}
+            <div class="_fx-Tflhs">
+                <div class="comd-flhs">
+                    <h5>attention !</h5>
+                    <div class="_rlm-a">
+                        <div class="msg-flhs">{{ message }}.</div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="tgl-100">
+        <div class="fx-content_flex">
+            {{ include('pwa/ptn_elements/ele_events/modale_resa_media_event.html.twig') }}
+        </div>
+    </div>
+</div>
+{{ include('pwa/ptn_public/footer/potins_footer.html.twig') }}
+{%  endblock body %}
+{% use "js/js_customer.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

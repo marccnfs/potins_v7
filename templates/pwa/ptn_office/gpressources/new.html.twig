@@ -1,0 +1,113 @@
+{% block body %}
+    <div class="_off">
+        <div class="container-bo_v5">
+            {{ include('pwa/ptn_office/menu/websitemenu.html.twig') }}
+            <section class="_wb-ospace">
+                <div class="regester-bk">
+                    {{ include('pwa/ptn_elements/ele_ressources/form/addformule.html.twig') }}
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock body%}
+{% use "js/js_website.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+
+            var $container = $('div#formules_catformules');
+            var index = $container.find(':input').length;
+            let listarticle=$('#formules_listarticle');
+
+
+            class Compo {
+                constructor(){
+                    this.list= {
+                        "1":[],
+                        "2":[],
+                        "3":[],
+                        "4":[]
+                    };
+                }
+                addcarte(carte){
+                    let cat=carte.attr("data-ctg");
+                    let art=carte.attr("data-carte");
+                    let index = this.list[cat].indexOf(art);
+                    if (index === -1) {
+                        this.list[cat].push(art);
+                    }
+                    this.changevalue()
+                }
+                deletecarte(carte){
+                    let cat=carte.attr("data-ctg");
+                    let art=carte.attr("data-carte");
+                    let index = this.list[cat].indexOf(art);
+                    if (index > -1) {
+                        this.list[cat].splice(index, 1);
+                    }
+                    this.changevalue()
+                }
+
+                changevalue(){
+                    listarticle.val(JSON.stringify(this.list))
+                }
+            }
+
+            let compo =new Compo();
+
+            $('.pop-carte').on('click', function(e){
+                e.stopPropagation();
+                e.preventDefault();
+                let carte=$(this)
+                if(! carte.hasClass("selectpop")){
+                    carte.addClass("selectpop")
+                    compo.addcarte(carte)
+                }else{
+                    carte.removeClass("selectpop")
+                    compo.deletecarte(carte)
+                }
+            })
+
+            $('#add_formule').click(function(e) {
+                addFormule($container);
+                e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+                return false;
+            });
+
+
+            if (index === 0) {
+                addFormule($container);
+            } else {
+                $container.children('div').each(function() {
+                    addDeleteLink($(this));
+                });
+            }
+
+            function addFormule($container) {
+                var template = $container.attr('data-prototype')
+                    .replace(/__name__label__/g, 'formule n°' + (index+1))
+                    .replace(/__name__/g,        index)
+                ;
+
+                var $prototype = $(template);
+                if(index !== 0) addDeleteLink($prototype);
+                $('.declin').append($prototype);
+                index++;
+            }
+
+            function addDeleteLink($prototype) {
+                var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
+                $prototype.append($deleteLink);
+                $deleteLink.click(function(e) {
+                    $prototype.remove();
+                    e.preventDefault();
+                    return false;
+                });
+            }
+        });
+
+    </script>
+{% endblock %}
+
+

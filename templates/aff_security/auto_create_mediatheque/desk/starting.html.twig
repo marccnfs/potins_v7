@@ -1,0 +1,29 @@
+{% block body %}
+<div class="log-machina">
+<section class="board_blocks">
+    <div class="block_choice">
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <a href="{{ path('registration_mediatheque_stptwo') }}" class="block_one">
+                    <h1>Acces Mediatheque</h1>
+                    {#
+                    <div class="board-pict-team">
+                        <div  class="board-add-gteam pictvierge" style="background-image:url('{{asset('imgdoc/potins/mepotinsone.jpg') }}');"></div>
+                    </div>
+                    #}
+                    <div class="inblock_one">
+                        <h2>Création d'un nouveau compte mediatheque</h2>
+                        <div class="bt_block">
+                            <div class="lk_bt">Commencer</div>
+                        </div>
+                    </div>
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
+</section>
+    {%  endblock body %}
+    {% use('js/js_loc_customer.html.twig') %}
+    {% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,106 @@
+<div class="filterblur"></div>
+<div class="borderblur"></div>
+
+<div class="content-form_glass  text-center" id="memberstate" data-member="{{ member }}" data-twigtbunique="{{ twigtbunique }}" data-twigconges="{{ twigconges }}">
+
+    <div class="glass-title_form">
+        <h1>reservation</h1>
+        <i class="fa fa-calendar heading-icon font-20"></i>
+    </div>
+
+        <div class="glass-label">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {% if not member %}
+            {{ include('forms/formtestmail') }}
+            {% else %}
+                <div class="intro-glass_form">
+                       {{ spaceweb.name }}
+                </div>
+            {% endif %}
+            <div class="stape_order_bulle">
+                <div class="stape_bull">
+                    <h2>choississez une date :</h2>
+                </div>
+            </div>
+                <div class="space_grid_tits">
+                    {% set tots =[{day:'aujourd\'hui',id:'today'},{day:'un autre jour',id:'other'}] %}
+                    {% for tot in tots %}
+                        <div class="space-tit" data-day="{{ tot.id }}">
+                            <a class="stape_order_tit">
+                                <div class="stape_tit" >
+                                    <h5>{{ tot.day }}</h5>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="glass-calendar lig-grid-resa calbakgr"></div>
+                <div id="recapopendays" class="calbakgr"></div>
+                {{ form_widget(form.datereserve, {'attr': {'class': ''}}) }}
+
+                <div class="stape_order_bulle">
+                    <div class="stape_bull">
+                        <h2>pour quelle heure :</h2>
+                    </div>
+                </div>
+                <div class="space_grid_tots">
+                {% set tits =['12:00-12:30','12:30-13:00','13:00-13:30','19:00-19:30','19:30-20:00','20:30-21:00','21:30-22:00'] %}
+                    {% for tit in tits %}
+                        <div class="space-tot">
+                            <a class="stape_order_tit">
+                                <div class="stape_tit" >
+                                    <h5>{{ tit }}</h5>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="stape_order_bulle">
+                    <div class="stape_bull">
+                        <h2>votre table :</h2>
+                    </div>
+                </div>
+                <div class="inf-tabl">
+                    <div class="glass-field">
+                        <i class="fa fa-question"></i>
+                        {{ form_label(form.nbCouverts, "nombre de couvert :") }}
+                        {{ form_widget(form.nbCouverts, {'attr': {'class': 'glass-input'}}) }}
+                    </div>
+                    <div class="glass-field">
+                        <i class="fa fa-tag"></i>
+                        {{ form_label(form.salle, "salle :") }}
+                        {{ form_widget(form.salle, {'attr': {'class': ''}}) }}
+                    </div>
+                </div>
+                <div class="stape_order_bulle">
+                    <div class="stape_bull">
+                        <h2>un besoin particulier, une envie.. :</h2>
+                    </div>
+                </div>
+                    {{ form_widget(form.content, {'attr': {'class': 'glass-input'}}) }}
+
+            </div>
+            <button type="submit" class="glass-button btn-glss-submit">Postez</button>
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+        </div>
+
+        <div class="footer-information-form">
+            <div class="adrrss.form">
+                <strong>Notre adresse</strong>
+                <p>
+                    <br> 125 RUE AUDIGANNE
+                    <br> 44100 NANTES
+                </p>
+            </div>
+
+            <div class="adrrss.form">
+                <strong>Contact</strong>
+                <p>
+                    <a href="tel: +0253551073"><i class="fa fa-phone-square color-green-dark"></i>+ 02.53.55.10.73</a>
+                    <a href="mailto:name@domain.com"><i class="fa fa-envelope-square color-blue-dark"></i>auxpetitsoignonsnantes@gmail.com</a>
+                </p>
+            </div>
+        </div>
+</div>

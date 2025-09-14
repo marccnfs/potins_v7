@@ -1,0 +1,41 @@
+{% set sexe={ 1: 'Mr', 2: 'Mme' } %}
+
+{%  for customer in particpants %}
+<div class="allrow">Contact: {% if customer['order'].profil.sex is not null %}{{ sexe[customer['order'].profil.sex] }} {% endif %} {{customer['order'].profil.firstname}} {{customer['order'].profil.lastname}} tél: {{customer['order'].profil.telephonemobile}} <br>email : {{ customer['order'].emailcontact }}</div>
+<table class="ptn_table t_size_list">
+    <thead>
+        <tr>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>date de naissance</th>
+        </tr>
+    </thead>
+    <tbody>
+            <tr>
+                <td>{{customer['part'].firstname}}</td>
+                <td>{{customer['part'].lastname}}</td>
+                <td>{{ customer['part'].birthdate|date('d/m/Y') }}</td>
+            </tr>
+                <div class="sha_lgt tab_ptn">
+            <div class="tab_l1_post">
+                <div class="tab_ptn_col1">
+                </div>
+                <div class="tab_ptn_col2">
+                    DOCUMENTS
+                </div>
+                <div class="tab_ptn_col_dt">
+                </div>
+                <div class="tab_ptn_cmd">
+                    <a href="{{ path('add_doc',{'order':customer['order'].id,'member':customer['part'].id}) }}" class="cmd_add btn " title="description"> ajouter un doc </a>
+                </div>
+                <div class="pos-incub-l">
+                    {{ include('desk/ptn_office/event/listdocs.html.twig') }}
+                </div>
+            </div>
+        </div>  
+
+    </tbody>
+</table>
+{% endfor %}
+
+

@@ -1,0 +1,11 @@
+<div class="_in-l-bb2_mb">
+    {% if  website.module.contactation.resa is defined %}
+        <div class="bta-lk_mb">
+            <a class="logo_wb resa-activ" href="{{ path('new_resa_website',{'slug':website.slug, 'id':wbsite.id }) }}"><i class="fa fa-calendar-o" aria-hidden="true"></i>Reservez</a>
+        </div>
+    {% else %}
+        <div class="bta-lk_mb">
+            <div class="logo_wb resa-noactiv bt-of"><i class="fas fa-calendar-alt"></i>Reservez</div>
+        </div>
+    {% endif %}
+</div>

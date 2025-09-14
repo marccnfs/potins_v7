@@ -1,0 +1,9 @@
+{% block javascripts %}
+    <script>
+        window.onunload = function() {
+            localStorage.clear();
+        }
+    </script>
+    {{ encore_entry_script_tags('affi') }}
+    {{ encore_entry_script_tags('localitate') }}
+{% endblock %}

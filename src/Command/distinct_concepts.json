@@ -1,0 +1,457 @@
+[
+    {
+        "id": "1",
+        "keyword": "IA",
+        "concepts": [
+            "Intelligence artificielle",
+            "Apprentissage automatique",
+            "R\u00e9seaux neuronaux"
+        ]
+    },
+    {
+        "id": "2",
+        "keyword": "Prochains Potins",
+        "concepts": [
+            "Planning des ateliers",
+            "Inscription en ligne",
+            "\u00c9v\u00e9nements num\u00e9riques"
+        ]
+    },
+    {
+        "id": "3",
+        "keyword": "Les Bons Clics",
+        "concepts": [
+            "Accompagnement num\u00e9rique",
+            "Tutoriels en ligne",
+            "Tests de comp\u00e9tences num\u00e9riques"
+        ]
+    },
+    {
+        "id": "4",
+        "keyword": "HTML",
+        "concepts": [
+            "Langage de balisage",
+            "Cr\u00e9ation de sites web",
+            "Structure de page"
+        ]
+    },
+    {
+        "id": "5",
+        "keyword": "CSS",
+        "concepts": [
+            "Feuilles de style",
+            "Design web",
+            "Mise en page"
+        ]
+    },
+    {
+        "id": "6",
+        "keyword": "JavaScript",
+        "concepts": [
+            "Langage de programmation",
+            "Interactions web",
+            "Frameworks (React, Angular)"
+        ]
+    },
+    {
+        "id": "7",
+        "keyword": "Python",
+        "concepts": [
+            "Langage de programmation",
+            "IA et machine learning",
+            "D\u00e9veloppement back-end"
+        ]
+    },
+    {
+        "id": "8",
+        "keyword": "RGPD",
+        "concepts": [
+            "Protection des donn\u00e9es",
+            "Conformit\u00e9 l\u00e9gale",
+            "Vie priv\u00e9e"
+        ]
+    },
+    {
+        "id": "9",
+        "keyword": "SEO",
+        "concepts": [
+            "R\u00e9f\u00e9rencement naturel",
+            "Optimisation des moteurs de recherche",
+            "Marketing num\u00e9rique"
+        ]
+    },
+    {
+        "id": "10",
+        "keyword": "CRM",
+        "concepts": [
+            "Gestion de la relation client",
+            "Logiciels CRM",
+            "Automatisation des ventes"
+        ]
+    },
+    {
+        "id": "11",
+        "keyword": "UX/UI",
+        "concepts": [
+            "Exp\u00e9rience utilisateur",
+            "Interface utilisateur",
+            "Design ergonomique"
+        ]
+    },
+    {
+        "id": "12",
+        "keyword": "VPN",
+        "concepts": [
+            "S\u00e9curit\u00e9 en ligne",
+            "Connexion priv\u00e9e",
+            "Anonymat sur Internet"
+        ]
+    },
+    {
+        "id": "13",
+        "keyword": "Impression 3D",
+        "concepts": [
+            "Fabrication additive",
+            "Logiciels de mod\u00e9lisation",
+            "Prototypage rapide"
+        ]
+    },
+    {
+        "id": "14",
+        "keyword": "MAO",
+        "concepts": [
+            "Cr\u00e9ation musicale",
+            "Enregistrement audio",
+            "Mixage"
+        ]
+    },
+    {
+        "id": "15",
+        "keyword": "CMS",
+        "concepts": [
+            "Syst\u00e8mes de gestion de contenu",
+            "WordPress",
+            "Drupal"
+        ]
+    },
+    {
+        "id": "16",
+        "keyword": "Cloud",
+        "concepts": [
+            "Stockage en ligne",
+            "S\u00e9curit\u00e9 dans le cloud",
+            "Services cloud (IaaS, PaaS)"
+        ]
+    },
+    {
+        "id": "17",
+        "keyword": "Cybers\u00e9curit\u00e9",
+        "concepts": [
+            "Protection des donn\u00e9es",
+            "Hame\u00e7onnage",
+            "S\u00e9curit\u00e9 des r\u00e9seaux"
+        ]
+    },
+    {
+        "id": "18",
+        "keyword": "Open Source",
+        "concepts": [
+            "Logiciels libres",
+            "Collaboration",
+            "Code partag\u00e9"
+        ]
+    },
+    {
+        "id": "19",
+        "keyword": "Formation Num\u00e9rique",
+        "concepts": [
+            "Ateliers pratiques",
+            "Initiation \u00e0 l'informatique",
+            "Cours en ligne"
+        ]
+    },
+    {
+        "id": "20",
+        "keyword": "Potins Num\u00e9riques",
+        "concepts": [
+            "Accompagnement local",
+            "Communaut\u00e9 num\u00e9rique",
+            "Partage de comp\u00e9tences"
+        ]
+    },
+    {
+        "id": "21",
+        "keyword": "Intelligence Artificielle",
+        "concepts": [
+            "Apprentissage automatique",
+            "R\u00e9seaux neuronaux",
+            "Applications dans la sant\u00e9",
+            "Ethique de l'IA"
+        ]
+    },
+    {
+        "id": "22",
+        "keyword": "Cybers\u00e9curit\u00e9",
+        "concepts": [
+            "Protection des donn\u00e9es",
+            "Cyberattaques",
+            "Pare-feu",
+            "Cryptographie"
+        ]
+    },
+    {
+        "id": "23",
+        "keyword": "R\u00e9seaux Sociaux",
+        "concepts": [
+            "Marketing num\u00e9rique",
+            "Engagement utilisateur",
+            "Algorithmes de recommandation",
+            "Vie priv\u00e9e"
+        ]
+    },
+    {
+        "id": "24",
+        "keyword": "Cloud Computing",
+        "concepts": [
+            "Stockage en ligne",
+            "Infrastructure as a Service (IaaS)",
+            "S\u00e9curit\u00e9 dans le cloud",
+            "Migration vers le cloud"
+        ]
+    },
+    {
+        "id": "25",
+        "keyword": "Big Data",
+        "concepts": [
+            "Analyse des donn\u00e9es massives",
+            "Visualisation des donn\u00e9es",
+            "Stockage distribu\u00e9",
+            "Data Mining"
+        ]
+    },
+    {
+        "id": "26",
+        "keyword": "D\u00e9veloppement Web",
+        "concepts": [
+            "HTML/CSS",
+            "Frameworks JavaScript",
+            "S\u00e9curit\u00e9 des applications web",
+            "Exp\u00e9rience utilisateur (UX)"
+        ]
+    },
+    {
+        "id": "27",
+        "keyword": "Programmation",
+        "concepts": [
+            "Langages de programmation",
+            "D\u00e9bogage",
+            "Optimisation du code",
+            "Programmation orient\u00e9e objet"
+        ]
+    },
+    {
+        "id": "28",
+        "keyword": "Blockchain",
+        "concepts": [
+            "Cryptomonnaies",
+            "Transactions d\u00e9centralis\u00e9es",
+            "Contrats intelligents",
+            "S\u00e9curit\u00e9 et transparence"
+        ]
+    },
+    {
+        "id": "29",
+        "keyword": "E-commerce",
+        "concepts": [
+            "Paiement en ligne",
+            "Optimisation des ventes",
+            "Exp\u00e9rience utilisateur",
+            "SEO pour le commerce en ligne"
+        ]
+    },
+    {
+        "id": "30",
+        "keyword": "IoT (Internet des Objets)",
+        "concepts": [
+            "Appareils connect\u00e9s",
+            "Automatisation",
+            "S\u00e9curit\u00e9 IoT",
+            "Communication M2M (Machine to Machine)"
+        ]
+    },
+    {
+        "id": "31",
+        "keyword": "IA",
+        "concepts": ["","Apprentissage automatique", "Réseaux neuronaux", "Vision par ordinateur"]
+    },
+    {
+        "id": "32",
+        "keyword": "POTINS NUMERIQUES",
+        "concepts": ["philosophique","atelier numérique", "accompagnement", "découvertes numériques"]
+    },
+    {
+        "id": "33",
+        "keyword": "MONTAGE VIDEO",
+        "concepts": ["technique","création vidéo", "acquisition vidéo", "youtube"]
+    },
+    {
+        "id": "34",
+        "keyword": "MAO",
+        "concepts": ["technique","musique sur ordinateur", "Création musicale", "Création musique assisté par ordinateur"]
+    },
+    {
+        "id": "35",
+        "keyword": "INTELLIGENCE ARTIFICIELLE",
+        "concepts": ["","Apprentissage automatique", "Réseaux neuronaux", "Vision par ordinateur"]
+    },
+    {
+        "id": "36",
+        "keyword": "Impression 3D",
+        "concepts": [
+            "Mod\u00e9lisation 3D",
+            "Mat\u00e9riaux d'impression",
+            "Logiciels de conception",
+            "Applications pratiques"
+        ]
+    },
+    {
+        "id": "37",
+        "keyword": "MAO (Musique Assist\u00e9e par Ordinateur)",
+        "concepts": [
+            "Logiciels audio",
+            "Mixage",
+            "Cr\u00e9ation musicale",
+            "Instruments virtuels"
+        ]
+    },
+    {
+        "id": "38",
+        "keyword": "Ateliers Num\u00e9riques",
+        "concepts": [
+            "Initiation aux outils num\u00e9riques",
+            "Accompagnement personnalis\u00e9",
+            "Utilisation des tablettes",
+            "Cr\u00e9ation collaborative"
+        ]
+    },
+    {
+        "id": "39",
+        "keyword": "Autonomie Num\u00e9rique",
+        "concepts": [
+            "Gestion des comptes en ligne",
+            "Protection des donn\u00e9es personnelles",
+            "Apprentissage des bases informatiques",
+            "Accessibilit\u00e9 num\u00e9rique"
+        ]
+    },
+    {
+        "id": "40",
+        "keyword": "R\u00e9alit\u00e9 Virtuelle",
+        "concepts": [
+            "Applications \u00e9ducatives",
+            "Immersion num\u00e9rique",
+            "Cr\u00e9ation de contenu VR",
+            "Mat\u00e9riel n\u00e9cessaire"
+        ]
+    },
+    {
+        "id": "41",
+        "keyword": "S\u00e9curit\u00e9 Num\u00e9rique",
+        "concepts": [
+            "Mots de passe s\u00e9curis\u00e9s",
+            "Antivirus",
+            "S\u00e9curisation des r\u00e9seaux",
+            "Pratiques de navigation s\u00e9curis\u00e9e"
+        ]
+    },
+    {
+        "id": "42",
+        "keyword": "Formation en Ligne",
+        "concepts": [
+            "Plateformes d'apprentissage",
+            "Certifications num\u00e9riques",
+            "Gestion du temps d'apprentissage",
+            "Outils collaboratifs"
+        ]
+    },
+    {
+        "id": "43",
+        "keyword": "Cr\u00e9ation de Sites Web",
+        "concepts": [
+            "CMS (WordPress, Joomla)",
+            "Design responsive",
+            "H\u00e9bergement web",
+            "R\u00e9f\u00e9rencement (SEO)"
+        ]
+    },
+    {
+        "id": "44",
+        "keyword": "Animation Vid\u00e9o",
+        "concepts": [
+            "Techniques de montage",
+            "Effets sp\u00e9ciaux",
+            "Rendu 3D",
+            "Applications pratiques"
+        ]
+    },
+    {
+        "id": "45",
+        "keyword": "Jeux Vid\u00e9o",
+        "concepts": [
+            "D\u00e9veloppement de jeux",
+            "Moteurs de jeu (Unity, Unreal)",
+            "Design interactif",
+            "Industrie du jeu vid\u00e9o"
+        ]
+    },
+    {
+        "id": "46",
+        "keyword": "Imprimantes 3D",
+        "concepts": [
+            "R\u00e9glages d'impression",
+            "Entretien du mat\u00e9riel",
+            "Conception assist\u00e9e par ordinateur",
+            "Types d'imprimantes"
+        ]
+    },
+    {
+        "id": "47",
+        "keyword": "Bureautique",
+        "concepts": [
+            "Traitement de texte",
+            "Feuilles de calcul",
+            "Pr\u00e9sentations",
+            "Outils collaboratifs"
+        ]
+    },
+    {
+        "id": "48",
+        "keyword": "Montage Photo",
+        "concepts": [
+            "Retouche d'images",
+            "Logiciels gratuits et payants",
+            "Effets visuels",
+            "Impression photo"
+        ]
+    },
+    {
+        "id": "49",
+        "keyword": "Cryptomonnaies",
+        "concepts": [
+            "Bitcoin",
+            "Portefeuilles num\u00e9riques",
+            "Investissement s\u00e9curis\u00e9",
+            "Technologie blockchain"
+        ]
+    },
+    {
+        "id": "50",
+        "keyword": "T\u00e9l\u00e9travail",
+        "concepts": [
+            "Outils de visioconf\u00e9rence",
+            "Gestion de projet en ligne",
+            "Organisation personnelle",
+            "S\u00e9curit\u00e9 informatique"
+        ]
+    }
+]

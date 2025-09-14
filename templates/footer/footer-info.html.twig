@@ -1,0 +1,25 @@
+<div class="footer-information-form">
+    <div class="adrrss-form">
+        <h6>Adresses</h6>
+        {% for adrr in  website.template.sector.adresse %}
+            <address>{{ adrr.label|upper}}
+                <br>{{ website.namewebsite|upper}}
+            </address>
+        {% endfor %}
+    </div>
+    <div class="contactor">
+        <h6>Contact</h6>
+        {% if website.template.telephonespaceweb %}
+            <a href="tel: +{{ website.template.telephonespaceweb|phone_number_format('NATIONAL') }}"><i class="fa fa-phone-square color-green-dark"></i> {{ website.template.telephonespaceweb|phone_number_format('NATIONAL') }}</a>
+        {% endif %}
+        <a href="mailto:{{ website.template.emailspaceweb }}"><i class="fa fa-envelope-square color-blue-dark"></i> {{ website.template.emailspaceweb }}</a>
+    </div>
+    <div class="space-link">
+        <div class="stape_link">
+            {% if website.url is defined %}
+            <link itemprop = "url" href="{{ website.url }}">
+            <a class="stape_order_link" href="{{ website.url }}" target="_blank">site weeb</a>
+            {% endif %}
+        </div>
+    </div>
+</div>

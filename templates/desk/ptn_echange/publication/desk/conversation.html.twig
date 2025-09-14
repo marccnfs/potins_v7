@@ -1,0 +1,32 @@
+ {% block body %}
+ <div class="_wb">
+     <div class="container-bo_v5">
+         {{ include('aff_messagery/menu/messagemenu.html.twig') }}
+         <section class="_wb-ospace">
+             <div class="head-msg-space">
+                 <div class="web-inf">
+                     <div class="zone-inf-msg">
+                         <div class="nav-msg">
+                             <div class="pop_op-msg" ></div>
+                                 {% if pagination is not null %}
+                                     <div id="mormsg" id="af_navdk">
+                                         {{ knp_pagination_render(pagination) }}
+                                     </div>
+                                 {%  endif %}
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             <div class="msg_cub" id="typeform" data-type="ctc">
+             <div class="contener-msg">
+                     {{ include('aff_messagery/board/view/listmsgs.html.twig') }}
+                 </div>
+             </div>
+         </section>
+     </div>
+ </div>
+ {% endblock %}
+{% use "js/js_website.html.twig" %}
+ {% block javascripts %}
+     {{ parent() }}
+ {% endblock %}

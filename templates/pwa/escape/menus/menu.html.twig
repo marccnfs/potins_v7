@@ -1,0 +1,106 @@
+{# templates/pwa/escape/<directory>/menu.html.twig #}
+{#
+Attentes:
+  - variable "participant" (objet Participant ou null) — à passer depuis le contrôleur
+  - variable "brand_route" (string)                   — route de la page d’accueil (défaut: 'home')
+  - variable "nav" (array de routes pour les liens)  — voir defaults ci-dessous
+  - optionnel: "active" (string)                      — clé de l’onglet actif: 'play'|'create'|'mine'|'docs'
+#}
+
+
+{% set brand_route = brand_route|default('home') %}
+{% set active = active|default('') %}
+{% set nav = nav|default({
+    play:        'catalog',
+    create:      'wizard_start',
+    mine:        'dashboard_my_escapes',
+    docs:        'docs_workshop',
+    login:       'participant_entry',
+    logout:      'participant_logout',
+    profile:     'participant_profile'
+    }) %}
+
+    <header class="xnav" data-controller="xnav">
+        <div class="xnav__inner">
+            <!-- gauche: logo -->
+            <a class="xnav__brand" href="{{ path(brand_route) }}" aria-label="Accueil">
+                <div class="navlogo-svg">{{ include('svg/potins/logopotins_svg_small.html.twig') }}</div>
+                <span class="xnav__logo">🧩</span>
+                <span class="xnav__brandname">Escape</span>
+             </a>
+
+            <!-- centre: navigation principale -->
+            <nav class="xnav__links" aria-label="Navigation principale">
+              <a class="xnav__link {{ active=='play' ? 'is-active' }}" href="{{ path(nav.play) }}">Jouer</a>
+              <a class="xnav__link {{ active=='create' ? 'is-active' }}" href="{{ path(nav.create) }}">Créer</a>
+                  {% if participant %}
+                    <a class="xnav__link {{ active=='mine' ? 'is-active' }}" href="{{ path(nav.mine) }}">Mes escapes</a>
+                  {% endif %}
+              <a class="xnav__link {{ active=='docs' ? 'is-active' }}" href="{{ path(nav.docs) }}">Atelier/Guide</a>
+            </nav>
+
+            <!-- droite: compte participant -->
+                <div class="xnav__account">
+              {% if participant and participant is not null %}
+                <button class="xnav__avatarbtn" id="xnav-account-btn" aria-haspopup="menu" aria-expanded="false">
+                  {% set initials = (participant.nickname ?? participant.prenom ?? 'Invité')|split(' ')|map(v=>v|slice(0,1))|join('')|upper %}
+                  <div class="xnav__avatar" title="{{ participant.nickname ?? participant.prenom }}">
+                    {# Si tu as un avatar vich: vich_uploader_asset(participant.avatar, 'imageFile') #}
+                    {% if participant.avatar is defined and participant.avatar %}
+                      <img src="{{ vich_uploader_asset(participant.avatar, 'imageFile') }}" alt="Avatar">
+                    {% else %}
+                      <span>{{ initials|slice(0,2) }}</span>
+                    {% endif %}
+                  </div>
+                  <span class="xnav__nick">{{ participant.prenom ?? participant.prenom ?? 'Participant' }}</span>
+                  <svg class="xnav__chev" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <div class="xnav__menu" id="xnav-account-menu" role="menu" hidden>
+                  <a role="menuitem" class="xnav__menuitem" href="{{ path(nav.profile) }}">Mon profil</a>
+                  <a role="menuitem" class="xnav__menuitem" href="{{ path(nav.mine) }}">Mes escapes</a>
+                  <hr>
+                  <a role="menuitem" class="xnav__menuitem" href="{{ path(nav.logout) }}">Se déconnecter</a>
+                </div>
+              {% else %}
+                <div class="xnav__guest">
+                  <a class="xnav__link" href="{{ path(nav.login) }}">Se connecter</a>
+                  <a class="xnav__cta" href="{{ path(nav.create) }}">Créer un escape</a>
+                </div>
+              {% endif %}
+              <button class="xnav__burger" id="xnav-burger" aria-label="Menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+              </button>
+            </div>
+        </div>
+    </header>
+
+
+<script>
+(function(){
+  const burger = document.getElementById('xnav-burger');
+  const links  = document.querySelector('.xnav__links');
+  const btn    = document.getElementById('xnav-account-btn');
+  const menu   = document.getElementById('xnav-account-menu');
+
+  if (burger && links) {
+    burger.addEventListener('click', () => {
+      const open = links.classList.toggle('is-open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      // ferme le menu compte si ouvert
+      if (menu && !menu.hidden) { menu.hidden = true; btn?.setAttribute('aria-expanded','false'); }
+    });
+  }
+  if (btn && menu) {
+    btn.addEventListener('click', () => {
+      const isHidden = menu.hidden;
+      menu.hidden = !isHidden;
+      btn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+    });
+    document.addEventListener('click', (e)=>{
+      if (!menu.hidden && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+        menu.hidden = true; btn.setAttribute('aria-expanded','false');
+      }
+    });
+  }
+})();
+</script>

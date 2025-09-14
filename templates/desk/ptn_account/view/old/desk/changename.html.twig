@@ -1,0 +1,33 @@
+<div class="container-bo_v5">
+
+    <div class="flrow">
+        <div class="fx-cub ii_cub2">
+            <div class="O_list-cube">
+                <h1 class="tit-cib-lg">Changez votre identitée sur le réseau AffiChange</h1>
+                <p>Attention : cela ne modifie pas votre identifiant de connexion. Le changement de votre identitée vous donne la possibilité de communiquer avec d'autres utilisateurs avec un nom de votre choix</p>
+                <div class="list-incub">
+                    {{ form_start(form)}}
+                    <div class="pos-incub-i">
+                        <div class="pos-incub-l">
+
+                                <div class="group-form-profil">
+                                    <div class="field-glass">
+                                        {{ form_label(form.name, "nouveau nom :") }}
+                                        {{ form_widget(form.name, {'attr': {'class': 'form-affi'}}) }}
+                                    </div>
+                                </div>
+
+                        </div>
+                    </div>
+                    <div class="cadre var--no-top var--blanc">
+                        <div class="pt-dm">
+                            {{form_rest(form)}}
+                            <input type="submit" value="envoyer" class="large-text-right btn-action-nivo1"/>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

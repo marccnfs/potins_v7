@@ -1,0 +1,17 @@
+{% block body %}
+    <div class="log-machina">
+    <h1 class="title_log">{{vartwig.title}}</h1>
+    <div class="svg-bulle_open">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">{# <circle cx="100" cy="100" r="80"/>#}</svg>
+        <div class="content_login_affi">
+            <div class="sous_connector">
+                <h5 class="glass-field_identify">Réinitialisation de votre mot de passe pour votre compte utlisateur : {{ user.emailCanonical }}</h5>
+                <h4>Un e-mail vous a été envoyé</h4>
+                <p>Il contient un lien sur lequel il vous faudra cliquer pour réinitialiser votre mot de passe.</p>
+                {#  <h2>Remarque :</h2><p>Vous ne pouvez demander un nouveau mot de passe que toutes les %tokenLifetime% heures.</p> #}
+                <p>Si vous ne recevez pas cet email, vérifiez votre dossier spam ou essayez à nouveau.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

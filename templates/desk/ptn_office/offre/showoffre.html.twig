@@ -1,0 +1,21 @@
+{% block body %}
+    {%  set entity, typ = offre, "shop" %}
+
+        <section class="affi_board">
+         {#    {{ include('aff_website/elements/'~agent~'/zonecommand.html.twig') }} #}
+            <article class="w-post">
+                <div class="w_more-fixed bgrop_modal" id="morinf" style="display: none">
+                    {{ include('aff_website/shop/'~agent~'/basket.html.twig') }}
+                </div>
+                {{ include('aff_website/shop/'~agent~'showoffredesk.html.twig') }}
+            </article>
+
+            {{ include('aff_website/shop/'~agent~'/showoffreothers.html.twig') }}
+        </section>
+
+{%  endblock body %}
+{% use "js/js_public_wb.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

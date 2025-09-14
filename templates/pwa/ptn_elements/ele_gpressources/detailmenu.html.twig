@@ -1,0 +1,64 @@
+<div class="zone-menu">
+<div class="zone-command-show">
+        {%  for declin in menu.catformules %}
+            <div class="formule-item">
+               {#  <h2>{{ declin.name }}</h2> #}
+                <h5>{{ declin.declinaison.name }}</h5>
+                <span class="price-form">{{ declin.prix }} €</span>
+            </div>
+        {%  endfor %}
+ </div>
+
+ <div class="board-list-replace">
+     <div class="af_flx fx-c">
+                  <div class="goaff_v6 moregoa">
+             <i class="fa fa-cutlery" aria-hidden="true"></i>
+             <h3>réserver</h3>
+         </div>
+     </div>
+
+     <div class="ti-sst_chap_v2">
+                        <ul><h3>entrée</h3>
+                            {%  for art in menu.articles %}
+                                {%  if art.categorie.name is same as ("entree") %}
+                                    <li>{{ art.titre }}</li>
+                                    {%  if  art.pict is not null %}
+                                        <li class="card-thumbail"><img src="{{asset( art.pict.getWebPath )}}" alt="image"></li>
+                                    {%   endif %}
+                                {% endif %}
+                            {%  endfor %}
+                        </ul>
+                        <ul><h3>plat</h3>
+                            {%  for art in menu.articles %}
+                                {%  if art.categorie.name is same as ("plat") %}
+                                    <li>{{ art.titre }}</li>
+                                    {%  if  art.pict is not null %}
+                                        <li class="card-thumbail"><img src="{{asset( art.pict.getWebPath )}}" alt="image"></li>
+                                    {%   endif %}
+                                {% endif %}
+                            {%  endfor %}
+                        </ul>
+                        <ul><h3>dessert</h3>
+                            {%  for art in menu.articles %}
+                                {%  if art.categorie.name is same as ("dessert") %}
+                                    <li>{{ art.titre }}</li>
+                                    {%  if  art.pict is not null %}
+                                        <li class="card-thumbail"><img src="{{asset( art.pict.getWebPath )}}" alt="image"></li>
+                                    {%   endif %}
+                                {% endif %}
+                            {%  endfor %}
+                        </ul>
+                        <ul><h3>boisson</h3>
+                            {%  for art in menu.articles %}
+                                {%  if art.categorie is same as ("boisson") %}
+                                    <li>{{ art.titre }}</li>
+                                    {%  if  art.pict is not null %}
+                                        <li class="card-thumbail"><img src="{{asset( art.pict.getWebPath )}}" alt="image"></li>
+                                    {%   endif %}
+                                {% endif %}
+                            {%  endfor %}
+                        </ul>
+            </div>
+
+    </div>
+</div>

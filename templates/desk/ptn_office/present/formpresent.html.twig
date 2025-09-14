@@ -1,0 +1,101 @@
+<form class="w100" enctype="multipart/form-data" method="post" name="fileinfo">
+        <div class="form_all_affi">
+            <h1>Nouvelle carte cadeau :</h1>
+            <div class="bk-form-all">
+
+                <div class="form-group">
+                    <label for="titrenews">Titre</label>
+                    <input type="text" class="form-affi" name="titre" id="titrenews" placeholder="titre....." required="required">
+                    <span class="error" aria-live="polite"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="cat" class="required">Categorie</label>
+                    <select id="cat" name="cat">
+                        <option value="}">--sélectionnez  une categorie</option>
+                        {%  for cat in cats %}
+                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                        {%  endfor %}
+                    </select>
+                    <span class="error" aria-live="polite"></span>
+                </div>
+
+                <div class="form-pictandcontent">
+
+                    <div class="form-group">
+                        <div class="blk_upload">
+                            <div class="btn_upload">
+                                <label id="media-img" class="cmd-btn-media smalbtblue fa fa-camera" for="uploadImage"></label>
+                                <span>image d'illustration :</span>
+                                <input id="uploadImage" type="file" name="uploadImage" accept=".jpg, .jpeg, .png" style="display:none"/>
+                            </div>
+                            <div class="preview"></div>
+                        </div>
+                        {#
+                        <div class="file-uploader">
+                            <div class="labels_form">
+                                <div class="label-upimg">une photo, plus d'info....</div>
+                                <input id="uploadImage" type="file" name="uploadImage" accept=".jpg, .jpeg, .png" style="display:none"/>
+                                <label id="media-img" class="cmd-btn-media smalbtblue fa fa-camera" for="uploadImage"></label>
+                            </div>
+                            <div class="preview"></div>
+                        </div>
+                        #}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="composition" class="required">introduction</label>
+                        <input type="text" id="composition" name="composition">
+                        <span class="error" aria-live="polite"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="descriptif" class="required">Détail</label>
+                        <input type="text" id="descriptif" name="descriptif">
+                        <span class="error" aria-live="polite"></span>
+                    </div>
+{#
+                        <div class="form-textearea_all">
+                            <textarea class="form-affi" name="contentOne" id="contentOne" required="required"
+                            placeholder="Entrez une description courte" rows="1" ></textarea>
+                            <span class="error" aria-live="polite"></span>
+                        </div>
+
+#}
+
+
+
+                <div class="form-group ">
+                    <div class="label-upimg">ajoutez un contenu</div>
+                    {#    <textarea id="mytextarea"></textarea>  #}
+
+                    <div id="articlenews">
+                        {{ include('WysiWyg/toolbar.html.twig') }}
+                        <div id="editor"></div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="gp-form-row-col2">
+                <div class="progress">
+                    <div id="loader-icon"><img src="{{asset('svg/LoaderIcon.gif')}}"  alt="loader"/></div>
+                </div>
+                <div class="iner-bt">
+                    <button id="post-news" class="btn-send">Enregistrez</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+ 
+
+            
+        
+
+
+
+
+

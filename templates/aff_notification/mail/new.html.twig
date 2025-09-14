@@ -1,0 +1,64 @@
+{% extends 'layout.html.twig' %}
+
+{% block meta_description %}Nouvelle discussion{% endblock %}
+
+{% block title %}Nouvelle discussion{% endblock %}
+        
+{% block content %}
+{% form_theme form 'Form:custom.html.twig' %}
+<div class="row">
+    <div class="col-lg-8 col-md-8 col-sm-12">
+        <div class="section_7">
+            <div class="sorting_block var2 clearfix">
+                <h2 class="section_title section_title_big">Nouvelle discussion</h2>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="section">
+            <strong>* : Champs requis</strong><br /><br />
+
+            <form id="new-message" class="form_type_1 type_2" action="{{ path('message_create') }}" method="post" {{ form_enctype(form) }} novalidate>
+                
+                <div class="control-group">
+                    <label for="destVal">Destinataire :</label>
+                    <input name="destVal" type="text" class="input-large" value="{{ userDest.username }}" readonly />
+                    <input id="dest" name="dest" type="hidden" class="input-large" value="{{ userDest.id }}" />
+                </div>
+
+                {{ form_rest(form) }}
+                
+                <div class="control-group">
+                    <label for="message">Message :</label>
+                    <textarea id="message" name="message" class="span12"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="button button_type_icon_medium button_orange">
+                        Envoyer
+                        <i class="fa fa-check"></i>
+                    </button>
+                    <a title="Annuler" href="{{ path('main') }}" class="button button_type_icon_medium button_grey_light">
+                        Annuler
+                        <i class="fa fa-undo"></i>
+                    </a>
+                </div>
+            </form>     
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-4 col-sm-12">
+        {% include 'User:sidebar-show.html.twig' %}
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{{ parent() }}
+<script>
+$(document).ready(function() {
+    $("form#new-message").validationEngine();
+    $('form .tooltip-info').tooltip();
+});
+</script>
+{% endblock %}

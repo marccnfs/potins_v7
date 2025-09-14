@@ -1,0 +1,32 @@
+<div class="ressources-grid">
+    {% for ressource in ressources %}
+        <a href="{{ path('show_ressource', {'id': ressource.id}) }}" class="ressource-card">
+            <div class="ressource-image">
+
+                {% set imgFromRessource =
+                    (ressource.pict is defined
+                    and ressource.pict
+                    and ressource.pict.namefile is defined)
+                    ? asset('spaceweb/template/'~ressource.pict.namefile)
+                    : asset('imgdoc/potins/logopotins.png')
+                %}
+
+
+                    <div class="pict_event" style="background-image: url('{{ imgFromRessource }}')"></div>
+
+            </div>
+            <div class="ressource-content">
+                <div class="category-tag card-{{ ressource.categorie.coul }}">{{ ressource.categorie.name }}</div>
+                <h3 class="ressource-title" title="{{ ressource.titre }}">{{ ressource.titre|lower|capitalize }}</h3>
+                {% if ressource.descriptif is not same as (" ") %}
+                    <p class="ressource-description">{{ ressource.descriptif|u.truncate(150, '...')|raw|lower|capitalize }}</p>
+                {% endif %}
+                <div class="ressource-footer">
+                        {% if ressource.datecreat is defined %}
+                        <span class="date">publié le {ressource.datecreat|date('d/m/Y')}</span>
+                        {% endif %}
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+</div>

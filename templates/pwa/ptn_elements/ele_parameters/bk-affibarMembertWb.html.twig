@@ -1,0 +1,13 @@
+<div class="_bk-contc">
+    <div class="_fx-R fx-c">
+        {% if vartwig.titlepage is not same as ("website-bo") %}
+            <div class="bta-lk_v2 affitoggle _bta-act">
+                <a class="logo_wb _co-bb" href="{{ path('tab_spaceweb',{'slug':website.slug}) }}">{{include('svg/afficone/babar.svg') }}</a>
+            </div>
+        {% else %}
+            <div class="bta-lk_v2 affitoggle _abs-afficone" id="nav_wb">
+                <div class="logo_wb _co-bb bt-of">{{include('svg/afficone/babar.svg') }}affichange</div>
+            </div>
+        {% endif %}
+    </div>
+</div>

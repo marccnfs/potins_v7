@@ -1,0 +1,35 @@
+<div class="menu-bo_sp">
+    <div class="pop-tab_menu _cl-cl">
+            <div class="bubble-menu-litt-rock {{ vartwig.m1 ? "actsel" :"" }}">
+                <a class="mn-link" href="{{path('parameters',{'id':board.id}) }}">Paramètres</a>
+            </div>
+
+            <div class="bubble-menu-litt-rock  {{ vartwig.m2 ? "actsel" :"" }}">
+                <a class="mn-link" href="{{ path('spaceweb_mod',{'id':board.id}) }}">
+                    <i class="fa fa-suitcase mgr_5" aria-hidden="true"></i><span>Modules</span>
+                    <h5>paramètress de modules</h5>
+                </a>
+            </div>
+
+            <div class="bubble-menu-litt-rock  {{ vartwig.m3 ? "actsel" :"" }}">
+                <a class="mn-link" href="{{ path('spaceweblocalize_init',{'id':board.id}) }}">
+                        <i class="fa fa-map-marker mgr_5" aria-hidden="true"></i><span>Adresse</span>
+                        <h5>adresse du panneau</h5>
+                </a>
+            </div>
+
+            <div class="bubble-menu-litt-rock  {{ vartwig.m4 ? "actsel" :"" }}">
+                <a class="mn-link" href="{{ path('website_edit',{'id':board.id}) }}">
+                        <i class="fa fa-id-card-o mgr_5" aria-hidden="true"></i><span>Infos</span>
+                        <h5>les infos du panneau</h5>
+                </a>
+            </div>
+
+            <div class="bubble-menu-litt-rock  {{ vartwig.m5 ? "actsel" :"" }}">
+                <a class="mn-link" href="{{ path('opendays_edit',{'id':board.id}) }}">
+                        <i class="fa fa-calendar mgr_5" aria-hidden="true"></i><span>Horaires</span>
+                        <h5>informez sur vos horaires d'ouverture</h5>
+                </a>
+            </div>
+    </div>
+</div>

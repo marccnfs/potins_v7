@@ -1,0 +1,47 @@
+{%  if event.media.imagejpg[0] is defined  %}
+    {%  set ill= "upload/module/"~event.media.imagejpg[0].namefile %}
+{%  else %}
+    {%  set ill= "img/AffiChange.png" %}
+{% endif %}
+<div class="ptn_content">
+    <div class="bk_content">
+        <div class="tab_ptn_cmd">
+            <a href="{{ path('module_event') }}" class="cmd_add btn " title="description"> retour </a>
+            <a class="bt-newmod" href="{{ path('resa_potins_admin',{'id':event.id,'date':date}) }}">participant +</a>
+        </div>
+        <div class="tab_lit_bo">
+             <img src="{{ asset(ill) }}" alt="">
+            <div class="tab_ptn_col2">
+                {{event.titre}}
+            </div>
+            <div class="tab_ptn_col2">
+                {{ event.locatemedia.nameboard }}
+            </div>
+            <div class="content">
+                {{ event.description }}
+            </div>
+            <div class="tab_l1_list">
+            <div class="tab_ptn_col_all">
+                <div class="tab_l1_list_brd">
+                    <div class="tab_ptn_col-100">
+                        du {{ event.appointment.starttime|date('d/m/Y') }}
+                    </div>
+                    <div class="tab_ptn_col-end">
+                        {%  if   event.datemajAt is not null %}
+                            <div class="_cg1enf">modifié le : {{ event.datemajAt|date("d/m/Y") }}</div>
+                        {%  else %}
+                            <div class="_cg1enf">créé le : {{ event.create_at|date("d/m/Y") }}</div>
+                        {%  endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <div class="regester-ptn">
+            <div class="flcol">
+                {{ include('desk/ptn_office/event/listparticipants2.html.twig') }}
+            </div>
+        </div>
+    </div>
+</div>

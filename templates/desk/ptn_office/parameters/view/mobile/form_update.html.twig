@@ -1,0 +1,108 @@
+<div class="inf_modul" data-edit="true">
+    {{ form_start(form)}}
+    <div class="process-module_glass">
+        <div class="stape-process-lit" >
+            <h3 class="tit_affi">Profil du Website:</h3>
+            <div class="group-form-glass">
+                <div class="field-glass">
+                    {{ form_label(form.namewebsite, "Nom du panneau :") }}
+                    {{ form_widget(form.namewebsite, {'attr': {'class': 'form-affi'}}) }}
+                </div>
+
+                <div class="field-glass">
+                    {{ form_label(form.template.description, "Activité, intérêts... :") }}
+                    {{ form_widget(form.template.description, {'attr': {'class': 'form-affi','placeholder':'en quelques mots...'}}) }}
+                </div>
+            </div>
+        </div>
+        <div class="stape-process-lit" >
+            <h3 class="tit_affi">acces website</h3>
+            <div class="group-form-glass">
+                <div class="field-glass">
+                    {{ form_label(form.codesite, "si vous disposez d'un website affichange, entrez le codesite secret") }}
+                    {{ form_widget(form.codesite, {'attr': {'class': 'form-affi'}}) }}
+                </div>
+
+                <div class="field-glass">
+                    {{ form_label(form.url, "adresse site web (url)") }}
+                    {{ form_widget(form.url, {'attr': {'class': 'form-affi'}}) }}
+                </div>
+            </div>
+        </div>
+        <div class="stape-process-lit" >
+            <h3 class="tit_affi">Réferencement</h3>
+            <div class="group-form-glass">
+                <div class="field-glass">
+                    {{ form_label(form.template.tagueries, "Mots clés :") }}
+                    {{ form_widget(form.template.tagueries, {'attr': {'class': 'form-affi','placeholder':'séparez les mots clés par une virgule'}}) }}
+                </div>
+                <div class="bfield-glass">
+                    {{ form_label(form.template.baseline, "Un slogan ?") }}
+                    {{ form_widget(form.template.baseline, {'attr': {'class': 'form-affi'}}) }}
+                </div>
+                <div class="bfield-glass">
+                    {{ form_label(form.template.activities, "votre secteur d'activité") }}
+                    {{ form_widget(form.template.activities, {'attr': {'class': 'form-affi'}}) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="stape-process-lit" >
+            <h3 class="tit_affi">Contact</h3>
+            <div class="group-form-glass">
+                <div class="field-glass">
+                    {{ form_label(form.template.emailspaceweb, "E-mail pour les notifications pour ce panneau - ne modifie pas votre mail d'indenticiation privé") }}
+                    {{ form_widget(form.template.emailspaceweb, {'attr': {'class': 'form-affi'}}) }}
+                </div>
+                <div class="field-glass">
+                    {{ form_label(form.template.telephonespaceweb, "telephone (optionnel)") }}
+                    {{ form_widget(form.template.telephonespaceweb, {'attr': {'class': 'form-affi'}}) }}
+                </div>
+                <div class="field-glass">
+                    {{ form_label(form.template.telephonemobspaceweb, "telephone mobile (optionnel)") }}
+                    {{ form_widget(form.template.telephonemobspaceweb, {'attr': {'class': 'form-affi'}}) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="stape-process-lit" >
+            <h3 class="tit_affi">Logo</h3>
+            <div class="rpw-wb_mob">
+                {% if board.template.logo is not null %}
+                <img src="{{ asset(board.template.logo.getwebpath) }}" id="uploadPreview1">
+                {% else %}
+                    <img src="{{ asset('img/affitrans.png') }}" id="uploadPreview1">
+                {% endif %}
+            </div>
+            <div class="group-form-glass">
+                <div class="field-glass">
+                    {{ form_label(form.template.logotemplate, "Ajoutez/modifier votre logo") }}
+                    {{ form_widget(form.template.logotemplate)}}
+                </div>
+            </div>
+        </div>
+
+        <div class="stape-process-lit" >
+            <h3 class="tit_affi">Image de fond</h3>
+            <div class="rpw-wb_mob">
+                {% if board.template.background is not null %}
+                <img src="{{ asset(board.template.background.getwebpath) }}" id="uploadPreview2">
+                {% else %}
+                    <img src="{{ asset('img/affitrans.png') }}" id="uploadPreview2">
+                {% endif %}
+            </div>
+            <div class="group-form-glass">
+                <div class="field-glass">
+                    {{ form_label(form.template.logotemplate, "Ajoutez/modifier l'image de fond") }}
+                    {{ form_widget(form.template.background)}}
+                </div>
+            </div>
+        </div>
+        {{form_rest(form)}}
+        <div class="gp-form-row-col2">
+            <div class="iner-bt">
+                <button class="btn-send">{{button|default('Enregistrer') }}</button>
+            </div>
+        </div>
+    </div>
+    {{form_end(form)}}

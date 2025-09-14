@@ -1,0 +1,25 @@
+<div class="w100">
+    {%  if notifs is defined %}
+        {% for notif in notifs %}
+
+            {% if notif.classmodule is same as "message" %}
+            <a class="Ax _co-gy" href="{{ path('read_msg',{'slug':notif.website.slug,'id':notif.classmoduleid})}}">
+                <div class="_gr_row  inf-msg {{ notif.isread ?"gxcsal":""}}">
+                    <div class="_bb-msg {{ notif.isread ?"_bg-Wfilt":"_bg-R"}}" ></div>
+                    <div class="_li-fx fx-cst">
+                        <div class="_gr-Ax">
+                            <div class="{{ notif.isread ?"":""}}">{{- notif.dispatch.name|trim -}}</div>
+                            <div class="obje">{{- notif.subject|u.truncate(20, '...', false) -}}</div>
+                            {% if notif.createAt|format_datetime('short', 'none', locale='fr') is same as ("now"|format_datetime('short', 'none', locale='fr')) %}
+                                <div>{{-notif.createAt|format_datetime('none', 'short', locale='fr') -}}</div>
+                            {% else %}
+                                <div>{{- notif.createAt|format_datetime('medium', 'none', locale='fr')|slice(0,-4) -}}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {%  endif %}
+        {% endfor %}
+    {% endif %}
+</div>

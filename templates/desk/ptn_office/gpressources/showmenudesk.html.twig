@@ -1,0 +1,16 @@
+{{ include('aff_website/formule/view/modale_found.html.twig') }}
+<div class="_wb-module-first">
+    <div class="ol-2 tglaff"  id="tgl_9" style="display: none">
+        {% if dispatch is null %}
+            <div id="testmail">
+                <test-mailmsg slug="{{ website.slug }}" id="{{ menu.id }}" module="_found"></test-mailmsg>
+            </div>
+        {%  else %}
+            <div id="adcomment">
+                <add-comment slug="{{ website.slug }}" id="{{ menu.id }}" module="_found"></add-comment>
+            </div>
+        {%  endif %}
+    </div>
+</div>
+{{ include('aff_website/formule/view/detailmenu.html.twig') }}
+

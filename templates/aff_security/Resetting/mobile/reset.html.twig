@@ -1,0 +1,22 @@
+{% extends "security/layout/baseconnect.html.twig" %}
+{% block title %}confirm ou reset mot de passe{% endblock %}
+
+{% block log %}
+<p>Oups !!!</p>
+<h2>Reset ?</h2>
+<div class="span4">
+    <h4>restez ou pas ?</h4>
+    <em>
+        Compléter le formulaire, <br/>
+    </em>
+</div>
+<div class="span4 offset2">
+    {{ form_start(form, { 'action': path('resetting_reset', {'token': token}), 'attr': { 'class': '' } }) }}
+    {{ form_widget(form) }}
+    <div>
+        <input type="submit" value="soumettez" />
+    </div>
+    {{ form_end(form) }}
+</div>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+<div class="littlespacevague_lrg_v5">
+    {# <div class="_fx-abs fx-c _bg-op-trs _sz6 _bdrad glob_affi _co-B"> #}
+    <a href="{{ path('cargo_public', {'slugcity': city}) }}">
+    {% if locate.namefile is defined and locate.namefile is not null %}
+        <div class="rondcity" style="background-image: url({{ asset('cities/'~locate.namefile) }})">
+            <div class="simpl-flex">
+                <div class="_ext-p shtf">
+                    <div class="_i-Wbs bulletoggle " data-affitgl="tgl_10">{{ include('svg/50x50_AfCHG_blanc.html.twig') }}</div>
+                    <span class="locate">{{ city|capitalize }}</span>
+                </div>
+            </div>
+        </div>
+
+    {%  else %}
+        <div class="_fx-abs _sz250 glob_affi _co-B">
+            <div class="_ext-p shtf">
+                <div class="_i-Wbs bulletoggle " data-affitgl="tgl_10">{{ include('svg/50x50_AfCHG_blanc.html.twig') }}</div>
+                <span class="locate">{{ city|capitalize }}</span>
+            </div>
+        </div>
+    {%  endif %}
+    </a>
+  {#   {{ include('public/affichange/pop/bull-act-affiche.html.twig') }}  #}
+    {{ include('aff_menu/'~agent~'/profilnav.html.twig') }}
+    {{ include('aff_menu/'~agent~'/poppublic.html.twig') }}
+</div>

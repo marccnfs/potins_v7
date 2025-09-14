@@ -1,0 +1,14 @@
+{% block body %}
+    <div class="container-bo_v5">
+        {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
+        <section class="_wb-ospace">
+            <div class="head-wb-space">
+            </div>
+            {{ include('desk/ptn_office/potins/deleteform.html.twig') }}
+        </section>
+    </div>
+{% endblock body%}
+{% use "js/js_customer.html.twig" %}
+{% block javascripts %}
+{{ parent() }}
+{% endblock %}

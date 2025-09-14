@@ -1,0 +1,34 @@
+
+    {%  if msgs is defined %}
+        {% for msg in msgs %}
+
+            {% if msg|length > 2  %} {#  message d'une publication #}
+
+                {% apply spaceless %}
+                    {%  if msg[2] %} {#  le dispatch est admin du board #}
+                    <a class="ax-m_mob {{ msg[0].sender ?"":"ax-m-no"}}" href="{{ path('read_message_blog',{'id':msg[0].id})}}">
+                        {{ include('aff_messagery/elements/listmessagepublication_mob.html.twig') }}
+                    </a>
+                    {%  else %}
+                    <a class="ax-m_mob {{ msg[0].sender ?"":"ax-m-no"}}" href="{{ path('read_msg_nopubli_custo',{'id':msg[0].id})}}">
+                        {{ include('aff_messagery/elements/listmessagepublication_mob.html.twig') }}
+                    </a>
+                    {%  endif %}
+                {% endapply %}
+
+            {% else %}      {#  message d'un board #}
+
+            {% apply spaceless %}
+                {%  if msg[1] %} {#  le dispatch est admin du board #}
+                    <a class="ax-m_mob {{ msg[0].sender ?"":"ax-m-no"}}" href="{{ path('read_msg_board',{'slug':msg[0].websitedest.slug, 'id':msg[0].id})}}">
+                        {{ include('aff_messagery/elements/listmessageboard_mob.html.twig') }}
+                    </a>
+                {%  else %}
+                    <a class="ax-m_mob {{ msg[0].sender ?"":"ax-m-no"}}" href="{{ path('read_msg_noboard_custo',{'id':msg[0].id})}}">
+                        {{ include('aff_messagery/elements/listmessageboard_mob.html.twig') }}
+                    </a>
+                {%  endif %}
+            {% endapply %}
+            {%  endif %}
+        {% endfor %}
+    {% endif %}

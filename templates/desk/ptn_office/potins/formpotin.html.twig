@@ -1,0 +1,126 @@
+<div class="ptn_content">
+    <div class="bk_content">
+        <form class="w100" id="manage-form" enctype="multipart/form-data" method="post"
+      action="{{ path('potins_manage', potin.id ? {'id': potin.id} : {}) }}">
+
+    <div class="form_all_affi">
+        <h1>{% if potin is defined %}Modifier{% else %}Nouveau{% endif %} potin :</h1>
+
+        <div class="bk-form-all">
+            <!-- Titre -->
+            <div class="form-group">
+                <label for="titrenews">Titre</label>
+                <input type="text" class="form-affi" name="titre" id="titrenews"
+                       value="{{ potin.titre ?? '' }}" placeholder="Titre..." required>
+                <span class="error" aria-live="polite"></span>
+            </div>
+{#
+            <!-- Catégorie -->
+            <div class="form-group">
+                <label for="cat" class="required">Catégorie</label>
+                <select id="cat" name="cat" required>
+                    <option value="">-- Sélectionnez une catégorie --</option>
+                    {% for cat in cats %}
+                        <option value="{{ cat.id }}" {% if ressource is defined and ressource.categorie.id == cat.id %}selected{% endif %}>
+                            {{ cat.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <span class="error" aria-live="polite"></span>
+            </div>
+#}
+            <!-- Image d'illustration -->
+            <div class="form-group">
+                {% if potin.imageName %}
+                    <div class="image-preview">
+                        <img src="{{ vich_uploader_asset(potin, 'ImageFile') }}" alt="Image actuelle" width="150">
+                        <p>Image actuelle</p>
+                    </div>
+                {% endif %}
+                <label for="uploadImage">Image d'illustration</label>
+                <input type="file" id="uploadImage" name="uploadImage" accept=".jpg, .jpeg, .png">
+                <p class="info">Si vous ne sélectionnez pas d’image, l’image actuelle sera conservée.</p>
+                {% if potin is defined and potin.image %}
+                    <img src="{{ asset('uploads/' ~ potin.image) }}" alt="Illustration actuelle" class="preview">
+                {% endif %}
+                <span class="error" aria-live="polite"></span>
+            </div>
+{#
+            <!-- Sous-titre -->
+            <div class="form-group">
+                <label for="composition">Sous-titre</label>
+                <input type="text" id="composition" name="composition"
+                       value="{{ ressource.composition ?? '' }}" placeholder="Sous-titre...">
+                <span class="error" aria-live="polite"></span>
+            </div>
+#}
+
+            <div class="form-group">
+                <label for="numberpart" class="required">Nombre de participants</label>
+                <input type="text" id="numberpart" name="numberpart" required="required" inputmode="decimal"value="{{ potin.numberPart ?? '' }}" placeholder="nombre participant...">
+                <span class="error" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="agepotin" class="required">à partir de : (âge)</label>
+                <input type="text" id="agepotin" name="agepotin" value="{{ potin.agePotin ?? '1' }}" placeholder="âge mini" required="required" inputmode="decimal">
+                <span class="error" aria-live="polite"></span>
+            </div>
+
+            <!-- Descriptif -->
+            <div class="form-group">
+                <label for="subject">Descriptif</label>
+                <textarea id="subject" name="subject" placeholder="Description courte...">{{ potin.subject ?? '' }}</textarea>
+                <span class="error" aria-live="polite"></span>
+            </div>
+
+            <!-- Liste des chapitres (Articles) -->
+            <div id="articles-container">
+                <h3>Chapitres :</h3>
+                <button type="button" onclick="addChapter()">Ajouter un chapitre</button>
+
+                {% if is_edit %}
+                    {% for article in potin.htmlcontent %}
+                        <div class="article-block" data-id="{{ article.id }}">
+                            <input type="hidden" name="articles[{{ loop.index }}][id]" value="{{ article.id }}">
+                            <label>Titre du chapitre</label>
+                            <input type="text" name="articles[{{ loop.index }}][titre]"
+                                   value="{{ article.titre }}">
+
+                            <label>Contenu</label>
+                            <textarea class="editor" name="articles[{{ loop.index }}][contenu]">{{ article.contenu }}</textarea>
+
+                            <label>Média</label>
+                            <input type="file" name="articles[{{ loop.index }}][media]" accept="image/*,video/*">
+
+                            {% if article.media %}
+                                <p>Média actuel : <a href="{{ asset('uploads/articles/' ~ article.media) }}" target="_blank">Voir</a></p>
+                            {% endif %}
+                            <input type="hidden" name="articles[{{ loop.index }}][delete]" value="0">
+                           {#  <button type="button" class="delete-article-btn" onclick="removeChapter(this)">Supprimer</button> #}
+                            <button type="button" class="delete-article-btn" onclick="deleteArticle(this)">Supprimer</button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Bouton d'enregistrement -->
+        <div class="gp-form-row-col2">
+            {#  <div class="progress">
+                <div id="loader-icon">
+                    <img src="{{ asset('svg/LoaderIcon.gif') }}" alt="Chargement...">
+                </div>
+            </div>
+            #}
+            <div class="iner-bt">
+                <button type="submit" id="submit-button" class="btn-send">{% if potin is defined %}Mettre à jour{% else %}Enregistrer{% endif %}</button>
+            </div>
+            <div id="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+</form>
+    </div>
+</div>

@@ -1,0 +1,64 @@
+{% block body %}
+<div class="container-websit">
+    <div class="before_board"></div>
+    {%  set entity, typ = post, "blog" %}
+    <div class="potin_pg">
+    <div class="wp-potin">
+        <div class="potin_board">
+            <article class="w-potin">
+                {{ include('desk/ptn_elements/ele_potins/modale_potin.html.twig') }}
+            </article>
+        </div>
+        <div class="potin_echange">
+            {{ include('desk/ptn_elements/ele_events/modale_widg_event.html.twig') }}
+            <div class="cub-form">
+                <div class="act-ct">
+                    <div class="cbe-fx">
+                        <div class="cbe_cnt">
+                            <div class="c_i_b">
+                                <div class="in_cib">
+
+                                    <div class="form-groupfields glass-label">
+                                        <div class="glass-title_form">
+                                            <h3>Participez !</h3>
+                                        </div>
+
+
+                                        <div class="process-module_glass">
+                                            <div class="stape-process-lit" >
+                                                <h5><strong>Choisissez une date dans une des localités proposées :</strong></h5>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {%  for event in events %}
+            {{ include('desk/ptn_elements/ele_events/widget_datesevent.html.twig') }}
+            {%  endfor %}
+            {#
+            {{ include('desk/ptn_elements/ele_echanges/bar_echanges.html.twig') }}
+
+            <div class="w_echanges">
+                {{ include('desk/ptn_elements/ele_echanges/potin_echange.html.twig') }}
+            </div>
+            #}
+        </div>
+    </div>
+        {{ include('desk/ptn_elements/ele_potins/tabOrderPotins.html.twig') }}
+    </div>
+{%  endblock body %}
+
+    {% block footer %}
+        {{ include ('desk/ptn_public/footer/potins_footer.html.twig') }}
+    {% endblock footer %}
+
+{% use "js/js_public_wb.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

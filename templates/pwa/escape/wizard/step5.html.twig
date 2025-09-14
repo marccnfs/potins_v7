@@ -1,0 +1,133 @@
+{# templates/escape/garden.html.twig #}
+{% block body %}
+    {% set cfg = puzzle.config is iterable ? puzzle.config : {} %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            <div class="bo_content">
+                <div class="step-layout">
+                    <div class="step-sidebar">
+                        {% include 'pwa/escape/wizard/_infos_step.html.twig' with { step: 5, eg: eg, puzzle: puzzle } %}
+                    </div>
+
+                    <div class="step-main">
+
+                        <header style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin-bottom:.75rem">
+                            <div>
+                                <h1 style="margin:0">Étape 5 — Vidéo interactive</h1>
+                                {% if puzzle.prompt %}<p class="text-muted" style="margin:.25rem 0 0">{{ puzzle.prompt }}</p>{% endif %}
+                            </div>
+                            <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+                                {% if puzzle.ready %}
+                                    <a class="btn btn-light" href="{{ path('wizard_preview_step', { id: eg.id, step: 5 }) }}" target="_blank" rel="noopener">Aperçu admin</a>
+                                {% endif %}
+                                {% if eg.published and eg.shareSlug %}
+                                    <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: 5 }) }}" target="_blank" rel="noopener">Voir côté joueur</a>
+                                {% endif %}
+                            </div>
+                        </header>
+
+                        <section class="card" style="margin-bottom:1rem">
+                            <div style="display:flex;justify-content:space-between;align-items:center;gap:.75rem">
+                                <h3 style="margin:0">Aperçu</h3>
+                                {% if cfg.videoPath is defined and cfg.videoPath %}
+                                    <span class="text-muted" style="font-size:.9rem">Vidéo : {{ cfg.videoPath|split('/')|last }}</span>
+                                {% else %}
+                                    <span class="text-muted" style="font-size:.9rem">Téléverse une vidéo puis enregistre pour l’activer ici</span>
+                                {% endif %}
+                            </div>
+
+                            <section id="preview-video"
+                                     data-controller="video-quiz"
+                                     data-video-quiz-src-value="{{ cfg.videoPath is defined and cfg.videoPath ? asset(cfg.videoPath) : '' }}"
+                                     data-video-quiz-cues-value='{{ (cfg.cues|default([]))|json_encode|e('html_attr') }}'
+                                     data-video-quiz-ok-message-value="{{ cfg.okMessage|default('Bravo !') }}">
+                                {% if cfg.videoPath is defined and cfg.videoPath %}
+                                    <video data-video-quiz-target="video" controls preload="metadata" style="max-width:100%;width:100%"></video>
+                                {% else %}
+                                    <div class="alert alert-info">Téléverse une vidéo et enregistre pour activer l’aperçu.</div>
+                                    <video data-video-quiz-target="video" controls preload="metadata" style="max-width:100%;width:100%" hidden></video>
+                                {% endif %}
+                                <div data-video-quiz-target="overlay" class="vq-overlay" hidden></div>
+                                <div data-video-quiz-target="msg" class="mt-2"></div>
+                            </section>
+                        </section>
+
+                        {{ form_start(form, { attr: { id: 'form-step5', enctype: 'multipart/form-data' } }) }}
+                        <section class="card">
+                            <div class="grid" style="grid-template-columns:minmax(260px,1fr) minmax(320px,1fr)">
+                                <div>
+                                    {{ form_row(form.title) }}
+                                    {{ form_row(form.prompt) }}
+                                    {{ form_row(form.videoFile) }}
+                                    <p class="text-muted" style="margin-top:.5rem">Format conseillé : .mp4 (H.264), 720p, &lt; 50 Mo.</p>
+                                </div>
+                                <div>
+                                    {{ form_row(form.cuesJson) }}
+                                    {{ form_row(form.okMessage) }}
+                                </div>
+                            </div>
+                            {#
+                            <div class="form-actions" style="display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem">
+                                <button class="btn btn-primary">Enregistrer</button>
+                                {% if puzzle.id %}
+                                    <a class="btn" href="{{ path('wizard_preview_step', { id: eg.id, step: 5 }) }}" target="_blank" rel="noopener">Aperçu admin</a>
+                                {% endif %}
+                            </div>
+                            #}
+                        </section>
+                        {{ form_end(form) }}
+
+                        <div class="sticky-save">
+                            <div class="sticky-inner">
+                                <span class="text-muted">Étape 5 — Vidéo</span>
+                                <div style="display:flex;gap:.5rem">
+                                    <button form="form-step5" class="btn btn-primary">Enregistrer</button>
+                                    {% if puzzle.ready %}<a class="btn btn-light" href="{{ path('wizard_preview_step', { id: eg.id, step: 5 }) }}" target="_blank">Aperçu</a>{% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function(){
+            const f=document.getElementById('form-step5'); if(!f) return;
+            const idCues='{{ form.cuesJson.vars.id }}', idOk='{{ form.okMessage.vars.id }}', idVid='{{ form.videoFile.vars.id }}';
+            let t; const deb=(fn)=>{clearTimeout(t); t=setTimeout(fn,250);};
+            function refresh(){
+                const root=document.getElementById('preview-video'); if(!root) return;
+                const c=root.cloneNode(false); c.id='preview-video';
+                let cues=[]; try{ cues=JSON.parse(document.getElementById(idCues).value||'[]'); }catch(e){}
+                const okm=document.getElementById(idOk).value||'Bravo !';
+                const src=root.getAttribute('data-video-quiz-src-value')||'';
+                c.setAttribute('data-controller','video-quiz');
+                c.setAttribute('data-video-quiz-cues-value', JSON.stringify(cues));
+                c.setAttribute('data-video-quiz-ok-message-value', okm);
+                c.setAttribute('data-video-quiz-src-value', src);
+                c.innerHTML = src
+                    ? `<video data-video-quiz-target="video" controls preload="metadata" style="max-width:100%;width:100%"></video>
+         <div data-video-quiz-target="overlay" class="vq-overlay" hidden></div>
+         <div data-video-quiz-target="msg" class="mt-2"></div>`
+                    : `<div class="alert alert-info">Téléverse une vidéo et enregistre pour activer l’aperçu.</div>
+         <video data-video-quiz-target="video" controls preload="metadata" style="max-width:100%;width:100%" hidden></video>
+         <div data-video-quiz-target="overlay" class="vq-overlay" hidden></div>
+         <div data-video-quiz-target="msg" class="mt-2"></div>`;
+                root.replaceWith(c);
+            }
+            document.getElementById(idCues)?.addEventListener('input', ()=>deb(refresh));
+            document.getElementById(idOk)?.addEventListener('input', ()=>deb(refresh));
+            document.getElementById(idVid)?.addEventListener('change', ()=>deb(refresh));
+        })();
+    </script>
+
+{% endblock %}
+{% use "js/js_escape.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

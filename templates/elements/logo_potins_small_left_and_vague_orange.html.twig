@@ -1,0 +1,22 @@
+
+{%  if agent is same as 'desk/' %}
+    <a href="{{ path('potins_index') }}">
+        <div id="logotop" class="zz_top-top logo-container">
+            {{ include('svg/potins/vector1.html.twig') }}
+        </div>
+        <div id="logosmall" class="svg_logo_small logo-small">
+            {{ include('svg/potins/logopotins_svg_small.html.twig') }}
+        </div>
+    </a>
+{% else %}
+    <div class="zz_top-notop">
+        <div class="vagmenu" data-agent="{{ agent }}">
+            {{ include('svg/potins/vector1.html.twig') }}
+        </div>
+        <a href="{{ path('potins_index') }}">
+            <div class="svg_logo_small">
+                {{ include('svg/potins/logopotins_svg_small.html.twig') }}
+            </div>
+        </a>
+    </div>
+{% endif %}

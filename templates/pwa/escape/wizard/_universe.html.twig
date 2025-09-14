@@ -1,0 +1,112 @@
+{% block body %}
+<div class="_wb">
+    <div class="container_bo_member">
+        <div class="bo_content">
+                {% set total = total ?? 6 %}
+                {% set steps = {
+                    1: eg.titresEtapes[1]|default('Cryptex numérique'),
+                    2: eg.titresEtapes[2]|default('QR code géolocalisé'),
+                    3: eg.titresEtapes[3]|default('Puzzle numérique'),
+                    4: eg.titresEtapes[4]|default('Formulaire logique'),
+                    5: eg.titresEtapes[5]|default('Vidéo interactive'),
+                    6: eg.titresEtapes[6]|default('Code HTML minimal')
+                } %}
+
+                <div class="wizard-layout">
+                    <aside class="wizard-aside">
+                        <div class="card">
+                            <h2 class="aside-title">🧭 Tunnel de création</h2>
+                            <ol class="aside-steps">
+                                <li class="is-current">
+                                    <span class="index">0</span>
+                                    <span class="label">Univers</span>
+                                </li>
+                                {% for i in 1..total %}
+                                    <li class="{{ readyMap[i]|default(false) ? 'is-ready' : '' }}">
+                                        <span class="index">{{ i }}</span>
+                                        <a class="label" href="{{ path('wizard_step', { id: eg.id, step: i }) }}">{{ steps[i] }}</a>
+                                        {% if readyMap[i]|default(false) %}<span class="badge">OK</span>{% endif %}
+                                    </li>
+                                {% endfor %}
+                                <li>
+                                    <span class="index">•</span>
+                                    <a class="label" href="{{ path('wizard_overview', { id: eg.id }) }}">Aperçu & publication</a>
+                                </li>
+                            </ol>
+                        </div>
+
+                        <div class="card tip">
+                            <h3>Conseils</h3>
+                            <ul class="bullets">
+                                <li>Un <strong>contexte</strong> court vaut mieux qu’un long roman.</li>
+                                <li>Formule l’<strong>objectif</strong> en une phrase claire.</li>
+                                <li>Donne un <strong>indice global</strong> dans le mode d’emploi si tu veux.</li>
+                            </ul>
+                        </div>
+                    </aside>
+
+                    <main class="wizard-main">
+                        <div class="card">
+                            <h1>✨ Crée / édite l’univers</h1>
+                            {{ form_start(form, { attr: { enctype: 'multipart/form-data' } }) }}
+
+                            <div class="grid2">
+                                <div>
+                                    {{ form_row(form.title) }}
+                                    {{ form_row(form.context) }}
+                                    {{ form_row(form.goal) }}
+                                    {{ form_row(form.howto) }}
+                                    {{ form_row(form.guide) }}
+                                </div>
+                                <div>
+                                    <h3>Titres des 6 étapes</h3>
+                                    <div class="steps-grid">
+                                        {% for i, field in form.stepTitles %}
+                                            <label>Étape {{ i }}</label>
+                                            {{ form_widget(field, {'attr': {'placeholder': steps[i] }}) }}
+                                        {% endfor %}
+                                    </div>
+
+                                    <hr>
+                                    <h3>Illustrations</h3>
+                                    <div class="illu-grid">
+                                        {% for illu in eg.illustrations %}
+                                            <div class="illu-item">
+                                                {% if illu is defined %}
+                                                    <img src="{{ vich_uploader_asset(illu, 'imageFile') }}" alt="" />
+                                                    {# coche de suppression #}
+                                                    {% set id = illu.id %}
+                                                    <label class="del">
+                                                        <input type="checkbox" name="{{ form.deleteImages.vars.full_name }}[]" value="{{ id }}">
+                                                        Supprimer
+                                                    </label>
+                                                {% endif %}
+                                            </div>
+                                        {% else %}
+                                            <p class="muted">Aucune image pour l’instant.</p>
+                                        {% endfor %}
+                                    </div>
+
+                                    {{ form_row(form.newImages) }}
+                                    {{ form_row(form.deleteImages, {'label': 'Supprimer (liste) — optionnel', 'row_attr': {'class': 'hidden'}}) }}
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <a class="btn" href="{{ path('wizard_overview', { id: eg.id }) }}">Annuler</a>
+                                <button class="btn btn-primary">Enregistrer</button>
+                                <a class="btn btn-light" href="{{ path('wizard_step', { id: eg.id, step: 1 }) }}">Passer à l’étape 1 →</a>
+                            </div>
+
+                            {{ form_end(form) }}
+                        </div>
+                    </main>
+                </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% use "js/js_escape.html.twig" %}
+{% block javascripts %}
+{{ parent() }}
+{% endblock %}

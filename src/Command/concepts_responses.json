@@ -1,0 +1,60 @@
+[
+  {
+    "id": "1",
+    "keyword": "Potins numériques",
+    "keys_find": "potins numeriques info",
+    "concept": "ateliers numériques",
+    "concepts": [
+      "Inscription en ligne",
+      "Planning des ateliers",
+      "Événements numériques"
+    ],
+    "description": "chaque samedi matin, de 10h à 12h venir découvrir lors d'un atelier découverte un technologie numérique, apprentissage ludique...",
+    "date": true,
+    "link": "potinsnumerique.fr/infopotins",
+    "definition": "Activités ou ateliers numériques visant à partager des informations et des compétences localement."
+  },
+  {
+  "id": "2",
+  "keys_find": "potins numeriques date",
+  "concept": "ateliers numériques",
+  "concepts": [
+    "Inscription en ligne",
+    "Planning des ateliers",
+    "Événements numériques"
+  ],
+  "description": "date des prochains potins numériques dans votre médiathèque",
+  "date": true,
+  "link": "potinsnumerique.fr/prochainspotins"
+  },
+  {
+    "id": "2",
+    "keys_find": "potins numeriques date",
+    "concept": "ateliers numériques",
+    "concepts": [
+      "Inscription en ligne",
+      "Planning des ateliers",
+      "Événements numériques"
+    ],
+    "description": "date des prochains potins numériques dans votre médiathèque",
+    "date": true,
+    "link": "potinsnumerique.fr/prochainspotins"
+  },
+  {
+    "id": "2",
+    "keys_find": "potins numeriques potins",
+    "concept": "potins numériques",
+    "concepts": "atelier numériques",
+    "description": "Les potins numériques c'est un lieu d'information, d'expérimentation et d'accompagnement dans le monde numérique d'aujourd'hui",
+    "date": true,
+    "link": "potinsnumerique.fr/prochainspotins"
+  },
+  {
+    "id": "2",
+    "keys_find": "potins numeriques date",
+    "concept": "ateliers numériques",
+    "description": "date des prochains potins numériques dans votre médiathèque",
+    "date": true,
+    "link": "potinsnumerique.fr/prochainspotins"
+  }
+]

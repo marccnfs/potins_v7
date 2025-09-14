@@ -1,0 +1,73 @@
+<form class="w100" enctype="multipart/form-data" method="post" name="fileinfo">
+        <div class="form_all_affi">
+
+            <div class="bk-form-all">
+                <div class="form-group">
+                    <label for="titrerss">Titre</label>
+                    <input type="text" class="form-affi" name="titre" id="titrenews" placeholder="titre....." required="required">
+                    <span class="error" aria-live="polite"></span>
+                </div>
+
+                <div class="form-textearea_all">
+                    <textarea class="form-affi" name="contentOne" id="contentOne" required="required"
+                                      placeholder="Entrez une description courte" rows="1" ></textarea>
+                    <span class="error" aria-live="polite"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="catrss">Categorie</label>
+                    <select type="text" class="form-affi" name="titre" id="titrenews"  required="required"></select>
+                    <span class="error" aria-live="polite"></span>
+                </div>
+
+                <div class="form-pictandcontent">
+
+                    <div class="file-uploader">
+                        <div class="labels_form">
+                            <div class="label-upimg">ajoutez une image :.</div>
+                            <input id="uploadImage" type="file" name="uploadImage" accept=".jpg, .jpeg, .png" style="display:none"/>
+                            <label id="media-img" class="cmd-btn-media smalbtblue fa fa-camera" for="uploadImage"></label>
+                        </div>
+                        <div class="preview"></div>
+
+
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="bk-form-all">
+                <div class="form-group ">
+                    <div class="label-upimg">ajoutez un contenu</div>
+                    {#    <textarea id="mytextarea"></textarea>  #}
+
+                    <div id="articlenews">
+                        {{ include('WysiWyg/toolbar.html.twig') }}
+                        <div id="editor"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="gp-form-row-col2">
+                <div class="progress">
+                    <div id="loader-icon"><img src="{{asset('svg/LoaderIcon.gif')}}"  alt="loader"/></div>
+                </div>
+                <div class="iner-bt">
+                    <button id="post-news" class="btn-send">Enregistrez</button>
+                </div>
+            </div>
+        </div>
+</form>
+
+
+ 
+
+            
+        
+
+
+
+
+

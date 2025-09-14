@@ -1,0 +1,54 @@
+{#
+ <div class="inf-msg">
+
+     <div class="wb-logo-pop">
+         {% if msg.websitedest.template.logo %}
+             <div   class="wb_logo" style="background-image: url('{{ asset('spaceweb/template/'~msg.websitedest.template.logo.namefile ) }}')"></div>
+         {% else %}
+             <div  class="wb_logo" style="background-image: url('{{ asset('img/pinsaffi.png') }}')"></div>
+         {% endif %}
+     </div>
+</div>
+<div class="_li-fx fx-cst">
+     <div class="origin">
+         <div class="origin">
+                 <h3>{{msg.websitedest.namewebsite }}</h3>
+         </div>
+    </div>
+#}
+
+<div class="_li-fx fx-cst">
+    <div class="af_flx-W">
+        {% if not msg[0].isspaceweb %}
+            <div class="{{ msg[0].sender ?"":"_co-bk"}}">Nouveau contact</div>
+        {% endif %}
+
+        {% if msg[0].isspaceweb %}
+            <span>de&nbsp;</span><div class="{{ msg[0].sender ?"":"_co-bk"}}">{{- msg[0].tballmsgs.dispatch.name|trim -}}&nbsp;:&nbsp;</div>
+        {% else %}
+            <span>de&nbsp;</span><div class="{{ msg[0].sender ?"":"_co-bk"}}">{{- msg[0].tballmsgs.contact.useridentity.firstname|trim -}}&nbsp;:&nbsp;</div>
+        {% endif %}
+
+        {%  if  msg[0].tballmsgs.extract is not null%}
+            <div class="obje">{{- msg[0].tballmsgs.extract|u.truncate(20, '...', false) -}}</div>
+        {%  else %}
+            <div class="obje">&nbsp;...</div>
+        {%  endif %}
+
+    </div>
+</div>
+
+<div>
+    {%  if  msg[0].tballmsgs.lastconvers %}
+        {%  set datetosee = msg[0].tballmsgs.lastconvers %}
+    {%  else %}
+        {%  set datetosee = msg[0].createAt %}
+    {% endif %}
+
+    {% if datetosee|format_datetime('short', 'none', locale='fr') is same as ("now"|format_datetime('short', 'none', locale='fr')) %}
+        <div class="date_msg">{{- datetosee|format_datetime('none', 'short', locale='fr') -}}</div>
+    {% else %}
+        <div class="date_msg">{{- datetosee|format_datetime('medium', 'none', locale='fr')|slice(0,-4) -}}</div>
+    {% endif %}
+</div>
+

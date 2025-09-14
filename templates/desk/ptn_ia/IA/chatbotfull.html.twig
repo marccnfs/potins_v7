@@ -1,0 +1,41 @@
+{% block body %}
+<div class="fix-body">
+
+    <div id="chatbot-full-page">
+        <!-- Header -->
+        <header class="site-header">
+            {{ include('desk/ptn_ia/menu/menu_ia.html.twig') }}
+            <h1>Chatbot IA</h1>
+        </header>
+
+        <!-- Contenu principal -->
+        <main class="main-content">
+            <!-- Zone gauche : Visualisation -->
+            <section id="ia-visualization" class="left-panel">
+                <h2 class="section-title">Analyse en cours...</h2>
+                <button id="skip-animation" style="position: absolute; top: 10px; right: 10px;">Passer les animations</button>
+                <canvas id="ia-animation"></canvas>
+            </section>
+
+            <!-- Zone droite : Chatbot -->
+            <section id="chatbot-zone" class="right-panel">
+                <h2 class="section-title">Interagissez avec le Chatbot</h2>
+                <div id="chatbot-messages" class="chatbot-messages"></div>
+                <input type="text" id="chatbot-input" class="chatbot-input" placeholder="Posez votre question..." />
+            </section>
+        </main>
+
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block footer %}
+{% endblock footer %}
+
+{% use "js/chatbot.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

@@ -1,0 +1,57 @@
+<div class="titlpotin_mb">
+    <h2 title="ressouce : {{ ressource.titre }}">{{ ressource.titre|lower|capitalize }}</h2>
+    <div class="illus-rss_mob" data-ce-columns="1" data-ce-images="1">
+        <figure role="group" aria-label="{{ressource.titre}}">
+            {% if ressource.pict is not null %}
+                <img src="{{ asset(ressource.pict.getwebpath) }}" alt="{{ressource.titre}}">
+                <figcaption class="caption_mb">{{ressource.titre}}</figcaption>
+            {% endif %}
+        </figure>
+    </div>
+</div>
+<div class="illustr-ressourc_mb" >
+    <div class="como_mb">
+        {% if ressource.composition is not same as (" ") %}
+            <h3>{{ ressource.composition|raw|lower|capitalize }}</h3> {# {{post.subject|u.truncate(80, '...')|lower|capitalize}} #}
+        {% endif %}
+    </div>
+    <div class="iner_compo_mb">
+
+
+
+        <div class="txt_r1_mb">
+            <p>Coactique aliquotiens nostri pedites ad eos persequendos scandere clivos sublimes etiam si lapsantibus plantis fruticeta prensando vel dumos ad vertices venerint summos, inter arta tamen et invia nullas acies explicare permissi nec firmare nisu valido gressus: hoste discursatore rupium abscisa volvente, ruinis ponderum inmanium consternuntur, aut ex necessitate ultima fortiter dimicante, superati periculose per prona discedunt.
+            </p>
+        </div>
+
+    </div>
+
+    {#
+    <div class="pt_pict_ressourc">
+        {% if ressource.pict is not null %}
+        <div class="bac_img" style="background-image: url('{{ asset('spaceweb/template/'~ressource.pict.namefile) }}')"></div>
+        {% endif %}
+    </div>
+    #}
+</div>
+<div class="inner-ressourc_mb">
+    <div class="ressourc_content_mb">
+        <div class="r_ctnt_mb">
+            <p class="iner_list_mb">{{ressource.descriptif}}</p>
+        </div>
+    </div>
+</div>
+<div class="inner-post_mob">
+    {% if content is not same as ("") %}
+        <div class="_post_content_mob">
+            <div class="article_content">
+                {{ content|raw }}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+
+
+
+

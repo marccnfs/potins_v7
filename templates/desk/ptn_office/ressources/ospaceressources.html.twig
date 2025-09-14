@@ -1,0 +1,22 @@
+{% block body %}
+<div class="_wb">
+    <div class="container_bo_member">
+        {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
+        <div class="bo_content">
+            <div class="zone-bar-show">
+                <div class="bar-item">
+                    <a href="{{ path('ressource_manage') }}" class="btn-add">
+                        <i class="fa fa-plus"></i> Nouvelle ressource
+                    </a>
+                </div>
+            </div>
+            <h1 class="dashboard-title">Ressources</h1>
+        {{ include('desk/ptn_office/ressources/carteofboard.html.twig') }}
+        </div>
+    </div>
+</div>
+{%  endblock body %}
+{% use "js/js_customer.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

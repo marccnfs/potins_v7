@@ -1,0 +1,28 @@
+{%  if agent is same as 'desk/' %}
+<div id="litlogotop" class="zz_top-top-fix">
+    <div class="vagmenu">
+        {{ include('svg/potins/vector1.html.twig') }}
+    </div>
+    <a href="{{ path('board_all') }}">
+        <div class="svg_logo_small">
+            {{ include('svg/potins/logopotins_svg_small.html.twig') }}
+        </div>
+    </a>
+
+{#  <div class="back_img_logo_small" style="background-image: url({{ asset('imgdoc/potins/logopotins.png') }} )"></div> #}
+</div>
+{% else %}
+    <div class="zz_top-notop">
+        <div class="vagmenu" data-agent="{{ agent }}">
+            {{ include('svg/potins/vector1.html.twig') }}
+        </div>
+        <a href="{{ path('board_all') }}">
+            <div class="svg_logo_small">
+                {{ include('svg/potins/logopotins_svg_small.html.twig') }}
+            </div>
+        </a>
+
+        {#  <div class="back_img_logo_small" style="background-image: url({{ asset('imgdoc/potins/logopotins.png') }} )"></div> #}
+    </div>
+{% endif %}
+

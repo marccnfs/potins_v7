@@ -1,0 +1,8 @@
+
+        {% for msg in msgs %}
+            <a class="ax-m {{ msg.sender ?"":"ax-m-no"}}" href="{{ path('read_msg_board',{'slug':website.slug,'id':msg.id})}}">
+                {{ include('aff_messagery/board/elements/listmessageboard_mob.html.twig') }}
+            </a>
+        {% endfor %}
+
+

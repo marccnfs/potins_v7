@@ -1,0 +1,33 @@
+{% block body %}
+<div id="pagehome" class="index--mob">
+    <div class="bk-separate_mb"></div>
+    <div class="bk-separate_mb"></div>
+
+    <div class="templ_bleu">
+         <div class="arg-content_mob">
+             <div class="arg-cont_mob-bk">
+                 <h2 class="h2-tit2_mob rub1">Potins<br>numeriques</h2>
+                 <div class="cont-arg">
+                    Le site est en maintenance<br>Nous revenons très vite...
+                 </div>
+            </div>
+             <div class="bk-pict_mob">
+                 <section class="ear">
+                     <div class="blk-img_vrt4_mob" style="background-image: url({{ asset('imgdoc/potins/social.png') }}">
+                         <div class="_in-ear">
+                             {#<h1 class="tit-sit">Végétal</h1>#}
+                         </div>
+                     </div>
+                 </section>
+             </div>
+         </div>
+     </div>
+</div>
+{% endblock %}
+
+
+{% use "js/js_potins.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

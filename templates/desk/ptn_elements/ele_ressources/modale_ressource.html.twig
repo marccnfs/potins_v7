@@ -1,0 +1,82 @@
+<div class="fx-row-ress">
+    <div class="left_row_ress">
+        <div class="titlpotin">
+            <h2 title="ressouce : {{ ressource.titre }}">{{ ressource.titre|lower|capitalize }}</h2>
+        </div>
+        <div class="cadre_content">
+            <div class="text_cadre">
+                {% if ressource.composition is not same as (" ") %}
+                    <h3>{{ ressource.composition|raw|lower|capitalize }}</h3>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="right_row_ress">
+        <div class="pic_right_ress">
+            <figure role="group" aria-label="{{ressource.label}}">
+                {% if ressource.pict is not null %}
+                    <img src="{{ asset(ressource.pict.getwebpath) }}" alt="{{ressource.label}}">
+                    <figcaption class="caption">{{ressource.label}}</figcaption>
+                {% else %}
+                    {% if ressource.imageName %}
+                    <img src="{{ vich_uploader_asset(ressource, 'ImageFile') }}" alt="{{ressource.label}}">
+                    <figcaption class="caption">{{ressource.label}}</figcaption>
+                    {% endif %}
+                {% endif %}
+            </figure>
+        </div>
+    </div>
+</div>
+
+
+<div class="cadre_content">
+    <div class="text_cadre txt_r1">
+        <p>{{ ressource.descriptif }}</p>
+    </div>
+</div>
+
+{#
+<div class="cadre_title">
+    <h2>{{ressource.htmltitre}}</h2>
+</div>
+#}
+
+<!-- Affichage des articles (chapitres) -->
+<div class="articles-container">
+    {% for article in ressource.htmlcontent %}
+        <div class="article-block">
+            <h2>{{ article.titre }}</h2>
+            <div class="article-content">
+                {{ article.contenu|raw }}
+            </div>
+
+            {% if article.mediaName is not null %}
+                <div class="article-media">
+                    {% if article.mediaName matches '/\.(jpg|jpeg|png|gif)$/i' %}
+                        <img src="{{ asset('uploads/articles/' ~ article.mediaName) }}" alt="Illustration de {{ article.titre }}">
+                    {% elseif article.mediaName matches '/\.(mp4|webm|ogg)$/i' %}
+                        <video controls>
+                            <source src="{{ asset('uploads/articles/' ~ article.mediaName) }}" type="video/mp4">
+                            Votre navigateur ne supporte pas la lecture de vidéos.
+                        </video>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+
+<div class="inner-post">
+    {% if content is not same as ("") %}
+        <div class="_post_content">
+            <div class="article_content">
+                {{ content|raw }}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+
+
+
+

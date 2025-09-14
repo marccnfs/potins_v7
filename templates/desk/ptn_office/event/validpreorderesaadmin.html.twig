@@ -1,0 +1,16 @@
+{% block body %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
+            <section class="bo_content">
+                <div class="" id="registered" data-number="{{ registered }}">
+                    {{ include('desk/ptn_office/event/form/validresapotinformadmin.html.twig') }}
+                </div>
+            </section>
+        </div>
+    </div>
+{%  endblock body %}
+{% use "js/js_resapotinparticpants.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

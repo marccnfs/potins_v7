@@ -1,0 +1,20 @@
+<div class="fx-nav-admin bx-sha_admin">
+    <div class="cbe_cnt">
+        <div class="c_i_b">
+            <div class="in_cibS_f">
+                {% for menu2 in vartwig.menu2 %}
+                    <a href="{{ path(menu2.route,{'id':board.id}) }}" class="in_cibS-bt {{ menu2.class }}" role="button">
+                        <span class="in_cibS-spn1">
+                            <span class="in_cibS-spn2">
+                                <div class="in_cibS-svg">
+                                     <i class="{{ menu2.i }} mgr_5" aria-hidden="true"></i>
+                                </div>
+                                <span class="tit-cb">{{menu2.name}}</span>
+                            </span>
+                        </span>
+                    </a>
+                {%  endfor %}
+            </div>
+        </div>
+    </div>
+</div>

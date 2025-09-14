@@ -1,0 +1,59 @@
+
+{% block body %}
+
+    <div class="_wb">
+        <div class="container_bo_member">
+            {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
+            <section class="bo_content">
+                <div id="adddoc" data-event="{{ orderprod.id }}"></div>
+                <h1>Téléverser un fichier</h1>
+
+                {# Le formulaire avec Dropzone #}
+                <form action="{{ path('upload_doc') }}" class="dropzone" id="my-awesome-dropzone">
+                    <div class="dz-message">
+                        Glissez et déposez vos fichiers ici ou cliquez pour téléverser
+                    </div>
+                    <input type="hidden" name="orderprod" id="orderprod" value="{{ orderprod.id }}">
+                </form>
+                {# Bouton pour soumettre le formulaire #}
+                <button type="button" id="submit-button">Valider le téléversement</button>
+
+               {# {{ include('desk/ptn_office/event/formadddoc.html.twig') }} #}
+            </section>
+        </div>
+    </div>
+{% endblock %}
+{% use "js/js_addoc.html.twig" %}
+ {# Inclure le script Dropzone #}
+{% block javascripts %}
+{{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+    <script>
+        Dropzone.options.myAwesomeDropzone = {
+            paramName: "file", // Le nom que votre contrôleur attend
+            autoProcessQueue: false, // Désactiver le traitement automatique
+            maxFilesize: 6, // Taille maximale du fichier en Mo
+            acceptedFiles: ".jpeg,.jpg,.png,.pdf,.zip,.mp3,.m4a", // Fichiers autorisés
+            dictDefaultMessage: "Glissez et déposez vos fichiers ici ou cliquez pour téléverser",
+            init: function() {
+                var myDropzone = this;
+
+                // Lorsque le bouton est cliqué, on soumet la file d'attente
+                document.getElementById("submit-button").addEventListener("click", function() {
+                    if (myDropzone.getQueuedFiles().length > 0) {
+                        myDropzone.processQueue(); // Soumet tous les fichiers de la file d'attente
+                    } else {
+                        alert("Aucun fichier à téléverser.");
+                    }
+                });
+
+                myDropzone.on("success", function(file, response) {
+                    if (response.status === 'success') {
+                        // Rediriger vers la page de succès
+                        window.location.href = response.redirect_url;
+                    }
+                });
+            }
+        };
+    </script>
+{% endblock %}

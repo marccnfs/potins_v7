@@ -1,0 +1,9 @@
+{% block body %}
+<div class="fx_wb-c">
+        {{ include('aff_account/profil/view/'~agent~'/changeadresse.html.twig') }}
+</div>
+{%  endblock body %}
+{% use "js/js_edit_customer.html.twig" %}
+{% block javascripts %}
+        {{ parent() }}
+{% endblock %}

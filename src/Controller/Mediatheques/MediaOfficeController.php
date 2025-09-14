@@ -1,0 +1,42 @@
+<?php
+
+
+namespace App\Controller\Mediatheques;
+
+use App\Classe\MemberSession;
+use App\Service\Search\ListEvent;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+
+#[IsGranted('ROLE_MEDIA')]
+
+
+class MediaOfficeController extends AbstractController
+{
+    use MemberSession;
+
+    #[Route('/planning-media', name:"office_media")]
+    public function officeMediaBoard(ListEvent $listEvent): Response
+    {
+        $tabdatesevents=$listEvent->listEventResa($this->board->getId());
+        $vartwig=$this->menuNav->templatingadmin(
+            'media_office',
+            $this->board->getNameBoard(),
+            $this->board,
+            1
+        );
+
+        return $this->render($this->useragentP.'ptn_media/home.html.twig', [
+            'directory'=>"office",
+            'replacejs'=>!empty($notices),
+            'vartwig'=>$vartwig,
+            'board'=>$this->board,
+            'member'=>$this->member,
+            'tabevents'=>$tabdatesevents,
+        ]);
+    }
+
+}

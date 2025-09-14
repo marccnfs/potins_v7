@@ -1,0 +1,42 @@
+{% apply spaceless %}
+    <div class="li-msgp {{ msg.isdispatchsender ?"":"li-msgp-no"}}">
+        <div class="msgp {{ msg.isdispatchsender ?"gxcsal":""}}">
+            <div class="_bb-msg {{ msg.isdispatchsender ?"_bg-Wfilt":"_bg-R"}}" ></div>
+            <div class="content-msgp">
+                {% if not msg.isdispatchsender %}
+                    <div class="{{ msg.isdispatchsender ?"":"_co-bk"}}">Nouveau contact</div>
+                {% endif %}
+                <div class="inner-msgp">
+                    {% if msg.isdispatchsender %}
+                        <div class="autor-msgp {{msg.isdispatchsender ?"":"_co-bk"}}">{{- msg.tballmsgp.dispatch.name|trim -}}</div>
+                    {% else %}
+                        <div class="autor-msgp {{ msg.isdispatchsender ?"":"_co-bk"}}">{{- msg.tballmsgp.contact.emailcanonical|trim -}}</div>
+                    {% endif %}
+                 {#   <div class="obje">{{- msg.subject|u.truncate(20, '...', false) -}}</div> #}
+                    {% if msg.createAt|format_datetime('short', 'none', locale='fr') is same as ("now"|format_datetime('short', 'none', locale='fr')) %}
+                        <div>{{- msg.createAt|format_datetime('none', 'short', locale='fr') -}}</div>
+                    {% else %}
+                        <div>{{- msg.createAt|format_datetime('medium', 'none', locale='fr')|slice(0,-4) -}}</div>
+                    {% endif %}
+                </div>
+
+                {% if msg.pj is defined %}
+                    <div class="andel">
+                        <div><p>pièce jointe</p></div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="bt-cub" role="button">
+                <a class="FKF6mc TpQm9d" href="{{path('read_message_blog',{'id': msg.id }) }}">
+                    <div class="in_cibS-Vd"></div>
+                    <div class="in_cibS-bot"></div>
+                    <span class="in_cibS-spn1">
+                        <span class="in_cibS-spn2">
+                            <span class="tit-cb">lire</span>
+                        </span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endapply %}

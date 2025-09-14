@@ -1,0 +1,138 @@
+<div class="_in-l-bb2_mb">
+
+    <div class="module-card {{ tabmodule.module_mail?'cardactive':'cardalerte'}}">
+        <div class="logo_wb no-law"><i class="fa fa-comments-o" aria-hidden="true"></i>Conversations</div>
+        <h5>Votre lien de communication. Astuce : utilisez le lien dans vos courriers électroniques, site web...et centralisez votre communication.</h5>
+        {% if  tabmodule.module_mail %}
+            {% if  board.contactation.active %}
+                <cite class="-ct_b">{{board.contactation.linkone }}</cite>
+                <a class="stape_order_menu middlegrid stape_bull" href="{{ path('process_contact',{'id':board.id}) }}">modifier</a>
+            {% else %}
+                <div class="wp-boutton">
+                    <a href="{{ path('process_contact',{'id':board.id}) }}" class="btn-send">Activez</a>
+
+                  {#  {% if pw.role is same as "superadmin" or pw.role is same as "admin" %}
+                            <a href="{{ path('process_contact',{'id':board.id}) }}" class="btn-send">Activez</a>
+                        {%  endif %}
+                  #}
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <div class="module-card {{  tabmodule.module_blog?'cardactive':'cardalerte' }}">
+        <div class="logo_wb no-law"><i class="fa fa-telegram" aria-hidden="true"></i> Affichez</div>
+        <h5>Votre panneau local vous permet d'afficher vos articles. Ils seront visibles depuis la localité du panneau et référencés sur le web</h5>
+        {% if  tabmodule.module_blog %}
+            <div class="wp-boutton">
+                <a href="" class="btn-send">désactivez</a>
+                 {#   {% if pw.role is same as "superadmin" %}
+                        <a href="" class="btn-send">désactivez</a>
+                    {%  endif %}
+                 #}
+            </div>
+        {% else %}
+            <div class="wp-boutton">
+                <a href="{{ path('new_postation',{'id':board.id}) }}" class="btn-send">j'affiche</a>
+
+                {#
+                    {% if pw.role is same as "superadmin" or pw.role is same as "admin" %}
+                        <a href="{{ path('new_postation',{'id':board.id}) }}" class="btn-send">j'affiche</a>
+                    {%  endif %}
+                #}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="module-card {{  tabmodule.module_shop?'cardactive':'cardalerte' }}">
+        <div class="logo_wb no-law"><i class="fa fa-shopping-basket" aria-hidden="true"></i> Boutique</div>
+        <h5>Votre espace pour mettre en avant vos produits, services. La boutique de votre panneau est aussi un vecteur relationnel important. Bientôt la vente en ligne disponible sur AffiChanGe</h5>
+
+        {% if  tabmodule.module_shop %}
+            <div class="wp-boutton">
+                <a href="" class="btn-send">désactivez</a>
+
+                {#
+                    {% if pw.role is same as "superadmin" or pw.role is same as "admin" %}
+                        <a href="" class="btn-send">désactivez</a>
+                    {%  endif %}
+                #}
+            </div>
+        {% else %}
+
+            <div class="wp-boutton">
+                <a href="{{ path('addmodule_website',{'activ':'module_shop','id':board.id}) }}" class="btn-send">Activez</a>
+
+                {#
+                    {% if pw.role is same as "superadmin" or pw.role is same as "admin" %}
+                        <a href="{{ path('addmodule_website',{'activ':'module_shop','id':board.id}) }}" class="btn-send">Activez</a>
+                    {%  endif %}
+#}
+            </div>
+        {% endif %}
+
+    </div>
+
+    <div class="module-card {{  tabmodule.module_ressources?'cardactive':'cardalerte'}}">
+        <div class="logo_wb no-law"><i class="fa fa-cutlery" aria-hidden="true"></i> Ressources </div>
+        <h5>Publiez vos ressources info.</h5>
+            <div class="_cTm-Wb">
+                {% if tabmodule.module_ressources %}
+                    <div class="wp-boutton">
+                        <a href="" class="btn-send">désactivez</a>
+
+                        {#
+                        {% if pw.role is same as "superadmin" or pw.role is same as "admin" %}
+                            <a href="" class="btn-send">désactivez</a>
+                        {%  endif %}
+                        #}
+                    </div>
+                {% else %}
+                    <div class="wp-boutton">
+                        <a href="{{ path('addmodule_website',{'activ':'module_found','id':board.id}) }}" class="btn-send">Activez</a>
+
+                        {#
+                        {% if pw.role is same as "superadmin" or pw.role is same as "admin" %}
+                            <a href="{{ path('addmodule_website',{'activ':'module_found','id':board.id}) }}" class="btn-send">Activez</a>
+                        {%  endif %}
+                        #}
+                    </div>
+                {% endif %}
+            </div>
+    </div>
+
+    <div class="module-card {{  tabmodule.module_event?'cardactive':'cardalerte'}}">
+        <div class="logo_wb no-law"><i class="fa fa-tags" aria-hidden="true"></i> Evenement en temps réel</div>
+        <h5>Dites où vous êtes en temps réel, informez sur vos prochains évènements locaux</h5>
+        {% if tabmodule.module_event %}
+        {% else %}
+            <div class="wp-boutton">
+                <a href="{{ path('addmodule_website',{'activ':'module_event','id':board.id}) }}" class="btn-send">Activez</a>
+
+                {#
+                    {% if pw.role is same as "superadmin" or pw.role is same as "admin" %}
+                        <a href="{{ path('addmodule_website',{'activ':'module_event','id':board.id}) }}" class="btn-send">Activez</a>
+                    {%  endif %}
+                #}
+            </div>
+        {% endif %}
+    </div>
+
+    {# reservation on voit apres
+    <div class="module-art {{  tabmodule.module_reservation?'active':'alerte' }}">
+        <div class="logo_wb no-law"><i class="fa fa-calendar-o" aria-hidden="true"></i> Reservation en ligne</div>
+        {% if tabmodule.module_reservation %}
+        {% else %}
+            <div class="gp-form-row-col2">
+                <div class="iner-bt">
+                    {% if pw.role is same as "superadmin" %}
+                        <a href="{{ path('addmodule_website',{'activ':'module_reservation','id':website.id}) }}" class="btn-send">Activez</a>
+                    {%  endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    #}
+
+</div>
+

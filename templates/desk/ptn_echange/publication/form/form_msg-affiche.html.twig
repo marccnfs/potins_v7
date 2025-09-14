@@ -1,0 +1,40 @@
+<div id="typeform" data-type="ctc">
+    <div class="wb_header centered">
+        <div class="_bk-0_mob" id="id-choicacces">
+            <div class="space_inf_msg">
+                <div class="tab-info_rd">
+                    {{ include('aff_messagery/conversations/view/add-msgaffiche-noconnect.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="timeline-msg_dk msg_register" id="register" data-register="{{ website.id }}">
+        {{ include('aff_messagery/conversations/form/addmember.html.twig') }}
+    </div>
+    <span id="loadingregister" style="display: none;font-size: 25px;"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i></span>
+    <div class="timeline-msg_dk msg_contact" id="contact">
+        {{ include('aff_messagery/conversations/form/addcontact.html.twig') }}
+    </div>
+    {{ include('aff_messagery/conversations/view/infregister.html.twig') }}
+    <div class="tglaff w100" id="tgl_12" style="display: none">
+        <add-comment slug="{{ website.slug }}"></add-comment>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

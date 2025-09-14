@@ -1,0 +1,11 @@
+{% block body %}
+<div class="_off">
+    <div class="media-ospace">
+        {{ include('pwa/ptn_elements/ele_events/agenda_media.html.twig') }}
+    </div>
+</div>
+{%  endblock body %}
+{% use "js/js_ospaceboard.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,29 @@
+<div class="dashboard">
+    <div class="dashboard-item">
+        <h4>Statut</h4>
+        <p class="status {{ openday ? 'open' : 'closed' }}">
+            {{ openday is defined ? (openday ? 'Ouvert' : 'Fermé') : 'Horaires non renseignés' }}
+        </p>
+        {% if openday is not defined %}
+            <a href="{{ path('opendays_edit', {'slug': board.slug, 'id': board.id}) }}" class="btn btn-edit">Modifier</a>
+        {% endif %}
+    </div>
+
+    <div class="dashboard-item">
+        <h4>Posts</h4>
+        <p>{{ posts|default(0) }}</p>
+    </div>
+
+    <div class="dashboard-item">
+        <h4>Offres</h4>
+        <p>{{ shops|default(0) }}</p>
+    </div>
+
+    <div class="dashboard-item">
+        <h4>Localisation</h4>
+        <p>{{ board.locality|length > 0 ? board.locality.city : 'Non renseigné' }}</p>
+        {% if board.locality|length == 0 %}
+            <a href="{{ path('localize_change', {'slug': board.slug}) }}" class="btn btn-edit">Modifier</a>
+        {% endif %}
+    </div>
+</div>

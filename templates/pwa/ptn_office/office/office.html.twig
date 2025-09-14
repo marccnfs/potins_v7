@@ -1,0 +1,14 @@
+{% block body %}
+<div class="_wb">
+    <div class="container_bo_member">
+        {{ include('pwa/ptn_office/menu/websitemenu.html.twig') }}
+        <div class="bo_content">
+            {{ include('pwa/ptn_elements/ele_boards/affi_board.html.twig') }}
+        </div>
+    </div>
+</div>
+{%  endblock body %}
+{% use "js/js_ospaceboard.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="FR">
+<head>
+    {% block head %}
+            <title>{% block title %}{{vartwig.title}}{% endblock %}</title>
+            {{ include('head/head.html.twig') }}
+    {% endblock head %}
+    {{ encore_entry_link_tags('app') }}
+</head>
+{%  set agent = app.session.get('agent') %}
+{%  if replacejs is not defined %}
+{%  set replacejs = false %}
+{%  endif %}
+<body>
+{{ encore_entry_script_tags('app') }}
+<main class="{{ agent=='desk/'? 'affibody' : 'body_mob' }}">
+<div class="wb-inf-" data-agent="{{ agent }}" data-replacejs="{{ replacejs?'yes':'no' }}"></div>
+    {% block menu %}
+    {% endblock menu %}
+    {% block core %}
+            {% block website %}
+            {% endblock %}
+            {%  block content %}
+            {% endblock %}
+        {% block javascripts %}
+        {% endblock %}
+    {% endblock core %}
+</main>
+</body>
+</html>

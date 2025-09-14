@@ -1,0 +1,134 @@
+{# templates/escape/garden.html.twig #}
+{% block body %}
+    {% set cfg = puzzle.config is iterable ? puzzle.config : {} %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            <div class="bo_content">
+
+                <div class="step-layout">
+                    <div class="step-sidebar">
+                        {% include 'pwa/escape/wizard/_infos_step.html.twig' with { step: 6, eg: eg, puzzle: puzzle } %}
+                    </div>
+
+                    <div class="step-main">
+
+                        <header style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin-bottom:.75rem">
+                            <div>
+                                <h1 style="margin:0">Étape 6 — Code HTML minimal</h1>
+                                {% if puzzle.prompt %}<p class="text-muted" style="margin:.25rem 0 0">{{ puzzle.prompt }}</p>{% endif %}
+                            </div>
+                            <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+                                {% if puzzle.ready %}
+                                    <a class="btn btn-light" href="{{ path('wizard_preview_step', { id: eg.id, step: 6 }) }}" target="_blank" rel="noopener">Aperçu admin</a>
+                                {% endif %}
+                                {% if eg.published and eg.shareSlug %}
+                                    <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: 6 }) }}" target="_blank" rel="noopener">Voir côté joueur</a>
+                                {% endif %}
+                            </div>
+                        </header>
+
+                        {# --- Carte PREVIEW & TEST --- #}
+                        <section class="card" style="margin-bottom:1rem">
+                            <h3 style="margin:0 0 .5rem">Aperçu & test</h3>
+                            <p class="muted" style="margin:.25rem 0 .75rem">
+                                Écris le code ci-dessous. Clique <strong>Aperçu</strong> pour voir le rendu et <strong>Tester</strong> pour vérifier les règles.
+                            </p>
+
+                            <section id="preview-htmlmin"
+                                     data-controller="html-min"
+                                     data-html-min-starter-value='{{ (cfg.starterHtml|default("<h1>Titre</h1><p>Paragraphe</p>"))|e('html_attr') }}'
+                                     data-html-min-checks-value='{{ (cfg.checks|default([]))|json_encode|e('html_attr') }}'
+                                     data-html-min-ok-message-value="{{ cfg.okMessage|default('Bravo !') }}">
+                                <textarea data-html-min-target="editor" rows="10" style="width:100%;font-family:ui-monospace,monospace"></textarea>
+                                <div class="mt-2" style="display:flex;gap:.5rem;flex-wrap:wrap">
+                                    <button class="btn" data-action="click->html-min#render">Aperçu</button>
+                                    <button class="btn btn-primary" data-action="click->html-min#test">Tester</button>
+                                </div>
+                                <iframe data-html-min-target="frame" sandbox="allow-scripts allow-same-origin" style="width:100%;min-height:260px;border:1px solid #ddd;border-radius:.5rem;margin-top:.5rem"></iframe>
+                                <div data-html-min-target="msg" class="mt-2"></div>
+                            </section>
+                        </section>
+
+                        {# --- Carte FORMULAIRE (paramétrage) --- #}
+                        {{ form_start(form, { attr: { id: 'form-step6' } }) }}
+                        <section class="card">
+                            <div class="grid" style="grid-template-columns:minmax(260px,1fr) minmax(320px,1fr)">
+                                <div>
+                                    {{ form_row(form.title, { label: 'Titre de l’épreuve' }) }}
+                                    {{ form_row(form.prompt, { label: 'Consigne affichée au joueur' }) }}
+                                    {{ form_row(form.starterHtml, { label: 'Code de départ (HTML)' }) }}
+                                    <p class="muted" style="margin-top:.25rem">
+                                        Exemple: <code>&lt;h1&gt;Mon titre&lt;/h1&gt;&lt;p&gt;Ajoute un lien ci-dessous&lt;/p&gt;</code>
+                                    </p>
+                                </div>
+                                <div>
+                                    {{ form_row(form.checksJson, { label: 'Règles (JSON)' }) }}
+                                    <p class="muted" style="margin-top:.25rem">
+                                        Règles possibles : <code>selectorExists</code>, <code>textIncludes</code>, <code>selectorCountAtLeast</code>, <code>attrEquals</code>, <code>htmlIncludes</code>.
+                                    </p>
+                                    {{ form_row(form.okMessage, { label: 'Message de réussite' }) }}
+                                    {{ form_row(form.hintsJson, { label: 'Indices (JSON)' }) }}
+                                </div>
+                            </div>
+                            {#
+                            <div class="form-actions" style="display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem">
+                                <button class="btn btn-primary">Enregistrer</button>
+                                {% if puzzle.id %}
+                                    <a class="btn" href="{{ path('wizard_preview_step', { id: eg.id, step: 6 }) }}" target="_blank" rel="noopener">Aperçu admin</a>
+                                {% endif %}
+                            </div>
+                            #}
+                        </section>
+                        {{ form_end(form) }}
+
+
+                        <div class="sticky-save">
+                            <div class="sticky-inner">
+                                <span class="text-muted">Étape 6 — HTML</span>
+                                <div style="display:flex;gap:.5rem">
+                                    <button form="form-step6" class="btn btn-primary">Enregistrer</button>
+                                    {% if puzzle.ready %}<a class="btn btn-light" href="{{ path('wizard_preview_step', { id: eg.id, step: 6 }) }}" target="_blank">Aperçu</a>{% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function(){
+            const f=document.getElementById('form-step6'); if(!f) return;
+            const idStarter='{{ form.starterHtml.vars.id }}', idChecks='{{ form.checksJson.vars.id }}', idOk='{{ form.okMessage.vars.id }}';
+            let t; const deb=(fn)=>{clearTimeout(t); t=setTimeout(fn,220);};
+            function refresh(){
+                const root=document.getElementById('preview-htmlmin'); if(!root) return;
+                const c=root.cloneNode(false); c.id='preview-htmlmin';
+                const starter=document.getElementById(idStarter).value || '<!-- Écris ici -->';
+                let checks=[]; try{ checks=JSON.parse(document.getElementById(idChecks).value||'[]'); }catch(e){}
+                c.setAttribute('data-controller','html-min');
+                c.setAttribute('data-html-min-starter-value', starter);
+                c.setAttribute('data-html-min-checks-value', JSON.stringify(checks));
+                c.setAttribute('data-html-min-ok-message-value', document.getElementById(idOk).value || 'Bravo !');
+                c.innerHTML = `
+      <textarea data-html-min-target="editor" rows="10" style="width:100%;font-family:ui-monospace,monospace"></textarea>
+      <div class="mt-2">
+        <button data-action="click->html-min#render">Aperçu</button>
+        <button data-action="click->html-min#test">Tester</button>
+      </div>
+      <iframe data-html-min-target="frame" sandbox="allow-scripts allow-same-origin" style="width:100%;min-height:260px;border:1px solid #ddd;border-radius:.5rem;margin-top:.5rem"></iframe>
+      <div data-html-min-target="msg" class="mt-2"></div>`;
+                root.replaceWith(c);
+            }
+            [idStarter,idChecks,idOk].forEach(id=>{
+                document.getElementById(id)?.addEventListener('input', ()=>deb(refresh));
+            });
+        })();
+    </script>
+{% endblock %}
+{% use "js/js_escape.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

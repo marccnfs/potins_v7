@@ -1,0 +1,18 @@
+{% block body %}
+<div class="_wb">
+    <div class="container-bo_v5">
+        {{ include('pwa/ptn_office/menu/websitemenu.html.twig') }}
+        <section class="_wb-ospace">
+            <div class="head-wb-space">
+
+            </div>
+        <!-- affiches du board customer -->
+      {{ include('pwa/ptn_office/ressources/foundofboard.html.twig') }}
+        </section>
+    </div>
+</div>
+{%  endblock body %}
+{% use "js/js_customer.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

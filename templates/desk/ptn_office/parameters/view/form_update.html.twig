@@ -1,0 +1,95 @@
+<div class="update-container">
+    {{ form_start(form) }}
+
+    <!-- Profil du website -->
+    <div class="form-section">
+        <h3 class="section-title">Profil du Website</h3>
+        <div class="form-group">
+            {{ form_label(form.nameboard, "Nom du panneau :") }}
+            {{ form_widget(form.nameboard, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.template.description, "Activité, intérêts... :") }}
+            {{ form_widget(form.template.description, {'attr': {'class': 'form-control', 'placeholder':'En quelques mots...'}}) }}
+        </div>
+    </div>
+
+    <!-- Accès board -->
+    <div class="form-section">
+        <h3 class="section-title">Accès board</h3>
+        <div class="form-group">
+            {{ form_label(form.codesite, "Code secret du website :") }}
+            {{ form_widget(form.codesite, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.url, "Adresse site web (URL) :") }}
+            {{ form_widget(form.url, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+
+    <!-- Référencement -->
+    <div class="form-section">
+        <h3 class="section-title">Référencement</h3>
+        <div class="form-group">
+            {{ form_label(form.template.tagueries, "Mots clés :") }}
+            {{ form_widget(form.template.tagueries, {'attr': {'class': 'form-control', 'placeholder':'Séparez les mots par une virgule'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.template.baseline, "Slogan :") }}
+            {{ form_widget(form.template.baseline, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.template.activities, "Secteur d'activité :") }}
+            {{ form_widget(form.template.activities, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="form-section">
+        <h3 class="section-title">Contact</h3>
+        <div class="form-group">
+            {{ form_label(form.template.emailspaceweb, "E-mail de contact :") }}
+            {{ form_widget(form.template.emailspaceweb, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.template.telephonespaceweb, "Téléphone fixe (optionnel) :") }}
+            {{ form_widget(form.template.telephonespaceweb, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.template.telephonemobspaceweb, "Téléphone mobile (optionnel) :") }}
+            {{ form_widget(form.template.telephonemobspaceweb, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+
+    <!-- Logo -->
+    <div class="form-section">
+        <h3 class="section-title">Logo</h3>
+        <div class="image-preview">
+            <img src="{{ board.template.logo ? asset(board.template.logo.getwebpath) : asset('img/affitrans.png') }}" id="uploadPreview1">
+        </div>
+        <div class="form-group">
+            {{ form_label(form.template.logotemplate, "Ajoutez/modifiez votre logo") }}
+            {{ form_widget(form.template.logotemplate) }}
+        </div>
+    </div>
+
+    <!-- Image de fond -->
+    <div class="form-section">
+        <h3 class="section-title">Image de fond</h3>
+        <div class="image-preview">
+            <img src="{{ board.template.background ? asset(board.template.background.getwebpath) : asset('img/affitrans.png') }}" id="uploadPreview2">
+        </div>
+        <div class="form-group">
+            {{ form_label(form.template.background, "Ajoutez/modifiez l'image de fond") }}
+            {{ form_widget(form.template.background) }}
+        </div>
+    </div>
+
+    {{ form_rest(form) }}
+
+    <div class="form-actions">
+        <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
+    </div>
+
+    {{ form_end(form) }}
+</div>

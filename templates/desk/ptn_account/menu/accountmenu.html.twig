@@ -1,0 +1,29 @@
+<div class="menu-bo_sp">
+    <div class="pop-tab_menu _cl-cl">
+        <div class="af_flx-C">
+            <div class="bubble-menu-litt-rock mn-border {{ vartwig.m1 ? "actsel" :"" }}">
+                <a class="mn-link" href="{{path('profil_dispatch')}}">Mon espace AffiChange</a>
+            </div>
+            <div class="bubble-menu-litt-rock mn-border {{ vartwig.m2 ? "actsel" :"" }}">
+                <a class="mn-link" href="{{path('profil_customer')}}">Mes infos de contact</a>
+            </div>
+            <div class="bubble-menu-litt-rock mn-border {{ vartwig.m3 ? "actsel" :"" }}">
+                <a class="mn-link" href="{{path('tab_facture_customer')}}">Mes Factures</a>
+            </div>
+            <div class="bubble-menu-litt-rock mn-border {{ vartwig.m4 ? "actsel" :""}}">
+                <a class="mn-link" href="{{path('choice_board')}}">Mes préférences</a>
+            </div>
+            <div class="bubble-menu-litt-rock mn-border {{ vartwig.m5 ? "actsel" :"" }}">
+                <a class="mn-link" href="{{ path('list_module_customer') }}">Mes Services</a>
+            </div>
+            {#
+            <div class="bubble-menu-litt-rock mn-border {{ vartwig.m6 ?? "actsel" }}">
+                <a class="mn-link" href="">Modification mot de passe</a>
+            </div>
+            #}
+            <div class="bubble-menu-litt-rock {{ vartwig.m7 ?? "actsel" }}">
+                <a class="mn-link" href="{{path('list_board')}}">Gérer mes panneaux</a>
+            </div>
+        </div>
+    </div>
+</div>

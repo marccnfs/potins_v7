@@ -1,0 +1,38 @@
+{% block body %}
+<div id="pagehome" class="homepage-wrapper--desk" data-agent="{{ agent }}">
+
+    <div class="templ_bleu">
+         <div class="arg-content_cor4">
+             <div class="arg-cont-bk">
+                 <h2 class="h2-tit2 rub1">Rencontres<br>numeriques</h2>
+                 <div class="cont-arg">
+                    Le site est en maintenance.<br>Nous revenons très vite...
+                 </div>
+
+            </div>
+             <div class="bk-pict_cor4">
+                 <section class="eyes">
+                     <div class="blk-img_vrt4" style="background-image: url({{ asset('imgdoc/potins/social.png') }}">
+                         <div class="_in-eyes">
+                             {#<h1 class="tit-sit">Végétal</h1>#}
+                         </div>
+                     </div>
+                 </section>
+             </div>
+         </div>
+     </div>
+
+    <div class="bk-separate"></div>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+    {{ include ('desk/ptn_public/footer/potins_footer.html.twig') }}
+{% endblock footer %}
+
+{% use "js/js_potins.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

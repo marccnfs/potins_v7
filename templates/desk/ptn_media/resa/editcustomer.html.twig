@@ -1,0 +1,12 @@
+{% block body %}
+    <div class="_o_media">
+        <div class="act-mem">
+        </div>
+        {{ include('desk/ptn_media/resa/form/editcustomerform.html.twig') }}
+    </div>
+    {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+{%  endblock body %}
+{% use "js/js_customer.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

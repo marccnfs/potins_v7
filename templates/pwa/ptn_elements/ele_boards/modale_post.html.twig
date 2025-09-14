@@ -1,0 +1,27 @@
+<div class="w_titlpost">
+    {#   <h2 title="post de {{ website.namewebsite }}">{{ post.titre|lower|capitalize }}</h2>  #}
+    {% if post.subject is not same as (" ") %}
+        <h3>{{ post.subject|raw|lower|capitalize }}</h3> {# {{post.subject|u.truncate(80, '...')|lower|capitalize}} #}
+    {% endif %}
+</div>
+<time itemprop = "startDate" class="datepost">mis en ligne le : {{ post.createAt|date("d-m-Y") }}</time>
+
+
+<div class="illustr-post" >
+    <div class="w_pictfull">
+        {% if post.media.imagejpg|length > 0 and post.media.imagejpg[0].namefile is defined %}
+            <img src="{{ asset(post.media.imagejpg[0].getWebPath) }}" alt="image affiche">
+        {% endif %}
+    </div>
+</div>
+
+<div class="inner-post">
+
+
+
+</div>
+
+
+
+
+

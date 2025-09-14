@@ -1,0 +1,77 @@
+<div class="container_bo">
+    <div class="contain_prof">
+       <div class="pos-incub-l">
+       <div class="tit-pos-cub">votre espace {{ profil.firstname }}</div>
+            {{ form_start(form)}}
+            <div class="process-module_glass">
+                <div class="stape-process-lit" >
+                    <div class="group-form-glass_lit">
+                        <div class="field-glass">
+                            {{ form_label(form.sex, "M,Mme :") }}
+                            {{ form_widget(form.sex, {'attr': {'class': 'form-affi'}}) }}
+                        </div>
+                        <div class="field-glass">
+                            {{ form_label(form.firstname, "Nom :") }}
+                            {{ form_widget(form.firstname, {'attr': {'class': 'form-affi'}}) }}
+                        </div>
+
+                        <div class="field-glass">
+                            {{ form_label(form.lastname, "prénom :") }}
+                            {{ form_widget(form.lastname, {'attr': {'class': 'form-affi'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stape-process-lit" >
+                    <h5>contact :</h5>
+                    <div class="group-form-glass_lit">
+                        <div class="field-glass">
+                            {{ form_label(form.emailfirst, "adresse mail") }}
+                            {{ form_widget(form.emailfirst, {'attr': {'class': 'form-affi'}}) }}
+                        </div>
+
+                        <div class="field-glass">
+                            {{ form_label(form.telephonefixe, "telephone fixe") }}
+                            {{ form_widget(form.telephonefixe, {'attr': {'class': 'form-affi'}}) }}
+                        </div>
+                        <div class="field-glass">
+                            {{ form_label(form.telephonemobile, "mobile") }}
+                            {{ form_widget(form.telephonemobile, {'attr': {'class': 'form-affi'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stape-process-lit" >
+                    <div class="group-form-glass_lit">
+                        <div class="field-glass">
+                            {{ form_label(form.birthdate, "date de naissance") }}
+                            {{ form_widget(form.birthdate, {'attr': {'class': 'form-affi'}}) }}
+                        </div>
+                        <div class="bfield-glass">
+                            {{ form_label(form.job, "votre activité") }}
+                            {{ form_widget(form.job, {'attr': {'class': 'form-affi'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="stape-process-lit" >
+                    <div class="group-form-glass_lit">
+                        <div class="field-glass">
+                            {{ form_label(form.avatar, "votre avatar") }}
+                            {{ form_widget(form.avatar)}}
+                        </div>
+                    </div>
+                </div>
+                {{form_rest(form)}}
+                <button class="btn btn-primary">{{button|default('Enregistrer') }}</button>
+            </div>
+            {{form_end(form)}}
+        </div>
+    </div>
+</div>
+
+
+
+
+

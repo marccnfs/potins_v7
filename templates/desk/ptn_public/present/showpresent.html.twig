@@ -1,0 +1,34 @@
+{% block body %}
+
+<div class="wp-ressourc">
+
+                <div class="potin_ressourc">
+                    <article class="w-ressourc">
+                        {{ include('desk/ptn_elements/ele_present/modale_present.html.twig') }}
+                    </article>
+                </div>
+    <div class="fix-ressources">
+                <div class="other_resourc_blk r_ctnt">
+
+                    <div class="title-block">
+                        <h2 class="title">voir aussi</h2>
+                    </div>
+
+                    <div class="other_resourc">
+                  ras
+                    </div>
+
+                </div>
+    </div>
+
+</div>
+{%  endblock body %}
+
+    {% block footer %}
+        {{ include ('desk/ptn_public/footer/potins_footer.html.twig') }}
+    {% endblock footer %}
+
+{% use "js/js_public.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

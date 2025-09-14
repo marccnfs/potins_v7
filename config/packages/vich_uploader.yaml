@@ -1,0 +1,42 @@
+vich_uploader:
+    db_driver: orm
+
+    metadata:
+        type: attribute
+
+    mappings:
+        avatar:
+            uri_prefix: /upload/avatar
+            upload_destination: '%kernel.project_dir%/public/upload/avatar'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true
+
+        articles_media:
+            uri_prefix: /uploads/articles
+            upload_destination: '%kernel.project_dir%/public/uploads/articles'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+        ressources_media:
+            uri_prefix: /uploads/ressources
+            upload_destination: '%kernel.project_dir%/public/uploads/ressources'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+        potins_media:
+            uri_prefix: /uploads/potins
+            upload_destination: '%kernel.project_dir%/public/uploads/potins'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+        participant_images:
+            uri_prefix: /uploads/illustrations
+            upload_destination: '%kernel.project_dir%/public/uploads/illustrations'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+        participant_avatar:
+            uri_prefix: /uploads/avatars
+            upload_destination: '%kernel.project_dir%/public/uploads/avatars'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            delete_on_remove: true
+            delete_on_update: true

@@ -1,0 +1,76 @@
+<div class="dash">
+
+    <header class="dash-head">
+        <div>
+            <h1>Mes escape games</h1>
+            <p class="muted">Retrouve tes créations, poursuis leur édition, publie ou joue.</p>
+        </div>
+        <div class="actions">
+            <a class="btn btn-primary" href="{{ path('wizard_start') }}">+ Créer un nouvel escape</a>
+        </div>
+    </header>
+
+    {% if games is not empty %}
+        <section class="cards">
+            {% for eg in games %}
+                <article class="card">
+                    <a class="thumb" href="{{ path('wizard_overview', { id: eg.id }) }}">
+                        {% set illu = eg.illustrations|first %}
+                        {% if illu %}
+                            <img src="{{ vich_uploader_asset(illu, 'imageFile') }}" alt="">
+                        {% else %}
+                            <div class="ph"></div>
+                        {% endif %}
+                    </a>
+
+                    <div class="meta">
+                        <h3 class="title">
+                            <a href="{{ path('wizard_overview', { id: eg.id }) }}">{{ eg.title|default('Sans titre') }}</a>
+                        </h3>
+                        <p class="desc">
+                            {% if eg.universe is defined and eg.universe.contexte is defined and eg.universe.contexte %}
+                                {{ eg.universe.contexte|striptags|u.truncate(120, '…') }}
+                            {% else %}
+                                <span class="muted">Ajoute un contexte pour présenter ton escape.</span>
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div class="badges">
+                        {% if eg.published %}
+                            <span class="badge badge-green">Publié</span>
+                        {% else %}
+                            <span class="badge">Brouillon</span>
+                        {% endif %}
+                        {% if eg.shareSlug %}
+                            <span class="badge">Slug: {{ eg.shareSlug }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="quick">
+                        <a class="btn" href="{{ path('wizard_universe', { id: eg.id }) }}">Univers</a>
+                        <a class="btn" href="{{ path('wizard_overview', { id: eg.id }) }}">Éditer</a>
+                        <form method="post" action="{{ path('escape_delete', {id: eg.id}) }}" onsubmit="return confirm('Supprimer définitivement ce jeu ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_escape_' ~ eg.id) }}">
+                            <button class="btn btn-danger">🗑️ Supprimer</button>
+                        </form>
+                        {% if eg.published and eg.shareSlug %}
+                            <a class="btn btn-light" href="{{ path('play_entry', { slug: eg.shareSlug }) }}" target="_blank" rel="noopener">Voir côté joueur</a>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+        </section>
+    {% else %}
+        <section class="empty">
+            <h2>Tu n’as pas encore créé d’escape</h2>
+            <p>Commence par définir l’univers de ton jeu, puis ajoute tes 6 épreuves guidées.</p>
+            <a class="btn btn-primary" href="{{ path('wizard_start') }}">Créer mon premier escape</a>
+        </section>
+    {% endif %}
+
+</div>
+
+<style>
+
+</style>

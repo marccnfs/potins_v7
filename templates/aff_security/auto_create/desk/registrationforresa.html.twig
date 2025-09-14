@@ -1,0 +1,36 @@
+{% block body %}
+<div class="log-machina">
+<section class="board_blocks">
+    <div class="block_choice">
+        <a href="{{ path('new_identify_stape_usager') }}" class="block_one">
+            <h1>Reservation en ligne</h1>
+            <div class="inblock_one">
+                <h2>Ouvrez votre espace personnel pour vous inscrire et retrouvez toutes les ressources de vos potins</h2>
+                <div class="bt_block">
+                   Je m'inscrit
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="block_choice">
+        <a href="{{ path('app_login') }}" class="block_one">
+            <h1>déja un compte</h1>
+            {#
+            <div class="board-pict-team">
+                <div  class="board-add-gteam pictvierge" style="background-image:url('{{asset('imgdoc/potins/mepotinsone.jpg') }}');"></div>
+            </div>
+            #}
+            <div class="inblock_one">
+                <h2>Identifiez-vous</h2>
+                <div class="bt_block">
+                    <div class="lk_bt">je me connecte</div>
+                </div>
+            </div>
+        </a>
+    </div>
+</section>
+    {%  endblock body %}
+    {% use('js/js_loc_customer.html.twig') %}
+    {% block javascripts %}
+    {{ parent() }}
+{% endblock %}

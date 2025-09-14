@@ -1,0 +1,13 @@
+<section data-controller="slider-puzzle"
+         data-slider-puzzle-image-value="{{ asset(cfg.imagePath) }}"
+         data-slider-puzzle-rows-value="{{ cfg.rows|default(3) }}"
+         data-slider-puzzle-cols-value="{{ cfg.cols|default(3) }}"
+         data-slider-puzzle-ok-message-value="{{ cfg.okMessage|default('Bravo !') }}">
+    <div data-slider-puzzle-target="grid" class="slider-grid"></div>
+    <div data-slider-puzzle-target="msg" class="mt-2"></div>
+</section>
+
+<style>
+    .slider-grid { gap: .25rem; }
+    .slider-tile { background-repeat:no-repeat; aspect-ratio: 1 / 1; border-radius:.5rem; box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+</style>

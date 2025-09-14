@@ -1,0 +1,36 @@
+<div class="rap-event">
+    <div class="inner-event_list">
+        <div class="ev_titlevent">
+            <h2 title="evenement de {{ board.nameboard }}">{{ event.titre|lower|capitalize }}</h2>
+            {% if event.description is not same as (" ") %}
+                <h3>{{ event.description|raw|lower|capitalize }}</h3> {# {{post.subject|u.truncate(80, '...')|lower|capitalize}} #}
+            {% endif %}
+        </div>
+     {#   <time itemprop = "startDate" class="dateevent">mis en ligne le : {{ event.createAt|date("d-m-Y") }}</time> #}
+        <div class="bk_date" itemprop = "startDate" pubdate><b>le {{ event.appointment.starttime|date("d-m-Y") }} </b></div>
+      {#  <div class="author">par : {{ event.author.name }}</div>  #}
+        <div class="two_col">
+
+            <div class="enc_pictfull">
+                {% if event.potin is not null %}
+                    {% if event.potin.media.imagejpg|length > 0 and event.potin.media.imagejpg[0].namefile is defined %}
+                        <img src="{{ asset(event.potin.media.imagejpg[0].getWebPath) }}" alt="image affiche">
+                    {% endif %}
+                {%  else %}
+                    {% if event.media.imagejpg|length > 0 and event.media.imagejpg[0].namefile is defined %}
+                        <img src="{{ asset(event.media.imagejpg[0].getWebPath) }}" alt="image affiche">
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <a class=" button-wp" href="{{path('show_post',{'slug':event.potin.slug,'id':event.potin.id }) }}">
+                <button class="pop_button"><i class="fa fa-arrow-right" aria-hidden="true"></i>en savoir plus</button>
+            </a>
+        </div>
+    </div>
+
+
+</div>
+
+
+

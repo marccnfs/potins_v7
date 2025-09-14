@@ -1,0 +1,44 @@
+{% block body %}
+    <div class="container-showpost">
+        <div class="header-showpost">
+            {#
+            <h1>{{ potin.titre|lower|capitalize }}</h1>
+            <time itemprop="startDate" class="datepotin">Mis en ligne le : {{ potin.createAt|date("d-m-Y") }}</time>
+            #}
+        </div>
+
+        <div class="content-grid">
+            <!-- 🟢 Contenu principal -->
+            <div class="main-content">
+                    {{ include('desk/ptn_elements/ele_ressources/modale_ressource.html.twig') }}
+            </div>
+
+            <!-- 🟢 Sidebar des ressources -->
+            <aside class="sidebar">
+                <div class="title-block">
+                    <h5>et aussi</h5>
+                </div>
+                <div class="other_resourc">
+                {%  for ressource in ressources %}
+                   {{ include('desk/ptn_elements/ele_ressources/widget_ressources.html.twig') }}
+                {%  endfor %}
+                </div>
+
+            </aside>
+                {#
+                todo liste d'autres ressources dans la meme categorie
+                      {{ include('desk/ptn_elements/ele_potinaries/tabOrderPotins.html.twig') }}
+                #}
+    </div>
+
+</div>
+{%  endblock body %}
+
+{% block footer %}
+    {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+{% endblock footer %}
+
+{% use "js/js_public.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

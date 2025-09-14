@@ -1,0 +1,43 @@
+{% block body %}
+<div class="search_ressource">
+    <div class="ressource_imput">
+        <x-ressources class="w100" cat="all"></x-ressources>
+    </div>
+</div>
+
+
+<div class="wp-ressourc">
+
+                <div class="potin_ressourc">
+                    <article class="w-ressourc">
+                        {{ include('desk/ptn_elements/ele_ressources/modale_ressource.html.twig') }}
+                    </article>
+                </div>
+
+                <div class="other_resourc_blk r_ctnt">
+                    <div class="title-block">
+                        <h2 class="title">voir aussi</h2>
+                    </div>
+
+                    <div class="other_resourc">
+                    {%  for ressource in ressources %}
+                       {{ include('desk/ptn_elements/ele_ressources/widget_ressources.html.twig') }}
+                    {%  endfor %}
+                    </div>
+
+                </div>
+                {#
+                todo liste d'autres ressources dans la meme categorie
+                      {{ include('desk/ptn_elements/ele_potinaries/tabOrderPotins.html.twig') }}
+                #}
+</div>
+{%  endblock body %}
+
+    {% block footer %}
+        {{ include ('desk/ptn_public/footer/potins_footer.html.twig') }}
+    {% endblock footer %}
+
+{% use "js/js_public.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

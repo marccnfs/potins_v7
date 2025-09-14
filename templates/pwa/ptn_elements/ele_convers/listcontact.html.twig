@@ -1,0 +1,18 @@
+<div class="to-to">
+    <h1>Nouvelle conversation avec ...</h1>
+</div>
+<div class="li_contct">
+    {%  for contact in contacts %}
+        {% if contact.customer.profil.avatar is not null and contact.customer.profil.avatar.url is not null %}
+            <a href="{{ path('new_private_convers_dp', {'id':contact.id}) }}" class="contact-prvt">
+                <div class="avataff" id="nav_user" style="background-image: url({{ asset('spaceweb/template/'~contact.customer.profil.avatar.url) }})"></div>
+                <div class="sou_avat">{{ contact.name }}</div>
+            </a>
+        {%  else %}
+            <a href="{{ path('new_private_convers_dp', {'id':contact.id}) }}" class="contact-prvt">
+                <div class="avataff" id="nav_user" style="background-image: url({{ asset('img/no-avatar.png') }})"></div>
+                <div class="sou_avat">{{ contact.name }}</div>
+            </a>
+        {%  endif %}
+    {%  endfor %}
+</div>

@@ -1,0 +1,47 @@
+<div class="_bk-15m">
+    <div class="list_msgs">
+        {% for msg in msgs %}
+            {% apply spaceless %}
+        <a class="Ax {{ msg.sender ?"":"Ax-no"}}" href="{{ path('read_msg',{'slug':website.slug,'id':msg.id})}}">
+            <div class="_gr_row  inf-msg {{ msg.sender ?" _co-gy gxcsal":""}}">
+                <div class="_bb-msg {{ msg.sender ?"_bg-Wfilt":"_bg-R"}}" ></div>
+                <div class="_fx-C fx-cst">
+                    {%- if not msg.isspaceweb -%}
+                        <div class="{{ msg.sender ?"_co-gy":"_co-bk"}}">
+                            Nouveau contact :  {{- msg.contactexp.emailCanonical -}}
+                        </div>
+                    {%- endif -%}
+                        <div class="_gr-Ax">
+                            <div class="{{ msg.sender ?"_co-gy":"_co-bk"}}">
+                                {%- if msg.isspaceweb -%}
+                                   {{- msg.spacewebexpe.name -}}
+                                {%- else -%}
+                                   {{- msg.contactexp.useridentity.firstname -}}
+                                {%- endif -%}
+                            </div>
+                            <div class="">
+                                {{- msg.subject -}}
+                            </div>
+                            <div>
+                                {%- if msg.createAt|format_datetime('short', 'none', locale='fr') is same as ("now"|format_datetime('short', 'none', locale='fr')) -%}
+                                    {{- msg.createAt|format_datetime('none', 'short', locale='fr') -}}
+                                {%- else -%}
+                                    {{- msg.createAt|format_datetime('medium', 'none', locale='fr')|slice(0,-4) -}}
+                                {%- endif -%}
+                            </div>
+                        </div>
+                    {% if msg.pj is defined %}
+                        <div class="andel">
+                            <div><p>pièce jointe</p></div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </a>
+            {% endapply %}
+        {% else %}
+            Pas de nouveau message
+        {% endfor %}
+    </div>
+</div>
+

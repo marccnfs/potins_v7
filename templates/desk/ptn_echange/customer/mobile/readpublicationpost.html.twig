@@ -1,0 +1,129 @@
+{% block body %}
+
+    <div class="msgAll">
+        {{ include('aff_menu/menus/mobile/modale_msg_publication_mob.html.twig') }}
+        <div class="msgw-EventList css-ktct5k" aria-label="Messages">
+            <div class="msg-ScrollableList msg-InfiniteScrollableList css-1badfti css-gxqzw e14f0li10">
+                <div class="css-1a6kj04 e14f0li11">
+                    <div class="msg-ScrollableListItem e18vzdc51 css-18eabo8 e145i56o0"></div>
+                    <div class="msg-ScrollableListItem e18vzdc52 css-nsy3p8 e145i56o0">
+                        <div class="msg-Loader e18vzdc53 css-11n1q1u e107csam0">
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img"
+                                 aria-labelledby="ifl-Spinner-title-9" class="css-idhoea e150lnaj2"><title
+                                        id="ifl-Spinner-title-9">Chargement des conversations…</title>
+                                <circle cx="50" cy="50" r="45" class="css-1gufuf1 e150lnaj1"></circle>
+                                <circle cx="50" cy="50" r="45" class="css-ewscs8 e150lnaj0"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="msg-ScrollableListItem css-nedbbw e145i56o0">
+                        <div class="msgw-EventListItem css-1g9aa5y" >
+                            {% if msgwb[1].isdispatchsender %}
+                                <h3 class="msg-NoticeEvent css-1d47mke css-pu465e epybgjo0">conversation ouverte le : {{ msgwb[1].createAt|date('d/m/Y') }} sur l'affiche : {{ msgwb[1].tabpublication.post.titre }}</h3>
+                            {%  else %}
+                                <h3 class="msg-NoticeEvent css-1d47mke css-pu465e epybgjo0">conversation ouverte le : {{ msgwb[1].createAt|date('d/m/Y') }} sur l'affiche : {{ msgwb[1].tabpublication.post.titre }}</h3>
+                            {%  endif %}
+                        </div>
+                    </div>
+                    <div class="msg-ScrollableListItem css-nedbbw e145i56o0">
+                        <div class="msgw-EventListItem css-1g9aa5y">
+                            <h3 class="msg-EventDivider css-1ti2hou css-1c6j68a e1swu0d80">
+                                <span class="msg-EventDivider-title css-1i1u7te e1swu0d81"></span>
+                            </h3>
+                            <div class="msg-MessageEvent css-0 ebpwili0">
+                                {% for msg in msgwb[1].msgs %}
+                                    <div class="msg-Event css-md66p8 ea6gi180">
+                                        <div class="msg-Event-LeftGutter css-enxzyz ea6gi181">
+                                            <div role="button"  class="css-ppn0bz">
+                                                <div class="msg-Avatar msgw-EventAvatar css-1hmldwu css-43v7ro e1gva88q1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                         fill="currentColor" viewBox="0 0 18 18" aria-hidden="true"
+                                                         class="css-f0fy6x eac13zx0">
+                                                        <path fill-rule="evenodd"
+                                                              d="M3.5 3a.5.5 0 00-.5.5v11a.5.5 0 00.5.5H5v-4h3v4h6.5a.5.5 0 00.5-.5v-6a.5.5 0 00-.5-.5H11V3.5a.5.5 0 00-.5-.5h-7zM5 8.1a.25.25 0 01.25-.25h3.5A.25.25 0 019 8.1v.8a.25.25 0 01-.25.25h-3.5A.25.25 0 015 8.9v-.8zm4-3a.25.25 0 00-.25-.25h-3.5A.25.25 0 005 5.1v.8c0 .138.112.25.25.25h3.5A.25.25 0 009 5.9v-.8z"
+                                                              clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="msg-Event-RightGutter css-1xa41n7 ea6gi182" id="messg" data-wb="{{ msgwb[0].slug }}" data-msg="{{ msgwb[0].id }}">
+
+                                            {% if msg.authordispatch is not null %}  {#  author = dispatch #}
+                                                {% if  msg.authordispatch.id is same as (dispatch.id) %}
+                                                    <h4 tabindex="-1" class="css-unc3ov ea6gi183">
+                                                        <span class="css-ypmjui ea6gi184"></span><span class="css-gmg73 ea6gi185"> {% if msg.createAt|format_datetime('short', 'none', locale='fr') is same as ("now"|format_datetime('short', 'none', locale='fr'))%}
+                                                                {{ msg.createAt|format_datetime('none', 'short', locale='fr') }}
+                                                            {% else %}
+                                                                {{ msg.createAt|format_datetime(locale='fr')}}
+                                                            {% endif %}</span>
+                                                    </h4>
+
+                                                    <div class="_fx-convers_inv_mob">
+                                                        <div class="iner-content-convers_mob prop-convers">
+                                                            <div class="_p-inL">
+                                                                <p> {{ msg.bodyTxt|nl2br}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                {% else %}
+                                                    <div class="_fx-convers">
+                                                        <div class="iner-content-convers another-convers">
+                                                            <div class="auth-convers">
+                                                                <div class="_mini-bb-msg _bg-R _bg-Wfilt" >
+                                                                    <span class="ini-dptch">{{ msg.authordispatch.name|slice(0, 1) }}</span>
+                                                                </div>
+                                                                <div class="inner-auth">
+                                                                    <span class="ini-auth">{{ msg.authordispatch.name }}</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="_p-inL">
+                                                                <p> {{ msg.bodyTxt|nl2br}}</p>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% else %}
+                                                <div class="_fx-convers">
+                                                    <div class="iner-content-convers another-convers">
+
+                                                        <div class="auth-convers">
+                                                            <div class="_mini-bb-msg _bg-R">
+                                                                <span class="avat-contact"><i class="fa fa-user-circle" aria-hidden="true"></i></span>
+                                                            </div>
+                                                            <div class="inner-auth">
+                                                                <h5>contact</h5>
+                                                                <span class="auth-mail">{{ msg.authorcontact.emailCanonical }}</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="_p-inL">
+                                                            <p> {{ msg.bodyTxt|nl2br}}</p>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            {%  endif %}
+                                        </div>
+                                    </div>
+                                {%  endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="msgw-MessageCompose css-q929co" aria-label="Rédigez un message…">
+            <div class="css-b8scee" id="adcomment">
+                <add-comment msgid="{{msgwb[1].id}}" slug="{{msgwb[0].slug}}" id="{{msgwb[0].id}}" module="add_board"></add-comment>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% use('js/js_customer.html.twig') %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

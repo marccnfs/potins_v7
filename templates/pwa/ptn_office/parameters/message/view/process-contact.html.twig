@@ -1,0 +1,38 @@
+<div class="_scrollflow _p w100 mrg0 mn-vh64">
+    <div class="fx-content">
+        <div class="process-module_glass">
+        <h2 class="_title til_mdl">Process du module de contact</h2>
+        {% if website.contactation.active %}
+            <div class="action_module">
+                <h3>Vous souhaitez modifier votre module de contact ?</h3>
+                <p>Cliquez sur le lien ci dessous. Après vos modification un nouveau test de parametrage sera effectué directement. Si tout est au vert c'est que tout est ok.</p>
+                <div class="stape_order_menu middlegrid stapeok">
+                    <a class="stape_bull" href="">Mise à jour du module</a>
+                </div>
+            </div>
+        {% else %}
+            <div class="action_module">
+                {% if test1  %}
+                    <h3>Vous allez proceder à la création de votre module de contact.</h3>
+                    <p>Ce process va créer un formulaire de contact rattaché à votre SpaceWeb. A la fin du process, vous trouverez dans
+                        votre tableau de bord, dans la rubrique <b>"Contact"</b> un lien que vous pourrez copier et coller où vous le souhaitez sur le web
+                        (page de votre site web, dans vos messages...etc).<br>
+                        A chaque nouveau message, vous serez averti par mail à l'adresse défini dans vos parameètres et pourrez le retrouver dans votre menu <b>"Messages</b>.Le panneau ci-desous est un test
+                        de parametrage, si tout est au vert, c'est que le profil de votre space web est suffisament renseigner pour créer votre formulaire.</p>
+
+                    <div class="blk-center">
+                        <a class="stape_order_menu middlegrid stapeok stape_bull" href="{{path('new_contact_mod',{'id': website.id})}}">J'initialise mon module</a>
+                    </div>
+                {% else %}
+                    <h3>Vous allez proceder à la création de votre module de contact.</h3>
+                    <p><b>Apparement votre profil n'est pas complet</b></p>
+                    <div class="middlegrid alrtprocess-war">
+                        <h6>Mettez à jour les informations pour pouvoir procéder à la création de votre module de contact</h6>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+            {{ include('aff_websiteadmin/message/view/testmodule.html.twig') }}
+        </div>
+    </div>
+</div>

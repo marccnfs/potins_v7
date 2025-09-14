@@ -1,0 +1,45 @@
+{%  set ite = 0 %}
+<div class="web-inf">
+    <h3>dernière affiche publiée</h3>
+</div>
+<div class="card_module">
+    {%  if notices['post'] is defined and notices['post']|length >0 %}
+
+            {% set firstnotice = notices['post']|first %}
+            {%  if firstnotice is not null %}
+                {%  set ite = 1 %}
+                {%  if firstnotice.promo is not defined %}
+                    {%  set post = firstnotice %}
+                    <a class="board_module card_line" href="{{path('show_post',{'slugcity':website.locality[locatecity].slugcity,'slug':website.slug, 'posta':post.slug, 'id':post.id }) }}">
+                        <div class="card-iner-line" >
+                            <div class="w_titlpost">
+                                <h2 title="post de {{ website.namewebsite }}">{{ post.titre|lower|capitalize }}</h2>
+                                {% if post.subject is not same as (" ") %}
+                                    <h3>{{ post.subject|raw|lower|capitalize }}</h3> {# {{post.subject|u.truncate(80, '...')|lower|capitalize}} #}
+                                {% endif %}
+                            </div>
+                            <time itemprop = "startDate" class="datepost">mis en ligne le : {{ post.createAt|date("d-m-Y") }}</time>
+                            <div class="author">par : {{ post.author.name }}</div>
+                        </div>
+                        <div class="pict-line" >
+                            {% if post.media.imagejpg|length > 0 and post.media.imagejpg[0].namefile is defined %}
+                                <img src="{{ asset(post.media.imagejpg[0].getWebPath) }}" alt="image affiche">
+                            {% endif %}
+                        </div>
+                    </a>
+                {%  else %}
+                    {%  set offre = firstnotice %}
+                    {{ include('pwa/ptn_elements/ele_offres/modale_offre.html.twig') }}
+                {%  endif %}
+            {%  else %}
+                {{ include('pwa/ptn_elements/ele_boards/modale_no.html.twig') }}
+            {%  endif %}
+        </div>
+    {%  endif %}
+</div>
+
+
+
+
+
+

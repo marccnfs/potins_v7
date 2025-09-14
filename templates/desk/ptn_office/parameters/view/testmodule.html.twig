@@ -1,0 +1,17 @@
+<div class="module-status">
+    <div class="module-item">
+        <h5>Email</h5>
+        <p>{{ test1 ? email : 'Non renseigné' }}</p>
+        <a href="{{ path('website_edit', {'id': board.id}) }}" class="btn {{ test1 ? 'btn-edit' : 'btn-warning' }}">
+            {{ test1 ? 'Modifier' : 'Mettre à jour' }}
+        </a>
+    </div>
+
+    <div class="module-item">
+        <h5>Profil</h5>
+        <p>{{ test2 ? board.nameboard : 'Profil incomplet' }}</p>
+        <a href="{{ path('website_edit', {'id': board.id}) }}" class="btn {{ test2 ? 'btn-edit' : 'btn-warning' }}">
+            {{ test2 ? 'Modifier' : 'Mettre à jour' }}
+        </a>
+    </div>
+</div>

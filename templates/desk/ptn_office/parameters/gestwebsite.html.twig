@@ -1,0 +1,21 @@
+ {% block body %}
+
+   <div class="fil-action-lit">
+    <div class="bar-act" id="nav_wb">
+     <i class="_co-B fa fa-bars"></i>
+    </div>
+   </div>
+   <div class="ii_cub_pub_scrw">
+    <div class="sw_mn" id="genery"> {{ include('navigation/'~agent~'actionlinkWb.html.twig') }}</div>
+    {{ include('navigation/'~agent~'/actionlinkWb2.html.twig') }}
+    <div class="fx-pw">
+     {{ include('navigation/'~agent~'navleft.html.twig') }}
+     {{ include('website/member/desk/admin/content/list-commande.html.twig') }}
+    </div>
+   </div>
+
+ {% endblock %}
+{% use "js/js_wb.html.twig" %}
+ {% block javascripts %}
+  {{ parent() }}
+ {% endblock %}

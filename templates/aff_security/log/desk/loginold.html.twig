@@ -1,0 +1,70 @@
+{% block body %}
+<div class="log-machina">
+    <h1 class="title_log">{{vartwig.title}}</h1>
+
+            <form method="post" class="form_connector_old">
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+                    {% if app.user %}
+                        <div class="mb-3">
+                            <a href="{{ path('app_logout') }}">fermez votre espace</a>
+                        </div>
+                    {% endif %}
+                    <div class="field_log sous_connector">
+                        <div class="iner-fiels"><i class="fa fa-at"></i><label for="inputEmail" class="label-log">identifiant</label></div>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="adresse mail" required autofocus>
+                    </div>
+                    <div class="field_log sous_connector">
+                        <div class="iner-fiels">
+                        <i class="fa fa-lock"></i><label for="inputPassword" class="label-log">mot de passe</label>
+                        </div>
+                        <label>
+                        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                        <div class="password-icon">
+                            <i data-feather="eye">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </i>
+                            <i data-feather="eye-off">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye-off"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                            </i>
+                        </div>
+                        </label>
+                    </div>
+                    <div class="bottom-10"></div>
+                    <a class="forget_mdp" href="{{ path('forget_password_request') }}">mot de passe oublié ?</a>
+                    <div class="checkerrember">
+                        <h5>Restez connecté</h5>
+                        <span class="switcher switcher-2">
+                           <input type="checkbox" id="remember_me" name="_remember_me" checked/>
+                           <label for="remember_me"></label>
+                        </span>
+                    </div>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <button class="bul-go" type="submit">go</button>
+                </form>
+
+</div>
+{% endblock %}
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        const eye = document.querySelector(".feather-eye");
+        const eyeoff = document.querySelector(".feather-eye-off");
+        const passwordField = document.querySelector("input[type=password]");
+
+        eye.addEventListener("click", () => {
+            eye.style.display = "none";
+            eyeoff.style.display = "block";
+            passwordField.type = "text";
+        });
+
+        eyeoff.addEventListener("click", () => {
+            eyeoff.style.display = "none";
+            eye.style.display = "block";
+            passwordField.type = "password";
+        });
+    </script>
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+

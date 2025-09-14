@@ -1,0 +1,89 @@
+<div class="ptn_content">
+    <div class="bk_content">
+        <div class="table-container">
+
+        {% for key, cat in articles %}
+            <div class="titre_tab">
+                <div class="card-{{ cat[0].categorie.coul }}">{{ key }}</div>
+            </div>
+            <table>
+                <colgroup>
+                    <col class="col-label">
+                    <col class="col-action">
+                    <col class="col-action">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>Désignation</th>
+                    <th>Action 1</th>
+                    <th>Action 2</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for art in cat %}
+                <tr>
+                    <td>{{ art.titre }}</td>
+                    <td>
+                        <a href="{{ path('ressource_manage', {id: art.id}) }}" class="btn btn-warning">
+                            <i class="fa fa-edit"></i> Éditer
+                        </a>
+                    </td>
+                    <td>
+                        <form method="post" action="{{ path('delete_carte', {id: art.id}) }}" style="display: inline-block;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet élément ?')">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ art.id) }}">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fa fa-trash"></i> Supprimer
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{#
+
+            <div class="tab_lit_bo">
+                <table class="table tab_l1_post">
+                <thead class="table-header card-{{ cat[0].categorie.coul }}">
+                <tr>
+                    <th>{{ key }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for art in cat %}
+                    <tr>
+                        <td>{{ art.titre }}</td>
+                        <td class="action-buttons">
+                            <!-- Bouton éditer -->
+                            <a href="{{ path('ressource_manage', {id: art.id}) }}" class="btn btn-warning">
+                                <i class="fa fa-edit"></i> Éditer
+                            </a>
+                            <!-- Bouton supprimer -->
+                            <form method="post" action="{{ path('delete_carte', {id: art.id}) }}" style="display: inline-block;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet élément ?')">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ art.id) }}">
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fa fa-trash"></i> Supprimer
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        {% endfor %}
+
+    </div>
+</div>
+#}

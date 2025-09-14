@@ -1,0 +1,62 @@
+<div class="card-wb">
+    <div class="head-wb flex-fix">
+        {% if  website.template.background is not null %}
+            {% set style = website.template.background.getWebPath %}
+        {%  else %}
+            {% set style = '#0a53be' %}
+        {%  endif %}
+
+        <div class="website-sh desktop mosaic-provider-jobcards" style="background-image: url({{ style}})">
+            <div class="wbsite-inf">
+                <div class="navaffi-bk">
+                    {% if pw %}
+                        {{ include('pwa/pop/logoliteadm.html.twig') }}
+                    {%  else %}
+                        {{ include('pwa/pop/logolite.html.twig') }}
+                    {%  endif %}
+                    <div>
+                        <h1>{{ website.namewebsite }}</h1>
+                        <h2>{{ website.template.description }}</h2>
+                    </div>
+                </div>
+
+                <div class="navaffi-bk">
+                        {{ include('pwa/pop/bullator_wb-point.html.twig') }}
+                </div>
+            </div>
+        </div>
+        <div class="map-wb">
+            <div class="wp-info">
+                <div class="af_flx-W fx-c pdbt15 a_centwhite">
+                    <div class="w_titleinfo">
+                        <h2 title="info de {{ website.namewebsite }}">{{ website.template.activities }}</h2>
+
+                        {% if website.template.sector.adresse[0] is defined %}
+                            {%  set adr = website.template.sector.adresse[0] %}
+                            <h5 class="adrrss"> {{ adr.numero }} {{ adr.nomvoie }} {{ adr.codepostal }} {{ adr.nomcommune }} </h5>
+                        {% else %}
+                            <h3 class="adrrss">{{ website.locality.city }}</h3>
+                        {%  endif %}
+                        {%  if website.attached %}
+                            {{ include('pwa/ptn_elements/ele_times/opencity.html.twig') }}
+                        {%  endif %}
+                    </div>
+
+                    {%  if  website.template.url is defined %}
+                        <button class="pop_button com_a_col">
+                            <i class="fa fa-link"></i>{{ website.template.url }}
+                        </button>
+                    {%  endif %}
+
+                    {%  if  website.template.telephonespaceweb is defined %}
+                        <a class="pop_button com_a_col" href="tel:"{{ website.template.telephonespaceweb }}>
+                            <i class="fa fa-phone"></i>
+                            <div class="com_a_in">Appellez</div>
+                            {#    <div class="tel">{{ website.template.telephonespaceweb }}</div> #}
+                        </a>
+                    {%  endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

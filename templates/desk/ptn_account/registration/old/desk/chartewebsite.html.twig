@@ -1,0 +1,15 @@
+{% block body %}
+    <div class="showwb_fx_v6">
+        <div class="contact-fixed">
+            <div class="_fx-C cdr-lit-trans" >
+            </div>
+        </div>
+    </div>
+    <div class="fx_wb-c">
+           {{include('aff_account/registration/view/'~agent~'/initboard.html.twig')}}
+    </div>
+{% endblock %}
+{% use "js/js-creawebsite.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

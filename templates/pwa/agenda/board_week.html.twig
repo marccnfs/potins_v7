@@ -1,0 +1,26 @@
+<div class="container"
+     data-controller="board-week"
+     data-board-week-fetch-url-value="{{ path('agenda_feed') }}"
+     data-board-week-date-value="{{ date|date('Y-m-d') }}"
+>
+    <header class="card" style="margin-bottom:12px;">
+        <div style="display:flex; gap:8px; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+            <div>
+                <button class="btn" data-action="board-week#prevWeek">‹ Semaine précédente</button>
+                <button class="btn" data-action="board-week#nextWeek">Semaine suivante ›</button>
+                <button class="btn btn-light" data-action="board-week#thisWeek">Cette semaine</button>
+            </div>
+            <h1 data-board-week-target="headline">Semaine</h1>
+        </div>
+        <div class="legend" style="margin-top:8px; display:flex; gap:12px; flex-wrap:wrap;">
+            <span class="dot dot-pellerin"></span> Le Pellerin
+            <span class="dot dot-montagne"></span> La Montagne
+            <span class="dot dot-sjb"></span> Saint-Jean-de-Boiseau
+            <span class="dot dot-autre"></span> Autre
+        </div>
+    </header>
+
+    <section class="week-grid" data-board-week-target="grid">
+        {# 5 colonnes: mar->sam, chaque colonne rendue par Stimulus #}
+    </section>
+</div>

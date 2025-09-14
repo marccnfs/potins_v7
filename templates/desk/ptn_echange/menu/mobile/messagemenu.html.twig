@@ -1,0 +1,6 @@
+<a class="btn btn-send {{ vartwig.m1 ? "actsel" :"" }} mimg" href="{{ path('board_board',{'id':board.id}) }}">Tous les Messages</a>
+{% if pagination is not null %}
+    <div id="mormsg" id="af_navdk">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+{%  endif %}

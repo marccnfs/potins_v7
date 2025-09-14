@@ -1,0 +1,25 @@
+{% block body %}
+    <section class="_wb-ospace_mob">
+        <div class="head-msg-space">
+            <div class="web-inf">
+                <div class="zone-inf-msg">
+                    <div class="op-msg">
+                        <div class="pop_op-msg" >conversation ouverte le : {{ msgwb.createAt|date('d/m/Y') }} sur le board : {{ msgwb.websitedest }}
+                        </div>
+                        {% if msgwb.isspaceweb %}
+                            <div>par :{{msgwb.tballmsgs.dispatch.name }}</div>
+                        {%  else %}
+                            <div>par (contact):{{msgwb.tballmsgs.contact.emailCanonical  }}</div>
+                        {%  endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {{ include('aff_messagery/board/view/readmessage.html.twig') }}
+        </section>
+{% endblock %}
+{% use "js/js_website.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,26 @@
+
+
+<a class="affiche" href="{{path('show_potin',{'slug':otherpost.slug,'id':otherpost.id}) }}">
+
+    <div class="evnet_titre_v5">{{otherpost.titre|lower|capitalize}}</div>
+
+    {% if otherpost.media.imagejpg[0].namefile is defined %}
+        <img  class="img-allnotice" src="{{ asset('upload/module/'~otherpost.media.imagejpg[0].namefile ) }}" alt="image affiche">
+    {% endif %}
+
+    {% if otherpost.subject is not same as (" ") %}
+        <div class="_fx-R_v2 _fx-convers_inv_v5">
+            <div class="info-post_v5">
+                <div class="event_second_titl_v5">{{otherpost.subject|u.truncate(80, '...')|lower|capitalize}}</div>
+            </div>
+        </div>
+    {% endif %}
+</a>
+
+<div class="boarder">
+    <a class="flx-lik-_v5" href="">
+        <span class="datepubli_event">mis en ligne le : <time itemprop = "startDate" pubdate>
+                <b>{{ otherpost.createAt|date("d-m-Y") }}</b></time>
+        </span>
+    </a>
+</div>

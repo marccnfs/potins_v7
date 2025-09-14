@@ -1,0 +1,17 @@
+{# menu naviagtion colone left -> var depuis vartwig version desk #}
+
+<div class="admin_col_left">
+    <div class="admin-men_col_left">
+        {% for nav in vartwig.nav %}
+            {% if loop.first %}
+            <div class="bta_leftnav-admin affitoggle-left _bta-left" data-affitglleft="tglleft_0">
+                <div class="mn-logo_wb mn-bb"><i class="{{nav.i}}" aria-hidden="true"></i>{{nav.name}}</div>
+            </div>
+            {% else %}
+            <div class="bta_leftnav-admin affitoggle-left" data-affitglleft="tglleft_{{loop.index0}}">
+                <div class="mn-logo_wb mn-bb"><i class="{{nav.i}}" aria-hidden="true"></i>{{nav.name}}</div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

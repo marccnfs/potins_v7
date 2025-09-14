@@ -1,0 +1,18 @@
+{% block body %}
+<div class="log-machina_mob">
+    <div class="svg-bulle_open">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">{# <circle cx="100" cy="100" r="80"/>#}</svg>
+        <div class="content_login_affi">
+            <div class="stape">
+                <h2>Localisez votre lieux d'affichage par défaut.</h2>
+            <p> Pour commencer, vous allez créer votre premier panneau AffiChange sur une ville en france metropolitaine ou d'outre mer. Ce panneau sera le lieu de vos publications par défaut, vous pourrez en changer par la suite depuis votre espace personnel (->préfrénces).</p>
+                {{ include('/aff_search/'~agent~'/search-affiche-connect_v2.html.twig') }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% use "js/js_security.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

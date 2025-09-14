@@ -1,0 +1,26 @@
+<div class="form-groupfields glass-label">
+    <div class="glass-title_form">
+        {% if registered > 1 %}
+        <h3>ajoutez les {{ registered }} participants(es)</h3>
+        {% else %}
+            <h3>participant(e):</h3>
+        {%  endif %}
+    </div>
+
+
+    <div class="process-resa-potin">
+        <div class="stape-process-lit" >
+            <h5>Potin : <strong>{{ event.titre }}</strong></h5>
+        </div>
+        {{ form_start(form) }}
+
+        <h3>Réservation pour le {{ preorder.resaAt|date('j.m.Y') }}</h3>
+
+        <ul class="tags" data-index="{{ form.listproducts|length > 0 ? form.listproducts|last.vars.name + 1 : 0 }}"
+            data-prototype="{{ form_widget(form.listproducts.vars.prototype)|e('html_attr') }}">
+        </ul>
+
+        {{form_rest(form)}}
+        {{ form_end(form) }}
+    </div>
+</div>

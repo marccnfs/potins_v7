@@ -1,0 +1,29 @@
+<div class="form-groupfields ">
+    <div class="glass-title_form">
+        <h3>Ouverture de votre espace personnel</h3>
+    </div>
+    <form name="register_msg" method="post">
+
+            <div class="intro_form">
+                <div class="formtest register">
+                    <i class="_m-t-10 fa fa-at" aria-hidden="true"></i>
+                    <label for="register_email" class="required">Entrez votre adress mail :</label>
+                    <input type="email" id="register_email" name="register_email" autocomplete="off" required="required" data-rule="email" data-msg="adresse mail invalide">
+                    <div class="validate"></div>
+                    <span id="loading" style="display: none;"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i></span>
+                    <div class="form-play-register">
+                        <i class="_m-t-10 fa fa-key"></i>
+                        <label for="register_password" class="required">Choisissez un mot de passe :</label>
+                        <input type="password" id="register_password" name="password" required="required" autocomplete="new-password" data-rule="minlen:8" data-msg="8 caractères minimum">
+                        <div class="validate"></div>
+                        <i class="_m-t-10 fa fa-user" aria-hidden="true"></i>
+                        <label for="register_name" class="required">Renseignez un nom d'utilisateur :</label>
+                        <input type="text" id="register_name" name="register_name" autocomplete="off" required="required" data-rule="minlen:8" data-msg="8 caractères minimum" placeholder="">
+                        <div class="validate"></div>
+                    </div>
+                </div>
+            </div>
+
+        <div id="register-go"  class="btn-glss-submit nosubmit" disabled=""><span class="arw-tx">Enregistrez&nbsp;</span><i class="fa fa-floppy-o" aria-hidden="true"></i></div>
+    </form>
+</div>

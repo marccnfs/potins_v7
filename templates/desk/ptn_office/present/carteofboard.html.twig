@@ -1,0 +1,35 @@
+ <div class="flcol">
+    <div class="pos-incub-i">
+        <a class="bt-newmod" href="{{ path('new_carte',{'id':board.id}) }}">Ressource +</a>
+    </div>
+
+    <div class="w100">
+                    {%  for key, cat in articles %}
+                        <table class="aff_table t_size_list">
+                            <thead class="card-{{ cat[0].categorie.coul }}">
+                            <tr>
+                                <th>{{ key }}</th>
+                                {#  <th><i class="fa fa-cog"></i></th> #}
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {%  for art in cat %}
+                                <tr>
+                                    <td>{{  art.titre }}</td>
+                                    <td><a href="{{path('edit_carte', {id: art.id})}}" class="btn btn-primary">editer</a>
+                                        <form method="post" action="{{path('delete_carte', {id: art.id})}}" style="display: inline-block"; onsubmit="return confirm('voulez vraiment supprimer cet élèment ?')">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ art.id) }}">
+                                            <button class="btn btn-danger">supprimer</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {%  endfor %}
+                </div>
+
+</div>
+

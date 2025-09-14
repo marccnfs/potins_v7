@@ -1,0 +1,103 @@
+<div class="flrow">
+    <div class="fx-cub ii_cub2">
+        <div class="O_list-cube">
+            {#
+            <div class="pos-incub-i">
+                <a class="bt-newmod" href="{{ path('new_generic_event') }}">Nouvel Evenement</a>
+            </div>
+            #}
+            <div class="list-incub">
+        {%  for event in events %}
+            {%  if event.media.imagejpg[0] is defined  %}
+                {%  set ill= "upload/module/"~event.media.imagejpg[0].namefile %}
+            {%  else %}
+                {%  set ill= "img/AffiChange.png" %}
+            {% endif %}
+        <div class="mod-incub">
+            <div class="pos-incub-i">
+                <div class="pos-incub-l w-cb1">
+                    <div class="tit-pos-cub">{{event.titre}}</div>
+                    <div class="content">
+                        {{ event.description }}
+                    </div>
+                    <div class="inf_cub">
+                        <div class="illust-list">
+                            <div class="iner-illust" style="background-image: url('{{ asset(ill) }}')"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pos-incub-px">
+                    <div class="account_module">
+                        <div class="til_rlt">date evenement :</div>
+                        {%  if event.appointment.starttime|date('d:m:Y') is same as event.appointment.endtime|date('d:m:Y') %}
+                            <p>du {{ event.appointment.starttime|date('d:m:Y') }}</p>
+                        {%  else %}
+                            <p>du {{ event.appointment.starttime|date('d:m:Y') }}</p><p>au {{ event.appointment.endtime|date('d:m:Y') }}</p>
+                        {%  endif %}
+
+                        {%  if   event.datemaj_at is not null %}
+                            <div class="_cg1enf">modifié le : {{ event.datemaj_at|date("j-m-Y") }}</div>
+                        {%  else %}
+                            <div class="_cg1enf">créé le : {{ event.create_at|date("j-m-Y") }}</div>
+                        {%  endif %}
+
+                    </div>
+
+                    <div class="pos-incub-px w-cb3">
+
+                        {#  bouton function petits format a garder peut etre pour mobile ???
+                        <div class="_2tb-cr2">
+                            <a href="{{ path('edit_event', {'id':event.id}) }}"  class="_bb-Bt-45-r">
+                                <div class="_bb-sz45-1 _vil-01">
+                                    <div class="spwb_header aleat-item">
+                                        <div class="_i-cO">
+                                            <div class="_icO-bl" ><i class=" fa fa-edit" data-descr="editer.."></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{{ path('form-delete_event', {'id':event.id}) }}"  class="_bb-Bt-45-r">
+                                <div class="_bb-sz45-1 _vil-01">
+                                    <div class="spwb_header aleat-item">
+                                        <div class="_i-cO">
+                                            <div class="_icO-rd" ><i class=" fa fa-trash" data-descr="en bulle.."></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        #}
+                        <div class="tools-msg">
+                            <a class="e-tool" title="edition de l'evenement" href="{{ path('edit_event_potin', {'id':event.id}) }}">
+                                <i class=" fa fa-edit" data-descr="editer.."></i>
+                            </a>
+                            <a class="e-tool" title="etat de la publication"  href="{{ path('form-publied_event_potin', {'id':event.id}) }}">
+                                {%  if event.publied %}
+                                    <div class="_icO-rd green"><i class="fa fa-flag-checkered" aria-hidden="true"></i></div>
+                                {% else %}
+                                    <div class="_icO-rd red"><i class="fa fa-flag" aria-hidden="true"></i></div>
+                                {%  endif %}
+                            </a>
+                            <a class="e-tool" title="suppression" href="{{ path('form-delete_event_potin', {'id':event.id}) }}">
+                                <i class=" fa fa-trash" data-descr="en bulle.."></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+            <div class="pop-board">
+                <div class="pos-incub">
+                    <div class="_t-c _m-lr-5">
+                        <div class="til_rlt">pas encore d'évenement programmé'</div>
+                    </div>
+                </div>
+            </div>
+        {%  endfor %}
+    </div>
+        </div>
+    </div>
+</div>
+
+

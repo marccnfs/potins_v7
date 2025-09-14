@@ -1,0 +1,18 @@
+<nav class="gnav gnav_mob" id="gnav-main-container" aria-label="Principal">
+    <div data-gnav-region="Main">
+        <div class="zz_top-notop">
+            <div class="vagmenu" data-agent="{{ agent }}">
+                {{ include('svg/potins/vector1.html.twig') }}
+            </div>
+            <a href="{{ path('board_all') }}">
+                <div class="svg_logo_small">
+                    {{ include('svg/potins/logopotins_svg_small.html.twig') }}
+                </div>
+            </a>
+            {{ include('pwa/pop/menutopbarr_all_mob.html.twig') }}
+            {#  <div class="back_img_logo_small" style="background-image: url({{ asset('imgdoc/potins/logopotins.png') }} )"></div> #}
+        </div>
+    </div>
+</nav>
+
+{{ include('elements/vague_bottom_right.html.twig') }}

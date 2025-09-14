@@ -1,0 +1,57 @@
+<div class="bk_content">
+    <div class="tab_lit_bo">
+        {% for event in events %}
+
+            {% if event.media.imagejpg[0] is defined %}
+                {% set ill = event.media.imagejpg[0].getwebPath %}
+            {% else %}
+                {% set ill = 'img/AffiChange.png' %}
+            {% endif %}
+
+            <div class="tab_l1_post">
+                <!-- En-tête de l'événement -->
+                <div class="event-header">
+                    <div class="event-image">
+                        <img src="{{ asset('upload/module/' ~ ill) }}" alt="Image de l'événement">
+                    </div>
+                    <div class="event-details">
+                        <h3>{{ event.titre }}</h3>
+                        <p class="event-location">Lieu : {{ event.locatemedia.nameboard }}</p>
+                        <p class="event-dates">
+                            {% if event.appointment.starttime|date('d/m/Y') == event.appointment.endtime|date('d/m/Y') %}
+                                {{ event.appointment.starttime|date('d/m/Y') }}
+                            {% else %}
+                                {{ event.appointment.starttime|date('d/m/Y') }} au {{ event.appointment.endtime|date('d/m/Y') }}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Actions sur l'événement -->
+                <div class="event-actions">
+                    <a href="{{ path('details_event', {'id': event.id}) }}" class="btn btn-primary">
+                        <i class="fa fa-info-circle"></i> Détails
+                    </a>
+                    <a href="{{ path('edit_event_potin', {'id': event.id}) }}" class="btn btn-warning">
+                        <i class="fa fa-edit"></i> Modifier
+                    </a>
+                    <a href="{{ path('form-publied_event_potin', {'id': event.id}) }}" class="btn btn-success">
+                        {% if event.publied %}
+                            <i class="fa fa-flag-checkered"></i> Publié
+                        {% else %}
+                            <i class="fa fa-flag"></i> Non publié
+                        {% endif %}
+                    </a>
+                    <a href="{{ path('form-delete_event_potin', {'id': event.id}) }}" class="btn btn-danger">
+                        <i class="fa fa-trash"></i> Supprimer
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <!-- Aucun événement -->
+            <div class="no-events">
+                <p>Aucun événement programmé pour l'instant.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>

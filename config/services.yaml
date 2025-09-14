@@ -1,0 +1,135 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+    locale: 'fr'
+    app_locales: fr
+    app.notifications.email_sender: anonymous@example.com
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: 'marc@potinsnumeriques.fr'
+    mailer_password: null
+    retry_ttl: 7200 # Value in seconds, logic will use as hours
+    token_ttl: 86400
+    firewall_name: main
+    user_class: App\Entity\User
+    app_affi: '%env(APP_AFFI)%'
+    #app_site: '%env(APP_SITE)%'
+    app_affi_form: '%env(APP_FORM)%'
+    key_admin: '%env(KEY_ADMIN)%'
+    path_facture: '5OpmlGr8574-t657aERZqsdt-457'
+    path_review: 'potins-gp-rw'
+    router.request_context.host: 'potinsnumeriques.fr'
+    router.request_context.scheme: 'https'
+    router.request_context.base_url: ''
+    asset.request_context.base_path: '%router.request_context.base_url%'
+    asset.request_context.secure: true
+    typesense_key: '%env(TYPESENSE_KEY)%'
+    typesense_host: '%env(TYPESENSE_HOST)%'
+    upload_directory: '%kernel.project_dir%/public/uploads/storedoc'
+    python_path: 'C:\Python312\python.exe'
+    script_path: 'D:\potinsnumeriques\src\Python\analyze_keywords_v2.py'
+    puzzle_images_dir: '%kernel.project_dir%/public/uploads/puzzles'
+    puzzle_images_public: '/uploads/puzzles'
+    puzzle_videos_dir: '%kernel.project_dir%/public/uploads/videos'
+    puzzle_videos_public: '/uploads/videos'
+
+services:
+    Doctrine\ORM\Mapping\Driver\AttributeDriver:
+        arguments:
+            - [ ]           # paths (gérés par DoctrineBundle)
+            - true         # reportFieldsWhereDeclared = true
+            -
+            # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $pythonPath: '%python_path%'
+            $scriptPath: '%script_path%'
+            $retryTtl: '%retry_ttl%'
+            $tokenTtl: '%token_ttl%'
+            $firewallName: '%firewall_name%'
+            $userClass: '%user_class%'
+            $hoster: '%typesense_host%'
+            $apiKey: '%typesense_key%'
+            string $locales: '%app_locales%'
+            string $defaultLocale: '%locale%'
+            string $emailSender: '%app.notifications.email_sender%'
+
+    App\Service\PythonShellService:
+        arguments:
+            $pythonPath: '%python_path%'
+            $scriptPath: '%script_path%'
+
+    App\Infrastructure\Search\Typesense\TypesenseClient:
+        arguments:
+            $hoster: '%typesense_host%'
+            $apiKey: '%typesense_key%'
+
+    App\Infrastructure\Search\IndexerInterface:
+        class: App\Infrastructure\Search\Typesense\TypesenseIndexer
+
+    App\Infrastructure\Search\SearchInterface:
+        class: App\Infrastructure\Search\Typesense\TypesenseSearch
+
+    redirectionListener:
+        class: App\Listener\RedirectionListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    App\Infrastructure\Orm\DoctrineSchemaListener:
+        tags: [ 'doctrine.event_subscriber' ]
+
+    #app.form.registration:
+    #    class: App\Form\OldRegistrationType
+    #    tags:
+    #        - { name: form.type, alias: app_user_oldregistration }
+
+
+    app.doctrine_listener_website_listener:
+        class: App\DoctrineListener\WebsiteListener
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: App\Entity\Boards\Board }
+            - { name: doctrine.orm.entity_listener, event: preUpdate, entity: App\Entity\Boards\Board }
+
+    app_doctrine_listener_offre_listener:
+        class: App\DoctrineListener\OffreListener
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: App\Entity\Marketplace\Offres }
+            - { name: doctrine.orm.entity_listener, event: preUpdate, entity: App\Entity\Marketplace\Offres }
+
+    app_doctrine_listener_postation_listener:
+        class: App\DoctrineListener\PostListener
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: App\Entity\Posts\Post }
+            - { name: doctrine.orm.entity_listener, event: preUpdate, entity: App\Entity\Posts\Post }
+
+    app_doctrine_listener_gps_listener:
+        class: App\DoctrineListener\GpsListener
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: App\Entity\Sector\Gps }
+            - { name: doctrine.orm.entity_listener, event: preUpdate, entity: App\Entity\Sector\Gps }
+
+    App\EventSubscriber\RequireParticipantSubscriber:
+        tags:
+            - { name: controller.argument_value_resolver, priority: 200 }
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+    App\EventListener\RedirectExceptionListener:
+        tags:
+            - { event: kernel.exception, name: kernel.event_listener }
+
+    Symfony\Component\Security\Http\Logout\LogoutUrlGenerator: '@security.logout_url_generator'

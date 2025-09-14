@@ -1,0 +1,29 @@
+
+{# menu customer version desk #}
+<div class="navadmin">
+    <div class="navaffi-bk">
+        <div class="afnav-fl">
+            <a href="{{ path('cargo_public',{'slugcity':board.locality[locatecity].slugcity}) }}" class="navlogo_affi">
+                <div class="navlogo-svg">{{ include('svg/50x50_AfCHG_bleu.html.twig') }}</div>
+            </a>
+        </div>
+
+        <div class="afnav-fl">
+            <div class="head-bull_admin">
+                <h2>{{ dispatch.name }}</h2>
+            </div>
+        </div>
+
+    </div>
+    <div class="navaffi-bk">
+        {{ include('aff_menu/pop/'~agent~'/modal-pop-customer.html.twig') }}
+        <div class="afnav-fl">
+            <div class="afnav-link-brd">
+                <div class="afnav-alk"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

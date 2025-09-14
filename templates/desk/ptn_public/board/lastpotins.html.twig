@@ -1,0 +1,31 @@
+{% block body %}
+<div id="pagehome" class="homepage-wrapper--desk" data-agent="{{ agent }}">
+    <div class="_pg_wb-pb_v6">
+    <div class="af_flx-C fx-c">
+        <div class="head_search">
+            <div class="af_flx-C">
+            </div>
+        </div>
+    </div>
+    <section class="tglaff" id="tgl_0">
+            <div class="fx-content_rep_v6">
+                <div class="web-inf_post">
+                    <h1>Les derniers potins</h1>
+                </div>
+
+                {{ include('desk/ptn_elements/ele_potins/lastnoticecity.html.twig', {
+                    lastsnotice: lastsnotice,
+                    city: city ?? null
+                }, with_context = false) }}
+
+            </div>
+    </section>
+    {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+</div>
+</div>
+{%  endblock body %}
+{% use "js/js_public.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

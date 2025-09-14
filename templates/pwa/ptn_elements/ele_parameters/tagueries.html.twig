@@ -1,0 +1,71 @@
+<div class="_in-l-bb2_mb">
+<div class="_bk-0">
+    <div class="space_tag_loc">
+        <div class="space-tag">
+            {% for tag in website.template.tagueries %}
+                {%  if tag.name is not same as("") %}
+                <div class="bull_tag" >
+                    <div class="-br-Ma">{{tag.name}}</div>
+                </div>
+                {%  endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="_fx-R fx-c">
+        <div class="_t-c _m-lr-5">
+            <div class="til_rlt">Actuellement</div>
+            <div class="space_tag_loc">
+                <div class="space-tag">
+                    <div class="bull_tag active" >
+                        {% if openday is defined  %}
+                            {% if openday %}
+                                <div class="-br-Ma">ouvert</div>
+                            {% else %}
+                                <div class="-br-Ma">fermé</div>
+                            {% endif %}
+                        {% else %}
+                            <div>horaires d'ouverture non renseigneé</div>
+                            <a href="{{ path('opendays_edit',{'slug':website.slug, 'id':website.id}) }}"><em>modifier</em></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="_t-c _m-lr-5">
+            <div class="til_rlt">Post</div>
+            <div class="space_tag_loc">
+                <div class="space-tag">
+                    <div class="bull_tag active" >
+                        <div class="-br-Ma">{{posts|default |length }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="_t-c _m-lr-5">
+            <div class="til_rlt">Evenement</div>
+            <div class="space_tag_loc">
+                <div class="space-tag">
+                    <div class="bull_tag active" >
+                        <div class="-br-Ma">{{ website.module.postevents|default|length}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="_t-c _m-lr-5">
+            <div class="til_rlt">localisation</div>
+            <div class="space_tag_loc">
+                <div class="space-tag">
+                    <div class="bull_tag active" >
+                        {% if website.locality %}
+                            <div class="-br-Ma">{{website.locality.city}}</div>
+                        {% else %}
+                            <div>pas de localisation</div>
+                            <a href="{{ path('localize_change',{'slug':website.slug}) }}"><em>modifier</em></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

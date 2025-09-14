@@ -1,0 +1,15 @@
+<div class="af_rel af_flx-nW cent-start">
+    {% for rocket in partners %}
+        <a href="{{ path('show_board',{'slugboard':rocket.slug}) }}" class="part_item_v6" data-website="{{ rocket.id }}">
+            {#  <i class="fa fa-times abs-croos"></i> #}
+            <div class="notbd-img">
+                <div class="iner-img_part_v6" style="background-image: url('{{ asset('spaceweb/template/'~rocket.template.logo.namefile??'img/pinsaffi.png' ) }}')"></div>
+            </div>
+            <div class="modal_part_v6">
+                <h5>{{rocket.namewebsite}}</h5>
+            </div>
+        </a>
+    {%  else %}
+    <h2 class="fz-tit">pas encore de lien ...</h2>
+    {%  endfor %}
+</div>

@@ -1,0 +1,34 @@
+<div class="zone-bar-show">
+    <div class="zone-bar-linkfirst">
+        <a href="{{ path('board_potin_public',{'slugboard':board.slug}) }}" class="in_bar_board">
+            <div class="af_flx fx-c">
+                <div class="wb-logo-lite">
+                    {% if board.template.logo %}
+                        <div  class="bkgrndlogo" style="background-image: url('{{ asset('spaceweb/template/'~board.template.logo.namefile ) }}')"></div>
+                    {% else %}
+                        <div class="bkgrndlogo" style="background-image: url('{{ asset('img/pinsaffi.png') }}')"></div>
+                    {% endif %}
+                </div>
+                <h3 class="in-txt-bar_left">{{ board.nameboard }}</h3>
+            </div>
+        </a>
+
+
+        <a  href="" class="in_bar_board"> {#  le lien vers la page info public du board #}
+            <div class="af_flx fx-c">
+                <i class="fa fa-th" aria-hidden="true"></i>
+                <h3 class="in-txt-bar_left"> le panneau</h3>
+            </div>
+        </a>
+    </div>
+    <h2 title="post de {{ board.nameboard }}">{{ post.titre|lower|capitalize }}</h2>
+    <div class="lite-cmd">
+        {% if  board.contactation is not null %}
+            <div class=" button-wp" >
+                <button class="bulletoggle pop_button" data-affitgl="tgl_9">
+                    <i class="fa fa-comments-o" aria-hidden="true"></i> laissez un commentaire
+                </button>
+            </div>
+        {% endif %}
+    </div>
+</div>

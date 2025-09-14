@@ -1,0 +1,46 @@
+<nav class="menu-container">
+    <button id="nav_user" class="menu-button" aria-label="Compte" aria-expanded="false">
+        {% if app.session.get('avatar') %}
+            <div class="avatar" style="background-image: url('{{ asset(vich_uploader_asset(customer.profil.avatar, 'imageFile')) }}')"></div>
+        {% else %}
+            <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img" viewBox="0 0 24 24" class="icon">
+                <path d="M12 12c2.486 0 4.5-2.014 4.5-4.5S14.486 3 12 3a4.499 4.499 0 00-4.5 4.5C7.5 9.986 9.514 12 12 12zm0 2.25c-3.004 0-9 1.508-9 4.5v1.75a.5.5 0 00.5.5h17a.5.5 0 00.5-.5v-1.75c0-2.992-5.996-4.5-9-4.5z"></path>
+            </svg>
+        {% endif %}
+    </button>
+
+    <div id="popuser" class="menu-dropdown" style="display: none;">
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <a href="{{ path('profil_customer') }}">Profil</a>
+            <a href="{{ path('office_member') }}">Mon Panneau</a>
+            <a href="{{ path('admin') }}">Backoffice</a>
+            <hr>
+            <a href="{{ path('app_logout') }}">Déconnexion</a>
+
+        {% elseif is_granted('ROLE_MEDIA') %}
+            <a href="{{ path('parameters') }}">Paramètres</a>
+            <a href="{{ path('office_media') }}">Planning Potins</a>
+            <hr>
+            <a href="{{ path('app_logout') }}">Déconnexion</a>
+
+        {% elseif is_granted('ROLE_MEMBER') %}
+            <a href="{{ path('profil_customer') }}">Profil</a>
+            <a href="{{ path('office_member') }}">Mon Panneau</a>
+            <hr>
+            <a href="{{ path('app_logout') }}">Déconnexion</a>
+
+        {% elseif is_granted('ROLE_CUSTOMER') %}
+            <a href="{{ path('profil_customer') }}">Profil</a>
+            <a href="{{ path('customer_agenda') }}">Mon agenda</a>
+            <a href="{{ path('customer_space') }}">Mes potins</a>
+            <hr>
+            <a href="{{ path('app_logout') }}">Déconnexion</a>
+
+        {% else %}
+            <div class="menu-info">À vos potins !</div>
+            <a href="{{ path('new_identify') }}">Inscrivez-vous</a>
+            <hr>
+            <a href="{{ path('app_login') }}">Connexion</a>
+        {% endif %}
+    </div>
+</nav>

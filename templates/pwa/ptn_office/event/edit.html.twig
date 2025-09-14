@@ -1,0 +1,18 @@
+{% block body %}
+    <div class="_wb">
+        <div class="container-bo_v5">
+            {{ include('pwa/ptn_office/menu/websitemenu.html.twig') }}
+            <section class="_wb-ospace">
+                <div class="regester-bk">
+            <x-event board="{{ board.id }}"  partners="{{ partners|serialize(format = 'json') }}" event="{{event|serialize(format = 'json') }}" city="{{ city }}"></x-event>
+                </div>
+            </section>
+    </div>
+</div>
+{% endblock %}
+{% use "js/js-event.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+

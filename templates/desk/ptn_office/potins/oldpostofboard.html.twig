@@ -1,0 +1,127 @@
+<div class="bk_content">
+    <div class="tab_lit_bo">
+    {%  for tab in posts %}
+        {%  if tab.media.imagejpg[0] is defined  %}
+            {%  set ill= tab.media.imagejpg[0].getwebPath %}
+        {%  else %}
+            {%  set ill= "img/AffiChange.png" %}
+        {% endif %}
+
+            <div class="sha_lgt tab_ptn">
+
+                <div class="tab_l1_post">
+                    <div class="tab_ptn_row">
+                        <div class="tab_ptn_col1">
+                            <img src="{{ asset(ill) }}" alt="Image">
+                        </div>
+                        <div class="tab_ptn_col2">
+                            <h3>{{ tab.titre }}</h3>
+                            <p class="post-date">Publié le : {{ tab.createAt|date("j-m-Y") }}</p>
+                        </div>
+                    </div>
+                    <div class="tab_ptn_actions">
+                        <a href="{{ path('add-iframe-potin', {'id':tab.id}) }}" class="btn btn-primary">Ajouter une vidéo</a>
+                    </div>
+                </div>
+                    <div class="tab_ptn_col_all">
+                        <ul>
+                            {% for video in tab.iframevideo %}
+                                <li class="tab_l1_list_brd">
+                                    <div class="tab_ptn_col1">
+                                        {{ video.fileblob }}
+                                    </div>
+                                    <div class="tab_ptn_cmd">
+                                        <a href="{{ path('add-iframe-potin', {'id':tab.id}) }}" class="cmd_edit btn"  title="modifier">modifier</a>
+                                        <a href="{{ path('add-iframe-potin', {'id':tab.id}) }}" class="cmd_delete btn"  title="supprimer">supprimer</a>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="tab_l1_list">
+                    <div class="tab_ptn_label">
+                        <div class="tab_ptn_col2">articles</div>
+                        <div class="tab_ptn_cmd">
+                            <a href="{{ path('add-article-potin', {'id':tab.id}) }}" class="cmd_add btn  hide-on-mobile" title="rendez-vous">ajouter un article</a>
+                        </div>
+                    </div>
+
+                    <div class="tab_ptn_col_all">
+                        <ul>
+                            {% for article in tab.htmlcontent %}
+                                <li class="tab_l1_list_brd">
+                                    <div class="tab_ptn_col1">{{ article.fileblob }}</div>
+                                    {#
+                                    <div class="tab_ptn_col2">
+                                        <h5>{{ article.titre }}</h5>
+                                    </div>
+
+                                    <div class="tab_ptn_col_dt">
+                                        le : {{ tab.createAt|date("j-m-Y") }}
+                                    </div>
+                                    #}
+                                    <div class="tab_ptn_cmd">
+                                        <a href="{{ path('edit_article_potin', {'id':article.id}) }}" class="cmd_edit btn"  title="modifier">modifier</a>
+                                        <a href="{{ path('delete-article-potin', {'id':article.id}) }}" class="cmd_delete btn"  title="supprimer">supprimer</a>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="pot_bo w-cb3">
+                    {% set post=tab %}
+                    {% if (member.id is same as (post.author.id))  or (member.id == 1) %}
+                        <div class="tools-msg">
+                            <a class="e-tool" title="edition de l'affiche" href="{{ path('edit_post', {'id':post.id}) }}">
+                                <i class=" fa fa-edit" data-descr="editer.."></i>
+                            </a>
+                            <a class="e-tool" title="etat de la publication"  href="{{ path('publied_post', {'id':post.id, 'board':board.id}) }}">
+                                {%  if post.publied %}
+                                    <div class="_icO-rd green"><i class="fa fa-flag-checkered" aria-hidden="true"></i></div>
+                                {% else %}
+                                    <div class="_icO-rd red"><i class="fa fa-flag" aria-hidden="true"></i></div>
+                                {%  endif %}
+                            </a>
+                            <a class="e-tool" title="messagerie" href="{{ path('form-delete_post', {'id':post.id}) }}"><i class=" fa fa-trash" data-descr="en bulle.."></i></a>
+                            <a class="e-tool" title="agenda des potins" href="{{ path('event_potins', {'id':post.id}) }}">
+                                <i class=" fa fa-calendar" data-descr="agenda"></i>
+                            </a>
+                            <a class="e-tool" title="ressources" href="{{ path('group_ressources', {'id':post.id}) }}">
+                                <i class=" fa fa-database" data-descr="ressources"></i>
+                            </a>
+                            <a class="e-tool" title="review" href="{{ path('manage_group_review', {'id':post.id}) }}">
+                                <i class=" fa fa-podcast" data-descr="review.."></i>
+                            </a>
+
+
+
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+    {%  else %}
+        <div class="pop-board">
+            <div class="pos-incub">
+                <div class="_t-c _m-lr-5">
+                    <div class="til_rlt">affichez-vous</div>
+                </div>
+            </div>
+        </div>
+    {%  endfor %}
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+

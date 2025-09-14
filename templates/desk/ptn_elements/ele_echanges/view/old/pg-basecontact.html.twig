@@ -1,0 +1,59 @@
+<div class="filterblur filter_blue"></div>
+<div class="borderblur"></div>
+
+<div class="content-wb_glass" id="memberstate" data-member="{{ member }}">
+    {{include('headers/imagebackWb.html.twig')}}
+    <div class="form-groupfields glass-label">
+            <div class="glass-title_form">
+                <h3>Contact</h3>
+            </div>
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {% if not member %}
+                {% set usersubmit = false %}
+            {{ include('forms/formtestmail.html.twig') }}
+            <div class="form-play-none">    
+                <div class="bg-glass-op">
+                     <div class="intro-glass_form">
+                        <div class="formtest">
+                            <i class="fa fa-envelope heading-icon font-20"></i>
+                            {{ form_label(form.content, "votre message :") }}
+                            {{ form_widget(form.content, {'attr': {'class': 'glass-input'}}) }}
+                            <div class="validate"></div>
+                        </div>
+                     </div>
+                </div>
+                <div class="glass-field form-send">
+                    <button id="subform" class="glass-button btn-glss-submit {{ usersubmit ? "oksubmit" : "nosubmit" }}">Postez</button>
+                </div>
+            </div>
+            {% else %}
+                {% set usersubmit = true %}
+            <div class="bg-glass-op">
+                 <div class="intro-glass_form">
+                    <div class="formtest">
+                        <div class="g-recaptcha" data-sitekey="6LfPKvAUAAAAAIopX1KBsmBtSrI8FekLD-u-s4N5"></div>
+                        <i class="fa fa-envelope heading-icon font-20"></i>
+                        {{ form_label(form.content, "votre message :") }}
+                        {{ form_widget(form.content, {'attr': {'class': 'glass-input'}}) }}
+                    </div>
+                 </div>
+            </div>
+
+            <div class="bg-glass-op">
+                <div class="headerprov">
+                    <div class="bullehead-spwb-desk"></div>
+                    <button id="subform" class="glass-button btn-glss-submit {{ usersubmit ? "oksubmit" : "nosubmit" }}">Postez</button>
+                </div>
+            </div>
+
+            {% endif %}
+            {{ form_rest(form) }}
+            <div class="loading"></div>
+            <div class="error-message"></div>
+            {{ form_end(form) }}
+
+        {{ include('headers/conversations-contact-desk.html.twig') }}
+        {{ include("footer/footer-info.html.twig") }}
+    </div>
+</div>

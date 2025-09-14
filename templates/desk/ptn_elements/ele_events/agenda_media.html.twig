@@ -1,0 +1,61 @@
+{% for tabevent in tabevents %}
+    {% set l_event = tabevent.event %}
+    {% for key, l_date in tabevent.date %}
+        {% set totnbpart = l_date|length %}
+        {% set col = loop.index0 < 3 ? loop.index0 : 3 %}
+
+        <div class="event-block">
+            <!-- En-tête de l'événement -->
+            <div class="event-header color-event-{{ col }}">
+                <h3>{{ l_event.potin.titre|lower|capitalize }}</h3>
+                <p class="event-date">Date : {{ key|date('d-m-Y') }}</p>
+            </div>
+
+            <!-- Informations sur l'événement -->
+            <div class="event-info">
+                <div class="info-item">
+                    <span class="label">Participants :</span>
+                    <span class="value">{{ l_event.potin.numberPart ?? 0 }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Restants :</span>
+                    <span class="value">{{ l_event.potin.numberPart - totnbpart }}</span>
+                </div>
+            </div>
+
+            <!-- Liste des inscrits -->
+            <div class="participants">
+                <h4>Inscrits :</h4>
+                <ul>
+                    {% for prod in l_date %}
+                        <li>
+                            <span>{{ prod.registered.lastname|capitalize }} {{ prod.registered.firstname|capitalize }}</span>
+                            <a href="{{ path('edit_registered_media', { 'order': prod.order.id, 'id': prod.registered.id }) }}" class="btn btn-primary">
+                                <i class="fa fa-eye"></i> Voir
+                            </a>
+                            <a href="{{ path('form-delete_resamedia', { 'order': prod.order.id, 'id': prod.registered.id }) }}" class="btn btn-danger">
+                                <i class="fa fa-trash"></i> Supprimer
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Bouton de réservation -->
+            <div class="event-action">
+                {% if totnbpart < l_event.potin.numberPart %}
+                    <a href="{{ path('resa_potins_media', { 'id': l_event.id, 'date': key }) }}" class="btn btn-success">
+                        Réserver
+                    </a>
+                {% else %}
+                    <div class="btn btn-secondary disabled">Complet</div>
+                {% endif %}
+            </div>
+        </div>
+
+    {% endfor %}
+{% else %}
+    <div class="no-events">
+        <p>Pas encore d'événement programmé.</p>
+    </div>
+{% endfor %}

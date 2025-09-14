@@ -1,0 +1,32 @@
+{% extends "security/layout/baseconnect.html.twig" %}
+
+
+{% block title %}Log in!{% endblock %}
+
+{% block log %}
+<p>Oups !!!</p>
+<h2>Mot de passe perdu ?</h2>
+<div class="span4">
+    <h4>Vous avez perdu votre mot de passe ?</h4>
+    <em>
+        Compléter le formulaire, un email vous seras envoyé.<br/>
+        Il contiendra la procèdure à suivre pour récupérer votre mot de passe.
+    </em>
+</div>
+<div class="span4 offset2">
+    <form action="{{ path('resetting_send_email') }}" method="POST"
+          class="fos_user_resetting_request">
+        <div>
+            <label for="email">votre email</label>
+            <input type="text" id="email" name="email" required="required"/>
+        </div>
+        <br/>
+
+        <div>
+            <input type="submit" class="btn btn-primary" value="Envoyer"/>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,51 @@
+
+{%  if notice is defined %}
+    {% set style = 'One' %}
+    {% set largstap = 'One' %}
+    <div class="timeline-out bottom-0">
+        <div class="timeline-news post-stap-alone">
+            <div class="pict_resume-alone">   {# zone image depart notice #}
+                {% if not notice.media.imagejpg[0] %}
+                    <div class="no-picture-nexs"></div>
+                {%  else %}
+                    <div class="picture-nexs-alone pictare-alone" style="background-image: url( {{notice.media.imagejpg[0].apiPath ??"" }} )"></div>
+                {% endif%}
+            </div>
+            <div class="post-resume-alone">
+                <h5 class="title-comment-alone newsfield tit-pop-small" data-news="{{notice.id}}">{{notice.titre}}</h5>
+                <p class="resume-post-alone">{% if notice['subject'] %}{{notice['subject']}}{% endif%}</p>
+                <p class="resume-post-long-alone">{% if notice['content'] %}{{notice['content']|raw}}{% endif%}</p>
+            </div>
+            <div class="info-news grd-C35-1f-1fp15-abs">
+                {# <div class="avatar-comment" style="background-image: url('{{asset( notice.idUser.avatar ?? 'svg/logohbcl.png') }}');"></div> #}
+            </div>
+            <div class="user{{ style }}">
+                <em>publié par {{notice.author.name| upper}}</em>
+                <span> - </span>
+                <span class="litledate">  {{notice.createAt|date('\\l\\e j:m:Y')}}</span>
+                {% for taguerie in notice.tagueries %}
+                    <em class="tag-comment bg-green-dark theme-post grid-center-left">{{taguerie.name}} </em>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% else %}
+    {% set style = 'T' %}
+    {% set largstap = 'T' %}
+    <div class="timeline-out bottom-0">
+        <div class="timeline-news post-stap{{ largstap }} all{{ style }}">
+            <div class="pict_resume{{ style }}">   {# zone image depart notice #}
+                {# <div class="picture-nexs pictarea{{ style }}" style="background-image: url( {{asset('images/hbcl-bdd.jpg') }} )"></div>#}
+            </div>
+            <em class="tag-comment bg-green-dark theme-post grid-center-left">story</em>
+            <p class="resume-post" >pas de post</p>
+            <div class="info-news grd-C35-1f-1fp15-abs">
+                <div class="avatar-comment" style="background-image: url({{ asset('svg/logohbcl.png') }});">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+
+

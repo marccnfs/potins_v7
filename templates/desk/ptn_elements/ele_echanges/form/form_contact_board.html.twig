@@ -1,0 +1,67 @@
+{%  if agent is same as"desk/" %}
+<div class="card_line bgrop_v5">
+    <div id="id-choicacces" class="head-l">
+        <div class="w_inf_board">
+            <div class="goaff_v6"><h3>J'ai déjà un compte</h3>
+                <div class="iner-col_v6">
+                    <a class="sstitl mrg0" href="{{path('app_login')}}">
+                        <div class="ti-sst"><i class="fa fa-user-circle-o"></i>je me connecte</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div id="testmail">
+            <test-mailmsg slug="{{ website.slug }}" id="{{ website.id }}" module="_board"></test-mailmsg>
+        </div>
+    </div>
+</div>
+{%  else %}
+    <div class="bordar_line_mob">
+        <div class="close-bt_mob bulleswith no-switch" data-tglswitch="tgl_9" data-action="nh">
+            <i class="fa fa-close" aria-hidden="true"></i>
+        </div>
+        <div id="id-choicacces" class="head-l">
+            <div class="w_inf_board_msgmob">
+                <div class="full_info_mob">
+                    <h3>Indentifez-vous</h3>
+                    <div class="iner-row_mob">
+                        <a class="sstitl_mob" href="{{path('app_login')}}">
+                            <div class="ti-sst"><i class="fa fa-user-circle-o"></i>je me connecte</div>
+                        </a>
+                        <a class="sstitl_mob" href="{{path('new_identify_stape')}}">
+                            <div class="ti-sst"><i class="fa fa-connectdevelop"></i>j'ouvre un compte'</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="msg-label-for_x">
+                <h5>ou</h5>
+                <p>je n'ouvre pas de compte. Je désir recevoir les réponses sur ma boite mail.</p>
+            </div>
+            <div id="testmail">
+                <test-mailmsg slug="{{ website.slug }}" id="{{ website.id }}" module="_board"></test-mailmsg>
+            </div>
+        </div>
+    </div>
+
+{%  endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

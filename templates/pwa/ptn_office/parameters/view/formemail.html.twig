@@ -1,0 +1,18 @@
+{{ form_start(form)}}
+<div class="process-module_glass" id="form_act">
+    <div class="stape-process-lit" >
+        <h5>ajoutez un administrateur à : <strong>{{ website.namewebsite }}</strong></h5>
+        <div class="group-form-glass">
+            <p>Saisissez son adresse mail :</p>
+            <div class="field-glass">
+                {{ form_widget(form.mail, {'attr': {'class': 'form-hbclnews'}}) }}
+            </div>
+        </div>
+    </div>
+    {{form_rest(form)}}
+    <div class="gp-form-row_center_mb">
+        <button type="submit" class="btn-send">Confirmez</button>
+        <button type="reset" {#onclick="getElementById('form_act').style.display='none'"#} class="btn-send no-send affitoggle" data-affitgl="tgl_0">annulez</button>
+    </div>
+</div>
+{{form_end(form)}}

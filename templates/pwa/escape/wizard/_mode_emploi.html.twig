@@ -1,0 +1,72 @@
+{# Usage :
+   {% include 'pwa/escape/wizard/_mode_emploi.html.twig' with { step: 1 } %}
+   Variables optionnelles :
+   - title (string)  : remplace le titre par défaut
+   - note  (string)  : petite note complémentaire (facultative)
+#}
+{% set s = step|default(0) %}
+
+<div class="mode-emploi">
+    {% if s == 1 %}
+        <h2>{{ title|default('Mode d’emploi — Cryptex numérique') }}</h2>
+        <ul>
+            <li>Un cadenas à roulettes : aligne les bonnes <strong>lettres</strong> pour l’ouvrir.</li>
+            <li>Tu choisis le <strong>mot secret</strong> (ex. <em>ZEN</em>).</li>
+            <li>Quand le joueur trouve le mot, un <strong>message</strong> apparaît (indice suivant).</li>
+        </ul>
+        <p class="me-tip">Tu règles : mot secret, alphabet (A…Z/0…9), mélange au départ, validation auto, message de réussite.</p>
+
+    {% elseif s == 2 %}
+        <h2>{{ title|default('Mode d’emploi — QR code géolocalisé') }}</h2>
+        <ul>
+            <li>Cette étape se débloque seulement <strong>au bon endroit</strong> (GPS).</li>
+            <li>Tu indiques un <strong>point sur la carte</strong> (latitude/longitude) et un <strong>rayon</strong> (ex. 100 m).</li>
+            <li>Si le joueur est dans la zone : <strong>message OK</strong>. Sinon : <strong>message hors zone</strong>.</li>
+        </ul>
+        <p class="me-tip">Astuce : imprime un QR vers cette étape. Le téléphone doit être en <strong>HTTPS</strong> pour la géoloc.</p>
+
+    {% elseif s == 3 %}
+        <h2>{{ title|default('Mode d’emploi — Puzzle numérique (image)') }}</h2>
+        <ul>
+            <li>Tu téléverses une <strong>image</strong> (photo, plan, dessin).</li>
+            <li>Elle est découpée en <strong>carrés</strong> mélangés (ex. 3×3).</li>
+            <li>Le joueur remet chaque morceau à la bonne place pour <strong>reconstituer</strong> l’image.</li>
+        </ul>
+        <p class="me-tip">Tu règles : image, nombre de lignes/colonnes, message de réussite.</p>
+
+    {% elseif s == 4 %}
+        <h2>{{ title|default('Mode d’emploi — Formulaire à piège logique') }}</h2>
+        <ul>
+            <li>Tu écris des <strong>questions</strong> avec des <strong>cases à cocher</strong>.</li>
+            <li>Tu définis quelles cases doivent être <strong>cochées</strong> (must) ou <strong>non cochées</strong> (mustNot).</li>
+            <li>La combinaison exacte débloque la suite.</li>
+        </ul>
+        <p class="me-tip">Exemple : Vrai = A et C cochés, B décoché. Messages personnalisés en cas de réussite/erreur.</p>
+
+    {% elseif s == 5 %}
+        <h2>{{ title|default('Mode d’emploi — Vidéo interactive') }}</h2>
+        <ul>
+            <li>Tu ajoutes une <strong>vidéo</strong> courte (.mp4).</li>
+            <li>À certains <strong>instants</strong> (ex. 10 s), la vidéo se met en pause et affiche une <strong>question</strong>.</li>
+            <li>Bonne réponse → la vidéo continue. À la fin : <strong>message de réussite</strong>.</li>
+        </ul>
+        <p class="me-tip">Prévois 1–3 questions max, nettes et liées à ce qu’on voit/entend.</p>
+
+    {% elseif s == 6 %}
+        <h2>{{ title|default('Mode d’emploi — Code HTML minimal') }}</h2>
+        <ul>
+            <li>Tu fournis un <strong>code de départ</strong> (HTML) dans une zone d’édition.</li>
+            <li>Le joueur doit <strong>ajouter/modifier</strong> quelque chose (ex. un &lt;h1&gt; avec un mot précis).</li>
+            <li>Des <strong>règles de vérification</strong> valident la page (sélecteurs, texte, nombre d’éléments).</li>
+        </ul>
+        <p class="me-tip">Exemples de règles : “il existe un <code>h1</code>”, “le <code>h1</code> contient ‘SECRET’”, “au moins 1 lien &lt;a&gt;”.</p>
+
+    {% else %}
+        <h2>{{ title|default('Mode d’emploi') }}</h2>
+        <p>Choisis une étape pour afficher son mode d’emploi.</p>
+    {% endif %}
+
+    {% if note is defined and note %}
+        <p class="me-note">{{ note }}</p>
+    {% endif %}
+</div>

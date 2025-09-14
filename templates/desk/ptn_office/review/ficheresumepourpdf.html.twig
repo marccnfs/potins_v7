@@ -1,0 +1,564 @@
+<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>{{ potin.titre }}</title>
+    <style type="text/css"> * {
+            margin: 0;
+            padding: 0;
+            text-indent: 0;
+        }
+
+        body {
+            background-color: #89a9ee;
+            position: relative;
+        }
+        h4 {
+            color: #FFF;
+            font-family: "Liberation Sans Narrow", sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 17pt;
+        }
+
+        .s1 {
+            color: #FFF;
+            font-family: "Arial Narrow", sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            text-decoration: none;
+            font-size: 17pt;
+        }
+
+        .s2 {
+            color: #102D69;
+            font-family: "Liberation Sans Narrow", sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 17pt;
+        }
+
+        h3 {
+            font-family: "Liberation Sans Narrow", sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 18pt;
+            padding: 10px 0 5px 0;
+        }
+
+        h2 {
+            color: #102D69;
+            font-family: Tahoma, sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 27pt;
+        }
+
+        h1 {
+            color: #FFF;
+            font-family: "Liberation Sans Narrow", sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 35pt;
+        }
+
+        .s3 {
+            color: #FFF;
+            font-family: "Liberation Sans Narrow", sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 18pt;
+        }
+
+        .s4 {
+            color: #0d0c0c;
+            font-family: "Trebuchet MS", sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .s5 {
+            color: #FFFFFF;
+            font-family: "Trebuchet MS", sans-serif;
+            font-style: normal;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .s6 {
+            color: #FFF;
+            font-family: Tahoma, sans-serif;
+            font-style: normal;
+            text-decoration: none;
+            font-size: 1.5rem;;
+        }
+
+        .p, p {
+            color: #FFFFFF;
+            font-family: "Trebuchet MS", sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            text-decoration: none;
+            font-size: 9pt;
+            margin: 0pt;
+        }
+
+        .s7 {
+            color: #E30613;
+            font-family: "Liberation Sans Narrow", sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 18pt;
+        }
+
+        .s8 {
+            color: #102D69;
+            font-family: "Trebuchet MS", sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            text-decoration: none;
+            font-size: 9pt;
+        }
+
+        .a, a {
+            color: #275B9B;
+            font-family: "Trebuchet MS", sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            text-decoration: none;
+            font-size: 9pt;
+        }
+
+        .s10 {
+            color: #FFF;
+            font-family: "Liberation Sans Narrow", sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 12pt;
+        }
+        .band-left-all {
+            display: table-column;
+            position: absolute;
+            top: 138px;
+            left: 0;
+            width: 150px;
+            background: linear-gradient(88deg, #89a9ee, #ff003b);
+            height: 100%;
+            z-index: -10;
+        }
+        .border-bt{
+            position: relative;
+            margin: auto;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        .bt_bk{
+            display: table;
+            text-align: left;
+        }
+        .center_bk{
+            display: table;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+        }
+        .img_cent{
+            margin: 15px;
+        }
+        .large_100{
+            display: table;
+            background-color: #0d1689;
+            margin: 0;
+            padding: 25px;
+            justify-content: center;
+            align-items: start;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 20px 0;
+        }
+        .larg_txt{
+            width: 60%;
+            height: auto;
+            color: #FFFFFF;
+            display: table-cell;
+            vertical-align: middle;
+            padding: 15px;
+        }
+        .larg_txt h3{
+            color:#FFFFFF;
+        }
+        .larg_txt h2{
+            color:#FFFFFF;
+            padding-bottom: 15px;
+        }
+        .soc{
+            display: table-cell;
+            width: 40%;
+            padding: 25px;
+            position: relative;
+            vertical-align: middle;
+        }.soc-t{
+            display: table;
+            width: 450px;
+            height: auto;
+            margin: 25px;
+        }
+        .soc-lig{
+            color:#FFFFFF;
+            font-family: "Dancing Script", cursive;
+            font-size: 20px;
+            padding-left: 10px;
+        }
+        .blk_comp{
+            background-color: #0a58ca;
+            font-family: "HeiS ASC Simplified Chinese", "HeiS ASC Simplified Chinese_n5", "HeiT ASC Traditional Chinese", "HelveticaNeue-Regular", "Helvetica Neue Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color:#FFFFFF;
+            padding: 50px;
+            margin-bottom: 35px;
+            text-align: center;
+        }
+        .blk_comp p{
+            font-size: 1rem;
+            line-height: 29px;
+        }
+        .t-right{
+            display: table;
+            vertical-align: middle;
+            width: 100%;
+            color: #FFFFFF;
+            position: relative;
+        }
+        .t-left{
+            display: table;
+            width: 100%;
+            color: #FFFFFF;
+            position: relative;
+        }
+        .blk_bkr{
+            width: 188px;
+            padding: 20px;
+            font-family: "HeiS ASC Simplified Chinese", "HeiS ASC Simplified Chinese_n5", "HeiT ASC Traditional Chinese", "HelveticaNeue-Regular", "Helvetica Neue Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color: #FFFFFF;
+            background: linear-gradient(88deg, #89a9ee, #007bff);
+        }
+        .deroule{
+            position: relative;
+            display: table;
+            width: 80%;
+            height: auto;
+            margin: auto;
+        }
+        .bk_txt{
+            width: 45%;
+        }
+        .vert_der{
+        }
+        .horz_der{
+           flex-direction: column;
+        }
+        .illust_der{
+            width: 45%;
+        }
+        .der-tx{
+            display: inline-table;
+        }
+        .der-tx h3{
+            font-family: "Noto Sans", "Helvetica Neue", "Helvetica", "Arial", "Liberation Sans", "Roboto", "Noto", sans-serif;
+            font-weight: 900;
+        }
+        .der-tx h3:before{
+            content: ".";
+            font-size: 5rem;
+            color:#0d1689;
+        }
+        .comment-der{
+            padding: 5px;
+            text-align: left;
+        }
+        .band-left{
+            width: 150px;
+        }
+        .fiche-review{
+            position: relative;
+            display: table;
+            vertical-align: middle;
+            table-layout: fixed;
+            border-collapse: separate;
+            border-spacing: 20px 0;
+            width: 80%;
+            height: auto;
+            margin-left: 300px;
+        }
+        .fiche-review h2{
+            padding: 15px;
+        }
+        .bk_left{
+            display: table-cell;
+            position: relative;
+            vertical-align: middle;
+            border: solid 1px #edeef0;
+            padding: 28px;
+            width: 50%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .bk_right{
+            position: relative;
+            display: table-cell;
+            vertical-align: middle;
+            padding: 20px;
+            top: -41px;
+            width: 50%;
+            height: auto;
+        }
+        .ct-head{
+            justify-content: start;
+            align-items: start;
+            top: -25px;
+            position: relative;
+        }
+        .foot-review{
+            margin-right: 100px;
+            width: 500px;
+            display: table;
+            text-align: left;
+            padding: 15px;
+        }
+        .header_tab{
+            display: table;
+            table-layout: fixed;
+            vertical-align: middle;
+            height: 150px;
+            width: 100%;
+            margin: auto;
+        }
+        .title_tab{
+            display: table;
+            table-layout: fixed;
+            vertical-align: middle;
+            height: 150px;
+            width: 100%;
+            margin: auto;
+        }
+        .content_stud{
+            text-align: center;
+        }
+        .cut_page{
+            display: table;
+            table-layout: fixed;
+            vertical-align: middle;
+            width: 100%;
+        }
+        .tabcell1 img{
+            height: 115px;
+            width: auto;
+            margin: auto;
+        }
+        .tabcell1{
+            display: table-cell;
+            vertical-align: middle;
+            width: 33%;
+        }
+        .tabcell2{
+            display: table-cell;
+            width: 33%;
+        }
+        .tabcell2 img{
+            height: 100px;
+            width: auto;
+            margin: auto;
+        }
+        .tabcell3{
+            display: table-cell;
+            width: 33%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="pag">
+    <div class="band-left-all"></div>
+    <div class="header_tab">
+        <div class="tabcell1">
+            <img alt="image" src="http://127.0.0.1:8000/pdf/illustration/logopotins.png"/>
+        </div>
+        <div class="tabcell2 center_bk">
+            <img class="img_cent" width="50" height="auto" alt="image" src="http://127.0.0.1:8000/pdf/illustration/pellerin.jpg"/>
+            <img class="img_cent" width="50" height="auto" alt="image" src="http://127.0.0.1:8000/pdf/illustration/saintjean.png"/>
+            <img class="img_cent" width="50" height="auto" alt="image" src="http://127.0.0.1:8000/pdf/illustration/montagne.jpg"/>
+        </div>
+        <div class="tabcell3">
+            <h4>Atelier multimedia</h4>
+        </div>
+    </div>
+
+    <div class="ct-head">
+        <img width="100%" height="35" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_012.png"/>
+    </div>
+
+    <div class="content_stud title_tab">
+        <h3>MAKEY MAKEY</h3>
+        <h1>FICHE ACTIVITE</h1>
+        <p class="s3">{{ review.titre }}</p>
+    </div>
+
+    <div class="cut_page">
+        <div class="t-right">
+            <div class="blk_bkr">
+                <p class="s7">potins</p>
+                <p class="s2" >2023/2024</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="fiche-review">
+            <div class="bk_left">
+                <p class="s4">Aujourd’hui, 96% des 9-16 ans naviguent sur la toile au moins une fois par semaine.
+                    <span class="s5">Aussi 12,5% de ces enfants ont déjà été victimes de cyberharcèlement.</span>
+                </p>
+                <p class="s4">Le numérique est présent au quotidien chez nos jeunes licencié(e)s Il faut les accompagner pour qu’ils adoptent les bons réflexes dans l’utilisation de ces supports.</p>
+                <p class="s6">Faire prendre conscience aux jeunes que pour une meilleure utilisation d’Internet, il est nécessaire d’adopter un comportement numérique responsable.</p>
+            </div>
+
+            <div class="bk_right">
+                <img width="350" height="350" alt="image" src="http://127.0.0.1:8000/pdf/illustration/makey01.jpg"/>
+            </div>
+    </div>
+
+    <div class="cut_page">
+        <div class="t-right">
+            <div class="blk_bkr">
+                <p class="s7">potins</p>
+                <p class="s2" >ACTIONS</p>
+            </div>
+        </div>
+    </div>
+    <div class="large_100">
+
+        <div class="larg_txt">
+            <h2>{{ potin.titre}}</h2>
+            <h3>ACTIONS À METTRE EN PLACE </h3>
+            <p class="s5">Organiser des moments d’échanges <span class="p">avec les jeunes sur leur utilisation d’internet et des réseaux sociaux</span></p>
+            <p class="s5">Questionner les jeunes<span class="p">sur les différences entre ami réel et ami virtuel</span></p>
+            <p class="s5">Transmettre des bonnes pratiques <span class="p">pour une utilisation plus sûre d’internet et réseaux</span></p>
+        </div>
+
+        <div class="soc">
+        <div class="soc-t">
+            <img width="8" height="8" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_017.png"/>
+            <div class="soc-lig">Makey makey</div>
+        </div>
+        <div class="soc-t">
+            <img width="8" height="8" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_017.png"/>
+            <div class="soc-lig">à parir de 8 ans</div>
+        </div>
+        <div class="soc-t">
+            <img width="8" height="8" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_017.png"/>
+            <div class="soc-lig">débutant</div>
+        </div>
+        <div class="soc-t">
+            <img width="8" height="8" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_017.png"/>
+            <div class="soc-lig">2h</div>
+        </div>
+    </div>
+    </div>
+    <div class="cut_page">
+        <div class="t-right">
+            <div class="blk_bkr">
+                <p class="s7">potins</p>
+                <p class="s2" >2023/2024</p>
+            </div>
+        </div>
+    </div>
+    <div class="fiche-review">
+        <div class="blk_comp">
+            <p class="s7">PROPOSITION DE MESSAGES CLÉS </p>
+            <p>« Internet est un endroit où il n’est pas bon de tout dire sur soi »</p>
+            <p>« Attention aux photos ou informations que tu diffuses sur les réseaux »</p>
+            <p>« Sécurise tes comptes pour que personne ne puisse avoir accès à tes informations »</p>
+            <p>« Respecte les autres sur les réseaux sociaux »</p>
+        </div>
+    </div>
+    <div class="fiche-review">
+
+            <div class="deroule vert_der">
+                <div class="bk_txt">
+                    <div class="der-tx">
+                        <h3>FICHE À VOIR </h3>
+                    </div>
+                    <div class="comment-der">
+                        <p class="s8">Fiche Action terrain Education aux numérique</p>
+                    </div>
+                </div>
+                <div class="illust_der">
+                    <img width="400" height="auto" alt="image" src="http://127.0.0.1:8000/pdf/illustration/makey1.jpg"/>
+                </div>
+            </div>
+
+
+            <div class="deroule horz_der">
+                <div class="bk_txt">
+                    <div class="der-tx">
+                        <h3>FICHE À VOIR </h3>
+                    </div>
+
+                    <div class="comment-der">
+                        <p class="s8">Fiche Action terrain Education aux numérique</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="deroule vert_der">
+                <div class="bk_txt">
+                    <div class="der-tx">
+                        <h3>BESOIN D’ALLER PLUS LOIN SUR CETTE THÉMATIQUE ?</h3>
+                    </div>
+
+                    <div class="comment-der">
+                        <p>Les potins  numérique met à votre disposition une
+                            plateforme dédiée à cette thématique afin de vous donner un maximum d’éléments ...bla bla.</p>
+                    </div>
+                </div>
+                <div class="illust_der">
+                    <img width="400" height="auto" alt="image" src="http://127.0.0.1:8000/pdf/illustration/makey2.jpg"/>
+                    <img width="400" height="auto" alt="image" src="http://127.0.0.1:8000/pdf/illustration/makey3.jpg"/>
+                </div>
+            </div>
+    </div>
+    <p class="s10">1/1</p>
+</div>
+
+<div class="ct-head">
+    <img width="100%" height="35" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_012.png"/>
+</div>
+
+<div class="border-bt back_ff">
+    <div class="bt_bk">
+        <span><img width="150" height="auto" alt="image" src="http://127.0.0.1:8000/pdf/illustration/logocnfs.png"/></span>
+        <p>
+            <a href="https://www.potinsnumerique.fr" class="a" target="_blank">Rendez-vous sur LE SITE POUR D'AUTRES RESSOURCES complémentaires.</a>
+        </p>
+    </div>
+    <div class="foot-review">
+        <h4>Atelier multimedia</h4>
+        <p>blavlalval</p>
+        <p>blavlalval</p>
+        <p>blavlalval</p>
+    </div>
+</div>
+
+</body>
+</html>

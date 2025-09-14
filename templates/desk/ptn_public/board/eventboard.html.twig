@@ -1,0 +1,26 @@
+{% block body %}
+<div class="_pg_wb-pb_v6">
+    <div class="af_flx-C fx-c">
+        <div class="head_search">
+            <div class="af_flx-C">
+            </div>
+        </div>
+    </div>
+    <section class="tglaff" id="tgl_0">
+        <div class="fx-content_rep_v6">
+            <div class="web-inf_post">
+                <h1>Nos prochains potins</h1>
+                <p>Découvrez une technologie, un logiciel, des loisirs numériques</p>
+            </div>
+             {{ include('desk/ptn_elements/ele_events/lasteventscity.html.twig') }}
+        </div>
+    </section>
+</div>
+    {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+
+{%  endblock body %}
+{% use "js/js_public.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

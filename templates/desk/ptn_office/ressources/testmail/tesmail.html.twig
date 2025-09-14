@@ -1,0 +1,18 @@
+{% block body %}
+<div class="_wb">
+    <div class="container_bo_member">
+        {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
+        <section class="bo_content">
+            {%  if reponse is same as "ok" %}
+                <h5>mail envoyé</h5>
+            {% else %}
+                <p>{{ reponse }}</p>
+            {%  endif %}
+        </section>
+    </div>
+</div>
+{%  endblock body %}
+{% use "js/js_customer.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,47 @@
+<div class="{{ agent=='desk/'?'_scrollflow-p w100 mrg0 mn-vh64':'_scrollflow-mb w100' }}">
+
+    <div class="tglaff w100 " id="tgl_0">
+        <div class="list_publi">
+            <h2 class="_title til_mdl">Facturation</h2>
+            <div class="fx-content">
+                <div class="w100">
+                    <div class="nX2Utf">
+                        <table class="list__table__match table table-striped match-dom" style="margin: auto;">
+                            <thead>
+                            <tr>
+                                <th>N°</th>
+                                <th>date</th>
+                                <th>Montant</th>
+                                <th>etat</th>
+                              {#  <th>show</th> #}
+                                <th>telecharger</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for fact in facts %}
+                                <tr>
+                                    <td>{{fact.numfact}}</td>
+                                    <td>{{fact.createAt|date('d/m/Y')}}</td>
+                                    <td>{{fact.montantttc|number_format(2,',', '.')}} € TTC</td>
+                                    {% if fact.valider %}
+                                        <td><span style="color:red">réglée</span></td>
+                                    {% else %}
+                                        <td><span style="color:red">à regler</span></td>
+                                    {% endif %}
+                                {#   <td style="display: inline-block">
+                                        <a class="bt_affi" href="{{ path('show_facture', {'id': fact.id}) }}"><i class="fa fa-eye"></i></a> -
+                                    </td>
+                                    #}
+                                    <td><a class="bt_affi" href="{{ asset('wb-v5/gest/5OpmlGr8574-t657aERZqsdt-457/admin-/pdf'~fact.pdfacture) }}" target="_blank"><i class="fa fa-file-pdf-o"></i></a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="kxr9cf"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

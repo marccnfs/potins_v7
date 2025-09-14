@@ -1,0 +1,24 @@
+<nav class="HO header-app-rel user_menu2border_men">
+    <div class="menu_viewer">
+        <div class="bar_potins">
+            <ul class="af-menu-content">
+                <li class="level-1">
+                    <a href="{{ path('potins_index') }}" class="link-bar {{ vartwig.linkbar[0]}}">Accueil</a>
+                </li>
+            </ul>
+        </div>
+
+
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            {{include('desk/pop/pop_menu_accueil.html.twig') }}
+        {% else %}
+            <div class="space_connect">
+                <a href="{{ path('new_identify') }}" class="btn-connect">inscrivez-vous</a>
+            </div>
+        {% endif %}
+
+
+    </div>
+</nav>
+{{ include('desk/ptn_public/menu/logo_potins_small_left_and_vague_fix.html.twig') }}
+

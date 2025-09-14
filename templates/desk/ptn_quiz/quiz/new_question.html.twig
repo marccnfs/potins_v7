@@ -1,0 +1,27 @@
+{% block body %}
+<div id="pagehome" class="homepage-wrapper--desk" data-agent="{{ agent }}">
+    <div class="fx-cent_pag">
+    <div class="templ_cnfs">
+        <div class="cadre_title">
+            <h2>Create Question</h2>
+        </div>
+        <div class="cadre_content">
+            <div class="arg-cont-bk">
+                <div class="text_cadre">
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <button class="btn btn-primary">{{ 'Create Question'|trans }}</button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="bk-separate"></div>
+{{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+</div>
+{%  endblock body %}
+{% use "js/js_public_cnfs.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,33 @@
+<a class="affiche" href="{{path('show_offre',{'slugcity':website.locality[locatecity].slugcity,'slug':website.slug, 'offra':otheroffre.slug, 'id':otheroffre.id }) }}" data-offre="{{ otheroffre.id }}">
+    {% if otheroffre.media.imagejpg[0].namefile is defined %}
+        <img  class="img-allnotice_bord" src="{{ asset('upload/module/'~otheroffre.media.imagejpg[0].namefile ) }}" alt="image affiche">
+    {% endif %}
+
+    <h3 class="goaff_offre-fix">Offre</h3>
+
+    <div class="evnet_titre_v5">{{otheroffre.titre|lower|capitalize}}</div>
+
+    <div class="fast-price">
+        {%  set state = otheroffre.product.tabcarac|split(',') %}
+        <div class="li-tit">état : <span class="li-dy">{{ state[0] }}</span></div>
+        {% if otheroffre.product.price == 0 %}
+            <div class="li-tit">Prix : <span class=new-price">{{ otheroffre.product.oldprice|raw|number_format(2,',', '.')}} €</span></div>
+        {% else %}
+            <div class="li-tit">Prix  : <span class="new-price">{{ otheroffre.product.price|raw|number_format(2,',', '.')}} €</span></div>
+        {% endif %}
+    </div>
+
+    {% if otheroffre.descriptif is not same as (" ") %}
+        <div class="_fx-R_v2 _fx-convers_inv_v5">
+            <div class="info-post_v5">
+                <div class="event_second_titl_v5">{{otheroffre.descriptif|u.truncate(80, '...')|lower|capitalize}}</div>
+            </div>
+        </div>
+    {% endif %}
+</a>
+
+<div class="boarder">
+    <a class="flx-lik-_v5" href="">
+        <span class="datepubli_event">mis en ligne le : <time itemprop = "startDate" pubdate><b>{{ otheroffre.createAt|date("d-m-Y") }}</b></time></span>
+    </a>
+</div>

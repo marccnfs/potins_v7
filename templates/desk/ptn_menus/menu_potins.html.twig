@@ -1,0 +1,396 @@
+<header role="banner" class="long header-app user_menu2" id="ptn_menu">
+    <div class="pos_menu2">
+
+        <div class="block-space_potins"> </div>
+
+        <div class="bar_potins">
+            <ul class="af-menu-content">
+                <li class="level-1">
+                    <a href="{{ path('potins_index') }}" class="link-bar {{ vartwig.linkbar[0]}}">Accueil</a>
+                </li>
+
+                <li class="level-abs">
+                    <div class="link-bar {{ vartwig.linkbar[1]}}">Les potins<i class="fa fa-chevron-down firstEt"></i></div>
+                    <ul class="_hov_hov">
+                        <li class="level-1more">
+                            <a href="{{ path('events_all') }}" class="souslink-bar">Les prochains potins</a>
+                        </li>
+                        <li class="level-1more">
+                            <a href="{{ path('board_all') }}" class="souslink-bar">les derniers potins</a>
+                        </li>
+                    </ul>
+                </li>
+                {#
+                <li class="level-1">
+                    <a href="{{ path('events_all') }}" class="link-bar {{ vartwig.linkbar[1]}}">Les prochains potins</a>
+                </li>
+                <li class="level-1">
+                    <a href="{{ path('board_all') }}" class="link-bar {{ vartwig.linkbar[2]}}">les derniers potins</a>
+                </li>
+                #}
+                <li class="level-1">
+                    <a href="{{ path('ressources') }}" class="link-bar {{ vartwig.linkbar[3]}}">Ressources</a>
+                </li>
+                <li class="level-1">
+                    <a href="{{ path('cnfs') }}" class="link-bar {{ vartwig.linkbar[4]}}">cnfs</a>
+                </li>
+                <li class="level-1">
+                    <a href="{{ path('noticezer') }}" class="link-bar {{ vartwig.linkbar[5]}}">info local</a>
+                </li>
+
+            </ul>
+        </div>
+
+
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            {{include('desk/pop/pop_menu_accueil.html.twig') }}
+       {% else %}
+        <div class="space_connect">
+               <a href="{{ path('new_identify') }}" class="btn-connect">inscrivez-vous</a>
+        </div>
+       {% endif %}
+    </div>
+</header>
+
+<header role="banner" class="short header-app user_menu2" id="ptn_menu">>
+    <nav class="gnav gnav_mob" id="gnav-main-container" aria-label="Principal">
+        <div data-gnav-region="Main">
+            <div class="zz_top-notop">
+                <div class="bar_menu_mb">
+                    <div class="gnav-header-1amsz23 e37uo190"></div>
+                    <div class="gnav-header-1q84fi9 e37uo190">
+                        <div class="gnav-header-1ti2ipg eu4oa1w0">
+                            <div class="gnav-header-1hifx0 e37uo190">
+                                <button tabindex="0" aria-label="Navigation principale" id="nav_user" data-gnav-element-name="BurgerMenu"
+                                        data-gnav-action="open" aria-controls="gnav-burger-menu-nav" aria-expanded="false"
+                                        class="gnav-header-tyjnkf e8ju0x51">
+                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img" fill="currentColor"
+                                         viewBox="0 0 24 24" aria-hidden="true" class="gnav-header-1h5euvm e18c60hj0">
+                                        <path d="M3.5 6h17a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-17a.5.5 0 01-.5-.5v-1a.5.5 0 01.5-.5zm17 5h-17a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h17a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5zm0 5h-17a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h17a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div role="region" data-gnav-region="BurgerMenu" id="popuser" class="gnav-header-1g2wiwy_dk eu4oa1w0">
+                                <div role="button" aria-label="Fermer" data-gnav-element-name="BurgerMenuBackground"
+                                     data-gnav-action="close" class="gnav-header-k5oo7o_dk eu4oa1w0"></div>
+
+                                <nav id="gnav-burger-menu-nav" aria-label="Navigation principale"
+                                     class="gnav-header-oneixo_dk e37uo190">
+                                    <div role="button" id="nav_close" tabindex="0" aria-label="Fermer" data-gnav-element-name="Close"
+                                         data-gnav-action="close" class="gnav-header-432fp5 e37uo190">
+                                        <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img" fill="currentColor"
+                                             viewBox="0 0 24 24" aria-hidden="true" class="gnav-header-1h5euvm e18c60hj0">
+                                            <path d="M4.575 18.01a.5.5 0 000 .707l.708.708a.5.5 0 00.707 0l6.01-6.01 6.01 6.01a.5.5 0 00.707 0l.707-.707a.5.5 0 000-.708L13.414 12l6.01-6.01a.5.5 0 000-.707l-.706-.708a.5.5 0 00-.707 0L12 10.586l-6.01-6.01a.5.5 0 00-.708 0l-.707.707a.5.5 0 000 .707l6.01 6.01-6.01 6.01z"></path>
+                                        </svg>
+                                    </div>
+
+                                    <div class="gnav-header-vurnku eu4oa1w0">
+                                        <div class="gnav-header-125wztp e37uo190">
+                                            <a href="{{path('events_all')}}" class="gnav-header-g5fyfa emf9s7v0">
+                                                <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                    <div class="gnav-header-2hk4u4 eu4oa1w0">Les prochains potins</div>
+                                                </div>
+                                                <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                     fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                     class="gnav-header-enbm4d e18c60hj0">
+                                                    <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                </svg>
+                                            </a>
+                                        </div>
+
+                                        <div class="gnav-header-125wztp e37uo190">
+                                            <a href="{{path('board_all')}}" class="gnav-header-g5fyfa emf9s7v0">
+                                                <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                    <div class="gnav-header-2hk4u4 eu4oa1w0">Ateliers potins</div>
+                                                </div>
+                                                <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                     fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                     class="gnav-header-enbm4d e18c60hj0">
+                                                    <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                </svg>
+                                            </a>
+                                        </div>
+
+                                        <div class="gnav-header-125wztp e37uo190">
+                                            <a href="{{path('ressources')}}" class="gnav-header-g5fyfa emf9s7v0">
+                                                <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                    <div class="gnav-header-2hk4u4 eu4oa1w0">Ressources</div>
+                                                </div>
+                                                <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                     fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                     class="gnav-header-enbm4d e18c60hj0">
+                                                    <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                </svg>
+                                            </a>
+                                        </div>
+
+                                        <div class="gnav-header-125wztp e37uo190">
+                                            <a href=""class="gnav-header-g5fyfa emf9s7v0"> {# {{ path('echange_cnfs') }} #}
+                                                <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                    <div class="gnav-header-2hk4u4 eu4oa1w0">Contact</div>
+                                                </div>
+                                                <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                     fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                     class="gnav-header-enbm4d e18c60hj0">
+                                                    <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="gnav-header-2pg0ni eu4oa1w0"></div>
+
+                                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+
+                                        <div class="gnav-header-vurnku eu4oa1w0">
+
+                                            <div class="gnav-header-125wztp e37uo190">
+                                                <a href="{{path('profil_customer')}}" class="gnav-header-g5fyfa emf9s7v0">
+                                                    <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                        <div class="gnav-header-2hk4u4 eu4oa1w0">Profil</div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                         fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                         class="gnav-header-enbm4d e18c60hj0">
+                                                        <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <div class="gnav-header-125wztp e37uo190">
+                                                <a href="{{path('office_member')}}" class="gnav-header-g5fyfa emf9s7v0">
+                                                    <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                        <div class="gnav-header-2hk4u4 eu4oa1w0">Publications</div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                         fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                         class="gnav-header-enbm4d e18c60hj0">
+                                                        <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <div class="gnav-header-125wztp e37uo190">
+                                                <a href="{{path('admin')}}" class="gnav-header-g5fyfa emf9s7v0">
+                                                    <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                        <div class="gnav-header-2hk4u4 eu4oa1w0">administration</div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                         fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                         class="gnav-header-enbm4d e18c60hj0">
+                                                        <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+
+                                            <div class="gnav-header-125wztp e37uo190">
+                                                <a href="{{ path('app_logout') }}"class="gnav-header-g5fyfa emf9s7v0">
+                                                    <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                        <div class="gnav-header-2hk4u4 eu4oa1w0">Déconnexion</div>
+                                                        <div class="gnav-header-pce2bd eu4oa1w0"></div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                         fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                         class="gnav-header-enbm4d e18c60hj0">
+                                                        <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                    {%  elseif is_granted('ROLE_MEDIA') %}
+                                        <div class="gnav-header-vurnku eu4oa1w0">
+
+                                            <div class="gnav-header-125wztp e37uo190">
+                                                <a href="{{path('parameters')}}" class="gnav-header-g5fyfa emf9s7v0">
+                                                    <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                        <div class="gnav-header-2hk4u4 eu4oa1w0">Paramètres</div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                         fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                         class="gnav-header-enbm4d e18c60hj0">
+                                                        <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <div class="gnav-header-125wztp e37uo190">
+                                                <a href="{{path('office_member')}}" class="gnav-header-g5fyfa emf9s7v0">
+                                                    <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                        <div class="gnav-header-2hk4u4 eu4oa1w0">Planning Potins</div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                         fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                         class="gnav-header-enbm4d e18c60hj0">
+                                                        <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <div class="gnav-header-125wztp e37uo190">
+                                                <a href="{{ path('app_logout') }}"class="gnav-header-g5fyfa emf9s7v0">
+                                                    <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                        <div class="gnav-header-2hk4u4 eu4oa1w0">Déconnexion</div>
+                                                        <div class="gnav-header-pce2bd eu4oa1w0"></div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                         fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                         class="gnav-header-enbm4d e18c60hj0">
+                                                        <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+
+                                        </div>
+
+                                    {%  elseif is_granted('ROLE_MEMBER') %}
+                                        <div class="gnav-header-vurnku eu4oa1w0">
+
+                                            <div class="gnav-header-125wztp e37uo190">
+                                                <a href="{{path('profil_customer')}}" class="gnav-header-g5fyfa emf9s7v0">
+                                                    <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                        <div class="gnav-header-2hk4u4 eu4oa1w0">Profil</div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                         fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                         class="gnav-header-enbm4d e18c60hj0">
+                                                        <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <div class="gnav-header-125wztp e37uo190">
+                                                <a href="{{path('office_member')}}" class="gnav-header-g5fyfa emf9s7v0">
+                                                    <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                        <div class="gnav-header-2hk4u4 eu4oa1w0">Publications</div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                         fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                         class="gnav-header-enbm4d e18c60hj0">
+                                                        <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+
+                                            <div class="gnav-header-125wztp e37uo190">
+                                                <a href="{{ path('app_logout') }}"class="gnav-header-g5fyfa emf9s7v0">
+                                                    <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                        <div class="gnav-header-2hk4u4 eu4oa1w0">Déconnexion</div>
+                                                        <div class="gnav-header-pce2bd eu4oa1w0"></div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                         fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                         class="gnav-header-enbm4d e18c60hj0">
+                                                        <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+
+                                        </div>
+
+                                    {%  elseif is_granted('ROLE_CUSTOMER') %}
+
+                                        <div class="gnav-header-vurnku eu4oa1w0">
+
+                                            <div class="gnav-header-125wztp e37uo190">
+                                                <a href="{{path('profil_customer')}}" class="gnav-header-g5fyfa emf9s7v0">
+                                                    <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                        <div class="gnav-header-2hk4u4 eu4oa1w0">Profil</div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                         fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                         class="gnav-header-enbm4d e18c60hj0">
+                                                        <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <div class="gnav-header-125wztp e37uo190">
+                                                <a href="{{path('customer_agenda')}}" class="gnav-header-g5fyfa emf9s7v0">
+                                                    <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                        <div class="gnav-header-2hk4u4 eu4oa1w0">Mon agenda</div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                         fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                         class="gnav-header-enbm4d e18c60hj0">
+                                                        <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <div class="gnav-header-125wztp e37uo190">
+                                                <a href="{{path('customer_space')}}" class="gnav-header-g5fyfa emf9s7v0">
+                                                    <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                        <div class="gnav-header-2hk4u4 eu4oa1w0">Mes potins</div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                         fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                         class="gnav-header-enbm4d e18c60hj0">
+                                                        <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+
+                                            <div class="gnav-header-125wztp e37uo190">
+                                                <a href="{{ path('app_logout') }}"class="gnav-header-g5fyfa emf9s7v0">
+                                                    <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                        <div class="gnav-header-2hk4u4 eu4oa1w0">Déconnexion</div>
+                                                        <div class="gnav-header-pce2bd eu4oa1w0"></div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                         fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                         class="gnav-header-enbm4d e18c60hj0">
+                                                        <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+
+                                        </div>
+
+
+                                    {%  else %}
+
+
+
+                                        <div class="gnav-header-vurnku eu4oa1w0">
+                                            <div class="gnav-header-mv9rzh infoinscr">à vos potins !</div>
+
+                                            <div class="gnav-header-125wztp e37uo190">
+                                                <a href="{{ path('new_identify') }}" class="gnav-header-g5fyfa emf9s7v0">
+                                                    <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                        <div class="gnav-header-2hk4u4 eu4oa1w0">Inscrivez-vous</div>
+                                                        <div class="gnav-header-pce2bd eu4oa1w0"></div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                         fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                         class="gnav-header-enbm4d e18c60hj0">
+                                                        <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+
+                                            <div class="gnav-header-mv9rzh infoinscr">déjà un compte...</div>
+
+                                            <div class="gnav-header-125wztp e37uo190">
+                                                <a href="{{ path('app_login') }}" class="gnav-header-g5fyfa emf9s7v0">
+                                                    <div aria-hidden="true" class="gnav-header-vurnku eu4oa1w0">
+                                                        <div class="gnav-header-2hk4u4 eu4oa1w0">Connectez-vous</div>
+                                                        <div class="gnav-header-pce2bd eu4oa1w0"></div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img"
+                                                         fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                                         class="gnav-header-enbm4d e18c60hj0">
+                                                        <path d="M9.888 5.998a.506.506 0 00-.716-.008l-.707.707a.506.506 0 00.01.716L13.06 12l-4.587 4.587c-.2.2-.204.521-.009.716l.707.707a.507.507 0 00.717-.009l5.647-5.648c.1-.1.148-.233.144-.366a.492.492 0 00-.144-.34v-.001a.611.611 0 00-.009-.009L9.888 5.998z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                    {% endif %}
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {#  <div class="back_img_logo_small" style="background-image: url({{ asset('imgdoc/potins/logopotins.png') }} )"></div> #}
+            </div>
+        </div>
+    </nav>
+</header>
+{{ include('elements/logo_potins_small_left_and_vague_orange.html.twig') }}
+{#
+{{ include('elements/vague_bottom_right.html.twig') }}
+#}

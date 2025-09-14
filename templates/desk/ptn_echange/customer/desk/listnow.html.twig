@@ -1,0 +1,15 @@
+{% block body %}
+    <main class="affibodyfixed_v5">
+        <div class="vagmenu nav-af" id="stripped" data-agent="{{ agent }}">
+            {{ include('svg/'~agent~'/vaguenocityt.html.twig') }}
+        </div>
+    </main>
+    <div class="_fx_msghead"></div>
+    <div class="fx_wb-c">
+        {{ include('aff_customer/notifications/'~agent~'/view/list.html.twig') }}
+    </div>
+{% endblock %}
+{% use "js/js_customer.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

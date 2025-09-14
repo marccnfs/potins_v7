@@ -1,0 +1,26 @@
+<a class="affiche" href="{{path('show_offre',{'slugcity':notice.board.locality[locatecity].slugcity,'slug':notice.board.slug, 'offra':notice.offre.slug, 'id':notice.offre.id }) }}"  data-offre="{{ notice.offre.id }}">
+
+{% if notice.offre.media.imagejpg[0].namefile is defined %}
+    <img  class="img-allnotice_bord" src="{{ asset('upload/module/'~notice.offre.media.imagejpg[0].namefile ) }}" alt="image affiche">
+{% endif %}
+
+<h3 class="goaff_offre-fix">Offre</h3>
+<div class="evnet_titre_v5">{{notice.offre.titre|lower|capitalize}}</div>
+{% if notice.offre.descriptif is not same as (" ") %}
+    <div class="_fx-R_v2 _fx-convers_inv_v5">
+        <div class="info-post_v5">
+            <div class="event_second_titl_v5">{{notice.offre.descriptif|u.truncate(80, '...')|lower|capitalize}}</div>
+        </div>
+    </div>
+{% endif %}
+</a>
+<div class="boarder">
+    <a class="flx-lik-_v5" href="{{ path('show_website', {"city":notice.board.locality[locatecity].slugcity,"nameboard":notice.board.slug }) }}">
+        <div class="wb-logo-lite">
+            {% if notice.board.template.logo %}
+                <div class="bkgrndlogo" style="background-image: url('{{ asset('spaceweb/template/'~notice.board.template.logo.namefile ) }}')"></div>
+            {% endif %}
+        </div>
+        <div class="wb_event_v5">{{notice.board.namewebsite}}</div>
+    </a>
+</div>

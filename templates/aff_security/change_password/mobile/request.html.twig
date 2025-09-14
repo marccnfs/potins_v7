@@ -1,0 +1,22 @@
+{% block body %}
+<div class="log-machina">
+    <h1 class="title_log">{{vartwig.title}}</h1>
+    <div class="svg-bulle_open">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">{# <circle cx="100" cy="100" r="80"/>#}</svg>
+    <div class="content_login_affi">
+
+        <form action="{{ path('forgetpassword_send_email') }}" method="POST" class="buble_form">
+            <div class="checkerrember_mb">
+                <p>Oups !!!</p>
+                <h5 class="glass-field_identify">Mot de passe oublié ?<br>Renseignez votre adresse e-mail pour recevoir votre lien de réinitialisation</h5>
+            </div>
+                <div class="bul-go_lrg_affi bl_large">
+                    <label for="email" class="label_ingo">votre email</label>
+                    <input type="email" id="email" name="email" class="field_ingo field_t30" required="required"/>
+                    <input type="submit" class="btn-send" value="Envoyer"/>
+                </div>
+        </form>
+    </div>
+    </div>
+</div>
+{% endblock %}

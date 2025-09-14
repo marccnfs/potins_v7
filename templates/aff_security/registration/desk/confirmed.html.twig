@@ -1,0 +1,18 @@
+{% block body %}
+<div class="log-machina">
+    <h1 class="title_log">{{vartwig.title}}</h1>
+    <div class="svg-bulle_open">
+        <div class="content_ask_affi">
+            <div class="stapefinish">
+                <h2>Votre espace AffiChanGe est maintenant ouvert. Choisissez une ville de préférence</h2>
+            <p>Cette localité sera votre point d'entrée sur le réseau affichange à chaque connexion. Vous pourrez à tous moment la modifier depuis votre espace personnel.</p>
+            </div>
+                <x-locate city="" lclass="init"></x-locate>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% use "js/js_security.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,50 @@
+<div class="_scrollflow _dk _post w100">
+    <div class="timeline-post-website_v3">
+
+
+        <div class="cargo-litt-post_v3 tglaff" id="tgl_0">
+            <article class="arti-post" itemscope itemtype="http://schema.org/Article">
+                {% set pict = post.media.imagejpg[0].namefile ?? "" %}
+                {% if post.media.imagejpg|length > 0  %}
+                    <img class="pop-post-img" src="{{ asset((post.media.imagejpg[0].getWebPath)) }}">
+                {% endif %}
+
+                <div class="event_article">
+                    <p>{{ content|raw }}</p>
+                </div>
+            </article>
+        </div>
+        <div class="cargo-litt-post_v3 tglaff" id="tgl_1" style="display: none">
+            <div class="arti-post">
+                <div class="link-post">
+                    {{ include('website/commun/postslinks.html.twig') }}
+                </div>
+            </div>
+        </div>
+        <div class="cargo-litt-post_v3 tglaff" id="tgl_2" style="display: none">
+            <div class="arti-post">
+                <div class="link-post">
+                    {{ include('website/commun/postslinks.html.twig') }}
+                </div>
+            </div>
+        </div>
+        <div class="cargo-litt-post_v3 tglaff" id="tgl_3" style="display: none">
+            <div class="arti-post">
+                <div class="link-post">
+                    {{ include('website/generies/generyconversation.html.twig') }}
+                </div>
+            </div>
+        </div>
+        <div class="cargo-litt-post_v3 tglaff" id="tgl_4" style="display: none">
+            <div class="arti-post">
+                onglet 4
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="outblur"></div>
+<div class="borderblur"></div>
+
+

@@ -1,0 +1,88 @@
+.content-page{
+    height: 1129px;
+    width: 798px;
+    background: white;
+    padding: 15px 30px;
+    color: black;
+}.entete{
+    height: 25%;
+}
+.section-in{
+    margin: auto;
+    height: 55%;
+}
+.foot-commande{
+    height: 15%;
+}
+img{
+    width: 80px;
+    height: auto;
+}
+span{
+    color:dodgerblue;
+}
+.header-pdf{
+}
+.header-pdf h6{
+    font-size: 1rem;
+}
+.title-page{
+    text-align: center
+}
+.content-fact{
+    max-height: 60%;
+    min-height: 60%;
+}
+.total-fact{
+    display: flex;
+    justify-content: right;
+    width: 100%;
+    text-align: center;
+    flex-direction: row-reverse;
+}
+.solde_table{
+    position: relative;
+    width: 50%;
+}
+.footer-fac{
+    width: 80%;
+    margin: auto;
+    font-size: 0.8rem;
+}
+.footer-brand{
+    text-align: center;
+    font-size: 0.6rem;
+    line-height: 2px;
+}
+.name-brand .h3, h3{
+    font-size: 1em;
+}
+li{
+    text-decoration: none;
+    list-style: none;
+}
+.td0{
+    width: 10%;
+}
+.td1{
+    width: 50%;
+}
+.td2{
+    width: 10%;
+}
+.td3{
+    max-width: 10%;
+    text-align: center;
+}
+.td4{
+    max-width: 10%;
+    text-align: center;
+}
+.td5{
+    min-width: 10%;
+    text-align: right;
+}
+.periode{
+    width: 100%;
+    text-align: left;
+}

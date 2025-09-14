@@ -1,0 +1,18 @@
+{% block javascripts %}
+   {#  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> #}
+  {#   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> #}
+    {{ encore_entry_script_tags('affi') }}
+  {#  {{ encore_entry_script_tags('geolocate') }}  #}
+    {{ encore_entry_script_tags('placernotice') }}
+  {{ encore_entry_script_tags('initplacer') }}
+  {#   {{ encore_entry_script_tags('localitate') }}
+  {{ encore_entry_script_tags('cargo') }}#}
+{#   {{ encore_entry_script_tags('titleanimate') }} #}
+  {{ encore_entry_script_tags('indexwebsite') }}
+  {{ encore_entry_script_tags('site') }}
+  {# {{ encore_entry_script_tags('home') }}
+  {{ encore_entry_script_tags('index') }}  #}
+{#  {{ encore_entry_script_tags('indexpartner') }} #}
+  {{ encore_entry_script_tags('indexressources') }}
+{% endblock %}

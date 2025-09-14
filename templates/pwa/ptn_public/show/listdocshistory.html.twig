@@ -1,0 +1,10 @@
+    {%  for doc in list.docs %}
+        <tr>
+            <td>{{ doc.name }}</td>
+            <td><a href="{{ path('download_doc_participant', {'id':doc.id, 'idpotin':post.id} )}}"><i class="fa fa-download"></i></a></td>
+            <td>{{doc.extension}}</td>
+        </tr>
+    {% endfor %}
+
+
+

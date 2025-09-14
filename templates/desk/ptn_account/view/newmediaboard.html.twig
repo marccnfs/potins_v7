@@ -1,0 +1,13 @@
+<div class="log-machina" id="machina" data-identify="{{ app.session.get('identify') }}">
+    <h1 class="title_log">{{vartwig.title}}</h1>
+    <div class="content_login_affi">
+        <div class="stape">
+            <p>renseignez votre établissement</p>
+        </div>
+        <div class="stape">
+            <div class="account_module">
+                <x-mediaboard customer="{{mediatheque.id}}"></x-mediaboard>
+            </div>
+        </div>
+    </div>
+</div>

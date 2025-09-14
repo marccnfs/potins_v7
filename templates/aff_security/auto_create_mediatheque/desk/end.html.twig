@@ -1,0 +1,23 @@
+{% block body %}
+<div class="log-machina">
+<section class="board_blocks">
+    <div class="block_choice">
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <div class="block_one">
+                    <h1>Ouverture de la médiathèque réussie</h1>
+                    <div class="inblock_one">
+                        <a class="bt_block" href="{{path('office_member') }}">
+                            <div class="lk_bt">retour bureau</div>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</section>
+    {%  endblock body %}
+    {% use('js/js_potins.html.twig') %}
+    {% block javascripts %}
+    {{ parent() }}
+{% endblock %}

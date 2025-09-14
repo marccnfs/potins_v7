@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="FR">
+<head>
+    {% block head %}
+        <title>{% block title %}{{vartwig.title}}{% endblock %}</title>
+        <base href="/">
+            {{ include('head/head.html.twig') }}
+    {% endblock head %}
+        {{ encore_entry_link_tags('app') }}
+
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P171X7Q4YQ"></script>
+
+<script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-P171X7Q4YQ');
+</script>
+
+<script>
+        if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                        navigator.serviceWorker.register('./_service-worker.js').then(function(registration) {
+                                // Registration was successful
+                                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                        }, function(err) {
+                                // registration failed :(
+                                console.log('ServiceWorker registration failed: ', err);
+                        });
+                });
+        }
+</script>
+
+{% if vartwig.scope is defined %}
+<section id="item" data-microdata="{{ vartwig.scope|json_encode() }}"></section>
+{%  endif %}
+
+{%  set agent = app.session.get('agent') %}
+<body class="aff-plc">
+<div class="wb-inf-" data-agent="{{ agent }}" data-replacejs="{{ replacejs?'yes':'no' }}"></div>
+{% block menu %}
+{% endblock menu %}
+{% block core %}
+        {% block body %}
+        {% endblock body %}
+        {% block footer %}
+        {% endblock footer %}
+{% endblock core %}
+{% block javascripts %}
+{% endblock %}
+</body>
+</html>

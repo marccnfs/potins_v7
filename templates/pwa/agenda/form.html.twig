@@ -1,0 +1,42 @@
+<div class="container" data-controller="event-form">
+    <div class="card" style="max-width:860px;margin:0 auto;">
+        <h1>{{ mode == 'edit' ? 'Modifier' : 'Créer' }} un événement</h1>
+        {{ form_start(form) }}
+        {{ form_row(form.title) }}
+        {{ form_row(form.description) }}
+
+        <div class="grid-2">
+            {{ form_row(form.startsAtLocal, {'attr': {'data-event-form-target': 'start'}}) }}
+            {{ form_row(form.endsAtLocal,   {'attr': {'data-event-form-target': 'end'}}) }}
+        </div>
+
+        {{ form_row(form.timezone, {'attr': {'data-event-form-target': 'timezone'}}) }}
+        {{ form_row(form.isAllDay) }}
+
+        <div class="grid-2">
+            {{ form_row(form.communeCode) }}   {# <-- nouveau #}
+            {{ form_row(form.locationName) }}
+        </div>
+        {{ form_row(form.locationAddress) }}
+
+        <div class="grid-3">
+            {{ form_row(form.capacity) }}
+            {{ form_row(form.category) }}
+            {{ form_row(form.visibility) }}
+        </div>
+
+        {{ form_row(form.published) }}
+
+        <div class="actions">
+            <button class="btn">Enregistrer</button>
+            {% if mode == 'edit' and e is defined %}
+                <form method="post" action="{{ path('event_delete', {slug: e.slug}) }}" style="display:inline">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete_' ~ e.slug) }}">
+                    <button class="btn btn-danger">Supprimer</button>
+                </form>
+            {% endif %}
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+

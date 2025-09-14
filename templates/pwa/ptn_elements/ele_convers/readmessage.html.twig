@@ -1,0 +1,58 @@
+<section class="affi_board" data-answer="1">
+    <div class="tglaff hscrool w100" id="tgl_0">
+        <div class="list_convers">
+            {% if convers is defined %}
+                <div class="wb_header centered ">
+                    <div id="messg" data-msg="{{ convers.id }}">
+                        {% for msg in convers.msgs %}
+                            <div class="_fx-convers _fx-center">
+                                <div class="{{ msg.tabreaders[0].isRead ?"_co-gy":"_co-bk"}}">
+                                    {% if msg.createAt|format_datetime('short', 'none', locale='fr') is same as ("now"|format_datetime('short', 'none', locale='fr'))%}
+                                        {{ msg.createAt|format_datetime('none', 'short', locale='fr') }}
+                                    {% else %}
+                                        {{ msg.createAt|format_datetime(locale='fr')}}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% if msg.author is not null %}
+                                {% if  msg.author.id is same as (dispatch.id) %}
+                                    <div class="_fx-convers_inv">
+                                        <div class="iner-content-convers prop-convers">
+                                            <div class="_p-inL">
+                                                <p> {{ msg.bodyTxt |raw|nl2br}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="_fx-convers">
+                                        <div class="iner-content-convers another-convers">
+                                            <div class="ini_bl _bb-msg {{ msg.tabreaders[0].isRead ?"_bg-R":"_bg-Wfilt"}}" >
+                                                <span class="ini-dptch">{{ msg.author|slice(0, 1) }}</span>
+                                            </div>
+                                            <div class="_p-inL">
+                                                <p> {{ msg.bodyTxt |raw|nl2br}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div class="_fx-convers">
+                                    <div class="iner-content-convers another-convers">
+                                        <div class="ini_bl _bb-msg {{ msg.tabreaders[0].isRead ?"":"_bg-R"}}" >
+                                            <span class="ini-dptch" style="color: #0b00ff; font-size: 3.5rem;">
+                                                {{ msg.author|slice(0, 1) }}</span>
+                                        </div>
+                                        <div class="_p-inL">
+                                            <p> {{ msg.bodyTxt |raw|nl2br}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {%  endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        {{ include('aff_customer/'~directory~'/view/conversall.html.twig') }}
+    </div>
+</section>

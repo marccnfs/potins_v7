@@ -1,0 +1,63 @@
+{% block body %}
+<div class="search_ressource"></div>
+
+    {#
+    <div class="timeline-stap bottom-0">
+        {% for notice in notices %}
+            {% set style = random('AXCAXBTAXAX') %}
+                {{ include('desk/ptn_public/news/listenoticeapi.html.twig') }}
+        {% endfor %}
+    </div>
+    #}
+
+    <div id="ai-tools-container">
+        <p>Chargement des outils IA...</p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // 1️⃣ Récupérer le token depuis le HTML
+            const apiToken = document.querySelector('meta[name="api-token"]').getAttribute("content");
+            const apiTimestamp = document.querySelector('meta[name="api-timestamp"]').getAttribute("content");
+
+            // 2️⃣ Utiliser le token pour faire la requête API
+            fetch("https://or4.fr/api/ai_tools", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-TOKEN": apiToken,
+                    "X-TIMESTAMP": apiTimestamp
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    let toolsContainer = document.getElementById("ai-tools-container");
+                    toolsContainer.innerHTML = "";
+
+                    data.forEach(tool => {
+                        let toolCard = document.createElement("div");
+                        toolCard.classList.add("tool-card");
+                        toolCard.innerHTML = `
+                        <h2>${tool.name}</h2>
+                        <p>${tool.description}</p>
+                        <p><strong>Catégorie :</strong> ${tool.category.name}</p>
+                        <p><strong>Prix :</strong> ${tool.priceModel}</p>
+                        <img src="${tool.imageUrl}" alt="${tool.name}">
+                    `;
+                        toolsContainer.appendChild(toolCard);
+                    });
+                })
+                .catch(error => console.error("Erreur lors de la récupération des outils IA :", error));
+        });
+    </script>
+
+{% block footer %}
+    {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+    {# {{ include ('desk/ptn_public/footer/potins_footer.html.twig') }}  #}
+{% endblock footer %}
+{%  endblock body %}
+{% use "js/js_public.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

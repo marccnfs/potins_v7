@@ -1,0 +1,30 @@
+{% block body %}
+<div id="pagehome" class="homepage-wrapper--desk" data-agent="{{ agent }}">
+    <div class="fx-cent_pag">
+    <div class="templ_cnfs">
+        <div class="cadre_title">
+            <h2>Quiz Admin</h2>
+        </div>
+        <div class="cadre_content">
+            <div class="arg-cont-bk">
+                <div class="text_cadre">
+                    <a href="{{ path('quiz_new') }}">Create New Quiz</a>
+                    <h2>Active Quizzes</h2>
+                    <ul>
+                        {% for quiz in quizzes %}
+                            <li>{{ quiz.name }} - <a href="{{ path('quiz_start', { id: quiz.id }) }}">Start</a> - <a href="{{ path('quiz_new_question', { id: quiz.id }) }}">Add Question</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="bk-separate"></div>
+{{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+</div>
+{%  endblock body %}
+{% use "js/js_public_cnfs.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

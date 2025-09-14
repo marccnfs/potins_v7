@@ -1,0 +1,387 @@
+<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>{{ potin.titre }}</title>
+    <style type="text/css"> * {
+            margin: 0;
+            padding: 0;
+            text-indent: 0;
+        }
+
+        body {
+            background-color: #89a9ee;
+            /*border: solid 15px #102D69;
+            padding: 15px;*/
+        }
+
+        h4 {
+            color: #FFF;
+            font-family: "Liberation Sans Narrow", sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 17pt;
+        }
+
+        .s1 {
+            color: #FFF;
+            font-family: "Arial Narrow", sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            text-decoration: none;
+            font-size: 17pt;
+        }
+
+        .s2 {
+            color: #102D69;
+            font-family: "Liberation Sans Narrow", sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 17pt;
+        }
+
+        h3 {
+            color: #102D69;
+            font-family: "Liberation Sans Narrow", sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 18pt;
+        }
+
+        h2 {
+            color: #102D69;
+            font-family: Tahoma, sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 27pt;
+        }
+
+        h1 {
+            color: #FFF;
+            font-family: "Liberation Sans Narrow", sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 35pt;
+        }
+
+        .s3 {
+            color: #FFF;
+            font-family: "Liberation Sans Narrow", sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 18pt;
+        }
+
+        .s4 {
+            color: #504F4F;
+            font-family: "Trebuchet MS", sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            text-decoration: none;
+            font-size: 9pt;
+        }
+
+        .s5 {
+            color: #FFFFFF;
+            font-family: "Trebuchet MS", sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 12pt;
+        }
+
+        .s6 {
+            color: #FFF;
+            font-family: Tahoma, sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 10pt;
+        }
+
+        .p, p {
+            color: #FFFFFF;
+            font-family: "Trebuchet MS", sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            text-decoration: none;
+            font-size: 9pt;
+            margin: 0pt;
+        }
+
+        .s7 {
+            color: #E30613;
+            font-family: "Liberation Sans Narrow", sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 18pt;
+        }
+
+        .s8 {
+            color: #102D69;
+            font-family: "Trebuchet MS", sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            text-decoration: none;
+            font-size: 9pt;
+        }
+
+        .a, a {
+            color: #275B9B;
+            font-family: "Trebuchet MS", sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            text-decoration: none;
+            font-size: 9pt;
+        }
+
+        .s10 {
+            color: #FFF;
+            font-family: "Liberation Sans Narrow", sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 12pt;
+        }
+        .border-top{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 150px;
+            width: 100%;
+        }
+        .content_stud{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+        }
+        .center_bk{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+        }
+        .img_cent{
+            margin: 15px;
+        }
+        .bk_left{
+            border:solid 0.5px grey;
+            padding: 20px;
+            top : 15px;
+            width: 350px;
+            margin: 25px;
+        }
+        .bk_right{
+            border:solid 0.5px grey;
+            padding: 20px;
+            bottom : 15px
+        }
+        .bk_fi{
+            display: flex;
+            align-items: start;
+            justify-content: space-around;
+            margin: auto;
+        }
+        .large_100{
+            display: flex;
+            background-color: #0d1689;
+            margin: 0;
+            padding: 25px;
+            justify-content: center;
+            align-items: start;
+        }
+        .larg_txt{
+            width: 450px;
+            height: auto;
+            margin: 50px;
+            color: #FFFFFF;
+        }
+        .larg_txt h3{
+            color:#FFFFFF;
+        }
+        .soc{
+            display: flex;
+            flex-direction: column;
+            width: 400px;
+            padding: 25px;
+            justify-content: start;
+            align-items: start;
+        }
+        .soc-t{
+            display: flex;
+            width: 450px;
+            height: auto;
+            margin: 25px;
+        }
+        .soc-lig{
+            color:#FFFFFF;
+            font-family: "Dancing Script", cursive;
+            font-size: 20px;
+            padding-left: 10px;
+        }
+        .blk_comp{
+            width: 80%;
+            background-color: #0a58ca;
+            font-family: "HeiS ASC Simplified Chinese", "HeiS ASC Simplified Chinese_n5", "HeiT ASC Traditional Chinese", "HelveticaNeue-Regular", "Helvetica Neue Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color:#FFFFFF;
+        }
+    </style>
+</head>
+<body>
+<div class="border-top">
+    <img width="250" height="61" alt="image" src="http://127.0.0.1:8000/pdf/illustration/logopotins.png"/>
+    <div class="center_bk">
+        <img class="img_cent" width="50" height="75" alt="image" src="http://127.0.0.1:8000/pdf/illustration/pellerin.jpg"/>
+        <img class="img_cent" width="50" height="75" alt="image" src="http://127.0.0.1:8000/pdf/illustration/saintjean.png"/>
+        <img class="img_cent" width="50" height="75" alt="image" src="http://127.0.0.1:8000/pdf/illustration/montagne.jpg"/>
+    </div>
+  <h4 style="padding-top: 3pt;padding-left: 14pt;text-indent: 0pt;text-align: left;">Atelier multimedia</h4>
+</div>
+<div class="content_stud">
+    <img width="850" height="178" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_012.png"/>
+
+    <p class="s2" >2023/2024</p>
+
+    <p style="text-indent: 0pt;text-align: left;"><br/></p>
+    <p style="text-indent: 0pt;text-align: left;"><br/></p>
+    <h3 style="padding-top: 13pt;padding-left: 45pt;text-indent: 0pt;text-align: left;">Fiche Activité</h3>
+    <h2 style="padding-top: 11pt;padding-left: 13pt;text-indent: 0pt;text-align: left;">{{ potin.titre}}</h2>
+    <p style="text-indent: 0pt;text-align: left;"><br/></p>
+    <h1 style="text-indent: 0pt;line-height: 38pt;text-align: left;">FICHE ACTIVITE</h1>
+    <p style="text-indent: 0pt;text-align: left;"/>
+    <p class="s3" style="padding-top: 23pt;padding-left: 138pt;text-indent: 0pt;text-align: left;">{{ review.titre }}</p>
+</div>
+<div class="bk_fi">
+<div class="bk_left">
+    <p class="s4" style="padding-top: 4pt;padding-left: 45pt;text-indent: 0pt;text-align: left;">Aujourd’hui, 96% des 9-16
+        ans naviguent sur la toile au moins une fois par semaine. <span class="s5">Aussi 12,5% de ces enfants ont déjà été victimes de cyberharcèlement.</span>
+    </p>
+    <p class="s4" style="padding-left: 45pt;text-indent: 0pt;text-align: left;">Le numérique est présent au quotidien chez
+        nos jeunes licencié(e)s Il faut les accompagner pour qu’ils adoptent les bons réflexes dans l’utilisation de ces
+        supports.</p>
+    <p style="text-indent: 0pt;text-align: left;"><br/></p>
+    <p class="s6" style="padding-left: 51pt;text-indent: 0pt;line-height: 124%;text-align: center;">Faire prendre conscience
+        aux jeunes que pour une meilleure utilisation d’Internet, il est nécessaire d’adopter un comportement numérique
+        responsable.</p>
+    <p style="text-indent: 0pt;text-align: left;"><br/></p>
+
+</div>
+<div class="bk_right">
+    <img width="350" height="350" alt="image" src="http://127.0.0.1:8000/pdf/illustration/makey01.jpg"/>
+</div>
+</div>
+<div class="large_100">
+    <div class="larg_txt">
+        <h3>ACTIONS À METTRE EN PLACE </h3>
+        <p class="s5">Organiser des moments d’échanges <span class="p">avec les jeunes sur leur utilisation d’internet et des réseaux sociaux</span></p>
+        <p class="s5">Questionner les jeunes<span class="p">sur les différences entre ami réel et ami virtuel</span></p>
+        <p class="s5">Transmettre des bonnes pratiques <span class="p">pour une utilisation plus sûre d’internet et réseaux</span></p>
+    </div>
+    <div class="soc">
+        <div class="soc-t">
+            <img width="8" height="8" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_017.png"/>
+            <div class="soc-lig">Makey makey</div>
+        </div>
+        <div class="soc-t">
+            <img width="8" height="8" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_017.png"/>
+            <div class="soc-lig">à parir de 8 ans</div>
+        </div>
+        <div class="soc-t">
+            <img width="8" height="8" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_017.png"/>
+            <div class="soc-lig">débutant</div>
+        </div>
+        <div class="soc-t">
+            <img width="8" height="8" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_017.png"/>
+            <div class="soc-lig">2h</div>
+        </div>
+    </div>
+</div>
+<div class="blk_comp">
+    <p class="s7" style="padding-top: 4pt;padding-left: 34pt;text-indent: 0pt;text-align: left;">PROPOSITION DE MESSAGES
+        CLÉS </p>
+    <p style="padding-top: 10pt;padding-left: 35pt;text-indent: 0pt;text-align: left;">« Internet est un endroit où il n’est
+        pas bon de tout dire sur soi »</p>
+    <p style="padding-top: 5pt;padding-left: 35pt;text-indent: 0pt;text-align: left;">« Attention aux photos ou informations
+        que tu diffuses sur les réseaux »</p>
+    <p style="padding-top: 5pt;padding-left: 35pt;text-indent: 0pt;text-align: left;">« Sécurise tes comptes pour que
+        personne ne puisse avoir accès à tes informations »</p>
+    <p style="padding-top: 5pt;padding-left: 35pt;text-indent: 0pt;text-align: left;">« Respecte les autres sur les réseaux
+        sociaux »</p>
+</div>
+
+<div class="deroule vert_der">
+    <div class="comment-der">
+
+    </div>
+    <div class="illust_der">
+
+    </div>
+</div>
+
+<div class="deroule horz_der">
+    <div class="comment-der">
+
+    </div>
+    <div class="illust_der">
+
+    </div>
+</div>
+
+<div class="deroule vert_der">
+    <div class="comment-der">
+
+    </div>
+    <div class="illust_der">
+
+    </div>
+</div>
+
+<h3 style="padding-left: 39pt;text-indent: 0pt;text-align: left;">FICHE À VOIR </h3>
+<p class="s8" style="padding-top: 10pt;padding-left: 39pt;text-indent: 0pt;text-align: left;">Fiche Action terrain
+    Education aux numérique</p>
+<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;"/>
+<p style="text-indent: 0pt;text-align: left;"><br/></p>
+<h3 style="padding-top: 4pt;padding-left: 45pt;text-indent: 0pt;text-align: left;">BESOIN D’ALLER PLUS LOIN SUR CETTE
+    THÉMATIQUE ?</h3>
+<p style="padding-top: 7pt;padding-left: 45pt;text-indent: 0pt;text-align: left;">Les potins  numérique met à votre disposition une
+    plateforme dédiée à cette thématique afin de vous donner un maximum d’éléments ...bla bla.</p>
+<p style="padding-left: 45pt;text-indent: 0pt;text-align: left;"><a
+            href="https://www.potinsnumerique.fr" class="a"
+            target="_blank">Rendez-vous sur LE SITE POUR D'4'AUTRES RESSOURCES</a>
+    <a href="https://www.potinsnumerique.fr" target="_blank">complémentaires.</a>
+</p>
+<p style="text-indent: 0pt;text-align: left;"><br/></p>
+<p style="text-indent: 0pt;text-align: left;"/>
+<p style="text-indent: 0pt;text-align: left;"/>
+<p class="s10" style="padding-top: 4pt;text-indent: 0pt;text-align: right;">1/1</p>
+<p style="text-indent: 0pt;text-align: left;">
+
+{#
+    <span></span>
+    <span><img width="34" height="36" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_005.png"/></span>
+    <span><img width="45" height="48" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_006.png"/></span>
+    <span><img width="42" height="44" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_007.png"/></span>
+    <span><img width="23" height="24" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_008.png"/></span>
+    <span><img width="8" height="7" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_009.png"/></span>
+    <span><img width="8" height="7" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_010.png"/></span>
+    <span><img width="64" height="51" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_011.png"/></span>
+    <span><img width="279" height="15" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_012.png"/></span>
+    <span><img width="8" height="8" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_013.png"/></span>
+    <span><img width="8" height="8" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_014.png"/></span>
+    <span><img width="8" height="8" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_015.png"/></span>
+    <span><img width="8" height="8" alt="image" src="http://127.0.0.1:8000/pdf/illustration/Image_016.png"/></span>
+
+#}
+    <span><img width="150" height="auto" alt="image" src="http://127.0.0.1:8000/pdf/illustration/logocnfs.png"/></span>
+</p></body>
+</html>

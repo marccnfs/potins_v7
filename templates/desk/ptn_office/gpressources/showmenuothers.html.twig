@@ -1,0 +1,24 @@
+<div class="_scrollflownew _dk _post w100">
+    <div class="board-list-replace">
+        <nav class="other">
+            <div class="nogo"><h3>et aussi</h3></div>
+        </nav>
+        <div class="flex-notb_v6-fix">
+            {% for menu in menus|slice(0, 6) %}
+                <div class="last-postall_v6-fix">
+                    {{include('aff_website/formule/view/modale_menu.html.twig')}}
+                </div>
+            {% else %}
+                <div class="flex-notb_v6-fix">
+                    <div class="last-postall_v6-fix">
+                        <div class="affiche">
+                            <div class="evnet_titre_v5">pas d'autre menu actuellement !!</div>
+                        </div>
+                        <div class="boarder">
+                        </div>
+                    </div>
+                </div>
+            {%  endfor %}
+        </div>
+    </div>
+</div>

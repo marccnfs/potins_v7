@@ -1,0 +1,1870 @@
+[
+  {
+    "text": "Qu'est-ce que l'intelligence artificielle ?",
+    "intent": "IA_definition"
+  },
+  {
+    "text": "Quelles sont les applications pratiques de l'intelligence artificielle dans le domaine de la santé ?",
+    "intent": "IA_applications_santé"
+  },
+  {
+    "text": "Quels sont les principaux algorithmes utilisés en apprentissage automatique ?",
+    "intent": "IA_algorithmes"
+  },
+  {
+    "text": "Comment l'intelligence artificielle peut-elle contribuer à la lutte contre le changement climatique ?",
+    "intent": "IA_climat"
+  },
+  {
+    "text": "Quelles sont les différences entre l'intelligence artificielle faible et forte ?",
+    "intent": "IA_faible_forte"
+  },
+  {
+    "text": "Quels sont les enjeux éthiques liés au développement de l'intelligence artificielle ?",
+    "intent": "IA_éthique"
+  },
+  {
+    "text": "Comment l'intelligence artificielle est-elle utilisée dans le secteur financier ?",
+    "intent": "IA_finance"
+  },
+  {
+    "text": "Quelles sont les limites actuelles de l'intelligence artificielle ?",
+    "intent": "IA_limites"
+  },
+  {
+    "text": "Comment l'intelligence artificielle peut-elle améliorer les processus de recrutement en entreprise ?",
+    "intent": "IA_recrutement"
+  },
+  {
+    "text": "Quels sont les impacts de l'intelligence artificielle sur le marché du travail ?",
+    "intent": "IA_travail"
+  },
+  {
+    "text": "Quelles sont les techniques d'apprentissage supervisé en intelligence artificielle ?",
+    "intent": "IA_supervisé"
+  },
+  {
+    "text": "Comment les chatbots utilisent-ils l'intelligence artificielle pour interagir avec les utilisateurs ?",
+    "intent": "IA_chatbots"
+  },
+  {
+    "text": "Quelles sont les implications de l'intelligence artificielle sur la protection des données personnelles ?",
+    "intent": "IA données personnelles"
+  },
+  {
+    "text": "Quels sont les défis de l'interprétabilité des modèles d'intelligence artificielle ?",
+    "intent": "IA_interprétabilité"
+  },
+  {
+    "text": "Comment l'intelligence artificielle est-elle utilisée dans les véhicules autonomes ?",
+    "intent": "IA_véhicules autonomes"
+  },
+  {
+    "text": "Quelles sont les applications de l'intelligence artificielle dans le domaine de la logistique ?",
+    "intent": "IA_logistique"
+  },
+  {
+    "text": "Quels sont les avantages de l'utilisation de l'intelligence artificielle dans la médecine diagnostique ?",
+    "intent": "IA_médecine diagnostique"
+  },
+  {
+    "text": "Comment les réseaux de neurones artificiels sont-ils utilisés en intelligence artificielle ?",
+    "intent": "IA_réseaux neuronaux"
+  },
+  {
+    "text": "Quelles sont les applications de l'intelligence artificielle dans l'analyse prédictive des données ?",
+    "intent": "IA_analyse prédictive"
+  },
+  {
+    "text": "Quels sont les impacts de l'intelligence artificielle sur l'industrie du jeu vidéo ?",
+    "intent": "IA_jeu vidéo"
+  },
+  {
+    "text": "Comment les algorithmes de recommandation utilisent-ils l'intelligence artificielle pour personnaliser les contenus ?",
+    "intent": "IA_recommandation"
+  },
+  {
+    "text": "Quelles sont les applications de l'intelligence artificielle dans la cybersécurité ?",
+    "intent": "IA_cybersécurité"
+  },
+  {
+    "text": "Quels sont les enjeux de la responsabilité sociale des entreprises dans le développement de l'intelligence artificielle ?",
+    "intent": "IA_RSE"
+  },
+  {
+    "text": "Comment l'intelligence artificielle est-elle utilisée dans la détection de fraudes financières ?",
+    "intent": "IA_fraude"
+  },
+  {
+    "text": "Quelles sont les perspectives d'évolution de l'intelligence artificielle dans les prochaines années ?",
+    "intent": "IA_évolution"
+  },
+  {
+    "text": "Quels sont les défis de l'apprentissage non supervisé en intelligence artificielle ?",
+    "intent": "IA_non supervisé"
+  },
+  {
+    "text": "Comment l'intelligence artificielle peut-elle contribuer à l'amélioration de la gestion des déchets ?",
+    "intent": "IA_déchets"
+  },
+  {
+    "text": "Quelles sont les applications de l'intelligence artificielle dans le secteur de l'énergie renouvelable ?",
+    "intent": "IA_énergie renouvelable"
+  },
+  {
+    "text": "Quels sont les impacts de l'intelligence artificielle sur l'industrie de la musique ?",
+    "intent": "IA_musique"
+  },
+  {
+    "text": "Comment les modèles de langage naturel sont-ils utilisés en intelligence artificielle ?",
+    "intent": "IA_langage naturel"
+  },
+  {
+    "text": "Quelles sont les applications de l'intelligence artificielle dans la prévention des catastrophes naturelles ?",
+    "intent": "IA_catastrophes naturelles"
+  },
+  {
+    "text": "Quels sont les défis de l'interprétation des décisions prises par les algorithmes d'intelligence artificielle ?",
+    "intent": "IA_interprétation"
+  },
+  {
+    "text": "Comment l'intelligence artificielle est-elle utilisée dans la création de contenu artistique ?",
+    "intent": "IA_artistique"
+  },
+  {
+    "text": "Quelles sont les applications de l'intelligence artificielle dans la gestion des ressources humaines ?",
+    "intent": "IA_RH"
+  },
+  {
+    "text": "Quels sont les enjeux de l'adoption de l'intelligence artificielle dans le secteur de l'éducation ?",
+    "intent": "IA_éducation"
+  },
+  {
+    "text": "Comment les drones utilisent-ils l'intelligence artificielle pour des missions de surveillance ?",
+    "intent": "IA_drones"
+  },
+  {
+    "text": "Quelles sont les applications de l'intelligence artificielle dans l'analyse de données géospatiales ?",
+    "intent": "IA_géospatial"
+  },
+  {
+    "text": "Quels sont les impacts de l'intelligence artificielle sur l'industrie du tourisme ?",
+    "intent": "IA_tourisme"
+  },
+  {
+    "text": "Comment les réseaux de neurones convolutifs sont-ils utilisés en intelligence artificielle ?",
+    "intent": "IA_convolutifs"
+  },
+  {
+    "text": "Quelles sont les applications de l'intelligence artificielle dans le domaine de la météorologie ?",
+    "intent": "IA_météorologie"
+  },
+  {
+    "text": "Quels sont les défis de l'adaptabilité des modèles d'intelligence artificielle à de nouveaux environnements ?",
+    "intent": "IA_adaptabilité"
+  },
+  {
+    "text": "Comment l'intelligence artificielle est-elle utilisée dans la gestion des transports publics ?",
+    "intent": "IA_transports publics"
+  },
+  {
+    "text": "Quelles sont les applications de l'intelligence artificielle dans la lutte contre la criminalité en ligne ?",
+    "intent": "IA_criminalité en ligne"
+  },
+  {
+    "text": "Quels sont les impacts de l'intelligence artificielle sur l'industrie de la mode et du luxe ?",
+    "intent": "IA_mode luxe"
+  },
+  {
+    "text": "Comment les algorithmes de clustering sont-ils utilisés en intelligence artificielle pour regrouper des données similaires ?",
+    "intent": "IA_clustering"
+  },
+  {
+    "text": "Quelles sont les applications de l'intelligence artificielle dans la prévision des tendances économiques ?",
+    "intent": "IA_tendances économiques"
+  },
+  {
+    "text": "Quels sont les enjeux de l'utilisation de l'intelligence artificielle dans le domaine de la justice ?",
+    "intent": "IA_justice"
+  },
+  {
+    "text": "Comment l'intelligence artificielle est-elle utilisée dans la personnalisation des expériences en ligne des utilisateurs ?",
+    "intent": "IA_personnalisation en ligne"
+  },
+  {
+    "text": "Quelles sont les applications de l'intelligence artificielle dans l'optimisation des processus industriels ?",
+    "intent": "IA_optimisation industrielle"
+  },
+  {
+    "text": "Quels sont les impacts de l'intelligence artificielle sur l'industrie de la publicité et du marketing ?",
+    "intent": "IA_publicité marketing"
+  },
+  {
+    "text": "Comment les réseaux de neurones récurrents sont-ils utilisés en intelligence artificielle pour traiter des séquences temporelles ?",
+    "intent": "IA_récurrents"
+  },
+  {
+    "text": "Quelles sont les applications de l'intelligence artificielle dans la détection de maladies à partir d'imagerie médicale ?",
+    "intent": "IA_imagerie médicale"
+  },
+  {
+    "text": "Quels sont les défis de la fiabilité des systèmes d'intelligence artificielle en situation réelle ?",
+    "intent": "IA_fiabilité"
+  },
+  {
+    "text": "Comment l'intelligence artificielle est-elle utilisée dans la gestion des stocks et des approvisionnements ?",
+    "intent": "IA_stocks approvisionnements"
+  },
+  {
+    "text": "Quelles sont les applications de l'intelligence artificielle dans la prédiction des catastrophes naturelles ?",
+    "intent": "IA_prédiction catastrophes"
+  },
+  {
+    "text": "Quels sont les impacts de l'intelligence artificielle sur l'industrie du sport et de la performance athlétique ?",
+    "intent": "IA_sport performance"
+  },
+  {
+    "text": "Comment les algorithmes génétiques sont-ils utilisés en intelligence artificielle pour résoudre des problèmes d'optimisation ?",
+    "intent": "IA_génétiques"
+  },
+  {
+    "text": "Quelles sont les applications de l'intelligence artificielle dans la personnalisation de la santé et du bien-être ?",
+    "intent": "IA_santé bien-être"
+  },
+  {
+    "text": "Comment fonctionne l'apprentissage automatique en IA ?",
+    "intent": "IA_fonctionnement"
+  },
+  {
+    "text": "Quelles sont les applications de l'intelligence artificielle ?",
+    "intent": "IA_applications"
+  },
+  {
+    "text": "Quels sont les avantages de l'IA ?",
+    "intent": "IA_avantages_risques"
+  },
+  {
+    "text": "Quels ateliers sont disponibles aux Potins Numériques ?",
+    "intent": "potins_ateliers"
+  },
+  {
+    "text": "Comment s'inscrire aux ateliers des Potins Numériques ?",
+    "intent": "inscription"
+  },
+  {
+    "text": "Quand les ateliers des Potins Numériques ont-ils lieu ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Quelles sont les différences entre l'IA et le machine learning ?",
+    "intent": "IA_comparaison"
+  },
+  {
+    "text": "Quels sont les risques associés à l'intelligence artificielle ?",
+    "intent": "IA_avantages_risques"
+  },
+  {
+    "text": "Quel est le rôle de l'IA dans les Potins Numériques ?",
+    "intent": "IA_applications"
+  },
+  {
+    "text": "L'IA est-elle utilisée dans les Potins Numériques ?",
+    "intent": "IA_applications"
+  },
+  {
+    "text": "Qu'est-ce que le machine learning ?",
+    "intent": "IA_definition"
+  },
+  {
+    "text": "Pourquoi l'IA est-elle importante ?",
+    "intent": "IA_importance"
+  },
+  {
+    "text": "Les Potins Numériques utilisent-ils des algorithmes d'IA ?",
+    "intent": "IA_applications"
+  },
+  {
+    "text": "Comment fonctionne l'IA ?",
+    "intent": "IA_fonctionnement"
+  },
+  {
+    "text": "Peut-on utiliser l'IA pour analyser des données ?",
+    "intent": "IA_applications"
+  },
+  {
+    "text": "Quels sont les bénéfices et les risques de l'intelligence artificielle ?",
+    "intent": "IA_avantages_risques"
+  },
+  {
+    "text": "Quel est l'impact de l'IA sur les Potins Numériques ?",
+    "intent": "IA_applications"
+  },
+  {
+    "text": "intelligence artificielle",
+    "intent": "IA_definition"
+  },
+  {
+    "text": "potins numérique",
+    "intent": "potins_definition"
+  },
+  {
+    "text": "Qu'est-ce que le deep learning ?",
+    "intent": "IA_definition"
+  },
+  {
+    "text": "Expliquez-moi comment fonctionne l'apprentissage automatique ?",
+    "intent": "IA_fonctionnement"
+  },
+  {
+    "text": "Quand auront lieu les ateliers des Potins Numériques ?",
+    "intent": "potins_ateliers"
+  },
+  {
+    "text": "Quand aura lieu le prochain atelier Potins Numériques ?",
+    "intent": "date"
+  },
+  {
+    "text": "Quels sont les prochains ateliers organisés par Potins Numériques ?",
+    "intent": "programme"
+  },
+  {
+    "text": "Où se déroulent les ateliers de Potins Numériques ?",
+    "intent": "lieu"
+  },
+  {
+    "text": "Comment s'inscrire aux ateliers de Potins Numériques ?",
+    "intent": "inscription"
+  },
+  {
+    "text": "Quels thèmes sont abordés lors des ateliers de Potins Numériques ?",
+    "intent": "thèmes"
+  },
+  {
+    "text": "Y a-t-il des ateliers en ligne proposés par Potins Numériques ?",
+    "intent": "en ligne"
+  },
+  {
+    "text": "Combien de temps durent les ateliers de Potins Numériques en moyenne ?",
+    "intent": "durée"
+  },
+  {
+    "text": "Les ateliers de Potins Numériques sont-ils gratuits ?",
+    "intent": "tarifs"
+  },
+  {
+    "text": "Quel est le niveau requis pour participer aux ateliers de Potins Numériques ?",
+    "intent": "niveau"
+  },
+  {
+    "text": "Qui anime les ateliers de Potins Numériques ?",
+    "intent": "animateur"
+  },
+  {
+    "text": "Quels outils sont utilisés lors des ateliers de Potins Numériques ?",
+    "intent": "outils"
+  },
+  {
+    "text": "Est-ce qu'il y a des ateliers spécifiques pour les débutants chez Potins Numériques ?",
+    "intent": "débutants"
+  },
+  {
+    "text": "Les ateliers de Potins Numériques sont-ils interactifs ?",
+    "intent": "interactivité"
+  },
+  {
+    "text": "Quelle est la fréquence des ateliers de Potins Numériques ?",
+    "intent": "fréquence"
+  },
+  {
+    "text": "Qui peut participer aux ateliers de Potins Numériques ?",
+    "intent": "public"
+  },
+  {
+    "text": "Quelles sont les compétences développées lors des ateliers de Potins Numériques ?",
+    "intent": "compétences"
+  },
+  {
+    "text": "Quelles sont les horaires des ateliers de Potins Numériques ?",
+    "intent": "horaires"
+  },
+  {
+    "text": "Les ateliers de Potins Numériques ont-ils des partenariats avec d'autres organisations ?",
+    "intent": "partenariats"
+  },
+  {
+    "text": "Comment contacter l'équipe organisatrice des ateliers de Potins Numériques ?",
+    "intent": "contact"
+  },
+  {
+    "text": "Quelles sont les modalités d'annulation des inscriptions aux ateliers de Potins Numériques ?",
+    "intent": "annulation"
+  },
+  {
+    "text": "Les ateliers de Potins Numériques sont-ils adaptés aux personnes en situation de handicap ?",
+    "intent": "handicap"
+  },
+  {
+    "text": "Est-ce que les ateliers de Potins Numériques sont éligibles à une prise en charge par un organisme de financement ?",
+    "intent": "financement"
+  },
+  {
+    "text": "Y a-t-il des ateliers sur le thème de la communication digitale chez Potins Numériques ?",
+    "intent": "communication"
+  },
+  {
+    "text": "Quelle est la durée recommandée entre deux ateliers suivis chez Potins Numériques ?",
+    "intent": "rythme"
+  },
+  {
+    "text": "Les ateliers de Potins Numériques sont-ils accessibles aux mineurs ?",
+    "intent": "mineurs"
+  },
+  {
+    "text": "Quelles sont les ressources fournies aux participants des ateliers de Potins Numériques ?",
+    "intent": "ressources"
+  },
+  {
+    "text": "Est-ce qu'il y a des ateliers thématiques sur la sécurité numérique chez Potins Numériques ?",
+    "intent": "sécurité"
+  },
+  {
+    "text": "Quel est l'objectif principal des ateliers de Potins Numériques ?",
+    "intent": "objectif"
+  },
+  {
+    "text": "Peut-on obtenir une certification à la fin des ateliers de Potins Numériques ?",
+    "intent": "certification"
+  },
+  {
+    "text": "Quels sont les retours des participants sur les ateliers de Potins Numériques ?",
+    "intent": "retours"
+  },
+  {
+    "text": "Les ateliers de Potins Numériques sont-ils disponibles en replay ?",
+    "intent": "replay"
+  },
+  {
+    "text": "Est-ce qu'il y a des sessions de questions-réponses à la fin des ateliers de Potins Numériques ?",
+    "intent": "Q&A"
+  },
+  {
+    "text": "Quelles sont les compétences préalables recommandées pour suivre les ateliers de Potins Numériques ?",
+    "intent": "prérequis"
+  },
+  {
+    "text": "Est-ce que les ateliers de Potins Numériques sont adaptés aux professionnels du numérique ?",
+    "intent": "professionnels"
+  },
+  {
+    "text": "Quels sont les canaux de communication utilisés pour informer des prochains ateliers de Potins Numériques ?",
+    "intent": "communication"
+  },
+  {
+    "text": "Les ateliers de Potins Numériques sont-ils suivis d'un temps de networking ?",
+    "intent": "networking"
+  },
+  {
+    "text": "Y a-t-il des ateliers dédiés à la création de sites web chez Potins Numériques ?",
+    "intent": "sites web"
+  },
+  {
+    "text": "Quelles sont les spécificités des ateliers de Potins Numériques par rapport à d'autres formations ?",
+    "intent": "spécificités"
+  },
+  {
+    "text": "Est-ce que les ateliers de Potins Numériques sont en partenariat avec des marques connues ?",
+    "intent": "marques"
+  },
+  {
+    "text": "Quels sont les horizons temporels abordés lors des ateliers de Potins Numériques ?",
+    "intent": "horizons"
+  },
+  {
+    "text": "Les ateliers de Potins Numériques sont-ils axés sur la pratique ou la théorie ?",
+    "intent": "pratique"
+  },
+  {
+    "text": "Quelle est la durée recommandée pour préparer un atelier de Potins Numériques ?",
+    "intent": "préparation"
+  },
+  {
+    "text": "Est-ce que les ateliers de Potins Numériques sont adaptés à tous les niveaux de compétence ?",
+    "intent": "tous niveaux"
+  },
+  {
+    "text": "Quels sont les avantages de participer aux ateliers de Potins Numériques ?",
+    "intent": "avantages"
+  },
+  {
+    "text": "Peut-on proposer des sujets d'ateliers à l'équipe de Potins Numériques ?",
+    "intent": "propositions"
+  },
+  {
+    "text": "Quel est le format des ateliers de Potins Numériques ?",
+    "intent": "format"
+  },
+  {
+    "text": "Y a-t-il des ateliers dédiés à l'utilisation des réseaux sociaux chez Potins Numériques ?",
+    "intent": "réseaux sociaux"
+  },
+  {
+    "text": "Les prochains ateliers organisés par les Potins Numériques sont pour quand ?",
+    "intent": "potins_ateliers"
+  },
+  {
+    "text": "Quand auront lieu les prochains ateliers des Potins Numériques ?",
+    "intent": "potins_agenda"
+  },
+  {
+    "text": "Quels sont les thèmes abordés dans les Potins Numériques ?",
+    "intent": "thématiques_potins_numériques"
+  },
+  {
+    "text": "Comment participer aux ateliers numériques des Potins ?",
+    "intent": "potins_ateliers"
+  },
+  {
+    "text": "Quels sont les avantages de l'IA pour la santé ?",
+    "intent": "IA_applications"
+  },
+  {
+    "text": "Pouvez-vous expliquer ce qu'est l'apprentissage profond ?",
+    "intent": "IA_definition"
+  },
+  {
+    "text": "Qu'est-ce que les Potins Numériques ?",
+    "intent": "potins_definition"
+  },
+  {
+    "text": "Quels ateliers sont proposés par les Potins Numériques ?",
+    "intent": "potins_ateliers"
+  },
+  {
+    "text": "Comment contacter l'équipe des Potins Numériques ?",
+    "intent": "contact"
+  },
+  {
+    "text": "Quelles sont les prochaines thématiques des ateliers numériques ?",
+    "intent": "thématiques_potins_numériques"
+  },
+  {
+    "text": "Quels sont les avantages de participer aux ateliers des Potins Numériques ?",
+    "intent": "potins_avantages"
+  },
+  {
+    "text": "Quelle est la durée moyenne d'un atelier numérique des Potins ?",
+    "intent": "durée_atelier"
+  },
+  {
+    "text": "Peut-on assister aux ateliers numériques des Potins sans inscription préalable ?",
+    "intent": "inscription"
+  },
+  {
+    "text": "Comment se déroule un atelier numérique typique des Potins ?",
+    "intent": "déroulement_atelier"
+  },
+  {
+    "text": "Quelles compétences peut-on acquérir lors des ateliers numériques des Potins ?",
+    "intent": "compétences"
+  },
+  {
+    "text": "Comment sont choisis les intervenants des ateliers numériques des Potins ?",
+    "intent": "intervenants"
+  },
+  {
+    "text": "Quelles sont les conditions pour animer un atelier numérique aux Potins Numériques ?",
+    "intent": "animateur"
+  },
+  {
+    "text": "Quels sont les critères de sélection des participants aux ateliers numériques des Potins ?",
+    "intent": "sélection_participants"
+  },
+  {
+    "text": "Comment sont financés les ateliers numériques des Potins ?",
+    "intent": "financement"
+  },
+  {
+    "text": "Quel est l'objectif principal des ateliers numériques des Potins ?",
+    "intent": "objectif"
+  },
+  {
+    "text": "Peut-on proposer un thème d'atelier numérique aux Potins ?",
+    "intent": "proposition_thème"
+  },
+  {
+    "text": "Quelles sont les retombées positives des ateliers numériques des Potins sur les participants ?",
+    "intent": "impact_positif"
+  },
+  {
+    "text": "Comment évaluer l'efficacité des ateliers numériques des Potins ?",
+    "intent": "évaluation"
+  },
+  {
+    "text": "Quel est le public cible des ateliers numériques des Potins ?",
+    "intent": "public_cible"
+  },
+  {
+    "text": "Quelles sont les collaborations majeures des Potins Numériques dans le domaine numérique ?",
+    "intent": "collaborations"
+  },
+  {
+    "text": "Comment les ateliers numériques des Potins contribuent-ils à la culture digitale locale ?",
+    "intent": "culture_digitale"
+  },
+  {
+    "text": "Quelle est la fréquence des ateliers numériques des Potins ?",
+    "intent": "fréquence_ateliers"
+  },
+  {
+    "text": "Qu'est-ce que la MAO (musique assistée par ordinateur) ?",
+    "intent": "MAO_definition"
+  },
+  {
+    "text": "Comment réaliser un montage vidéo de qualité professionnelle ?",
+    "intent": "montage_vidéo"
+  },
+  {
+    "text": "Qu'est-ce que Scratch et comment l'utiliser pour apprendre la programmation ?",
+    "intent": "Scratch"
+  },
+  {
+    "text": "Quels sont les principes de programmation derrière le robot Thymio ?",
+    "intent": "Thymio"
+  },
+  {
+    "text": "Comment créer des effets sonores pour vos projets numériques ?",
+    "intent": "effets_sonores"
+  },
+  {
+    "text": "Quelles sont les techniques avancées de mixage en MAO ?",
+    "intent": "mixage_MAO"
+  },
+  {
+    "text": "Comment mettre en place une stratégie de communication digitale efficace ?",
+    "intent": "communication_digitale"
+  },
+  {
+    "text": "Quels sont les outils indispensables pour un graphiste numérique ?",
+    "intent": "outils_graphiste"
+  },
+  {
+    "text": "Comment optimiser le référencement d'un site web ?",
+    "intent": "SEO"
+  },
+  {
+    "text": "Quelles sont les étapes clés de la création d'un site web responsive ?",
+    "intent": "site_web_responsive"
+  },
+  {
+    "text": "Comment créer une application mobile sans compétences en codage ?",
+    "intent": "app_mobile"
+  },
+  {
+    "text": "Quels sont les avantages de la réalité augmentée dans le domaine du marketing ?",
+    "intent": "AR_marketing"
+  },
+  {
+    "text": "Comment protéger efficacement ses données personnelles en ligne ?",
+    "intent": "sécurité_données"
+  },
+  {
+    "text": "Quelles sont les tendances actuelles en design d'interface utilisateur ?",
+    "intent": "UI_design"
+  },
+  {
+    "text": "Comment intégrer des éléments interactifs dans une présentation PowerPoint ?",
+    "intent": "PowerPoint_interactif"
+  },
+  {
+    "text": "Quels sont les meilleurs logiciels de retouche photo disponibles sur le marché ?",
+    "intent": "logiciels_retouche_photo"
+  },
+  {
+    "text": "Comment créer une campagne publicitaire efficace sur les réseaux sociaux ?",
+    "intent": "pub_réseaux_sociaux"
+  },
+  {
+    "text": "Quelles sont les règles à suivre pour une utilisation éthique des données numériques ?",
+    "intent": "éthique_données"
+  },
+  {
+    "text": "Comment organiser un événement en ligne interactif ?",
+    "intent": "événement_virtuel"
+  },
+  {
+    "text": "Quels sont les enjeux de la transformation digitale pour les entreprises ?",
+    "intent": "transformation_digitale"
+  },
+  {
+    "text": "Comment utiliser les chatbots pour améliorer le service client ?",
+    "intent": "chatbots"
+  },
+  {
+    "text": "Quelles sont les innovations récentes en matière de réalité virtuelle ?",
+    "intent": "VR_innovations"
+  },
+  {
+    "text": "Comment réaliser une analyse de données approfondie pour prendre des décisions stratégiques ?",
+    "intent": "analyse_données_stratégique"
+  },
+  {
+    "text": "Quels sont les avantages de l'automatisation des tâches répétitives en entreprise ?",
+    "intent": "automatisation_tâches"
+  },
+  {
+    "text": "Comment assurer la cybersécurité d'une infrastructure informatique ?",
+    "intent": "cybersécurité"
+  },
+  {
+    "text": "Quelles sont les bonnes pratiques à adopter pour une présence en ligne efficace ?",
+    "intent": "présence_en_ligne"
+  },
+  {
+    "text": "Comment développer une stratégie de marketing digital gagnante ?",
+    "intent": "stratégie_marketing_digital"
+  },
+  {
+    "text": "Quels sont les outils de collaboration en ligne les plus performants pour les équipes ?",
+    "intent": "outils_collaboration"
+  },
+  {
+    "text": "Comment gérer efficacement un projet numérique du début à la fin ?",
+    "intent": "gestion_projet_numérique"
+  },
+  {
+    "text": "Quelles sont les compétences essentielles pour réussir dans le secteur du numérique ?",
+    "intent": "compétences_numériques"
+  },
+  {
+    "text": "Quels sont les impacts de l'intelligence artificielle sur l'industrie du jeu vidéo ?",
+    "intent": "IA_jeu_vidéo"
+  },
+  {
+    "text": "Comment prévenir les risques liés à l'utilisation des nouvelles technologies ?",
+    "intent": "prévention_risques_numériques"
+  },
+  {
+    "text": "Quelles sont les opportunités offertes par la blockchain dans le domaine financier ?",
+    "intent": "blockchain_opportunités_financières"
+  },
+  {
+    "text": "Comment mettre en place une stratégie d'inbound marketing efficace ?",
+    "intent": "inbound_marketing"
+  },
+  {
+    "text": "Qu'est-ce que LMMS et comment l'utiliser?",
+    "intent": "lmms"
+  },
+  {
+    "text": "Comment créer de la musique avec LMMS?",
+    "intent": "lmms"
+  },
+  {
+    "text": "Quelles sont les fonctionnalités de LMMS?",
+    "intent": "lmms"
+  },
+  {
+    "text": "Comment installer des plugins dans LMMS?",
+    "intent": "lmms"
+  },
+  {
+    "text": "Quelle est la différence entre LMMS et d'autres logiciels de musique?",
+    "intent": "lmms"
+  },
+  {
+    "text": "Qu'est-ce que la MAO et comment ça fonctionne?",
+    "intent": "mao"
+  },
+  {
+    "text": "Quels sont les logiciels de MAO les plus populaires?",
+    "intent": "mao"
+  },
+  {
+    "text": "Comment enregistrer sa voix en utilisant la MAO?",
+    "intent": "mao"
+  },
+  {
+    "text": "Qu'est-ce que Chorus Pro et comment l'utiliser?",
+    "intent": "chorus pro"
+  },
+  {
+    "text": "Comment créer une facture avec Chorus Pro?",
+    "intent": "chorus pro"
+  },
+  {
+    "text": "Quels sont les avantages de l'utilisation de Chorus Pro?",
+    "intent": "chorus pro"
+  },
+  {
+    "text": "Comment importer des données dans Chorus Pro?",
+    "intent": "chorus pro"
+  },
+  {
+    "text": "Quelles sont les fonctionnalités avancées de Chorus Pro?",
+    "intent": "chorus pro"
+  },
+  {
+    "text": "Qu'est-ce que Shotcut et comment l'utiliser?",
+    "intent": "shotcut"
+  },
+  {
+    "text": "Comment ajouter des effets spéciaux avec Shotcut?",
+    "intent": "shotcut"
+  },
+  {
+    "text": "Quelle est la différence entre Shotcut et d'autres logiciels de montage vidéo?",
+    "intent": "shotcut"
+  },
+  {
+    "text": "Comment exporter une vidéo avec Shotcut?",
+    "intent": "shotcut"
+  },
+  {
+    "text": "Qu'est-ce qu'Openshot et comment l'utiliser?",
+    "intent": "openshot"
+  },
+  {
+    "text": "Comment découper une vidéo avec Openshot?",
+    "intent": "openshot"
+  },
+  {
+    "text": "Quels sont les formats de fichiers supportés par Openshot?",
+    "intent": "openshot"
+  },
+  {
+    "text": "Comment ajouter des transitions dans Openshot?",
+    "intent": "openshot"
+  },
+  {
+    "text": "Qu'est-ce qu'une fake news et comment la reconnaître?",
+    "intent": "fake news"
+  },
+  {
+    "text": "Quels sont les dangers des fake news?",
+    "intent": "fake news"
+  },
+  {
+    "text": "Comment vérifier la véracité d'une information en ligne?",
+    "intent": "fake news"
+  },
+  {
+    "text": "Quelles sont les conséquences des fake news sur la société?",
+    "intent": "fake news"
+  },
+  {
+    "text": "Quels sont les impacts des fake news sur la démocratie?",
+    "intent": "fake news"
+  },
+  {
+    "text": "Quelles sont les fonctionnalités du drone Tello?",
+    "intent": "drone tello"
+  },
+  {
+    "text": "Comment piloter un drone Tello?",
+    "intent": "drone tello"
+  },
+  {
+    "text": "Quelle est l'autonomie de vol du drone Tello?",
+    "intent": "drone tello"
+  },
+  {
+    "text": "Comment filmer avec un drone Tello?",
+    "intent": "drone tello"
+  },
+  {
+    "text": "Quelles sont les applications du drone Tello?",
+    "intent": "drone tello"
+  },
+  {
+    "text": "Comment formuler une requête efficace dans un moteur de recherche?",
+    "intent": "requête dans un moteur de recherche"
+  },
+  {
+    "text": "Quels sont les opérateurs de recherche avancée à utiliser dans un moteur de recherche?",
+    "intent": "requête dans un moteur de recherche"
+  },
+  {
+    "text": "Comment filtrer les résultats d'une recherche sur internet?",
+    "intent": "requête dans un moteur de recherche"
+  },
+  {
+    "text": "Quelles sont les bonnes pratiques pour une recherche rapide et pertinente?",
+    "intent": "requête dans un moteur de recherche"
+  },
+  {
+    "text": "Comment convertir des photos HEIC en JPG?",
+    "intent": "heic en jpg"
+  },
+  {
+    "text": "Quels sont les outils disponibles pour convertir des fichiers HEIC en JPG?",
+    "intent": "heic en jpg"
+  },
+  {
+    "text": "Quelle est la qualité de compression des fichiers HEIC par rapport aux JPG?",
+    "intent": "heic en jpg"
+  },
+  {
+    "text": "Comment ouvrir un fichier HEIC sur un appareil ne supportant pas ce format?",
+    "intent": "heic en jpg"
+  },
+  {
+    "text": "Qu'est-ce qu'Audacity et comment l'utiliser pour l'édition audio?",
+    "intent": "audacity"
+  },
+  {
+    "text": "Comment enregistrer et mixer des pistes audio avec Audacity?",
+    "intent": "audacity"
+  },
+  {
+    "text": "Quelles sont les fonctionnalités avancées d'Audacity?",
+    "intent": "audacity"
+  },
+  {
+    "text": "Comment supprimer les bruits parasites d'un enregistrement avec Audacity?",
+    "intent": "audacity"
+  },
+  {
+    "text": "Qu'est-ce que le robot Thymio et comment le programmer?",
+    "intent": "robot thymio"
+  },
+  {
+    "text": "Quelles sont les applications éducatives du robot Thymio?",
+    "intent": "robot thymio"
+  },
+  {
+    "text": "Comment contrôler les mouvements du robot Thymio?",
+    "intent": "robot thymio"
+  },
+  {
+    "text": "Quels sont les capteurs intégrés au robot Thymio?",
+    "intent": "robot thymio"
+  },
+  {
+    "text": "Qu'est-ce que Scratch et comment créer un jeu avec ce logiciel?",
+    "intent": "scratch"
+  },
+  {
+    "text": "Comment programmer des animations avec Scratch?",
+    "intent": "scratch"
+  },
+  {
+    "text": "Quelles sont les possibilités de création offertes par Scratch?",
+    "intent": "scratch"
+  },
+  {
+    "text": "Comment partager ses projets Scratch avec la communauté?",
+    "intent": "scratch"
+  },
+  {
+    "text": "Qu'est-ce que Booktube et comment participer à cette communauté de lecteurs?",
+    "intent": "booktube"
+  },
+  {
+    "text": "Comment créer des vidéos de critiques littéraires pour Booktube?",
+    "intent": "booktube"
+  },
+  {
+    "text": "Quels sont les avantages de rejoindre la communauté Booktube?",
+    "intent": "booktube"
+  },
+  {
+    "text": "Comment promouvoir sa chaîne Booktube?",
+    "intent": "booktube"
+  },
+  {
+    "text": "Qu'est-ce que Makey Makey et comment l'utiliser pour créer des projets interactifs?",
+    "intent": "makey makey"
+  },
+  {
+    "text": "Comment connecter Makey Makey à un ordinateur et à des objets du quotidien?",
+    "intent": "makey makey"
+  },
+  {
+    "text": "Quelles sont les applications pédagogiques de Makey Makey?",
+    "intent": "makey makey"
+  },
+  {
+    "text": "Comment programmer des interactions avec Makey Makey?",
+    "intent": "makey makey"
+  },
+  {
+    "text": "Comment fonctionne une imprimante 3D et quels sont ses usages?",
+    "intent": "impression 3d"
+  },
+  {
+    "text": "Quels sont les matériaux utilisés en impression 3D?",
+    "intent": "impression 3d"
+  },
+  {
+    "text": "Quelles sont les étapes pour créer un objet en 3D à imprimer?",
+    "intent": "impression 3d"
+  },
+  {
+    "text": "Quelles sont les limitations de l'impression 3D?",
+    "intent": "impression 3d"
+  },
+  {
+    "text": "Qu'est-ce que la réalité virtuelle et comment fonctionne-t-elle?",
+    "intent": "réalité virtuelle"
+  },
+  {
+    "text": "Comment créer des expériences immersives en réalité virtuelle?",
+    "intent": "réalité virtuelle"
+  },
+  {
+    "text": "Quels sont les cas d'utilisation de la réalité virtuelle dans différents domaines?",
+    "intent": "réalité virtuelle"
+  },
+  {
+    "text": "Quelles sont les technologies associées à la réalité virtuelle?",
+    "intent": "réalité virtuelle"
+  },
+  {
+    "text": "Qu'est-ce que WeDo Lego et comment l'utiliser dans l'éducation?",
+    "intent": "wedo lego"
+  },
+  {
+    "text": "Comment construire et programmer des robots avec WeDo Lego?",
+    "intent": "wedo lego"
+  },
+  {
+    "text": "Quelles sont les compétences développées par l'utilisation de WeDo Lego?",
+    "intent": "wedo lego"
+  },
+  {
+    "text": "Quels sont les projets pédagogiques possibles avec WeDo Lego?",
+    "intent": "wedo lego"
+  },
+  {
+    "text": "Comment réaliser un stop motion de manière efficace?",
+    "intent": "stop motion"
+  },
+  {
+    "text": "Quels logiciels utiliser pour créer un stop motion de qualité?",
+    "intent": "stop motion"
+  },
+  {
+    "text": "Quelles sont les étapes pour produire un film en stop motion?",
+    "intent": "stop motion"
+  },
+  {
+    "text": "Quels sont les accessoires utiles pour le stop motion?",
+    "intent": "stop motion"
+  },
+  {
+    "text": "Comment réagir face au harcèlement numérique?",
+    "intent": "harcelement numérique"
+  },
+  {
+    "text": "Quelles sont les démarches à suivre en cas de harcèlement en ligne?",
+    "intent": "harcelement numérique"
+  },
+  {
+    "text": "Quels sont les outils pour se protéger du harcèlement sur internet?",
+    "intent": "harcelement numérique"
+  },
+  {
+    "text": "Comment sensibiliser à la prévention du harcèlement numérique?",
+    "intent": "harcelement numérique"
+  },
+  {
+    "text": "Quelles sont les bonnes pratiques pour une utilisation responsable du téléphone mobile?",
+    "intent": "téléphone mobile"
+  },
+  {
+    "text": "Comment sécuriser son téléphone mobile contre les cyberattaques?",
+    "intent": "téléphone mobile"
+  },
+  {
+    "text": "Quelles sont les applications indispensables à avoir sur un téléphone mobile?",
+    "intent": "téléphone mobile"
+  },
+  {
+    "text": "Comment prolonger l'autonomie de la batterie d'un téléphone mobile?",
+    "intent": "téléphone mobile"
+  },
+  {
+    "text": "Quelles sont les différences entre un PC fixe et un ordinateur portable?",
+    "intent": "PC"
+  },
+  {
+    "text": "Comment choisir un PC adapté à ses besoins?",
+    "intent": "PC"
+  },
+  {
+    "text": "Quels sont les composants essentiels d'un PC performant?",
+    "intent": "PC"
+  },
+  {
+    "text": "Comment entretenir son PC pour prolonger sa durée de vie?",
+    "intent": "PC"
+  },
+  {
+    "text": "Quelles sont les astuces pour optimiser les performances de son PC?",
+    "intent": "PC"
+  },
+  {
+    "text": "Quelles sont les règles de sécurité à respecter sur internet?",
+    "intent": "internet"
+  },
+  {
+    "text": "Comment protéger ses données personnelles en ligne?",
+    "intent": "internet"
+  },
+  {
+    "text": "Quels sont les risques liés à la navigation sur internet?",
+    "intent": "internet"
+  },
+  {
+    "text": "Qu'est-ce que le phishing et comment s'en protéger?",
+    "intent": "piratage informatique"
+  },
+  {
+    "text": "Comment sécuriser mon compte sur les réseaux sociaux?",
+    "intent": "réseaux sociaux"
+  },
+  {
+    "text": "Quels sont les avantages de l'utilisation d'un VPN?",
+    "intent": "internet"
+  },
+  {
+    "text": "Comment protéger la vie privée de mes enfants en ligne?",
+    "intent": "parentalité numérique"
+  },
+  {
+    "text": "Quelles sont les tendances actuelles en matière de e-commerce?",
+    "intent": "web"
+  },
+  {
+    "text": "Comment reconnaître un site web frauduleux?",
+    "intent": "internet"
+  },
+  {
+    "text": "Quels sont les risques liés à l'utilisation des réseaux sociaux pour les adolescents?",
+    "intent": "réseaux sociaux"
+  },
+  {
+    "text": "Quelles sont les meilleures pratiques pour protéger ses données en ligne?",
+    "intent": "internet"
+  },
+  {
+    "text": "Comment limiter le temps d'écran de mes enfants de manière efficace?",
+    "intent": "parentalité numérique"
+  },
+  {
+    "text": "Quelles sont les conséquences légales du piratage informatique?",
+    "intent": "piratage informatique"
+  },
+  {
+    "text": "Comment identifier les faux profils sur les réseaux sociaux?",
+    "intent": "réseaux sociaux"
+  },
+  {
+    "text": "Quelles sont les technologies émergentes qui vont impacter le web dans les prochaines années?",
+    "intent": "web"
+  },
+  {
+    "text": "Comment expliquer les bases de la cybersécurité à mes enfants?",
+    "intent": "parentalité numérique"
+  },
+  {
+    "text": "Quelles sont les principales menaces pour la sécurité sur Internet aujourd'hui?",
+    "intent": "internet"
+  },
+  {
+    "text": "Comment protéger mes données personnelles sur mon smartphone?",
+    "intent": "internet"
+  },
+  {
+    "text": "Quelles sont les conséquences psychologiques du cyberharcèlement?",
+    "intent": "réseaux sociaux"
+  },
+  {
+    "text": "Comment détecter un logiciel malveillant sur son ordinateur?",
+    "intent": "piratage informatique"
+  },
+  {
+    "text": "Quelles sont les bonnes pratiques pour créer un mot de passe sécurisé?",
+    "intent": "internet"
+  },
+  {
+    "text": "Comment aborder le sujet de la cyberintimidation avec mes enfants?",
+    "intent": "parentalité numérique"
+  },
+  {
+    "text": "Quelles sont les étapes à suivre en cas de vol de données personnelles?",
+    "intent": "internet"
+  },
+  {
+    "text": "Comment protéger mes enfants des contenus inappropriés en ligne?",
+    "intent": "parentalité numérique"
+  },
+  {
+    "text": "Quelles sont les techniques de phishing les plus courantes?",
+    "intent": "piratage informatique"
+  },
+  {
+    "text": "Comment gérer sa réputation en ligne sur les réseaux sociaux?",
+    "intent": "réseaux sociaux"
+  },
+  {
+    "text": "Quels sont les outils indispensables pour un développeur web?",
+    "intent": "web"
+  },
+  {
+    "text": "Comment sensibiliser mes enfants aux dangers d'Internet de manière ludique?",
+    "intent": "parentalité numérique"
+  },
+  {
+    "text": "Quelles sont les mesures à prendre pour sécuriser un réseau Wi-Fi domestique?",
+    "intent": "internet"
+  },
+  {
+    "text": "Comment reconnaître un email de phishing?",
+    "intent": "piratage informatique"
+  },
+  {
+    "text": "Quelles sont les tendances actuelles en matière de marketing sur les réseaux sociaux?",
+    "intent": "réseaux sociaux"
+  },
+  {
+    "text": "Quels sont les langages de programmation les plus utilisés pour le développement web?",
+    "intent": "web"
+  },
+  {
+    "text": "Comment éduquer mes enfants à l'utilisation responsable des réseaux sociaux?",
+    "intent": "parentalité numérique"
+  },
+  {
+    "text": "Quelles sont les implications juridiques de la publication de contenus en ligne?",
+    "intent": "internet"
+  },
+  {
+    "text": "Comment protéger mes données sensibles sur le cloud?",
+    "intent": "internet"
+  },
+  {
+    "text": "Quels sont les risques d'exposition aux écrans pour les enfants?",
+    "intent": "parentalité numérique"
+  },
+  {
+    "text": "Comment réagir en cas de chantage par rançongiciel?",
+    "intent": "piratage informatique"
+  },
+  {
+    "text": "Quelles sont les meilleures pratiques pour animer une communauté en ligne?",
+    "intent": "réseaux sociaux"
+  },
+  {
+    "text": "Quelles sont les compétences essentielles pour devenir un développeur web?",
+    "intent": "web"
+  },
+  {
+    "text": "Comment établir des règles claires sur l'utilisation des écrans à la maison?",
+    "intent": "parentalité numérique"
+  },
+  {
+    "text": "Quelles sont les réglementations en vigueur pour la protection des données personnelles sur Internet?",
+    "intent": "internet"
+  },
+  {
+    "text": "Comment éviter les arnaques en ligne lors d'achats sur Internet?",
+    "intent": "internet"
+  },
+  {
+    "text": "Quels sont les signes indiquant une possible intrusion sur mon réseau domestique?",
+    "intent": "piratage informatique"
+  },
+  {
+    "text": "Quelles sont les stratégies de marketing d'influence les plus efficaces sur les réseaux sociaux?",
+    "intent": "réseaux sociaux"
+  },
+  {
+    "text": "Quelles sont les frameworks JavaScript les plus populaires pour le développement web?",
+    "intent": "web"
+  },
+  {
+    "text": "Comment aider mes enfants à gérer leur temps d'écran de manière équilibrée?",
+    "intent": "parentalité numérique"
+  },
+  {
+    "text": "Quelles sont les responsabilités des fournisseurs de services en ligne en matière de protection des données?",
+    "intent": "internet"
+  },
+  {
+    "text": "Comment identifier un faux site de commerce en ligne?",
+    "intent": "internet"
+  },
+  {
+    "text": "Quels sont les risques liés à l'utilisation des réseaux sociaux pour la santé mentale des adolescents?",
+    "intent": "réseaux sociaux"
+  },
+  {
+    "text": "Comment se former aux bonnes pratiques de développement web?",
+    "intent": "web"
+  },
+  {
+    "text": "Comment aborder le sujet de la cyberintimité avec mes enfants?",
+    "intent": "parentalité numérique"
+  },
+  {
+    "text": "Quelles sont les obligations des entreprises en cas de fuite de données clients?",
+    "intent": "internet"
+  },
+  {
+    "text": "Comment sécuriser mes communications sur les réseaux sociaux?",
+    "intent": "réseaux sociaux"
+  },
+  {
+    "text": "Quels sont les outils de gestion de contenu web les plus utilisés?",
+    "intent": "web"
+  },
+  {
+    "text": "Quand aura lieu le prochain atelier numérique sur les potins numériques ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Peux-tu me donner la date de la prochaine scéance sur les potins numériques ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Quels sont les potins les plus récents dans le domaine numérique ?",
+    "intent": "potins"
+  },
+  {
+    "text": "Y a-t-il des ateliers numériques prévus prochainement sur les potins ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Est-ce qu'il y a des potins intéressants à venir dans le domaine numérique ?",
+    "intent": "potins"
+  },
+  {
+    "text": "Quelle est la date de l'atelier numérique sur les potins ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Quand aura lieu la prochaine scéance sur les potins numériques ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Peux-tu me dire quand est prévue la prochaine séance sur les potins numériques ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "As-tu des informations sur les potins numériques à venir ?",
+    "intent": "potins"
+  },
+  {
+    "text": "Quand auront lieu les prochains ateliers numériques sur les potins ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Quelle est la date du prochain atelier numérique sur les potins ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Est-ce qu'il y a des scéances prévues sur les potins numériques ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Peux-tu me dire quand est programmé le prochain atelier numérique sur les potins ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Connais-tu la date de la prochaine scéance sur les potins numériques ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Quels sont les potins à ne pas manquer dans le domaine numérique ?",
+    "intent": "potins"
+  },
+  {
+    "text": "Y a-t-il des ateliers numériques prévus sur les potins numériques ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Est-ce qu'il y a des potins à venir dans le domaine numérique ?",
+    "intent": "potins"
+  },
+  {
+    "text": "Quelle est la date de l'atelier numérique sur les potins à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Quand aura lieu la prochaine scéance sur les potins numériques à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Peux-tu me dire quand est prévue la prochaine séance sur les potins numériques à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "As-tu des informations sur les potins numériques à venir et à ne pas manquer ?",
+    "intent": "potins"
+  },
+  {
+    "text": "Quand auront lieu les prochains ateliers numériques sur les potins à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Quelle est la date du prochain atelier numérique sur les potins à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Est-ce qu'il y a des scéances prévues sur les potins numériques à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Peux-tu me dire quand est programmé le prochain atelier numérique sur les potins à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Connais-tu la date de la prochaine scéance sur les potins numériques à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Quels sont les potins à ne pas manquer dans le domaine numérique ?",
+    "intent": "potins"
+  },
+  {
+    "text": "Y a-t-il des ateliers numériques prévus sur les potins numériques à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Est-ce qu'il y a des potins à venir dans le domaine numérique à ne pas manquer ?",
+    "intent": "potins"
+  },
+  {
+    "text": "Quelle est la date de l'atelier numérique sur les potins à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Quand aura lieu la prochaine scéance sur les potins numériques à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Peux-tu me dire quand est prévue la prochaine séance sur les potins numériques à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "As-tu des informations sur les potins numériques à venir et à ne pas manquer ?",
+    "intent": "potins"
+  },
+  {
+    "text": "Quand auront lieu les prochains ateliers numériques sur les potins à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Quelle est la date du prochain atelier numérique sur les potins à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Est-ce qu'il y a des scéances prévues sur les potins numériques à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Peux-tu me dire quand est programmé le prochain atelier numérique sur les potins à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Connais-tu la date de la prochaine scéance sur les potins numériques à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Quels sont les potins à ne pas manquer dans le domaine numérique ?",
+    "intent": "potins"
+  },
+  {
+    "text": "Y a-t-il des ateliers numériques prévus sur les potins numériques à ne pas manquer ?",
+    "intent": "agenda"
+  },
+  {
+    "text": "Est-ce qu'il y a des potins à venir dans le domaine numérique à ne pas manquer ?",
+    "intent": "potins"
+  },
+  {
+    "text": "Ils sont les avantages de l'intégration de l'IA dans les ateliers numériques ?",
+    "intent": "ia_avantages"
+  },
+  {
+    "text": "Comment l'IA révolutionne-t-elle le domaine de la médecine ?",
+    "intent": "ia_médecine"
+  },
+  {
+    "text": "Quel est le rôle de l'IA dans la transformation numérique des entreprises ?",
+    "intent": "ia_rôle"
+  },
+  {
+    "text": "Quels sont les avantages de la collaboration humain-machine en IA ?",
+    "intent": "ia_avantages"
+  },
+  {
+    "text": "Comment l'IA peut-elle améliorer les processus de soins en médecine ?",
+    "intent": "ia_médecine"
+  },
+  {
+    "text": "Quel est le rôle de l'IA dans la création de chatbots pour les ateliers numériques ?",
+    "intent": "ia_rôle"
+  },
+  {
+    "text": "Quels sont les avantages de l'utilisation de l'IA dans la gestion des données numériques ?",
+    "intent": "ia_avantages"
+  },
+  {
+    "text": "Comment l'IA contribue-t-elle à la recherche en médecine personnalisée ?",
+    "intent": "ia_médecine"
+  },
+  {
+    "text": "Comment mettre en place un projet d'IA dans le cadre d'ateliers numériques ?",
+    "intent": "ia_comment"
+  },
+  {
+    "text": "Quel est le rôle de l'IA dans l'analyse des comportements numériques des utilisateurs ?",
+    "intent": "ia_rôle"
+  },
+  {
+    "text": "Quels sont les avantages de l'IA pour la personnalisation des expériences numériques ?",
+    "intent": "ia_avantages"
+  },
+  {
+    "text": "Comment l'IA peut-elle être utilisée pour diagnostiquer des maladies en médecine ?",
+    "intent": "ia_médecine"
+  },
+  {
+    "text": "Comment former un modèle d'IA pour prédire les tendances des ateliers numériques ?",
+    "intent": "ia_comment"
+  },
+  {
+    "text": "Quel est le rôle de l'IA dans la sécurité des transactions numériques ?",
+    "intent": "ia_rôle"
+  },
+  {
+    "text": "Quels sont les avantages de l'utilisation de l'IA pour la détection de fraudes numériques ?",
+    "intent": "ia_avantages"
+  },
+  {
+    "text": "Comment l'IA peut-elle aider à optimiser les processus de recherche en médecine ?",
+    "intent": "ia_médecine"
+  },
+  {
+    "text": "Quel est le rôle de l'IA dans l'automatisation des tâches répétitives des ateliers numériques ?",
+    "intent": "ia_rôle"
+  },
+  {
+    "text": "Quels sont les avantages de l'utilisation de l'IA pour la recommandation de contenus numériques ?",
+    "intent": "ia_avantages"
+  },
+  {
+    "text": "Comment l'IA peut-elle être utilisée pour améliorer la précision des diagnostics en médecine ?",
+    "intent": "ia_médecine"
+  },
+  {
+    "text": "Comment concevoir une interface utilisateur intuitive pour les ateliers numériques avec l'IA ?",
+    "intent": "ia_comment"
+  },
+  {
+    "text": "Quel est le rôle de l'IA dans la personnalisation des services numériques pour les utilisateurs ?",
+    "intent": "ia_rôle"
+  },
+  {
+    "text": "Quels sont les avantages de l'IA dans l'optimisation des campagnes marketing numériques ?",
+    "intent": "ia_avantages"
+  },
+  {
+    "text": "Comment l'IA peut-elle réduire les erreurs médicales et améliorer la sécurité des patients en médecine ?",
+    "intent": "ia_médecine"
+  },
+  {
+    "text": "Quel est le rôle de l'IA dans la prédiction des tendances technologiques des ateliers numériques ?",
+    "intent": "ia_rôle"
+  },
+  {
+    "text": "Quels sont les avantages de l'utilisation de l'IA pour la personnalisation des recommandations de produits numériques ?",
+    "intent": "ia_avantages"
+  },
+  {
+    "text": "Comment l'IA peut-elle être exploitée pour la recherche de nouveaux médicaments en médecine ?",
+    "intent": "ia_médecine"
+  },
+  {
+    "text": "Comment améliorer la performance des algorithmes d'IA pour les ateliers numériques ?",
+    "intent": "ia_comment"
+  },
+  {
+    "text": "Quel est le rôle de l'IA dans la détection des menaces cybernétiques dans l'environnement numérique ?",
+    "intent": "ia_rôle"
+  },
+  {
+    "text": "Quels sont les avantages de l'utilisation de l'IA pour la personnalisation des expériences d'apprentissage numérique ?",
+    "intent": "ia_avantages"
+  },
+  {
+    "text": "Comment l'IA peut-elle contribuer à la médecine préventive en analysant les données de santé ?",
+    "intent": "ia_médecine"
+  },
+  {
+    "text": "Quel est le rôle de l'IA dans l'optimisation des processus de production des ateliers numériques ?",
+    "intent": "ia_rôle"
+  },
+  {
+    "text": "Quels sont les avantages de l'utilisation de l'IA pour la personnalisation des recommandations de contenu numérique ?",
+    "intent": "ia_avantages"
+  },
+  {
+    "text": "Comment l'IA peut-elle être utilisée pour prédire l'évolution des maladies chroniques en médecine ?",
+    "intent": "ia_médecine"
+  },
+  {
+    "text": "Comment concevoir une stratégie d'IA adaptée à la transformation numérique des ateliers numériques ?",
+    "intent": "ia_comment"
+  },
+  {
+    "text": "Quel est le rôle de l'IA dans la détection des comportements frauduleux sur les plateformes numériques ?",
+    "intent": "ia_rôle"
+  },
+  {
+    "text": "Quels sont les avantages de l'utilisation de l'IA pour l'automatisation des processus de service client numérique ?",
+    "intent": "ia_avantages"
+  },
+  {
+    "text": "Comment l'IA peut-elle être utilisée pour la modélisation des maladies et la recherche de traitements en médecine ?",
+    "intent": "ia_médecine"
+  },
+  {
+    "text": "Quel est le rôle de l'IA dans l'amélioration de l'expérience utilisateur des plateformes numériques ?",
+    "intent": "ia_rôle"
+  },
+  {
+    "text": "Quels sont les avantages de l'utilisation de l'IA pour la personnalisation des recommandations de voyage numérique ?",
+    "intent": "ia_avantages"
+  },
+  {
+    "text": "Comment l'IA peut-elle être utilisée pour la détection précoce des maladies graves en médecine ?",
+    "intent": "ia_médecine"
+  },
+  {
+    "text": "Comment intégrer l'IA dans la conception de solutions innovantes pour les ateliers numériques ?",
+    "intent": "ia_comment"
+  },
+  {
+    "text": "Quel est le rôle de l'IA dans la détection des contenus inappropriés sur les plateformes numériques ?",
+    "intent": "ia_rôle"
+  },
+  {
+    "text": "Quels sont les avantages de l'utilisation de l'IA pour l'analyse prédictive des tendances numériques ?",
+    "intent": "ia_avantagess"
+  },
+  {
+    "text": "Comment l'IA peut-elle être utilisée pour la personnalisation des traitements médicaux en fonction des données génétiques ?",
+    "intent": "ia_médecine"
+  },
+  {
+    "text": "Quel est le rôle de l'IA dans la recommandation de formations en ligne pour les ateliers numériques ?",
+    "intent": "ia_rôle_ateliers_numériques"
+  },
+  {
+    "text": "Quels sont les avantages de l'intelligence artificielle en médecine ?",
+    "intent": "ia_avantages"
+  },
+  {
+    "text": "Comment participer aux ateliers en ligne des Potins Numériques ?",
+    "intent": "potins_ateliers"
+  },
+  {
+    "text": "Quand se tiendra le prochain webinaire sur la médecine préventive ?",
+    "intent": "webinaires"
+  },
+  {
+    "text": "Quelles sont les dernières avancées en matière d'intelligence artificielle dans l'industrie automobile ?",
+    "intent": "ia_industrie_automobile"
+  },
+  {
+    "text": "Comment optimiser la gestion des données clients dans un environnement cloud ?",
+    "intent": "cloud_gestion_donnees"
+  },
+  {
+    "text": "Quels outils utiliser pour sécuriser les transactions en ligne sur une plateforme e-commerce ?",
+    "intent": "securite_transactions_en_ligne"
+  },
+  {
+    "text": "Quelles sont les étapes pour développer une application mobile performante sur Android et iOS ?",
+    "intent": "developpement_application_mobile"
+  },
+  {
+    "text": "Comment améliorer l'expérience utilisateur sur un site web de e-learning ?",
+    "intent": "ameliore_experience_utilisateur"
+  },
+  {
+    "text": "Quels sont les impacts de l'intelligence artificielle sur l'industrie de la santé ?",
+    "intent": "ia_impacts_sante"
+  },
+  {
+    "text": "Comment réussir sa transition vers un modèle économique basé sur les données ?",
+    "intent": "transition_modele_economique_donnees"
+  },
+  {
+    "text": "Quelles sont les tendances actuelles en matière de réalité virtuelle et augmentée ?",
+    "intent": "tendances_realite_virtuelle_augmentee"
+  },
+  {
+    "text": "Comment assurer la sécurité des objets connectés dans un environnement domestique ?",
+    "intent": "securite_objets_connectes"
+  },
+  {
+    "text": "Quels sont les enjeux de la transformation digitale pour les entreprises traditionnelles ?",
+    "intent": "enjeux_transformation_digitale"
+  },
+  {
+    "text": "Quelles sont les bonnes pratiques pour optimiser le référencement naturel d'un site web ?",
+    "intent": "optimisation_referencement_naturel"
+  },
+  {
+    "text": "Comment mettre en place une stratégie de marketing digital efficace pour une start-up ?",
+    "intent": "strategie_marketing_digital_start-up"
+  },
+  {
+    "text": "Quels sont les risques liés à l'utilisation des technologies de reconnaissance faciale en sécurité ?",
+    "intent": "risques_reconnaissance_faciale_securite"
+  },
+  {
+    "text": "Quelles sont les étapes pour créer un chatbot intelligent pour un service client en ligne ?",
+    "intent": "creation_chatbot_intelligent"
+  },
+  {
+    "text": "Comment garantir la protection des données personnelles des utilisateurs dans une application mobile ?",
+    "intent": "protection_donnees_personnelles"
+  },
+  {
+    "text": "Quels sont les impacts de la blockchain sur le secteur financier ?",
+    "intent": "blockchain_impacts_secteur_financier"
+  },
+  {
+    "text": "Comment intégrer des fonctionnalités de réalité augmentée dans une application de shopping en ligne ?",
+    "intent": "integration_realite_augmentee_shopping"
+  },
+  {
+    "text": "Quelles sont les meilleures pratiques pour la collecte et l'analyse de données en temps réel ?",
+    "intent": "pratiques_collecte_analyse_donnees_temps_reel"
+  },
+  {
+    "text": "Comment concevoir une interface utilisateur intuitive pour une application de santé connectée ?",
+    "intent": "conception_interface_utilisateur_sante_connectee"
+  },
+  {
+    "text": "Quels sont les avantages du cloud computing pour les petites et moyennes entreprises ?",
+    "intent": "avantages_cloud_computing_pme"
+  },
+  {
+    "text": "Quelles sont les tendances émergentes dans le domaine de l'internet des objets ?",
+    "intent": "tendances_internet_objets"
+  },
+  {
+    "text": "Comment protéger efficacement les données sensibles lors de leur transmission sur un réseau public ?",
+    "intent": "protection_donnees_transmission_reseau_public"
+  },
+  {
+    "text": "Quels sont les défis à relever pour une adoption massive de l'intelligence artificielle dans l'éducation ?",
+    "intent": "defis_adoption_masse_ia_education"
+  },
+  {
+    "text": "Quelles sont les bonnes pratiques pour sécuriser un système de paiement en ligne ?",
+    "intent": "securisation_systeme_paiement_en_ligne"
+  },
+  {
+    "text": "Comment améliorer la performance d'une application web grâce à l'optimisation du code source ?",
+    "intent": "performance_application_web_optimisation_code"
+  },
+  {
+    "text": "Quels sont les impacts de l'automatisation des processus sur l'efficacité opérationnelle des entreprises ?",
+    "intent": "impacts_automatisation_processus_efficacite_operationnelle"
+  },
+  {
+    "text": "Comment mettre en place une stratégie de gestion de contenu efficace pour un site web d'actualités ?",
+    "intent": "strategie_gestion_contenu_site_web_actualites"
+  },
+  {
+    "text": "Quelles sont les meilleures pratiques pour assurer la conformité réglementaire en matière de protection des données ?",
+    "intent": "pratiques_conformite_reglementaire_protection_donnees"
+  },
+  {
+    "text": "Comment favoriser l'adoption des outils collaboratifs au sein d'une entreprise ?",
+    "intent": "adoption_outils_collaboratifs_entreprise"
+  },
+  {
+    "text": "Quels sont les enjeux de la cybersécurité pour les organisations gouvernementales ?",
+    "intent": "enjeux_cybersecurite_organisations_gouvernementales"
+  },
+  {
+    "text": "Quelles sont les étapes clés pour développer une application de réalité virtuelle pour le secteur du tourisme ?",
+    "intent": "developpement_application_realite_virtuelle_tourisme"
+  },
+  {
+    "text": "Comment optimiser la gestion des stocks grâce à un système de gestion d'entrepôt automatisé ?",
+    "intent": "optimisation_gestion_stocks_systeme_automatise"
+  },
+  {
+    "text": "Quels sont les avantages de l'analyse prédictive pour les entreprises de e-commerce ?",
+    "intent": "avantages_analyse_predictive_e-commerce"
+  },
+  {
+    "text": "Quelles sont les tendances actuelles en matière de protection des données personnelles en ligne ?",
+    "intent": "tendances_protection_donnees_personnelles_ligne"
+  },
+  {
+    "text": "Comment concevoir une expérience utilisateur immersive pour une application de réalité augmentée en tourisme ?",
+    "intent": "conception_experience_utilisateur_realite_augmentee_tourisme"
+  },
+  {
+    "text": "Quels sont les défis à relever pour une adoption généralisée de la technologie blockchain dans le secteur de la logistique ?",
+    "intent": "defis_adoption_technologie_blockchain_logistique"
+  },
+  {
+    "text": "Quelles sont les bonnes pratiques pour garantir la confidentialité des données de santé dans les applications mobiles de suivi médical ?",
+    "intent": "pratiques_confidentialite_donnees_sante_applications_suivi_medical"
+  },
+  {
+    "text": "Comment assurer la sécurité des données sensibles stockées dans un cloud public ?",
+    "intent": "securite_donnees_sensibles_cloud_public"
+  },
+  {
+    "text": "Quels sont les impacts de l'intelligence artificielle sur la gestion des ressources humaines dans les entreprises ?",
+    "intent": "ia_impacts_gestion_ressources_humaines"
+  },
+  {
+    "text": "Quelles sont les meilleures pratiques pour protéger les données financières des clients dans une application bancaire en ligne ?",
+    "intent": "pratiques_protection_donnees_financieres_clients_application_bancaire"
+  },
+  {
+    "text": "Comment intégrer des fonctionnalités de chatbot dans un site web de vente en ligne ?",
+    "intent": "integration_fonctionnalites_chatbot_site_web_vente_ligne"
+  },
+  {
+    "text": "Quels sont les avantages de l'automatisation des processus de production dans l'industrie manufacturière ?",
+    "intent": "avantages_automatisation_processus_production_industrie_manufacturiere"
+  },
+  {
+    "text": "Quelles sont les tendances émergentes dans le domaine de la réalité virtuelle appliquée à la formation professionnelle ?",
+    "intent": "tendances_realite_virtuelle_formation_professionnelle"
+  },
+  {
+    "text": "Comment garantir la protection des données personnelles des utilisateurs dans une application de santé connectée ?",
+    "intent": "protection_donnees_personnelles_sante_connectee"
+  },
+  {
+    "text": "Quels sont les défis à relever pour une adoption massive de l'intelligence artificielle dans le secteur de la finance ?",
+    "intent": "defis_adoption_masse_ia_finance"
+  },
+  {
+    "text": "Quelles sont les bonnes pratiques pour sécuriser les échanges de données sensibles entre plusieurs filiales d'une entreprise internationale ?",
+    "intent": "pratiques_securisation_echanges_donnees_sensibles_entreprises_internationales"
+  },
+  {
+    "text": "Comment optimiser l'expérience client sur une plateforme de réservation en ligne grâce à l'analyse des données comportementales ?",
+    "intent": "optimisation_experience_client_plateforme_reservation_ligne_analyse_donnees_comportementales"
+  },
+  {
+    "text": "Quels sont les enjeux de la transformation digitale pour les organismes du secteur public ?",
+    "intent": "enjeux_transformation_digitale_organismes_secteur_public"
+  }
+]

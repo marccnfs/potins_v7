@@ -1,0 +1,45 @@
+{% block javascripts %}
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            const registeredElement = document.getElementById('registered');
+            if (!registeredElement) {
+                console.error("L'élément avec l'ID 'registered' est introuvable.");
+                return;
+            }
+
+            const nb = parseInt(registeredElement.dataset.number, 10);
+
+
+            const addTagFormDeleteLink = (item) => {
+                const removeFormButton = document.createElement('button');
+                removeFormButton.innerText = 'Supprimer';
+                removeFormButton.className = 'btn btn-danger btn-sm';
+
+                item.appendChild(removeFormButton);
+
+                removeFormButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    item.remove();
+                });
+            };
+
+            const addFormToCollection = (collectionClass, index) => {
+                const collectionHolder = document.querySelector(`.${collectionClass}`);
+                const item = document.createElement('li');
+                item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index);
+                collectionHolder.appendChild(item);
+                collectionHolder.dataset.index++;
+                if (index !== 0) {
+                    addTagFormDeleteLink(item);
+                }
+            };
+
+            // Générer automatiquement les formulaires pour les participants
+            let i = 0;
+            while (i < nb) {
+                addFormToCollection('tags', i);
+                i++;
+            }
+        });
+    </script>
+{% endblock %}

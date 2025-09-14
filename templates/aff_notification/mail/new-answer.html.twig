@@ -1,0 +1,48 @@
+{% extends 'layout.html.twig' %}
+
+{% block meta_description %}Messagerie - Répondre{% endblock %}
+
+{% block header_title %}
+    {% block title %}
+        Messagerie - Répondre
+    {% endblock %}
+{% endblock %}
+            
+{% block header_subtitle %}
+    {{ entity.subject }}
+{% endblock %}
+
+{% block content %}
+      
+{% form_theme form 'Form:custom.html.twig' %}
+<div class="row-fluid">
+    <div class="span6 offset3 content-wrapper">
+        <p class="text-center"><small>* : Champs requis</small></p>
+
+        <form id="new-message" action="{{ path('message_create_answer') }}" method="post" {{ form_enctype(form) }} novalidate>
+                        
+            <input type="hidden" name="subject" value="{{ entity.id }}" />
+            
+            <div class="control-group">
+                <label for="message">Message :</label>
+                <textarea id="message" name="message" class="input-large span12"></textarea>
+            </div>
+            <br />
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Répondre</button>
+                <a title="Annuler" href="{{ path('main') }}" class="btn btn-danger">Annuler</a>
+            </div>
+        </form>     
+    </div>
+</div>
+
+<script src="{{ asset('build/js/jquery.validationEngine.js') }}"></script>
+<script src="{{ build/js/jquery.validationEngine-fr.js') }}"></script>
+<script>
+$(document).ready(function() {
+    $("form#new-message").validationEngine();
+    $('form .tooltip-info').tooltip();
+});
+</script>
+{% endblock %}

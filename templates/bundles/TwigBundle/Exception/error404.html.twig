@@ -1,0 +1,10 @@
+{# templates/bundles/TwigBundle/Exception/error404.html.twig #}
+{% extends 'basepublic.html.twig' %}
+
+{% block body %}
+    <h1>Page not found</h1>
+    <p>
+        {{ status_text }}
+        <a href="{{ path('cargo_public') }}">retour</a>.
+    </p>
+{% endblock %}

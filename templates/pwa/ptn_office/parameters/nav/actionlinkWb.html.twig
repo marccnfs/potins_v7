@@ -1,0 +1,33 @@
+<div class="menu-admin">
+    <div class="cbe_cnt">
+        <div class="c_i_b">
+            <div class="in_cibS_f">
+                {% for menu in vartwig.menu %}
+                    {%  if menu.name is same as('conversations') %}
+                        {{ include('iconedyna/bullemsg.html.twig') }}
+                    {%  else %}
+                    <a href="{{ path(menu.route,{'id':website.id}) }}" class="in_cibS-bt" role="button">
+                        <div class="in_cibS-Vd"></div>
+                        <div class="in_cibS-bot"></div>
+                        <span class="in_cibS-spn1">
+                            <span class="in_cibS-spn2">
+                                <div class="in_cibS-svg">
+                                     <i class="{{ menu.i }} mgr_5" aria-hidden="true"></i>
+                                </div>
+                                <span class="tit-cb">{{menu.name}}</span>
+                            </span>
+                        </span>
+                    </a>
+                    {% endif %}
+                    {% if not loop.last %}
+                        <div class="sp_v-lg">
+                            <div class="lea-fx"></div>
+                            <div class="lea-fxY"></div>
+                            <div class="lea-fx"></div>
+                        </div>
+                    {% endif %}
+                {%  endfor %}
+            </div>
+        </div>
+    </div>
+</div>
