@@ -15,9 +15,11 @@ bsCustomFileInput.init();
 
 import './styles/potins.scss';
 import './styles/calendar.css';
+<<<<<<< Updated upstream
 import './styles/pwa.css';
+=======
+>>>>>>> Stashed changes
 import './styles/media.css';
 import './styles/form.css';
 import './styles/articles.css';
-import './styles/bouton.css';
 import './styles/potin.css';

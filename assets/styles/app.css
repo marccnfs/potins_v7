@@ -5366,53 +5366,7 @@ a.logo_wb:hover{
     font-size: 1rem;
     text-align: right;
 }
-.btn:not(:disabled):not(.disabled) {
-    cursor: pointer;
-}
-.btn-outline-secondary {
-    color: #fffbff;
-    background-color: #007bff;
-    background-image: none;
-    border-color: #6c757d;
-}
-.btn_cto {
-    display: inline-block;
-    font-weight: 400;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    border: 1px solid transparent;
-    padding: .375rem .75rem;
-    font-size: 2rem;
-    line-height: 1.5;
-    border-radius: .25rem;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
-.btn_cto-outline-secondary {
-    color: #fffbff;
-    background-color: #007bff;
-    background-image: none;
-    border-color: #6c757d;
-}
-.btn_cto:not(:disabled):not(.disabled) {
-    cursor: pointer;
-}
-.btn_cto-outline-secondary:hover {
-    color: #fff;
-    background-color: #6c757d;
-    border-color: #6c757d;
-}
-.btn_cto:focus, .btn_cto:hover {
-    text-decoration: none;
-}
-.btn-lg{
-    display: block;
-    margin: auto;
-}
+
 .mouv_little{
     position: relative;
     left: 150px;
@@ -5428,40 +5382,6 @@ a.logo_wb:hover{
     margin: auto;
     grid-template-rows: 1fr;
     position: relative;
-}
-.btn_guful{
-    display: block;
-    font-weight: 400;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    border: 1px solid rgb(245, 248, 251);
-    padding: .375rem .75rem;
-    font-size: 1.5rem;
-    line-height: 1.5;
-    border-radius: .25rem;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-    margin: auto;
-}
-.btn_guful-notice{
-    color: #fffbff;
-    background-color: #007bff;
-    background-image: none;
-}
-.btn_guful-notice:hover{
-    color: #fff;
-    background-color: #6c757d;
-    border-color: #6c757d;
-}
-.btn_guful:not(:disabled):not(.disabled) {
-    cursor: pointer;
-}
-.btn_guful:focus, .btn_guful:hover {
-    text-decoration: none;
 }
 .content_aside{
     display: block;

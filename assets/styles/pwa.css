@@ -1,5 +1,8 @@
+<<<<<<< Updated upstream:assets/styles/pwa.css
 
 
+=======
+>>>>>>> Stashed changes:assets/styles/potins_mob.css
 .pwa-potin-pg h1 {
   line-height: 40px;
   font-size: 2rem !important;
@@ -13,7 +16,11 @@
   font-weight: 500 !important;
   line-height: 24px;
 }
+<<<<<<< Updated upstream:assets/styles/pwa.css
 .pwa-potin-pg h5 {
+=======
+.pwa-potin_pg h5 {
+>>>>>>> Stashed changes:assets/styles/potins_mob.css
   line-height: 24px;
   font-size: 1.1rem !important;
 }

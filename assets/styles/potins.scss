@@ -7,6 +7,185 @@
 @import "@fortawesome/fontawesome-free/css/all.min.css";
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap'); /* GENERAL */
 
+// Centralized button styles
+
+// Base button style
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    text-align: center;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+}
+
+// Mixin for color variants
+@mixin btn-variant($bg, $color: #fff, $hover-bg: darken($bg, 10%)) {
+    background-color: $bg;
+    color: $color;
+
+    &:hover {
+        background-color: $hover-bg;
+        color: $color;
+        text-decoration: none;
+    }
+}
+
+// Standard color variants
+.btn-primary { @include btn-variant(#007bff); }
+.btn-danger { @include btn-variant(#dc3545); }
+.btn-success { @include btn-variant(#28a745); }
+.btn-secondary { @include btn-variant(#6c757d); }
+.btn-light { @include btn-variant(#f8f9fa, #333, darken(#f8f9fa, 10%)); }
+.btn-warning { @include btn-variant(#ffc107, black); }
+.btn-edit { @include btn-variant(#007bff); }
+.btn-outline-secondary { @include btn-variant(#007bff, #fffbff); border-color: #6c757d; }
+
+// Utility buttons
+.delete-button {
+    @include btn-variant(#d9534f);
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.btn-upload {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-link,
+.btn-event {
+    @extend .btn;
+    @include btn-variant(#007bff);
+}
+
+.btn-website {
+    @extend .btn;
+    @include btn-variant(#007bff);
+    border-radius: 5px;
+}
+
+.btn-advisor {
+    @extend .btn;
+    @include btn-variant(#007bff);
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.btn-view-pdf {
+    @extend .btn;
+    @include btn-variant(#007bff);
+    padding: 0.3rem 0.8rem;
+    font-size: 0.9rem;
+    border-radius: 5px;
+}
+
+.btn-add {
+    @extend .btn;
+    @include btn-variant(#007bff);
+    margin-bottom: 1rem;
+}
+
+.btn-send {
+    @extend .btn;
+    @include btn-variant(#04a804);
+    height: 49px;
+    margin: 15px;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    font-weight: 300;
+    padding: 12px;
+}
+
+.btn-send:hover {
+    background-color: #e3a30b;
+    color: #fff;
+    transition: all ease;
+}
+
+.btn-send:focus {
+    outline: none;
+}
+
+.btn_resa {
+    @extend .btn;
+    @include btn-variant(#f80018);
+    position: absolute;
+    padding: 10px;
+    font-size: 0.8rem;
+    top: 8px;
+    right: 8px;
+    border-radius: 3px;
+}
+
+.btn_resa:hover {
+    background-color: #d01e2f;
+    color: white;
+    font-weight: 600;
+    transition: all ease;
+}
+
+// Additional variants from app.css
+.btn_cto {
+    @extend .btn;
+    font-size: 2rem;
+}
+
+.btn_cto-outline-secondary {
+    @include btn-variant(#007bff, #fffbff);
+    border: 1px solid #6c757d;
+}
+
+.btn_cto-outline-secondary:hover {
+    background-color: #6c757d;
+    color: #fff;
+    border-color: #6c757d;
+}
+
+.btn_cto:focus,
+.btn_cto:hover {
+    text-decoration: none;
+}
+
+.btn-lg {
+    display: block;
+    margin: auto;
+}
+
+.btn_guful {
+    @extend .btn;
+    font-size: 1.5rem;
+    border: 1px solid rgb(245, 248, 251);
+    margin: auto;
+}
+
+.btn_guful-notice {
+    @include btn-variant(#007bff, #fffbff);
+}
+
+.btn_guful-notice:hover {
+    background-color: #6c757d;
+    color: #fff;
+    border-color: #6c757d;
+}
+
+.btn_guful:not(:disabled):not(.disabled) {
+    cursor: pointer;
+}
+
+.btn_guful:focus,
+.btn_guful:hover {
+    text-decoration: none;
+}
 .poppins-thin {
     font-family: "Poppins", sans-serif;
     font-weight: 100;
