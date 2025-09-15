@@ -52,7 +52,7 @@ Class InitMarket
      */
     public function initAllMarketsThanOneProviderByWeek($provider, $week=null) //todo n'est plus valid market ->module
     {
-            $weekentity = new WeekCalendar($week); 
+            $weekentity = new WeekCalendar($week);
             $start=$weekentity->getDebutweek();
             $end=$weekentity->getFinweek();
             $markets=$this->marketRepository->findMarketByAppointWithPeriod($provider['id'], $start, $end);
@@ -87,7 +87,7 @@ Class InitMarket
     public function initAllMarketsThanOneProviderByMonth($provider, $module, $month=null, $year=null)
     {
             try{
-            $month = new Monthcalendar($month, $year); 
+            $month = new Monthcalendar($month, $year);
             }
             catch (\Exception $e){
               $month=new Monthcalendar();
@@ -106,7 +106,7 @@ Class InitMarket
 
 
 
- 
+
       public function listMarketByWeek($week, $markets)
         {
 
@@ -135,7 +135,7 @@ Class InitMarket
                     // si il y a une periodicité
                 $numrepete=$period->getNumberrept();
                 $numrepete=$numrepete>1 ? $numrepete : 1;
-                $typerepete=$period->getTyperept();
+              $typerepete = $period->getTypeRept();
                 $interval=$startappoint->diff($endappoint)->format('%a'); // plage de validité de la periods en jour
 
                 switch ($typerepete) {
@@ -218,8 +218,8 @@ Class InitMarket
           $typechoice=$period['periodeChoice'];
           if($typechoice!==1){       // si il y a une periodicité
             $numrepete=$period['numberrept'];
-            $numrepete=$numrepete>1 ? $numrepete : 1; 
-            $typerepete=$period['typerept'];
+            $numrepete=$numrepete>1 ? $numrepete : 1;
+            $typerepete = $period['typeRept'];
             $daysweek=explode("-", $period['daysweek']);
             $interval=$startappoint->diff($endappoint)->format('%a'); // plage de validité de la periods en jour
             switch ($typerepete) {       // periodicité par jour
@@ -228,7 +228,7 @@ Class InitMarket
               $endweekmonth=$end->modify('last day of this month');
               $endsunday=$endweekmonth->modify('Sunday');
               if($interval>1){
-                while ($firstday <= $endsunday->modify('+1 day')) { 
+                while ($firstday <= $endsunday->modify('+1 day')) {
                   if($firstday >= $start && $firstday < $endappoint){
                   $dateappoint=$firstday->format('Y-m-d');
                   $daystab=$this->inputapoint($daystab, $market, $dateappoint);
@@ -249,36 +249,36 @@ Class InitMarket
                   $firstday=$startappoint;
                   $lastday=$endappoint;
                    //1er lundi du calendier (mois ou mois-1)
-                  $jourmois=$start->modify('Monday this week');      
+                  $jourmois=$start->modify('Monday this week');
                   while ($jourmois < $end) {  // on boucle sur le mois
 
                     if($jourmois >= $firstday && $lastday >= $jourmois){ //si le debut appoint est egale/sup au jour du mois
-                      foreach ($daysweek as $day) {  //ici on cherche les jour renseigné                     
+                      foreach ($daysweek as $day) {  //ici on cherche les jour renseigné
                         $dayappoint=$jourmois->modify($day);
                         $dateappoint=$dayappoint->format('Y-m-d');
                         $daystab=$this->inputapoint($daystab, $market, $dateappoint);
-                        }   
-                      }                                                       
-                    $jourmois=$jourmois->modify('+'.$numrepete.'week'); 
-                  }                                
+                        }
+                      }
+                    $jourmois=$jourmois->modify('+'.$numrepete.'week');
+                  }
                   break;
 
               case '3':  // periodicité en mois // todo la periodicité en mois et année
-                   $daystab=$this->imputtabmonth($daystab, $interval, $numrepete, $start, $end, $startappoint, $market);               
+                   $daystab=$this->imputtabmonth($daystab, $interval, $numrepete, $start, $end, $startappoint, $market);
               break;
               }
 
           }else{    // si pas de periodicité cas d'un evenement ponctuel
             $dateappoint=$appoint->getStarttime()->format('Y-m-d');
             $daystab=$this->inputapoint($daystab, $market, $dateappoint);
-          } 
+          }
       }// fin du for periode
     } // fin du for sur market
 
     return ['date'=> $month, 'daysmarkets' => $daystab, 'marketation'=>$tabMarket];
-}  
+}
 
- 
+
 
   public function inputapoint($daystab, $market, $dateappoint)
   {
@@ -292,5 +292,5 @@ Class InitMarket
 
 
 
-	
+
 }

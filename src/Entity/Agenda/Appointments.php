@@ -26,8 +26,8 @@ class Appointments
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::INTEGER)]
-    private ?int $TypeAppointment;
+    #[ORM\Column(name: 'type_appointment', type: Types::INTEGER)]
+    private ?int $typeAppointment;
 
     #[Groups(['appointoffre:read', 'formules_post:read','edit_event','event_post:read'])]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
@@ -215,12 +215,12 @@ class Appointments
 
     public function getTypeAppointment(): ?int
     {
-        return $this->TypeAppointment;
+        return $this->typeAppointment;
     }
 
-    public function setTypeAppointment(int $TypeAppointment): self
+    public function setTypeAppointment(int $typeAppointment): self
     {
-        $this->TypeAppointment = $TypeAppointment;
+        $this->typeAppointment = $typeAppointment;
 
         return $this;
     }

@@ -5,7 +5,6 @@ use App\Classe\PublicSession;
 use App\Entity\Games\EscapeGame;
 use App\Entity\Games\MobileLink;
 use App\Entity\Media\Illustration;
-use App\Entity\Users\Participant;
 use App\Form\EscapeUniverseType;
 use App\Form\PuzzleCryptexType;
 use App\Form\PuzzleQrGeoType;
@@ -29,7 +28,6 @@ class WizardController extends AbstractController
 {
     use PublicSession;
 
-
     #[Route('/wizard/start', name: 'wizard_start', methods: ['GET'])]
     #[RequireParticipant]
     public function start(Request $req): Response
@@ -40,7 +38,7 @@ class WizardController extends AbstractController
         $eg = new EscapeGame();
         $eg->setOwner($participant);
         $eg->setTitle('Mon escape game');
-        $eg->setUnivers([ 'contexte'=>'', 'objectif'=>'', 'modeEmploi'=>'', 'guide'=>null ]);
+        $eg->setUniverse([ 'contexte'=>'', 'objectif'=>'', 'modeEmploi'=>'', 'guide'=>null ]);
         $eg->setTitresEtapes([1=>'',2=>'',3=>'',4=>'',5=>'',6=>'']);
         $eg->setPublished(false);
         // $eg->setOwner($this->getUser()); // si tu as une sécu d’édition
@@ -71,12 +69,12 @@ class WizardController extends AbstractController
             $participant->addEscapeGame($eg);
 
             // 2) Univers (array)
-            $u = $eg->getUnivers() ?? [];
+            $u = $eg->getUniverse() ?? [];
             $u['contexte']   = (string)$form->get('context')->getData();
             $u['objectif']   = (string)$form->get('goal')->getData();
             $u['modeEmploi'] = (string)$form->get('howto')->getData();
             $u['guide']      = (string)$form->get('guide')->getData();
-            $eg->setUnivers($u);
+            $eg->setUniverse($u);
 
             // 3) Titres d’étapes (array 1..6)
             $titles = $eg->getTitresEtapes() ?? [1=>'',2=>'',3=>'',4=>'',5=>'',6=>''];
@@ -206,7 +204,7 @@ class WizardController extends AbstractController
         $type = $typeMap[$step] ?? throw $this->createNotFoundException();
 
         $puzzle = $eg->getOrCreatePuzzleByStep($step, $type);
-        $puzzle->setTitle($eg->getTitresEtapes()[$typeMap[$step]]??"");
+        $puzzle->setTitle($eg->getTitresEtapes()[$step]??"");
         $puzzle->setType($type);
         $this->em->persist($puzzle);
         $this->em->flush();

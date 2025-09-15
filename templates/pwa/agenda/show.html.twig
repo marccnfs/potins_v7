@@ -1,4 +1,4 @@
-<div class="container">
+<section class="container">
     <article class="card" style="max-width: 860px; margin: 0 auto;" data-controller="enrollment">
         <header>
             <h1>{{ e.title }}</h1>
@@ -7,7 +7,7 @@
                 {{ startsLocal|date(e.isAllDay ? 'd F Y' : 'd F Y, H:i') }}
                 —
                 {{ endsLocal|date(e.isAllDay ? 'd F Y' : 'H:i') }}
-                • {{ e.category|capitalize }}
+                • {{ e.category.value|capitalize }}
                 {% if e.communeCode is defined %}
                     <span class="badge">{{ e.communeCode|upper }}</span>
                 {% endif %}
@@ -24,12 +24,12 @@
 
         <hr>
 
-        <div class="actions" style="display:flex; gap:8px; flex-wrap:wrap;">
+        <nav class="actions" style="display:flex; gap:8px; flex-wrap:wrap;" aria-label="Actions">
             <a class="btn" href="{{ path('event_ics', {slug: e.slug}) }}">Ajouter à mon agenda (.ics)</a>
             {% if canManage %}
                 <a class="btn btn-light" href="{{ path('event_edit', {slug: e.slug}) }}">Éditer</a>
             {% endif %}
-        </div>
+        </nav>
 
         <hr>
 
@@ -52,4 +52,4 @@
             {% endif %}
         {% endif %}
     </article>
-</div>
+</section>

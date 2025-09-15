@@ -19,7 +19,7 @@ class Calendator
     /**
      * @var PostRepository
      */
-    private $postationRepository;
+    private PostRepository $postationRepository;
 
 
     public function __construct(PostRepository $postationRepository, EntityManagerInterface $em){
@@ -67,7 +67,7 @@ class Calendator
      * @var $appoint Appointments
      * @return array
      */
-    public function initByPost($month, $start, $end, $posts)
+    public function initByPost($month, $start, $end, $posts): array
     {
         $daystab=[];
         $daystabvide=[];
@@ -90,7 +90,7 @@ class Calendator
                 if($typechoice!==1){       // si il y a une periodicité
                     $numrepete=$period->getNumberrept();
                     $numrepete=$numrepete>1 ? $numrepete : 1;
-                    $typerepete=$period->getTyperept();
+                    $typerepete = $period->getTypeRept();
 
                     //$startappoint=$period->getStartPeriod();
                     //$along=$period->getAlongPeriod();
@@ -160,7 +160,7 @@ class Calendator
 
 
 
-    public function inputapoint($daystab, $post, $dateappoint)
+    public function inputapoint($daystab, $post, $dateappoint): array
     {
         if (!isset($daystab[$dateappoint])) {
             $daystab[$dateappoint]=[$post];
@@ -289,7 +289,7 @@ class Calendator
             if($typechoice!==0){       // si il y a une periodicité
                 $numrepete=$period->getNumberrept();
                 $numrepete=$numrepete>1 ? $numrepete : 1;
-                $typerepete=$period->getTyperept();
+                $typerepete = $period->getTypeRept();
 
                 $datedebutcalcul=$period->getStartPeriod();
                 $datefindecalcul=$period->getEndPeriod();

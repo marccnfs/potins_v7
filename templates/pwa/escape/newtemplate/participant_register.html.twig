@@ -4,6 +4,7 @@
     <main class="register-container">
         <h1>👤 Crée ton espace d’escape game</h1>
         <form method="post" action="{{ path('participant_register') }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('participant') }}">
             <label>Ton prénom ou pseudo :</label><br>
             <input type="text" name="prenom" required><br><br>
 

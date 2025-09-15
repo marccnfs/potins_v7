@@ -22,7 +22,7 @@ class CallbacksAppoint
     #[JoinColumn(nullable: false)]
     private ?Appointments $idAppointmentCb;
 
-    #[ORM\Column(type: Types::SMALLINT)]
+    #[ORM\Column(name: 'choice_callback', type: Types::SMALLINT)]
     #[JoinColumn(nullable: false)]
     private ?int $choiceCallback;
 

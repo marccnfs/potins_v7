@@ -2,24 +2,45 @@
 
 namespace App\Controller\Game;
 
+use App\Attribute\RequireParticipant;
 use App\Classe\PublicSession;
-use App\Entity\Games\PlaySession;
 use App\Entity\Games\EscapeGame;
+use App\Entity\Games\PlaySession;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Attribute\RequireParticipant;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Contracts\Service\Attribute\Required;
+
 
 class PlayTelemetryController extends AbstractController
 {
     use PublicSession;
 
+    private CsrfTokenManagerInterface $csrfTokenManager;
+
+    #[Required]
+    public function setCsrfTokenManager(CsrfTokenManagerInterface $csrfTokenManager): void
+    {
+        $this->csrfTokenManager = $csrfTokenManager;
+    }
+
+    private function isCsrfValid(Request $req): bool
+    {
+        $token = $req->headers->get('X-CSRF-TOKEN', '');
+        return $this->csrfTokenManager->isTokenValid(new CsrfToken('play', $token));
+    }
+
     #[Route('/play/{slug}/start', name: 'play_start', methods: ['POST'])]
     #[RequireParticipant]
     public function start(Request $req, EscapeGame $eg): JsonResponse
     {
-        //$participant = $req->attributes->get('_participant');
+        if (!$this->isCsrfValid($req)) {
+            return new JsonResponse(['ok'=>false], 403);
+        }
+
         $participant=$this->currentParticipant($req);
 
         // On peut autoriser 1 session “ouverte” par participant/EG ; sinon on en crée une nouvelle
@@ -39,6 +60,10 @@ class PlayTelemetryController extends AbstractController
     #[RequireParticipant]
     public function hint(Request $req, EscapeGame $eg): JsonResponse
     {
+        if (!$this->isCsrfValid($req)) {
+            return new JsonResponse(['ok'=>false], 403);
+        }
+
         $sid = $req->getSession()->get('play_session_id_'.$eg->getId());
         if (!$sid) return new JsonResponse(['ok'=>false], 400);
 
@@ -55,6 +80,10 @@ class PlayTelemetryController extends AbstractController
     #[RequireParticipant]
     public function finish(Request $req, EscapeGame $eg): JsonResponse
     {
+        if (!$this->isCsrfValid($req)) {
+            return new JsonResponse(['ok'=>false], 403);
+        }
+
         $sid = $req->getSession()->get('play_session_id_'.$eg->getId());
         if (!$sid) return new JsonResponse(['ok'=>false], 400);
 

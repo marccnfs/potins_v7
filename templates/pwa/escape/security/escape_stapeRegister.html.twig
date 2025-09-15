@@ -11,6 +11,7 @@
     <section id="register-form" class="hidden">
         <h2>🆕 Inscription</h2>
         <form method="post" action="{{ path('participant_register') }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('participant') }}">
             <label>Ton prénom ou pseudo :</label><br>
             <input type="text" name="prenom" required><br><br>
 
@@ -27,6 +28,7 @@
     <section id="login-form" class="hidden">
         <h2>🔐 Connexion</h2>
         <form method="post" action="{{ path('participant_login') }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('participant') }}">
             <label>Ton prénom ou pseudo :</label><br>
             <input type="text" name="prenom" required><br><br>
 

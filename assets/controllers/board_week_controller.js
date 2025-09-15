@@ -18,25 +18,32 @@ export default class extends Controller {
         url.searchParams.set('from', this.fmtDate(monday));
         url.searchParams.set('to', this.fmtDate(saturday));
 
-        const res = await fetch(url.toString());
-        const events = await res.json();
+        try {
+            const res = await fetch(url.toString());
+            if (!res.ok) throw new Error(res.statusText);
+            const events = await res.json();
 
-        // structure: {2:{am:[], pm:[]}, 3:{...}, 4:{...}, 5:{...}, 6:{...}} -> Tue..Sat
-        const byDay = {2: {am:[], pm:[]}, 3:{am:[], pm:[]}, 4:{am:[], pm:[]}, 5:{am:[], pm:[]}, 6:{am:[], pm:[]}};
+            // structure: {2:{am:[], pm:[]}, 3:{...}, 4:{...}, 5:{...}, 6:{...}} -> Tue..Sat
+            const byDay = {2: {am:[], pm:[]}, 3:{am:[], pm:[]}, 4:{am:[], pm:[]}, 5:{am:[], pm:[]}, 6:{am:[], pm:[]}};
 
-        (events || []).forEach(e => {
-            // parse "dd/mm HH:ii" venant du feed
-            const [ds, hs] = (e.startsAtLocal || '').split(' ');
-            const day = this.dayOfWeekFromDateString(ds); // 0=Sun..6=Sat
-            if (day < 2 || day > 6) return; // on garde Tue..Sat
+            (events || []).forEach(e => {
+                // parse "dd/mm HH:ii" venant du feed
+                const [ds, hs] = (e.startsAtLocal || '').split(' ');
+                const day = this.dayOfWeekFromDateString(ds); // 0=Sun..6=Sat
+                if (day < 2 || day > 6) return; // on garde Tue..Sat
 
-            const isMorning = this.isMorning(hs);
-            const slot = isMorning ? 'am' : 'pm';
+                const isMorning = this.isMorning(hs);
+                const slot = isMorning ? 'am' : 'pm';
 
-            byDay[day][slot].push(e);
-        });
+                byDay[day][slot].push(e);
+            });
 
-        this.render(byDay);
+            this.render(byDay);
+        } catch (err) {
+            console.error('BoardWeek load error', err);
+            this.gridTarget.innerHTML = `<p class="muted">Erreur lors du chargement des événements.</p>`;
+            document.querySelector('.toast-stack')?.controller?.push('Impossible de charger les événements.');
+        }
     }
 
     render(byDay) {

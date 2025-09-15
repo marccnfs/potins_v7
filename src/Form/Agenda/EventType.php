@@ -3,6 +3,8 @@
 namespace App\Form\Agenda;
 
 use App\Entity\Agenda\Event;
+use App\Enum\EventCategory;
+use App\Enum\EventVisibility;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type as F;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -60,22 +62,25 @@ final class EventType extends AbstractType
                 'label' => 'Capacité (laisser vide = illimité)',
                 'required' => false,
             ])
-            ->add('category', F\ChoiceType::class, [
+            ->add('category', F\EnumType::class, [
                 'label' => 'Catégorie',
-                'choices' => [
-                    'Atelier' => 'atelier',
-                    'RDV' => 'rdv',
-                    'Externe' => 'externe',
-                    'Autre' => 'autre',
-                ],
+                'class' => EventCategory::class,
+                'choice_label' => fn(EventCategory $c) => match ($c) {
+                    EventCategory::ATELIER => 'Atelier',
+                    EventCategory::RDV => 'RDV',
+                    EventCategory::EXTERNE => 'Externe',
+                    EventCategory::AUTRE => 'Autre',
+                },
+
             ])
-            ->add('visibility', F\ChoiceType::class, [
+            ->add('visibility', F\EnumType::class, [
                 'label' => 'Visibilité',
-                'choices' => [
-                    'Public' => 'public',
-                    'Non référencé' => 'unlisted',
-                    'Privé' => 'private',
-                ],
+                'class' => EventVisibility::class,
+                'choice_label' => fn(EventVisibility $v) => match ($v) {
+                    EventVisibility::PUBLIC => 'Public',
+                    EventVisibility::UNLISTED => 'Non référencé',
+                    EventVisibility::PRIVATE => 'Privé',
+                },
             ])
             ->add('published', F\CheckboxType::class, [
                 'label' => 'Publié',

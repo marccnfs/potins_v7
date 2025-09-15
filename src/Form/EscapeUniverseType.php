@@ -18,7 +18,7 @@ class EscapeUniverseType extends AbstractType
     {
         /** @var EscapeGame $eg */
         $eg = $options['eg'];
-        $univers = is_array($eg->getUnivers()) ? $eg->getUnivers() : [];
+        $univers = is_array($eg->getUniverse()) ? $eg->getUniverse() : [];
         $stepTitles = $eg->getTitresEtapes() ?? [1=>'',2=>'',3=>'',4=>'',5=>'',6=>''];
 
         $b
@@ -28,15 +28,15 @@ class EscapeUniverseType extends AbstractType
             ])
             ->add('context', TextareaType::class, [
                 'mapped'=>false, 'required'=>false, 'attr'=>['rows'=>4],
-                'data'=>$univers['contexte'] ?? '', 'label'=>'Contexte / histoire',
+                'data'=>$universe['contexte'] ?? '', 'label'=>'Contexte / histoire',
             ])
             ->add('goal', TextType::class, [
                 'mapped'=>false, 'required'=>false,
-                'data'=>$univers['objectif'] ?? '', 'label'=>'Objectif du joueur',
+                'data'=>$universe['objectif'] ?? '', 'label'=>'Objectif du joueur',
             ])
             ->add('howto', TextareaType::class, [
                 'mapped'=>false, 'required'=>false, 'attr'=>['rows'=>3],
-                'data'=>$univers['modeEmploi'] ?? '', 'label'=>'Mode d’emploi (facultatif)',
+                'data'=>$universe['modeEmploi'] ?? '', 'label'=>'Mode d’emploi (facultatif)',
             ])
             ->add('guide', ChoiceType::class, [
                 'mapped'=>false, 'required'=>false, 'expanded'=>false,
@@ -46,7 +46,7 @@ class EscapeUniverseType extends AbstractType
                     '👻 Fantôme'=>'Fantôme',
                     '🔬 Scientifique'=>'Scientifique',
                 ],
-                'data'=>$univers['guide'] ?? null,
+                'data'=>$universe['guide'] ?? null,
                 'placeholder'=>'— Choisir un guide —',
                 'label'=>'Personnage guide',
             ])

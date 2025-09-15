@@ -5,7 +5,10 @@ namespace App\Controller\Agenda;
 use App\Classe\PublicSession;
 use App\Entity\Agenda\Event;
 use App\Entity\Users\Participant;
+use App\Enum\EventCategory;
+use App\Enum\EventStatus;
 use App\Lib\Links;
+use App\Repository\EventRepository;
 use App\Service\Agenda\IcsExporter;
 use Doctrine\ORM\EntityManagerInterface as EM;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,17 +16,25 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-// use App\Security\RequireParticipant; // si tu veux protéger certaines routes
 
-final class AgendaController extends AbstractController
+     class AgendaController extends AbstractController
+
 {
     use PublicSession;
 
     #[Route('/agenda', name: 'agenda_index')]
     public function index(Request $req): Response
     {
-        $view = $req->query->get('view', 'month'); // month|week|day
-        $date = $req->query->get('date', (new \DateTimeImmutable('today'))->format('Y-m-d'));
+        $allowedViews = ['month', 'week', 'day'];
+        $viewParam = $req->query->get('view');
+        $view = \in_array($viewParam, $allowedViews, true) ? $viewParam : 'month';
+
+        $today = new \DateTimeImmutable('today');
+        $dateParam = $req->query->get('date');
+        $date = \DateTimeImmutable::createFromFormat('Y-m-d', $dateParam ?? '') ?: false;
+        if (!$date || $date->format('Y-m-d') !== $dateParam) {
+            $date = $today;
+        }
 
         $vartwig=$this->menuNav->templatepotins(
             Links::ACCUEIL,
@@ -38,12 +49,12 @@ final class AgendaController extends AbstractController
             'vartwig'=>$vartwig,
             'directory'=>'agenda',
             'view' => $view,
-            'date' => new \DateTimeImmutable($date),
+            'date' => $date,
         ]);
     }
 
     #[Route('/agenda/feed.json', name: 'agenda_feed', methods: ['GET'])]
-    public function feed(Request $req, EM $em): JsonResponse
+    public function feed(Request $req, EventRepository $eventRepository): JsonResponse
     {
         $from = $req->query->get('from'); // YYYY-MM-DD (local Europe/Paris)
         $to   = $req->query->get('to');
@@ -53,31 +64,25 @@ final class AgendaController extends AbstractController
         }
 
         $tzParis = new \DateTimeZone('Europe/Paris');
-        $fromLocal = (new \DateTimeImmutable($from.' 00:00:00', $tzParis));
-        $toLocal   = (new \DateTimeImmutable($to.' 23:59:59', $tzParis));
+        $fromDate = \DateTimeImmutable::createFromFormat('Y-m-d', $from, $tzParis);
+        $toDate   = \DateTimeImmutable::createFromFormat('Y-m-d', $to, $tzParis);
+        if (!$fromDate || $fromDate->format('Y-m-d') !== $from || !$toDate || $toDate->format('Y-m-d') !== $to) {
+            return new JsonResponse(['error' => 'invalid from/to'], 400);
+        }
+
+        $fromLocal = $fromDate->setTime(0, 0, 0);
+        $toLocal   = $toDate->setTime(23, 59, 59);
 
         // Converti en UTC pour requête
         $fromUtc = $fromLocal->setTimezone(new \DateTimeZone('UTC'));
         $toUtc   = $toLocal->setTimezone(new \DateTimeZone('UTC'));
 
-        $qb = $em->getRepository(Event::class)->createQueryBuilder('e')
-            ->andWhere('e.published = true')
-            ->andWhere('e.status = :st')->setParameter('st', 'scheduled')
-            ->andWhere('e.startsAt <= :to')->setParameter('to', $toUtc)
-            ->andWhere('e.endsAt >= :from')->setParameter('from', $fromUtc)
-            ->orderBy('e.startsAt', 'ASC');
-
-        // (Option) filtrer par category ?sourceType ?visibility
-        if ($cat = $req->query->get('category')) {
-            $qb->andWhere('e.category = :cat')->setParameter('cat', $cat);
-        }
-
-        if ($commune = $req->query->get('commune')) {
-            $qb->andWhere('e.communeCode = :cc')->setParameter('cc', $commune);
-        }
-
-
-        $events = $qb->getQuery()->getResult();
+        $events = $eventRepository->findPublishedInRange(
+            $fromUtc,
+            $toUtc,
+            $req->query->get('category'),
+            $req->query->get('commune')
+        );
 
         // Sérialisation légère (format local FR)
         $out = [];
@@ -90,7 +95,7 @@ final class AgendaController extends AbstractController
             $out[] = [
                 'slug'          => $e->getSlug(),
                 'title'         => $e->getTitle(),
-                'category'      => $e->getCategory(),
+                'category'      => $e->getCategory()->value,
                 'startsAtLocal' => $sLocal->format('d/m H:i'),
                 'endsAtLocal'   => $eLocal->format('d/m H:i'),
                 'locationName'  => $e->getLocationName(),
@@ -144,9 +149,7 @@ final class AgendaController extends AbstractController
 
     private function getUserParticipant(): ?Participant
     {
-        // Adapte à ton système: tu as un Participant en session via #[RequireParticipant]
-        // Ici on tente depuis la session Symfony (ex: $request->getSession()->get('_participant')).
-        $session = $this->get('request_stack')->getSession();
+        $session = $this->requestStack->getSession();
         return $session->get('_participant'); // cast si besoin
     }
 

@@ -57,18 +57,39 @@ export default class extends Controller {
             if (this.autocheckValue) this.check();
         };
 
-        up.addEventListener("click", ()=> step(1));
-        down.addEventListener("click", ()=> step(-1));
-        ring.addEventListener("wheel", (e)=>{ e.preventDefault(); step(e.deltaY>0?-1:1); }, {passive:false});
-        ring.tabIndex = 0;
-        ring.addEventListener("keydown", (e)=>{
+        const onUp = ()=> step(1);
+        const onDown = ()=> step(-1);
+        const onWheel = (e)=>{ e.preventDefault(); step(e.deltaY>0?-1:1); };
+        const wheelOpts = {passive:false};
+        const onKeydown = (e)=>{
             if (e.key === "ArrowUp") { e.preventDefault(); step(1); }
             if (e.key === "ArrowDown") { e.preventDefault(); step(-1); }
-        });
+        };
+
+        up.addEventListener("click", onUp);
+        down.addEventListener("click", onDown);
+        ring.addEventListener("wheel", onWheel, wheelOpts);
+        ring.tabIndex = 0;
+        ring.addEventListener("keydown", onKeydown);
+
+        ring._listeners = [
+            [up, "click", onUp],
+            [down, "click", onDown],
+            [ring, "wheel", onWheel, wheelOpts],
+            [ring, "keydown", onKeydown]
+        ];
 
         render();
         ring.append(up, val, down);
         return ring;
+    }
+
+    disconnect(){
+        this.element.querySelectorAll(".ring").forEach(ring=>{
+            (ring._listeners || []).forEach(([el, evt, fn, opts])=>{
+                el.removeEventListener(evt, fn, opts);
+            });
+        });
     }
 
     currentWord(){ return this.state.map(i => this.alphabet[i]).join(""); }

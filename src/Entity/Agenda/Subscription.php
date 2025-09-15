@@ -2,15 +2,13 @@
 
 namespace App\Entity\Agenda;
 
-use App\Entity\Admin\OrderProducts;
+
 use App\Entity\Admin\WbOrderProducts;
 use App\Entity\Module\PostEvent;
-use App\Entity\Users\Participant;
 use App\Repository\SubscriptionRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\OneToOne;
 
 
 #[ORM\Entity(repositoryClass: SubscriptionRepository::class)]
@@ -22,8 +20,9 @@ class Subscription
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::INTEGER)]
-    private ?int $TypeSubscription;
+    #[ORM\Column(name: 'type_subscription', type: Types::INTEGER)]
+    private ?int $typeSubscription;
+
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTime $starttime;
@@ -44,7 +43,7 @@ class Subscription
 
     public function __construct()
     {
-        $this->TypeSubscription= 1;
+        $this->typeSubscription = 1;
     }
 
     public function getId(): ?int
@@ -54,13 +53,12 @@ class Subscription
 
     public function getTypeSubscription(): ?int
     {
-        return $this->TypeSubscription;
+        return $this->typeSubscription;
     }
 
-    public function setTypeSubscription(int $TypeSubscription): self
+    public function setTypeSubscription(int $typeSubscription): self
     {
-        $this->TypeSubscription = $TypeSubscription;
-
+        $this->typeSubscription = $typeSubscription;
         return $this;
     }
 

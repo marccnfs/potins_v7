@@ -108,7 +108,7 @@ class PlayController extends AbstractController
 
     }
     // src/Controller/PlayController.php
-    #[Route('/play/{slug}/the-end', name: 'play_the_end')]
+    #[Route('/{slug}/the-end', name: 'play_the_end')]
     #[RequireParticipant]
     public function theEnd(EscapeGameRepository $repo, string $slug): Response
     {

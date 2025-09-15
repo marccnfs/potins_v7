@@ -38,7 +38,7 @@ class CatalogController extends AbstractController
             ->andWhere('e.published = :pub')->setParameter('pub', true);
 
         if ($q !== '') {
-            // recherche simple : titre ou univers (si univers est stocké en JSON/array, adapter selon mapping)
+            // recherche simple : titre ou univers (si universe est stocké en JSON/array, adapter selon mapping)
             $qb->andWhere('LOWER(e.title) LIKE :q OR LOWER(e.shareSlug) LIKE :q')
                 ->setParameter('q', '%'.mb_strtolower($q).'%');
         }
@@ -63,6 +63,16 @@ class CatalogController extends AbstractController
         }
 
         // pagination
+        /*
+        $qbCount = clone $qb;
+        $qbCount
+            ->resetDQLPart('orderBy')   // <-- IMPORTANT
+            ->resetDQLPart('groupBy')   // au cas où
+            ->resetDQLPart('having');   // au cas où
+        $perPage = 9;
+        $page    = max(1, (int) $req->query->get('page', 1));
+        */
+
         $qb->setFirstResult(($page - 1) * $perPage)
             ->setMaxResults($perPage);
 

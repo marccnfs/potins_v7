@@ -29,9 +29,9 @@ class Periods
     #[JoinColumn(nullable: false)]
     private ?int $numberrept;
 
-    #[ORM\Column(type: Types::SMALLINT)]
+    #[ORM\Column(name: 'type_rept', type: Types::SMALLINT)]
     #[JoinColumn(nullable: true)]
-    private ?int $typerept;
+    private ?int $typeRept;
 
     #[ORM\Column]
     #[JoinColumn(nullable: true)]
@@ -77,14 +77,14 @@ class Periods
         return $this;
     }
 
-    public function getTyperept(): ?int
+    public function getTypeRept(): ?int
     {
-        return $this->typerept;
+        return $this->typeRept;
     }
 
-    public function setTyperept(?int $typerept): self
+    public function setTypeRept(?int $typeRept): self
     {
-        $this->typerept = $typerept;
+        $this->typeRept = $typeRept;
 
         return $this;
     }
@@ -149,5 +149,5 @@ class Periods
         return $this;
     }
 
-    
+
 }

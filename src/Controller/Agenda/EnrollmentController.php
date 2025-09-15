@@ -2,10 +2,12 @@
 
 namespace App\Controller\Agenda;
 
+use App\Classe\PublicSession;
 use App\Entity\Agenda\Enrollment;
 use App\Entity\Agenda\Event;
-use App\Entity\Users\Participant;
-use Doctrine\ORM\EntityManagerInterface as EM;
+use App\Enum\EventStatus;
+use App\Service\ParticipantContext;
+use Doctrine\DBAL\LockMode;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,84 +15,120 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class EnrollmentController extends AbstractController
 {
+    use PublicSession;
+
     #[Route('/events/{slug}/enroll', name: 'event_enroll', methods: ['POST'])]
-    public function enroll(string $slug, Request $req, EM $em): RedirectResponse
+    public function enroll(string $slug, Request $req,ParticipantContext $participantContext ): RedirectResponse
     {
         $this->denyUnlessCsrf($req, 'enroll_'.$slug);
 
-        $event = $em->getRepository(Event::class)->findOneBy(['slug' => $slug]);
-        if (!$event || !$event->isPublished() || $event->getStatus() !== 'scheduled') {
+        $event = $this->em->getRepository(Event::class)->findOneBy(['slug' => $slug]);
+        if (!$event || !$event->isPublished() || $event->getStatus() !== EventStatus::SCHEDULED) {
             throw $this->createNotFoundException();
         }
-        $p = $this->getParticipantOrFail();
+
+        $p = $participantContext->getParticipantOrFail();
 
         // capacité
-        $capacity = $event->getCapacity();
-        $repo = $em->getRepository(Enrollment::class);
-        $confirmedCount = $repo->count(['event' => $event, 'status' => 'confirmed']);
+/* $capacity = $event->getCapacity();
+$repo = $this->em->getRepository(Enrollment::class);
+$confirmedCount = $repo->count(['event' => $event, 'status' => 'confirmed']);
+*/
+        return $this->em->wrapInTransaction(function () use ($event, $p, $slug) {
+            $this->em->lock($event, LockMode::PESSIMISTIC_WRITE);
 
-        $status = 'confirmed';
-        if ($capacity !== null && $confirmedCount >= $capacity) {
-            $status = 'waitlist';
-        }
+/*
+$status = 'confirmed';
 
-        $existing = $repo->findOneBy(['event' => $event, 'participant' => $p]);
-        if ($existing) {
-            $this->addFlash('info', 'Déjà inscrit(e).');
+if ($capacity !== null && $confirmedCount >= $capacity) {
+$status = 'waitlist';
+}
+*/
+            $capacity = $event->getCapacity();
+            $repo = $this->em->getRepository(Enrollment::class);
+            $confirmedCount = $repo->count(['event' => $event, 'status' => 'confirmed']);
+/*
+$existing = $repo->findOneBy(['event' => $event, 'participant' => $p]);
+if ($existing) {
+$this->addFlash('info', 'Déjà inscrit(e).');
+return $this->redirectToRoute('event_show', ['slug' => $slug]);
+}
+*/
+            $status = 'confirmed';
+            if ($capacity !== null && $confirmedCount >= $capacity) {
+                $status = 'waitlist';
+            }
+
+            $existing = $repo->findOneBy(['event' => $event, 'participant' => $p]);
+            if ($existing) {
+                $this->addFlash('info', 'Déjà inscrit(e).');
+                return $this->redirectToRoute('event_show', ['slug' => $slug]);
+            }
+            $enr = new Enrollment($event, $p, $status);
+            $this->em->persist($enr);
+            $this->em->flush();
+/*
+$enr = new Enrollment($event, $p, $status);
+$this->em->persist($enr);
+$this->em->flush();
+*/
+            $this->addFlash('success', $status === 'confirmed' ? 'Inscription confirmée.' : 'Liste d’attente.');
             return $this->redirectToRoute('event_show', ['slug' => $slug]);
-        }
-
-        $enr = new Enrollment($event, $p, $status);
-        $em->persist($enr);
-        $em->flush();
-
-        $this->addFlash('success', $status === 'confirmed' ? 'Inscription confirmée.' : 'Liste d’attente.');
-        return $this->redirectToRoute('event_show', ['slug' => $slug]);
+        });
     }
 
     #[Route('/events/{slug}/cancel-enrollment', name: 'event_cancel_enrollment', methods: ['POST'])]
-    public function cancel(string $slug, Request $req, EM $em): RedirectResponse
+    public function cancel(string $slug, Request $req, ParticipantContext $participantContext): RedirectResponse
     {
         $this->denyUnlessCsrf($req, 'cancel_enrollment_'.$slug);
 
-        $event = $em->getRepository(Event::class)->findOneBy(['slug' => $slug]);
+        $event = $this->em->getRepository(Event::class)->findOneBy(['slug' => $slug]);
         if (!$event) { throw $this->createNotFoundException(); }
 
-        $p = $this->getParticipantOrFail();
-        $repo = $em->getRepository(Enrollment::class);
+        $p = $participantContext->getParticipantOrFail();
+        $repo = $this->em->getRepository(Enrollment::class);
+        /*
         $enr = $repo->findOneBy(['event' => $event, 'participant' => $p]);
 
         if (!$enr) {
             $this->addFlash('info', 'Vous n’êtes pas inscrit(e).');
             return $this->redirectToRoute('event_show', ['slug' => $slug]);
         }
+        */
+        return $this->em->wrapInTransaction(function () use ($event, $p, $repo, $slug) {
+            $this->em->lock($event, LockMode::PESSIMISTIC_WRITE);
+/*
+        $this->em->remove($enr);
+        $this->em->flush();
+*/
+            $enr = $repo->findOneBy(['event' => $event, 'participant' => $p]);
 
-        $em->remove($enr);
-        $em->flush();
-
-        // Promotion premier en liste d’attente si capacité
+/*        // Promotion premier en liste d’attente si capacité
         if ($event->getCapacity() !== null) {
             $wait = $repo->findBy(['event' => $event, 'status' => 'waitlist'], ['createdAt' => 'ASC'], 1);
             if ($wait) {
                 $w = $wait[0];
                 $w->setStatus('confirmed');
-                $em->flush();
+                $this->em->flush();*/
+            if (!$enr) {
+                $this->addFlash('info', 'Vous n’êtes pas inscrit(e).');
+                return $this->redirectToRoute('event_show', ['slug' => $slug]);
             }
-        }
+            $this->em->remove($enr);
+            $this->em->flush();
 
-        $this->addFlash('success', 'Inscription annulée.');
-        return $this->redirectToRoute('event_show', ['slug' => $slug]);
-    }
+            if ($event->getCapacity() !== null) {
+                $wait = $repo->findBy(['event' => $event, 'status' => 'waitlist'], ['createdAt' => 'ASC'], 1);
+                if ($wait) {
+                    $w = $wait[0];
+                    $w->setStatus('confirmed');
+                    $this->em->flush();
+                }
+            }
 
-    private function getParticipantOrFail(): Participant
-    {
-        /** @var \Symfony\Component\HttpFoundation\Session\SessionInterface $s */
-        $s = $this->get('request_stack')->getSession();
-        $p = $s->get('_participant');
-        if (!$p instanceof Participant) {
-            throw $this->createAccessDeniedException('Participant requis.');
-        }
-        return $p;
+            $this->addFlash('success', 'Inscription annulée.');
+            return $this->redirectToRoute('event_show', ['slug' => $slug]);
+        });
     }
 
     private function denyUnlessCsrf(\Symfony\Component\HttpFoundation\Request $req, string $id): void

@@ -24,9 +24,16 @@ export default class extends Controller {
         const cat = this.currentCategory();
         if (cat) url.searchParams.set('category', cat);
 
-        const res = await fetch(url.toString());
-        const events = await res.json();
-        this.render(events);
+        try {
+            const res = await fetch(url.toString());
+            if (!res.ok) throw new Error(res.statusText);
+            const events = await res.json();
+            this.render(events);
+        } catch (err) {
+            console.error('Agenda load error', err);
+            this.gridTarget.innerHTML = `<p class="muted">Erreur lors du chargement des événements.</p>`;
+            document.querySelector('.toast-stack')?.controller?.push('Impossible de charger les événements.');
+        }
     }
 
     render(events) {

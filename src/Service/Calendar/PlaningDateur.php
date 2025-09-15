@@ -10,15 +10,15 @@ use \DateInterval;
 
 Class PlaningDateur
 {
-      
+
 
     public function initDates($form, $addate=null)
-    {             
+    {
                 $timenow = new DateTime();
-                
-                if(!isset($addate)){    
+
+                if(!isset($addate)){
                  // pas de date en get
-                 
+
                 $form->get('datedebut')->setData($timenow); //$this->initDatedebut($datenow->format('Y-m-d'));
                 $form->get('heuredebut')->setData($timenow); //$this->initHeuredebut($timenow->format('H:i:s'));
                 $form->get('datefin')->setData( $timenow); //$this->initDatefin($datenow->format('Y-m-d'));
@@ -38,12 +38,12 @@ Class PlaningDateur
 
         public function initTimes($form,$appointment=null, $period=null,  $addate=null)
         {
-                
+
                 $timenow = new DateTime();
-                
-                if(!isset($addate)){    
+
+                if(!isset($addate)){
                  // pas de date en get
-                 
+
                 $form->get('dateStartPeriod')->setData($timenow); //$this->initDatedebut($datenow->format('Y-m-d'));
                 $form->get('heuredebut')->setData($timenow); //$this->initHeuredebut($timenow->format('H:i:s'));
                 $form->get('dateEndPeriod')->setData( $timenow); //$this->initDatefin($datenow->format('Y-m-d'));
@@ -63,12 +63,12 @@ Class PlaningDateur
 
         public function initMarket($form, $appointment=null, $period=null,  $addate=null)
         {
-                
+
                 $timenow = new DateTime();
-                
-                if(!isset($addate)){    
+
+                if(!isset($addate)){
                  // pas de date en get
-                 
+
                 //$form->get('dateStartPeriod')->setData($timenow); //$this->initDatedebut($datenow->format('Y-m-d'));
                 $form->get('heuredebut')->setData($timenow); //$this->initHeuredebut($timenow->format('H:i:s'));
                 //$form->get('dateEndPeriod')->setData( $timenow); //$this->initDatefin($datenow->format('Y-m-d'));
@@ -85,7 +85,7 @@ Class PlaningDateur
 
                 return $form;
         }
-   
+
 
         public function initfinalong($appoint)
         {
@@ -113,7 +113,7 @@ Class PlaningDateur
         {
                 return DateTime::createFromFormat('Y-m-d' ,$datefin);
         }
-        public function initHeurefin($heurefin) 
+        public function initHeurefin($heurefin)
         {
                 return DateTime::createFromFormat('H:i:s' ,$heurefin);
         }
@@ -134,83 +134,83 @@ Class PlaningDateur
                 return $form;
         }
 
-        public function recDatedebut($editdate) 
+        public function recDatedebut($editdate)
         {
                 return $editdate->format('Y-m-d');
-                
+
         }
         public function recHeuredebut ($editdate)
         {
                 return $editdate->format('H:i:s');
-                
-        }     
-        public function rectDatefin($editdatefin) 
+
+        }
+        public function rectDatefin($editdatefin)
         {
                 return $editdatefin->format('Y-m-d');
-                
+
         }
-        public function recHeurefin($editdatefin) 
+        public function recHeurefin($editdatefin)
         {
                 return $editdatefin->format('H:i:s');
-               
+
         }
 
         public function convertorDateStringStart($form)
-        {       
-                $okdate = DateTime::createFromFormat('Y-m-d H:i:s', ($form->get('datedebut')->getData()->format('Y-m-d')).' '.($form->get('heuredebut')->getData()->format('H:i:s')));  
-                 return $okdate;        
+        {
+                $okdate = DateTime::createFromFormat('Y-m-d H:i:s', ($form->get('datedebut')->getData()->format('Y-m-d')).' '.($form->get('heuredebut')->getData()->format('H:i:s')));
+                 return $okdate;
         }
 
         public function convertorDateStringEnd($form)
-        {                             
+        {
                 return DateTime::createFromFormat('Y-m-d H:i:s', ($form->get('datefin')->getData()->format('Y-m-d')).' '.($form->get('heurefin')->getData()->format('H:i:s')));
         }
 
          public function convertorDateStringPeridoStart($form)
-        {       
-                $okdate = DateTime::createFromFormat('Y-m-d H:i:s', ($form->get('dateStartPeriod')->getData()->format('Y-m-d')).' '.($form->get('dateStartPeriod')->getData()->format('H:i:s')));  
-                 return $okdate;        
+        {
+                $okdate = DateTime::createFromFormat('Y-m-d H:i:s', ($form->get('dateStartPeriod')->getData()->format('Y-m-d')).' '.($form->get('dateStartPeriod')->getData()->format('H:i:s')));
+                 return $okdate;
         }
 
         public function convertorDateStringPeriodEnd($form)
-        {                             
+        {
                 return DateTime::createFromFormat('Y-m-d H:i:s', ($form->get('dateEndPeriod')->getData()->format('Y-m-d')).' '.($form->get('dateEndPeriod')->getData()->format('H:i:s')));
         }
 
-       
+
 
         public function addAppointMarket($appointment, $form)
-        { 
-            $durestart=$form->get('heuredebut')->getData();  
+        {
+            $durestart=$form->get('heuredebut')->getData();
             $dureend=$form->get('heurefin')->getData();
             $appointment->setStarttime($durestart);
             $appointment->setAlongtime($dureend->diff($durestart)->format('%H:%I:%S'));
             $appointment->setStatut(true);
             $appointment->setConfirmed(false);
             $appointment->setName($form->get('name')->getData());
-            
-            return $appointment;       
+
+            return $appointment;
         }
 
         public function addAppointRdv($appointment, $form)
-        { 
-            $durestart=$form->get('heuredebut')->getData();  
+        {
+            $durestart=$form->get('heuredebut')->getData();
             $dureend=$form->get('heurefin')->getData();
             $appointment->setStarttime($durestart);
             $appointment->setAlongtime($dureend->diff($durestart)->format('%H:%I:%S'));
             $appointment->setStatut(true);
             $appointment->setConfirmed(false);
             $textname="rendez-vous avec ".$form->get('name')->getData()."";
-            
-            return $appointment;       
+
+            return $appointment;
         }
 
 
-        public function addCallBack($appointment, $callbackappoint)  
-        { 
+        public function addCallBack($appointment, $callbackappoint)
+        {
             $instCallbacksAppoint=new CallbacksAppoint();
-            $instCallbacksAppoint->setchoiceCallback($callbackappoint);
-            $appointment->addFrequenceCallback($instCallbacksAppoint);  
+            $instCallbacksAppoint->setChoiceCallback($callbackappoint);
+            $appointment->addFrequenceCallback($instCallbacksAppoint);
 
             return $instCallbacksAppoint  ;
 
@@ -232,10 +232,10 @@ Class PlaningDateur
                     $datedepart = new DateTime();
                     $datestop= new DateTime();
                     $datestop->modify("+2 year");
-                        
+
                 }else{
                     $datedepart = $this->convertorDateStringPeridoStart($form);
-                    $datestop= ($this->convertorDateStringPeriodEnd($form))->modify("+1 day");               
+                    $datestop= ($this->convertorDateStringPeriodEnd($form))->modify("+1 day");
                 }
             }
 
@@ -244,7 +244,7 @@ Class PlaningDateur
 
             if($periodicity===5){                               // personnalisé
                 $typerepete=$form->get("typerepete")->getData();
-                $numrepete=$numrepete>1 ? $numrepete : 1;  
+                $numrepete=$numrepete>1 ? $numrepete : 1;
                 $daysweek=implode("-",$form->get("daysweek")->getData());
                 $daymobth=$form->get("daymonth")->getData();
             }else{                                              // automatique (choix: jour, semaine ...)
@@ -257,10 +257,10 @@ Class PlaningDateur
                 // sinon ce serait cette version :
                 /*
                 $daysweek=$datedepart->format('l');
-                $daymobth=$datedepart->format('l');  
+                $daymobth=$datedepart->format('l');
                 */
             }
-           
+
             if(!isset($period)){
             $Instperiods=new Periods();
             }
@@ -269,7 +269,7 @@ Class PlaningDateur
             }
             $Instperiods->setPeriodeChoice($periodicity);
             $Instperiods->setNumberrept($numrepete);
-            $Instperiods->setTyperept($typerepete);          
+            $Instperiods->setTypeRept($typerepete);
             $Instperiods->setDaysweek($daysweek);
             $Instperiods->setDaymonth($daymobth);
             $Instperiods->setStartPeriod($datedepart);
@@ -277,19 +277,19 @@ Class PlaningDateur
             $appointment->addIdPeriod($Instperiods);
 
         return $Instperiods;
-    
+
     }
 
      public function addPeriodRdv($appointment, $form, $period=null)
-        {  
+        {
             $datedepart = $this->convertorDateStringStart($form);
-            $datestop= $this->convertorDateStringEnd($form);               
+            $datestop= $this->convertorDateStringEnd($form);
             $periodicity=0;
             $numrepete=1;
             $typerepete=1;
             $daysweek=$datedepart->format('l');
-            $daymobth=$datedepart->format('l');  
-  
+            $daymobth=$datedepart->format('l');
+
             if(!isset($period)){
             $Instperiods=new Periods();
             }
@@ -298,7 +298,7 @@ Class PlaningDateur
             }
             $Instperiods->setPeriodeChoice($periodicity);
             $Instperiods->setNumberrept($numrepete);
-            $Instperiods->setTyperept($typerepete);          
+            $Instperiods->setTypeRept($typerepete);
             $Instperiods->setDaysweek($daysweek);
             $Instperiods->setDaymonth($daymobth);
             $Instperiods->setStartPeriod($datedepart);
@@ -306,7 +306,7 @@ Class PlaningDateur
             $appointment->addIdPeriod($Instperiods);
 
         return $Instperiods;
-        
+
         }
-        
+
 }

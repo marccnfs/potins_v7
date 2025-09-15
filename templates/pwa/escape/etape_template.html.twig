@@ -34,7 +34,7 @@
     6: "Écris ou modifie une ligne de HTML qui change le comportement."
 } %}
 
-{% set guide = participant.univers.guide|default('') %}
+{% set guide = participant.universe.guide|default('') %}
 {% if guide == 'Robot' %}
     <p>🤖 Je suis ton assistant numérique. Déchiffrons cette étape ensemble !</p>
 {% elseif guide == 'Espion' %}

@@ -34,13 +34,10 @@ class EscapeGame
     private array $enigmes = [];
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
-    private array $univers = [];
+    private array $universe = [];
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private array $titresEtapes = [];
-
-    #[ORM\Column(type:"text", nullable:true)]
-    private ?string $universe = null;
 
     #[ORM\Column(type: 'boolean',nullable: true, options:["default"=>false])]
     private bool $published = false;
@@ -63,6 +60,9 @@ class EscapeGame
     #[ORM\OneToMany(targetEntity: Illustration::class, mappedBy: 'escapeGame', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $illustrations;
 
+    #[ORM\OneToMany(targetEntity: MobileLink::class, mappedBy: 'escapeGame', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $mobilelink;
+
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $created_at;
 
@@ -75,6 +75,7 @@ class EscapeGame
         $this->illustrations = new ArrayCollection();
         $this->created_at=new DateTime();
         $this->sessions = new ArrayCollection();
+        $this->mobilelink = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -94,12 +95,12 @@ class EscapeGame
         return $this;
     }
 
-    public function getUniverse(): ?string
+    public function getUniverse(): array
     {
-        return $this->universe;
+        return $this->universe ?? [];
     }
 
-    public function setUniverse(?string $universe): static
+    public function setUniverse(array $universe): static
     {
         $this->universe = $universe;
 
@@ -241,17 +242,6 @@ class EscapeGame
         return $this;
     }
 
-    public function getUnivers(): array
-    {
-        return $this->univers ?? [];
-    }
-
-    public function setUnivers(array $univers): self
-    {
-        $this->univers = $univers;
-        return $this;
-    }
-
     public function getTitresEtapes(): array
     {
         return $this->titresEtapes ?? [];
@@ -353,6 +343,36 @@ class EscapeGame
             // set the owning side to null (unless already changed)
             if ($session->getEscapeGame() === $this) {
                 $session->setEscapeGame(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MobileLink>
+     */
+    public function getMobilelink(): Collection
+    {
+        return $this->mobilelink;
+    }
+
+    public function addMobilelink(MobileLink $mobilelink): static
+    {
+        if (!$this->mobilelink->contains($mobilelink)) {
+            $this->mobilelink->add($mobilelink);
+            $mobilelink->setEscapeGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMobilelink(MobileLink $mobilelink): static
+    {
+        if ($this->mobilelink->removeElement($mobilelink)) {
+            // set the owning side to null (unless already changed)
+            if ($mobilelink->getEscapeGame() === $this) {
+                $mobilelink->setEscapeGame(null);
             }
         }
 

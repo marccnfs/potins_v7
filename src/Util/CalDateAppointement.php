@@ -73,7 +73,7 @@ class CalDateAppointement
 
             $Instperiods->setPeriodeChoice(1);
             $Instperiods->setNumberrept(1);
-            $Instperiods->setTyperept(1);
+            $Instperiods->setTypeRept(1);
             $Instperiods->setDaysweek($start->format('l'));
             $Instperiods->setStartPeriod($start);
             $Instperiods->setAlongPeriod($timealong);
@@ -145,7 +145,7 @@ class CalDateAppointement
 
         $Instperiods->setPeriodeChoice(intval($periodicity));
         $Instperiods->setNumberrept($numrepete);
-        $Instperiods->setTyperept($typerepete);
+        $Instperiods->setTypeRept($typerepete);
         $Instperiods->setDaysweek($daysweek);
         //$Instperiods->setDaymonth($daymobth);
         $Instperiods->setStartPeriod($durestart);
@@ -277,7 +277,7 @@ class CalDateAppointement
             $Instperiods=new Periods();
             $Instperiods->setPeriodeChoice(1);
             $Instperiods->setNumberrept(1);
-            $Instperiods->setTyperept(1);
+            $Instperiods->setTypeRept(1);
             $Instperiods->setDaysweek($start->format('l'));
             $Instperiods->setStartPeriod($start);
             $Instperiods->setAlongPeriod($timealong);
@@ -291,7 +291,7 @@ class CalDateAppointement
     public function addCallBack($appointment, $callbackappoint)
     {
         $instCallbacksAppoint=new CallbacksAppoint();
-        $instCallbacksAppoint->setchoiceCallback($callbackappoint);
+        $instCallbacksAppoint->setChoiceCallback($callbackappoint);
         $appointment->addFrequenceCallback($instCallbacksAppoint);
 
         return $instCallbacksAppoint  ;
@@ -378,9 +378,9 @@ class CalDateAppointement
 
         $form->get('dateEndPeriod')->setData($appointment->getEndtime());
         $form->get("numberrepete")->setData($period->getNumberrept());
-        $form->get("typerepete")->setData($period->getTyperept());
+        $form->get("typerepete")->setData($period->getTypeRept());
         $form->get("periodicity")->setData($period->getPeriodeChoice());
-        $form->get("typerepete")->setData($period->getTyperept());
+        $form->get("typerepete")->setData($period->getTypeRept());
         $form->get("daysweek")->setData(explode("-",$period->getDaysweek()));
         //$form->get("callback")->setData(0); // desactivé en version simple
         //$form->get("daymonth")->setData(1);
@@ -416,7 +416,7 @@ class CalDateAppointement
 
         $period->setPeriodeChoice(intval($periodicity));
         $period->setNumberrept($numrepete);
-        $period->setTyperept($typerepete);
+        $period->setTypeRept($typerepete);
         $period->setDaysweek($daysweek);
         //$Instperiods->setDaymonth($daymobth);
         $period->setStartPeriod($durestart);

@@ -2,14 +2,11 @@
 
 namespace App\Controller\Agenda;
 
-
-
 use App\Classe\PublicSession;
 use App\Entity\Agenda\Event;
 use App\Form\Agenda\EventType;
-use App\Entity\Users\Participant;
 use App\Lib\Links;
-use Doctrine\ORM\EntityManagerInterface as EM;
+use App\Service\ParticipantContext;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,9 +17,9 @@ final class EventController extends AbstractController
     use PublicSession;
 
     #[Route('/events/new', name: 'event_new')]
-    public function new(Request $req, EM $em): Response
+    public function new(Request $req, ParticipantContext $participantContext): Response
     {
-        $p = $this->getParticipantOrFail();
+        $p = $participantContext->getParticipantOrFail();
 
         // valeur par défaut : aujourd’hui 10:00–12:00 (Europe/Paris)
         $nowParis = new \DateTimeImmutable('today 10:00', new \DateTimeZone('Europe/Paris'));
@@ -65,8 +62,8 @@ final class EventController extends AbstractController
                 $e->setVisibility($form->get('visibility')->getData());
                 $e->setPublished((bool) $form->get('published')->getData());
 
-                $em->persist($e);
-                $em->flush();
+                $this->em->persist($e);
+                $this->em->flush();
 
                 $this->addFlash('success', 'Événement créé.');
                 return $this->redirectToRoute('event_show', ['slug' => $e->getSlug()]);
@@ -80,10 +77,10 @@ final class EventController extends AbstractController
     }
 
     #[Route('/events/{slug}/edit', name: 'event_edit')]
-    public function edit(string $slug, Request $req, EM $em): Response
+    public function edit(string $slug, Request $req, ParticipantContext $participantContext): Response
     {
-        $p = $this->getParticipantOrFail();
-        $e = $em->getRepository(Event::class)->findOneBy(['slug' => $slug]);
+        $p = $participantContext->getParticipantOrFail();
+        $e = $this->em->getRepository(Event::class)->findOneBy(['slug' => $slug]);
         if (!$e || $e->getOrganizer()->getId() !== $p->getId()) {
             throw $this->createNotFoundException();
         }
@@ -123,7 +120,7 @@ final class EventController extends AbstractController
                 $e->setPeriod($startUtc, $endUtc);
                 $e->setCommuneCode($form->get('communeCode')->getData() ?: 'autre');
 
-                $em->flush();
+                $this->em->flush();
                 $this->addFlash('success', 'Événement mis à jour.');
                 return $this->redirectToRoute('event_show', ['slug' => $e->getSlug()]);
             }
@@ -148,31 +145,21 @@ final class EventController extends AbstractController
     }
 
     #[Route('/events/{slug}/delete', name: 'event_delete', methods: ['POST'])]
-    public function delete(string $slug, Request $req, EM $em): Response
+    public function delete(string $slug, Request $req, ParticipantContext $participantContext): Response
     {
         $this->denyUnlessCsrf($req, 'delete_'.$slug);
 
-        $p = $this->getParticipantOrFail();
-        $e = $em->getRepository(Event::class)->findOneBy(['slug' => $slug]);
+        $p = $participantContext->getParticipantOrFail();
+        $e = $this->em->getRepository(Event::class)->findOneBy(['slug' => $slug]);
         if (!$e || $e->getOrganizer()->getId() !== $p->getId()) {
             throw $this->createNotFoundException();
         }
 
-        $em->remove($e);
-        $em->flush();
+        $this->em->remove($e);
+        $this->em->flush();
         $this->addFlash('success', 'Événement supprimé.');
 
         return $this->redirectToRoute('agenda_index');
-    }
-
-    private function getParticipantOrFail(): Participant
-    {
-        $s = $this->get('request_stack')->getSession();
-        $p = $s->get('_participant');
-        if (!$p instanceof Participant) {
-            throw $this->createAccessDeniedException('Participant requis.');
-        }
-        return $p;
     }
 
     private function denyUnlessCsrf(Request $req, string $id): void

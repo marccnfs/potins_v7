@@ -27,12 +27,8 @@ class EscapeGardenController extends AbstractController
     #[Route('/escape/home', name: 'home')]
     public function index2(EscapeGameRepository $repo,Security $security): Response {
 
-        $participantId = $this->requestStack->getSession()->get('participant_id');
-        if ($participantId) {
-            $participant = $this->em->getRepository(Participant::class)->find($participantId);
-        }else{
-            $participant = null;
-        }
+        $participant = $this->getParticipantFromSession();
+
         $featuredGames = $repo->findBy(['published'=>true], ['id'=>'DESC'], 6);
         $recentGames   = $repo->findBy(['published'=>true], ['id'=>'DESC'], 6);
 
@@ -76,10 +72,7 @@ class EscapeGardenController extends AbstractController
 
         $enigmes = [];
         $progression = [];
-        $participantId = $this->requestStack->getSession()->get('participant_id');
-        if ($participantId) {
-            $participant = $this->em->getRepository(Participant::class)->find($participantId);
-        }
+        $participant = $this->getParticipantFromSession();
 
         $vartwig=$this->menuNav->templatepotins(
             Links::ACCUEIL,
@@ -119,8 +112,13 @@ class EscapeGardenController extends AbstractController
     }
 
     #[Route('/escape/register', name: 'participant_register', methods: ['POST'])]
-    public function register(Request $request, EntityManagerInterface $em): Response
+    public function register(Request $request): Response
     {
+        if (!$this->isCsrfTokenValid('participant', $request->request->get('_token'))) {
+            $this->addFlash('error', 'Jeton CSRF invalide.');
+            return $this->redirectToRoute('participant_entry');
+        }
+
         $participant = new Participant();
 
         $participant->setPrenom($request->request->get('prenom'));
@@ -128,8 +126,8 @@ class EscapeGardenController extends AbstractController
         $participant->setCodeSecret($request->request->get('code_secret'));
 
 
-        $em->persist($participant);
-        $em->flush();
+        $this->em->persist($participant);
+        $this->em->flush();
         $this->requestStack->getSession()->set('participant_id', $participant->getId());
        // $request->getSession()->set('participant_id', $participant->getId());
 
@@ -137,13 +135,18 @@ class EscapeGardenController extends AbstractController
     }
 
     #[Route('/escape/login', name: 'participant_login', methods: ['POST'])]
-    public function login(Request $request, EntityManagerInterface $em): Response
+    public function login(Request $request): Response
     {
+        if (!$this->isCsrfTokenValid('participant', $request->request->get('_token'))) {
+            $this->addFlash('error', 'Jeton CSRF invalide.');
+            return $this->redirectToRoute('participant_entry');
+        }
+
         $prenom = $request->request->get('prenom');
         $codeAtelier = $request->request->get('code_atelier');
         $codeSecret = $request->request->get('code_secret');
 
-        $participant = $em->getRepository(Participant::class)->findOneBy([
+        $participant = $this->em->getRepository(Participant::class)->findOneBy([
             'prenom' => $prenom,
             'codeAtelier' => $codeAtelier,
             'codeSecret' => $codeSecret,
@@ -217,7 +220,7 @@ class EscapeGardenController extends AbstractController
 
     #[Route('/escape/mes-escapes', name: 'dashboard_my_escapes')]
     #[RequireParticipant]
-    public function listEscapeGame( Participant $participant, SessionInterface $session,EntityManagerInterface $em): Response
+    public function listEscapeGame( Participant $participant): Response
     {
 
         $games=$participant->getEscapeGames();
@@ -240,9 +243,9 @@ class EscapeGardenController extends AbstractController
 
     }
 
-    #[Route('/escape/univers', name: 'escape_univers')]
+    #[Route('/escape/universe', name: 'escape_universe')]
     #[RequireParticipant]
-    public function univers(Participant $participant,Request $request, SessionInterface $session, EntityManagerInterface $em, SluggerInterface $slugger): Response
+    public function universe(Participant $participant,Request $request, SessionInterface $session, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
 
         if ($request->isMethod('POST')) {
@@ -255,7 +258,7 @@ class EscapeGardenController extends AbstractController
 
             $participant->addEscapeGame($eg);
 
-            $univers = [
+            $universe = [
                 'titre' => $request->request->get('titre'),
                 'contexte' => $request->request->get('contexte'),
                 'objectif' => $request->request->get('objectif'),
@@ -270,7 +273,7 @@ class EscapeGardenController extends AbstractController
                         $illustration = new Illustration();
                         $illustration->setImageFile($file);
                         $illustration->setEscapeGame($eg);
-                        $em->persist($illustration);
+                        $this->em->persist($illustration);
                     }
                 }
             }
@@ -284,18 +287,18 @@ class EscapeGardenController extends AbstractController
                 }
             }
 
-            $eg->setUnivers($univers);
+            $eg->setUniverse($universe);
             $eg->setTitresEtapes($titresEtapes);
-            $em->persist($eg);
-            $em->persist($participant);
-            $em->flush();
+            $this->em->persist($eg);
+            $this->em->persist($participant);
+            $this->em->flush();
 
             return $this->redirectToRoute('wizard_step', ['id'=>$eg->getId(),'step' => 1]); // todo anciennement route vers 'escape_start'
         }
 
         $vartwig=$this->menuNav->templatepotins(
             Links::ACCUEIL,
-            'univers',
+            'universe',
             0,
             "nocity");
 
@@ -313,7 +316,7 @@ class EscapeGardenController extends AbstractController
 
     #[Route('/escape/start/{step}', name: 'escape_start',requirements: ['step' => '\d+'], defaults: ['step' => 1])]
     #[RequireParticipant]
-    public function escapeStart(Participant $participant,int $step,SessionInterface $session, EntityManagerInterface $em): Response
+    public function escapeStart(Participant $participant,int $step): Response
     {
 
         $enigmes = $participant->getEnigmes();
@@ -338,11 +341,8 @@ class EscapeGardenController extends AbstractController
 
     #[Route('/escape/{id}/delete', name: 'escape_delete', methods: ['POST'])]
     #[RequireParticipant]
-    public function delete(
-        Request $req,
-        EscapeGame $eg,
-        EM $em
-    ): Response {
+    public function delete(Request $req,EscapeGame $eg): Response {
+
         $participant = $req->attributes->get('_participant');
 
         // Sécurité : seul le créateur peut supprimer
@@ -353,7 +353,7 @@ class EscapeGardenController extends AbstractController
         // Vérifie le CSRF
         if (!$this->isCsrfTokenValid('delete_escape_'.$eg->getId(), $req->request->get('_token'))) {
             $this->addFlash('danger','Jeton CSRF invalide.');
-            return $this->redirectToRoute('participant_dashboard');
+            return $this->redirectToRoute('dashboard_my_escapes');
         }
 
         // (Optionnel) supprimer les fichiers images liés aux puzzles
@@ -365,16 +365,16 @@ class EscapeGardenController extends AbstractController
             }
         }
 
-        $em->remove($eg);
-        $em->flush();
+        $this->em->remove($eg);
+        $this->em->flush();
 
         $this->addFlash('success','Escape supprimé avec succès.');
-        return $this->redirectToRoute('participant_dashboard');
+        return $this->redirectToRoute('dashboard_my_escapes');
     }
 
     #[Route('/escape/publish', name: 'escape_publish', methods: ['POST'])]
     #[RequireParticipant]
-    public function publish(Participant $participant,SessionInterface $session, EntityManagerInterface $em): Response
+    public function publish(Participant $participant): Response
     {
 
         if (count($participant->getEnigmes()) < 6) {
@@ -383,15 +383,15 @@ class EscapeGardenController extends AbstractController
         }
 
         $participant->setPublished(true);
-        $em->persist($participant);
-        $em->flush();
+        $this->em->persist($participant);
+        $this->em->flush();
 
         return $this->redirectToRoute('escape_public_view', ['id' => $participant->getId()]);
     }
 
     #[Route('/escape/show/{id}', name: 'escape_public_view')]
     #[RequireParticipant]
-    public function showPublic(Participant $participant,int $id, EntityManagerInterface $em): Response
+    public function showPublic(Participant $participant,int $id): Response
     {
 
         if ( !$participant->isPublished()) {
@@ -416,7 +416,7 @@ class EscapeGardenController extends AbstractController
 
     #[Route('/escape/save/{step}', name: 'escape_save_step', methods: ['POST'])]
     #[RequireParticipant]
-    public function saveStep(Participant $participant,int $step, Request $request, SessionInterface $session, EntityManagerInterface $em): Response
+    public function saveStep(Participant $participant,int $step, Request $request): Response
     {
 
         $contenu = $request->request->get('contenu');
@@ -424,17 +424,17 @@ class EscapeGardenController extends AbstractController
         $enigmes[$step] = $contenu;
 
         $participant->setEnigmes($enigmes);
-        $em->persist($participant);
-        $em->flush();
+        $this->em->persist($participant);
+        $this->em->flush();
 
         return $this->redirectToRoute('escape_start', ['step' => $step + 1]);
     }
 
 
-    private function getParticipant(SessionInterface $session, EntityManagerInterface $em): ?Participant
+    private function getParticipantFromSession(): ?Participant
     {
-        $id = $session->get('participant_id');
-        return $id ? $em->getRepository(Participant::class)->find($id) : null;
+        $participantId = $this->requestStack->getSession()->get('participant_id');
+        return $participantId ? $this->em->getRepository(Participant::class)->find($participantId) : null;
     }
 
     #[Route('/escape/public', name: 'escape_public_list')]
@@ -465,12 +465,8 @@ class EscapeGardenController extends AbstractController
 
     public function workshop(): Response
     {
-        $participantId = $this->requestStack->getSession()->get('participant_id');
-        if ($participantId) {
-            $participant = $this->em->getRepository(Participant::class)->find($participantId);
-        }else{
-            $participant = null;
-        }
+        $participant = $this->getParticipantFromSession();
+
         $vartwig=$this->menuNav->templatepotins(
             Links::ACCUEIL,
             '_workshop',
@@ -491,12 +487,7 @@ class EscapeGardenController extends AbstractController
 
     public function legalMentions(): Response
     {
-        $participantId = $this->requestStack->getSession()->get('participant_id');
-        if ($participantId) {
-            $participant = $this->em->getRepository(Participant::class)->find($participantId);
-        }else{
-            $participant = null;
-        }
+        $participant = $this->getParticipantFromSession();
 
         $vartwig=$this->menuNav->templatepotins(
             Links::ACCUEIL,
@@ -518,12 +509,8 @@ class EscapeGardenController extends AbstractController
 
     public function privacy(): Response
     {
-        $participantId = $this->requestStack->getSession()->get('participant_id');
-        if ($participantId) {
-            $participant = $this->em->getRepository(Participant::class)->find($participantId);
-        }else{
-            $participant = null;
-        }
+        $participant = $this->getParticipantFromSession();
+
         $vartwig=$this->menuNav->templatepotins(
             Links::ACCUEIL,
             '_privacy',

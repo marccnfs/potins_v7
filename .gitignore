@@ -8,7 +8,8 @@
 /public/bundles/
 /var/
 /vendor/
-/migrations/
+!/vendor/bin
+!/vendor/phpunit
 /old_migration/
 /public/*
 !/public/index.php
@@ -24,3 +25,8 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+/.phpunit.cache/
+###< phpunit/phpunit ###

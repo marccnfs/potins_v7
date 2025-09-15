@@ -3,12 +3,16 @@
 namespace App\Entity\Agenda;
 
 use App\Entity\Users\Participant;
-use Doctrine\DBAL\Types\Types;
+use App\Enum\EventCategory;
+use App\Enum\EventStatus;
+use App\Enum\EventVisibility;
+use App\Repository\EventRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity]
+#[ORM\Entity (repositoryClass: EventRepository::class)]
 #[ORM\Table(name: 'agenda_events')]
 #[ORM\Index(columns: ['starts_at'])]
 #[ORM\Index(columns: ['published', 'visibility'])]
@@ -39,6 +43,7 @@ class Event
     private \DateTimeImmutable $startsAt; // UTC
 
     #[ORM\Column(name: 'ends_at', type: 'datetime_immutable')]
+    #[Assert\GreaterThan(propertyPath: 'startsAt', message: 'The end time must be after the start time.')]
     private \DateTimeImmutable $endsAt; // UTC
 
     #[ORM\Column(length: 64)]
@@ -56,17 +61,17 @@ class Event
     #[ORM\Column(nullable: true)]
     private ?int $capacity = null; // null = illimité
 
-    #[ORM\Column(length: 16)]
-    private string $visibility = 'public'; // public|unlisted|private
+    #[ORM\Column(length: 16, enumType: EventVisibility::class)]
+    private EventVisibility $visibility = EventVisibility::PUBLIC;
 
-    #[ORM\Column(length: 16)]
-    private string $status = 'scheduled';  // scheduled|cancelled|completed|draft
+    #[ORM\Column(length: 16, enumType: EventStatus::class)]
+    private EventStatus $status = EventStatus::SCHEDULED;
 
     #[ORM\Column(type: 'boolean')]
     private bool $published = false;
 
-    #[ORM\Column(length: 48)]
-    private string $category = 'atelier'; // atelier|rdv|externe|autre
+    #[ORM\Column(length: 48, enumType: EventCategory::class)]
+    private EventCategory $category = EventCategory::ATELIER;
 
     // Lien optionnel vers une autre ressource (ex: EscapeGame)
     #[ORM\Column(length: 48, nullable: true)]
@@ -92,6 +97,7 @@ class Event
         $this->id = Uuid::v7();
         $this->organizer = $organizer;
         $this->title = $title;
+        $this->assertPeriodIsValid($startsAtUtc, $endsAtUtc);
         $this->startsAt = $startsAtUtc;
         $this->endsAt = $endsAtUtc;
         $this->timezone = $timezone;
@@ -181,9 +187,16 @@ class Event
 
     public function setPeriod(\DateTimeImmutable $startUtc, \DateTimeImmutable $endUtc): void
     {
+        $this->assertPeriodIsValid($startUtc, $endUtc);
         $this->startsAt = $startUtc;
         $this->endsAt = $endUtc;
         $this->touch();
+    }
+    private function assertPeriodIsValid(\DateTimeImmutable $startUtc, \DateTimeImmutable $endUtc): void
+    {
+        if ($endUtc <= $startUtc) {
+            throw new \InvalidArgumentException('The end time must be after the start time.');
+        }
     }
 
     public function getTimezone(): string
@@ -241,23 +254,23 @@ class Event
         $this->touch();
     }
 
-    public function getVisibility(): string
+    public function getVisibility(): EventVisibility
     {
         return $this->visibility;
     }
 
-    public function setVisibility(string $v): void
+    public function setVisibility(EventVisibility $v): void
     {
         $this->visibility = $v;
         $this->touch();
     }
 
-    public function getStatus(): string
+    public function getStatus(): EventStatus
     {
         return $this->status;
     }
 
-    public function setStatus(string $s): void
+    public function setStatus(EventStatus $s): void
     {
         $this->status = $s;
         $this->touch();
@@ -274,12 +287,12 @@ class Event
         $this->touch();
     }
 
-    public function getCategory(): string
+    public function getCategory(): EventCategory
     {
         return $this->category;
     }
 
-    public function setCategory(string $c): void
+    public function setCategory(EventCategory $c): void
     {
         $this->category = $c;
         $this->touch();

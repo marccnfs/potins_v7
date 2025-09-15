@@ -77,7 +77,7 @@ class InitModule
                 if ($typechoice !== 1) {       // si il y a une periodicité
                     $numrepete = $period->getNumberrept();
                     $numrepete = $numrepete > 1 ? $numrepete : 1;
-                    $typerepete = $period->getTyperept();
+                    $typerepete = $period->getTypeRept();
 
                     //$startappoint=$period->getStartPeriod();
                     //$along=$period->getAlongPeriod();
@@ -192,7 +192,7 @@ class InitModule
                     // si il y a une periodicité
                     $numrepete = $period->getNumberrept();
                     $numrepete = $numrepete > 1 ? $numrepete : 1;
-                    $typerepete = $period->getTyperept();
+                    $typerepete = $period->getTypeRept();
                     $interval = $startappoint->diff($endappoint)->format('%a'); // plage de validité de la periods en jour
 
                     switch ($typerepete) {
@@ -270,4 +270,3 @@ class InitModule
 
 }
 
-	

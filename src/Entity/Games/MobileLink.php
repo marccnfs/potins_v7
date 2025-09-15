@@ -21,7 +21,7 @@ class MobileLink
     #[ORM\JoinColumn(nullable:false)]
     private Participant $participant;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: EscapeGame::class,inversedBy: 'mobilelink')]
     #[ORM\JoinColumn(nullable:false)]
     private EscapeGame $escapeGame;
 

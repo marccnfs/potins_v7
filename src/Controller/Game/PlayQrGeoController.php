@@ -7,7 +7,6 @@ use App\Attribute\RequireParticipant;
 use App\Classe\PublicSession;
 use App\Entity\Games\EscapeGame;
 use App\Service\MobileLinkManager;
-use Doctrine\ORM\EntityManagerInterface as EM;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +19,7 @@ class PlayQrGeoController extends AbstractController
 
     #[Route('/play/{slug}/qr/regen/{step}', name: 'play_qr_geo_regen', methods: ['POST'])]
     #[RequireParticipant]
-    public function regen(Request $req, EscapeGame $eg, int $step, MobileLinkManager $mobile, EM $em): Response
+    public function regen(Request $req, EscapeGame $eg, int $step, MobileLinkManager $mobile): Response
     {
         $participant = $req->attributes->get('_participant');
         $puzzle = $eg->getPuzzleByStep($step);

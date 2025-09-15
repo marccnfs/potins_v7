@@ -1,34 +1,34 @@
-<div class="wizard-layout"
+<section class="wizard-layout"
      data-controller="agenda-nav agenda-calendar"
      data-agenda-nav-view-value="{{ view }}"
      data-agenda-nav-date-value="{{ date|date('Y-m-d') }}"
      data-agenda-calendar-fetch-url-value="{{ path('agenda_feed') }}"
      data-agenda-calendar-view-value="{{ view }}"
-     data-agenda-calendar-date-value="{{ date|date('Y-m-d') }} ">
+     data-agenda-calendar-date-value="{{ date|date('Y-m-d') }}">
 
     <aside class="wizard-aside">
-        <div class="card">
+        <nav class="card" aria-label="Changer de vue">
             <h2 class="aside-title">🗓️ Agenda</h2>
             <ol class="aside-steps">
                 <li class="{{ view == 'month' ? 'is-current' : '' }}">
                     <a class="label" data-action="agenda-nav#setView"
-                       data-view-param="month" href="#"
+                       data-view-param="month" href="#" role="button"
                     >Vue mois</a>
                 </li>
                 <li class="{{ view == 'week' ? 'is-current' : '' }}">
                     <a class="label" data-action="agenda-nav#setView"
-                       data-view-param="week" href="#"
+                       data-view-param="week" href="#" role="button"
                     >Vue semaine</a>
                 </li>
                 <li class="{{ view == 'day' ? 'is-current' : '' }}">
                     <a class="label" data-action="agenda-nav#setView"
-                       data-view-param="day" href="#"
+                       data-view-param="day" href="#" role="button"
                     >Vue jour</a>
                 </li>
             </ol>
-        </div>
+        </nav>
 
-        <div class="card tip">
+        <section class="card tip">
             <h3>Filtres</h3>
             <form data-controller="agenda-filters">
                 <label>Catégorie</label>
@@ -40,23 +40,23 @@
                     <option value="autre">Autres</option>
                 </select>
             </form>
-        </div>
+        </section>
     </aside>
 
     <main class="wizard-main">
-        <div class="card"
->
-            <div class="agenda-header">
-                <div class="controls">
-                    <button class="btn" data-action="agenda-nav#prev">‹</button>
+        <section class="card">
+            <header class="agenda-header">
+                <nav class="controls" aria-label="Navigation du calendrier">
+                    <button class="btn" data-action="agenda-nav#prev" aria-label="Précédent">‹</button>
+
                     <input type="date" data-agenda-nav-target="datePicker">
-                    <button class="btn" data-action="agenda-nav#next">›</button>
+                    <button class="btn" data-action="agenda-nav#next" aria-label="Suivant">›</button>
                     <button class="btn btn-light" data-action="agenda-nav#today">Aujourd’hui</button>
-                </div>
+                </nav>
                 <h1 data-agenda-nav-target="headline"></h1>
-            </div>
+            </header>
             <div data-agenda-calendar-target="grid" class="event-list"></div>
-        </div>
+        </section>
     </main>
 
-</div>
+</section>
