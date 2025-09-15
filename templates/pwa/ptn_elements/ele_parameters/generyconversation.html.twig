@@ -1,7 +1,7 @@
-<div class="_in-l-bb2_mb">
+<div class="pwa-in-l-bb2">
     {% if  post.partners is defined %}
         {% for part in post.partners %}  {# le part est un website #}
-            <div class="space_tag_when_mb">
+            <div class="pwa-space-tag-when">
                 <div class="space-tag">
                     <div class="bull_tag active" >
                         <a href="{{ path("show_website",{'slug':part.slug}) }}" class="-br-Ma">{{part.namewebsite}}</a>
@@ -11,7 +11,7 @@
         {% endfor %}
     {% endif %}
     {% if  website.module.contactation.linkone is defined %}
-    <div class="bta-lk_mb">
+    <div class="pwa-bta-lk">
         <a class="logo_wb" href="{{ website.module.contactation.linkone }}"><i class="far fa-comment"></i>Conversation</a>
     </div>
     <div class="bta-lk">

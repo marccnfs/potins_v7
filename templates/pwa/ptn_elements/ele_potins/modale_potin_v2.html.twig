@@ -12,10 +12,10 @@
 
 {%  if contents|length > 0 %}
     {%  for content in contents %}
-        <div class="inner-post_mb">
+        <div class="pwa-inner-post">
             {% if content is not same as ("") %}
-                <div class="_post_content_mb">
-                    <div class="article_content_mb">
+                <div class="pwa-post-content">
+                    <div class="pwa-article-content">
                         {#  {{ include('bacasable/content.html.twig')|raw }} #}
                         {{ content|raw }}
                     </div>

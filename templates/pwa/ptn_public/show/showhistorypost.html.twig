@@ -1,12 +1,12 @@
 {% block body %}
-<div class="_pg_ptn_mob">
-    <div class="col_mob">
+<div class="pwa-pg-ptn">
+    <div class="pwa-col">
         <p>Retour sur l'atelier...</p>
         <div class="content_mob_all">
-                <div class="header_show_mb">
+                <div class="pwa-header-show">
                     <h2>{{ post.titre|lower|capitalize }}</h2>
                 </div>
-                <div class="zone-info-potin_mb">
+                <div class="pwa-zone-info-potin">
                     <div class="zone-bar-author">
                         <div class="in_bar_board">
                             <div class="af_flx fx-c">
@@ -22,7 +22,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="zone-info-potin_mb">
+                <div class="pwa-zone-info-potin">
                     <div class="potin_ressources">
                         <div class="form-groupfields glass-label">
                             <div class="process-module_glass">
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="zone-info-potin_mb">
+                <div class="pwa-zone-info-potin">
                     {% for tabevent in events %}
                         <time itemprop = "startDate" class="datepotin">date de l'atelier :
                             {{ tabevent['event'].appointment.starttime|date("d-m-Y") }} -
@@ -91,13 +91,13 @@
                 {% endif %}
                 <article>
                     {% if  post.gpreview is not null %}
-                        <div class="w_review_mb">
-                            <div class="pict_wall_mb">
+                        <div class="pwa-w-review">
+                            <div class="pwa-pict-wall">
                                 {% if post.gpreview.media.imagejpg is defined %}
                                     {% for pict in post.gpreview.media.imagejpg %}
                                         <div class="wall_litlepict">
                                             <img class="pictsmall" src="{{ asset(pict.getWebPath) }}" alt="image atelier">
-                                            {# <div class="little-pic-block_mb" style="background-image: url({{ asset(pict.getWebPath) }})"></div> #}
+                                            {# <div class="pwa-little-pic-block" style="background-image: url({{ asset(pict.getWebPath) }})"></div> #}
                                         </div>
                                         <div class="pictlarge"></div>
                                     {% endfor %}

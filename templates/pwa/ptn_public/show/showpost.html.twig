@@ -1,11 +1,11 @@
 {% block body %}
 <div class="container-websit">
     {%  set entity, typ = potin, "blog" %}
-    <div class="potin_pg_mb">
+    <div class="pwa-potin-pg">
 
-            <div class="potin-comment_mob">
+            <div class="pwa-potin-comment">
                 <h1>{{ potin.titre|lower|capitalize }}</h1>
-                <div class="titlpotin_mb">
+                <div class="pwa-titlpotin">
                     {% if potin.subject is not same as (" ") %}
                         <h3>{{ potin.subject|raw|lower|capitalize }}</h3> {# {{post.subject|u.truncate(80, '...')|lower|capitalize}} #}
                     {% endif %}
@@ -17,7 +17,7 @@
             </article>
 
             <div class="more_rss">
-                <div class="zone-info-potin_mob">
+                <div class="pwa-zone-info-potin">
                     <div class="potin_ressources">
                         <div class="form-groupfields glass-label">
                             <div class="process-module_glass">
@@ -38,7 +38,7 @@
 
             {% if  potin.gpreview is not null %}
                 <div class="btn_review">
-                    <div class="zone-info-potin_mob">
+                    <div class="pwa-zone-info-potin">
                         <div class="zone-bar-author">
                             <div class="in_bar_board">
                                 <div class="af_flx fx-c">
@@ -46,7 +46,7 @@
 
                                     {#   {% if isPlayer(customer.id, tabplayer) %} #}
                                     <button class="link_code"><i class="fa fa-sign-in" id="goaccess"></i></button>
-                                    <div class="pop_code_mb" id="codeaccess" data-post={{ potin.id }} style="display:none">
+                                    <div class="pwa-pop-code" id="codeaccess" data-post={{ potin.id }} style="display:none">
                                         <h2>Entrez votre code d'accès :</h2>
                                         <div id="testcode"></div>
                                         <test-access></test-access>
@@ -64,8 +64,8 @@
                                     {% endfor %}
                                 {%  endif %}
                             </div>
-                            <div class="list_content_mb">
-                                <ul class="bk_content_coul_mb">
+                            <div class="pwa-list-content">
+                                <ul class="pwa-bk-content-coul">
                                     {% for rw in potin.gpreview.reviews %}
                                         <li>{{rw.titre}}
                                             {% set typ =  rw.type?"1":"0"%}

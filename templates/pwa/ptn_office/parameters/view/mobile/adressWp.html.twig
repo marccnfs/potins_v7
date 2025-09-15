@@ -1,4 +1,4 @@
-<div class="inf_modul_mob">
+<div class="pwa-inf-modul">
     <h2 class="_title til_mdl">Localisation de votre point info</h2>
 
         <p>Vous devez renseigner au moins une adresse principale</p>
@@ -10,10 +10,10 @@
 
 
         {% if board.template.sector.adresse is defined %}
-            <div class="content_tab_mob" id="listadressgp">
+            <div class="pwa-content-tab" id="listadressgp">
                 {% set adr=["","Principale","etablissement","livraison","facturation"] %}
-                <div class="list-incub_mob">
-                <table class="aff_table_mob t_size_list">
+                <div class="pwa-list-incub">
+                <table class="pwa-aff-table t_size_list">
                         <thead>
                         <tr>
                             <th>adresse </th>
@@ -45,7 +45,7 @@
 
 
         {% else %}
-            <div class="content_tab_mob">
+            <div class="pwa-content-tab">
                 <p>Entrez une adresse pour localiser votre point Info</p>
                 <em>Champ obiligatoire</em>
                 <em>Cette adresse sera visible sur vos modules publics</em>

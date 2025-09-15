@@ -1,10 +1,10 @@
-<nav class="gnav gnav_mob" id="gnav-main-container" aria-label="Principal">
+<nav class="gnav pwa-gnav" id="gnav-main-container" aria-label="Principal">
     <div data-gnav-region="Main">
-        <a href="{{ path('potins_index') }}" class="svg_logo_mob">
+        <a href="{{ path('potins_index') }}" class="pwa-svg-logo">
             {{ include('svg/potins/base logo_ini_potins_pp_fdwhite.html.twig') }}
         </a>
-        <div class="header_ptn_mb">
-            <div class="header_ptn_mb-block">
+        <div class="pwa-header-ptn">
+            <div class="pwa-header-ptn-block">
                 {% if search is defined %}
                 <a href="">
                     <div class="ptn-toolbar-icon">
@@ -17,8 +17,8 @@
                 </a>
                 {%  endif %}
             </div>
-            <div class="header_ptn_mb-block">
-                {{ include('pwa/pop/menutopbarr_all_mob.html.twig') }}
+            <div class="pwa-header-ptn-block">
+                {{ include('pwa/pop/pwa-menutopbarr-all.html.twig') }}
             </div>
         </div>
     </div>

@@ -11,15 +11,15 @@
 {% endif %}
 <div class="wp-event">
     <div class="inner-event">
- {#  <div class="pict_menu_mob" style="background-image: url({{ pict }})"></div>   #}
-        <h3 class="goaff_event_mob">à Table !</h3>
-        <div class="w_titlevent_mob">
+ {#  <div class="pwa-pict-menu" style="background-image: url({{ pict }})"></div>   #}
+        <h3 class="pwa-goaff-event">à Table !</h3>
+        <div class="pwa-w-titlevent">
         <h2>{{ menu.formule.name }}</h2>
         <time itemprop = "startDate" pubdate><b>du {{ menu.formule.parution.starttime|date("d-m-Y") }} au {{  menu.formule.parution.endtime|date("d-m-Y") }}</b></time>
 
         {%  for declin in menu.formule.catformules %}
                 <h3>{{ declin.declinaison.name }}</h3>
-                <span class="price-form_mob">{{ declin.prix }} €</span>
+                <span class="pwa-price-form">{{ declin.prix }} €</span>
         {%  endfor %}
 {#
         <div class="bt-live">
@@ -28,7 +28,7 @@
         </div>
 #}
 
-    <div class="menu-list_mob">
+    <div class="pwa-menu-list">
         <div class="info-plat">
             <div class="ineer-plat">
                 {% for entree in menu.entrees %}

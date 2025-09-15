@@ -2,16 +2,16 @@
 
 <a class="affiche" href="{{path('show_potin',{'slug':otherpost.slug,'id':otherpost.id}) }}">
 
-    <div class="potin_titre_mob">{{otherpost.titre|lower|capitalize}}</div>
+    <div class="pwa-potin-titre">{{otherpost.titre|lower|capitalize}}</div>
 
     {% if otherpost.media.imagejpg[0].namefile is defined %}
-        <img  class="img-other-notice_mob" src="{{ asset('upload/module/'~otherpost.media.imagejpg[0].namefile ) }}" alt="image affiche">
+        <img  class="pwa-img-other-notice" src="{{ asset('upload/module/'~otherpost.media.imagejpg[0].namefile ) }}" alt="image affiche">
     {% endif %}
 
     {% if otherpost.subject is not same as (" ") %}
         <div class="_fx-R_v2 _fx-convers_inv_v5">
             <div class="info-post_v5">
-                <div class="event_second_titl_mob">{{otherpost.subject|u.truncate(80, '...')|lower|capitalize}}</div>
+                <div class="pwa-event-second-titl">{{otherpost.subject|u.truncate(80, '...')|lower|capitalize}}</div>
             </div>
         </div>
     {% endif %}

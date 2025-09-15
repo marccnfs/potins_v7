@@ -1,15 +1,15 @@
-{{ form_start(form, {'attr': {'class': 'form-elastic_mob'}}) }}
+{{ form_start(form, {'attr': {'class': 'pwa-form-elastic'}}) }}
 
 
     {{ form_row(form.name, {'attr': {'class': 'form-affi','placeholder':'"menu du jour"'}}) }}
 
-    <div class="field-info-date_mob">
-        <div class="field-date-label_mob">Pour la période du : </div>
-        <div class="timdate_form_mob">
+    <div class="pwa-field-info-date">
+        <div class="pwa-field-date-label">Pour la période du : </div>
+        <div class="pwa-timdate-form">
             {{ form_widget(form.start, {'attr': {'class': 'form-date'}}) }}
         </div>
-        <div class="field-date-label_mob">au : </div>
-        <div class="timdate_form_mob">
+        <div class="pwa-field-date-label">au : </div>
+        <div class="pwa-timdate-form">
             {{ form_widget(form.end, {'attr': {'class': 'form-date'}}) }}
         </div>
     </div>
@@ -17,7 +17,7 @@
 
 
 
-<div class="field-info_mob">
+<div class="pwa-field-info">
     {{ form_widget(form.catformules) }}
     <div class="declin"></div>
 </div>
@@ -28,24 +28,24 @@
 </div>
 
 
-<div class="_buble-form_mob">
+<div class="pwa-buble-form">
     <h5>selectionez les entrées, plats, desserts et boissons pour cette formule</h5>
-    <div class="buble-field_mob">
-        <div class="inpop-content_mob">
-            <div class="choice-flex_mob">
-                <div class="bul-go_f bull-sz-lit_mob bulletoggle" data-affitgl="tgl_15" id="afftgl">
+    <div class="pwa-buble-field">
+        <div class="pwa-inpop-content">
+            <div class="pwa-choice-flex">
+                <div class="bul-go_f pwa-bull-sz-lit bulletoggle" data-affitgl="tgl_15" id="afftgl">
 
                     <div class="">Entrées</div>
                 </div>
-                <div class="bul-go_f bull-sz-lit_mob bulletoggle" data-affitgl="tgl_11" id="afftgl">
+                <div class="bul-go_f pwa-bull-sz-lit bulletoggle" data-affitgl="tgl_11" id="afftgl">
 
                     <div class="">Plats</div>
                 </div>
-                <div class="bul-go_f bull-sz-lit_mob bulletoggle" data-affitgl="tgl_12" id="afftgl">
+                <div class="bul-go_f pwa-bull-sz-lit bulletoggle" data-affitgl="tgl_12" id="afftgl">
 
                     <div class="">Desserts</div>
                 </div>
-                <div class="bul-go_f bull-sz-lit_mob bulletoggle" data-affitgl="tgl_14" id="afftgl">
+                <div class="bul-go_f pwa-bull-sz-lit bulletoggle" data-affitgl="tgl_14" id="afftgl">
 
                     <div class="">Boissons</div>
                 </div>

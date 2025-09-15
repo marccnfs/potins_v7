@@ -5,7 +5,7 @@
     {%  set col = 3 %}
 {% endif %}
 <div class="mb-event_card color-event-{{ col }}">
-    <div class="inner-event_mob">
+    <div class="pwa-inner-event">
          <div class="w_titlevent">
                 <h2 title="evenement de {{ event[0].potin.titre }}">{{ event[0].potin.titre|lower|capitalize }}</h2>
                 {% if event[0].description is not same as (" ") %}
@@ -68,18 +68,18 @@
         </div>
 
             {%  if customer is not null %}
-                <nav class="relational_mob">
+                <nav class="pwa-relational">
                     <a href="{{ path('back_admin_cmd_potins',{'id':event[0].id}) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">Réservez</a>
                 </nav>
            {%  else %}
-               <nav class="relational_mob">
+               <nav class="pwa-relational">
                    <a href="{{ path('show_event_id',{'id':event[0].potin.id}) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">en savoir plus</a>
                </nav>
             {% endif %}
 
     </div>
 
-    <div class="illustr-mb" >
+    <div class="pwa-illustr" >
         <div class="e_pictfull_card">
             {% if event[0].potin is not null %}
                 {% if event[0].potin.media.imagejpg|length > 0 and event[0].potin.media.imagejpg[0].namefile is defined %}

@@ -1,10 +1,10 @@
 
-    <div class="wb-logo-lite_mb">
+    <div class="pwa-wb-logo-lite">
         {% if potin.author.customer.profil.avatar %}
             <div  class="bkgrndlogo" style="background-image: url('{{ asset(vich_uploader_asset(potin.author.customer.profil.avatar, 'imageFile' )) }}')"></div>
         {% else %}
             <div class="bkgrndlogo" style="background-image: url('{{ asset('img/pinsaffi.png') }}')"></div>
         {% endif %}
         <div class="author">&thinsp;&thinsp;publié par : {{ potin.author.customer.profil.firstname }}</div>
-        <time itemprop = "startDate" class="datepotin_mb">mis en ligne le : {{ potin.createAt|date("d-m-Y") }}</time>
+        <time itemprop = "startDate" class="pwa-datepotin">mis en ligne le : {{ potin.createAt|date("d-m-Y") }}</time>
     </div>
