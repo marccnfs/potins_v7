@@ -8,8 +8,6 @@
 /public/bundles/
 /var/
 /vendor/
-!/vendor/bin
-!/vendor/phpunit
 /old_migration/
 /public/*
 !/public/index.php

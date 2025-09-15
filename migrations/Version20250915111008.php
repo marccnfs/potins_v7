@@ -29,3 +29,5 @@ final class Version20250915111008 extends AbstractMigration
         $this->addSql('ALTER TABLE aff_periods RENAME COLUMN type_rept TO typerept');
     }
 }
+
+
