@@ -15,10 +15,9 @@ bsCustomFileInput.init();
 
 import './styles/potins.scss';
 import './styles/calendar.css';
-import './styles/potins_mob.css';
+import './styles/pwa.css';
 import './styles/media.css';
 import './styles/form.css';
-import './styles/menupotins.css';
 import './styles/articles.css';
 import './styles/bouton.css';
 import './styles/potin.css';

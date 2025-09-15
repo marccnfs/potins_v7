@@ -1,5 +1,5 @@
 <div class="tglaff w100" id="tgl_0">
-    <div class="{{ agent=='desk/'?'_scrollflow _p w100 mrg0 mn-vh64':'_scrollflow _mb w100' }}">
+    <div class="{{ agent=='desk/'?'_scrollflow _p w100 mrg0 mn-vh64':'_scrollflow pwa- w100' }}">
         {% if pw.role=="superadmin" %}
         <div class="bt-share-fxd affitoggle" id="member-act"  data-affitgl="tgl_pop" role="button">
             <div class="i-bt-share"><i class="fa fa-share-alt"></i><span class="tit-cb">Invitez</span></div>
@@ -39,7 +39,7 @@
                         {% if permis|length > 2 %} {# member fondateur et/ou admin #}
                            <div class="unit-list">
                                <h5>Admin</h5>
-                               <div class="list-mb member-validate"><i class="fa fa-user"></i><br>{{member.disptachwebsite.name}}</div>
+                               <div class="pwa-list member-validate"><i class="fa fa-user"></i><br>{{member.disptachwebsite.name}}</div>
                            </div>
                        {%  endif %}
                    {% endfor %}
@@ -50,7 +50,7 @@
 </div>
 
 <div class="tglaff w100" id="tgl_1" style="display: none">
-    <div class="{{ agent=='desk/'?'_scrollflow _p w100 mrg0 mn-vh64':'_scrollflow _mb w100' }}">
+    <div class="{{ agent=='desk/'?'_scrollflow _p w100 mrg0 mn-vh64':'_scrollflow pwa- w100' }}">
        <div class="list_publi">
             <h2 class="_title til_mdl">membres</h2>
             <div class="fx-content">
@@ -65,7 +65,7 @@
                        {% if permis[1]==0 %}
                             <div class="unit-list">
                            <h5>Invités</h5>
-                           <div class="list-mb member-no-validate"><i class="fa fa-user"></i>
+                           <div class="pwa-list member-no-validate"><i class="fa fa-user"></i>
                                {{ member.disptachwebsite.customer.emailcontact }}
                                <p class="wait-member member-validate">en attente: invité le {{ member.createat|format_datetime('full', 'medium', locale='fr')}}
                                <p class="wait-member member-validate">mot de passe provisoire: <span style="font-weight: 600; font-size:1.2rem;">{{member.disptachwebsite.customer.profil.mdpfirst}}</span></p>
@@ -73,7 +73,7 @@
                             </div>
                        {% else %}
                    <div class="unit-list">
-                           <div class="list-mb member-validate"><i class="fa fa-user"></i><br>invité et validé<br>{{member.disptachwebsite.name}}</div>
+                           <div class="pwa-list member-validate"><i class="fa fa-user"></i><br>invité et validé<br>{{member.disptachwebsite.name}}</div>
                    </div>
                        {% endif %}
                    {% endif %}
@@ -87,7 +87,7 @@
 </div>
 
 <div class="tglaff w100" id="tgl_2" style="display: none">
-    <div class="{{ agent=='desk/'?'_scrollflow _p w100 mrg0 mn-vh64':'_scrollflow _mb w100' }}">
+    <div class="{{ agent=='desk/'?'_scrollflow _p w100 mrg0 mn-vh64':'_scrollflow pwa- w100' }}">
        <div class="list_publi">
             <h2 class="_title til_mdl">contacts</h2>
             <div class="fx-content">
@@ -103,7 +103,7 @@
                                {% if permis[0]==0 %}
                                 <div class="unit-list">
                                    <h5>Contacts</h5>
-                                   <div class="list-mb member-validate"><i class="fa fa-contact"></i>
+                                   <div class="pwa-list member-validate"><i class="fa fa-contact"></i>
                                        {{member.disptachwebsite.name}}
                                        <p class="wait-member member-validate">inscrit à la messagerie le {{ member.createat|format_datetime('full', 'medium', locale='fr')}} pas encore validé </p>
                                        <p class="wait-member member-validate">adresse mail: <span style="font-weight: 600; font-size:1.2rem;">{{member.disptachwebsite.customer.profil.emailfirst}}</span></p>
@@ -111,7 +111,7 @@
                                 </div>
                                {% else %}
                                 <div class="unit-list">
-                                   <div class="list-mb member-validate"><i class="fa fa-user"></i><br>contact messagerie validé<br>{{member.disptachwebsite.name}}</div>
+                                   <div class="pwa-list member-validate"><i class="fa fa-user"></i><br>contact messagerie validé<br>{{member.disptachwebsite.name}}</div>
                                 </div>
                                {% endif %}
                            {%  endif %}
@@ -126,7 +126,7 @@
 </div>
 
 <div class="tglaff w100" id="tgl_pop" style="display: none">
-    <div class="{{ agent=='desk/'?'_scrollflow _p w100 mrg0 mn-vh64':'_scrollflow _mb w100' }}">
+    <div class="{{ agent=='desk/'?'_scrollflow _p w100 mrg0 mn-vh64':'_scrollflow pwa- w100' }}">
        <div class="list_publi">
            <h2 class="_title til_mdl">Nouveau membre</h2>
            <div class="fx-content">

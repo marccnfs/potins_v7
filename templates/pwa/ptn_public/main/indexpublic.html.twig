@@ -1,22 +1,22 @@
 {% block body %}
-<div id="pagehome" class="index--mob" data-agent="{{ agent }}">
-    <div class="bk-separate_mb"></div>
-    <div class="bk-separate_mb"></div>
+<div id="pagehome" class="pwa-index" data-agent="{{ agent }}">
+    <div class="pwa-bk-separate"></div>
+    <div class="pwa-bk-separate"></div>
 
     <div class="templ_bleu">
-         <div class="arg-content_mob">
-             <div class="arg-cont_mob-bk">
-                 <h2 class="h2-tit2_mob rub1">Rencontres<br>numeriques</h2>
-                 <div class="cont-arg_mob">
+         <div class="pwa-arg-content">
+             <div class="pwa-arg-cont-bk">
+                 <h2 class="pwa-h2-tit2 rub1">Rencontres<br>numeriques</h2>
+                 <div class="pwa-cont-arg">
                     Un programme pour les jeunes et les adultes.<br>Pour en savoir plus sur le monde numérique.
                  </div>
-                 <nav class="relational_mb">
-                     <a href="{{ path('rdv_samedi') }}" class="nav1_mb btn" title="rendez-vous">Les rendez-vous du samedi</a>
+                 <nav class="pwa-relational">
+                     <a href="{{ path('rdv_samedi') }}" class="pwa-nav1 btn" title="rendez-vous">Les rendez-vous du samedi</a>
                  </nav>
             </div>
-             <div class="bk-pict_mob">
+             <div class="pwa-bk-pict">
                  <section class="ear">
-                     <div class="blk-img_vrt4_mob" style="background-image: url({{ asset('imgdoc/potins/social.png') }}">
+                     <div class="pwa-blk-img-vrt4" style="background-image: url({{ asset('imgdoc/potins/social.png') }}">
                          <div class="_in-ear">
                              {#<h1 class="tit-sit">Végétal</h1>#}
                          </div>
@@ -26,19 +26,19 @@
          </div>
      </div>
 
-     <div class="bk-separate_mb"></div>
+     <div class="pwa-bk-separate"></div>
 
-    <div class="all_blocks_mb">
+    <div class="pwa-all-blocks">
 
-        <a class="vertical_block_mb" href="{{ path('ressources') }}">
-            <div class="content_vertical_block_mb" >Ressources</div>
+        <a class="pwa-vertical-block" href="{{ path('ressources') }}">
+            <div class="pwa-content-vertical-block" >Ressources</div>
         </a>
 
-        <div class="horizontal_block_mb">
-            <div class="two_block_mb">
-                <a class="block_blue_mb" href="{{ path('decouverte') }}">
-                    <div class="block_inblue_left_mb">
-                        <div class="ctn_in_blue_mb">
+        <div class="pwa-horizontal-block">
+            <div class="pwa-two-block">
+                <a class="pwa-block-blue" href="{{ path('decouverte') }}">
+                    <div class="pwa-block-inblue-left">
+                        <div class="pwa-ctn-in-blue">
                             <h2>Découvrir</h2>
                             <h3>Découvrez ou redécouvrez les technologies d'aujourd'hui.</h3>
                             <div class="ctn_strong">Réalité virtuelle, impression 3D, robotique</div>
@@ -51,9 +51,9 @@
                     #}
                 </a>
 
-                <div class="block_green_mb">
-                    <div class="block_ingreen_left_mb">
-                        <div class="ctn_in_blue_mb">
+                <div class="pwa-block-green">
+                    <div class="pwa-block-ingreen-left">
+                        <div class="pwa-ctn-in-blue">
                             <h2>Créer</h2>
                             <div class="ctn_strong">
                                 Montage vidéo, musique assistée par ordinateur...
@@ -69,10 +69,10 @@
                     #}
                 </div>
             </div>
-            <div class="one_block_mb">
-                <div class="block_pink_mb">
-                    <div class="block_inpink_letf_mb">
-                        <div class="ctn_in_blue_mb">
+            <div class="pwa-one-block">
+                <div class="pwa-block-pink">
+                    <div class="pwa-block-inpink-letf">
+                        <div class="pwa-ctn-in-blue">
                             <h2>Parentalité numérique</h2>
                             <h3>Parlons-en ensemble et avec vos enfants</h3>
                             <div class="ctn_strong">Le numérique ça se discute ! Pour vous donner les moyens d'accompagner vos enfants dans leur vie numérique, dialoguer, échanger autour des pratiques, du temps d'écran, des risques et des avantages, comment vivre le numérique en famille...</div>
@@ -88,7 +88,7 @@
         </div>
     </div>
 
-    <div class="bk-separate_mb"></div>
+    <div class="pwa-bk-separate"></div>
 
     <div class="middle__block-center">
         <div class="ntro4_cor">
@@ -98,11 +98,11 @@
         </div>
     </div>
 
-    <div class="block_locate_grey_mb">
+    <div class="pwa-block-locate-grey">
         {%  for media in medias %}
-            <a  class="in_locate_grey_mb" href="{{ path('media_page',{'slug':media.slug}) }}">
+            <a  class="pwa-in-locate-grey" href="{{ path('media_page',{'slug':media.slug}) }}">
                 <div class="tit-media">{{media.nameboard}}</div>
-                <div class="iner_where_mb">
+                <div class="pwa-iner-where">
                     {% if  media.template.logo is not null %}
                         <div class="pict_in_where" style="background-image: url( {{ asset(media.template.logo.getWebPath) }} )"></div>
                     {% endif %}
@@ -111,9 +111,9 @@
         {%  endfor %}
     </div>
 
-    <div class="bk-separate_mb"></div>
-    <div class="bk-separate_mb"></div>
-    <div class="bk-separate_mb"></div>
+    <div class="pwa-bk-separate"></div>
+    <div class="pwa-bk-separate"></div>
+    <div class="pwa-bk-separate"></div>
 
 </div>
 {% endblock %}

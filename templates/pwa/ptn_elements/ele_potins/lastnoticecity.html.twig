@@ -1,14 +1,14 @@
 <div class="flex-notb_v6-fix">
     {% for notice in lastsnotice %}
         {%  if notice.post is defined %}
-            <div class="last-postall_v6-mob">
+            <div class="pwa-last-postall-v6">
                 {{include('pwa/ptn_elements/ele_potins/noticecity.html.twig')}}
                 {%  if notice.post.htmlcontent.fileblob is defined %}
                 <content-notices data-cat="post" data-id="{{notice.post.id}}"></content-notices>
                 {%  endif %}
             </div>
         {%  elseif  notice.offre is defined%}
-            <div class="last-postall_v6-mob">
+            <div class="pwa-last-postall-v6">
                 {{include('pwa/ptn_elements/ele_potins/offrecity.html.twig')}}
                 {%  if notice.offre.product.htmlcontent.fileblob is defined %}
                 <content-notices data-cat="offre" data-id="{{notice.offre.id}}"></content-notices>

@@ -1,6 +1,6 @@
 {% block body %}
-    <div class="_pg_ptn_mob">
-        <div class="col_mob">
+    <div class="pwa-pg-ptn">
+        <div class="pwa-col">
             <button class="btn btn-secondary" onclick="history.back();"><i class="fa fa-arrow-circle-o-left">Retour</i></button>
         </div>
     </div>
@@ -12,20 +12,20 @@
     </div>
     #}
 
-    <div class="wp-ressourc_mb">
+    <div class="pwa-wp-ressourc">
 
-        <div class="potin_ressourc_mb">
-            <article class="w-ressourc_mb">
+        <div class="pwa-potin-ressourc">
+            <article class="pwa-w-ressourc">
                 {{ include('pwa/ptn_elements/ele_ressources/modale_ressource.html.twig') }}
             </article>
         </div>
 
-        <div class="other_resourc_blk_mb r_ctnt_mb">
-            <div class="title-block_mb">
-                <h2 class="title_mb">voir aussi</h2>
+        <div class="pwa-other-resourc-blk pwa-r-ctnt">
+            <div class="pwa-title-block">
+                <h2 class="pwa-title">voir aussi</h2>
             </div>
 
-            <div class="other_resourc_mb">
+            <div class="pwa-other-resourc">
                 {%  for ressource in ressources %}
                     {{ include('pwa/ptn_elements/ele_ressources/widget_ressources.html.twig') }}
                 {%  endfor %}

@@ -1,12 +1,12 @@
 {{ form_start(form) }}
 
-<div class="fieldset_mob">
+<div class="pwa-fieldset">
     {{ form_row(form.titre, {'attr': {'placeholder':'"article"'}}) }}  {# 'class': 'form-affi', #}
     {{ form_row(form.categorie) }}
 </div>
 
-<div class="fieldset_mob">
-    <div class="_items-form_mob">
+<div class="pwa-fieldset">
+    <div class="pwa-items-form">
     {{ form_row(form.pict) }}
     {% if carte.pict.getWebPAth is defined %}
         <div class="preview">
@@ -22,7 +22,7 @@
     </div>
 </div>
 
-<div class="fieldset_mob">
+<div class="pwa-fieldset">
     {{ form_widget(form.prix, {'attr': {'class': 'field-affi','placeholder':'"prix"'}}) }}
     <div class="form-group">
         {{ form_widget(form.composition, {'attr': {'class': 'field-affi','placeholder':'"composition"'}}) }}
