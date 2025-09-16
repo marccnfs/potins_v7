@@ -1,0 +1,29 @@
+{% block body %}
+    <div class="container-websit">
+        <div class="before_board"></div>
+        <section class="potin_public-section">
+            <header class="potin_public-header">
+                <h1>Inscription enregistrée</h1>
+                <p>Merci ! Votre demande de participation à <strong>{{ event.titre }}</strong> a bien été prise en compte.</p>
+            </header>
+            <div class="potin_public-content">
+                <div class="potin_public-summary">
+                    <h2>Prochaines étapes</h2>
+                    <ul>
+                        <li><span>Date :</span> {{ preorder.resaAt|date('d/m/Y') }}</li>
+                        <li><span>Participants :</span> {{ preorder.numberresa }}</li>
+                        {% if product and product.price > 0 %}
+                            <li><span>Tarif indicatif :</span> {{ (product.price * preorder.numberresa)|number_format(2, ',', ' ') }} €</li>
+                        {% endif %}
+                    </ul>
+                    <p>Un message de confirmation vient de vous être envoyé. Nous restons disponibles pour toute question.</p>
+                    <a class="btn" href="{{ path('show_event_id', {'id': event.potin.id}) }}">Retour au potin</a>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {{ include('desk/ptn_public/footer/potins_footer.html.twig') }}
+{% endblock %}

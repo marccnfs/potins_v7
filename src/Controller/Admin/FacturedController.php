@@ -13,16 +13,15 @@ use App\Repository\WbordersRepository;
 use App\Service\Gestion\Commandar;
 use App\Service\Gestion\Facturator;
 use App\Service\Gestion\GetFacture;
-use Doctrine\ORM\NonUniqueResultException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[IsGranted('ROLE_SUPER_ADMIN')]
-#[Route(' /board-v5-1/gest-wbsite/')]
+#[Route('/board-v5-1/gest-wbsite')]
 
 class FacturedController extends AbstractController{
 

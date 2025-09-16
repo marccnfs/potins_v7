@@ -1,0 +1,31 @@
+{% block body %}
+    <div class="container-websit">
+        <div class="before_board"></div>
+        <section class="potin_public-section">
+            <header class="potin_public-header">
+                <h1>Finalisez votre inscription</h1>
+                <p>Votre inscription à <strong>{{ event.titre }}</strong> est presque terminée.</p>
+            </header>
+            <div class="potin_public-content">
+                <div class="potin_public-summary">
+                    <h2>Récapitulatif</h2>
+                    <ul>
+                        <li><span>Date :</span> {{ preorder.resaAt|date('d/m/Y') }}</li>
+                        <li><span>Participants :</span> {{ participants }}</li>
+                        {% if product %}
+                            <li><span>Tarif par participant :</span> {{ product.price|number_format(2, ',', ' ') }} €</li>
+                        {% endif %}
+                        <li><span>Total à régler :</span> {{ total|number_format(2, ',', ' ') }} €</li>
+                    </ul>
+                    <p>Vous recevrez très prochainement un e-mail détaillant la marche à suivre pour régler votre réservation.</p>
+                    <p>Besoin d’aide ? Contactez-nous et nous vous guiderons pas à pas.</p>
+                    <a class="btn" href="{{ path('show_event_id', {'id': event.potin.id}) }}">Retour au potin</a>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {{ include('desk/ptn_public/footer/potins_footer.html.twig') }}
+{% endblock %}

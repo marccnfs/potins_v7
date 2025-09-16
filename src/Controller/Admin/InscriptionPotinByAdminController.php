@@ -17,16 +17,16 @@ use App\Service\Gestion\Commandar;
 use App\Service\Modules\Resator;
 use App\Service\Registration\Identificat;
 use Doctrine\Common\Collections\ArrayCollection;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[IsGranted('ROLE_MEMBER')]
-#[Route(' /media/gest-potins/')]
+#[Route('/media/gest-potins')]
 
 class InscriptionPotinByAdminController extends AbstractController
 {
@@ -206,7 +206,7 @@ class InscriptionPotinByAdminController extends AbstractController
     }
 
     #[Route('/form-delete-resa-admin/{idorder}/{id}', name:"form-delete_resa_admin")]
-    public function deleteResa(RegisteredRepository $regisrepo,OrdersRepository $ordersRepository,Commandar $commandar,Request $request,$id,$idorder): RedirectResponse|Response
+    public function deleteResaAdmin(RegisteredRepository $regisrepo,OrdersRepository $ordersRepository,Commandar $commandar,Request $request,$id,$idorder): RedirectResponse|Response
     {
 
         $order=$ordersRepository->findOrderEvent($idorder);

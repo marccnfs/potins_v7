@@ -7,20 +7,30 @@
 <div class="widget_event_card_date color-event-{{ col }}">
     <div class="widget_inner-event">
         <div class="info_dat">
+            {% set firstDate = event.dates|length > 0 ? (event.dates|first) : null %}
             {%  if customer is not null %}
                 <nav class="relational_relat">
-                    <a href="{{ path('back_admin_cmd_potins',{'id':event.id}) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">Réservez</a>
+                    {% if is_granted('ROLE_MEDIA') %}
+                        <a href="{{ path('resa_potins_media',{'id':event.id, 'date': firstDate ? firstDate.timestamp : event.appointment.starttime|date('U') }) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">Réservez</a>
+                    {% else %}
+                        <a href="{{ path('back_admin_cmd_potins',{'id':event.id}) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">Réservez</a>
+                    {% endif %}
                 </nav>
             {%  else %}
 
                 <nav class="relational_relat">
-                    <a href="{{ path('new_identify_for_resa') }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">reservez</a>
+                    {% if firstDate %}
+                        <a href="{{ path('resa_potins_public',{'id':event.id,'timestamp':firstDate.timestamp}) }}" class="nav1 btn  hide-on-mobile" title="Réservez votre place">Réservez</a>
+                    {% else %}
+                        <span class="nav1 btn disabled">Complet</span>
+                    {% endif %}
                 </nav>
 
             {% endif %}
 
             <div class="event-locate">
                 {% for datep in event.dates %}
+                {% for label, datep in event.dates %}
                 <div class="event-dates">
                     <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img" fill="currentColor" width="700pt" height="700pt" viewBox="0 0 700 700"  aria-hidden="true" class="info-svg">
                         <g>
@@ -43,6 +53,9 @@
 
                     <div class="event-inf4">
                         <span class="event-inf2">{{ datep|date("d-m-Y") }}</span>
+                        {% if customer is null %}
+                            <a href="{{ path('resa_potins_public',{'id':event.id,'timestamp':datep.timestamp}) }}" class="nav1 btn btn-small">Je m'inscris</a>
+                        {% endif %}
                     </div>
 
                 </div>

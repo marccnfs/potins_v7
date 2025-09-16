@@ -109,7 +109,6 @@ class PostEventRepository extends ServiceEntityRepository
             -> orderBy('p.create_at', 'ASC')
             -> getQuery()
             -> getResult();
-
     }
 
     public function findLastByCityBeforeWeek($city){ // todo ici plusieru technique pour les dates

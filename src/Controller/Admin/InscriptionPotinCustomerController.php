@@ -21,15 +21,15 @@ use App\Service\Gestion\Commandar;
 use App\Service\Gestion\Facturator;
 use App\Service\Gestion\GetFacture;
 use App\Service\Modules\Resator;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[IsGranted('ROLE_CUSTOMER')]
-#[Route(' /customer/gest-potins/')]
+#[Route('/customer/gest-potins')]
 
 class InscriptionPotinCustomerController extends AbstractController
 {

@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('mediatheque')]
+#[Route('/mediatheque')]
 
 class MediathequesController extends AbstractController
 {
@@ -45,7 +45,7 @@ class MediathequesController extends AbstractController
             ]);
     }
 
-    #[Route('mediatheque-la-saint-jean-de-boiseau', name:"media_saintjean")]
+    #[Route('/mediatheque-la-saint-jean-de-boiseau', name:"media_saintjean")]
     public function mediaSaintJean(): Response
     {
         $vartwig=$this->menuNav->templatepotins(
@@ -62,7 +62,7 @@ class MediathequesController extends AbstractController
         ]);
     }
 
-    #[Route('mediatheque-le-pellerin', name:"media_pellerin")]
+    #[Route('/mediatheque-le-pellerin', name:"media_pellerin")]
     public function mediaPellerin(): Response
     {
         $vartwig=$this->menuNav->templatepotins(

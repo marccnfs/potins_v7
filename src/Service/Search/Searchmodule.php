@@ -5,11 +5,7 @@ namespace App\Service\Search;
 
 
 use App\Entity\Module\GpReview;
-use App\Entity\Module\ModuleList;
 use App\Repository\GpReviewRepository;
-use App\Repository\RessourcesRepository;
-use App\Repository\GpRessourcesRepository;
-use App\Repository\OffresRepository;
 use App\Repository\PostEventRepository;
 use App\Repository\PostRepository;
 use App\Repository\BoardRepository;

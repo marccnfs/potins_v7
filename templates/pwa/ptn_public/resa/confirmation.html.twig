@@ -1,0 +1,26 @@
+{% block body %}
+    <div class="pwa-container">
+        <h1>Réservez votre place</h1>
+        <p>Inscrivez-vous pour participer à <strong>{{ event.titre }}</strong> le {{ selectedDate|date('d/m/Y') }}.</p>
+        <div class="pwa-card">
+            {% if event.locatemedia %}
+                <p><strong>Lieu :</strong> {{ event.locatemedia.nameboard }}{% if event.locatemedia.locality %}, {{ event.locatemedia.locality.city }}{% endif %}</p>
+            {% endif %}
+            {% if product and product.price > 0 %}
+                <p><strong>Tarif par participant :</strong> {{ product.price|number_format(2, ',', ' ') }} €</p>
+            {% else %}
+                <p><strong>Participation :</strong> Gratuit</p>
+            {% endif %}
+        </div>
+        <div class="pwa-form">
+            {{ form_start(form) }}
+            {{ form_row(form.sexe) }}
+            {{ form_row(form.name) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.telephone) }}
+            {{ form_row(form.numberresa) }}
+            {{ form_row(form.save) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

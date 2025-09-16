@@ -4,7 +4,6 @@ namespace App\Controller\Member;
 
 use App\Classe\potinsession;
 use App\Entity\Customer\Customers;
-use App\Entity\Member\Boardslist;
 use App\Entity\Users\User;
 use App\Entity\Users\Contacts;
 use App\Entity\Users\ProfilUser;
@@ -24,14 +23,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 
 
 #[IsGranted('ROLE_CUSTOMER')]
-#[Route(' /customer/suggest-boardpartner/')]
+#[Route('/customer/suggest-boardpartner')]
 class SuggestController extends AbstractController
 {
     use potinsession;

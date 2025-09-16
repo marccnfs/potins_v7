@@ -5,7 +5,7 @@ namespace App\Form;
 use App\Entity\Users\ProfilUser;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -34,7 +34,7 @@ class ProfilresaType extends AbstractType
                     'class' => 'validate[required, minSize[3], maxSize[150]] span12'
                 )
             ))
-            ->add('emailfirst',TextType::class, array(
+            ->add('emailfirst', EmailType::class, array(
                 'label' => 'email',
                 'attr' => array(
                     'class' => 'validate[required, minSize[3], maxSize[150]] span12'

@@ -30,7 +30,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[IsGranted('ROLE_MEDIA')]
-#[Route(' /media/gest-potins/')]
+#[Route('/media/gest-potins')]
 
 class InscriptionPotinByMediaController extends AbstractController
 {
@@ -58,13 +58,15 @@ class InscriptionPotinByMediaController extends AbstractController
             "Wadorder",
             'all');
 
+        $replace = false;
+
         return $this->render($this->useragentP.'ptn_media/home.html.twig', [
             'directory'=>'resa',
             'form' => $form->createView(),
             'post'=>$event->getPotin(),
             'date'=>$date,
             'event'=>$event,
-            'replacejs'=>$replace??null,
+            'replacejs'=>$replace,
             'vartwig'=>$vartwig,
             'member'=>$this->member,
             'board'=>$this->board
@@ -94,13 +96,15 @@ class InscriptionPotinByMediaController extends AbstractController
             "validpreorderesa",
             'all');
 
+        $replace = false;
+
         return $this->render($this->useragentP.'ptn_media/home.html.twig', [
             'directory'=>'resa',
             'form' => $form->createView(),
             'event'=>$event,
             'preorder'=>$preO,
             'registered'=>$nbregistered,
-            'replacejs'=>$replace??null,
+            'replacejs'=>$replace,
             'member'=>$this->member,
             'board'=>$this->board,
             'vartwig'=>$vartwig
@@ -121,12 +125,14 @@ class InscriptionPotinByMediaController extends AbstractController
             "confirmresa",
             'all');
 
+        $replace = false;
+
         return $this->render($this->useragentP.'ptn_media/home.html.twig', [
             'directory'=>'resa',
             'order'=>$order,
             'event'=>$event,
             'sub'=>$sub,
-            'replacejs'=>$replace??null,
+            'replacejs'=>$replace,
             'member'=>$this->member,
             'board'=>$this->board,
             'vartwig'=>$vartwig
@@ -146,12 +152,14 @@ class InscriptionPotinByMediaController extends AbstractController
             "confirmresa",
             'all');
 
+        $replace = false;
+
         return $this->render($this->useragentP.'ptn_media/home.html.twig', [
             'directory'=>'resa',
             'order'=>$order,
             'event'=>$event,
             'sub'=>$sub,
-            'replacejs'=>$replace??null,
+            'replacejs'=>$replace,
             'member'=>$this->member,
             'board'=>$this->board,
             'vartwig'=>$vartwig
@@ -175,10 +183,12 @@ class InscriptionPotinByMediaController extends AbstractController
             "editcustomer",
             'all');
 
+        $replace = false;
+
         return $this->render($this->useragentP.'ptn_media/home.html.twig', [
             'directory'=>'resa',
             'form' => $form->createView(),
-            'replacejs'=>$replace??null,
+            'replacejs'=>$replace,
             'member'=>$this->member,
             'board'=>$this->board,
             'vartwig'=>$vartwig
@@ -186,7 +196,7 @@ class InscriptionPotinByMediaController extends AbstractController
     }
 
 
-    #[Route('edit-participant-potins/{order}/{id}]', name:"edit_registered_media")]
+    #[Route('edit-participant-potins/{order}/{id}', name:"edit_registered_media")]
     public function editOrderRegisterd(RegisteredRepository $regisrepo,OrdersRepository $ordersRepository,Commandar $commandar,Request $request,$id,$order): Response
     {
         $order=$ordersRepository->findOrderEvent($order);
@@ -218,20 +228,22 @@ class InscriptionPotinByMediaController extends AbstractController
             "editorderesa",
             'all');
 
+        $replace = false;
+
         return $this->render($this->useragentP.'ptn_media/home.html.twig', [
             'directory'=>'resa',
             'form' => $form->createView(),
             'event'=>$event,
             'order'=>$order,
             'registered'=>$registered,
-            'replacejs'=>$replace??null,
+            'replacejs'=>$replace,
             'member'=>$this->member,
             'board'=>$this->board,
             'vartwig'=>$vartwig
         ]);
     }
 
-    #[Route('/form-delete-participant-potins/{order}/{id}', name:"form-delete_resamedia")]
+    #[Route('/form-delete-participant-potins/{order}/{id}', name:"form-delete_participant_resamedia")]
     public function deleteParticipantResa(RegisteredRepository $regisrepo,OrdersRepository $ordersRepository,Commandar $commandar,Request $request,$order,$id): RedirectResponse|Response
     {
         $order=$ordersRepository->findOrderEvent($order);
@@ -250,11 +262,11 @@ class InscriptionPotinByMediaController extends AbstractController
             $this->board,
             1
         );
-
+        $replace = false;
         return $this->render($this->useragentP.'ptn_media/home.html.twig', [
             'directory'=>'resa',
             'form' => $form->createView(),
-            'replacejs'=>$replace??null,
+            'replacejs'=>$replace,
             'board' => $this->board,
             'event'=>$event,
             'member'=>$this->member,
@@ -286,11 +298,11 @@ class InscriptionPotinByMediaController extends AbstractController
             $this->board,
             1
         );
-
+        $replace = false;
         return $this->render($this->useragentP.'ptn_media/home.html.twig', [
             'directory'=>'resa',
             'form' => $form->createView(),
-            'replacejs'=>$replace??null,
+            'replacejs'=>$replace,
             'board' => $this->board,
             'event'=>$event,
             'member'=>$this->member,
@@ -298,38 +310,5 @@ class InscriptionPotinByMediaController extends AbstractController
             'vartwig' => $vartwig,
         ]);
     }
-
-
-    /*
-    #[Route('delete-info-usager-registered/{idorder}/{id}]', name:"delete_registered_media")]
-    public function deleteOrderRegisterd(RegisteredRepository $regisrepo,OrdersRepository $ordersRepository,Commandar $commandar,Request $request,$id,$idorder): Response
-    {
-        $order=$ordersRepository->findOrderEvent($idorder);
-        $event=$order->getListproducts()[0]->getSubscription()->getEvent();
-        $form = $this->createForm(WorderPotinParticipantsType::class, $order);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $commandar->deleteParticpant($order);
-            return $this->redirectToRoute("office_media");
-        }
-        $vartwig=$this->menuNav->templatepotins(
-            Links::CUSTOMER_LIST,
-            'editorderesa',
-            "editorderesa",
-            'all');
-
-        return $this->render($this->useragentP.'ptn_media/home.html.twig', [
-            'directory'=>'resa',
-            'form' => $form->createView(),
-            'event'=>$event,
-            'order'=>$order,
-            'replacejs'=>$replace??null,
-            'member'=>$this->member,
-            'board'=>$this->board,
-            'vartwig'=>$vartwig
-        ]);
-    }
-*/
 
 }

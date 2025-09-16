@@ -1,0 +1,16 @@
+{% block body %}
+    <div class="pwa-container">
+        <h1>Finaliser votre inscription</h1>
+        <div class="pwa-card">
+            <p>Vous êtes inscrit à <strong>{{ event.titre }}</strong>.</p>
+            <p><strong>Date :</strong> {{ preorder.resaAt|date('d/m/Y') }}</p>
+            <p><strong>Participants :</strong> {{ participants }}</p>
+            {% if product %}
+                <p><strong>Tarif par participant :</strong> {{ product.price|number_format(2, ',', ' ') }} €</p>
+            {% endif %}
+            <p><strong>Total :</strong> {{ total|number_format(2, ',', ' ') }} €</p>
+            <p>Vous recevrez rapidement un message avec la procédure de paiement.</p>
+            <a class="btn" href="{{ path('show_event_id', {'id': event.potin.id}) }}">Retour au potin</a>
+        </div>
+    </div>
+{% endblock %}
