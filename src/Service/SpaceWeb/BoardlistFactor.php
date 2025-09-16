@@ -113,7 +113,7 @@ class BoardlistFactor
         */
         $board=new Board();
         $board->setNameboard($form['namewebsite']->getData());
-        $key=substr($board->getNameboard(),5).sha1(uniqid(mt_rand(), true));
+        $key=substr($board->getNameboard(),5).bin2hex(random_bytes(16));
         $board->setCodesite($key);
         $template=new Template();
         $template->setEmailspaceweb($customer->getEmailcontact());
@@ -148,7 +148,7 @@ class BoardlistFactor
         $adress = new Adresses();
         $board->setLocatemedia(true);
         $board->setNameboard($data['titre']);
-        $key=substr($board->getNameboard(),5).sha1(uniqid(mt_rand(), true));
+        $key=substr($board->getNameboard(),5).bin2hex(random_bytes(16));
         $board->setCodesite($key);
         $template->setEmailspaceweb($customer->getEmailcontact());
         $board->setTemplate($template);

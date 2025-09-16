@@ -41,7 +41,7 @@ class Pdfstore
           $this->extension = null;
           $this->alt = null;
         }
-      
+
     }
 
     #[ORM\PrePersist]
@@ -53,7 +53,7 @@ class Pdfstore
         }
         $this->extension = "pdf";
         $this->alt = $this->file['name'];
-        $uploadName = sha1(uniqid(mt_rand(), true));
+        $uploadName = bin2hex(random_bytes(16));
         $this->name=$uploadName.'.'.$this->extension;
 
       }
@@ -77,7 +77,7 @@ class Pdfstore
     {
         echo 'erreur chargement du fichiers';
     }
- 
+
   }
 
     #[ORM\PreRemove]
@@ -104,7 +104,7 @@ class Pdfstore
   protected function getUploadRootDir(): string
   {
     // On retourne le chemin relatif vers l'image pour notre code PHP
-    
+
     return  __DIR__.'/../../public/'.$this->getUploadDir();
 
   }

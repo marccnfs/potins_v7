@@ -47,7 +47,7 @@ class PanneauController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
             $website = $spaceWebtor->addWebsiteLocalityAdmin($this->dispatch,  $form);
-            $key=$website->getSlug().sha1(uniqid(mt_rand(), true));
+            $key=$website->getSlug().bin2hex(random_bytes(16));
             $website->setCodesite($key);
             $em->persist($website);
             $em->flush();

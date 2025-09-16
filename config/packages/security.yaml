@@ -33,7 +33,7 @@ security:
                 default_target_path: potins_index
 
             remember_me:
-                secret: '%kernel.secret%'
+                secret: '%env(APP_SECRET)%'
                 lifetime: 604800 # 1 week in seconds
                 path: /
                 secure: true

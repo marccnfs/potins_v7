@@ -46,7 +46,7 @@ class Imagejpg
 
 
 
-   
+
     public function setFile($options)
     {
           $this->file = $options['file'];
@@ -71,7 +71,7 @@ class Imagejpg
 
         if ($this->typefile === "file") {
             $this->extension = $this->file->guessExtension();
-            $uploadName = sha1(uniqid(mt_rand(), true));
+            $uploadName = bin2hex(random_bytes(16));
             $this->namefile = $uploadName . '.' . $this->extension;
 
         }elseif ($this->typefile === "gif") {

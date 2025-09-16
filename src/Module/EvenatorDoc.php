@@ -52,7 +52,7 @@ class EvenatorDoc
         $parts = base64_decode($data);
         $img = imagecreatefromstring($parts);
         if($img) {
-            $uploadName = sha1(uniqid(mt_rand(), true));
+            $uploadName = bin2hex(random_bytes(16));
             $namefile = $uploadName . '.' . 'jpg';
             imagejpeg($img, $npict->getUploadRootDir() . '/' . $namefile);
             $npict->setNamefile($namefile);

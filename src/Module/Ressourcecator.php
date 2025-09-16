@@ -151,7 +151,7 @@ class Ressourcecator
             $parts = base64_decode($data);
             $img = imagecreatefromstring($parts);
             if($img) {
-                $uploadName = sha1(uniqid(mt_rand(), true));
+                $uploadName = bin2hex(random_bytes(16));
                 $namefile = $uploadName . '.' . 'jpg';
                 imagejpeg($img, $npict->getUploadRootDir() . '/' . $namefile);
                 $npict->setNamefile($namefile);
@@ -169,7 +169,7 @@ class Ressourcecator
         return MsgAjax::MSG_POSTOK;
     }
 
- 
+
     public function removeRessource(Ressources $ressource): array
     {
         $this->em->remove($ressource);

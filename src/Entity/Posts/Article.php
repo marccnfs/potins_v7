@@ -332,7 +332,7 @@ class Article
     {
         if (null === $this->file) return false;
         $this->extension = 'txt';
-        $uploadName = sha1(uniqid(mt_rand(), true));
+        $uploadName = bin2hex(random_bytes(16));
         $this->fileblob=$uploadName.'.'.$this->extension;
         $data = trim($this->file);
         $this->data=nl2br($data);

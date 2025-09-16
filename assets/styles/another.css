@@ -1,0 +1,1457 @@
+/* ==========================================================================
+   Module: Admin module badge helpers
+   Purpose: Provide textual labels on module shortcuts in the back-office menu.
+   Source: Previously in assets/styles/app.css.
+   ========================================================================= */
+#testpre {
+    position: relative;
+}
+
+.module_mail:after {
+    content: 'Messages';
+}
+
+.module_found:after {
+    content: 'Menus';
+}
+
+.module_blog:after {
+    content: 'Blog';
+}
+
+.module_event:after {
+    content: 'Evenement';
+}
+
+.module_shop:after {
+    content: 'Boutique';
+}
+
+/* ==========================================================================
+   Module: Onboarding promo modal
+   Purpose: Style the "ampoule" promotional pop-in displayed during onboarding.
+   Source: Previously in assets/styles/app.css.
+   ========================================================================= */
+.pop_backgange {
+    color: #fff;
+    position: absolute;
+    right: 10%;
+    width: 250px;
+    height: 300px;
+    padding: 39px 14px;
+    background-color: #ffffff1a;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 50;
+}
+
+.abs-croos {
+    position: absolute;
+    right: 12px;
+    top: 5px;
+    font-size: 1rem;
+}
+
+.univ {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.ampoul {
+    height: 25%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    border-radius: 15px;
+    color: yellow;
+}
+
+.modal_innerpopo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    height: 75%;
+}
+
+.modal_innerpopo > h3 {
+    color: #407ec2 !important;
+}
+
+._iner-cmd {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: auto;
+    align-items: center;
+}
+
+.modal_innerpopo p {
+    font-size: 1rem;
+    color: var(--goaffi);
+}
+
+.modal_cmd {
+    height: 250px;
+    width: 80%;
+    margin: auto;
+}
+
+.me_ampoul {
+    font-size: 1rem;
+    color: grey;
+}
+
+.me_ampoul i {
+    font-size: 1rem;
+    color: #FFFFFF;
+}
+
+.pop_rep {
+    color: #fff;
+    position: relative;
+    width: 200px;
+    height: auto;
+    padding: 25px 14px;
+    background-color: #ffffff1a;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.price-offre {
+    padding: 0;
+    color: var(--goaffi);
+    text-align: left;
+}
+
+.price-offre li {
+    line-height: 3rem;
+    font-size: 1rem;
+}
+
+.fast-price {
+    padding: 5px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.fast-price .dkprice {
+    font-size: 1rem;
+}
+
+.new-price {
+    color: orangered;
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   Module: Marketplace calendar board
+   Purpose: Layout and behaviour for the merchant calendar & agenda tools.
+   Source: Previously in assets/styles/calendar.css.
+   ========================================================================= */
+
+/* Block: Form layout columns for board creation */
+.board-formadd {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    width: 80%;
+    margin: auto;
+}
+
+.side_menu {
+    margin-top: 0;
+    padding: 15px;
+}
+
+.form-add-center-row_one {
+    position: relative;
+    padding-top: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.form-add-center {
+    position: relative;
+    display: grid;
+    grid-template-rows: 1fr;
+    margin-top: 35px;
+}
+
+.content-form-busi {
+    position: relative;
+    padding: 15px;
+    border: solid 1px #f0f0f3;
+    border-radius: 5px;
+}
+
+#tab-nav {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -1px;
+}
+
+/* Block: Tab navigation for multi-step forms */
+.tab {
+    display: none;
+    border: 1px solid #cccccc;
+    padding: 15px;
+    height: 100%;
+    background-color: #fff;
+    margin: auto;
+    text-align: center;
+}
+
+.tab-active {
+    display: block;
+}
+
+#tab-nav a {
+    display: block;
+    border: solid #cccccc;
+    border-width: 1px 1px 0 1px;
+    padding: 10px 15px;
+    border-radius: 5px 5px 0 0;
+    background-color: #150878;
+    text-decoration: none;
+    color: #fff;
+    transition-duration: 0.5s;
+}
+
+#tab-nav a.tab-nav-active {
+    color: #fbaf31;
+}
+
+#tab-nav .tab-nav-active {
+    background-color: #ffffff;
+}
+
+#tab-nav li {
+    display: inline-block;
+}
+
+main li {
+    font-size: 15px;
+    line-height: 20px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+}
+
+/* Block: Field toggles and callback configuration */
+.group-side {
+    position: relative;
+    margin-top: 0;
+    padding: 15px;
+}
+
+.stateone {
+    display: block;
+}
+
+.select-callback {
+    display: none;
+}
+
+.alongdate {
+    display: none;
+}
+
+.callback {
+    display: block;
+    height: 100px;
+    width: 80%;
+}
+
+.menu-side-busi {
+    text-align: center;
+    justify-self: center;
+    align-self: start;
+}
+
+.content-side {
+    width: 80%;
+    padding-top: 10px;
+}
+
+.content-form-calendar {
+}
+
+.callback a {
+    color: black;
+}
+
+.select-day-month {
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+}
+
+.market_daysweek {
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+}
+
+.alongperiod {
+    display: block;
+    margin: 0px;
+}
+
+.fields-days {
+    display: block;
+    margin: 0px;
+    width: 100%;
+}
+
+.fields-repete {
+    margin: 0px;
+}
+
+.fields-month {
+    display: none;
+    margin: 0px;
+    height: 120px;
+    margin-top: 20px;
+}
+
+.fields-week {
+    display: none;
+    margin: 0px;
+}
+
+.alongchoice {
+    display: none;
+}
+
+/* Block: Weekly summary board layout */
+.board-hebdo-busi {
+    top: 70px;
+    position: relative;
+    padding-top: 100px;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+}
+
+.Monday {
+    background-color: #5d9cec;
+}
+
+.Tuesday {
+    background-color: #5d9cec;
+    color: #fff;
+}
+
+.Wednesday {
+    background-color: #5d9cec;
+}
+
+.Thursday {
+    background-color: #5d9cec;
+}
+
+.Friday {
+    background-color: #5d9cec;
+    color: #fff;
+}
+
+.Saturday {
+    background-color: #5d9cec;
+}
+
+.Sunday {
+    background-color: #5d9cec;
+    color: #fff;
+}
+
+/* Block: Admin calendar table structure */
+.calendar__table__admin {
+    width: 100%;
+    height: 70vh;
+    margin-top: 20px;
+}
+
+.calendar__table__admin td {
+    border: 1px solid white;
+    vertical-align: top;
+    width: 14.29%;
+    height: 20%;
+    background-color: #d2d4d6;
+}
+
+.calendar__table__admin td a {
+    color: #0f087d;
+    margin-left: 3px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.ref-market {
+    display: block;
+}
+
+.ref-market:hover {
+    background-color: #d2d4d6;
+}
+
+.ref-market a {
+    color: #000;
+}
+
+.appoint_admin {
+    padding: 0px;
+    margin: auto;
+    background-color: #a5a2a2;
+    text-align: center;
+    border-bottom: solid 0.5px grey;
+    border-top: solid 0.5px grey;
+}
+
+.in-calendar {
+    background-color: #a5a2a2;
+    font-size: 0.8rem;
+}
+
+.in-calendar a {
+    color: #fff;
+}
+
+.calendar__table__admin td.is__today__admin {
+    background-color: #fabd16;
+}
+
+.calendar__event__admin {
+    display: grid;
+    visibility: hidden;
+    grid-template-columns: 1fr 2fr;
+}
+
+.calendar__event_market__admin {
+    display: grid;
+    visibility: visible;
+    grid-template-columns: 1fr 2fr;
+    background-color: green;
+}
+
+.calendar__table__market-desk__admin {
+    width: 100%;
+    /* height: 450px; */
+    margin-bottom: 100px;
+}
+
+.calendar__table__market-desk__admin td {
+    padding: 10px;
+    border: 1px solid white;
+    vertical-align: top;
+    width: 14.29%;
+    height: 20%;
+}
+
+.calendar__table--6weeks__admin tr {
+    height: 150px;
+}
+
+.calendar__table--6weeks__admin td {
+    height: 100px;
+}
+
+.calendar__weekday__admin {
+    font-weight: bold;
+    color: #000;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.calendar__othermonth__admin .calendar__day {
+    opacity: 0.2;
+}
+
+.calendar__market {
+    margin: 20px;
+    text-align: center;
+}
+
+.calendar-affi {
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.til_cal {
+    font-family: arial, sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #510a7b;
+    align-self: center;
+    border-radius: 0 10px 10px 0;
+    height: 36px;
+    text-align: center;
+}
+
+/* Block: Month and week view grids */
+.lig-grid_month {
+    display: flex;
+    flex-direction: column;
+}
+
+.lig-grid_day {
+    display: flex;
+    flex-direction: column;
+}
+
+.col-date {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lig-grid-resa {
+    display: grid;
+    grid-template-rows: 1fr 2fr;
+    margin-bottom: 15px;
+}
+
+.col-date h1 {
+    font-size: 2rem;
+}
+
+.calendar__table {
+    color: #3a3636;
+    text-align: center;
+}
+
+.calendar__table--5weeks {
+}
+
+.calendar__table--month {
+}
+
+.calendar__table--month tr {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+}
+
+.calendar__table--month td {
+    height: 36px;
+    justify-self: center;
+    align-self: center;
+    border: 0.5px #80808030 solid;
+    width: 8.333%;
+    padding-top: 5px;
+}
+
+.calendar__table--5weeks tr {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.col-date h1 {
+    text-align: center;
+    font-size: 1.8em;
+    line-height: 1em;
+    color: #011180;
+    padding: 15px;
+}
+
+.calendar__table--5weeks td {
+    height: 36px;
+    justify-self: center;
+    align-self: center;
+    border: 1px #80808030 solid;
+    width: 100%;
+    padding-top: 5px;
+    margin: 1px;
+}
+
+.calendar__table--6weeks {
+    width: 100%;
+}
+
+.calendar__table--6weeks tr {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar__table--6weeks td {
+    height: 36px;
+    justify-self: center;
+    align-self: center;
+    border: 1px #80808030 solid;
+    width: 100%;
+    padding-top: 5px;
+    margin: 1px;
+}
+
+.calendar__othermonth {
+    color: rgba(84, 84, 84, 0.22);
+    opacity: 0.4;
+}
+
+.calendar__weekday {
+    font-size: 0.8rem;
+    color: darkslategrey;
+}
+
+.calendar__month {
+    font-size: 0.8rem;
+    color: darkslategrey;
+}
+
+.calendar__month a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Block: Calendar day states and highlights */
+.calendar__day {
+    color: var(--goaffi);
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.calendar__day a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.calendar__button {
+    background-color: grey;
+}
+
+.dayopen {
+    background-color: #2f4f4f4f;
+}
+
+.dayselect {
+    background-color: darkblue;
+}
+
+.dayoff {
+    background-color: #00008b42;
+}
+
+.dayon {
+    background-color: #ffc107;
+}
+
+.dayon > div {
+    color: #f0f0f0 !important;
+}
+
+.is__today {
+    background-color: #001b44;
+}
+
+.spacy_blue {
+    color: #dc3545;
+    height: 10px;
+    width: 10px;
+    font-size: 20px;
+}
+
+.glass-calendar {
+    font-weight: 300;
+    font-size: 1rem;
+    text-shadow: none;
+}
+
+.reserved {
+    background-color: #f36100;
+}
+
+/* Block: Floating quick action button */
+.stape_post {
+    position: relative;
+    right: 7px;
+    top: 0;
+    z-index: 50;
+    height: 50px;
+    background-color: #f36100;
+    width: 50px;
+    padding: 0%;
+    display: inline-block;
+    color: #ffffff;
+    border-radius: 50%;
+    text-align: center;
+    justify-self: center;
+}
+
+.intext {
+    font-size: 1.2rem;
+    font-weight: 300;
+    display: inline-block;
+    align-self: center;
+    color: #ffff;
+}
+
+/* ==========================================================================
+   Module: Article & resource detail pages
+   Purpose: Layout for resource stories, galleries and listing tiles.
+   Source: Previously in assets/styles/articles.css.
+   ========================================================================= */
+
+/* Block: Resource hero layout */
+.potin_ressourc {
+    width: 70%;
+    position: relative;
+}
+
+.potin_ressourc p {
+}
+
+.w-ressourc {
+    width: 100%;
+    position: relative;
+    z-index: 505;
+    color: var(--potins-blk);
+}
+
+.inner-list_ress {
+    position: relative;
+    width: 100%;
+    text-align: left;
+    padding: 7px;
+    background-color: #aab3b729;
+}
+
+.fx-row-ress {
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.left_row_ress {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    padding: 15px;
+    width: 350px;
+}
+
+.right_row_ress {
+    position: relative;
+    min-width: 266px;
+    display: block;
+}
+
+.pic_right_ress {
+    width: 266px;
+}
+
+.pic_right {
+    display: block;
+    position: relative;
+    width: auto;
+    margin: auto;
+    height: 570px;
+}
+
+.titlpotin {
+    position: relative;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+}
+
+.titlpotin h2 {
+    color: #51658f;
+}
+
+.titlpotin h3 {
+    padding: 35px;
+    color: var(--potinsmauv);
+}
+
+.illustr-ressourc {
+    display: flex;
+    flex-direction: column;
+    margin-top: 18px;
+}
+
+.illustr-ressourc img {
+    height: auto;
+    max-width: 100%;
+}
+
+/* Block: Inline gallery within resource details */
+.gallery {
+    margin-left: 20px;
+    float: right;
+    width: 36%;
+}
+
+.gallery figure {
+    display: table;
+    margin: 0;
+}
+
+.gallery figcaption {
+    font-style: normal;
+    caption-side: bottom;
+    color: #727272;
+}
+
+.pt_pict_ressourc {
+    position: relative;
+    height: 350px;
+    width: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.pictsmall,
+.pictlarge {
+    cursor: pointer;
+}
+
+.pictsmall {
+    width: 150px;
+    height: auto;
+    margin: 5px;
+}
+
+/* Block: Resource card layout inside article */
+.ressource_card {
+    display: flex;
+    flex-direction: row-reverse;
+    position: relative;
+    width: 865px;
+    margin-bottom: 20px;
+}
+
+.ressource_descp {
+    padding: 0 10px 0;
+}
+
+.pict_ressource {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 25;
+}
+
+.w_titl_ress {
+    display: block;
+    padding: 0 0 0 10px;
+    position: relative;
+    color: #04284fa6;
+    font-size: 1.4rem !important;
+    font-weight: 600 !important;
+}
+
+.inner-ressourc {
+    font-weight: 400;
+    position: relative;
+    display: flex;
+    width: 100%;
+    text-align: left;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+}
+
+.ressourc_content {
+    position: relative;
+    min-height: 0;
+    border-top: rgba(105, 105, 105, 0.1411764706) solid 0.2px;
+    background-color: #FFFFFF;
+}
+
+/* Block: Related resources sidebar */
+.other_resourc_blk {
+    width: 30%;
+    max-width: 360px;
+    vertical-align: top;
+    position: fixed;
+    right: 75px;
+    top: 122px;
+    padding: 25px;
+}
+
+.other_resourc {
+    border: 1px solid rgb(10 39 41 / 5%);
+    position: relative;
+    padding: 10px;
+    align-items: center;
+}
+
+.other_resourc_blk .title-block {
+    margin: 0 0 1rem;
+    padding-left: 3rem;
+    position: relative;
+}
+
+.other_resourc_blk .title-block::before {
+    left: 0;
+    width: 2rem;
+}
+
+.other_resourc_blk p {
+    font-size: 1.6rem;
+    line-height: 1.9rem;
+    margin: 0;
+    padding-top: 2rem;
+}
+
+.other_resourc_blk .title {
+    font-size: 1.8rem;
+    color: grey;
+    margin: 0;
+    padding: 0;
+}
+
+/* Block: Article content sections */
+.articles-container {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.article-block {
+    margin-bottom: 30px;
+    /*padding: 15px;*/
+    border-bottom: 1px solid #ddd;
+}
+
+.article-block h2 {
+    color: #1e3a5f;
+    font-size: 20px !important;
+    margin-bottom: 10px;
+}
+
+.article-content {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.article-content p {
+    font-size: 18px;
+    line-height: 30px;
+    width: 100%;
+    margin: 22px 0 25px;
+    display: block;
+}
+
+.article-media {
+    margin-top: 15px;
+}
+
+.article-media img {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+.article-media video {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+.widget_event_card {
+    display: block;
+    padding: 10px;
+    background: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    transition: transform 0.2s ease-in-out;
+    margin: 10px;
+}
+
+.widget_event_card:hover {
+    transform: scale(1.05);
+}
+
+.search-section {
+    text-align: center;
+    margin-bottom: 2rem;
+    display: block;
+    position: relative;
+    margin-top: 90px;
+}
+
+/* Block: Resource listing grid */
+.ressources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+}
+
+.ressource-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.ressource-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.ressource-image {
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+}
+
+.pict_event {
+    background-color: #ddd;
+    background-size: cover;
+    background-position: center;
+}
+
+.ressource-content {
+    padding: 1rem;
+}
+
+.category-tag {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.ressource-title {
+    margin-bottom: 0.5rem;
+    line-height: 29px;
+    font-size: 1.4rem !important;
+    color: #040f64 !important;
+}
+
+.ressource-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.ressource-footer {
+    font-size: 0.85rem;
+    color: #888;
+    text-align: right;
+    position: absolute;
+    bottom: 5px;
+    left: 15px;
+}
+
+.no-ressources {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: #777;
+}
+
+/* Block: Status badges */
+.status-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.status-badge.open {
+    background: #28a745;
+    color: white;
+}
+
+.status-badge.closed {
+    background: #dc3545;
+    color: white;
+}
+
+/* Block: Section wrappers */
+.ressource-container {
+    padding: 25px;
+}
+
+.section-title {
+    text-align: center;
+    color: #4c78a7;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #ced3d8;
+}
+
+/* ==========================================================================
+   Module: PWA fallback (no potin available)
+   Purpose: Branded emergency layout when the mobile PWA has no potin content.
+   Source: Selected rules from assets/styles/pwa.css.
+   ========================================================================= */
+.pwa-footer-noptn {
+    background-color: #ff0000;
+    bottom: 0;
+    box-shadow: inset 0 1px 0 var(--potinblk), 0 -1px 0 rgba(0, 0, 0, 0.5);
+    color: var(--potinsgrey);
+    font: 14px var(--fontFamOne);
+    left: 0;
+    margin: 0;
+    padding: 0 0 0 0;
+    right: 0;
+    text-transform: none;
+    z-index: 99999;
+    direction: ltr;
+    -webkit-font-smoothing: subpixel-antialiased;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 150px;
+}
+
+.pwa-header-noptn {
+    background-color: #ff0000;
+    top: 0;
+    box-shadow: inset 0 1px 0 var(--potinblk), 0 -1px 0 rgba(0, 0, 0, 0.5);
+    color: var(--potinsgrey);
+    font: 14px var(--fontFamOne);
+    left: 0;
+    margin: 0;
+    padding: 0 0 0 0;
+    position: fixed;
+    right: 0;
+    text-transform: none;
+    direction: ltr;
+    -webkit-font-smoothing: subpixel-antialiased;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 60px;
+}
+
+.pwa-nopotin-content {
+    background-color: #fff;
+    border-top: 0.2px solid hsla(0,0%,41%,.141);
+    min-height: 0;
+    padding: 15px;
+    position: relative;
+    margin: auto;
+    width: 450px;
+}
+
+.wp-ressourc_nopotin {
+    color: var(--potins-blk);
+    position: relative;
+    width: 80%;
+    z-index: 505;
+    margin: auto;
+    background-color: #ffffffba;
+    border-radius: 15px;
+    padding: 0;
+}
+
+.titre_noel {
+    font-size: 2rem;
+    padding: 5px;
+    color: red;
+}
+
+.h3noel {
+    font-size: 1.5rem;
+    color: black;
+    font-family: var(--fontLarge);
+}
+
+.article_content-nopotin {
+    width: 100%;
+    height: 100%;
+    padding: 0 15px;
+    color: black;
+}
+
+.ressourc_content_nopotin {
+    border-top: 0.2px solid hsla(0,0%,41%,.141);
+    min-height: 0;
+    position: relative;
+    width: 100%;
+}
+
+.pwa-titlpotin h2 {
+    font-size: 2rem;
+    color: #51658f;
+}
+
+.pwa-titlpotin h3 {
+    font-size: 1.3rem;
+    color: var(--potinsmauv);
+}
+
+.pwa-illustr-ressourc {
+    display: flex;
+    flex-direction: column;
+    margin-top: 18px;
+}
+
+.pwa-illustr-ressourc img {
+    height: auto;
+    max-width: 100%;
+}
+
+.r_100 {
+    position: relative;
+    width: 100%;
+}
+
+.pwa-gallery {
+    margin-left: 20px;
+    float: right;
+    width: 36%;
+}
+
+.pwa-gallery figure {
+    display: table;
+    margin: 0;
+}
+
+.pwa-gallery figcaption {
+    font-size: 1rem;
+    font-style: normal;
+    caption-side: bottom;
+    color: #727272;
+}
+
+.pwa-pt-pict-ressourc {
+    position: relative;
+    height: 350px;
+    width: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.pwa-iner-compo {
+    overflow: inherit;
+    box-sizing: inherit;
+    color: inherit;
+    display: block;
+    margin-top: 0 !important;
+}
+
+.pwa-como {
+    padding: 0 10px 0 10px;
+}
+
+.pwa-compo-row {
+    margin-bottom: 0;
+    overflow: inherit;
+}
+
+.pwa-compo-column {
+    margin-right: 0;
+    float: left;
+}
+
+.pwa-txt-r1 {
+    padding: 0 10px 0 10px;
+}
+
+.pwa-txt-r1 p {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    margin: 0 0 0.75em 0;
+    color: #2a2828;
+    font-family: var(--fontlith);
+}
+
+.pwa-inner-ressourc {
+    font-weight: normal;
+    font-family: "Roboto", "Franklin Gothic Medium", Tahoma, sans-serif;
+    padding: 0 10px 0 10px;
+    position: relative;
+    display: flex;
+    width: 100%;
+    text-align: left;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+}
+
+.pwa-ressourc-content {
+    position: relative;
+    min-height: 0;
+    border-top: rgba(105, 105, 105, 0.1411764706) solid 0.2px;
+    background-color: #FFFFFF;
+}
+
+.pwa-r-ctnt {
+    padding: 0 10px 0 10px;
+    margin: 15px 0 50px 0;
+}
+
+.pwa-r-ctnt p {
+    line-height: 1.6;
+    margin: 0 0 0.75em 0;
+}
+
+.pwa-r-ctnt ul {
+    list-style: none;
+    margin: 2rem 0 1.5rem;
+    padding-left: 3rem;
+    color: #000;
+    font-size: 2rem;
+    font-weight: 400;
+}
+
+.pwa-r-ctnt ul > li {
+    line-height: 1.6;
+    position: relative;
+}
+
+.pwa-r-ctnt ul > li::before {
+    display: inline-block;
+    font-family: 'Font Awesome 5 Pro';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    height: 2rem;
+    width: 2rem;
+    background-color: #07aeb9;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 1.3rem;
+    left: -3rem;
+    line-height: 20px;
+    padding: 0.1rem 0 0 0.1rem;
+    text-align: center;
+    top: 0.5rem;
+    content: "\f105";
+    position: absolute;
+    box-sizing: inherit;
+}
+
+/* ==========================================================================
+   Module: Potin tool showcase
+   Purpose: Display animated tool cards inside the potin presentation page.
+   Source: Previously in assets/styles/potin.css.
+   ========================================================================= */
+
+/* Block: Layout container */
+.container-showpost {
+    max-width: 1100px;
+    margin: auto;
+}
+
+.header-showpost {
+    text-align: center;
+    margin-bottom: 2rem;
+    margin-top: 92px;
+}
+
+.potin-subject {
+    padding: 8px 0 45px;
+}
+
+.potin-media {
+    padding-bottom: 15px;
+    height: 450px;
+    width: 100%;
+}
+
+/* Block: Futuristic tool grid */
+.masonry-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: #111;
+}
+
+/* Block: Tool card base styles */
+.tool-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    transition: transform 0.5s ease-in-out, opacity 0.5s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.tool-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.tool-card p {
+    font-size: 1.2rem;
+    opacity: 0.8;
+    color: white !important;
+}
+
+.tool-card img {
+    width: 80%;
+    max-height: 150px;
+    object-fit: contain;
+    margin-top: 10px;
+}
+
+/* Block: Card animations */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.tool-card:nth-child(odd) {
+    animation: float 3s ease-in-out infinite;
+}
+
+.tool-card:nth-child(even) {
+    animation: float 4s ease-in-out infinite alternate;
+}

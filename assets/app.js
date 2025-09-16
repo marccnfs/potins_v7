@@ -13,13 +13,11 @@ global.$ = global.jQuery = $;
 
 bsCustomFileInput.init();
 
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import '@fortawesome/fontawesome-free/css/v4-shims.min.css';
+
 import './styles/potins.scss';
-import './styles/calendar.css';
-<<<<<<< Updated upstream
 import './styles/pwa.css';
-=======
->>>>>>> Stashed changes
 import './styles/media.css';
 import './styles/form.css';
-import './styles/articles.css';
-import './styles/potin.css';
+import './styles/another.css';

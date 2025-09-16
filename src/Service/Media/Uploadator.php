@@ -36,7 +36,7 @@ class Uploadator
 
         $this->ext=$this->file->guessExtension();
         $this->pict->SetAlt($this->file->getClientOriginalName());
-        $uploadName = sha1(uniqid(mt_rand(), true));
+        $uploadName = bin2hex(random_bytes(16));
         $this->newfile=$uploadName . '.' . $this->ext;
         $this->pict->SetNamefile($this->newfile);
 

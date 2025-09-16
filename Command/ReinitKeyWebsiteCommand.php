@@ -42,7 +42,7 @@ class ReinitKeyWebsiteCommand extends Command
 
         foreach ($items as $item) {
             $io->progressAdvance();
-            $key = $item->getSlug().sha1(uniqid(mt_rand(), true));
+            $key = $item->getSlug().bin2hex(random_bytes(16));
             if (!$item->getCodesite()){
                 $item->setCodesite($key);
                 $moduleevent = new ModuleList();
