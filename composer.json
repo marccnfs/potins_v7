@@ -71,6 +71,7 @@
     },
     "scripts": {
         "auto-scripts": {
+            "test": "php -d zend.assertions=1 ./bin/phpunit",
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },

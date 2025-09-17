@@ -13,6 +13,8 @@ use App\Repository\BoardslistRepository;
 use App\Service\MenuNavigator;
 use App\Service\Registration\Sessioninit;
 use App\Service\Navigator;
+use App\Entity\Users\User;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -49,8 +51,13 @@ trait MemberSession
                                 Navigator $navigator,
                                 BoardslistRepository $repolistboard)
     {
-        $this->em = $em;
         $this->security = $security;
+        $user = $this->security->getUser();
+        if (!$user instanceof User) {
+            throw new AccessDeniedException();
+        }
+
+        $this->em = $em;
         $this->menuNav = $menuNav;
         $this->requestStack = $requestStack;
         $this->router = $router;
@@ -58,21 +65,10 @@ trait MemberSession
         $this->navigator = $navigator;
         $this->repomember = $repomember;
         $this->repolistboard=$repolistboard;
-/*
-        if ($this->security->isGranted("ROLE_MEMBER")){
-            if($this->requestStack->getSession()->has('iddisptachweb')){
-                $idmember=$this->requestStack->getSession()->get('iddisptachweb');
-                $this->member=$this->repomember->findAllById($idmember);
-                $this->customer=$this->member->getCustomer();
-            }else{
-                $this->sessioninit->InitCustomer($this->security->getUser());
-            }
-            $this->prepa();
-        }elseif ($this->security->isGranted("ROLE_MEDIA")){
-*/
+
         $this->clearinit();
-        $tabuser=$this->sessioninit->InitCustomer($this->security->getUser());
-        dump($this->security->getUser());
+        $tabuser=$this->sessioninit->InitCustomer($user);
+        dump($user);
         $this->member=$tabuser['member'];
         $this->customer=$this->member->getCustomer();
         $this->prepa();
