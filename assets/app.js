@@ -17,7 +17,15 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@fortawesome/fontawesome-free/css/v4-shims.min.css';
 
 import './styles/potins.scss';
+<<<<<<< Updated upstream
 import './styles/pwa.css';
 import './styles/media.css';
 import './styles/form.css';
 import './styles/another.css';
+=======
+import './styles/calendar.css';
+import './styles/media.css';
+import './styles/form.css';
+import './styles/articles.css';
+import './styles/potin.css';
+>>>>>>> Stashed changes
