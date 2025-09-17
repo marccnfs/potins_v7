@@ -5,8 +5,6 @@ namespace App\Controller\Agenda;
 use App\Classe\PublicSession;
 use App\Entity\Agenda\Event;
 use App\Entity\Users\Participant;
-use App\Enum\EventCategory;
-use App\Enum\EventStatus;
 use App\Lib\Links;
 use App\Repository\EventRepository;
 use App\Service\Agenda\IcsExporter;

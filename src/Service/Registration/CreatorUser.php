@@ -15,6 +15,7 @@ use App\Repository\ProductsRepository;
 use App\Util\Canonicalizer;
 use App\Util\DefaultModules;
 use App\Util\PasswordUpdater;
+use LogicException;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
@@ -83,6 +84,7 @@ class CreatorUser
             $user->setDatemajAt(new \DateTime());
             $user->setEmail($form['email']->getData());
             $this->passwordUpdater->hashPasswordstring($user, $identity->getMdpfirst());
+            $this->assertPasswordHasBeenHashed($user);
             $this->canonicalizer->updateCanonicalFields($user);
             $numeroclient->setNumero($nums->getNumClient());
             $numeroclient->setOrdre(date("Y"));
@@ -135,6 +137,7 @@ class CreatorUser
         $user->setEmail($mail);
 
         $this->passwordUpdater->hashPasswordstring($user, $identity->getMdpfirst());
+        $this->assertPasswordHasBeenHashed($user);
         $this->canonicalizer->updateCanonicalFields($user);
 
         $numeroclient->setNumero($nums->getNumClient());
@@ -198,6 +201,7 @@ class CreatorUser
         $user->setEmail($mail);
 
         $this->passwordUpdater->hashPasswordstring($user, $identity->getMdpfirst());
+        $this->assertPasswordHasBeenHashed($user);
         $this->canonicalizer->updateCanonicalFields($user);
 
         $numeroclient->setNumero($nums->getNumClient());
@@ -221,69 +225,18 @@ class CreatorUser
         return $customer;
     }
 
-
-
-    /* desactive pour l'instant
- public function initMemberPro(User $user, $form, Numeratum $nums): Customers
- {
-     $stringpass=$form['plainPassword']->getData() ?? "";
-     $mail=$form['email']->getData() ?? "";
-     return $this->newComptePro($user, $nums,true,$stringpass,$mail);
- }
- */
-
-
-
-    /* le reste old de affichange
-
-    public function createUserByMailToInvitWebsite($tabmember): Customers
+    private function assertPasswordHasBeenHashed(User $user): void
     {
-        $user = New User();
-        $nums=$this->numerator->getActiveNumerate();
-        $customer=$this->addUser($user, $nums, $tabmember);
-        $event = new DisptachEvent($user,$customer->getProfil(),$tabmember['website']);
-        $this->eventDispatcher->dispatch($event, AffiEvents::DISPATCH_REGISTRATION_SUCCESS);
-        $this->em->persist($user);
-        $this->em->flush();
-        $this->autoCommande->newInscriptionCmd($customer, $nums);
-        return $customer;
+        try {
+            $password = $user->getPassword();
+        } catch (\TypeError $exception) {
+            throw new LogicException('Password hashing failed for the new account.', 0, $exception);
+        }
+
+        if ($password === null) {
+            throw new LogicException('Password hashing failed for the new account.');
+        }
     }
 
 
-    public function createUserByConversToJoinWebsite($tabmember): Customers
-    {
-        $user = New User();
-        $nums=$this->numerator->getActiveNumerate();
-        $customer=$this->addUser($user, $nums, $tabmember);
-        $event = new DisptachEvent($user,$customer->getProfil(),$tabmember['website']);
-        $this->eventDispatcher->dispatch($event, AffiEvents::ADD_CONTACT_SUCCESS);
-        $this->em->persist($user);
-        $this->em->flush();
-        $this->autoCommande->newInscriptionCmd($customer, $nums);
-        return $customer;
-    }
-
-
-    public function createUserByShop($tabmember): Customers
-    {
-        $user = New User();
-        $nums=$this->numerator->getActiveNumerate();
-        $customer=$this->addUser($user, $nums, $tabmember);
-        $event = new DisptachEvent($user,$customer->getProfil(),$tabmember['website']);
-        $this->eventDispatcher->dispatch($event, AffiEvents::ADD_CLIENT_SUCCESS);
-        $this->em->persist($user);
-        $this->em->flush();
-        $this->autoCommande->newInscriptionCmd($customer, $nums);
-        return $customer;
-    }
-
-
-    public function adduser(User $user, Numeratum $nums, $tabmember): Customers
-    {
-        $contact=$tabmember['contact'];
-        $stringpass=$tabmember['pass'];
-        $mail=$tabmember['mail'];
-        return $this->newCompte($user, $nums,$contact,$stringpass,$mail);
-    }
-    */
 }
