@@ -155,7 +155,7 @@ class RegistrationMailer
 
     public function sendNewPasswordEmailMessage(User $user)
     {
-        $template ='aff_security/change_password/reinitpassword.email.twig';
+        $template ='aff_notification/security/reinitpassword.email.twig';
         $url = $this->router->generate('reset_change_password', array(
             'token' => $user->getConfirmationToken()),
             UrlGeneratorInterface::ABSOLUTE_URL);

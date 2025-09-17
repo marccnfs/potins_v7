@@ -23,12 +23,12 @@ class GetResponseUserEvent extends Event
         $this->request = $request;
     }
 
-    public function setResponse(Response $response)
+    public function setResponse(Response $response): void
     {
         $this->response = $response;
     }
 
-    public function getResponse()
+    public function getResponse(): ?Response
     {
         return $this->response;
     }
@@ -40,7 +40,7 @@ class GetResponseUserEvent extends Event
     }
 
 
-    public function getRequest()
+    public function getRequest(): ?Request
     {
         return $this->request;
     }

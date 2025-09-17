@@ -14,19 +14,15 @@ class FormEvent extends Event
 
     private FormInterface $form;
     private ?Request $request;
-    private ?Response $response;
-    private ?Heuristiques $heuristique;
+    private ?Response $response = null;          // ✅ nullable + valeur par défaut
+    private ?Heuristiques $heuristique = null;   // (si tu l’utilises, idem nullable)
 
-    /**
-     * FormEvent constructor.
-     *
-     * @param FormInterface $form
-     * @param Request       $request
-     */
-    public function __construct(FormInterface $form, Request $request)
+
+    public function __construct(FormInterface $form, ?Request $request = null, ?Heuristiques $heuristique = null)
     {
         $this->form = $form;
         $this->request = $request;
+        $this->heuristique = $heuristique;
     }
 
     public function getForm(): FormInterface
@@ -34,27 +30,27 @@ class FormEvent extends Event
         return $this->form;
     }
 
-    public function getRequest()
+    public function getRequest(): ?Request
     {
         return $this->request;
     }
 
-    public function setResponse(Response $response)
+    public function setResponse(Response $response): void   // ✅ setter explicite
     {
         $this->response = $response;
     }
 
-    public function getResponse()
+    public function getResponse(): ?Response                // ✅ retour nullable
     {
         return $this->response;
     }
 
-    public function getHeuristique()
+    public function getHeuristique(): ?Heuristiques
     {
         return $this->heuristique;
     }
 
-    public function setHeuristique(Heuristiques $heuristique)
+    public function setHeuristique(Heuristiques $heuristique): void
     {
         $this->heuristique = $heuristique;
     }

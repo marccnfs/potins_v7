@@ -53,6 +53,7 @@ class ChangePasswordController extends AbstractController
             $session->set('agent','desk/');
         }
         $vartwig=['maintwig'=>"request",'title'=>"renouvellez votre mot de passe"];
+
         return $this->render('aff_security/home.html.twig', [
             'directory'=>'change_password',
             'vartwig'=>$vartwig,
@@ -90,7 +91,10 @@ class ChangePasswordController extends AbstractController
 
 
     #[Route('reset-change-password', name:"reset_change_password")]
-    public function changePasswordofForget(Request $request,Response $response, UserRepository $userRepository,RequestStack $requestStack): RedirectResponse|Response
+    public function changePasswordofForget(
+        Request $request,
+        UserRepository $userRepository,
+        RequestStack $requestStack): RedirectResponse|Response
     {
         $session=$requestStack->getSession();
         if (preg_match('/mob/i', $_SERVER['HTTP_USER_AGENT'])) {
@@ -118,8 +122,11 @@ class ChangePasswordController extends AbstractController
             if (null !== $event->getResponse()) {
                 return $event->getResponse();
             }
-            $this->eventDispatcher->dispatch(new FilterUserResponseEvent($user, $request, $response), Affievents::RESETTING_RESET_COMPLETED);
-            return $response;
+            $filterEvent=new FilterUserResponseEvent($user, $request);
+            $this->eventDispatcher->dispatch($filterEvent, Affievents::RESETTING_RESET_COMPLETED);
+            if (null !== $filterEvent->getResponse()) {
+                return $event->getResponse();
+            }
         }
 
         $vartwig=['maintwig'=>"change_password",'title'=>"renouvellez votre mot de passe"];

@@ -72,7 +72,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $confirmationToken=null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private \DateTime $passwordRequestedAt;
+    private ?\DateTime $passwordRequestedAt = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $active = true;
