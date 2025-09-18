@@ -122,13 +122,11 @@ class ChangePasswordController extends AbstractController
             $session->set('agent','desk/');
         }
         $token = $request->query->get('token');
-        $user = $userRepository->findUserByConfirmationToken($token);
-        if (null === $user) {
-            throw $this->createAccessDeniedException('Token invalide.');
-        }
-
-        if (!$user->isPasswordRequestNonExpired($this->retryTtl)) {
-            throw $this->createAccessDeniedException('Token expiré.');
+        $isTokenString = is_string($token) && trim($token) !== '';
+        $user = $isTokenString ? $userRepository->findUserByConfirmationToken($token) : null;
+        if (null === $user || !$user->isPasswordRequestNonExpired($this->retryTtl)) {
+            $this->addFlash('resetting_error', "Votre lien de réinitialisation est invalide ou a expiré. Veuillez effectuer une nouvelle demande.");
+            return $this->redirectToRoute('forget_password_request');
         }
 
         $event = new GetResponseUserEvent($user, $request);
@@ -151,7 +149,7 @@ class ChangePasswordController extends AbstractController
             $filterEvent=new FilterUserResponseEvent($user, $request);
             $this->eventDispatcher->dispatch($filterEvent, Affievents::RESETTING_RESET_COMPLETED);
             if (null !== $filterEvent->getResponse()) {
-                return $event->getResponse();
+                return $filterEvent->getResponse();
             }
         }
 

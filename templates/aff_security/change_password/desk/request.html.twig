@@ -5,6 +5,10 @@
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">{# <circle cx="100" cy="100" r="80"/>#}</svg>
     <div class="content_login_affi">
 
+        {% for message in app.flashes('resetting_error') %}
+            <div class="alert alert-warning">{{ message }}</div>
+        {% endfor %}
+
         <form action="{{ path('forgetpassword_send_email') }}" method="POST" class="buble_form">
             <div class="checkerrember_mb">
                 <p>Oups !!!</p>
