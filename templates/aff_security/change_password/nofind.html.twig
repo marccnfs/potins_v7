@@ -1,4 +1,7 @@
 {% block body %}
+    {% for message in app.flashes('resetting_error') %}
+        <div class="alert alert-warning">{{ message }}</div>
+    {% endfor %}
     <p>Oups !!!</p>
     <h2>email introuvable</h2>
     <div class="span4">

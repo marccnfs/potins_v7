@@ -100,4 +100,43 @@ final class ChangePasswordTest extends WebTestCase
         self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
     }
+
+    public function testPasswordResetRequestIsCaseInsensitive(): void
+    {
+        $user = new User();
+        $user->setEmail('case.test@example.test');
+        $user->setEmailCanonical('case.test@example.test');
+        $user->setCharte(true);
+        $user->setEnabled(true);
+        $user->setPassword($this->passwordHasher->hashPassword($user, 'InitialPassword123!'));
+        $user->setPasswordRequestedAt(new \DateTime());
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        $this->client->request(
+            'POST',
+            '/security/oderder/profil-password/control-forget-mot-de-passe-to-mail',
+            ['email' => ' CASE.TEST@EXAMPLE.TEST ']
+        );
+
+        $response = $this->client->getResponse();
+        self::assertTrue($response->isRedirect());
+        $location = $response->headers->get('Location');
+        self::assertNotNull($location);
+        self::assertStringContainsString('username=case.test%40example.test', $location);
+        self::assertStringNotContainsString('%20', $location);
+
+        $this->client->followRedirect();
+        self::assertResponseIsSuccessful();
+        self::assertStringContainsString('case.test@example.test', $this->client->getResponse()->getContent());
+
+        $this->client->request(
+            'GET',
+            '/security/oderder/profil-password/check-new-password-by-mail',
+            ['username' => 'CASE.TEST@EXAMPLE.TEST']
+        );
+        self::assertResponseIsSuccessful();
+        self::assertStringContainsString('case.test@example.test', $this->client->getResponse()->getContent());
+    }
 }

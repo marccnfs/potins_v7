@@ -11,6 +11,7 @@ use App\Event\GetResponseNullableUserEvent;
 use App\Event\GetResponseUserEvent;
 use App\Form\ChangePasswordType;
 use App\Repository\UserRepository;
+use App\Util\Canonicalizer;
 use App\Util\TokenGeneratorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,14 +36,23 @@ class ChangePasswordController extends AbstractController
     private int $retryTtl;
     private EntityManagerInterface $em;
 
-    public function __construct(EntityManagerInterface $em ,EventDispatcherInterface $eventDispatcher, TokenGeneratorInterface $tokenGenerator, RegistrationMailer$mailer, PasswordUpdater $passwordUpdater)
-    {
-        $this->em=$em;
+    private Canonicalizer $canonicalizer;
+
+    public function __construct(
+        EntityManagerInterface $em,
+        EventDispatcherInterface $eventDispatcher,
+        TokenGeneratorInterface $tokenGenerator,
+        RegistrationMailer $mailer,
+        PasswordUpdater $passwordUpdater,
+        Canonicalizer $canonicalizer
+    ) {
+        $this->em = $em;
         $this->eventDispatcher = $eventDispatcher;
         $this->tokenGenerator = $tokenGenerator;
         $this->mailer = $mailer;
         $this->passwordUpdater = $passwordUpdater;
         $this->retryTtl = 60; //3600;
+        $this->canonicalizer = $canonicalizer;
     }
 
 
@@ -76,10 +86,16 @@ class ChangePasswordController extends AbstractController
             $session->set('agent','desk/');
         }
         $username = $request->query->get('username');
-        if (empty($username)) {
+        $username = is_string($username) ? trim($username) : '';
+        if ($username === '') {
             return new RedirectResponse($this->generateUrl('forget_password_request'));
         }
-        $user = $userRepository->findUserByEmail($username);
+        $usernameCanonical = $this->canonicalizer->canonicalize($username);
+        $user = $userRepository->findUserByEmail($usernameCanonical);
+        if (null === $user) {
+            $this->addFlash('resetting_error', "Aucun compte n'a été trouvé pour cette adresse e-mail.");
+            return $this->redirectToRoute('fno_email_find');
+        }
 
         $vartwig=['maintwig'=>"check_email",'title'=>"renouvellez votre mot de passe"];
         return $this->render('aff_security/home.html.twig', [
@@ -164,7 +180,7 @@ class ChangePasswordController extends AbstractController
     #[Route('email-inconnu', name:"fno_email_find")]
     public function noEmail(): Response
     {
-        return $this->render('security/ChangePassword/nofind.html.twig');
+        return $this->render('aff_security/change_password/nofind.html.twig');
     }
 
     /**
@@ -174,7 +190,13 @@ class ChangePasswordController extends AbstractController
     public function sendEmail(Request $request, UserRepository $userRepository,EntityManagerInterface $em)
     {
         $email = $request->request->get('email');
-        $user = $userRepository->findUserByEmail($email);
+        $email = is_string($email) ? trim($email) : '';
+        $emailCanonical = $email === '' ? '' : (string) $this->canonicalizer->canonicalize($email);
+        $user = $userRepository->findUserByEmail($emailCanonical);
+        if (null === $user) {
+            $this->addFlash('resetting_error', "Aucun compte n'a été trouvé pour cette adresse e-mail.");
+            return $this->redirectToRoute('fno_email_find');
+        }
         $event = new GetResponseNullableUserEvent($user, $request);
         $this->eventDispatcher->dispatch($event, Affievents::CHANGE_PASSWORD_TEST);
 
@@ -215,7 +237,7 @@ class ChangePasswordController extends AbstractController
         }
         return new RedirectResponse($this->generateUrl('passeword_check_email', array(
             'user'=>$user,
-            'username' => $email,
+            'username' => $emailCanonical,
             'titleidf'=>"Votre identifiant de connexion"
         )));
     }
