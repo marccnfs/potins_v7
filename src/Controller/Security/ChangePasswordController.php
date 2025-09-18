@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Util\PasswordUpdater;
 
 
 
@@ -30,15 +31,17 @@ class ChangePasswordController extends AbstractController
     private EventDispatcherInterface $eventDispatcher;
     private TokenGeneratorInterface $tokenGenerator;
     private RegistrationMailer $mailer;
+    private PasswordUpdater $passwordUpdater;
     private int $retryTtl;
     private EntityManagerInterface $em;
 
-    public function __construct(EntityManagerInterface $em ,EventDispatcherInterface $eventDispatcher, TokenGeneratorInterface $tokenGenerator, RegistrationMailer$mailer)
+    public function __construct(EntityManagerInterface $em ,EventDispatcherInterface $eventDispatcher, TokenGeneratorInterface $tokenGenerator, RegistrationMailer$mailer, PasswordUpdater $passwordUpdater)
     {
         $this->em=$em;
         $this->eventDispatcher = $eventDispatcher;
         $this->tokenGenerator = $tokenGenerator;
         $this->mailer = $mailer;
+        $this->passwordUpdater = $passwordUpdater;
         $this->retryTtl = 60; //3600;
     }
 
@@ -116,6 +119,7 @@ class ChangePasswordController extends AbstractController
         $form =$this->createForm(ChangePasswordType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->passwordUpdater->hashPassword($user, $form);
             $event = new FormEvent($form, $request);
             $this->eventDispatcher->dispatch($event, Affievents::RESETTING_RESET_SUCCESS);
             $this->updateUser($user);
