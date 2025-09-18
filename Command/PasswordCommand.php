@@ -88,13 +88,7 @@ class PasswordCommand extends Command
         foreach ($items as $item) {
             $io->progressAdvance();
             if ($item->getId() == 1 || $item->getId() == 2) {
-                $profil = $item->getUseridentity();
-                $password = $profil->getMdpfirst();
-                if ($password) {
-                    $this->passwordupdater->hashPasswordstring($item, $password);
-                } else {
-                    $this->passwordupdater->hashPasswordstring($item, $fallbackPassword);
-                }
+                $this->passwordupdater->hashPasswordstring($item, $fallbackPassword);
                 $this->em->persist($item);
             }
             //$this->em->clear();

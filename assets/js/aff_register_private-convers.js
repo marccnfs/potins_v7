@@ -88,57 +88,34 @@ $("document").ready(function() {
         return !ierror;
     };
 
-    function donetestmail(data) {
+    function donetestmail(data, email) {
         loadinger.hide();
-        if (data.success === 'user') {
-            if (window.confirm('cette adresse mail correspond à un espace membre. Souhaitez vous vous identifier?')) {
-                let url = "{{ path('app_login') }}";
-                //todo : a definir le retour
-                window.location.replace(url); //fait une redirection vers login'
-            } else {
-                fieldscontact[1].val("");
-                playcontact.hide()
-            }
-        }
-        if (data.success === 'contact') {
-            let jesus = JSON.parse(data.contact);
-            $("#private_convers_form_id").val(jesus.id);
-            $('#private_convers_form_type').val('contact')
+        if (data.ok) {
+            $('#private_convers_form_type').val('unknown')
+            $("#private_convers_form_id").val('')
             playcontact.show()
             gocontact.show().prop('disabled', false)
-        }
-        if (data.success === 'nomail') {
-            $('#private_convers_form_type').val('new')
-            playcontact.show()
-            gocontact.show().prop('disabled', false)
+        } else {
+            fieldscontact[1].val("");
+            fieldscontact[1].next('.validate').html(data.message || 'Erreur').show('blind')
+            playcontact.hide()
         }
     }
 
-    function doneresgistermail(data){
-       loadinger.hide()
-       if (data.success === 'user') {
-           if (window.confirm('Cette adresse mail correspond à un espace membre. Souhaitez vous vous connecter?')) {
-               let url = "{{ path('app_login') }}";
-               //todo : a definir le retour
-               window.location.replace(url); //fait une redirection vers l'article'
-           } else {
-               fieldsregister[2].val("")
-           }
-       }
-       if (data.success === 'contact') {
-           let jesus = JSON.parse(data.contact);
-           tabcontact.id=jesus.id;
-           tabcontact.state=true;
-           playregister.show();
-           goregister.show().prop('disabled', false)
-       }
-        if (data.success === 'nomail') {
-            $('#private_convers_form_type').val('new')
-            tabcontact.state=false;
-            playregister.show()
+    function doneresgistermail(data, email) {
+        loadinger.hide()
+        if (data.ok) {
+            $('#private_convers_form_type').val('unknown')
+            tabcontact.id = null;
+            tabcontact.state = false;
+            playregister.show();
             goregister.show().prop('disabled', false)
+        } else {
+            fieldsregister[2].val("")
+            fieldsregister[2].next('.validate').html(data.message || 'Erreur').show('blind')
+            playregister.hide()
         }
-   }
+    }
 
     function validateform(event,f,m,c,fields){
         let ferror = false;
@@ -261,32 +238,39 @@ $("document").ready(function() {
     fieldscontact[1].on('change, blur',function(e) {
 
         if (verifmail($(this))) {
+            const email = $(this).val();
             $.ajax({
-                type: 'get',
+                type: 'post',
                 url:route,
-                data: {mail: $(this).val(),typ:"contact"},
+                contentType: 'application/json',
+                data: JSON.stringify({email: email}),
                 beforeSend: function () {
                     loadinger.show()
                 }
             }).done(function (data) {
+                donetestmail(data, email);
+            }).fail(function () {
                 loadinger.hide();
-                donetestmail(data);
             });
         }
     });
 
     fieldsregister[2].on('change',function(e) {
         if (verifmail($(this))) {
+            const email = $(this).val();
             $.ajax({
-                type: 'get',
+                type: 'post',
                 url:route,
-                data: {mail: $(this).val(),typ:"register"},
+                contentType: 'application/json',
+                data: JSON.stringify({email: email}),
                 beforeSend: function () {
                     loadinger.show()
                 }
             }).done(function (data) {
+                doneresgistermail(data, email);
+            }).fail(function () {
                 loadinger.hide();
-                doneresgistermail(data);
+
             });
         }
     });

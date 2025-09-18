@@ -13,7 +13,7 @@ use App\Entity\Users\Contacts;
 use App\Entity\Users\ProfilUser;
 use App\Event\MessageWebsiteEvent;
 use App\Lib\Tools;
-use App\Repository\Entity\ContactRepository;
+use App\Repository\ContactRepository;
 use App\Util\Canonicalizer;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -69,8 +69,10 @@ class WebsiteMessageor
         }else{
             $sender=false;
             $email = $data['email'];
-            if($data['status']!=="nomail"){
-                $contact=$this->repoContact->findBymail($email);  //contact
+            $canonicalEmail = $this->emailCanonicalizer->canonicalize($email);
+            $contact=$this->repoContact->findBymail($canonicalEmail);  //contact
+
+            if($contact instanceof Contacts){
 
                 $identity = $contact->getUseridentity();
                 $contact->setDatemajAt(new \DateTime());
@@ -83,7 +85,7 @@ class WebsiteMessageor
                 $identity->setFirstname("");
                 $identity->setLastname("");
                 $identity->setEmailfirst($email);
-                $contact->setEmailCanonical($this->emailCanonicalizer->canonicalize($email)); //todo voir si necessaire de garder
+                $contact->setEmailCanonical($canonicalEmail); //todo voir si necessaire de garder
                 $contact->setUseridentity($identity);
                 $this->em->persist($contact);
                 $this->em->flush();

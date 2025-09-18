@@ -7,6 +7,7 @@ use App\Entity\Media\Avatar;
 use App\Entity\Sector\Sectors;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -43,9 +44,7 @@ class ProfilUser
     private ?string $sex = null;
 
     #[ORM\Column(nullable: true)]
-    private ?string $mdpfirst = null;
-
-    #[ORM\Column(nullable: true)]
+    #[Ignore]
     private ?string $emailfirst = null;
 
     #[ORM\Column(nullable: true)]
@@ -128,18 +127,6 @@ class ProfilUser
     public function setSex(?string $sex): self
     {
         $this->sex = $sex;
-
-        return $this;
-    }
-
-    public function getMdpfirst(): ?string
-    {
-        return $this->mdpfirst;
-    }
-
-    public function setMdpfirst(?string $mdpfirst): self
-    {
-        $this->mdpfirst = $mdpfirst;
 
         return $this;
     }

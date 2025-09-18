@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class ChangePasswordTest extends WebTestCase
@@ -34,7 +35,7 @@ final class ChangePasswordTest extends WebTestCase
         $this->passwordHasher = $container->get(UserPasswordHasherInterface::class);
     }
 
-    public function testPasswordIsUpdatedThroughResetForm(): void
+    public function testPasswordResetClearsTokenAndRequestTimestamp(): void
     {
         $user = new User();
         $email = 'user'.uniqid('', true).'@example.test';
@@ -48,11 +49,13 @@ final class ChangePasswordTest extends WebTestCase
 
         $token = bin2hex(random_bytes(16));
         $user->setConfirmationToken($token);
+        $user->setPasswordRequestedAt(new \DateTime());
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
         $this->client->request('GET', '/security/oderder/profil-password/reset-change-password', ['token' => $token]);
+        self::assertResponseIsSuccessful();
 
         $newPassword = 'NewPassword456!';
         $this->client->submitForm('validez', [
@@ -69,5 +72,32 @@ final class ChangePasswordTest extends WebTestCase
         self::assertNotSame($initialHash, $updatedUser->getPassword());
         self::assertTrue(password_verify($newPassword, $updatedUser->getPassword()));
         self::assertNull($updatedUser->getPlainPassword());
+        self::assertNull($updatedUser->getConfirmationToken());
+        self::assertNull($updatedUser->getPasswordRequestedAt());
+
+        $this->client->request('GET', '/security/oderder/profil-password/reset-change-password', ['token' => $token]);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+    }
+
+    public function testExpiredTokenIsAccessDenied(): void
+    {
+        $user = new User();
+        $email = 'expired'.uniqid('', true).'@example.test';
+        $user->setEmail($email);
+        $user->setEmailCanonical(strtolower($email));
+        $user->setCharte(true);
+        $user->setEnabled(true);
+        $user->setPassword($this->passwordHasher->hashPassword($user, 'InitialPassword123!'));
+
+        $token = bin2hex(random_bytes(16));
+        $user->setConfirmationToken($token);
+        $user->setPasswordRequestedAt((new \DateTime())->modify('-2 minutes'));
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        $this->client->request('GET', '/security/oderder/profil-password/reset-change-password', ['token' => $token]);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+
     }
 }

@@ -31,47 +31,29 @@ export function Testmailform () {
         type: '',
     })
 
-    function handletest(response){
+    function handletest(response, submittedData = {}){
 
-       // console.log(response)
-
-        const formStatusProps = {
-            success: {
-                message: 'Signed up successfully.',
-                type: 'success',
-            },
-            duplicate: {
-                message: "Cette adresse mail existe déjà. Merci d'essayer une autre adresse.",
-                type: 'error',
-            },
-            error: {
-                message: 'Something went wrong. Please try again.',
-                type: 'error',
-            },
-        }
+        const submittedEmail = submittedData.email ?? submittedData.mail ?? ''
+        const successMessage = response.message ?? 'Votre demande a été enregistrée.'
 
         if(response.ok) {
-            if (response.success === "user") {
-                setFormStatus(formStatusProps.duplicate)
-            } else {
-                if (response.success === "contact"){
-                    setFormStatus(formStatusProps.contact)
-                    localStorage.setItem('email',response.contact );
-                    console.log(response.contact)
-                }
-
-                else{
-                    setFormStatus(formStatusProps.success)
-                    localStorage.setItem('email',response.email );
-                    dataemail.val(response.email)
-                    $(stape[0]).hide()
-                    $(stape[1]).show()
-
-                   // window.location.replace("/security/admin/new-Identify/"+response.email);
-                }
+            if (submittedEmail) {
+                localStorage.setItem('email', submittedEmail )
+                dataemail.val(submittedEmail)
             }
+            setFormStatus({
+                message: successMessage,
+                type: 'success',
+            })
+            $(stape[0]).hide()
+            $(stape[1]).show()
             setDisplayFormStatus(true)
         }else{
+            setFormStatus({
+                message: response.message ?? 'Something went wrong. Please try again.',
+                type: 'error',
+            })
+            setDisplayFormStatus(true)
             console.error(response)
         }
     }
@@ -99,7 +81,3 @@ export function Testmailform () {
     )
 }
 
-/*
-<a className='full-btbtn-send-log' href='/login'>j'ai déjà un compte</a>
-
- */

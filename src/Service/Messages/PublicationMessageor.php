@@ -80,8 +80,9 @@ class PublicationMessageor
             $message->setIsmembersender(true);
         }else{
             $email = $data['email'];
-            if($data['status']!=="nomail"){
-                $contact = $this->repoContact->findBymail($email);
+            $canonicalEmail = $this->emailCanonicalizer->canonicalize($email);
+            $contact = $this->repoContact->findBymail($canonicalEmail);
+            if($contact instanceof Contacts){
                 $sender=$contact;
                 $sender->setDatemajAt(new \DateTime());
             }else{
@@ -93,7 +94,7 @@ class PublicationMessageor
                 $identity->setFirstname("");
                 $identity->setLastname("");
                 $identity->setEmailfirst($email);
-                $sender->setEmailCanonical($this->emailCanonicalizer->canonicalize($email)); //todo voir si necessaire de garder
+                $sender->setEmailCanonical($canonicalEmail); //todo voir si necessaire de garder
                 $sender->setUseridentity($identity);
                 $this->entityManager->persist($sender);
                 $this->entityManager->flush();

@@ -19,51 +19,31 @@ export function Testmailmsg ({slug,id,module}) {
         setEmailStatus(false);
     }
 
-    function handletest(response){
+    function handletest(response, submittedData = {}){
 
-
-        const formStatusProps = {
-            success: {
-                status: 'nofind',
-                message: 'Signed up successfully.',
-                type: 'nomail',
-            },
-            user: {
-                status: 'user',
-                message: "L'adresse email "+response.email+" est déjà enregistrée. Si cette adresse vous appartient",
-                type: 'email',
-            },
-            error: {
-                status: 'false',
-                message: 'Something went wrong. Please try again.',
-                type: 'error',
-            },
-            contact: {
-                status: 'contact',
-                message: "L'adresse email "+response.email+" est déjà enregistrée. Si cette adresse vous appartient",
-                type: 'email',
-            },
-        }
+        const submittedEmail = submittedData.email ?? submittedData.mail ?? ''
+        const successMessage = response.message ?? "Si cette adresse est enregistrée, nous reviendrons vers vous prochainement."
 
         if(response.ok) {
-            localStorage.setItem('email',response.email );
 
-            if (response.success === "user") {
-                setFormStatus(formStatusProps.user)
-                localStorage.setItem('status',"user" );
-            } else {
-                if (response.success === "contact"){
-                    setFormStatus(formStatusProps.contact)
-                    localStorage.setItem('status',"contact" );
-                    console.log(response.contact)
-                }else{
-                    setFormStatus(formStatusProps.success)
-                    localStorage.setItem('status',"nomail" );
-                    follow();
-                }
+            if (submittedEmail){
+                localStorage.setItem('email',submittedEmail )
             }
+            localStorage.setItem('status','unknown' )
+            setFormStatus({
+                status: 'processed',
+                message: successMessage,
+                type: 'info',
+            })
+            follow()
             setDisplayFormStatus(true)
         }else{
+            setFormStatus({
+                status: 'error',
+                message: response.message ?? 'Something went wrong. Please try again.',
+                type: 'error',
+            })
+            setDisplayFormStatus(true)
             console.error(response)
         }
     }
@@ -113,17 +93,10 @@ export function Testmailmsg ({slug,id,module}) {
                                 <p className="errorMessage">
                                     {formStatus.message}
                                 </p>
-                            ) : formStatus.type === 'nomail' ? (
+                            ) : formStatus.type === 'info' ? (
                                 <p className=" successMessage">
                                     {formStatus.message}
                                 </p>
-                            ) : formStatus.type === 'email' ? (
-                                <div>
-                                    <p className=" successMessage">
-                                        {formStatus.message}
-                                    </p>
-                                    <a href="/security/oderder/identif/login">connectez-vous.</a>
-                                </div>
                             ) : null}
                         </div>
                     )}
@@ -155,7 +128,7 @@ export function Testmailmsg ({slug,id,module}) {
                     <p className="errorMessage">
                         {formStatus.message}
                     </p>
-                ) : formStatus.type === 'success' ? (
+                ) : formStatus.type === 'success' || formStatus.type === 'info' ? (
                     <p className=" successMessage">
                         {formStatus.message}
                     </p>
@@ -165,20 +138,3 @@ export function Testmailmsg ({slug,id,module}) {
         </div>
     }
 }
-
-
-/*
- {displayFormStatus && (
-                        <div className="formStatus">
-                            {formStatus.type === 'error' ? (
-                                <p className="errorMessage">
-                                    {formStatus.message}
-                                </p>
-                            ) : formStatus.type === 'success' ? (
-                                <p className=" successMessage">
-                                    {formStatus.message}
-                                </p>
-                            ) : null}
-                        </div>
-                    )}
- */

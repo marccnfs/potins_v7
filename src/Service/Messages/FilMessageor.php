@@ -5,11 +5,8 @@ namespace App\Service\Messages;
 
 
 use App\AffiEvents;
-use App\Entity\Member\DispatchSpaceWeb;
-use App\Entity\Member\membersboard;
 use App\Entity\LogMessages\Loginner;
 use App\Entity\LogMessages\Msgs;
-use App\Entity\LogMessages\MsgW;
 use App\Entity\LogMessages\MsgBoard;
 use App\Entity\LogMessages\Tbmsgs;
 use App\Entity\Users\Contacts;
@@ -17,31 +14,20 @@ use App\Entity\Users\ProfilUser;
 use App\Entity\Boards\Board;
 use App\Event\MessageEvent;
 use App\Lib\Tools;
-use App\Repository\Entity\ContactationRepository;
-use App\Repository\Entity\DispatchSpaceWebRepository;
-use App\Repository\Entity\MsgsRepository;
-use App\Repository\Entity\MsgWebisteRepository;
-use App\Repository\Entity\TbmsgsRepository;
 use App\Service\Modules\Mailator;
 use App\Util\Canonicalizer;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class FilMessageor
 {
 
-    private MsgWebisteRepository $msgWebisteRepository;
     private EntityManagerInterface $entityManager;
-    private TbmsgsRepository $tabreadrepo;
     private Canonicalizer $emailCanonicalizer;
     private Mailator $mailator;
-    private MsgsRepository $mesrepo;
-    private DispatchSpaceWebRepository $repodispatch;
-    private ContactationRepository $repoContact;
     private bool $member=false;
     private bool $contact=false;
     private object $expe;
@@ -49,24 +35,16 @@ class FilMessageor
     private EventDispatcherInterface $eventdispatcher;
 
 
-    public function __construct(EventDispatcherInterface $eventDispatcher,SessionInterface $session, DispatchSpaceWebRepository $dispatchSpaceWebRepository, ContactationRepository $contactationRepository,MsgWebisteRepository $msgWebisteRepository, EntityManagerInterface $entityManager, TbmsgsRepository $tbmsgsRepository, Canonicalizer $emailCanonicalizer, Mailator $mailator)
+    public function __construct(EventDispatcherInterface $eventDispatcher,SessionInterface $session,  EntityManagerInterface $entityManager,  Canonicalizer $emailCanonicalizer, Mailator $mailator)
     {
-        $this->msgWebisteRepository=$msgWebisteRepository;
         $this->entityManager = $entityManager;
-        $this->tabreadrepo=$tbmsgsRepository;
         $this->emailCanonicalizer = $emailCanonicalizer;
         $this->mailator=$mailator;
-        $this->repodispatch=$dispatchSpaceWebRepository;
-        $this->repoContact=$contactationRepository;
         $this->session=$session;
         $this->eventdispatcher=$eventDispatcher;
     }
 
-    /**²
-     * @param $website Board
-     * @param $pw membersboard
-     * @return mixed
-     */
+
     public function messnoreadToList(Board $website, membersboard $pw): mixed
     {
         $reads= $this->tabreadrepo->findMessnoreadToList($website->getId());
@@ -277,7 +255,6 @@ class FilMessageor
 
         // 1- identification de l'expediteur
         if($data['dispatch']){
-            dump($data['dispatch']);
             $this->member=true;
             $this->contact=false;
             $this->expe=$data['dispatch'];
@@ -289,8 +266,9 @@ class FilMessageor
             $email = $request['email'];
             $this->member=false;
             $this->contact=true;
-            if($request['status']==="contact"){
-                $contact=$this->repoContact->findBymail($email);  //contact
+            $canonicalEmail = $this->emailCanonicalizer->canonicalize($email);
+            $contact=$this->repoContact->findBymail($canonicalEmail);  //contact
+            if($contact instanceof Contacts){
                 $identity = $contact->getUseridentity();
                 $this->expe=$contact;
                 $this->expe->setDatemajAt(new \DateTime());
@@ -303,7 +281,7 @@ class FilMessageor
                 $identity->setFirstname("");
                 $identity->setLastname("");
                 $identity->setEmailfirst($email);
-                $this->expe->setEmailCanonical($this->emailCanonicalizer->canonicalize($email)); //todo voir si necessaire de garder
+                $this->expe->setEmailCanonical($canonicalEmail); //todo voir si necessaire de garder
                 $this->expe->setUseridentity($identity);
                 $this->entityManager->persist($this->expe);
                 $this->entityManager->flush();

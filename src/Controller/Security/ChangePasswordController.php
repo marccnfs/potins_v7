@@ -107,8 +107,12 @@ class ChangePasswordController extends AbstractController
         }
         $token = $request->query->get('token');
         $user = $userRepository->findUserByConfirmationToken($token);
-        if ( null === $user) {
-            return  new  RedirectResponse ($this->generateUrl( 'app_login' ));
+        if (null === $user) {
+            throw $this->createAccessDeniedException('Token invalide.');
+        }
+
+        if (!$user->isPasswordRequestNonExpired($this->retryTtl)) {
+            throw $this->createAccessDeniedException('Token expiré.');
         }
 
         $event = new GetResponseUserEvent($user, $request);
@@ -120,6 +124,8 @@ class ChangePasswordController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->passwordUpdater->hashPassword($user, $form);
+            $user->setConfirmationToken(null);
+            $user->setPasswordRequestedAt(null);
             $event = new FormEvent($form, $request);
             $this->eventDispatcher->dispatch($event, Affievents::RESETTING_RESET_SUCCESS);
             $this->updateUser($user);

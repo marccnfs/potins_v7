@@ -24,59 +24,72 @@ class ToolsController extends AbstractController
 {
     use potinsession;
 
-    #[Route('/test-visitor-mail', name:"test_mail_visitor")]
-    public function tesEmailVisitor(Request $request, SerializerInterface $serializer, UserRepository $userRepository, ContactRepository $contactRepository): JsonResponse
+    #[Route('/test-visitor-mail', name:"test_mail_visitor", methods: ['POST'])]
+    public function tesEmailVisitor(Request $request, UserRepository $userRepository, ContactRepository $contactRepository): JsonResponse
     {
-
-        $mail =  $request->request->get('email');
-        $testuser=$userRepository->findOneBy(array('email'=> $mail));
-        if($testuser!=null){
-            $responseCode = 200;
-            http_response_code($responseCode);
-            header('Content-Type: application/json');
-            return new JsonResponse(['ok' => true,'success' => "user",'email' => $mail]);
-        }
-
-        $contact = $contactRepository->findOneBy(array('emailCanonical' => $mail));
-        if ($contact!=null) {
-            $jasoncontact = $serializer->serialize($contact, 'json');
-            $responseCode = 200;
-            http_response_code($responseCode);
-            header('Content-Type: application/json');
-            return new JsonResponse(['ok' => true,'success' => "contact",'email' => $mail, 'contact' => $jasoncontact]);
-        }
-        return new JsonResponse(['ok' => true,'success' => "nomail", 'email' => $mail]);
+        return $this->handleEmailProbe($request, $userRepository, $contactRepository);
     }
 
 
-    #[Route('/testContactMail', name:"test_mail")]
-    public function tesEmailContact(Request $request, SerializerInterface $serializer,UserRepository $userRepository, ContactRepository $contactRepository): JsonResponse
+    #[Route('/testContactMail', name:"test_mail", methods: ['POST'])]
+    public function tesEmailContact(Request $request, UserRepository $userRepository, ContactRepository $contactRepository): JsonResponse
     {
-
-        $data = json_decode((string) $request->getContent(), true);
-        $mail=$data['email'];
-
-        $testuser=$userRepository->findOneBy(array('email'=> $mail));
-        if($testuser!=null){
-            $responseCode = 200;
-            http_response_code($responseCode);
-            header('Content-Type: application/json');
-            return new JsonResponse(['ok' => true,'success' => "user",'email' => $mail]);
-        }
-
-        $contact = $contactRepository->findOneBy(array('emailCanonical' => $mail));
-        if ($contact!=null) {
-            $jasoncontact = $serializer->serialize($contact, 'json');
-            $responseCode = 200;
-            http_response_code($responseCode);
-            header('Content-Type: application/json');
-            return new JsonResponse(['ok' => true,'success' => "contact",'email' => $mail, 'contact' => $jasoncontact]);
-        }
-        return new JsonResponse(['ok' => true,'success' => "nomail", 'email' => $mail]);
+        return $this->handleEmailProbe($request, $userRepository, $contactRepository);
     }
 
+    private function handleEmailProbe(Request $request, UserRepository $userRepository, ContactRepository $contactRepository): JsonResponse
+    {
+        $email = $this->resolveEmailFromRequest($request);
+        if ($email === '') {
+            return new JsonResponse([
+                'ok' => false,
+                'message' => 'Une adresse email valide est requise.'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return new JsonResponse([
+                'ok' => false,
+                'message' => 'Le format de votre adresse email est invalide.'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        $this->emailExists($email, $userRepository, $contactRepository);
 
-    #[Route('/add-member-contactmail', name:"add_member_contactmail")]
+        return new JsonResponse([
+            'ok' => true,
+            'status' => 'processed',
+            'message' => 'Si cette adresse est enregistrée, vous recevrez prochainement les informations nécessaires.'
+        ]);
+    }
+
+    private function resolveEmailFromRequest(Request $request): string
+    {
+        $email = $request->get('email');
+        if (!$email) {
+            $email = $request->get('mail');
+        }
+
+        if (!is_string($email) || $email === '') {
+            $content = trim((string) $request->getContent());
+            if ($content !== '') {
+                $data = json_decode($content, true);
+                if (is_array($data)) {
+                    $email = $data['email'] ?? $data['mail'] ?? $email;
+                }
+            }
+        }
+
+        return is_string($email) ? trim($email) : '';
+    }
+
+    private function emailExists(string $email, UserRepository $userRepository, ContactRepository $contactRepository): void
+    {
+        $normalizedEmail = mb_strtolower($email);
+        $userRepository->findOneBy(['email' => $email]);
+        $userRepository->findOneBy(['emailCanonical' => $normalizedEmail]);
+        $contactRepository->findOneBy(['emailCanonical' => $normalizedEmail]);
+    }
+
+        #[Route('/add-member-contactmail', name:"add_member_contactmail")]
     public function addMemberContact(Request         $request, BoardRepository $websiteRepository, ContactRepository $contactRepository,
                                      BoardlistFactor $factor, CreatorUser $creatorUser, SerializerInterface $serializer){
         if($request->isXmlHttpRequest())
@@ -112,7 +125,7 @@ class ToolsController extends AbstractController
                             return new JsonResponse(['success' => false]);
                         }
                     }else{
-                        /** @var DispatchSpaceWeb $dispatch */
+
                         $dispatch=$factor->addwebsiteclient($tabmember);
                         if ( $dispatch) {
                             $responseCode = 200;

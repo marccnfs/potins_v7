@@ -70,7 +70,6 @@ class RegistrationMailer
                 'exp' =>'les potins numeriques',
                 'dest'=>$user->getEmail(),
                 'confirmationUrl' => $url,
-                'mdp'=>$profil->getMdpfirst(),
                 'user' => $user,
                 'website'=>$website,
                 'msg'=>""],

@@ -628,7 +628,7 @@ export function FetchData ({
     formData.id=id;
     try {
       const response = await jsonFetch(action, { method, body: formData })
-      onSuccess(response)
+        onSuccess(response, formData)
     } catch (e) {
       if (e instanceof ApiError) {
         setState(s => ({ ...s, errors: e.violations }))

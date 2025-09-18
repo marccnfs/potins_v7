@@ -7,6 +7,7 @@ use App\Entity\Sector\Sectors;
 use App\Repository\RegisteredRepository;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RegisteredRepository::class)]
@@ -38,6 +39,7 @@ class Registered
     private ?string $sex = null;
 
     #[ORM\Column(nullable: true)]
+    #[Ignore]
     private ?string $mdpfirst = null;
 
     #[ORM\Column(unique: true,nullable: true)]
@@ -133,18 +135,6 @@ class Registered
         return $this;
     }
 
-    public function getMdpfirst(): ?string
-    {
-        return $this->mdpfirst;
-    }
-
-    public function setMdpfirst(?string $mdpfirst): self
-    {
-        $this->mdpfirst = $mdpfirst;
-
-        return $this;
-    }
-
     public function getTelephonemobile(): ?string
     {
         return $this->telephonemobile;
@@ -229,6 +219,18 @@ class Registered
     public function setCodeacces(string $codeacces): self
     {
         $this->codeacces = $codeacces;
+
+        return $this;
+    }
+
+    public function getMdpfirst(): ?string
+    {
+        return $this->mdpfirst;
+    }
+
+    public function setMdpfirst(?string $mdpfirst): static
+    {
+        $this->mdpfirst = $mdpfirst;
 
         return $this;
     }
