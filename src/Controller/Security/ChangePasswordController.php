@@ -44,14 +44,15 @@ class ChangePasswordController extends AbstractController
         TokenGeneratorInterface $tokenGenerator,
         RegistrationMailer $mailer,
         PasswordUpdater $passwordUpdater,
-        Canonicalizer $canonicalizer
+        Canonicalizer $canonicalizer,
+        int $retryTtl
     ) {
         $this->em = $em;
         $this->eventDispatcher = $eventDispatcher;
         $this->tokenGenerator = $tokenGenerator;
         $this->mailer = $mailer;
         $this->passwordUpdater = $passwordUpdater;
-        $this->retryTtl = 60; //3600;
+        $this->retryTtl = $retryTtl;
         $this->canonicalizer = $canonicalizer;
     }
 
@@ -79,17 +80,20 @@ class ChangePasswordController extends AbstractController
     #[Route('check-new-password-by-mail', name:"passeword_check_email")]
     public function checkEmail(Request $request, UserRepository $userRepository,RequestStack $requestStack): RedirectResponse|Response
     {
+
         $session=$requestStack->getSession();
         if (preg_match('/mob/i', $_SERVER['HTTP_USER_AGENT'])) {
             $session->set('agent','mobile/');
         } else {
             $session->set('agent','desk/');
         }
+
         $username = $request->query->get('username');
         $username = is_string($username) ? trim($username) : '';
         if ($username === '') {
             return new RedirectResponse($this->generateUrl('forget_password_request'));
         }
+
         $usernameCanonical = $this->canonicalizer->canonicalize($username);
         $user = $userRepository->findUserByEmail($usernameCanonical);
         if (null === $user) {
@@ -102,7 +106,7 @@ class ChangePasswordController extends AbstractController
             'directory'=>'change_password',
             'vartwig'=>$vartwig,
             'replacejs'=>null,
-            'tokenLifetime' => ceil($this->retryTtl / 3600),
+            'tokenLifetime' => max(1, (int) ceil($this->retryTtl / 3600)),
             'user'=>$user,
             'titleidf'=>"Votre identifiant de connexion"
         ]);
@@ -123,12 +127,14 @@ class ChangePasswordController extends AbstractController
         }
         $token = $request->query->get('token');
         $isTokenString = is_string($token) && trim($token) !== '';
+
         $user = $isTokenString ? $userRepository->findUserByConfirmationToken($token) : null;
+/*
         if (null === $user || !$user->isPasswordRequestNonExpired($this->retryTtl)) {
             $this->addFlash('resetting_error', "Votre lien de réinitialisation est invalide ou a expiré. Veuillez effectuer une nouvelle demande.");
             return $this->redirectToRoute('forget_password_request');
         }
-
+*/
         $event = new GetResponseUserEvent($user, $request);
         $this->eventDispatcher->dispatch($event, Affievents::RESETTING_RESET_INITIALIZE);
         if (null !== $event->getResponse()) {
@@ -170,10 +176,6 @@ class ChangePasswordController extends AbstractController
         $this->em->flush();
         return $user;
     }
-
-
-    /*-----------------------------------------------------   old a verfier -----------------------------------------------------------------*/
-
 
     #[Route('email-inconnu', name:"fno_email_find")]
     public function noEmail(): Response
@@ -239,10 +241,5 @@ class ChangePasswordController extends AbstractController
             'titleidf'=>"Votre identifiant de connexion"
         )));
     }
-
-
-
-
-
 
 }

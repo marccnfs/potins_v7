@@ -21,9 +21,12 @@ security:
 
             custom_authenticators:
                 - App\Security\LoginFormAuthenticator
+            entry_point: App\Security\LoginFormAuthenticator  # utile si plusieurs authenticators
 
             remember_me:
                 secret: '%kernel.secret%'
+                name: REMEMBERME
+                secure: auto
                 lifetime: 1209600    # 14 jours
                 path: /
                 httponly: true
@@ -31,6 +34,8 @@ security:
             logout:
                 path: app_logout
                 target: potins_index
+
+
 
     access_control:
             - { path: ^/login, roles: PUBLIC_ACCESS }

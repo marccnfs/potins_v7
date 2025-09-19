@@ -122,7 +122,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     {
         return $this->createQueryBuilder('u')
             -> andWhere('u.confirmationToken =:token')
-            ->setParameter('token', $token)
+            -> setParameter('token', $token)
             -> getQuery()
             -> getOneOrNullResult();
     }

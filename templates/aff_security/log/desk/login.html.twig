@@ -4,12 +4,17 @@
         {{ include('svg/potins/base logo_ini_potins_pp_fdwhite.html.twig') }}
         <h1>{{vartwig.title|capitalize}}</h1>
     </div>
-
+    <!-- DEBUG_LOGIN_TPL_v3 -->
 
             <form method="post" class="form_connector_old">
                     {% if error %}
                         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                     {% endif %}
+
+                    {% for message in app.flashes('security') %}
+                        <div class="alert alert-danger">{{ message }}</div>
+                    {% endfor %}
+
                     {% if app.user %}
                         <div class="mb-3">
                             <a href="{{ path('app_logout') }}">fermez votre espace</a>

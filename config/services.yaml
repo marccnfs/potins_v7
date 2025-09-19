@@ -11,7 +11,7 @@ parameters:
     mailer_host: 127.0.0.1
     mailer_user: 'marc@potinsnumeriques.fr'
     mailer_password: null
-    retry_ttl: 7200 # Value in seconds, logic will use as hours
+    retry_ttl: 3600 # Value in seconds, logic will use as hours
     token_ttl: 86400
     firewall_name: main
     user_class: App\Entity\User

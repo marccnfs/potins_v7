@@ -30,6 +30,7 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $helper->getLastUsername();
 
+
         $vartwig=['maintwig'=>"login",'title'=>"connexion"];
         return $this->render('aff_security/home.html.twig', [
             'directory'=>'log',

@@ -20,6 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 
 trait MemberSession
@@ -53,7 +54,7 @@ trait MemberSession
     {
         $this->security = $security;
         $user = $this->security->getUser();
-        if (!$user instanceof User) {
+        if (!$user instanceof UserInterface) {
             throw new AccessDeniedException();
         }
 
