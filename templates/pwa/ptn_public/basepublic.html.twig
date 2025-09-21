@@ -35,7 +35,7 @@ if ('serviceWorker' in navigator) {
 {%  endif %}
 {%  set agent = app.session.get('agent') %}
 <body class="wbesitemob">
-<div class="wb-inf-" data-agent="{{ agent }}" data-replacejs="no"></div>
+<div class="wb-inf-" data-agent="{{ agent }}" data-replacejs="{{ replacejs?'yes':'no' }}"></div>
 <main class="content-constrain2" id="page">
 {% block menu %}
 {% endblock menu %}

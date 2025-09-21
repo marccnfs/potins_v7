@@ -364,6 +364,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return [
             'id' => $this->id,
+            'email' => $this->email,
+            'emailCanonical' => $this->emailCanonical,
             'password' => $this->password, // pour invalider la session si le mot de passe change
         ];
     }
@@ -371,6 +373,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __unserialize(array $data): void
     {
         $this->id = $data['id'] ?? null;
+        $this->email = $data['email'] ?? null;
+        $this->emailCanonical = $data['emailCanonical']
+            ?? (null !== $this->email ? mb_strtolower($this->email) : null);
         $this->password = $data['password'] ?? null;
     }
 

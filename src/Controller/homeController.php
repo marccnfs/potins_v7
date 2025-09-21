@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Users\User;
-use App\Lib\Links;
 use App\Repository\BoardRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

@@ -15,6 +15,7 @@ import ToastController from "./toast_controller";
 import HintsController from "./hints_controller";
 import ConfettiController from "./confetti_controller";
 import ShareController from "./share_controller";
+import MenuController from "./menu_controller";
 
 
 
@@ -34,3 +35,4 @@ Stimulus.register("toast", ToastController);
 Stimulus.register("hints", HintsController);
 Stimulus.register("confetti", ConfettiController);
 Stimulus.register("share", ShareController);
+Stimulus.register("menu", MenuController);

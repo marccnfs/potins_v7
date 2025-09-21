@@ -14,10 +14,15 @@
             <li><a href="#">Contact</a></li>
 
             {% if is_granted('ROLE_SUPER_ADMIN') %}
-                <li><a href="{{ path('profil_customer') }}">Profil</a></li>
-                <li><a href="{{ path('office_member') }}">Publications</a></li>
-                <li><a href="{{ path('admin') }}">Administration</a></li>
-                <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
+                <a href="{{ path('profil_customer') }}">Profil</a>
+                <a href="{{ path('office_member') }}">Panneau</a>
+                <a href="{{ path('admin_index') }}">Backoffice</a>
+                <a href="{{ path('app_logout') }}">Déconnexion</a>
+            {%  elseif is_granted('ROLE_MEDIA') %}
+                <a href="{{ path('parameters') }}">Informations</a>
+                <a href="{{ path('office_media') }}">Planning Potins</a>
+                <a href="{{ path('app_logout') }}">Déconnexion</a>
+
             {% elseif is_granted('ROLE_MEMBER') %}
                 <li><a href="{{ path('profil_customer') }}">Profil</a></li>
                 <li><a href="{{ path('office_member') }}">Publications</a></li>
