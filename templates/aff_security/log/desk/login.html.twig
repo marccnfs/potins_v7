@@ -4,9 +4,8 @@
         {{ include('svg/potins/base logo_ini_potins_pp_fdwhite.html.twig') }}
         <h1>{{vartwig.title|capitalize}}</h1>
     </div>
-    <!-- DEBUG_LOGIN_TPL_v3 -->
 
-            <form method="post" class="form_connector_old">
+            <form method="post" class="form_connector_old" action="{{ path('app_login') }}">
                     {% if error %}
                         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                     {% endif %}
@@ -45,7 +44,7 @@
                         </div>
                     </div>
                     <div class="bottom-10"></div>
-                    <a class="forget_mdp" href="{{ path('forget_password_request') }}">mot de passe oublié ?</a>
+                    <a class="forget_mdp" href="{{ path('app_forgot_password_request') }}">mot de passe oublié ?</a>
                     <div class="checkerrember">
                         <h5>Restez connecté</h5>
                         <span class="switcher switcher-2">

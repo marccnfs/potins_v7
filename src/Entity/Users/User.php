@@ -27,8 +27,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private ?string $email;
+    #[ORM\Column(type: 'string', length: 180, unique: true, nullable: false)]
+    private ?string $email = null;
 
     #[ORM\OneToOne(targetEntity: Customers::class)]
     #[ORM\JoinColumn(nullable: true)]
@@ -112,11 +112,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email)
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
-
-        return $this;
+        return self;
     }
 
     public function getPlainPassword(): ?string
@@ -155,7 +154,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string) ($this->email ?? '');
     }
 
      public function getUsername(): string
@@ -165,11 +164,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
+        $roles = $this->roles ?? [];
         $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        $roles = array_values(array_unique($roles));
+        sort($roles); // <— ordre stable
+        return $roles;
     }
 
     public function setRoles(array $roles): self
@@ -365,20 +364,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return [
             'id' => $this->id,
-            'email' => $this->email,
-            'emailCanonical' => $this->emailCanonical,
-            'roles' => $this->roles,
-            'enabled' => $this->enabled,
+            'password' => $this->password, // pour invalider la session si le mot de passe change
         ];
     }
 
     public function __unserialize(array $data): void
     {
         $this->id = $data['id'] ?? null;
-        $this->email = $data['email'] ?? null;
-        $this->emailCanonical = $data['emailCanonical'] ?? null;
-        $this->roles = $data['roles'] ?? [];
-        $this->enabled = $data['enabled'] ?? false;
+        $this->password = $data['password'] ?? null;
     }
 
     public function getActive(): ?bool

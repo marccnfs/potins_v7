@@ -7,13 +7,13 @@ use App\Classe\sessionConnect;
 use App\Entity\Users\User;
 use App\Form\MediathequeType;
 use App\Service\Registration\Identificat;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_SUPER_ADMIN')]
 #[Route('/security/mediatheque')]

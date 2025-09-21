@@ -61,9 +61,12 @@ trait PublicSession
         $this->repomember = $repomember;
         $this->repocustomer=$repocustomer;
         $this->boardRepository=$boardRepository;
+
         $this->clearinit();
+
         if ($this->security->isGranted("IS_AUTHENTICATED_REMEMBERED")){
             $user=$this->security->getUser();
+            dump($user);
             $tabuser=$sessioninit->initCustomer($user);
             $this->customer=$tabuser['customer'];
             $this->member=$tabuser['member'];
@@ -73,7 +76,7 @@ trait PublicSession
 
     protected function prepa(): void
     {
-        $this->board=$this->boardRepository->find(3);
+        //$this->board=$this->boardRepository->find(3);
         if (preg_match('/mob/i', $_SERVER['HTTP_USER_AGENT'])) {
             $this->requestStack->getSession()->set('agent', 'pwa/');
             $this->useragent=false;

@@ -26,14 +26,17 @@
         <!-- MENU UTILISATEUR -->
         <div class="user-menu">
             <button id="nav_user" class="user-button">
-                {# 1) si la session stocke déjà un chemin d'avatar, on l'utilise tel quel #}
-                {% set avatarPath = app.session.get('avatar') %}
-                {% if avatarPath %}
-                    <div class="avataff" style="background-image: url('{{ asset(avatarPath) }}')"></div>
+                {% if user  is defined %}
 
-                    {# 2) sinon, on tente Vich mais uniquement si tout l'arbre est non-null #}
-                {% elseif customer is defined and customer and customer.profil is defined and customer.profil and customer.profil.avatar is defined and customer.profil.avatar %}
-                    <div class="avataff" style="background-image: url('{{ vich_uploader_asset(customer.profil.avatar, 'imageFile') }}')"></div>
+                    {# 1) si la session stocke déjà un chemin d'avatar, on l'utilise tel quel #}
+                    {% set avatarPath = app.session.get('avatar') %}
+                    {% if avatarPath %}
+                        <div class="avataff" style="background-image: url('{{ asset(avatarPath) }}')"></div>
+
+                        {# 2) sinon, on tente Vich mais uniquement si tout l'arbre est non-null #}
+                    {% elseif customer is defined and customer and customer.profil is defined and customer.profil and customer.profil.avatar is defined and customer.profil.avatar %}
+                        <div class="avataff" style="background-image: url('{{ vich_uploader_asset(customer.profil.avatar, 'imageFile') }}')"></div>
+                    {%  endif %}
 
                     {# 3) sinon, fallback SVG #}
                 {% else %}

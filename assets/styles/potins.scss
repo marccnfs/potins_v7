@@ -9082,3 +9082,9 @@ section {
 .dot-autre, .c-autre { background:#9ca3af; }
 .c-pellerin, .c-montagne, .c-sjb, .c-autre { border-left:4px solid currentColor; }
 .event-pill { color: inherit; }
+.toggle-password-button {
+    margin-left: .5rem;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+}

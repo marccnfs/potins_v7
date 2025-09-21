@@ -1381,6 +1381,10 @@
   version "2.29.1"
   resolved "file:vendor/symfony/ux-cropperjs/assets"
 
+"@symfony/ux-toggle-password@file:vendor/symfony/ux-toggle-password/assets":
+  version "2.29.2"
+  resolved "file:vendor/symfony/ux-toggle-password/assets"
+
 "@symfony/webpack-encore@^5.0.0":
   version "5.1.0"
   resolved "https://registry.npmjs.org/@symfony/webpack-encore/-/webpack-encore-5.1.0.tgz"
