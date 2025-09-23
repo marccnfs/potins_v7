@@ -1,0 +1,75 @@
+{% block body %}
+
+<div id="pagehome" class="homepage-wrapper--desk" data-agent="{{ agent }}">
+
+    <div class="pwa-templ_bleu">
+        <div class="pwa-arg-content">
+            <div class="pwa-arg-cont-bk">
+                <!-- Section d'introduction -->
+                <div class="hero-section">
+                    <div class="hero-image" style="background-image: url({{ asset('imgdoc/potins/social.png') }});"></div>
+                    <div class="hero-content">
+                        <h1>Contre l'exclusion numérique</h1>
+                        <p class="source-info"><strong>Source :</strong> <span data-published-date="22/11/2023">gouvernement.fr</span></p>
+                        <p class="intro-text">
+                            Depuis 2021, 4 000 conseillers numériques accompagnent gratuitement les Français pour mieux maîtriser le numérique,
+                            de l'utilisation d'un ordinateur à la création de contenus en ligne.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Section Missions -->
+                <section class="missions-section">
+                    <h2>Quelles sont les missions des conseillers numériques ?</h2>
+                    <p class="mission-text">
+                        Les conseillers numériques forment un réseau de professionnels spécialisés dans l’accompagnement numérique des citoyens,
+                        qu’ils soient débutants ou non. Ils offrent, partout en France, des solutions personnalisées pour :
+                    </p>
+                    <ul class="mission-list">
+                        <li><i class="fas fa-user"></i> Aider les Français à utiliser les outils numériques du quotidien.</li>
+                        <li><i class="fas fa-shield-alt"></i> Sensibiliser aux enjeux du numérique et encourager des usages responsables.</li>
+                        <li><i class="fas fa-globe"></i> Accompagner les citoyens dans la réalisation de démarches en ligne.</li>
+                    </ul>
+
+                    <!-- Vidéo informative -->
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/LxSSj8I-kZw" allowfullscreen></iframe>
+                        <p class="video-caption">Stéphane, conseiller numérique France services.</p>
+                    </div>
+                </section>
+
+                <!-- Section Comment les conseillers numériques peuvent aider -->
+                <section class="help-section">
+                    <h2>Comment les conseillers numériques peuvent-ils vous aider ?</h2>
+                    <p>Les conseillers numériques accompagnent les citoyens pour :</p>
+                    <div class="help-grid">
+                        <div class="help-item"><i class="fas fa-envelope"></i> Utiliser une messagerie et les réseaux sociaux.</div>
+                        <div class="help-item"><i class="fas fa-briefcase"></i> Trouver un emploi et rédiger un CV.</div>
+                        <div class="help-item"><i class="fas fa-shopping-cart"></i> Réserver et acheter en ligne en toute sécurité.</div>
+                        <div class="help-item"><i class="fas fa-user-shield"></i> Sécuriser ses connexions et protéger ses données.</div>
+                        <div class="help-item"><i class="fas fa-laptop"></i> Apprendre à utiliser des outils numériques (bureautique, etc.).</div>
+                        <div class="help-item"><i class="fas fa-university"></i> Accompagner ses enfants dans l’usage du numérique.</div>
+                    </div>
+                </section>
+
+                <!-- Section Trouver un conseiller -->
+                <section class="advisor-section">
+                    <h2>Trouver un conseiller numérique près de chez vous</h2>
+                    <p>Utilisez la cartographie nationale pour localiser un conseiller numérique proche de vous.</p>
+                    <a href="{{ path('carto_cnfs') }}" class="btn-advisor" target="_blank">Rechercher</a>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{%  endblock body %}
+{% block footer %}
+    {{ include ('pwa/footer/potins_footer.html.twig') }}
+{% endblock footer %}
+{% use "js/js_potins.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

@@ -1,13 +1,19 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Service;
 
-
-use App\Entity\Posts\Post;
-use App\Entity\Boards\Board;
-
-
-class MenuNavigator
+/**
+ * Construit des contextes (tableaux) destinés à Twig pour différents écrans.
+ *
+ * Notes de refactorisation :
+ * - Plus de state partagé : chaque méthode construit son propre tableau.
+ * - Factorisation via baseContext() pour les clés communes.
+ * - Accès "safe" à $meta avec valeurs par défaut.
+ * - Boucle pour m1..m7 (au lieu de 7 affectations) et clamp de l'index actif.
+ * - Typage des paramètres là où c’est raisonnable sans connaître vos entités.
+ */
+final class MenuNavigator
 {
     private array $vartwig;
 
@@ -15,154 +21,85 @@ class MenuNavigator
         $this->vartwig=[];
     }
 
-    protected function initemplate($links,$twigfile,$page){
-        $this->vartwig=$links;
-        $this->vartwig['entity']=false;
-        $this->vartwig['linkbar'][0]="";
-        $this->vartwig['linkbar'][1]="";
-        $this->vartwig['linkbar'][2]="";
-        $this->vartwig['linkbar'][3]="";
-        $this->vartwig['linkbar'][4]="";
-        $this->vartwig['linkbar'][5]="";
-        $this->vartwig['linkbar'][$page]="active";
-        $this->vartwig['maintwig']=$twigfile;
+    /**
+     * Construit le contexte pour l’affichage d’un post.
+     *
+     * @param object $post Doit exposer getTitre(), getSubject(), getAuthor()
+     */
+    public function postinfoObj(object $post, string $html, array $meta): array
+    {
+        $ctx = $this->baseContext($meta, $html);
+
+        // On suppose que ces méthodes existent ; sinon, adaptez/typhez avec vos entités.
+        $ctx['title']       = method_exists($post, 'getTitre') ? (string) $post->getTitre() : ($ctx['title'] ?? '');
+        $ctx['description'] = method_exists($post, 'getSubject') ? (string) $post->getSubject() : ($ctx['description'] ?? '');
+        $ctx['author']      = method_exists($post, 'getAuthor') ? (string) $post->getAuthor() : null;
+
+        return $ctx;
     }
 
-    public function templatepotins($links,$twigfile, $page, $city=null): array
+    /**
+     * Construit le contexte "Potins".
+     */
+    public function templatePotins(string $html, array $meta): array
     {
-        $this->initemplate($links,$twigfile,$page);
-        $this->vartwig['menu'][]=['route'=>'contact_module_spwb','i'=>'fa fa-comments-o','name'=>'conversations'];
-        $this->vartwig['titlepage']='Les potins numeriques';
-        $this->vartwig['nav']=[];
-        return $this->vartwig;
-    }
+        $ctx = $this->baseContext($meta, $html);
 
-    public function templatepotinsBoard($links,$twigfile, $page, Board $website, $city=null): array
-    {
-        $this->initemplate($links,$twigfile,$page);
-        $this->vartwig['menu'][]=['route'=>'contact_module_spwb','i'=>'fa fa-comments-o','name'=>'conversations'];
-        $this->vartwig['titlepage']='Les potins numeriques';
-        $this->vartwig['nav']=[];
+        // Cohérence title/titlepage
+        $title            = (string)($meta['title'] ?? $ctx['title'] ?? '');
+        $ctx['title']     = $title;
+        $ctx['titlepage'] = $title;
 
-        return $this->vartwig;
-    }
-
-
-    public function templateMember($twigfile,$page, Board $board): array
-    {
-        $this->initemplate([],$twigfile,$page);
-        $this->vartwig['tabActivities']=[];
-        foreach ($board->getListmodules() as $module){
-            $this->vartwig['tabActivities'][]=$module->getClassmodule();
-        }
-        $this->vartwig['tagueries']=$board->getTemplate()->getTagueries(); //implode(",", $template->getKeyword());
-        $this->vartwig['description']=$board->getTemplate()->getDescription();
-        $this->vartwig['arround']=[];
-        $this->vartwig['title']= $board->getNameboard();
-        $this->vartwig['titlepage']=$board->getNameboard();
-        return $this->vartwig;
-    }
-
-    public function templateCustomer($links,$twigfile, $page, $city=null): array
-    {
-        $this->initemplate($links,$twigfile,$page);
-        $this->vartwig['menu'][]=['route'=>'contact_module_spwb','i'=>'fa fa-comments-o','name'=>'conversations'];
-        $this->vartwig['titlepage']='Les potins numeriques';
-        $this->vartwig['nav']=[];
-
-        return $this->vartwig;
-    }
-
-
-    public function websiteinfoObj(Board $website, $twigfile, $page, $typeuser): array
-    {
-        $this->initemplate([],$twigfile,$page);
-            $this->vartwig['arround']=[];
-            $this->vartwig['template']=$website->getTemplate();
-            $this->vartwig['tagueries']=$website->getTemplate()->getTagueries(); //implode(",", $template->getKeyword());
-            $this->vartwig['title']=$website->getNameboard();
-            $this->vartwig['description']=$website->getTemplate()->getDescription();
-            $this->vartwig['author']="mdj, https://affichange.com/msg/formcontact/affichange/Dc7zkgFhLpCoH5a2vbiNGUOZ";
-            return $this->vartwig;
-    }
-
-
-    public function postinfoObj(Post $post, Board $website, $twigfile, $page,$titre, $typeuser): array
-    {
-        $this->initemplate([],$twigfile,$page);
-        $this->vartwig['arround']=[];
-        $this->vartwig['template']=$website->getTemplate();
-        $this->vartwig['tagueries']=$website->getTemplate()->getTagueries(); //implode(",", $template->getKeyword());
-        $this->vartwig['title']=$titre;
-        $this->vartwig['description']=$post->getSubject();
-        $this->vartwig['author']=$website->getNameboard();
-        $this->vartwig['page']=$page;
-
-        return $this->vartwig;
-    }
-
-    public function templatingadmin($twigfile, $title, Board $website, $nav): array
-    {
-        $this->initemplate([],$twigfile,0);
-        $this->vartwig['tabActivities']=[];
-        foreach ($website->getListmodules() as $module){
-            $this->vartwig['tabActivities'][]=$module->getClassmodule();
-        }
-        $this->vartwig['arround']=[];
-        $this->vartwig['title']=$title;
-        $this->vartwig['titlepage']=$title;
-        $this->vartwig['description']="gestion boardsite";
-        $this->vartwig['tagueries'][]=["name"=> "backinfo boardsite"];
-        $this->vartwig['m1']=false;
-        $this->vartwig['m2']=false;
-        $this->vartwig['m3']=false;
-        $this->vartwig['m4']=false;
-        $this->vartwig['m5']=false;
-        $this->vartwig['m6']=false;
-        $this->vartwig['m7']=false;
-        $this->vartwig['m'.$nav]=true;
-
-        switch ($twigfile) {
-
-            case 'openday':
-                $this->vartwig['menu2'][]=['route'=>'opendays_edit','i'=>'fa fa-clock-o','name'=>'horaires','class'=>'navselect'];
-                $this->vartwig['menu2'][]=['route'=>'spaceweblocalize_init','i'=>'fa fa-compass','name'=>'Adresse','class'=>'no'];
-                $this->vartwig['menu2'][]=['route'=>'spaceweb_mod','i'=>'fa fa-suitcase','name'=>'modules','class'=>'no'];
-                $this->vartwig['menu2'][]=['route'=>'website_edit','i'=>'fa fa-id-card-o','name'=>'infos','class'=>'no'];
-                break;
-
-            case 'localizer':
-                $this->vartwig['menu2'][]=['route'=>'opendays_edit','i'=>'fa fa-clock-o','name'=>'horaires','class'=>'no'];
-                $this->vartwig['menu2'][]=['route'=>'spaceweblocalize_init','i'=>'fa fa-compass','name'=>'localisation','class'=>'navselect'];
-                $this->vartwig['menu2'][]=['route'=>'spaceweb_mod','i'=>'fa fa-suitcase','name'=>'modules','class'=>'no'];
-                $this->vartwig['menu2'][]=['route'=>'website_edit','i'=>'fa fa-id-card-o','name'=>'infos','class'=>'no'];
-                break;
-
-            case 'update':
-                $this->vartwig['menu2'][]=['route'=>'opendays_edit','i'=>'fa fa-clock-o','name'=>'horaires','class'=>'no'];
-                $this->vartwig['menu2'][]=['route'=>'spaceweblocalize_init','i'=>'fa fa-compass','name'=>'localisation','class'=>'no'];
-                $this->vartwig['menu2'][]=['route'=>'spaceweb_mod','i'=>'fa fa-suitcase','name'=>'modules','class'=>'no'];
-                $this->vartwig['menu2'][]=['route'=>'website_edit','i'=>'fa fa-id-card-o','name'=>'infos','class'=>'navselect'];
-                break;
-
-            case 'stateModules':
-            case 'modules/comonModule':
-                $this->vartwig['menu2'][]=['route'=>'opendays_edit','i'=>'fa fa-clock-o','name'=>'horaires','class'=>'no'];
-                $this->vartwig['menu2'][]=['route'=>'spaceweblocalize_init','i'=>'fa fa-compass','name'=>'localisation','class'=>'no'];
-                $this->vartwig['menu2'][]=['route'=>'spaceweb_mod','i'=>'fa fa-suitcase','name'=>'modules','class'=>'navselect'];
-                $this->vartwig['menu2'][]=['route'=>'website_edit','i'=>'fa fa-id-card-o','name'=>'infos','class'=>'no'];
-                break;
-
-            default:
-                $this->vartwig['menu2'][]=['route'=>'opendays_edit','i'=>'fa fa-clock-o','name'=>'horaires','class'=>'no'];
-                $this->vartwig['menu2'][]=['route'=>'spaceweblocalize_init','i'=>'fa fa-compass','name'=>'localisation','class'=>'no'];
-                $this->vartwig['menu2'][]=['route'=>'spaceweb_mod','i'=>'fa fa-suitcase','name'=>'modules','class'=>'no'];
-                $this->vartwig['menu2'][]=['route'=>'website_edit','i'=>'fa fa-id-card-o','name'=>'infos','class'=>'no'];
-                break;
+        // Description explicite si fournie dans $meta
+        if (array_key_exists('description', $meta)) {
+            $ctx['description'] = (string) $meta['description'];
         }
 
-        return $this->vartwig;
+        return $ctx;
     }
 
+    /**
+     * Construit le contexte pour l’admin d’un "board".
+     *
+     * @param object $board Doit exposer getListmodules(): iterable de modules avec getClassmodule(): string
+     * @param int|string $nav Index du menu actif (ex: 1..7)
+     */
+    public function admin(object $board, string $html, array $meta, int|string $nav): array
+    {
+        $ctx = $this->templatePotins($html, $meta);
+
+        // Liste des activités
+        $ctx['tabActivities'] = [];
+        if (method_exists($board, 'getListmodules')) {
+            foreach ($board->getListmodules() as $module) {
+                $ctx['tabActivities'][] = method_exists($module, 'getClassmodule')
+                    ? (string) $module->getClassmodule()
+                    : '';
+            }
+        }
+
+        // Indicateurs m1..m7 avec une boucle
+        $active = is_numeric($nav) ? max(1, min(7, (int) $nav)) : 0;
+        for ($i = 1; $i <= 7; $i++) {
+            $ctx['m' . $i] = ($i === $active);
+        }
+
+        return $ctx;
+    }
+
+    /**
+     * Construit les clés communes du contexte à partir de $meta et du HTML.
+     */
+    private function baseContext(array $meta, string $html): array
+    {
+        return [
+            'maintwig'    => $html,
+            'title'       => (string)($meta['title'] ?? ''),
+            'titlepage'   => (string)($meta['titlepage'] ?? ($meta['title'] ?? '')),
+            'description' => (string)($meta['description'] ?? ''),
+            'linkbar'     => $meta['menu']      ?? [],
+            'tagueries'   => $meta['tagueries'] ?? [],
+        ];
+    }
 
 }

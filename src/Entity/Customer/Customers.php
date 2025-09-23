@@ -5,6 +5,7 @@ namespace App\Entity\Customer;
 
 use App\Entity\Admin\NumClients;
 use App\Entity\Admin\PreOrderResa;
+use App\Entity\Admin\Wbcustomers;
 use App\Entity\Bulles\Bulle;
 use App\Entity\Member\Activmember;
 use App\Entity\UserMap\Heuristiques;
@@ -45,6 +46,10 @@ class Customers
     #[JoinColumn(nullable: true)]
     private ?Activmember $member;
 
+    #[OneToOne(targetEntity: Wbcustomers::class, cascade: ['persist'])]
+    #[JoinColumn(nullable: true)]
+    private ?Wbcustomers $boardwbcustomer;
+
     #[OneToOne(targetEntity: ProfilUser::class, cascade: ['persist', 'remove'])]
     #[JoinColumn(nullable: false)]
     private ?ProfilUser $profil;
@@ -81,7 +86,7 @@ class Customers
     #[ORM\JoinColumn(nullable: true)]
     private Collection $bulles;
 
-    #[OneToMany(mappedBy: 'customer', targetEntity: Services::class, cascade: ['persist', 'remove'])]
+    #[OneToMany(targetEntity: Services::class, mappedBy: 'customer', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
     private Collection $services;
 
@@ -360,5 +365,17 @@ class Customers
     public function isMember(): ?bool
     {
         return $this->isMember;
+    }
+
+    public function getBoardwbcustomer(): ?Wbcustomers
+    {
+        return $this->boardwbcustomer;
+    }
+
+    public function setBoardwbcustomer(?Wbcustomers $boardwbcustomer): static
+    {
+        $this->boardwbcustomer = $boardwbcustomer;
+
+        return $this;
     }
 }

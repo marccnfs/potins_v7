@@ -1,3 +1,5 @@
+
+
 .pwa-potin-pg h1 {
   line-height: 40px;
   font-size: 2rem !important;
@@ -128,6 +130,13 @@
   padding: 0 2rem 2rem;
   position: relative;
   background-color: white;
+}
+.pwa-header-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 15px;
+    height: 100px;
 }
 .rss-inf2{
   word-break: break-word;
@@ -315,17 +324,6 @@
   color: var(--potins-blk);
   padding: 10px 0px 10px 0;
 }
-.pwa-relational {
-  z-index: 10;
-  /* display: inline-block; */
-  /* text-align: end; */
-  width: 100%;
-  /* position: absolute; */
-  bottom: 36px;
-  right: 56px;
-  margin: auto;
-  text-align: center;
-}
 .pwa-illustr{
   width: 270px;
   height: 270px;
@@ -345,11 +343,16 @@
   height: 100%;
   margin-top: 100px;
 }
+.pwa-temp_bleu{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
 .pwa-relational {
   z-index: 10;
   width: 100%;
   position: relative;
-  height: 90px;
 }
 .pwa-fx-pag{
   display: flex;
@@ -407,9 +410,10 @@
 .pwa-pic-right {
   display: block;
   position: relative;
-  width: 350px;
+  width: min(100%, 350px);
   margin: auto;
-  height: 350px;
+  aspect-ratio: 1 / 1;
+  height: auto;
 }
 .zz_top-notop{
 }
@@ -568,22 +572,25 @@ text-align: center;
   padding: 10px;
 }
 .pwa-right-row {
-  height: 350px;
+  height: 100%;
+  max-height: 350px;
   width: 0%;
 }
 .pwa-pic-right {
   display: block;
   position: relative;
-  width: auto;
+  width: min(100%, 350px);
   margin: auto;
-  height: 340px;
+  aspect-ratio: 1 / 1;
+  height: auto;
 }
 .pwa-bkg-right {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   height: 100%;
-  width: 350px;
+    width: 100%;
+    max-width: 350px;
 }
 .content_mb_with_icone_l3_txt{
   margin: auto;
@@ -629,21 +636,23 @@ text-align: center;
   flex-direction: column;
 }
 .pwa-block-locate-grey {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80%;
-  margin: auto;;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    margin: auto;
+    flex-wrap: wrap;
 }
 .pwa-in-locate-grey {
   position: relative;
   display: block;
   border-radius: 15px;
-  width: 300px;
+    width: 100%;
+    max-width: 300px;
   background-color: #eeebea;
   padding: 15px;
-  margin: 15px;
+    margin: 15px auto;
   height: auto;
   z-index: 501;
 }
@@ -1744,7 +1753,7 @@ align-items: center;
 }
 .pwa-ressource-imput {
   position: relative;
-  width: 350px;
+  width: min(100%, 350px);
   margin-top: 19px;
 }
 #Workshop_Back {
@@ -2886,17 +2895,62 @@ a:active{
     transition: 0.4s;
 }
 
-.mobile-nav {
+.hidden {
     display: none;
     position: absolute;
     top: 70px;
     width: 100%;
     background: white;
 }
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 90;
+}
 
+.mobile-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 80%;
+    max-width: 320px;
+    height: 100%;
+    background: #fff;
+    z-index: 100;
+    padding: 1.5rem 1.25rem;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow-y: auto;
+}
+
+.mobile-nav {
+    height: 100%;
+}
 .mobile-nav ul {
     list-style: none;
-    padding: 20px;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.mobile-nav a {
+    color: #1e3a5f;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.close-icon {
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    align-self: flex-end;
+    color: #1e3a5f;
 }
 
 /* RESPONSIVE */
@@ -3678,3 +3732,107 @@ a:active{
     }
 
 }
+.pwa-logo-small-smaller{
+    position: relative;
+    width: 60px;
+    height: auto;
+}
+/* tout en haut de la pile */
+.overlay {
+    position: fixed;
+    inset: 0;              /* top:0; right:0; bottom:0; left:0 */
+    z-index: 9001;
+}
+
+/* Respect absolu de [hidden] et scroll lock */
+[hidden] { display: none !important; }
+html.is-locked, body.is-locked { overflow: hidden; }
+
+/* App bar mobile (fixe) */
+:root { --appbar-h: 56px; }
+.pwa-appbar {
+    position: sticky; /* ou fixed si tu préfères */
+    top: 0;
+    z-index: 9000;
+    height: var(--appbar-h);
+    padding: env(safe-area-inset-top) 12px 0 12px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    background: #fff;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+}
+.pwa-appbar__left { display: flex; align-items: center; gap: 8px; }
+.pwa-appbar__right { display: flex; justify-content: flex-end; }
+
+/* Logo compact */
+.pwa-logo svg { display: block; height: 28px; }
+
+/* Burger */
+.pwa-burger {
+    inline-size: 40px; block-size: 40px;
+    display: grid; place-items: center;
+    border: 0; background: transparent; padding: 0; cursor: pointer;
+}
+.pwa-burger span {
+    display: block;
+    inline-size: 22px; block-size: 2px;
+    margin-block: 3px;
+    background: currentColor;
+    border-radius: 2px;
+}
+
+/* Overlay (derrière le panneau) */
+.pwa-menu__overlay {
+    position: fixed; inset: 0; z-index: 9001;
+    background: rgba(0,0,0,.35);
+    backdrop-filter: blur(1px);
+}
+
+/* Panneau plein écran */
+.pwa-menu {
+    position: fixed; inset: 0; z-index: 9002;
+    display: grid; grid-template-rows: auto 1fr;
+    background: #fff;
+    padding-top: env(safe-area-inset-top);
+}
+
+/* Barre haute du panneau */
+.pwa-menu__appbar {
+    height: var(--appbar-h);
+    display: grid; grid-template-columns: auto 1fr; align-items: center;
+    padding: 0 8px;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+}
+.pwa-back {
+    inline-size: 40px; block-size: 40px;
+    display: grid; place-items: center;
+    border: 0; background: transparent; cursor: pointer;
+}
+.pwa-menu__title {
+    font-weight: 600; font-size: 16px;
+    margin-inline-start: 4px;
+}
+
+/* Liste des liens */
+.pwa-menu__list {
+    margin: 0; padding: 8px 10px 16px; list-style: none;
+    overflow: auto;
+}
+.pwa-menu__list li { margin: 0; }
+.pwa-menu__list a {
+    display: block;
+    padding: 12px 10px;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 12px;
+}
+.pwa-menu__list a:active { opacity: .8; }
+.pwa-menu__sep {
+    margin: 8px 0; height: 1px; background: rgba(0,0,0,.06);
+}
+
+/* Si ton header global est en z-index élevé, ceci garde l’ordre: header < overlay < panel */
+#main-header { z-index: 9000; }
+.pwa-menu__overlay { z-index: 9001; }
+.pwa-menu { z-index: 9002; }

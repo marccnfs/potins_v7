@@ -20,20 +20,15 @@ class ListAllPotinsController extends AbstractController
     public function allPotins(Listpublications $listpublications): Response
     {
        $vartwig=$this->menuNav->templatepotins(
-           Links::POTINS,
            'lastpotins',
-           1,
-           "nocity");
+           Links::POTINS);
 
         $lastnotices=$listpublications->listAllPotins();
-      //  dump($lastnotices);
 
         return $this->render($this->useragentP.'ptn_public/home.html.twig', [
             'directory'=>'board',
             'replacejs'=>!empty($lastnotices),
             'vartwig'=>$vartwig,
-            'customer'=>$this->customer,
-            'member'=>$this->member,
             'lastsnotice'=>$lastnotices,
         ]);
     }
@@ -42,10 +37,8 @@ class ListAllPotinsController extends AbstractController
     public function allEvents(Searchmodule $searchmodule): Response
     {
         $vartwig=$this->menuNav->templatepotins(
-            Links::EVENT,
             'eventboard',
-            1,
-            "nocity");
+            Links::EVENT);
 
 
         $tab=$searchmodule->findLastBeforeWeek();
@@ -54,9 +47,6 @@ class ListAllPotinsController extends AbstractController
             'replacejs'=>!empty($lastnotices),
             'vartwig'=>$vartwig,
             'events'=>$tab,
-            'board'=>$this->board??[],
-            'member'=>$this->member,
-            'customer'=>$this->customer,
         ]);
     }
 }

@@ -64,24 +64,54 @@
             {% endif %}
         </div>
 
+
         <!-- MENU BURGER MOBILE -->
-        <div id="burger-menu" class="burger-menu">
-            <span></span><span></span><span></span>
+        <div class="mobile-menu" data-controller="menu">
+            <button
+                type="button"
+                class="burger-menu"
+                aria-label="Ouvrir le menu"
+                aria-controls="mobile-menu-panel"
+                aria-expanded="false"
+                aria-haspopup="true"
+                data-menu-target="trigger"
+                data-action="click->menu#open"
+            >
+                <span></span><span></span><span></span>
+            </button>
+            <div
+                class="overlay hidden"
+                data-menu-target="overlay"
+                data-action="click->menu#close"
+                hidden
+            ></div>
+            <!-- MENU MOBILE -->
+            <nav
+                id="mobile-menu-panel"
+                class="mobile-nav mobile-panel hidden"
+                data-menu-target="panel"
+                aria-hidden="true"
+                tabindex="-1"
+                hidden
+            >
+                <button
+                    type="button"
+                    class="close-icon"
+                    aria-label="Fermer le menu"
+                    data-menu-target="close"
+                    data-action="click->menu#close"
+                >&times;</button>
+                <ul>
+                    <li><a href="{{ path('potins_index') }}">Accueil</a></li>
+                    <li><a href="{{ path('events_all') }}">Les prochains potins</a></li>
+                    <li><a href="{{ path('board_all') }}">Les derniers potins</a></li>
+                    <li><a href="{{ path('ressources') }}">Ressources</a></li>
+                    <li><a href="{{ path('cnfs') }}">CNFS</a></li>
+                    {# <li><a href="{{ path('noticezer') }}">Info locale</a></li>  #}
+                </ul>
+            </nav>
         </div>
-
     </div>
-
-    <!-- MENU MOBILE -->
-    <nav id="mobile-nav" class="mobile-nav">
-        <ul>
-            <li><a href="{{ path('potins_index') }}">Accueil</a></li>
-            <li><a href="{{ path('events_all') }}">Les prochains potins</a></li>
-            <li><a href="{{ path('board_all') }}">Les derniers potins</a></li>
-            <li><a href="{{ path('ressources') }}">Ressources</a></li>
-            <li><a href="{{ path('cnfs') }}">CNFS</a></li>
-            {# <li><a href="{{ path('noticezer') }}">Info locale</a></li>  #}
-        </ul>
-    </nav>
 </header>
 <div class="logo-header">
     <div id="logotop" class="zz_top-top">

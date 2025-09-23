@@ -34,16 +34,14 @@ use Symfony\Component\Routing\Attribute\Route;
             $date = $today;
         }
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
+        $vartwig=$this->menuNav->templatePotins(
             '_index',
-            0,
-            "nocity");
+            "agenda cnfs"
+        );
 
 
         return $this->render('pwa/agenda/home.html.twig', [
             'replacejs'=>false,
-            'customer'=>$this->customer,
             'vartwig'=>$vartwig,
             'directory'=>'agenda',
             'view' => $view,
@@ -119,15 +117,12 @@ use Symfony\Component\Routing\Attribute\Route;
         $endsLocal   = $event->getEndsAt()->setTimezone($tz);
 
         $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
             '_show',
-            0,
-            "nocity");
+            'show agenda');
 
 
         return $this->render('pwa/agenda/home.html.twig', [
             'replacejs'=>false,
-            'customer'=>$this->customer,
             'vartwig'=>$vartwig,
             'directory'=>'agenda',
             'e'           => $event,

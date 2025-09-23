@@ -39,14 +39,14 @@ class Sessioninit
     public function initCustomer(User $user): array
     {
         $session=$this->requestStack->getSession();
-        $customer=$this->repouser->findAllCustomByUserId($user->getId())->getCustomer();
+        $customer=$this->repouser->find($user->getId())->getCustomer();
         $session->set('idcustomer', $customer->getId());
         $session->set('typeuser', 'customer');
         $avatar=$customer->getProfil()->getAvatar();
         if($avatar) $session->set('avatar', $this->helper->asset($avatar, 'imageFile'));
 
         if($member=$customer->getMember()){
-            $this->initSession($member,$session);
+            //$this->initSession($member,$session);
             return ['customer'=>$customer,'member'=>$member];
         }
         return ['customer'=>$customer,'member'=>null];

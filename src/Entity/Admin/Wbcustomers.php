@@ -37,7 +37,7 @@ class Wbcustomers
     #[ORM\JoinColumn(nullable: true)]
     private ?Customers $customer= null;
 
-    #[ORM\OneToMany(mappedBy: 'wbcustomer', targetEntity: Wborders::class, cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Wborders::class, mappedBy: 'wbcustomer', cascade: ['persist'], orphanRemoval: true)]
     #[ORM\JoinColumn(nullable: true)]
     private Collection $orders;
 

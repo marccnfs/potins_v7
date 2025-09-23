@@ -129,8 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let logo = document.getElementById("logo");
     let userButton = document.getElementById("nav_user");
     let userDropdown = document.getElementById("user-dropdown");
-    let burgerMenu = document.getElementById("burger-menu");
-    let mobileNav = document.getElementById("mobile-nav");
+
 
     // Effet de scroll pour réduire le header et le logo
     window.addEventListener("scroll", function () {
@@ -155,8 +154,4 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Menu mobile toggle
-    burgerMenu.addEventListener("click", function () {
-        mobileNav.style.display = mobileNav.style.display === "block" ? "none" : "block";
-    });
 });

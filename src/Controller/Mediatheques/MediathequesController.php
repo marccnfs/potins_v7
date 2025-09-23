@@ -26,58 +26,19 @@ class MediathequesController extends AbstractController
         $media=$boardRepository->findWbBySlug($slug);
         $sector=$reposector->findWithAdressByCodesite($media->getCodesite());
         $notices=$listEvent->listallEvenstResa($media->getId());
-           $vartwig=$this->menuNav->templatepotins(
-                Links::ACCUEIL,
-                'mediatheque',
-                0,
-                "nocity");
+
+       $vartwig=$this->menuNav->templatepotins('mediatheque', Links::MEDIATHEQUE);
 
             return $this->render($this->useragentP.'ptn_public/home.html.twig', [
                 'directory'=>'board',
                 'replacejs'=>false,
-                'customer'=>$this->customer,
                 'vartwig'=>$vartwig,
                 'board'=>$media,
                 'media'=>$media,
                 'sector'=>$sector,
                 'notices'=>$notices,
-                'openday'=>$this->board->getTabopendays()? $calopen->cal($this->board->getTabopendays()):"",
+                'openday'=>$media->getTabopendays()? $calopen->cal($media->getTabopendays()):"",
             ]);
     }
-
-    #[Route('/mediatheque-la-saint-jean-de-boiseau', name:"media_saintjean")]
-    public function mediaSaintJean(): Response
-    {
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            'indexpublic',
-            0,
-            "nocity");
-
-        return $this->render($this->useragentP.'ptn_public/home.html.twig', [
-            'directory'=>'main',
-            'replacejs'=>false,
-            'customer'=>$this->customer,
-            'vartwig'=>$vartwig
-        ]);
-    }
-
-    #[Route('/mediatheque-le-pellerin', name:"media_pellerin")]
-    public function mediaPellerin(): Response
-    {
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            'indexpublic',
-            0,
-            "nocity");
-
-        return $this->render($this->useragentP.'ptn_public/home.html.twig', [
-            'directory'=>'main',
-            'replacejs'=>false,
-            'customer'=>$this->customer,
-            'vartwig'=>$vartwig
-        ]);
-    }
-
 
 }

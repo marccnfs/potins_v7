@@ -23,7 +23,6 @@ class EscapeGardenController extends AbstractController
 {
     use PublicSession;
 
-    // src/Controller/LandingController.php
     #[Route('/escape/home', name: 'home')]
     public function index2(EscapeGameRepository $repo,Security $security): Response {
 
@@ -43,10 +42,8 @@ class EscapeGardenController extends AbstractController
         }
 
         $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
             '_index',
-            0,
-            "nocity");
+            Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig',[
             'featuredGames'=>$featuredGames,
@@ -55,11 +52,8 @@ class EscapeGardenController extends AbstractController
             'lastPlayed'=>$lastPlayed,
             'replacejs'=>false,
             'directory'=>'landing',
-            'customer'=>$this->customer,
             'vartwig'=>$vartwig,
             'participant'=>$participant,
-            //'progression' => $progression,
-            //'enigmes' => $enigmes
         ]);
 
     }
@@ -75,15 +69,12 @@ class EscapeGardenController extends AbstractController
         $participant = $this->getParticipantFromSession();
 
         $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
             'garden',
-            0,
-            "nocity");
+            Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
             'directory'=>'newtemplate',
-            'customer'=>$this->customer,
             'vartwig'=>$vartwig,
             'progression' => $progression,
             'enigmes' => $enigmes,
@@ -96,15 +87,12 @@ class EscapeGardenController extends AbstractController
     public function entry(): Response
     {
         $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
             'participant_entry',
-            0,
-            "nocity");
+            Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
             'directory'=>'security',
-            'customer'=>$this->customer,
             'vartwig'=>$vartwig
         ]);
 
@@ -203,14 +191,11 @@ class EscapeGardenController extends AbstractController
         }
 
         $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
             '_profil',
-            0,
-            "nocity");
+            Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
-            'customer'=>$this->customer,
             'directory'=>'dashboard',
             'vartwig'=>$vartwig,
             'participant' => $participant,
@@ -226,14 +211,11 @@ class EscapeGardenController extends AbstractController
         $games=$participant->getEscapeGames();
 
         $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
             '_liste',
-            0,
-            "nocity");
+            Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
-            'customer'=>$this->customer,
             'directory'=>'dashboard',
             'vartwig'=>$vartwig,
             'participant' => $participant,
@@ -297,14 +279,11 @@ class EscapeGardenController extends AbstractController
         }
 
         $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
             'universe',
-            0,
-            "nocity");
+            Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
-            'customer'=>$this->customer,
             'directory'=>'newtemplate',
             'vartwig'=>$vartwig,
             'participant' => $participant,
@@ -323,14 +302,11 @@ class EscapeGardenController extends AbstractController
         $progression = array_keys($enigmes);
 
         $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
             'garden',
-            0,
-            "nocity");
+            Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [ // todo renvoyer vers nouvelle procedure
             'replacejs'=>false,
-            'customer'=>$this->customer,
             'vartwig'=>$vartwig,
             'participant' => $participant,
             'progression' => $progression,
@@ -399,14 +375,11 @@ class EscapeGardenController extends AbstractController
         }
 
         $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
             'public_view',
-            0,
-            "nocity");
+            Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
-            'customer'=>$this->customer,
             'vartwig'=>$vartwig,
             'participant' => $participant,
             'enigmes' => $participant->getEnigmes()
@@ -447,14 +420,11 @@ class EscapeGardenController extends AbstractController
         );
 
         $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
             'public_list',
-            0,
-            "nocity");
+            Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
-            'customer'=>$this->customer,
             'vartwig'=>$vartwig,
             'participants' => $participants
         ]);
@@ -468,14 +438,11 @@ class EscapeGardenController extends AbstractController
         $participant = $this->getParticipantFromSession();
 
         $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
             '_workshop',
-            0,
-            "nocity");
+            Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
-            'customer'=>$this->customer,
             'vartwig'=>$vartwig,
             'directory'=>'docs',
             'participant' => $participant
@@ -490,14 +457,11 @@ class EscapeGardenController extends AbstractController
         $participant = $this->getParticipantFromSession();
 
         $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
             '_legal_mentions',
-            0,
-            "nocity");
+            Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
-            'customer'=>$this->customer,
             'vartwig'=>$vartwig,
             'directory'=>'docs',
             'participant' => $participant
@@ -512,14 +476,11 @@ class EscapeGardenController extends AbstractController
         $participant = $this->getParticipantFromSession();
 
         $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
             '_privacy',
-            0,
-            "nocity");
+            Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
-            'customer'=>$this->customer,
             'vartwig'=>$vartwig,
             'directory'=>'docs',
             'participant' => $participant

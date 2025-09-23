@@ -48,9 +48,14 @@ class ResetPasswordController extends AbstractController
             );
         }
 
-        return $this->render('reset_password/request.html.twig', [
+        $vartwig=['maintwig'=>"request",'title'=>"request"];
+        return $this->render('aff_security/home.html.twig', [
+            'directory'=>'reset_password',
+            'vartwig'=>$vartwig,
+            'replacejs'=>null,
             'requestForm' => $form,
         ]);
+
     }
 
     /**
@@ -65,7 +70,11 @@ class ResetPasswordController extends AbstractController
             $resetToken = $this->resetPasswordHelper->generateFakeResetToken();
         }
 
-        return $this->render('reset_password/check_email.html.twig', [
+        $vartwig=['maintwig'=>"check_email",'title'=>"check email"];
+        return $this->render('aff_security/home.html.twig', [
+            'directory'=>'reset_password',
+            'vartwig'=>$vartwig,
+            'replacejs'=>null,
             'resetToken' => $resetToken,
         ]);
     }
@@ -124,7 +133,11 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('potins_index');
         }
 
-        return $this->render('reset_password/reset.html.twig', [
+        $vartwig=['maintwig'=>"reset",'title'=>"reset"];
+        return $this->render('aff_security/home.html.twig', [
+            'directory'=>'reset_password',
+            'vartwig'=>$vartwig,
+            'replacejs'=>null,
             'resetForm' => $form,
         ]);
     }
@@ -160,7 +173,7 @@ class ResetPasswordController extends AbstractController
             ->from(new Address('contact@potinsnumeriques.fr', 'potins mail Bot'))
             ->to((string) $user->getEmail())
             ->subject('Your password reset request')
-            ->htmlTemplate('reset_password/email.html.twig')
+            ->htmlTemplate('aff_notification/security/reset_password.email.html.twig')
             ->context([
                 'resetToken' => $resetToken,
             ])

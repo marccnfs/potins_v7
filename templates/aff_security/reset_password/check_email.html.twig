@@ -1,11 +1,21 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Password Reset Email Sent{% endblock %}
-
 {% block body %}
-    <p>
-        If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password.
-        This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
-    </p>
-    <p>If you don't receive an email please check your spam folder or <a href="{{ path('app_forgot_password_request') }}">try again</a>.</p>
+<div class="log-machina_mob">
+    <div class="svg-bulle_open">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">{# <circle cx="100" cy="100" r="80"/>#}</svg>
+        <div class="content_login_affi">
+            <div class="sous_connector">
+                <h5 class="glass-field_identify">Réinitialisation de votre mot de passe pour votre compte utlisateur : {{ user.emailCanonical }}</h5>
+                <h4>Un e-mail vous a été envoyé</h4>
+                <p>Il contient un lien sur lequel il vous faudra cliquer pour réinitialiser votre mot de passe.</p>
+                <h2>Remarque :</h2>
+                <p>
+                    This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+                    Vous ne pouvez demander un nouveau mot de passe que toutes les {{ tokenLifetime }}
+                    {{ tokenLifetime > 1 ? 'heures' : 'heure' }}.
+                </p>
+                <p>Si vous ne recevez pas cet email, vérifiez votre dossier spam ou or <a href="{{ path('app_forgot_password_request') }}">essayez à nouveau</a>.</p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

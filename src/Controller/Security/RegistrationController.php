@@ -47,7 +47,7 @@ class RegistrationController extends AbstractController
                     ->from(new Address('mailer@potinsnumeriques.fr', 'potins Mail Bot'))
                     ->to((string) $user->getEmail())
                     ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->htmlTemplate('aff_notification/security/confirmation_email.html.twig')
             );
 
             // do anything else you need here, like send an email
@@ -55,7 +55,11 @@ class RegistrationController extends AbstractController
             return $security->login($user, AppPotinsAuthenticator::class, 'main');
         }
 
-        return $this->render('registration/register.html.twig', [
+        $vartwig=['maintwig'=>"register",'title'=>"register"];
+        return $this->render('aff_security/home.html.twig', [
+            'directory'=>'registration',
+            'vartwig'=>$vartwig,
+            'replacejs'=>null,
             'registrationForm' => $form,
         ]);
     }

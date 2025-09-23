@@ -250,10 +250,10 @@ class BoardRepository extends ServiceEntityRepository
 
 
     public function findAllAndPwAdmin($req){
-        return $this->createQueryBuilder('w')
-            -> leftJoin('w.listmodules', 'lm')
+        return $this->createQueryBuilder('b')
+            -> leftJoin('b.listmodules', 'lm')
             -> addSelect('lm')
-            -> leftJoin('w.spwsites', 'sp')
+            -> leftJoin('b.spwsites', 'sp')
             -> addSelect('sp')
             -> leftJoin('sp.disptachwebsite', 'dp')
             -> addSelect('dp')
@@ -428,20 +428,20 @@ class BoardRepository extends ServiceEntityRepository
     public function findWebsiteAdmin($id): mixed
     {
 
-        return $this->createQueryBuilder('w')
-            -> leftJoin('w.wbcustomer','wc')
+        return $this->createQueryBuilder('b')
+            -> leftJoin('b.wbcustomer','wc')
             -> addSelect('wc')
             -> leftJoin('wc.orders','o')
             -> addSelect('o')
-            -> leftJoin('w.locality','l')
+            -> leftJoin('b.locality','l')
             -> addSelect('l')
-            -> leftJoin('w.template', 't')
+            -> leftJoin('b.template', 't')
             -> addSelect('t')
             -> leftJoin('t.logo', 'lg')
             -> addSelect('lg')
             -> leftJoin('t.background', 'bk')
             -> addSelect('bk')
-            -> andwhere('w.id = :id')
+            -> andwhere('wc.id = :id')
             -> setParameter('id', $id)
             -> getQuery()
             -> getOneOrNullResult();

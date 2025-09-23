@@ -109,11 +109,11 @@ class Activmember
     #[ORM\JoinColumn(nullable: true)]
     private Collection $tagueries;
 
-    #[ORM\OneToMany(mappedBy: 'member', targetEntity: Notifmember::class)]
+    #[ORM\OneToMany(targetEntity: Notifmember::class, mappedBy: 'member')]
     #[ORM\JoinColumn(nullable: true)]
     private Collection $tbnotifs;
 
-    #[ORM\OneToOne(inversedBy: 'member', targetEntity: TagAnalytic::class)]
+    #[ORM\OneToOne(targetEntity: TagAnalytic::class, inversedBy: 'member')]
     #[ORM\JoinColumn(nullable: true)]
     private ?TagAnalytic $analityc;
 

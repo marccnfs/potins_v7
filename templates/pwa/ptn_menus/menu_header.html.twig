@@ -1,93 +1,84 @@
-<header id="main-header">
-    <div class="header-container">
-        <div class="logo-small-smaller smaller">
+{# pwa/ptn_public/menu_header.html.twig #}
+<header class="pwa-appbar" data-controller="menu">
+    <div class="pwa-appbar__left">
+        <a href="{{ path('potins_index') }}" class="pwa-logo" aria-label="Accueil">
             {{ include('svg/potins/logopotins_svg_small.html.twig') }}
-        </div>
-        <!-- MENU NAVIGATION -->
-        <nav class="main-nav">
-            <ul>
-                <li class="level-1">
-                    <a href="{{ path('potins_index') }}" class="link-bar {{ vartwig.linkbar[0]}}">Accueil</a>
-                </li>
-                <li class="dropdown">
-                    <div class="link-bar {{ vartwig.linkbar[1]}}">Les Potins ▼</div>
-                    <ul class="dropdown-menu">
-                        <li class="level-1more"><a class="souslink-bar" href="{{ path('events_all') }}">Les prochains potins</a></li>
-                        <li class="level-1more"><a class="souslink-bar" href="{{ path('board_all') }}">Les derniers potins</a></li>
-                    </ul>
-                </li>
-                <li class="level-1"><a class="link-bar {{ vartwig.linkbar[3]}}" href="{{ path('ressources') }}">Ressources</a></li>
-                <li class="level-1"><a class="link-bar {{ vartwig.linkbar[4]}}" href="{{ path('cnfs') }}">CNFS</a></li>
-                <li class="level-1"><a class="link-bar {{ vartwig.linkbar[5]}}" href="{{ path('home') }}">Games</a></li>
-                {# <li class="level-1"><a class="link-bar {{ vartwig.linkbar[5]}}" href="{{ path('noticezer') }}">Info locale</a></li>  #}
-            </ul>
-        </nav>
-
-        <!-- MENU UTILISATEUR -->
-        <div class="user-menu">
-            <button id="nav_user" class="user-button">
-                {% if user  is defined %}
-
-                    {# 1) si la session stocke déjà un chemin d'avatar, on l'utilise tel quel #}
-                    {% set avatarPath = app.session.get('avatar') %}
-                    {% if avatarPath %}
-                        <div class="avataff" style="background-image: url('{{ asset(avatarPath) }}')"></div>
-
-                        {# 2) sinon, on tente Vich mais uniquement si tout l'arbre est non-null #}
-                    {% elseif customer is defined and customer and customer.profil is defined and customer.profil and customer.profil.avatar is defined and customer.profil.avatar %}
-                        <div class="avataff" style="background-image: url('{{ vich_uploader_asset(customer.profil.avatar, 'imageFile') }}')"></div>
-                    {%  endif %}
-
-                    {# 3) sinon, fallback SVG #}
-                {% else %}
-                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img" fill="currentColor"
-                         viewBox="0 0 24 24" aria-hidden="true" class="gnav-header-1ob2qzx e18c60hj0">
-                        <path d="M12 12c2.486 0 4.5-2.014 4.5-4.5S14.486 3 12 3a4.499 4.499 0 00-4.5 4.5C7.5 9.986 9.514 12 12 12zm0 2.25c-3.004 0-9 1.508-9 4.5v1.75a.5.5 0 00.5.5h17a.5.5 0 00.5-.5v-1.75c0-2.992-5.996-4.5-9-4.5z"></path>
-                    </svg>
-                {% endif %}
-            </button>
-            {% if is_granted('ROLE_SUPER_ADMIN') %}
-                <div id="user-dropdown" class="user-dropdown">
-                    <a href="{{ path('profil_customer') }}">Profil</a>
-                    <a href="{{ path('office_member') }}">Panneau</a>
-                    <a href="{{ path('admin_index') }}">Backoffice</a>
-                    <a href="{{ path('app_logout') }}">Déconnexion</a>
-                </div>
-            {%  elseif is_granted('ROLE_MEDIA') %}
-                <div id="user-dropdown" class="user-dropdown">
-                    <a href="{{ path('parameters') }}">Informations</a>
-                    <a href="{{ path('office_media') }}">Planning Potins</a>
-                    <a href="{{ path('app_logout') }}">Déconnexion</a>
-                </div>
-            {% else %}
-                <a href="{{ path('app_login') }}" class="login-button">Se connecter</a>
-            {% endif %}
-        </div>
-
-        <!-- MENU BURGER MOBILE -->
-        <div id="burger-menu" class="burger-menu">
-            <span></span><span></span><span></span>
-        </div>
-
+        </a>
     </div>
 
-    <!-- MENU MOBILE -->
-    <nav id="mobile-nav" class="mobile-nav">
-        <ul>
+    <div class="pwa-appbar__right">
+        <button
+            type="button"
+            class="pwa-burger"
+            aria-label="Ouvrir le menu"
+            aria-controls="pwa-menu-panel"
+            aria-expanded="false"
+            aria-haspopup="true"
+            data-menu-target="trigger"
+            data-action="click->menu#toggle"
+        >
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+
+    {# overlay (fond assombri) #}
+    <div
+        class="pwa-menu__overlay"
+        data-menu-target="overlay"
+        data-action="click->menu#close"
+        hidden
+    ></div>
+
+    {# panneau plein écran #}
+    <nav
+        id="pwa-menu-panel"
+        class="pwa-menu"
+        data-menu-target="panel"
+        aria-hidden="true"
+        tabindex="-1"
+        hidden
+    >
+        <div class="pwa-menu__appbar">
+            <button
+                type="button"
+                class="pwa-back"
+                aria-label="Fermer le menu"
+                data-menu-target="close"
+                data-action="click->menu#close"
+            >
+                <!-- flèche retour -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <span class="pwa-menu__title">Menu</span>
+        </div>
+
+        <ul class="pwa-menu__list" data-menu-target="firstLink">
             <li><a href="{{ path('potins_index') }}">Accueil</a></li>
             <li><a href="{{ path('events_all') }}">Les prochains potins</a></li>
             <li><a href="{{ path('board_all') }}">Les derniers potins</a></li>
             <li><a href="{{ path('ressources') }}">Ressources</a></li>
             <li><a href="{{ path('cnfs') }}">CNFS</a></li>
-            {# <li><a href="{{ path('noticezer') }}">Info locale</a></li>  #}
+            {# <li><a href="{{ path('noticezer') }}">Info locale</a></li> #}
+
+            <li class="pwa-menu__sep" aria-hidden="true"></li>
+
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <li><a href="{{ path('profil_customer') }}">Profil</a></li>
+                <li><a href="{{ path('office_member') }}">Panneau</a></li>
+                <li><a href="{{ path('admin_index') }}">Backoffice</a></li>
+                <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
+            {% elseif is_granted('ROLE_MEDIA') %}
+                <li><a href="{{ path('parameters') }}">Informations</a></li>
+                <li><a href="{{ path('office_media') }}">Planning Potins</a></li>
+                <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
+            {% else %}
+                <li><a href="{{ path('app_login') }}">Se connecter</a></li>
+            {% endif %}
         </ul>
+
+        {# (Option) si tu veux un footer dans le panneau : place un bloc ici #}
     </nav>
 </header>
-<div class="logo-header">
-    <div id="logotop" class="zz_top-top">
-        {{ include('svg/potins/vector1.html.twig') }}
-    </div>
-    <a href="{{ path('potins_index') }}" id="logosmall" class="logo-large">
-        {{ include('svg/potins/logopotins_svg_small.html.twig') }}
-    </a>
-</div>

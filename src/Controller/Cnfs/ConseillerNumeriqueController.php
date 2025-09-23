@@ -18,20 +18,13 @@ class ConseillerNumeriqueController extends AbstractController
     public function cnfs(): Response
     {
         $vartwig=$this->menuNav->templatepotins(
-            Links::PUBLIC,
             'index',
-            2,
-            "");
-        $post=['id'=>1];
+            Links::CNFS);
 
         return $this->render($this->useragentP.'ptn_cnfs/home.html.twig', [
             'directory'=>'cnfs',
             'replacejs'=>false,
-            'board'=>$this->board,
             'vartwig'=>$vartwig,
-            'post'=>$post,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
         ]);
     }
 
@@ -39,17 +32,12 @@ class ConseillerNumeriqueController extends AbstractController
     public function cartoCnfs(): Response
     {
        $vartwig=$this->menuNav->templatepotins(
-           Links::PUBLIC,
            'cartographie',
-           3,
-           "");
+           Links::CNFS);
 
         return $this->render($this->useragentP.'ptn_cnfs/home.html.twig', [
             'directory'=>'cnfs',
-            'board'=>$this->board,
             'vartwig'=>$vartwig,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
         ]);
     }
 
@@ -58,18 +46,13 @@ class ConseillerNumeriqueController extends AbstractController
     {
 
         $vartwig=$this->menuNav->templatepotins(
-            Links::PUBLIC,
             'ask',
-            4,
-            "nocity");
-
+            Links::CNFS);
 
         return $this->render($this->useragentP.'ptn_public/home.html.twig', [
             'directory'=>'cnfs',
             'replacejs'=>false,
             'vartwig' => $vartwig,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
         ]);
     }
 
