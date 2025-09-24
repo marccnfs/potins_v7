@@ -83,15 +83,10 @@ class CatalogController extends AbstractController
         $pages     = (int) max(1, ceil($total / $perPage));
 
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            '_index',
-            0,
-            "nocity");
+        $vartwig=$this->menuNav->templatepotins('_index',Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
-            'customer'=>$this->customer,
             'vartwig'=>$vartwig,
             'directory'=>'catalog',
             'games'   => $games,

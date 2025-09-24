@@ -2,6 +2,7 @@
 namespace App\Controller\Game;
 
 use App\Classe\PublicSession;
+use App\Classe\UserSessionTrait;
 use App\Entity\Games\EscapeGame;
 use App\Entity\Games\MobileLink;
 use App\Entity\Media\Illustration;
@@ -26,7 +27,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 #[Route('/atelier/eg')]
 class WizardController extends AbstractController
 {
-    use PublicSession;
+    use UserSessionTrait;
 
     #[Route('/wizard/start', name: 'wizard_start', methods: ['GET'])]
     #[RequireParticipant]
@@ -120,17 +121,12 @@ class WizardController extends AbstractController
             $readyMap[$i] = $p ? (bool)$p->isReady() : false;
         }
 
+        $vartwig=$this->menuNav->templatepotins('_universe',Links::GAMES);
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            '_universe',
-            0,
-            "nocity");
 
         return $this->render('pwa/escape/home.html.twig', [
             'directory'=>'wizard',
             'replacejs'=>false,
-            'customer'=>$this->customer,
             'vartwig'=>$vartwig,
             'eg'      => $eg,
             'form'    => $form,
@@ -149,16 +145,12 @@ class WizardController extends AbstractController
         $this->em->refresh($eg);                     // recharge la racine
         $eg->getPuzzles()->toArray();          // initialise la collection (JOIN lazy)
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            '_overview',
-            0,
-            "nocity");
+
+        $vartwig=$this->menuNav->templatepotins('_overview',links::GAMES);
 
         $response = $this->render('pwa/escape/home.html.twig', [
             'directory'=>'wizard',
             'replacejs'=>false,
-            'customer'=>$this->customer,
             'vartwig'=>$vartwig,
             'stape'=>1,
             'eg'=>$eg,
@@ -184,12 +176,8 @@ class WizardController extends AbstractController
         if (!$eg->getOwner() || $eg->getOwner()->getId() !== $participant->getId()) {
             throw $this->createAccessDeniedException();
         }
+        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            "step{$step}",
-            0,
-            "nocity");
 
 
         $typeMap = [
@@ -244,20 +232,20 @@ class WizardController extends AbstractController
 
                     if (count($hints) < 1) {
                         $form->get('hintsJson')->addError(new FormError('Ajoute au moins un indice.'));
-                        $vartwig = $this->menuNav->templatepotins(Links::ACCUEIL, "step{$step}", 0, "nocity");
 
-                        return $this->render('pwa/escape/home.html.twig', [
-                            'directory'   => 'wizard',
-                            'replacejs'   => false,
-                            'customer'    => $this->customer,
-                            'vartwig'     => $vartwig,
-                            'eg'          => $eg,
-                            'puzzle'      => $puzzle,
-                            'form'        => $form,
-                            'participant' => $participant,
-                            'stape'       => $step,
-                        ]);
-                    }
+                    $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
+
+                    return $this->render('pwa/escape/home.html.twig', [
+                        'directory'   => 'wizard',
+                        'replacejs'   => false,
+                        'vartwig'     => $vartwig,
+                        'eg'          => $eg,
+                        'puzzle'      => $puzzle,
+                        'form'        => $form,
+                        'participant' => $participant,
+                        'stape'       => $step,
+                    ]);
+                }
 
                     // Fusion propre
                     $cfg = array_replace($old, [
@@ -281,16 +269,13 @@ class WizardController extends AbstractController
                     } else {
                         if ($solution === '') {
                             $this->addFlash('danger','La solution ne peut pas être vide (mode clair).');
-                            $vartwig=$this->menuNav->templatepotins(
-                                Links::ACCUEIL,
-                                "step{$step}",
-                                0,
-                                "nocity");
+
+                            $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
+
 
                             return $this->render('pwa/escape/home.html.twig', [
                                 'directory'=>'wizard',
                                 'replacejs'=>false,
-                                'customer'=>$this->customer,
                                 'vartwig'=>$vartwig,
                                 'eg'=>$eg,
                                 'puzzle'=>$puzzle,
@@ -323,12 +308,13 @@ class WizardController extends AbstractController
 
                     if (count($hints) < 1) {
                         $form->get('hintsJson')->addError(new FormError('Ajoute au moins un indice.'));
-                        $vartwig = $this->menuNav->templatepotins(Links::ACCUEIL, "step{$step}", 0, "nocity");
+
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
+
 
                         return $this->render('pwa/escape/home.html.twig', [
                             'directory'   => 'wizard',
                             'replacejs'   => false,
-                            'customer'    => $this->customer,
                             'vartwig'     => $vartwig,
                             'eg'          => $eg,
                             'puzzle'      => $puzzle,
@@ -394,16 +380,12 @@ class WizardController extends AbstractController
                     }
                     if (!$imagePath) {
                         $this->addFlash('danger','Merci de téléverser une image.');
-                        $vartwig=$this->menuNav->templatepotins(
-                            Links::ACCUEIL,
-                            "step{$step}",
-                            0,
-                            "nocity");
+
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
 
                         return $this->render('pwa/escape/home.html.twig', [
                             'directory'=>'wizard',
                             'replacejs'=>false,
-                            'customer'=>$this->customer,
                             'vartwig'=>$vartwig,
                             'eg'=>$eg,
                             'puzzle'=>$puzzle,
@@ -420,12 +402,13 @@ class WizardController extends AbstractController
 
                     if (count($hints) < 1) {
                         $form->get('hintsJson')->addError(new FormError('Ajoute au moins un indice.'));
-                        $vartwig = $this->menuNav->templatepotins(Links::ACCUEIL, "step{$step}", 0, "nocity");
+
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
+
 
                         return $this->render('pwa/escape/home.html.twig', [
                             'directory'   => 'wizard',
                             'replacejs'   => false,
-                            'customer'    => $this->customer,
                             'vartwig'     => $vartwig,
                             'eg'          => $eg,
                             'puzzle'      => $puzzle,
@@ -470,16 +453,12 @@ class WizardController extends AbstractController
                         $data = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
                     } catch (\Throwable $e) {
                         $this->addFlash('danger','JSON invalide pour les questions.');
-                        $vartwig=$this->menuNav->templatepotins(
-                            Links::ACCUEIL,
-                            "step{$step}",
-                            0,
-                            "nocity");
+
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
 
                         return $this->render('pwa/escape/home.html.twig', [
                             'directory'=>'wizard',
                             'replacejs'=>false,
-                            'customer'=>$this->customer,
                             'vartwig'=>$vartwig,
                             'eg'=>$eg,
                             'puzzle'=>$puzzle,
@@ -488,29 +467,25 @@ class WizardController extends AbstractController
                         ]);
                     }
 
-
-                    /*old
-                    // ✅ Accepte soit { "questions": [...] }, soit directement [ ... ]
-                    $questions = [];
-                    if (is_array($data)) {
-                        if (array_is_list($data)) {        // PHP 8.1 : liste => tableau de questions
-                            $questions = $data;
-                        } elseif (isset($data['questions']) && is_array($data['questions'])) {
-                            $questions = $data['questions'];
-                        }
-                    }
-                    */
-
                     // JSON questions
                     $questionsJson = (string) $form->get('questionsJson')->getData();
                     $questions = $this->parseLogicQuestionsJson($questionsJson);
                     if (count($questions) < 1) {
                         $form->get('questionsJson')->addError(new FormError('Ajoute au moins une question valide (voir l’exemple).'));
                         // re-render ton template d’édition (même que d’habitude)
-                        $vartwig = $this->menuNav->templatepotins(Links::ACCUEIL, "step{$step}", 0, "nocity");
+
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
+
+
                         return $this->render('pwa/escape/home.html.twig', [
-                            'directory'=>'wizard','replacejs'=>false,'customer'=>$this->customer,
-                            'vartwig'=>$vartwig,'eg'=>$eg,'puzzle'=>$puzzle,'form'=>$form,'participant'=>$participant,'stape'=>$step,
+                            'directory'=>'wizard',
+                            'replacejs'=>false,
+                            'vartwig'=>$vartwig,
+                            'eg'=>$eg,
+                            'puzzle'=>$puzzle,
+                            'form'=>$form,
+                            'participant'=>$participant,
+                            'stape'=>$step,
                         ]);
                     }
 
@@ -520,12 +495,12 @@ class WizardController extends AbstractController
 
                     if (count($hints) < 1) {
                         $form->get('hintsJson')->addError(new FormError('Ajoute au moins un indice.'));
-                        $vartwig = $this->menuNav->templatepotins(Links::ACCUEIL, "step{$step}", 0, "nocity");
+
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
 
                         return $this->render('pwa/escape/home.html.twig', [
                             'directory'   => 'wizard',
                             'replacejs'   => false,
-                            'customer'    => $this->customer,
                             'vartwig'     => $vartwig,
                             'eg'          => $eg,
                             'puzzle'      => $puzzle,
@@ -584,16 +559,11 @@ class WizardController extends AbstractController
 
                     if (!$videoPath) {
                         $this->addFlash('danger','Merci de téléverser une vidéo .mp4.');
-                        $vartwig=$this->menuNav->templatepotins(
-                            Links::ACCUEIL,
-                            "step{$step}",
-                            0,
-                            "nocity");
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
 
                         return $this->render('pwa/escape/home.html.twig', [
                             'directory'=>'wizard',
                             'replacejs'=>false,
-                            'customer'=>$this->customer,
                             'vartwig'=>$vartwig,
                             'eg'=>$eg,
                             'puzzle'=>$puzzle,
@@ -607,12 +577,11 @@ class WizardController extends AbstractController
 
                     if (count($hints) < 1) {
                         $form->get('hintsJson')->addError(new FormError('Ajoute au moins un indice.'));
-                        $vartwig = $this->menuNav->templatepotins(Links::ACCUEIL, "step{$step}", 0, "nocity");
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
 
                         return $this->render('pwa/escape/home.html.twig', [
                             'directory'   => 'wizard',
                             'replacejs'   => false,
-                            'customer'    => $this->customer,
                             'vartwig'     => $vartwig,
                             'eg'          => $eg,
                             'puzzle'      => $puzzle,
@@ -652,12 +621,11 @@ class WizardController extends AbstractController
 
                     if (count($hints) < 1) {
                         $form->get('hintsJson')->addError(new FormError('Ajoute au moins un indice.'));
-                        $vartwig = $this->menuNav->templatepotins(Links::ACCUEIL, "step{$step}", 0, "nocity");
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
 
                         return $this->render('pwa/escape/home.html.twig', [
                             'directory'   => 'wizard',
                             'replacejs'   => false,
-                            'customer'    => $this->customer,
                             'vartwig'     => $vartwig,
                             'eg'          => $eg,
                             'puzzle'      => $puzzle,
@@ -685,7 +653,6 @@ class WizardController extends AbstractController
                 }
             }
 
-
             $this->em->persist($puzzle);
             $this->em->flush();
 
@@ -697,7 +664,6 @@ class WizardController extends AbstractController
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
             'directory'=>'wizard',
-            'customer'=>$this->customer,
             'vartwig'=>$vartwig,
             'progression'=>0,
             'participant'=>$participant,
@@ -743,18 +709,13 @@ class WizardController extends AbstractController
                 'expiresAt' => $link->getExpiresAt(),
             ];
         }
-        // --- FIN AJOUT ---
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            "step",
-            0,
-            "nocity");
+        $vartwig=$this->menuNav->templatepotins("step",links::GAMES);
+
 
         return $this->render('pwa/escape/home.html.twig', [
             'directory'=>'preview',
             'replacejs'=>false,
-            'customer'=>$this->customer,
             'vartwig'=>$vartwig,
             'eg'     => $eg,
             'puzzle' => $puzzle,

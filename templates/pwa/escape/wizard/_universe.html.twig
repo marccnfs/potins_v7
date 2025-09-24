@@ -67,27 +67,42 @@
                                         {% endfor %}
                                     </div>
 
+                                    {# ... au même endroit où tu as déjà "Illustrations" ... #}
                                     <hr>
                                     <h3>Illustrations</h3>
-                                    <div class="illu-grid">
+
+                                    {# Aperçu "couverture" (1re illustration) #}
+                                    {% set illustrations = eg.illustrations ?? [] %}
+                                    {% set cover = illustrations|first %}
+
+                                    <div class="cover-preview" style="margin-bottom:.6rem;">
+                                        {% if cover %}
+                                            <img src="{{ vich_uploader_asset(cover, 'imageFile') }}" alt="Couverture" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;border:1px solid #e5e7eb;">
+                                        {% else %}
+                                            <div class="ph" style="width:100%;aspect-ratio:16/9;border-radius:10px;border:1px dashed #e5e7eb;display:grid;place-items:center;color:#6b7280">Aucune image de couverture</div>
+                                        {% endif %}
+                                    </div>
+
+                                    {# Miniatures + suppression #}
+                                    <div class="illu-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;">
                                         {% for illu in eg.illustrations %}
-                                            <div class="illu-item">
-                                                {% if illu is defined %}
-                                                    <img src="{{ vich_uploader_asset(illu, 'imageFile') }}" alt="" />
-                                                    {# coche de suppression #}
-                                                    {% set id = illu.id %}
-                                                    <label class="del">
-                                                        <input type="checkbox" name="{{ form.deleteImages.vars.full_name }}[]" value="{{ id }}">
-                                                        Supprimer
-                                                    </label>
-                                                {% endif %}
+                                            <div class="illu-item" style="border:1px solid #e5e7eb;border-radius:8px;padding:.3rem;background:#fff;">
+                                                <img src="{{ vich_uploader_asset(illu, 'imageFile') }}" alt="" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;">
+                                                {% set id = illu.id %}
+                                                <label class="del" style="display:block;margin-top:.35rem;font-size:.9rem;">
+                                                    <input type="checkbox" name="{{ form.deleteImages.vars.full_name }}[]" value="{{ id }}"> Supprimer
+                                                </label>
                                             </div>
                                         {% else %}
                                             <p class="muted">Aucune image pour l’instant.</p>
                                         {% endfor %}
                                     </div>
 
-                                    {{ form_row(form.newImages) }}
+                                    {# Upload multiples #}
+                                    <div style="margin-top:.6rem;">
+                                        {{ form_row(form.newImages) }}
+                                    </div>
+
                                     {{ form_row(form.deleteImages, {'label': 'Supprimer (liste) — optionnel', 'row_attr': {'class': 'hidden'}}) }}
                                 </div>
                             </div>
@@ -95,7 +110,7 @@
                             <div class="form-actions">
                                 <a class="btn" href="{{ path('wizard_overview', { id: eg.id }) }}">Annuler</a>
                                 <button class="btn btn-primary">Enregistrer</button>
-                                <a class="btn btn-light" href="{{ path('wizard_step', { id: eg.id, step: 1 }) }}">Passer à l’étape 1 →</a>
+                              {#  <a class="btn btn-light" href="{{ path('wizard_step', { id: eg.id, step: 1 }) }}">Passer à l’étape 1 →</a>  #}
                             </div>
 
                             {{ form_end(form) }}
