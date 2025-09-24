@@ -1,7 +1,6 @@
 <?php
 namespace App\Controller\Game;
 
-use App\Classe\PublicSession;
 use App\Classe\UserSessionTrait;
 use App\Entity\Games\EscapeGame;
 use App\Entity\Games\MobileLink;

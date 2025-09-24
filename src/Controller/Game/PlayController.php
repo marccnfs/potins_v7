@@ -4,6 +4,7 @@ namespace App\Controller\Game;
 
 use App\Attribute\RequireParticipant;
 use App\Classe\PublicSession;
+use App\Classe\UserSessionTrait;
 use App\Entity\Games\MobileLink;
 use App\Lib\Links;
 use App\Repository\EscapeGameRepository;
@@ -18,7 +19,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/play')]
 class PlayController extends AbstractController
 {
-    use PublicSession;
+    use UserSessionTrait;
+
     #[Route('/{slug}', name:'play_entry', methods:['GET'])]
     #[RequireParticipant]
     public function entry(Request $req,EscapeGameRepository $repo,PlaySessionRepository $playSessionRepo, string $slug): Response
@@ -35,12 +37,9 @@ class PlayController extends AbstractController
             }
         }
 
+dump($eg);
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            'entry',
-            0,
-            "nocity");
+        $vartwig=$this->menuNav->templatepotins('entry',Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
@@ -85,14 +84,8 @@ class PlayController extends AbstractController
                 'expiresAt' => $link->getExpiresAt(),
             ];
         }
-        // --- FIN AJOUT ---
 
-
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            'step',
-            0,
-            "nocity");
+        $vartwig=$this->menuNav->templatepotins('step',Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
@@ -115,11 +108,7 @@ class PlayController extends AbstractController
         $eg = $repo->findOneBy(['shareSlug'=>$slug, 'published'=>true])
             ?? throw $this->createNotFoundException();
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            'the_end',
-            0,
-            "nocity");
+        $vartwig=$this->menuNav->templatepotins('the_end',Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,

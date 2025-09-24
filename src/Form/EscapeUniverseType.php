@@ -18,7 +18,7 @@ class EscapeUniverseType extends AbstractType
     {
         /** @var EscapeGame $eg */
         $eg = $options['eg'];
-        $univers = is_array($eg->getUniverse()) ? $eg->getUniverse() : [];
+        $universe = is_array($eg->getUniverse()) ? $eg->getUniverse() : [];
         $stepTitles = $eg->getTitresEtapes() ?? [1=>'',2=>'',3=>'',4=>'',5=>'',6=>''];
 
         $b

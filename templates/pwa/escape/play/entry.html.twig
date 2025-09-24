@@ -41,7 +41,8 @@
                 <div class="entry-layout">
 
                     {% set uni = eg.universe ?? {} %}
-                    {% set cover = eg.illustrations|first ?? null %}
+                    {% set illustrations = eg.illustrations ?? [] %}
+                    {% set cover = illustrations|first %}
 
 
                     <header class="entry-hero" style="position:relative;overflow:hidden;border-radius:12px;">
@@ -56,7 +57,7 @@
 
                         <div class="hero-body" style="position:relative;z-index:1;color:#fff;padding:1.2rem 1.2rem 1rem;">
                             <h1 class="hero-title" style="margin:.2rem 0;font-size:clamp(1.6rem,3.2vw,2.2rem);">{{ eg.title }}</h1>
-                            {% set subtitle = (uni.context ?? uni.goal ?? '') %}
+                            {% set subtitle = (uni.contexte ?? uni.goal ?? '') %}
                             {% if subtitle %}
                                 <p class="hero-sub" style="opacity:.9;margin:.2rem 0 .6rem 0;">{{ subtitle|striptags|length > 180 ? (subtitle|striptags|slice(0,180) ~ '…') : subtitle|raw }}</p>
                             {% else %}
@@ -83,8 +84,8 @@
                         <div class="grid2" style="display:grid;grid-template-columns:1.2fr .8fr;gap:1rem;">
                             <div>
                                 <h3>Contexte</h3>
-                                {% if uni.context %}
-                                    <p>{{ uni.context|raw }}</p>
+                                {% if uni.contexte %}
+                                    <p>{{ uni.contexte|raw }}</p>
                                 {% else %}
                                     <p class="muted">Le maître du jeu n’a pas encore précisé le contexte.</p>
                                 {% endif %}
