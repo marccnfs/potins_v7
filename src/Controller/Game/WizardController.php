@@ -29,6 +29,15 @@ class WizardController extends AbstractController
 {
     use UserSessionTrait;
 
+    private const STEP_DEFINITIONS = [
+        1 => ['type' => 'cryptex',       'label' => 'Cryptex numérique'],
+        2 => ['type' => 'qr_geo',        'label' => 'QR code géolocalisé'],
+        3 => ['type' => 'slider_puzzle', 'label' => 'Puzzle numérique'],
+        4 => ['type' => 'logic_form',    'label' => 'Formulaire à piège logique'],
+        5 => ['type' => 'video_quiz',    'label' => 'Vidéo interactive'],
+        6 => ['type' => 'html_min',      'label' => 'Code HTML minimal'],
+    ];
+
     #[Route('/wizard/start', name: 'wizard_start', methods: ['GET'])]
     #[RequireParticipant]
     public function start(Request $req): Response
@@ -142,11 +151,32 @@ class WizardController extends AbstractController
 
        // $this->denyAccessUnlessGranted('EDIT', $eg);
         $participant=$this->currentParticipant($req);
+        if (!$eg->getOwner() || $eg->getOwner()->getId() !== $participant->getId()) {
+            throw $this->createAccessDeniedException();
+        }
+
         $this->em->refresh($eg);                     // recharge la racine
         $eg->getPuzzles()->toArray();          // initialise la collection (JOIN lazy)
 
+        $stepSummaries = [];
+        $completedSteps = 0;
+        foreach (self::STEP_DEFINITIONS as $index => $definition) {
+            $puzzle = $eg->getPuzzleByStep($index);
+            $isReady = $puzzle?->isReady() ?? false;
+            if ($isReady) {
+                ++$completedSteps;
+            }
+            $stepSummaries[$index] = [
+                'label'  => $definition['label'],
+                'type'   => $definition['type'],
+                'ready'  => $isReady,
+                'puzzle' => $puzzle,
+            ];
+        }
 
-        $vartwig=$this->menuNav->templatepotins('_overview',links::GAMES);
+        $totalSteps = count(self::STEP_DEFINITIONS);
+        $completionRate = $totalSteps > 0 ? (int) floor(($completedSteps / $totalSteps) * 100) : 0;
+        $vartwig=$this->menuNav->templatepotins('_overview',Links::GAMES);
 
         $response = $this->render('pwa/escape/home.html.twig', [
             'directory'=>'wizard',
@@ -155,6 +185,12 @@ class WizardController extends AbstractController
             'stape'=>1,
             'eg'=>$eg,
             'participant'=>$participant,
+            'stepSummaries'=>$stepSummaries,
+            'completedSteps'=>$completedSteps,
+            'totalSteps'=>$totalSteps,
+            'completionRate'=>$completionRate,
+            'nextStep'=>$eg->nextIncompleteStep(),
+            'canPublish'=>$completedSteps === $totalSteps,
 
         ]);
 
@@ -176,20 +212,9 @@ class WizardController extends AbstractController
         if (!$eg->getOwner() || $eg->getOwner()->getId() !== $participant->getId()) {
             throw $this->createAccessDeniedException();
         }
-        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
+        $vartwig=$this->menuNav->templatepotins("step{$step}",Links::GAMES);
 
-
-
-        $typeMap = [
-            1 => 'cryptex',
-            2 => 'qr_geo',
-            3 => 'slider_puzzle',
-            4 => 'logic_form',
-            5 => 'video_quiz',
-            6 => 'html_min',
-        ];
-
-        $type = $typeMap[$step] ?? throw $this->createNotFoundException();
+        $type = $this->getStepType($step);
 
         $puzzle = $eg->getOrCreatePuzzleByStep($step, $type);
         $puzzle->setTitle($eg->getTitresEtapes()[$step]??"");
@@ -233,7 +258,7 @@ class WizardController extends AbstractController
                     if (count($hints) < 1) {
                         $form->get('hintsJson')->addError(new FormError('Ajoute au moins un indice.'));
 
-                    $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
+                    $vartwig=$this->menuNav->templatepotins("step{$step}",Links::GAMES);
 
                     return $this->render('pwa/escape/home.html.twig', [
                         'directory'   => 'wizard',
@@ -270,7 +295,7 @@ class WizardController extends AbstractController
                         if ($solution === '') {
                             $this->addFlash('danger','La solution ne peut pas être vide (mode clair).');
 
-                            $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",Links::GAMES);
 
 
                             return $this->render('pwa/escape/home.html.twig', [
@@ -309,7 +334,7 @@ class WizardController extends AbstractController
                     if (count($hints) < 1) {
                         $form->get('hintsJson')->addError(new FormError('Ajoute au moins un indice.'));
 
-                        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",Links::GAMES);
 
 
                         return $this->render('pwa/escape/home.html.twig', [
@@ -381,7 +406,7 @@ class WizardController extends AbstractController
                     if (!$imagePath) {
                         $this->addFlash('danger','Merci de téléverser une image.');
 
-                        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",Links::GAMES);
 
                         return $this->render('pwa/escape/home.html.twig', [
                             'directory'=>'wizard',
@@ -403,7 +428,7 @@ class WizardController extends AbstractController
                     if (count($hints) < 1) {
                         $form->get('hintsJson')->addError(new FormError('Ajoute au moins un indice.'));
 
-                        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",Links::GAMES);
 
 
                         return $this->render('pwa/escape/home.html.twig', [
@@ -454,7 +479,7 @@ class WizardController extends AbstractController
                     } catch (\Throwable $e) {
                         $this->addFlash('danger','JSON invalide pour les questions.');
 
-                        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",Links::GAMES);
 
                         return $this->render('pwa/escape/home.html.twig', [
                             'directory'=>'wizard',
@@ -496,7 +521,7 @@ class WizardController extends AbstractController
                     if (count($hints) < 1) {
                         $form->get('hintsJson')->addError(new FormError('Ajoute au moins un indice.'));
 
-                        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",Links::GAMES);
 
                         return $this->render('pwa/escape/home.html.twig', [
                             'directory'   => 'wizard',
@@ -559,7 +584,7 @@ class WizardController extends AbstractController
 
                     if (!$videoPath) {
                         $this->addFlash('danger','Merci de téléverser une vidéo .mp4.');
-                        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",Links::GAMES);
 
                         return $this->render('pwa/escape/home.html.twig', [
                             'directory'=>'wizard',
@@ -577,7 +602,7 @@ class WizardController extends AbstractController
 
                     if (count($hints) < 1) {
                         $form->get('hintsJson')->addError(new FormError('Ajoute au moins un indice.'));
-                        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",Links::GAMES);
 
                         return $this->render('pwa/escape/home.html.twig', [
                             'directory'   => 'wizard',
@@ -621,7 +646,7 @@ class WizardController extends AbstractController
 
                     if (count($hints) < 1) {
                         $form->get('hintsJson')->addError(new FormError('Ajoute au moins un indice.'));
-                        $vartwig=$this->menuNav->templatepotins("step{$step}",links::GAMES);
+                        $vartwig=$this->menuNav->templatepotins("step{$step}",Links::GAMES);
 
                         return $this->render('pwa/escape/home.html.twig', [
                             'directory'   => 'wizard',
@@ -710,7 +735,7 @@ class WizardController extends AbstractController
             ];
         }
 
-        $vartwig=$this->menuNav->templatepotins("step",links::GAMES);
+        $vartwig=$this->menuNav->templatepotins("step",Links::GAMES);
 
 
         return $this->render('pwa/escape/home.html.twig', [
@@ -745,6 +770,15 @@ class WizardController extends AbstractController
         $this->em->flush();
         $this->addFlash('success','Escape game publié !');
         return $this->redirectToRoute('play_entry', ['slug'=>$eg->getShareSlug()]);
+    }
+
+    private function getStepType(int $step): string
+    {
+        if (!isset(self::STEP_DEFINITIONS[$step])) {
+            throw $this->createNotFoundException();
+        }
+
+        return self::STEP_DEFINITIONS[$step]['type'];
     }
 
     public function mergeHints($form,$cfg,$puzzle){

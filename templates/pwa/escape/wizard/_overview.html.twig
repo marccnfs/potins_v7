@@ -4,37 +4,45 @@
         <div class="container_bo_member">
             <div class="bo_content">
                 {# --- OVERVIEW WIZARD --- #}
-                {% set steps = {
-                    1: {'type':'cryptex',        'label':'Cryptex numérique'},
-                    2: {'type':'qr_geo',         'label':'QR code géolocalisé'},
-                    3: {'type':'slider_puzzle',  'label':'Puzzle numérique'},
-                    4: {'type':'logic_form',     'label':'Formulaire à piège logique'},
-                    5: {'type':'video_quiz',     'label':'Vidéo interactive'},
-                    6: {'type':'html_min',       'label':'Code HTML minimal'}
-                } %}
-{#
-                {% set readyMap = {} %}
-                {% for p in eg.puzzles %}
-                    {% set readyMap = readyMap|merge({ (p.step): (p.ready ?? false) }) %}
-                {% endfor %}
-#}
-                {% set total = 6 %}
-                {% set done  = 0 %}
-
- {#
-                {% for i in 1..6 %}
-                    {% if readyMap[i]|default(false) %}{% set done = done + 1 %}{% endif %}
-                {% endfor %}
-                {% set pct = (done / total * 100) | round(0, 'floor') %}
- #}
+                {% set steps = stepSummaries|default({}) %}
+                {% if steps is empty %}
+                    {% set fallback = {
+                        1: {'type':'cryptex',        'label':'Cryptex numérique'},
+                        2: {'type':'qr_geo',         'label':'QR code géolocalisé'},
+                        3: {'type':'slider_puzzle',  'label':'Puzzle numérique'},
+                        4: {'type':'logic_form',     'label':'Formulaire à piège logique'},
+                        5: {'type':'video_quiz',     'label':'Vidéo interactive'},
+                        6: {'type':'html_min',       'label':'Code HTML minimal'}
+                    } %}
+                    {% set steps = {} %}
+                    {% set computedDone = 0 %}
+                    {% for index, meta in fallback %}
+                        {% set puzzle = eg.getPuzzleByStep(index) %}
+                        {% set ready = puzzle ? puzzle.isReady : false %}
+                        {% set steps = steps|merge({ (index): meta|merge({ 'puzzle': puzzle, 'ready': ready }) }) %}
+                        {% if ready %}{% set computedDone = computedDone + 1 %}{% endif %}
+                    {% endfor %}
+                    {% set total = steps|length %}
+                    {% set done = computedDone %}
+                    {% set pct = total ? (done / total * 100) | round(0, 'floor') : 0 %}
+                    {% set nextStepNumber = eg.nextIncompleteStep() %}
+                    {% set publishable = done == total and total > 0 %}
+                {% else %}
+                    {% set total = totalSteps|default(steps|length) %}
+                    {% set done = completedSteps|default(0) %}
+                    {% set pct = completionRate|default(0) %}
+                    {% set nextStepNumber = nextStep|default(null) %}
+                    {% set publishable = canPublish|default(done == total and total > 0) %}
+                {% endif %}
 
                 <div class="wizard-overview">
                     <header class="wo-head">
-                        <div>
+                        <div class="wo-head-text">
                             <h1 class="wo-title">{{ eg.title }}</h1>
                             <p class="wo-sub">Progression des étapes · {{ done }}/{{ total }}</p>
                         </div>
                         <div class="wo-actions">
+                            <a class="btn btn-secondary" href="{{ path('wizard_universe', { id: eg.id }) }}">Modifier l’univers</a>
                             {% if eg.published %}
                                 <span class="badge badge-success">Publié</span>
                                 {% if eg.shareSlug %}
@@ -42,14 +50,12 @@
                                 {% endif %}
                             {% else %}
                                 <form method="post" action="{{ path('wizard_publish', { id: eg.id }) }}" onsubmit="return confirm('Publier maintenant ? Vous ne pourrez plus modifier.');">
-                                    <button class="btn btn-primary" {% if done < total %}disabled title="Complète d’abord toutes les étapes"{% endif %}>Publier l’escape game</button>
+                                    <button class="btn btn-primary" {% if not publishable %}disabled title="Complète d’abord toutes les étapes"{% endif %}>Publier l’escape game</button>
                                 </form>
                             {% endif %}
                         </div>
                     </header>
 
-                    {# barre de progression recalculée #}
-                    {% set pct = (done / total * 100) | round(0, 'floor') %}
                     <div class="wo-progress">
                         <div class="wo-bar"><span class="wo-bar-fill" style="width: {{ pct }}%"></span></div>
                         <div class="wo-bar-caption">{{ done }}/{{ total }} · {{ pct }}%</div>
@@ -66,35 +72,38 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for i in 1..6 %}
-                                {# Récupère directement le puzzle de l’étape i #}
-                                {% set p = eg.getPuzzleByStep(i) %}
-                                {% set isReady = p ? p.isReady : false %}
-                                {% if isReady %}{% set done = done + 1 %}{% endif %}
+                            {% for index, step in steps %}
+                                {% set puzzle = step.puzzle|default(null) %}
+                                {% set isReady = step.ready|default(false) %}
 
                                 <tr class="{{ isReady ? 'is-ready' : 'is-pending' }}">
-                                    <td>{{ i }}</td>
-                                    <td>
-                                        {# adapte si tu as déjà la map "steps" quelque part #}
-                                        {{ steps[i].label|default('Étape ' ~ i) }}
+
+                                    <td data-label="#">{{ index }}</td>
+                                    <td data-label="Épreuve">
+                                        <strong>{{ step.label|default('Étape ' ~ index) }}</strong>
+                                        {% if step.type is defined %}
+                                            <span class="wo-step-chip">{{ step.type|replace({'_':' '})|title }}</span>
+                                        {% endif %}
                                     </td>
-                                    <td>
+                                    <td data-label="Statut">
                                         {% if isReady %}
                                             <span class="badge badge-success">Prête</span>
                                         {% else %}
                                             <span class="badge badge-warning">À faire</span>
                                         {% endif %}
                                     </td>
-                                    <td class="wo-actions-col">
-                                        <a class="btn btn-sm btn-primary" href="{{ path('wizard_step', { id: eg.id, step: i }) }}">
-                                            {{ isReady ? 'Modifier' : 'Configurer' }}
-                                        </a>
-                                        {% if isReady %}
-                                            <a class="btn btn-sm btn-light" href="{{ path('wizard_preview_step', { id: eg.id, step: i }) }}" target="_blank" rel="noopener">Aperçu</a>
-                                        {% endif %}
-                                        {% if eg.published %}
-                                            <a class="btn btn-sm btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: i }) }}" target="_blank" rel="noopener">Voir côté joueur</a>
-                                        {% endif %}
+                                    <td data-label="Actions" class="wo-actions-col">
+                                        <div class="wo-action-list">
+                                            <a class="btn btn-sm btn-primary" href="{{ path('wizard_step', { id: eg.id, step: index }) }}">
+                                                {{ isReady ? 'Modifier' : 'Configurer' }}
+                                            </a>
+                                            {% if isReady %}
+                                                <a class="btn btn-sm btn-light" href="{{ path('wizard_preview_step', { id: eg.id, step: index }) }}" target="_blank" rel="noopener">Aperçu</a>
+                                            {% endif %}
+                                            {% if eg.published and eg.shareSlug %}
+                                                <a class="btn btn-sm btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: index }) }}" target="_blank" rel="noopener">Voir côté joueur</a>
+                                            {% endif %}
+                                        </div>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -103,13 +112,11 @@
                     </div>
 
                     <footer class="wo-footer">
-                        {% set next = eg.nextIncompleteStep() %}
-                        {% if next %}
-                            <a class="btn btn-primary" href="{{ path('wizard_step', { id: eg.id, step: next }) }}">Continuer à l’étape {{ next }}</a>
-                        {% else %}
+                        {% if nextStepNumber %}
+                            <a class="btn btn-primary" href="{{ path('wizard_step', { id: eg.id, step: nextStepNumber }) }}">Continuer à l’étape {{ nextStepNumber }}</a>   {% else %}
                             {% if not eg.published %}
                                 <form method="post" action="{{ path('wizard_publish', { id: eg.id }) }}">
-                                    <button class="btn btn-primary">Publier maintenant</button>
+                                    <button class="btn btn-primary" {% if not publishable %}disabled{% endif %}>Publier maintenant</button>
                                 </form>
                             {% else %}
                                 <a class="btn btn-light" href="{{ path('play_entry', { slug: eg.shareSlug }) }}" target="_blank" rel="noopener">Ouvrir la version “jeu”</a>
