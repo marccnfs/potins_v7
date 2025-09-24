@@ -15,7 +15,7 @@
 
                         <header style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin-bottom:.75rem">
                             <div>
-                                <h1 style="margin:0">Étape 2 — QR code géolocalisé</h1>
+                                <h1 style="margin:0">Étape 2 — QR code (géoloc ou caché)</h1>
                                 {% if puzzle.prompt %}<p class="text-muted" style="margin:.25rem 0 0">{{ puzzle.prompt }}</p>{% endif %}
                             </div>
                             <div style="display:flex;gap:.5rem;flex-wrap:wrap">
@@ -30,7 +30,7 @@
 
                         <section class="card" style="margin-bottom:1rem">
                             <h3 style="margin:0 0 .5rem">Aperçu</h3>
-                            <section id="preview-qr"
+                            <section id="preview-geo" class="preview-block"
                                      data-controller="qr-geo"
                                      data-qr-geo-lat-value="{{ target.lat|default(47.0) }}"
                                      data-qr-geo-lng-value="{{ target.lng|default(-1.0) }}"
@@ -38,28 +38,47 @@
                                      data-qr-geo-ok-message-value="{{ cfg.okMessage|default('Bravo !') }}"
                                      data-qr-geo-deny-message-value="{{ cfg.denyMessage|default('Hors zone…') }}"
                                      data-qr-geo-need-https-message-value="{{ cfg.needHttpsMessage|default('HTTPS requis') }}">
+                                <p><strong>Mode géolocalisation</strong></p>
                                 <button data-action="click->qr-geo#check">Vérifier ma position</button>
                                 <div data-qr-geo-target="msg" class="mt-2"></div>
+                            </section>
+                            <section id="preview-qronly" class="preview-block" hidden>
+                                <p><strong>Mode QR caché</strong></p>
+                                <p>Message mobile : <span id="preview-qronly-msg">Bravo !</span></p>
+                                <p>Page « réponse » : <strong id="preview-qronly-answer-title">Réponse de l’étape</strong></p>
+                                <p id="preview-qronly-answer-body" class="muted">Le texte s’affichera ici.</p>
                             </section>
                         </section>
 
                         {{ form_start(form, { attr: { id: 'form-step2' } }) }}
                         <section class="card">
-                            <div class="grid" style="grid-template-columns:minmax(260px,1fr) minmax(320px,1fr)">
+                            <div class="grid" style="grid-template-columns:minmax(260px,1fr) minmax(320px,1fr);gap:1rem">
                                 <div>
                                     {{ form_row(form.title) }}
                                     {{ form_row(form.prompt) }}
-                                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+                                    {{ form_row(form.mode) }}
+
+                                    <div data-step2-mode="geo" style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
                                         {{ form_row(form.lat) }}
                                         {{ form_row(form.lng) }}
                                     </div>
                                 </div>
                                 <div>
-                                    {{ form_row(form.radiusMeters) }}
-                                    {{ form_row(form.okMessage) }}
-                                    {{ form_row(form.denyMessage) }}
-                                    {{ form_row(form.needHttpsMessage) }}
+                                    <div data-step2-mode="geo">
+                                        {{ form_row(form.radiusMeters) }}
+                                        {{ form_row(form.okMessage) }}
+                                        {{ form_row(form.denyMessage) }}
+                                        {{ form_row(form.needHttpsMessage) }}
+                                    </div>
+                                    <div data-step2-mode="qr_only" hidden>
+                                        {{ form_row(form.qrValidateMessage) }}
+                                        {{ form_row(form.qrAnswerTitle) }}
+                                        {{ form_row(form.qrAnswerBody) }}
+                                    </div>
                                 </div>
+                            </div>
+                            <div style="margin-top:1rem">
+                                {{ form_row(form.hintsJson) }}
                             </div>
                             {#
                             <div class="form-actions" style="display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem">
@@ -70,11 +89,12 @@
                             </div>
                             #}
                         </section>
-                        {{ form_end(form) }}
+                        {{ form_rest(form) }}
+                        {{ form_end(form, { render_rest: false }) }}
 
                         <div class="sticky-save">
                             <div class="sticky-inner">
-                                <span class="text-muted">Étape 2 — QR géoloc</span>
+                                <span class="text-muted">Étape 2 — QR code</span>
                                 <div style="display:flex;gap:.5rem">
                                     <button form="form-step2" class="btn btn-primary">Enregistrer</button>
                                     {% if puzzle.ready %}<a class="btn btn-light" href="{{ path('wizard_preview_step', { id: eg.id, step: 2 }) }}" target="_blank">Aperçu</a>{% endif %}
@@ -91,23 +111,69 @@
     <script>
         (function(){
             const f = document.getElementById('form-step2'); if(!f) return;
-            const ids={lat:'{{ form.lat.vars.id }}',lng:'{{ form.lng.vars.id }}',rad:'{{ form.radiusMeters.vars.id }}',ok:'{{ form.okMessage.vars.id }}',deny:'{{ form.denyMessage.vars.id }}',https:'{{ form.needHttpsMessage.vars.id }}'};
+            const ids={
+                mode:'{{ form.mode.vars.id }}',
+                lat:'{{ form.lat.vars.id }}',
+                lng:'{{ form.lng.vars.id }}',
+                rad:'{{ form.radiusMeters.vars.id }}',
+                ok:'{{ form.okMessage.vars.id }}',
+                deny:'{{ form.denyMessage.vars.id }}',
+                https:'{{ form.needHttpsMessage.vars.id }}',
+                qrMsg:'{{ form.qrValidateMessage.vars.id }}',
+                qrAnswerTitle:'{{ form.qrAnswerTitle.vars.id }}',
+                qrAnswerBody:'{{ form.qrAnswerBody.vars.id }}'
+            };
             let t;const deb=(fn)=>{clearTimeout(t);t=setTimeout(fn,180);};
-            function refresh(){
-                const root=document.getElementById('preview-qr'); if(!root)return;
-                const c=root.cloneNode(false); c.id='preview-qr';
-                const g=id=>document.getElementById(id);
+
+            const getEl=id=>document.getElementById(id);
+            const val=(id, fallback='')=>{
+                const el=getEl(id);
+                if(!el) return fallback;
+                const value=el.value;
+                return value === undefined || value === null || String(value).trim()==='' ? fallback : value;
+            };
+            function refreshGeo(){
+                const root=document.getElementById('preview-geo'); if(!root)return;
+                const c=root.cloneNode(false);
+                c.id='preview-geo';
                 c.setAttribute('data-controller','qr-geo');
-                c.setAttribute('data-qr-geo-lat-value', g(ids.lat).value || '47');
-                c.setAttribute('data-qr-geo-lng-value', g(ids.lng).value || '-1');
-                c.setAttribute('data-qr-geo-radius-value', g(ids.rad).value || '150');
-                c.setAttribute('data-qr-geo-ok-message-value', g(ids.ok).value || 'Bravo !');
-                c.setAttribute('data-qr-geo-deny-message-value', g(ids.deny).value || 'Hors zone…');
-                c.setAttribute('data-qr-geo-need-https-message-value', g(ids.https).value || 'HTTPS requis');
-                c.innerHTML = `<button data-action="click->qr-geo#check">Vérifier ma position</button><div data-qr-geo-target="msg" class="mt-2"></div>`;
+                c.setAttribute('data-qr-geo-lat-value', val(ids.lat, '47'));
+                c.setAttribute('data-qr-geo-lng-value', val(ids.lng, '-1'));
+                c.setAttribute('data-qr-geo-radius-value', val(ids.rad, '150'));
+                c.setAttribute('data-qr-geo-ok-message-value', val(ids.ok, 'Bravo !'));
+                c.setAttribute('data-qr-geo-deny-message-value', val(ids.deny, 'Hors zone…'));
+                c.setAttribute('data-qr-geo-need-https-message-value', val(ids.https, 'HTTPS requis'));
+                c.innerHTML = `<p><strong>Mode géolocalisation</strong></p><button data-action="click->qr-geo#check">Vérifier ma position</button><div data-qr-geo-target="msg" class="mt-2"></div>`;
                 root.replaceWith(c);
             }
-            f.addEventListener('input', ()=>deb(refresh));
+            function refreshQrOnly(){
+                const msgEl = document.getElementById('preview-qronly-msg');
+                const titleEl = document.getElementById('preview-qronly-answer-title');
+                const bodyEl = document.getElementById('preview-qronly-answer-body');
+                if (msgEl) msgEl.textContent = val(ids.qrMsg, 'Bravo !');
+                if (titleEl) titleEl.textContent = val(ids.qrAnswerTitle, 'Réponse de l’étape');
+                if (bodyEl) {
+                    const value = val(ids.qrAnswerBody, '');
+                    bodyEl.textContent = value.trim() !== '' ? value : 'Le texte s’affichera ici.';
+                }
+            }
+            function applyMode(){
+                const mode = val(ids.mode, 'geo');
+                const geoPreview = document.getElementById('preview-geo');
+                const qrPreview = document.getElementById('preview-qronly');
+                if (geoPreview) geoPreview.hidden = mode !== 'geo';
+                if (qrPreview) qrPreview.hidden = mode !== 'qr_only';
+                document.querySelectorAll('[data-step2-mode="geo"]').forEach(el=>{ el.hidden = mode !== 'geo'; });
+                document.querySelectorAll('[data-step2-mode="qr_only"]').forEach(el=>{ el.hidden = mode !== 'qr_only'; });
+            }
+            function refreshAll(){
+                applyMode();
+                refreshGeo();
+                refreshQrOnly();
+            }
+            f.addEventListener('input', ()=>deb(refreshAll));
+            f.addEventListener('change', ()=>deb(refreshAll));
+            refreshAll();
         })();
     </script>
 {% endblock %}

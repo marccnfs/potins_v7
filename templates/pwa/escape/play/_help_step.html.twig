@@ -13,9 +13,16 @@
     <ul><li>Astuce : commence par les lettres que tu es sûr·e d’avoir.</li></ul>
 
 {% elseif t == 'qr_geo' %}
-    <h3>Que faire ?</h3>
-    <p>Autorise la <strong>géolocalisation</strong>, puis appuie sur “Vérifier ma position”. Avance jusqu’à être dans la zone.</p>
-    <ul><li>Astuce : un cercle autour du lieu — rapproche-toi pour voir le message.</li></ul>
+    {% set mode = cfgsafe.mode|default('geo') %}
+    {% if mode == 'qr_only' %}
+        <h3>Que faire ?</h3>
+        <p>Pars à la recherche du <strong>QR caché</strong>. Dès qu’il est scanné, un message s’affiche et l’étape est validée.</p>
+        <ul><li>Astuce : regarde bien autour de toi, le QR peut être collé ou glissé dans un livre !</li></ul>
+    {% else %}
+        <h3>Que faire ?</h3>
+        <p>Autorise la <strong>géolocalisation</strong>, puis appuie sur “Vérifier ma position”. Avance jusqu’à être dans la zone.</p>
+        <ul><li>Astuce : un cercle autour du lieu — rapproche-toi pour voir le message.</li></ul>
+    {% endif %}
 
 {% elseif t == 'slider_puzzle' %}
     <h3>Que faire ?</h3>

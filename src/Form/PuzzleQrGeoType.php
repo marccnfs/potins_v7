@@ -2,6 +2,7 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -22,6 +23,8 @@ class PuzzleQrGeoType extends AbstractType
         if (!is_array($cfg)) { $cfg = []; }
 
         $target = is_array($cfg['target'] ?? null) ? $cfg['target'] : [];
+        $mode   = is_string($cfg['mode'] ?? null) ? $cfg['mode'] : 'geo';
+        $qrOnly = is_array($cfg['qrOnly'] ?? null) ? $cfg['qrOnly'] : [];
 
         $builder
             ->add('title', TextType::class, [
@@ -29,6 +32,41 @@ class PuzzleQrGeoType extends AbstractType
             ])
             ->add('prompt', TextType::class, [
                 'label'=>'Consigne', 'mapped'=>false, 'required'=>false, 'data'=>$cfg['prompt'] ?? null,
+            ])
+            ->add('mode', ChoiceType::class, [
+                'label'   => 'Mode de validation',
+                'mapped'  => false,
+                'required'=> true,
+                'data'    => $mode,
+                'choices' => [
+                    'Validation par géolocalisation (GPS)' => 'geo',
+                    'Validation par QR caché (sans GPS)'   => 'qr_only',
+                ],
+                'help'    => 'Choisis « QR caché » si tu préfères cacher un code à scanner plutôt que d’utiliser la localisation.',
+            ])
+            ->add('qrValidateMessage', TextType::class, [
+                'label'    => 'Message affiché sur le QR « localisation »',
+                'mapped'   => false,
+                'required' => false,
+                'data'     => $qrOnly['validateMessage'] ?? 'Bravo !',
+                'help'     => 'Texte montré immédiatement quand le QR caché est scanné (valide l’étape).',
+            ])
+            ->add('qrAnswerTitle', TextType::class, [
+                'label'    => 'Titre de la page « réponse »',
+                'mapped'   => false,
+                'required' => false,
+                'data'     => $qrOnly['answerTitle'] ?? 'Réponse de l’étape',
+            ])
+            ->add('qrAnswerBody', TextareaType::class, [
+                'label'    => 'Contenu de la page « réponse »',
+                'mapped'   => false,
+                'required' => false,
+                'data'     => $qrOnly['answerBody'] ?? '',
+                'attr'     => [
+                    'rows' => 3,
+                    'placeholder' => 'Texte ou solution à révéler après validation.',
+                ],
+                'help'     => 'Ce texte s’affiche via un second QR code (optionnel) une fois l’étape validée.',
             ])
 
             ->add('lat', NumberType::class, [

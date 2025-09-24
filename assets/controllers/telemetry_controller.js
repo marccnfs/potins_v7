@@ -2,13 +2,18 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-    static values = { slug: String, csrf: String }
+    static values = { slug: String, csrf: String, step: Number }
 
     connect(){
         // Start dès l’entrée de jeu
+        const startBody = new FormData();
+        if (this.hasStepValue) {
+            startBody.append('step', String(this.stepValue));
+        }
         fetch(`/play/${this.slugValue}/start`, {
             method: 'POST',
-            headers: {'X-Requested-With':'XMLHttpRequest', 'X-CSRF-TOKEN': this.csrfValue}
+            headers: {'X-Requested-With':'XMLHttpRequest', 'X-CSRF-TOKEN': this.csrfValue},
+            body: startBody
         });
         // Écoute des hints
         this._onHint = () => {
@@ -19,6 +24,19 @@ export default class extends Controller {
         };
         document.addEventListener('puzzle:hint', this._onHint);
 
+        this._onSolved = (e) => {
+            const step = e?.detail?.step ?? (this.hasStepValue ? this.stepValue : null);
+            if (!step) return;
+            const body = new FormData();
+            body.append('step', String(step));
+            fetch(`/play/${this.slugValue}/progress`, {
+                method: 'POST',
+                headers: {'X-Requested-With':'XMLHttpRequest', 'X-CSRF-TOKEN': this.csrfValue},
+                body
+            });
+        };
+
+        document.addEventListener('puzzle:solved', this._onSolved, { once: true });
         // Fin (on attend d’avoir une durée côté front)
         this._onGameover = (e) => {
             const ms = e.detail?.durationMs ?? 0;
@@ -37,5 +55,6 @@ export default class extends Controller {
     disconnect(){
         document.removeEventListener('puzzle:hint', this._onHint);
         document.removeEventListener('puzzle:gameover', this._onGameover);
+        document.removeEventListener('puzzle:solved', this._onSolved);
     }
 }

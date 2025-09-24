@@ -37,7 +37,11 @@ class MobileLinkManager
         $url = $this->urlGen->generate('mobile_entry', [
             'token' => $link->getToken()],
             UrlGeneratorInterface::ABSOLUTE_URL);
+        return $this->buildQrForUrl($url);
+    }
 
+    public function buildQrForUrl(string $url): string
+    {
         // Version “agnostique” v3/v4/v5: QrCode + PngWriter
         $writer = new PngWriter();
 

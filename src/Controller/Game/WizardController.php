@@ -30,7 +30,7 @@ class WizardController extends AbstractController
 
     private const STEP_DEFINITIONS = [
         1 => ['type' => 'cryptex',       'label' => 'Cryptex numérique'],
-        2 => ['type' => 'qr_geo',        'label' => 'QR code géolocalisé'],
+        2 => ['type' => 'qr_geo',        'label' => 'QR code géolocalisé / caché'],
         3 => ['type' => 'slider_puzzle', 'label' => 'Puzzle numérique'],
         4 => ['type' => 'logic_form',    'label' => 'Formulaire à piège logique'],
         5 => ['type' => 'video_quiz',    'label' => 'Vidéo interactive'],
@@ -325,6 +325,10 @@ class WizardController extends AbstractController
                     $okMessage = (string)$form->get('okMessage')->getData();
                     $denyMessage = (string)$form->get('denyMessage')->getData();
                     $needHttpsMessage = (string)$form->get('needHttpsMessage')->getData();
+                    $mode = (string) $form->get('mode')->getData();
+                    $qrValidateMessage = trim((string)$form->get('qrValidateMessage')->getData());
+                    $qrAnswerTitle = trim((string)$form->get('qrAnswerTitle')->getData());
+                    $qrAnswerBody = (string)$form->get('qrAnswerBody')->getData();
 
                     // 3) Indices (JSON) — normalisation & exigence >= 1
                     $hintsJson = (string) $form->get('hintsJson')->getData();
@@ -348,16 +352,39 @@ class WizardController extends AbstractController
                         ]);
                     }
                     // Fusion propre
-                    $cfg = array_replace($old, [
-                        'title'     => $title,
-                        'prompt'    => $prompt,
-                        'target'     => $target,
-                        'radiusMeters'    => $radiusMeters,
-                        'okMessage' => $okMessage,
-                        'denyMessage'      => $denyMessage,
-                        'needHttpsMessage' => $needHttpsMessage,
-                        'hints'     => $hints,
-                    ]);
+                    $cfg = $old;
+                    if (!is_array($cfg)) { $cfg = []; }
+
+                    if ($mode === 'qr_only') {
+                        $qrOnly = is_array($cfg['qrOnly'] ?? null) ? $cfg['qrOnly'] : [];
+                        if (!isset($qrOnly['answerSlug']) || !is_string($qrOnly['answerSlug']) || $qrOnly['answerSlug'] === '') {
+                            $qrOnly['answerSlug'] = bin2hex(random_bytes(5));
+                        }
+                        $qrOnly['validateMessage'] = $qrValidateMessage !== '' ? $qrValidateMessage : 'Bravo !';
+                        $qrOnly['answerTitle'] = $qrAnswerTitle !== '' ? $qrAnswerTitle : 'Réponse de l’étape';
+                        $qrOnly['answerBody'] = $qrAnswerBody;
+
+                        $cfg = array_replace($cfg, [
+                            'title'  => $title,
+                            'prompt' => $prompt,
+                            'mode'   => 'qr_only',
+                            'qrOnly' => $qrOnly,
+                            'hints'  => $hints,
+                        ]);
+                    } else {
+                        unset($cfg['qrOnly']);
+                        $cfg = array_replace($cfg, [
+                            'title'     => $title,
+                            'prompt'    => $prompt,
+                            'mode'      => 'geo',
+                            'target'    => $target,
+                            'radiusMeters'    => $radiusMeters,
+                            'okMessage' => $okMessage,
+                            'denyMessage'      => $denyMessage,
+                            'needHttpsMessage' => $needHttpsMessage,
+                            'hints'     => $hints,
+                        ]);
+                    }
 
                     $puzzle->setConfig($cfg);
                     $puzzle->setTitle($title);

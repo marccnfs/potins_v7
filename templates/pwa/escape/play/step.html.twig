@@ -4,7 +4,8 @@
 
     <div class="_wb" data-controller="telemetry"
          data-telemetry-slug-value="{{ eg.shareSlug }}"
-         data-telemetry-csrf-value="{{ csrf_token('play') }}">
+         data-telemetry-csrf-value="{{ csrf_token('play') }}"
+         data-telemetry-step-value="{{ step }}">
         <div class="container_bo_member">
             <div class="bo_content">
                 {% set step = step ?? 1 %}

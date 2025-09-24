@@ -1,0 +1,23 @@
+<!doctype html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title ?? 'Étape validée' }}</title>
+<style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial;color:#111;margin:0;padding:1.2rem;background:#f8fafc}
+    .card{border:1px solid #e2e8f0;border-radius:14px;padding:1.2rem;margin:0 auto;max-width:480px;background:#fff;box-shadow:0 10px 25px rgba(15,23,42,.08)}
+    h1{font-size:1.5rem;margin:0 0 .5rem}
+    .muted{color:#64748b;margin:0 0 .75rem;font-size:.95rem}
+    p{line-height:1.5;margin:.5rem 0;font-size:1.05rem}
+    .footer{margin-top:1.5rem;font-size:.9rem;color:#64748b}
+</style>
+<section class="card">
+    <h1>{{ title ?? 'Bravo !' }}</h1>
+    {% if subtitle %}<p class="muted">{{ subtitle }}</p>{% endif %}
+    {% if message %}
+        <p>{{ message|nl2br }}</p>
+    {% else %}
+        <p>Bravo, tu viens de valider cette étape !</p>
+    {% endif %}
+    {% if variant != 'answer' %}
+        <p class="footer">Étape validée automatiquement ✔</p>
+    {% endif %}
+</section>

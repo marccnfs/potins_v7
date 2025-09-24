@@ -4,7 +4,8 @@
     <div class="container_bo_member">
         <div class="bo_content">
             {% set total = 6 %}
-            {% set done = 0 %}
+            {% set progress = progressSteps|default([]) %}
+            {% set done = progressCount|default(progress|length) %}
             {% set steps = {
                 1: 'Cryptex numérique',
                 2: 'QR code géolocalisé',
@@ -14,12 +15,9 @@
                 6: 'Code HTML minimal'
             } %}
 
-            {# calc progression #}
-            {% for i in 1..total %}
-                {% set p = eg.getPuzzleByStep(i) %}
-                {% if p and p.ready %}{% set done = done + 1 %}{% endif %}
-            {% endfor %}
-            {% set pct = (done / total * 100) | round(0, 'floor') %}
+            {% set resume = resumeStep|default(progress ? (progress|last + 1 > total ? total : progress|last + 1) : 1) %}
+            {% set pct = total > 0 ? (done / total * 100) | round(0, 'floor') : 0 %}
+
             <div class="play-layout">
                 {# --- Colonne INFO --- #}
                 <aside class="play-aside">
@@ -57,7 +55,7 @@
 
                         <div class="hero-body" style="position:relative;z-index:1;color:#fff;padding:1.2rem 1.2rem 1rem;">
                             <h1 class="hero-title" style="margin:.2rem 0;font-size:clamp(1.6rem,3.2vw,2.2rem);">{{ eg.title }}</h1>
-                            {% set subtitle = (uni.contexte ?? uni.goal ?? '') %}
+                            {% set subtitle = (uni.contexte ?? uni.goal ?? uni.objectif ?? '') %}
                             {% if subtitle %}
                                 <p class="hero-sub" style="opacity:.9;margin:.2rem 0 .6rem 0;">{{ subtitle|striptags|length > 180 ? (subtitle|striptags|slice(0,180) ~ '…') : subtitle|raw }}</p>
                             {% else %}
@@ -66,7 +64,9 @@
                             <div class="hero-actions" style="display:flex;gap:.5rem;flex-wrap:wrap;">
                                 <a class="btn btn-primary" href="{{ path('play_step', { slug: eg.shareSlug, step: 1 }) }}">🎬 Commencer</a>
                                 {% if done > 0 and done < total %}
-                                    <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: done + 1 }) }}">Reprendre à l’étape {{ done + 1 }}</a>
+                                    <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: resume }) }}">Reprendre à l’étape {{ resume }}</a>
+                                {% elseif done >= total %}
+                                    <a class="btn btn-light" href="{{ path('play_the_end', { slug: eg.shareSlug }) }}">Voir le final</a>
                                 {% endif %}
                             </div>
                         </div>
@@ -92,8 +92,9 @@
                             </div>
                             <div>
                                 <h3>Objectif</h3>
-                                {% if uni.goal %}
-                                    <p>{{ uni.goal|raw }}</p>
+                                {% set goal = uni.goal ?? uni.objectif %}
+                                {% if goal %}
+                                <p>{{ goal|raw }}</p>
                                 {% else %}
                                     <p class="muted">Résous les 6 épreuves pour atteindre ton but.</p>
                                 {% endif %}
@@ -131,12 +132,15 @@
                             {% for i in 1..total %}
                                 {% set p = eg.getPuzzleByStep(i) %}
                                 {% set ready = p and p.ready %}
-                                <li class="step-item {{ ready ? 'is-ready' : 'is-locked' }}">
+                                {% set solved = i in progress %}
+                                <li class="step-item {{ solved ? 'is-ready is-cleared' : (ready ? 'is-ready' : 'is-locked') }}">
                                     <div class="step-head">
                                         <div class="step-index">{{ i }}</div>
                                         <div class="step-title">{{ steps[i] }}</div>
                                         <div class="step-status">
-                                            {% if ready %}
+                                            {% if solved %}
+                                                <span class="badge badge-primary">Terminée</span>
+                                            {% elseif ready %}
                                                 <span class="badge badge-success">Prête</span>
                                             {% else %}
                                                 <span class="badge">Bientôt…</span>
@@ -145,7 +149,7 @@
                                     </div>
                                     <div class="step-actions">
                                         {% if ready %}
-                                            <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: i }) }}">Jouer l’étape {{ i }}</a>
+                                            <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: i }) }}">{{ solved ? 'Rejouer' : 'Jouer' }} l’étape {{ i }}</a>
                                         {% else %}
                                             <button class="btn" disabled>Indisponible</button>
                                         {% endif %}

@@ -6,6 +6,7 @@ namespace App\Controller\Game;
 
 
 use App\Classe\PublicSession;
+use App\Classe\UserSessionTrait;
 use App\Entity\Games\MobileLink;
 use App\Entity\Games\EscapeGame;
 use Doctrine\ORM\EntityManagerInterface as EM;
@@ -17,14 +18,41 @@ use Symfony\Component\HttpFoundation\Response;
 class MobileEntryController extends AbstractController
 {
 
-    use PublicSession;
+    use UserSessionTrait;
 
     #[Route('/m/{token}', name: 'mobile_entry', methods: ['GET'])]
     public function entry(string $token): Response
     {
         $link = $this->em->getRepository(MobileLink::class)->findOneBy(['token'=>$token]);
-        if (!$link || ($link->getExpiresAt() && $link->getExpiresAt() < new \DateTimeImmutable()) || $link->getUsedAt()) {
+        if (!$link || ($link->getExpiresAt() && $link->getExpiresAt() < new \DateTimeImmutable())) {
             return $this->render('mobile/invalid.html.twig');
+        }
+
+        $puzzle = $link->getEscapeGame()->getPuzzleByStep($link->getStep());
+        if (!$puzzle) {
+            return $this->render('mobile/invalid.html.twig');
+        }
+        $cfg = $puzzle?->getConfig() ?? [];
+        $mode = is_string($cfg['mode'] ?? null) ? $cfg['mode'] : 'geo';
+
+        if ($link->getUsedAt() && $mode !== 'qr_only') {
+            return $this->render('mobile/invalid.html.twig');
+        }
+
+        if ($mode === 'qr_only') {
+            if (!$link->getUsedAt()) {
+                $link->setUsedAt(new \DateTimeImmutable());
+                $this->em->flush();
+            }
+
+            $qrOnly = is_array($cfg['qrOnly'] ?? null) ? $cfg['qrOnly'] : [];
+
+            return $this->render('mobile/qr_simple.html.twig', [
+                'title'    => 'Étape validée !',
+                'message'  => $qrOnly['validateMessage'] ?? 'Bravo !',
+                'subtitle' => $cfg['title'] ?? $puzzle?->getTitle(),
+                'variant'  => 'validation',
+            ]);
         }
 
         // On rend une page mobile minimaliste qui va faire navigator.geolocation + POST /m/{token}/verify
@@ -43,6 +71,9 @@ class MobileEntryController extends AbstractController
         if (!$puzzle) return $this->json(['ok'=>false], 400);
 
         $cfg = $puzzle->getConfig() ?? [];
+        if (($cfg['mode'] ?? 'geo') === 'qr_only') {
+            return $this->json(['ok'=>false], 400);
+        }
         $target = $cfg['target'] ?? ['lat'=>0,'lng'=>0];
         $radius = (int)($cfg['radiusMeters'] ?? 150);
 

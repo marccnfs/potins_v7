@@ -50,6 +50,11 @@ class PlayTelemetryController extends AbstractController
         $this->em->persist($session);
         $this->em->flush();
 
+        $step = (int) $req->request->get('step', 0);
+        if ($req->hasSession() && $step <= 1) {
+            $req->getSession()->remove('play_progress_'.$eg->getId());
+        }
+
         // On mémorise l’id en session HTTP pour les prochains POST
         $req->getSession()->set('play_session_id_'.$eg->getId(), $session->getId());
 
@@ -98,7 +103,47 @@ class PlayTelemetryController extends AbstractController
         $score = max(0, 100 - $ps->getHintsUsed() - intdiv($ps->getDurationMs(), 30_000));
         $ps->setScore($score);
 
+        if ($req->hasSession()) {
+            $progress = [];
+            for ($i=1; $i<=6; $i++) {
+                $progress[$i] = true;
+            }
+            $req->getSession()->set('play_progress_'.$eg->getId(), $progress);
+        }
+
         $this->em->flush();
         return new JsonResponse(['ok'=>true, 'score'=>$score]);
+    }
+
+    #[Route('/play/{slug}/progress', name: 'play_progress', methods: ['POST'])]
+    #[RequireParticipant]
+    public function progress(Request $req, EscapeGame $eg): JsonResponse
+    {
+        if (!$this->isCsrfValid($req)) {
+            return new JsonResponse(['ok'=>false], 403);
+        }
+
+        $step = filter_var($req->request->get('step'), FILTER_VALIDATE_INT);
+        if (!$step || $step < 1 || $step > 6) {
+            return new JsonResponse(['ok'=>false], 400);
+        }
+
+        if (!$req->hasSession()) {
+            return new JsonResponse(['ok'=>false], 500);
+        }
+
+        $session = $req->getSession();
+        $key = 'play_progress_'.$eg->getId();
+        $progress = $session->get($key, []);
+        if (!\is_array($progress)) {
+            $progress = [];
+        }
+        $progress[(int) $step] = true;
+        $session->set($key, $progress);
+
+        $steps = array_keys(array_filter($progress, static fn($v) => (bool) $v));
+        sort($steps);
+
+        return new JsonResponse(['ok'=>true, 'steps'=>$steps]);
     }
 }

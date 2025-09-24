@@ -12,8 +12,8 @@
                 <li>Un <strong>mot secret</strong> (4–8 lettres conseillées)</li>
                 <li>Un <strong>message</strong> qui s’affichera si le mot est trouvé</li>
             {% elseif s == 2 %}
-                <li>Un <strong>lieu précis</strong> (sur la carte) et un <strong>rayon</strong> (ex. 100 m)</li>
-                <li>Un <strong>QR code</strong> pointant vers cette étape (à imprimer)</li>
+                <li>Soit un <strong>lieu précis</strong> (GPS + rayon), soit un <strong>endroit où cacher</strong> ton QR.</li>
+                <li>Des <strong>messages</strong> : validation mobile + texte de la page « réponse ».</li>
             {% elseif s == 3 %}
                 <li>Une <strong>image</strong> (jpeg/png/webp) de bonne qualité</li>
                 <li>Le <strong>nombre de cases</strong> (ex. 3×3)</li>
@@ -36,7 +36,7 @@
             {% if s == 1 %}
                 <li>Mot secret, alphabet, mélange, validation auto, message succès.</li>
             {% elseif s == 2 %}
-                <li>Latitude/longitude, rayon (m), messages OK / hors zone / HTTPS.</li>
+                <li>Mode (géoloc ou QR caché), lat/lng + rayon OU messages validation/réponse.</li>
             {% elseif s == 3 %}
                 <li>Image, lignes × colonnes, message succès.</li>
             {% elseif s == 4 %}
@@ -56,8 +56,8 @@
                 <li>Privilégie 4–6 lettres pour que ce soit fun mais pas trop dur.</li>
                 <li>Le message succès peut contenir un <em>indice</em> pour l’étape suivante.</li>
             {% elseif s == 2 %}
-                <li>Teste sur <strong>HTTPS</strong> (obligatoire pour le GPS) — localhost OK en dev.</li>
-                <li>Prévois un petit <em>indice de direction</em> si les joueurs sont hors zone.</li>
+                <li>Mode géoloc : HTTPS obligatoire, vérifie le rayon avec ton téléphone.</li>
+                <li>Mode QR caché : plastifie le QR ou mets-le dans une pochette pour qu’il survive à la chasse !</li>
             {% elseif s == 3 %}
                 <li>Évite les images trop uniformes ; des zones contrastées aident à jouer.</li>
                 <li>3×3 pour enfants, 4×4 ou 5×5 pour plus de défi.</li>

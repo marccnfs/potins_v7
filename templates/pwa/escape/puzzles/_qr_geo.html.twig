@@ -1,72 +1,116 @@
 {% set token = extras.token|default(null) %}
 {% set qr    = extras.qr|default(null) %}
 {% set exp   = extras.expiresAt|default(null) %}
+{% set mode  = extras.mode|default(cfg.mode|default('geo')) %}
+{% set qrOnly = cfg.qrOnly is iterable ? cfg.qrOnly : {} %}
 
-<section data-controller="qr-geo"
-         data-qr-geo-lat-value="{{ cfg.target.lat }}"
-         data-qr-geo-lng-value="{{ cfg.target.lng }}"
-         data-qr-geo-radius-value="{{ cfg.radiusMeters|default(150) }}"
-         data-qr-geo-ok-message-value="{{ cfg.okMessage|default('Bravo !') }}"
-         data-qr-geo-deny-message-value="{{ cfg.denyMessage|default('Hors zone…') }}"
-         data-qr-geo-need-https-message-value="{{ cfg.needHttpsMessage|default('HTTPS requis') }}">
-    <div class="grid2">
-        <aside class="card">
-            <h2>📍 QR géolocalisé</h2>
-            <p>Scanne ce QR avec ton téléphone et autorise la localisation. Si tu es dans la bonne zone, l’étape sera validée automatiquement.</p>
+{% if mode == 'qr_only' %}
+    <section>
+        <div class="grid2">
+            <aside class="card">
+                <h2>📍 QR à cacher</h2>
+                <p>Imprime et cache ce QR code à l’endroit choisi. Quand il est scanné, l’étape se valide immédiatement et le message défini s’affiche sur le téléphone.</p>
 
-            {% if qr and token %}
-                <img src="{{ qr }}" alt="QR code" width="280" height="280">
-                <p class="muted">Valable jusqu’à {{ exp ? exp|date('H:i') : 'bientôt' }}.</p>
-                <p class="muted">Lien direct : <a href="{{ absolute_url(path('mobile_entry', { token: token })) }}" target="_blank" rel="noopener">ouvrir sur mobile</a></p>
+                {% if qr and token %}
+                    <img id="qr-validation" src="{{ qr }}" alt="QR localisation" width="280" height="280">
+                    <p class="muted">Valable jusqu’à {{ exp ? exp|date('H:i') : 'bientôt' }}.</p>
+                    <p class="muted">Lien direct : <a href="{{ absolute_url(path('mobile_entry', { token: token })) }}" target="_blank" rel="noopener">ouvrir sur mobile</a></p>
 
-                <div id="qr-status" class="muted">En attente de validation…</div>
+                    <div id="qr-status" class="muted">Prêt à être scanné…</div>
 
-                <div class="mt">
-                    <button id="qr-regen" class="btn btn-light">♻️ Regénérer</button>
-                </div>
-            {% else %}
-                <p class="error">QR indisponible. Recharge la page.</p>
-            {% endif %}
-        </aside>
+                    <div class="mt">
+                        <button id="qr-regen" class="btn btn-light">♻️ Regénérer</button>
+                    </div>
+                {% else %}
+                    <p class="error">QR indisponible. Recharge la page.</p>
+                {% endif %}
+            </aside>
 
-        <main class="card">
-            <h3>Consigne</h3>
-            <p>{{ puzzle.prompt|default('Rends-toi au bon endroit et valide ta position sur mobile.') }}</p>
-            <h4>Objectif</h4>
-            <p>{{ cfg.objectif|default('Être dans le rayon autorisé autour du point cible.') }}</p>
-        </main>
-    </div>
-   {#  <button data-action="click->qr-geo#check">Vérifier ma position</button>
-    <div data-qr-geo-target="msg" class="mt-2"></div>
-   #}
-</section>
+            <main class="card">
+                <h3>Consigne</h3>
+                <p>{{ puzzle.prompt|default('Cache le QR code au bon endroit pour débloquer la suite de l’escape.') }}</p>
+
+                <h4>Message affiché sur mobile</h4>
+                <p>{{ qrOnly.validateMessage|default('Bravo, étape validée !') }}</p>
+
+                <h4>QR « réponse » à imprimer</h4>
+                {% if extras.answerQr is defined %}
+                    <img id="qr-answer" src="{{ extras.answerQr }}" alt="QR réponse" width="220" height="220">
+                    <p class="muted">À remettre aux joueurs après validation. <a href="{{ extras.answerUrl }}" target="_blank" rel="noopener">Ouvrir la page réponse</a>.</p>
+                {% else %}
+                    <p class="muted">Enregistre l’étape pour générer le QR réponse.</p>
+                {% endif %}
+
+                {% if qrOnly.answerBody is defined and qrOnly.answerBody %}
+                    <details class="mt">
+                        <summary>Aperçu du contenu « réponse »</summary>
+                        <p>{{ qrOnly.answerBody|nl2br }}</p>
+                    </details>
+                {% endif %}
+            </main>
+        </div>
+    </section>
+{% else %}
+    <section data-controller="qr-geo"
+             data-qr-geo-lat-value="{{ cfg.target.lat }}"
+             data-qr-geo-lng-value="{{ cfg.target.lng }}"
+             data-qr-geo-radius-value="{{ cfg.radiusMeters|default(150) }}"
+             data-qr-geo-ok-message-value="{{ cfg.okMessage|default('Bravo !') }}"
+             data-qr-geo-deny-message-value="{{ cfg.denyMessage|default('Hors zone…') }}"
+             data-qr-geo-need-https-message-value="{{ cfg.needHttpsMessage|default('HTTPS requis') }}">
+        <div class="grid2">
+            <aside class="card">
+                <h2>📍 QR géolocalisé</h2>
+                <p>Scanne ce QR avec ton téléphone et autorise la localisation. Si tu es dans la bonne zone, l’étape sera validée automatiquement.</p>
+
+                {% if qr and token %}
+                    <img id="qr-validation" src="{{ qr }}" alt="QR code" width="280" height="280">
+                    <p class="muted">Valable jusqu’à {{ exp ? exp|date('H:i') : 'bientôt' }}.</p>
+                    <p class="muted">Lien direct : <a href="{{ absolute_url(path('mobile_entry', { token: token })) }}" target="_blank" rel="noopener">ouvrir sur mobile</a></p>
+
+                    <div id="qr-status" class="muted">En attente de validation…</div>
+
+                    <div class="mt">
+                        <button id="qr-regen" class="btn btn-light">♻️ Regénérer</button>
+                    </div>
+                {% else %}
+                    <p class="error">QR indisponible. Recharge la page.</p>
+                {% endif %}
+            </aside>
+
+            <main class="card">
+                <h3>Consigne</h3>
+                <p>{{ puzzle.prompt|default('Rends-toi au bon endroit et valide ta position sur mobile.') }}</p>
+                <h4>Objectif</h4>
+                <p>{{ cfg.objectif|default('Être dans le rayon autorisé autour du point cible.') }}</p>
+            </main>
+        </div>
+    </section>
+{% endif %}
+
 {% if token %}
     <script>
         (() => {
             const statusEl = document.getElementById('qr-status');
             const regenBtn = document.getElementById('qr-regen');
+            const qrImg    = document.getElementById('qr-validation');
             let   token    = {{ token|json_encode|raw }};
             const statusUrl = (t) => "{{ path('mobile_link_status', { token:'__T__' }) }}".replace('__T__', t);
             const regenUrl  = "{{ path('play_qr_geo_regen', { slug: eg.shareSlug, step: step }) }}";
 
-            // polling status
             let timer = setInterval(async () => {
                 try {
                     const r = await fetch(statusUrl(token), { headers:{'X-Requested-With':'XMLHttpRequest'} });
                     if (!r.ok) return;
                     const j = await r.json();
                     if (j.status === 'used') {
-                        statusEl.textContent = '✅ Validé depuis le mobile !';
+                        if (statusEl) statusEl.textContent = '✅ Validé depuis le mobile !';
                         clearInterval(timer);
-                        // Informe ton HUD que l’étape est validée
                         document.dispatchEvent(new CustomEvent('puzzle:solved', { bubbles:true, detail: { step: {{ step }} } }));
-                        // Option: avancer automatiquement à l’étape suivante
-                        // window.location.href = "{{ path('play_step', { slug: eg.shareSlug, step: step+1 }) }}";
                     }
                 } catch(e){}
             }, 2000);
 
-            // régénérer le QR (nouveau token + datauri)
             regenBtn?.addEventListener('click', async () => {
                 regenBtn.disabled = true;
                 try {
@@ -74,16 +118,15 @@
                     if (!r.ok) throw new Error();
                     const j = await r.json();
                     token = j.token;
-                    document.querySelector('img[alt="QR code"]').src = j.qr;
-                    statusEl.textContent = 'QR régénéré. En attente de validation…';
+                    if (qrImg) qrImg.src = j.qr;
+                    if (statusEl) statusEl.textContent = 'QR régénéré. Prêt pour un nouveau scan.';
                 } catch(e) {
-                    statusEl.textContent = 'Erreur de régénération.';
+                    if (statusEl) statusEl.textContent = 'Erreur de régénération.';
                 } finally {
                     regenBtn.disabled = false;
                 }
             });
 
-            // nettoyage si on change de page
             window.addEventListener('beforeunload', () => clearInterval(timer));
         })();
     </script>
