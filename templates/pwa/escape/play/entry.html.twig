@@ -1,9 +1,8 @@
-{# templates/escape/garden.html.twig #}
 {% block body %}
 <div class="_wb">
     <div class="container_bo_member">
         <div class="bo_content">
-            {% set total = 6 %}
+            {% set total = totalSteps|default(6) %}
             {% set progress = progressSteps|default([]) %}
             {% set done = progressCount|default(progress|length) %}
             {% set steps = {
@@ -35,6 +34,30 @@
                             {% endfor %}
                         </ol>
                     </div>
+                    {% if active or attempts|length > 0 %}
+                        <div class="card">
+                            <h3>📈 Mes parties</h3>
+                            <ul class="stats" style="list-style:none;margin:0;padding:0;display:grid;gap:.45rem;">
+                                {% if active %}
+                                    <li style="display:flex;justify-content:space-between;align-items:center;">
+                                        <span>Partie en cours</span>
+                                        <span class="badge badge-primary">Étape {{ resume }}</span>
+                                    </li>
+                                {% endif %}
+                                {% if best %}
+                                    <li style="display:flex;justify-content:space-between;align-items:center;">
+                                        <span>Meilleur score</span>
+                                        <strong>{{ best.score }} pts</strong>
+                                    </li>
+                                {% endif %}
+                                <li style="display:flex;justify-content:space-between;align-items:center;">
+                                    <span>Parties jouées</span>
+                                    <span>{{ attempts|length }}</span>
+                                </li>
+                            </ul>
+                            <a class="btn btn-light" style="margin-top:.6rem;" href="{{ path('dashboard_my_sessions') }}">Voir toutes mes parties</a>
+                        </div>
+                    {% endif %}
                 </aside>
                 <div class="entry-layout">
 
@@ -59,14 +82,19 @@
                             {% if subtitle %}
                                 <p class="hero-sub" style="opacity:.9;margin:.2rem 0 .6rem 0;">{{ subtitle|striptags|length > 180 ? (subtitle|striptags|slice(0,180) ~ '…') : subtitle|raw }}</p>
                             {% else %}
-                                <p class="hero-sub" style="opacity:.9;margin:.2rem 0 .6rem 0;">Prêt·e pour l’aventure ? Résous 6 épreuves pour dévoiler le secret…</p>
+                                <p class="hero-sub" style="opacity:.9;margin:.2rem 0 .6rem 0;">Prêt·e pour l’aventure ? Résous {{ total }} épreuves pour dévoiler le secret…</p>{% endif %}
                             {% endif %}
                             <div class="hero-actions" style="display:flex;gap:.5rem;flex-wrap:wrap;">
-                                <a class="btn btn-primary" href="{{ path('play_step', { slug: eg.shareSlug, step: 1 }) }}">🎬 Commencer</a>
-                                {% if done > 0 and done < total %}
-                                    <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: resume }) }}">Reprendre à l’étape {{ resume }}</a>
-                                {% elseif done >= total %}
-                                    <a class="btn btn-light" href="{{ path('play_the_end', { slug: eg.shareSlug }) }}">Voir le final</a>
+                                {% if active %}
+                                    <a class="btn btn-primary" href="{{ path('play_step', { slug: eg.shareSlug, step: resume }) }}">Reprendre à l’étape {{ resume }}</a>
+                                    <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: 1, restart: 1 }) }}">Nouvelle partie</a>
+                                {% else %}
+                                    <a class="btn btn-primary" href="{{ path('play_step', { slug: eg.shareSlug, step: 1, restart: 1 }) }}">🎬 Commencer</a>
+                                    {% if done > 0 and done < total %}
+                                        <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: resume }) }}">Reprendre à l’étape {{ resume }}</a>
+                                    {% elseif done >= total %}
+                                        <a class="btn btn-light" href="{{ path('play_the_end', { slug: eg.shareSlug }) }}">Voir le final</a>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>
@@ -96,7 +124,7 @@
                                 {% if goal %}
                                 <p>{{ goal|raw }}</p>
                                 {% else %}
-                                    <p class="muted">Résous les 6 épreuves pour atteindre ton but.</p>
+                                    <p class="muted">Résous les {{ total }} épreuves pour atteindre ton but.</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -136,7 +164,7 @@
                                 <li class="step-item {{ solved ? 'is-ready is-cleared' : (ready ? 'is-ready' : 'is-locked') }}">
                                     <div class="step-head">
                                         <div class="step-index">{{ i }}</div>
-                                        <div class="step-title">{{ steps[i] }}</div>
+                                        <div class="step-title">{{ steps[i] ?? 'Épreuve ' ~ i }}</div>
                                         <div class="step-status">
                                             {% if solved %}
                                                 <span class="badge badge-primary">Terminée</span>

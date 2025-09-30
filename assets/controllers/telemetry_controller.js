@@ -2,13 +2,16 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-    static values = { slug: String, csrf: String, step: Number }
+    static values = { slug: String, csrf: String, step: Number, restart: Boolean }
 
     connect(){
         // Start dès l’entrée de jeu
         const startBody = new FormData();
         if (this.hasStepValue) {
             startBody.append('step', String(this.stepValue));
+        }
+        if (this.hasRestartValue && this.restartValue) {
+            startBody.append('restart', '1');
         }
         fetch(`/play/${this.slugValue}/start`, {
             method: 'POST',

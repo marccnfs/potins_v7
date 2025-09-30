@@ -13,6 +13,7 @@ Attentes:
 {% set nav = nav|default({
     play:        'catalog',             # Voir & jouer aux escapes
     create:      'wizard_start',        # Démarrer la création
+    sessions:    'dashboard_my_sessions',# Mes parties en cours/terminées
     mine:        'dashboard_my_escapes',# Mes escapes (nécessite participant)
     docs:        'docs_workshop',       # Guide atelier
     login:       'participant_entry',   # Connexion participant (à adapter si autre nom)
@@ -34,6 +35,7 @@ Attentes:
               <a class="xnav__link {{ active=='play' ? 'is-active' }}" href="{{ path(nav.play) }}">Jouer</a>
               <a class="xnav__link {{ active=='create' ? 'is-active' }}" href="{{ path(nav.create) }}">Créer</a>
                   {% if participant %}
+                   <a class="xnav__link {{ active=='sessions' ? 'is-active' }}" href="{{ path(nav.sessions) }}">Mes parties</a>
                     <a class="xnav__link {{ active=='mine' ? 'is-active' }}" href="{{ path(nav.mine) }}">Mes escapes</a>
                   {% endif %}
               <a class="xnav__link {{ active=='docs' ? 'is-active' }}" href="{{ path(nav.docs) }}">Atelier/Guide</a>

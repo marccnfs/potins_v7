@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Games\EscapeGame;
 use App\Entity\Games\PlaySession;
+use App\Entity\Users\Participant;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -37,5 +38,40 @@ class PlaySessionRepository extends ServiceEntityRepository
             ->orderBy('totalScore', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()->getArrayResult();
+    }
+    public function findLatestActiveForParticipant(EscapeGame $eg, Participant $participant): ?PlaySession
+    {
+        return $this->createQueryBuilder('ps')
+            ->andWhere('ps.escapeGame = :eg')->setParameter('eg', $eg)
+            ->andWhere('ps.participant = :participant')->setParameter('participant', $participant)
+            ->andWhere('ps.completed = false')
+            ->orderBy('ps.updatedAt', 'DESC')
+            ->addOrderBy('ps.createdAt', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()->getOneOrNullResult();
+    }
+
+    /** @return PlaySession[] */
+    public function findRecentForParticipant(EscapeGame $eg, Participant $participant, int $limit = 5): array
+    {
+        return $this->createQueryBuilder('ps')
+            ->andWhere('ps.escapeGame = :eg')->setParameter('eg', $eg)
+            ->andWhere('ps.participant = :participant')->setParameter('participant', $participant)
+            ->orderBy('ps.createdAt', 'DESC')
+            ->addOrderBy('ps.id', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()->getResult();
+    }
+
+    /** @return PlaySession[] */
+    public function findAllForParticipant(Participant $participant): array
+    {
+        return $this->createQueryBuilder('ps')
+            ->addSelect('eg')
+            ->innerJoin('ps.escapeGame', 'eg')
+            ->andWhere('ps.participant = :participant')->setParameter('participant', $participant)
+            ->orderBy('ps.createdAt', 'DESC')
+            ->addOrderBy('ps.id', 'DESC')
+            ->getQuery()->getResult();
     }
 }

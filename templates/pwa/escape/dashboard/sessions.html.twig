@@ -1,0 +1,125 @@
+<div class="dash">
+
+    <header class="dash-head">
+        <div>
+            <h1>Mes parties</h1>
+            <p class="muted">Retrouve les escape games que tu as commencés ou terminés et reprends ta progression.</p>
+        </div>
+        <div class="actions">
+            <a class="btn" href="{{ path('catalog') }}">Explorer les jeux</a>
+        </div>
+    </header>
+
+    {% if gamesSessions is not empty %}
+        <section class="cards sessions">
+            {% for row in gamesSessions %}
+                {% set game = row.game %}
+                {% set active = row.active %}
+                {% set best = row.best %}
+                {% set total = row.totalSteps|default(6) %}
+                <article class="card session-card">
+                    <div class="session-head">
+                        <div>
+                            <h3 class="title">{{ game.title|default('Escape sans titre') }}</h3>
+                            {% set universe = game.universe ?? {} %}
+                            {% if universe.contexte %}
+                                <p class="desc">{{ universe.contexte|striptags|u.truncate(140, '…') }}</p>
+                            {% elseif universe.objectif %}
+                                <p class="desc">{{ universe.objectif|striptags|u.truncate(140, '…') }}</p>
+                            {% else %}
+                                <p class="desc muted">Pas de description disponible.</p>
+                            {% endif %}
+                        </div>
+                        <div class="badges">
+                            {% if active %}
+                                <span class="badge badge-primary">En cours</span>
+                            {% endif %}
+                            {% if best %}
+                                <span class="badge badge-green">Meilleur score&nbsp;: {{ best.score }} pts</span>
+                            {% endif %}
+                            <span class="badge">{{ row.sessions|length }} partie{{ row.sessions|length > 1 ? 's' : '' }}</span>
+                        </div>
+                    </div>
+
+                    {% set slug = game.shareSlug %}
+                    <div class="session-actions">
+                        {% if slug %}
+                            {% if active %}
+                                <a class="btn btn-primary" href="{{ path('play_step', { slug: slug, step: row.resumeStep|default(1) }) }}">Reprendre (étape {{ row.resumeStep|default(1) }})</a>
+                                <a class="btn btn-light" href="{{ path('play_step', { slug: slug, step: 1, restart: 1 }) }}">Nouvelle partie</a>
+                            {% else %}
+                                <a class="btn btn-primary" href="{{ path('play_step', { slug: slug, step: 1, restart: 1 }) }}">Rejouer</a>
+                            {% endif %}
+                            <a class="btn" href="{{ path('play_entry', { slug: slug }) }}">Voir la fiche du jeu</a>
+                        {% else %}
+                            <span class="muted">Ce jeu n’est plus accessible.</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="session-list">
+                        <table class="table attempts">
+                            <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Statut</th>
+                                <th>Score</th>
+                                <th>Durée</th>
+                                <th>Indices</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for session in row.sessions|slice(0,5) %}
+                                {% set duration = session.durationMs|default(0) %}
+                                {% set minutes = (duration / 60000)|round(0, 'floor') %}
+                                {% set seconds = ((duration / 1000)|round(0, 'floor')) % 60 %}
+                                <tr>
+                                    <td>{{ session.createdAt|date('d/m/Y H:i') }}</td>
+                                    <td>
+                                        {% if session.completed %}
+                                            <span class="badge badge-success">Terminée</span>
+                                        {% elseif session is same as "active" %}
+                                            <span class="badge badge-primary">En cours</span>
+                                        {% else %}
+                                            <span class="badge">Interrompue</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ session.score }} pts</td>
+                                    <td>
+                                        {% if session.completed and duration > 0 %}
+                                            {{ minutes }} min {{ '%02d'|format(seconds) }} s
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ session.hintsUsed }} indice{{ session.hintsUsed > 1 ? 's' : '' }}</td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="5" class="muted">Aucune session enregistrée.</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+            {% endfor %}
+        </section>
+    {% else %}
+        <section class="empty">
+            <h2>Tu n’as encore joué à aucun escape</h2>
+            <p>Choisis un jeu dans le catalogue et lance-toi&nbsp;! Ta progression sera sauvegardée automatiquement.</p>
+            <a class="btn btn-primary" href="{{ path('catalog') }}">Voir les escapes disponibles</a>
+        </section>
+    {% endif %}
+
+</div>
+
+<style>
+    .sessions .session-card { display:flex; flex-direction:column; gap:1rem; }
+    .session-head { display:flex; justify-content:space-between; gap:1.5rem; flex-wrap:wrap; }
+    .session-actions { display:flex; flex-wrap:wrap; gap:.5rem; }
+    .session-list { overflow-x:auto; }
+    .attempts { width:100%; border-collapse:collapse; }
+    .attempts th, .attempts td { padding:.45rem .6rem; text-align:left; border-bottom:1px solid #e5e7eb; }
+    .attempts tbody tr:last-child td { border-bottom:none; }
+</style>

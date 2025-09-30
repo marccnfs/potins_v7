@@ -5,6 +5,8 @@ namespace App\Controller\Game;
 use App\Attribute\RequireParticipant;
 use App\Classe\PublicSession;
 use App\Entity\Games\EscapeGame;
+use App\Entity\Users\Participant;
+use DateTimeImmutable;
 use App\Entity\Games\PlaySession;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -41,24 +43,57 @@ class PlayTelemetryController extends AbstractController
             return new JsonResponse(['ok'=>false], 403);
         }
 
-        $participant=$this->currentParticipant($req);
+        $participant = $this->currentParticipant($req);
+        $repo = $this->em->getRepository(PlaySession::class);
 
-        // On peut autoriser 1 session “ouverte” par participant/EG ; sinon on en crée une nouvelle
-        $session = new PlaySession();
-        $session->setEscapeGame($eg);
-        $session->setParticipant($participant);
-        $this->em->persist($session);
-        $this->em->flush();
+        $forceRestart = filter_var($req->request->get('restart', false), FILTER_VALIDATE_BOOLEAN);
 
-        $step = (int) $req->request->get('step', 0);
-        if ($req->hasSession() && $step <= 1) {
+        if ($forceRestart && $req->hasSession()) {
+            $req->getSession()->remove('play_session_id_'.$eg->getId());
             $req->getSession()->remove('play_progress_'.$eg->getId());
         }
 
-        // On mémorise l’id en session HTTP pour les prochains POST
-        $req->getSession()->set('play_session_id_'.$eg->getId(), $session->getId());
+        $session = null;
+        if (!$forceRestart) {
+            $session = $this->sessionFromRequest($req, $eg, $participant);
+            if (!$session) {
+                $session = $repo->findLatestActiveForParticipant($eg, $participant);
+            }
+        } else {
+            $existing = $repo->findLatestActiveForParticipant($eg, $participant);
+            if ($existing) {
+                $existing->setEndedAt(new DateTimeImmutable());
+                $existing->touch();
+            }
+        }
 
-        return new JsonResponse(['ok'=>true, 'sid'=>$session->getId()]);
+        $created = false;
+        if (!$session) {
+            $session = new PlaySession();
+            $session->setEscapeGame($eg);
+            $session->setParticipant($participant);
+            $this->em->persist($session);
+            $created = true;
+        }
+
+        $step = (int) $req->request->get('step', 0);
+        if ($step > 0) {
+            $session->setCurrentStep($step);
+        }
+        $session->touch();
+
+        $this->em->flush();
+
+        if ($req->hasSession()) {
+            $req->getSession()->set('play_session_id_'.$eg->getId(), $session->getId());
+        }
+
+        return new JsonResponse([
+            'ok'       => true,
+            'sid'      => $session->getId(),
+            'reused'   => !$created,
+            'progress' => $session->getProgressSteps(),
+        ]);
     }
 
     #[Route('/play/{slug}/hint', name: 'play_hint', methods: ['POST'])]
@@ -69,16 +104,17 @@ class PlayTelemetryController extends AbstractController
             return new JsonResponse(['ok'=>false], 403);
         }
 
-        $sid = $req->getSession()->get('play_session_id_'.$eg->getId());
-        if (!$sid) return new JsonResponse(['ok'=>false], 400);
+        $participant = $this->currentParticipant($req);
+        $session = $this->sessionFromRequest($req, $eg, $participant);
+        if (!$session) {
+            return new JsonResponse(['ok'=>false], 400);
+        }
+        $session->setHintsUsed($session->getHintsUsed()+1);
+        $session->touch();
 
-        $ps = $this->em->getRepository(PlaySession::class)->find($sid);
-        if (!$ps) return new JsonResponse(['ok'=>false], 400);
-
-        $ps->setHintsUsed($ps->getHintsUsed()+1);
         $this->em->flush();
 
-        return new JsonResponse(['ok'=>true, 'hints'=>$ps->getHintsUsed()]);
+        return new JsonResponse(['ok'=>true, 'hints'=>$session->getHintsUsed()]);
     }
 
     #[Route('/play/{slug}/finish', name: 'play_finish', methods: ['POST'])]
@@ -89,29 +125,36 @@ class PlayTelemetryController extends AbstractController
             return new JsonResponse(['ok'=>false], 403);
         }
 
-        $sid = $req->getSession()->get('play_session_id_'.$eg->getId());
-        if (!$sid) return new JsonResponse(['ok'=>false], 400);
-
-        $ps = $this->em->getRepository(PlaySession::class)->find($sid);
-        if (!$ps) return new JsonResponse(['ok'=>false], 400);
+        $participant = $this->currentParticipant($req);
+        $session = $this->sessionFromRequest($req, $eg, $participant);
+        if (!$session) {
+            return new JsonResponse(['ok'=>false], 400);
+        }
 
         $durationMs = (int) $req->request->get('durationMs', 0);
-        $ps->setDurationMs(max(0,$durationMs));
-        $ps->setCompleted(true);
-        $ps->setEndedAt(new \DateTimeImmutable());
 
-        $score = max(0, 100 - $ps->getHintsUsed() - intdiv($ps->getDurationMs(), 30_000));
-        $ps->setScore($score);
+        $session->setDurationMs(max(0, $durationMs));
+        $session->setCompleted(true);
+        $session->setEndedAt(new DateTimeImmutable());
+
+        $score = max(0, 100 - $session->getHintsUsed() - intdiv($session->getDurationMs(), 30_000));
+        $session->setScore($score);
+
+        $totalSteps = max(1, $eg->getPuzzles()->count() ?: 6);
+        $session->setProgressSteps(range(1, $totalSteps));
+        $session->setCurrentStep($totalSteps);
+        $session->touch();
 
         if ($req->hasSession()) {
             $progress = [];
-            for ($i=1; $i<=6; $i++) {
+            for ($i = 1; $i <= $totalSteps; $i++) {
                 $progress[$i] = true;
             }
             $req->getSession()->set('play_progress_'.$eg->getId(), $progress);
         }
 
         $this->em->flush();
+
         return new JsonResponse(['ok'=>true, 'score'=>$score]);
     }
 
@@ -128,22 +171,51 @@ class PlayTelemetryController extends AbstractController
             return new JsonResponse(['ok'=>false], 400);
         }
 
+        $participant = $this->currentParticipant($req);
+        $sessionEntity = $this->sessionFromRequest($req, $eg, $participant);
+        if (!$sessionEntity) {
+            return new JsonResponse(['ok'=>false], 400);
+        }
+
+        if ($req->hasSession()) {
+            $session = $req->getSession();
+            $key = 'play_progress_'.$eg->getId();
+            $progress = $session->get($key, []);
+            if (!\is_array($progress)) {
+                $progress = [];
+            }
+            $progress[$step] = true;
+            $session->set($key, $progress);
+        }
+
+        $sessionEntity->addProgressStep($step);
+        $sessionEntity->setCurrentStep($step);
+        $sessionEntity->touch();
+        $this->em->flush();
+
+        return new JsonResponse(['ok'=>true, 'steps'=>$sessionEntity->getProgressSteps()]);
+    }
+
+    private function sessionFromRequest(Request $req, EscapeGame $eg, Participant $participant): ?PlaySession
+    {
         if (!$req->hasSession()) {
-            return new JsonResponse(['ok'=>false], 500);
+            return null;
         }
 
-        $session = $req->getSession();
-        $key = 'play_progress_'.$eg->getId();
-        $progress = $session->get($key, []);
-        if (!\is_array($progress)) {
-            $progress = [];
+        $sid = $req->getSession()->get('play_session_id_'.$eg->getId());
+        if (!$sid) {
+            return null;
         }
-        $progress[(int) $step] = true;
-        $session->set($key, $progress);
+        $session = $this->em->getRepository(PlaySession::class)->find($sid);
+        if (!$session || !$session->getParticipant() || $session->getParticipant()->getId() !== $participant->getId()) {
+            $req->getSession()->remove('play_session_id_'.$eg->getId());
+            return null;
+        }
 
-        $steps = array_keys(array_filter($progress, static fn($v) => (bool) $v));
-        sort($steps);
-
-        return new JsonResponse(['ok'=>true, 'steps'=>$steps]);
+        if ($session->isCompleted()) {
+            $req->getSession()->remove('play_session_id_'.$eg->getId());
+            return null;
+        }
+        return $session;
     }
 }

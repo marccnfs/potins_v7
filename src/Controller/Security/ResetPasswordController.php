@@ -2,17 +2,15 @@
 
 namespace App\Controller\Security;
 
+use App\Email\MailerSender;
 use App\Entity\Users\User;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -27,7 +25,8 @@ class ResetPasswordController extends AbstractController
 
     public function __construct(
         private ResetPasswordHelperInterface $resetPasswordHelper,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private MailerSender $mailersender
     ) {
     }
 
@@ -35,7 +34,7 @@ class ResetPasswordController extends AbstractController
      * Display & process form to request a password reset.
      */
     #[Route('', name: 'app_forgot_password_request')]
-    public function request(Request $request, MailerInterface $mailer, TranslatorInterface $translator): Response
+    public function request(Request $request, MailerSender $mailer, TranslatorInterface $translator): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
@@ -48,7 +47,7 @@ class ResetPasswordController extends AbstractController
             );
         }
 
-        $vartwig=['maintwig'=>"request",'title'=>"request"];
+        $vartwig=['maintwig'=>"request",'title'=>"Réinitialisation du mot de passe"];
         return $this->render('aff_security/home.html.twig', [
             'directory'=>'reset_password',
             'vartwig'=>$vartwig,
@@ -70,12 +69,18 @@ class ResetPasswordController extends AbstractController
             $resetToken = $this->resetPasswordHelper->generateFakeResetToken();
         }
 
+        $tokenLifetime = $this->resetPasswordHelper->getTokenLifetime();
+
+        $email =$this->getSessionService()->get('ResetPasswordCheckEmail');
+
         $vartwig=['maintwig'=>"check_email",'title'=>"check email"];
         return $this->render('aff_security/home.html.twig', [
             'directory'=>'reset_password',
             'vartwig'=>$vartwig,
             'replacejs'=>null,
             'resetToken' => $resetToken,
+            'mail'=>$email,
+            'tokenLifetime'=>$tokenLifetime
         ]);
     }
 
@@ -130,10 +135,10 @@ class ResetPasswordController extends AbstractController
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
 
-            return $this->redirectToRoute('potins_index');
+            return $this->redirectToRoute('app_login');
         }
 
-        $vartwig=['maintwig'=>"reset",'title'=>"reset"];
+        $vartwig=['maintwig'=>"reset",'title'=>"nouveau mot de passe"];
         return $this->render('aff_security/home.html.twig', [
             'directory'=>'reset_password',
             'vartwig'=>$vartwig,
@@ -142,7 +147,7 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer, TranslatorInterface $translator): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData, MailerSender $mailer, TranslatorInterface $translator): RedirectResponse
     {
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
@@ -150,7 +155,7 @@ class ResetPasswordController extends AbstractController
 
         // Do not reveal whether a user account was found or not.
         if (!$user) {
-            return $this->redirectToRoute('app_check_email');
+            return $this->redirectToRoute('app_check_email',['email'=>$emailFormData]);
         }
 
         try {
@@ -168,19 +173,31 @@ class ResetPasswordController extends AbstractController
 
             return $this->redirectToRoute('app_check_email');
         }
+        $context=[
+            'resetToken' => $resetToken,
+            'user'=>$user
+        ];
 
-        $email = (new TemplatedEmail())
+        $mailer->goSendMessage(
+            'aff_notification/security/reset_password.email.html.twig',
+            $context,
+            'réinitialisation de votre mot de passe'
+        );
+/*
+
+$email = (new TemplatedEmail())
             ->from(new Address('contact@potinsnumeriques.fr', 'potins mail Bot'))
             ->to((string) $user->getEmail())
             ->subject('Your password reset request')
             ->htmlTemplate('aff_notification/security/reset_password.email.html.twig')
             ->context([
                 'resetToken' => $resetToken,
+                'user'=>$user
             ])
         ;
 
         $mailer->send($email);
-
+*/
         // Store the token object in session for retrieval in check-email route.
         $this->setTokenObjectInSession($resetToken);
 

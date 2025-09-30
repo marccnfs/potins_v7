@@ -2,7 +2,6 @@
 
 namespace App\Security;
 
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -55,7 +54,7 @@ class AppPotinsAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        $userId=$token->getUser();
+        //$userId=$token->getUser();
         $this->removeTargetPath($request->getSession(), $firewallName);
 
        /* if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
@@ -63,7 +62,7 @@ class AppPotinsAuthenticator extends AbstractLoginFormAuthenticator
         }
        */
 
-        return new RedirectResponse($this->urlGenerator->generate('potins',["user"=>$userId]));
+        return new RedirectResponse($this->urlGenerator->generate('potins_index'));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 

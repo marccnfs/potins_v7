@@ -1,0 +1,13 @@
+{% block body %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            <div class="bo_content">
+                {{ include('pwa/escape/dashboard/sessions.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% use "js/js_escape.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

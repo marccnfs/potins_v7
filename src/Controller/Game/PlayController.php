@@ -39,8 +39,8 @@ class PlayController extends AbstractController
             }
         }
 
-        $totalSteps = 6;
-        $progressSteps = [];
+        $totalSteps = max(1, $eg->getPuzzles()->count() ?: 6);
+        $httpProgressMap = [];
         if ($req->hasSession()) {
             $session = $req->getSession();
             $stored = $session->get('play_progress_'.$eg->getId(), []);
@@ -56,16 +56,38 @@ class PlayController extends AbstractController
                         continue;
                     }
                     if ($flag && $step >= 1 && $step <= $totalSteps) {
-                        $progressSteps[$step] = true;
+                        $httpProgressMap[$step] = true;
                     }
                 }
             }
         }
-        $progressSteps = array_keys($progressSteps);
+        $httpProgress = array_keys($httpProgressMap);
+        sort($httpProgress);
+
+        $activeSession = $playSessionRepo->findLatestActiveForParticipant($eg, $participant);
+        $recentSessions = $playSessionRepo->findRecentForParticipant($eg, $participant, 5);
+
+        $dbProgress = $activeSession ? $activeSession->getProgressSteps() : [];
+        $progressSteps = $dbProgress ?: $httpProgress;
+        if ($dbProgress && $httpProgress) {
+            $progressSteps = array_values(array_unique(array_merge($dbProgress, $httpProgress)));
+        }
+        $progressSteps = array_filter($progressSteps, static fn ($step) => $step >= 1 && $step <= $totalSteps);
+
         sort($progressSteps);
         $doneCount = min(\count($progressSteps), $totalSteps);
         $lastStep = $doneCount ? max($progressSteps) : 0;
-        $resumeStep = $doneCount >= $totalSteps ? $totalSteps : max(1, min($totalSteps, $lastStep + 1));
+        $resumeStep = $activeSession
+            ? $activeSession->getResumeStep($totalSteps)
+            : ($doneCount >= $totalSteps ? $totalSteps : max(1, min($totalSteps, $lastStep + 1)));
+
+        $bestSession = null;
+        foreach ($recentSessions as $session) {
+            if ($session->isCompleted() && (!$bestSession || $session->getScore() > $bestSession->getScore())) {
+                $bestSession = $session;
+            }
+        }
+
 
         $vartwig=$this->menuNav->templatepotins('entry',Links::GAMES);
 
@@ -80,7 +102,10 @@ class PlayController extends AbstractController
             'progressSteps' => $progressSteps,
             'progressCount' => $doneCount,
             'resumeStep'    => $resumeStep,
-
+            'totalSteps'    => $totalSteps,
+            'activeSession' => $activeSession,
+            'recentSessions'=> $recentSessions,
+            'bestSession'   => $bestSession,
         ]);
     }
 
@@ -94,6 +119,8 @@ class PlayController extends AbstractController
             ?? throw $this->createNotFoundException();
 
         $puzzle = $eg->getPuzzleByStep($step) ?? throw $this->createNotFoundException();
+        $totalSteps = max(1, $eg->getPuzzles()->count() ?: 6);
+        $forceRestart = $req->query->getBoolean('restart', false);
 // --- AJOUT SPÉCIFIQUE QR GEO ---
         $cfg = $puzzle->getConfig() ?? [];
         $extras = [];
@@ -157,6 +184,8 @@ class PlayController extends AbstractController
             'cfg'    => $cfg,
             'step'   => $step,
             'extras' => $extras,
+            'totalSteps' => $totalSteps,
+            'forceRestart' => $forceRestart,
         ]);
 
     }

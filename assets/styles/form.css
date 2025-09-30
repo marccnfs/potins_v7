@@ -253,6 +253,7 @@ select option {
 .sous_connector label {
     text-transform: none;
     color: #060683;
+    padding-left: 10px;
 }
 
 .label-log-check {
@@ -547,12 +548,15 @@ span[data-descr]:hover::after {
 }
 
 .log-machina {
-    width: 100%;
+    max-width: 650px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-bottom: 50px;
+    height: auto;
+    margin: auto;
+    top: 70px;
+    position: relative;
 }
 
 .title_log {

@@ -1,0 +1,15 @@
+{% block body %}
+<div class="log-machina">
+    <div class="title_log">
+        {{ include('svg/potins/base logo_ini_potins_pp_fdwhite.html.twig') }}
+        <h1>{{vartwig.title|capitalize}}</h1>
+    </div>
+    <div class="form_connector_old">
+        <h5 class="glass-field_identify">Suppression de votre mot de passe</h5>
+        {{ form_start(resetForm) }}
+            {{ form_row(resetForm.plainPassword) }}
+            <button class="btn btn-primary">Réinitialisez</button>
+        {{ form_end(resetForm) }}
+    </div>
+</div>
+{% endblock %}

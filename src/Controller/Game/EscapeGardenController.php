@@ -9,6 +9,7 @@ use App\Entity\Media\Illustration;
 use App\Entity\Users\Participant;
 use App\Form\ParticipantProfileType;
 use App\Lib\Links;
+use App\Repository\PlaySessionRepository;
 use App\Repository\EscapeGameRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -57,6 +58,73 @@ class EscapeGardenController extends AbstractController
         ]);
 
     }
+
+    #[Route('/escape/mes-parties', name: 'dashboard_my_sessions')]
+    #[RequireParticipant]
+    public function listSessions(Participant $participant, PlaySessionRepository $playSessionRepository): Response
+    {
+
+        $sessions = $playSessionRepository->findAllForParticipant($participant);
+        $byGame = [];
+        $participant = $this->getParticipantFromSession();
+
+        foreach ($sessions as $session) {
+            $game = $session->getEscapeGame();
+            if (!$game) {
+                continue;
+            }
+
+            $gid = $game->getId();
+            if (!isset($byGame[$gid])) {
+                $byGame[$gid] = [
+                    'game'           => $game,
+                    'sessions'       => [],
+                    'active'         => null,
+                    'best'           => null,
+                    'totalSteps'     => max(1, $game->getPuzzles()->count() ?: 6),
+                    'resumeStep'     => 1,
+                    'completedCount' => 0,
+                ];
+            }
+
+            $byGame[$gid]['sessions'][] = $session;
+
+            if (!$session->isCompleted() && !$byGame[$gid]['active']) {
+                $byGame[$gid]['active'] = $session;
+            }
+
+            if ($session->isCompleted()) {
+                $byGame[$gid]['completedCount']++;
+                $best = $byGame[$gid]['best'];
+                if (!$best || $session->getScore() > $best->getScore()) {
+                    $byGame[$gid]['best'] = $session;
+                }
+            }
+        }
+
+        foreach ($byGame as $gid => $row) {
+            if ($row['active']) {
+                $byGame[$gid]['resumeStep'] = $row['active']->getResumeStep($row['totalSteps']);
+            }
+        }
+
+        $gamesSessions = array_values($byGame);
+
+        $vartwig=$this->menuNav->templatepotins(
+            '_sessions',
+            Links::GAMES);
+
+        return $this->render('pwa/escape/home.html.twig', [
+            'replacejs'=>false,
+            'directory'=>'dashboard',
+            'vartwig'=>$vartwig,
+            'participant' => $participant,
+            'gamesSessions' => $gamesSessions,
+            'active' => 'sessions',
+        ]);
+
+    }
+
 
 
     #[Route('/escape/garden', name: 'garden')]
