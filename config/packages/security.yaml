@@ -42,8 +42,8 @@ security:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/member, roles: ROLE_MEMBER }   # optionnel si tu préfères par path en plus du #[IsGranted]
-        - { path: ^/dashboard, roles: ROLE_MEMBER } # si tu as encore /dashboard ailleurs
+       # - { path: ^/member, roles: ROLE_MEMBER }   # optionnel si tu préfères par path en plus du #[IsGranted]
+       # - { path: ^/dashboard, roles: ROLE_MEMBER } # si tu as encore /dashboard ailleurs
 
 when@test:
     security:

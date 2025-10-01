@@ -17,22 +17,24 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[IsGranted('ROLE_MEMBER')]
-#[Route('/member')]
+#[Route('/board-office')]
 
 class BoardOfficeController extends AbstractController
 {
     use UserSessionTrait;
 
+    public function __construct(){
+        $this->userSession();
+        $board=$this->resolveCurrentBoard();
+    }
+
     #[Route('/tableau-de-bord', name:"office_member")]
     public function ospaceBlog(PostRepository $postationRepository): Response
     {
 
-        $this->userSession();
-        $board=$this->resolveCurrentBoard();
-
-        $posts=$postationRepository->findPstKey($board->getCodesite());
+        $posts=$postationRepository->findPstKey($this->board->getCodesite());
         $vartwig=$this->menuNav->admin(
-            $board,
+            $this->board,
             'ospaceblog',
             links::ADMIN,
             1
@@ -42,11 +44,10 @@ class BoardOfficeController extends AbstractController
             'directory'=>"potins",
             'replacejs'=>false,
             'vartwig'=>$vartwig,
-            'board'=>$board,
+            'board'=>$this->board,
             'member'=>$this->currentMember,
             'customer'=>$this->currentCustomer,
             'posts'=>array_reverse($posts),
-            'locatecity'=>0
         ]);
     }
 
@@ -54,8 +55,8 @@ class BoardOfficeController extends AbstractController
     #[Route('/programmation-potins', name:"module_event")]
     public function ospaceEvent(PostEventRepository $eventRepository ): Response
     {
-        $board=$this->resolveCurrentBoard();
-        $events=$eventRepository->findEventKey($board->getCodesite());
+
+        $events=$eventRepository->findEventKey($this->board->getCodesite());
 
         $vartwig=$this->menuNav->admin(
             $this->board,
@@ -80,7 +81,7 @@ class BoardOfficeController extends AbstractController
     public function ospaceOffre(OffresRepository $offresRepository ): Response
     {
         $offres=$offresRepository->findOffreKey($this->board->getCodesite());
-        $board=$this->resolveCurrentBoard();
+
         $vartwig=$this->menuNav->admin(
             $this->board,
             'ospaceoffre',
@@ -103,7 +104,7 @@ class BoardOfficeController extends AbstractController
     public function ospaceRessource(SearchRessources $searchRessources): Response
     {
         $tabcarte=$searchRessources->findAllRessources();
-        $board=$this->resolveCurrentBoard();
+
         $vartwig=$this->menuNav->admin(
             $this->board,
             'ospaceressources',
@@ -128,7 +129,7 @@ class BoardOfficeController extends AbstractController
     public function ospaceReview(SearchReviews $searchReviews): Response
     {
         $tabreviews=$searchReviews->findAllReviews();
-        $board=$this->resolveCurrentBoard();
+
         $vartwig=$this->menuNav->admin(
             $this->board,
             'ospacegpreviews',

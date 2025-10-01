@@ -3,8 +3,9 @@
 
 namespace App\Controller\potins;
 
-use App\Classe\MemberSession;
+use App\Classe\UserSessionTrait;
 use App\Form\DeleteType;
+use App\Lib\Links;
 use App\Lib\MsgAjax;
 use App\Module\Evenator;
 use App\Module\EvenatorPotin;
@@ -21,12 +22,17 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 
-#[Route('/member/wb/event')]
+#[Route('/potins/event')]
 #[IsGranted("ROLE_MEMBER")]
 
 class EventPotinsController extends AbstractController
 {
-    use MemberSession;
+    use UserSessionTrait;
+
+    public function __construct(){
+        $this->userSession();
+        $board=$this->resolveCurrentBoard();
+    }
 
     #[Route('/add-event-potin-ajx', name:"add_event_potin_ajx")]
     public function addEvenPotintAjx(Request $request, EvenatorPotin $evenator): JsonResponse
@@ -41,18 +47,19 @@ class EventPotinsController extends AbstractController
         }
     }
 
-    #[Route('/new-potin-event/', name:"new_generic_potin_event")]
     #[Route('/new-potin-event/{id}', name:"event_potins")]
     public function newPotinEvent(PostRepository $postRepository,$id=null): RedirectResponse|Response
     {
         $potin=$postRepository->findOnePostById($id);
         if($potin->getKeymodule()!=$this->board->getCodesite())$this->redirectToRoute('list_board');
-        $vartwig=$this->menuNav->templatingadmin(
-            'newpotinevent',
-            $this->board->getNameboard(),
+
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'newpotinevent',
+            links::ADMIN,
             3
         );
+
 
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'event',
@@ -73,10 +80,14 @@ class EventPotinsController extends AbstractController
     {
         $event = $postEventRepository->findEventById($id);
         $json = $normalizer->normalize($event,null,['groups' => 'edit_event']);
-        $vartwig=$this->menuNav->templatingadmin(
+
+        $vartwig=$this->menuNav->admin(
+            $this->board,
             'editpotinevent',
-            "edition event",
-            $this->board,3);
+            links::ADMIN,
+            3
+        );
+
 
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'event',
@@ -105,10 +116,13 @@ class EventPotinsController extends AbstractController
             $evenator->removeEvent($event);
         return $this->redirectToRoute('module_event', ['board' => $this->board->getSlug()]);
         }
-        $vartwig = $this->menuNav->templatingadmin(
-        'delete',
-        'delete event',
-            $this->board,3);
+
+        $vartwig=$this->menuNav->admin(
+            $this->board,
+            'delete',
+            links::ADMIN,
+            3
+        );
 
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
         'directory'=>'event',

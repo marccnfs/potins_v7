@@ -24,11 +24,16 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[IsGranted('ROLE_MEMBER')]
-#[Route('/admin')]
+#[Route('/member')]
 
 class PotinsController extends AbstractController
 {
     use UserSessionTrait;
+
+    public function __construct(){
+        $this->userSession();
+        $board=$this->resolveCurrentBoard();
+    }
 
     #[Route('/potins/manage/{id?}', name: 'potins_manage', methods: ['GET', 'POST'])]
     public function managePotins(
@@ -237,11 +242,11 @@ class PotinsController extends AbstractController
     public function addIframePotin(PostRepository $postRepository, $id): Response
     {
         $post=$postRepository->find($id);
-        //dump($post);
-        $vartwig=$this->menuNav->templatingadmin(
-            'addiframevideo',
-            $this->board->getNameboard(),
+
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'addiframevideo',
+            links::ADMIN,
             2
         );
 
@@ -262,17 +267,13 @@ class PotinsController extends AbstractController
     {
         /** @var Post $post */
         if(!$post=$postRepository->findPstQ0($id))return $this->redirectToRoute('api-error',['err'=>2]); // sans controle de l'auteur pour acces superadmin
-/*
-        if($post->getHtmlcontent()->getFileblob() && file_exists($post->getHtmlcontent()->getWebPathblob())){
-            $content=file_get_contents($post->getHtmlcontent()->getWebPathblob());
-        }else{
-            $content="";
-        }
-*/
-        $vartwig=$this->menuNav->templatingadmin(
+
+        $vartwig=$this->menuNav->admin(
+            $this->board,
             'edit',
-            "edition de l'affiche",
-            $this->board,2);
+            links::ADMIN,
+            2
+        );
 
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'potins',
@@ -293,10 +294,11 @@ class PotinsController extends AbstractController
     public function addlinkPotin(PostRepository $postRepository, $id): Response
     {
         $post=$postRepository->findOnePostById($id);
-        $vartwig=$this->menuNav->templatingadmin(
-            'addlink',
-            $this->board->getNameboard(),
+
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'addlink',
+            links::ADMIN,
             2
         );
 
@@ -316,18 +318,13 @@ class PotinsController extends AbstractController
     {
         /** @var Post $post */
         if(!$post=$postRepository->findPstQ0($id))return $this->redirectToRoute('api-error',['err'=>2]); // sans controle de l'auteur pour acces superadmin
-        /*
-                if($post->getHtmlcontent()->getFileblob() && file_exists($post->getHtmlcontent()->getWebPathblob())){
-                    $content=file_get_contents($post->getHtmlcontent()->getWebPathblob());
-                }else{
-                    $content="";
-                }
-        */
-        dump($post);
-        $vartwig=$this->menuNav->templatingadmin(
+
+        $vartwig=$this->menuNav->admin(
+            $this->board,
             'addlink',
-            "edition du lien",
-            $this->board,2);
+            links::ADMIN,
+            2
+        );
 
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'potins',
@@ -354,10 +351,12 @@ class PotinsController extends AbstractController
             $content="";
         }
 
-        $vartwig=$this->menuNav->templatingadmin(
+        $vartwig=$this->menuNav->admin(
+            $this->board,
             'editarticle_potin',
-            "edition de l'article",
-            $this->board,2);
+            links::ADMIN,
+            2
+        );
 
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'potins',
@@ -386,10 +385,11 @@ class PotinsController extends AbstractController
 
             return $this->redirectToRoute('office_member');
         }
-        $vartwig=$this->menuNav->templatingadmin(
-            'deletearticle',
-            $this->board->getNameboard(),
+
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'deletearticle',
+            links::ADMIN,
             2
         );
 
@@ -420,10 +420,13 @@ class PotinsController extends AbstractController
 
             return $this->redirectToRoute('office_member');
         }
-        $vartwig = $this->menuNav->templatingadmin(
+
+        $vartwig=$this->menuNav->admin(
+            $this->board,
             'deletearticle',
-            'delete article',
-            $this->board,2);
+            links::ADMIN,
+            2
+        );
 
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'potins',

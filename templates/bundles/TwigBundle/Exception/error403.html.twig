@@ -1,0 +1,14 @@
+{% extends 'basepublic.html.twig' %}
+
+{% block body %}
+        <h1>Accès refusé</h1>
+       <p>Vous n'avez pas l'autorisation nécessaire pour consulter cette page.</p>
+
+        {% if app.user %}
+            <p>Vous êtes connecté, mais votre compte ne possède pas les droits requis pour accéder à cette section.</p>
+        {% else %}
+            <p>Veuillez vous connecter ou contacter un administrateur si vous pensez qu'il s'agit d'une erreur.</p>
+        {% endif %}
+
+        <a class="btn btn-primary" href="{{ path('potins_index') }}">Retour à l'accueil</a>
+{% endblock %}

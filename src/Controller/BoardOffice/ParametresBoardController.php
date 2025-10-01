@@ -3,9 +3,10 @@
 namespace App\Controller\BoardOffice;
 
 
-use App\Classe\MemberSession;
+use App\Classe\UserSessionTrait;
 use App\Entity\Boards\Opendays;
 use App\Event\WebsiteCreatedEvent;
+use App\Lib\Links;
 use App\Lib\MsgAjax;
 use App\Repository\BoardRepository;
 use App\Repository\OffresRepository;
@@ -30,17 +31,24 @@ use App\Form\WebsiteType;
 
 class ParametresBoardController extends AbstractController
 {
-    use MemberSession;
+    use UserSessionTrait;
+
+    public function __construct(){
+        $this->userSession();
+        $board=$this->resolveCurrentBoard();
+    }
 
 
     #[Route('parameters', name:"parameters")]
-    public function parametersWebsite(SectorsRepository $reposector, OffresRepository $offresRepository, PostRepository $postationRepository): Response
+    public function parametersWebsite(SectorsRepository $reposector, PostRepository $postationRepository): Response
     {
 
-        $vartwig=$this->menuNav->templatingadmin(
+        $vartwig=$this->menuNav->admin(
+            $this->board,
             'parameter',
-            'parametres du panneau',
-            $this->board,1);
+            links::ADMIN,
+            1
+        );
 
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'parameters',
@@ -65,10 +73,12 @@ class ParametresBoardController extends AbstractController
        // if(!$this->getUserspwsiteOfWebsite($id) || !$this->admin )$this->redirectToRoute('cargo_public');
         $moduletab=$defaultModules->selectModule($this->board);
 
-        $vartwig=$this->menuNav->templatingadmin(
-        'stateModules',
-        'parametres du panneau',
-            $this->board,2);
+        $vartwig=$this->menuNav->admin(
+            $this->board,
+            'stateModules',
+            links::ADMIN,
+            2
+        );
 
 
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
@@ -104,10 +114,13 @@ class ParametresBoardController extends AbstractController
             return $this->redirectToRoute('parameters',[
                 'id'=>$this->board->getId()]);
         }
-        $vartwig=$this->menuNav->templatingadmin(
+
+        $vartwig=$this->menuNav->admin(
+            $this->board,
             'update',
-            'parametres du panneau',
-            $this->board,4);
+            links::ADMIN,
+            4
+        );
 
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'parameters',
@@ -132,10 +145,12 @@ class ParametresBoardController extends AbstractController
             $tabconges=$opendays->getCongesjso()??[];
         }
 
-        $vartwig=$this->menuNav->templatingadmin(
+        $vartwig=$this->menuNav->admin(
+            $this->board,
             'openday',
-            'parametres du panneau',
-            $this->board,5);
+            links::ADMIN,
+            5
+        );
 
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'vartwig'=>$vartwig,

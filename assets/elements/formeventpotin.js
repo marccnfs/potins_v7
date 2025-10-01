@@ -115,7 +115,7 @@ export default function Formeventpotin(props){
     }
 
     return (
-        <FetchFormEvent action='/member/wb/event/add-event-potin-ajx' className="form-elastic" onSuccess={onSuccess}
+        <FetchFormEvent action='potins/event/add-event-potin-ajx' className="form-elastic" onSuccess={onSuccess}
                         edit={edit}
                         board={props.board}
                         potin={props.potin}
@@ -150,61 +150,3 @@ export default function Formeventpotin(props){
         </FetchFormEvent>
     )
 }
-
-/*
-
-const [adresse, setAdresse] = useState(options.adresse)
-    const [propadresse, setPropadresse] = useState(options.adresse)
-     const [changAdress, setChangAdress]=useState(false)
-
-  const handledeselect=(index,e) =>{
-        e.preventDefault()
-        setChangPartner(true)
-        tabpartners.splice(index,1)
-        if(tabpartners.length === 0){
-            setPartner(false)
-        }
-        setTabpartners(tabpartners)
-        console.log(tabpartners)
-    }
-
-
-
- <div className="form-group">
-                        <h3>où ?</h3>
-                        <Searchadress onChangeAdress={handleChangeAdress} defaultValue={adresse}/>
-                    </div>
-
-
-function handleChangeAdress(select){
-        setPropadresse(select)
-        setAdresse(select.label)
-        setChangAdress(true)
-    }
-
-     {(partner) &&
-                            <div>
-                                <ul className='search-input_suggestions'>
-                                    {tabpartners.map((r, index) => (
-                                        <li key={r.id} className="af_flx li-flex">
-                                            <img className='imgsearch' src={r.pict}/>
-                                            <span dangerouslySetInnerHTML={{__html: r.title}}/>
-                                            <button className="btn btn-danger" onClick={(e) => handledeselect(index, e)}>
-                                                <i className="fa fa-trash"/>
-                                            </button>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        }
-
-     function handleToggleChoice(state){
-        setChoiceTgl(state)
-    }
-
-  <ToggleChoice etat={choiceTgl} onTogglechoice={handleToggleChoice}>associer un partner</ToggleChoice>
-                        <div className="bk-fix-zoneform">
-                            {choiceTgl  &&
-                                <SearchPartnerEvent tabpartner={tabpartners} onChangePartner={handleChangePartner}  defaultValue={namepartner}/>
-                            }
-                        </div>*/

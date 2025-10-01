@@ -3,10 +3,10 @@
 
 namespace App\Controller\BoardOffice;
 
-use App\Classe\MemberSession;
+use App\Classe\UserSessionTrait;
 use App\Entity\Media\Docstore;
+use App\Lib\Links;
 use App\Repository\DocstoreRepository;
-use App\Entity\Module\PostEvent;
 use App\Form\DeleteType;
 use App\Lib\MsgAjax;
 use App\Module\Evenator;
@@ -34,8 +34,12 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class EventController extends AbstractController
 {
-    use MemberSession;
+    use UserSessionTrait;
 
+    public function __construct(){
+        $this->userSession();
+        $board=$this->resolveCurrentBoard();
+    }
 
     #[Route('/add-event-ajx', name:"add_event_ajx")]
     public function addEventAjx(Request $request, Evenator $evenator): JsonResponse
@@ -72,10 +76,10 @@ class EventController extends AbstractController
     #[Route('/new-event', name:"new_event")]
     public function newEvent($board=null): RedirectResponse|Response
     {
-        $vartwig=$this->menuNav->templatingadmin(
-            'new',
-            $this->board->getNameboard(),
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'new',
+            links::ADMIN,
             3
         );
 
@@ -95,10 +99,11 @@ class EventController extends AbstractController
     {
         $orderprod=$orderProductsRepository->find($orderprodid);
 
-        $vartwig=$this->menuNav->templatingadmin(
-            'add_doc',
-            $this->board->getNameboard(),
+
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'add_doc',
+            links::ADMIN,
             3
         );
 
@@ -187,26 +192,6 @@ class EventController extends AbstractController
     }
 
 
-/*
-        $vartwig=$this->menuNav->templatingadmin(
-            'add_doc',
-            $this->board->getNameboard(),
-            $this->board,
-            3
-        );
-
-        return $this->render($this->useragentP.'ptn_office/home.html.twig', [
-            'directory'=>'event',
-            'replacejs'=>false,
-            'board' => $this->board,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
-            'orderprod'=>$orderprod,
-            'vartwig'=>$vartwig,
-            'locatecity'=>0
-        ]);
-    }
-*/
 
     /**
      * @throws NonUniqueResultException
@@ -215,10 +200,11 @@ class EventController extends AbstractController
     public function addParticpant(PostEventRepository $eventRepository,$id): RedirectResponse|Response
     {
         $event= $eventRepository->findEventByOneId($id);
-        $vartwig=$this->menuNav->templatingadmin(
-            'add_part',
-            $this->board->getNameboard(),
+
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'add_part',
+            links::ADMIN,
             3
         );
 
@@ -249,10 +235,12 @@ class EventController extends AbstractController
             $tab[]=['id'=>$partner->getId(), 'title'=>$partner->getNamewebsite(), 'pict'=>'/spaceweb/template/'.$partner->getTemplate()->getLogo()->getNamefile()];
         }
 
-        $vartwig=$this->menuNav->templatingadmin(
+        $vartwig=$this->menuNav->admin(
+            $this->board,
             'edit',
-            "edition event",
-            $this->board,3);
+            links::ADMIN,
+            3
+        );
 
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'event',
@@ -280,13 +268,12 @@ class EventController extends AbstractController
         $dateevent=$resator->BuildTDateOfOneEvent($event);
         $tabOrderParticpants=$listEvent->listParticipantPotin($id); // rechercher le customer et les participants
 
-        //dump($tabOrderParticpants);
-       // $docs=$event->getDocs();
-
-        $vartwig=$this->menuNav->templatingadmin(
+        $vartwig=$this->menuNav->admin(
+            $this->board,
             'details',
-            "details event",
-            $this->board,2);
+            links::ADMIN,
+            3
+        );
 
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'event',
@@ -314,10 +301,13 @@ class EventController extends AbstractController
             $evenator->removeEvent($event);
         return $this->redirectToRoute('module_event', ['city'=>$this->board->getLocality()[0]->getCity(),'nameboard' => $this->board->getSlug()]);
         }
-        $vartwig = $this->menuNav->templatingadmin(
-        'delete',
-        'delete event',
-            $this->board,3);
+
+        $vartwig=$this->menuNav->admin(
+            $this->board,
+            'delete',
+            links::ADMIN,
+            3
+        );
 
         return $this->render($this->useragentP.'ptn_member/home.html.twig', [
         'directory'=>'event',

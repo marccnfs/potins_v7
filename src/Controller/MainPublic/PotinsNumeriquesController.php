@@ -3,6 +3,7 @@
 namespace App\Controller\MainPublic;
 
 use App\Classe\PublicSession;
+use App\Classe\UserSessionTrait;
 use App\Lib\Links;
 use App\Repository\BoardRepository;
 use App\Service\Search\Searchmodule;
@@ -14,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 class PotinsNumeriquesController extends AbstractController
 {
 
-use PublicSession;
+    use UserSessionTrait;
 
     #[Route('', name:"potins_index")]
     public function index(BoardRepository $boardRepository): Response
