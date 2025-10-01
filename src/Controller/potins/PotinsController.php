@@ -3,10 +3,11 @@
 
 namespace App\Controller\potins;
 
-use App\Classe\MemberSession;
+use App\Classe\UserSessionTrait;
 use App\Entity\Module\TabpublicationMsgs;
 use App\Entity\Posts\Post;
 use App\Form\DeleteType;
+use App\Lib\Links;
 use App\Lib\MsgAjax;
 use App\Module\Postator;
 use App\Repository\ArticleRepository;
@@ -19,7 +20,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[IsGranted('ROLE_MEMBER')]
@@ -27,11 +28,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class PotinsController extends AbstractController
 {
-    use MemberSession;
-
+    use UserSessionTrait;
 
     #[Route('/potins/manage/{id?}', name: 'potins_manage', methods: ['GET', 'POST'])]
-    public function managePotins(Request $request, Postator $postator, BoardRepository $websiteRepository, PostRepository $postRepository,
+    public function managePotins(
+        Request $request,
+        Postator $postator,
+        BoardRepository $websiteRepository,
+        PostRepository $postRepository,
         ?int $id = null
     ): Response {
         // Si un ID est fourni, on cherche la ressource, sinon on en crée une nouvelle
@@ -82,11 +86,12 @@ class PotinsController extends AbstractController
 
             return $this->redirectToRoute('office_member');
         }
-        $vartwig=$this->menuNav->templatingadmin(
-            'manage_potin',
-            $this->board->getNameboard(),
+
+        $vartwig=$this->menuNav->admin(
             $this->board,
-            2
+            'manage_potin',
+            links::ADMIN,
+            1
         );
 
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
@@ -185,11 +190,11 @@ class PotinsController extends AbstractController
     {
         if($board!=$this->board->getId()) $this->redirectToRoute('list_board');
 
-        $vartwig=$this->menuNav->templatingadmin(
+        $vartwig=$this->menuNav->admin(
+            $board,
             'newpost',
-            $this->board->getNameboard(),
-            $this->board,
-            2
+            links::ADMIN,
+            1
         );
 
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
@@ -208,11 +213,12 @@ class PotinsController extends AbstractController
     public function addArticlePotin(PostRepository $postRepository, $id): Response
     {
         $post=$postRepository->findOnePostById($id);
-         $vartwig=$this->menuNav->templatingadmin(
-            'addarticle',
-            $this->board->getNameboard(),
+
+        $vartwig=$this->menuNav->admin(
             $this->board,
-            2
+            'addarticle',
+            links::ADMIN,
+            1
         );
 
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [

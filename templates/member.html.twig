@@ -45,7 +45,7 @@
 {%  set agent = app.session.get('agent') %}
 {%  set city = app.session.get('city') %}
 <body class="wpbocusto">
-<div class="wb-inf-" data-idwb="{{ board.id }}" data-slugwb="{{ board.slug }}" data-namewb="{{ board.nameboard }}" data-agent="{{ agent }}" data-pg="{{ pg??'hm' }}" data-member="{{ member.id }}" data-replacejs="{{ replacejs?'yes':'no' }}"></div>
+<div class="wb-inf-" data-idwb="{{ board.id }}" data-slugwb="{{ board.slug }}" data-namewb="{{ board.nameboard }}" data-agent="{{ agent }}"  data-replacejs="{{ replacejs?'yes':'no' }}"></div>
 {% block menu %}
 {% endblock menu %}
 {% block core %}

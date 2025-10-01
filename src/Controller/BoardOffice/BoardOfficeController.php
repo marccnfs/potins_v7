@@ -26,7 +26,10 @@ class BoardOfficeController extends AbstractController
     #[Route('/tableau-de-bord', name:"office_member")]
     public function ospaceBlog(PostRepository $postationRepository): Response
     {
+
+        $this->userSession();
         $board=$this->resolveCurrentBoard();
+
         $posts=$postationRepository->findPstKey($board->getCodesite());
         $vartwig=$this->menuNav->admin(
             $board,

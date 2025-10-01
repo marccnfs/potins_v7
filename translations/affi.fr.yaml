@@ -16,7 +16,11 @@ security:
     password: Mot de passe
     remember_me: Se souvenir de moi
     submit: Connexion
-
+  flash:
+      missing_identifier: Identifiant manquant
+      missing_password: Mot de passe manquant
+      invalid_credentials: Identifiants invalides
+      technical_error: Une erreur technique est survenue
 profile:
   show:
     username: Nom d''utilisateur
