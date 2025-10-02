@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Classe\MemberSession;
+use App\Classe\UserSessionTrait;
 use App\Entity\Admin\Orders;
 use App\Entity\Admin\PreOrderResa;
 use App\Form\DeleteType;
@@ -30,7 +30,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class InscriptionPotinByAdminController extends AbstractController
 {
-    use MemberSession;
+    use UserSessionTrait;
 
     #[Route('resa-potins-admin/{id}/{date}', name:"resa_potins_admin")]
     public function newInscriptionPotinsByMedia($id, $date, Request $request, PostEventRepository $eventrepo, Resator $resator, Identificat $identificator,): Response
@@ -52,10 +52,10 @@ class InscriptionPotinByAdminController extends AbstractController
             return $this->redirectToRoute("valid_resa_admin_potins",['id'=>$preO->getId()]);
         }
 
-        $vartwig=$this->menuNav->templatingadmin(
-            'add_part',
-            $this->board->getNameboard(),
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'add_part',
+            links::ADMIN,
             3
         );
 
@@ -66,9 +66,9 @@ class InscriptionPotinByAdminController extends AbstractController
             'event'=>$event,
             'replacejs'=>$replace??null,
             'vartwig'=>$vartwig,
-            'board' => $this->board,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
+            'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
         ]);
     }
 
@@ -90,10 +90,10 @@ class InscriptionPotinByAdminController extends AbstractController
             }
         }
 
-        $vartwig=$this->menuNav->templatingadmin(
-            'validpreorderesaadmin',
-            $this->board->getNameboard(),
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'validpreorderesaadmin',
+            links::ADMIN,
             3
         );
 
@@ -104,9 +104,9 @@ class InscriptionPotinByAdminController extends AbstractController
             'preorder'=>$preO,
             'registered'=>$nbregistered,
             'replacejs'=>$replace??null,
-            'board' => $this->board,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
+            'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'vartwig'=>$vartwig
         ]);
     }
@@ -119,10 +119,10 @@ class InscriptionPotinByAdminController extends AbstractController
         $sub=$order->getListproducts()[0]->getSubscription();
         $event=$sub->getEvent();
 
-        $vartwig=$this->menuNav->templatingadmin(
-            'confirmresa',
-            $this->board->getNameboard(),
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'confirmresa',
+            links::ADMIN,
             3
         );
 
@@ -132,9 +132,9 @@ class InscriptionPotinByAdminController extends AbstractController
             'event'=>$event,
             'sub'=>$sub,
             'replacejs'=>$replace??null,
-            'board' => $this->board,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
+            'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'vartwig'=>$vartwig
         ]);
     }
@@ -146,10 +146,10 @@ class InscriptionPotinByAdminController extends AbstractController
         $sub=$order->getListproducts()[0]->getSubscription();
         $event=$sub->getEvent();
 
-        $vartwig=$this->menuNav->templatingadmin(
-            'confirmresa',
-            $this->board->getNameboard(),
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'confirmresa',
+            links::ADMIN,
             3
         );
         return $this->render($this->useragentP.'ptn_media/home.html.twig', [
@@ -158,9 +158,9 @@ class InscriptionPotinByAdminController extends AbstractController
             'event'=>$event,
             'sub'=>$sub,
             'replacejs'=>$replace??null,
-            'board' => $this->board,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
+            'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'vartwig'=>$vartwig
         ]);
     }
@@ -186,10 +186,10 @@ class InscriptionPotinByAdminController extends AbstractController
             return $this->redirectToRoute("office_media");
         }
 
-        $vartwig=$this->menuNav->templatingadmin(
-            'editorderesa',
-            $this->board->getNameboard(),
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'editorderesa',
+            links::ADMIN,
             3
         );
         return $this->render($this->useragentP.'ptn_media/home.html.twig', [
@@ -198,9 +198,9 @@ class InscriptionPotinByAdminController extends AbstractController
             'event'=>$event,
             'order'=>$order,
             'replacejs'=>$replace??null,
-            'board' => $this->board,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
+            'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'vartwig'=>$vartwig
         ]);
     }
@@ -223,10 +223,10 @@ class InscriptionPotinByAdminController extends AbstractController
             return $this->redirectToRoute('office_media');
         }
 
-        $vartwig=$this->menuNav->templatingadmin(
-            'deleteorderesa',
-            $this->board->getNameboard(),
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'deleteorderesa',
+            links::ADMIN,
             3
         );
 
@@ -234,10 +234,10 @@ class InscriptionPotinByAdminController extends AbstractController
             'directory'=>'resa',
             'form' => $form->createView(),
             'replacejs'=>$replace??null,
-            'board' => $this->board,
             'event'=>$event,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
+            'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'vartwig' => $vartwig,
         ]);
     }

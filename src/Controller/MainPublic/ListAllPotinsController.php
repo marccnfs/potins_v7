@@ -2,7 +2,7 @@
 
 namespace App\Controller\MainPublic;
 
-use App\Classe\PublicSession;
+use App\Classe\UserSessionTrait;
 use App\Lib\Links;
 use App\Service\Search\Listpublications;
 use App\Service\Search\Searchmodule;
@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ListAllPotinsController extends AbstractController
 {
 
-    use PublicSession;
+    use UserSessionTrait;
 
     #[Route('/les-derniers-potins', name:"board_all")]
     public function allPotins(Listpublications $listpublications): Response

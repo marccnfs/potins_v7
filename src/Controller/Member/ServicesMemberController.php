@@ -6,13 +6,13 @@ namespace App\Controller\Member;
 
 use App\Classe\MemberSession;
 use App\Lib\Links;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-#[IsGranted('ROLE_CUSTOMER')]
+#[IsGranted('ROLE_MEMBER')]
 #[Route('/customer/services/directive/')]
 
 class ServicesMemberController extends AbstractController
@@ -34,12 +34,8 @@ class ServicesMemberController extends AbstractController
             $tabservice[]=$list->getNamemodule();
         }
 
-        $vartwig=$this->menuNav->newtemplateControlCustomer(
-            Links::CUSTOMER_LIST,
-            'modules',
-            "services actifs",
-            5);
 
+        $vartwig=$this->menuNav->templatepotins('modules', Links::CUSTOMER_LIST);
         return $this->render('aff_account/home.html.twig', [
             'directory'=>'profil',
             'replacejs'=>$replace??null,

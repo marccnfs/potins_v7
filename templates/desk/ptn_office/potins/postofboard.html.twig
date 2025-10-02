@@ -73,7 +73,7 @@
 
                 <!-- Section Outils -->
                 <div class="pot_bo w-cb3">
-                    {% if (member.id is same as (tab.author.id)) or (member.id == 1) %}
+                   {#  {% if (member.id is same as (tab.author.id)) or (member.id == 1) %} #}
                         <div class="tools-msg">
                             <a class="e-tool" title="Édition de l'affiche" href="{{ path('potins_manage', {'id':tab.id}) }}">
                                 <i class="fa fa-edit" data-descr="Éditer"></i>
@@ -98,7 +98,7 @@
                                 <i class="fa fa-podcast"></i>
                             </a>
                         </div>
-                    {% endif %}
+                  {#  {% endif %}  #}
                 </div>
             </div>
         {% else %}

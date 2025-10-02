@@ -3,7 +3,7 @@
 namespace App\Controller\BoardOffice;
 
 
-use App\Classe\UserSessionTrait;
+use App\Classe\UserSessionTraitOld;
 use App\Entity\Boards\Opendays;
 use App\Event\WebsiteCreatedEvent;
 use App\Lib\Links;
@@ -31,7 +31,7 @@ use App\Form\WebsiteType;
 
 class ParametresBoardController extends AbstractController
 {
-    use UserSessionTrait;
+    use UserSessionTraitOld;
 
     public function __construct(){
         $this->userSession();

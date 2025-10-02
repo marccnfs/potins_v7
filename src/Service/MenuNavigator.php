@@ -54,7 +54,6 @@ final class MenuNavigator
         if (array_key_exists('description', $meta)) {
             $ctx['description'] = (string) $meta['description'];
         }
-
         return $ctx;
     }
 

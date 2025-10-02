@@ -8,12 +8,13 @@ use App\Entity\Module\GpRessources;
 use App\Form\DeleteType;
 use App\Form\DuplicateType;
 use App\Form\GpRessourceType;
+use App\Lib\Links;
 use App\Module\GpRessourcator;
 use App\Repository\GpRessourcesRepository;
 use App\Repository\PostRepository;
 use App\Service\Search\SearchRessources;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,10 +45,10 @@ class GpRessourcesController extends AbstractController
             return $this->redirectToRoute('module_ressources', ['board'=>$this->board->getSlug()]);
         }
 
-        $vartwig=$this->menuNav->templatingadmin(
-            'new',
-            $this->board->getNameboard(),
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'new',
+            links::ADMIN,
             5
         );
 
@@ -99,13 +100,12 @@ class GpRessourcesController extends AbstractController
             return $this->redirectToRoute('office_member');
         }
 
-        $vartwig=$this->menuNav->templatingadmin(
-            'edit',
-            "edition ressources",
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'edit',
+            links::ADMIN,
             5
         );
-
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'gpressources',
             'replacejs'=>false,
@@ -136,12 +136,13 @@ class GpRessourcesController extends AbstractController
             $ressourcator->removeFormule($formule);
             return $this->redirectToRoute('module_found', ['board' => $this->board->getSlug()]);
         }
-        $vartwig = $this->menuNav->templatingadmin(
-        'delete',
-        'delete formule',
-            $this->board,5);
 
-
+        $vartwig=$this->menuNav->admin(
+            $this->board,
+            'delete',
+            links::ADMIN,
+            5
+        );
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
         'directory'=>'ressources',
         'replacejs'=>false,
@@ -166,11 +167,13 @@ class GpRessourcesController extends AbstractController
             $ressourcator->duplicateFormule($this->board,$formule->getKeymodule(), $formule);
             return $this->redirectToRoute('module_found', ['board' => $this->board->getSlug()]);
         }
-        $vartwig = $this->menuNav->templatingadmin(
-                'duplicate',
-                'duplicate formule',
-            $this->board,5);
 
+        $vartwig=$this->menuNav->admin(
+            $this->board,
+            'duplicate',
+            links::ADMIN,
+            5
+        );
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'replacejs'=>false,
             'form' => $form->createView(),

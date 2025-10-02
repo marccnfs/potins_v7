@@ -4,11 +4,12 @@
 namespace App\Controller\Modules;
 
 
-use App\Classe\potinsession;
+use App\Classe\UserSessionTraitOld;
+use App\Lib\Links;
 use App\Repository\ContactationRepository;
 use App\Module\Modulator;
 use App\Util\DefaultModules;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,13 +17,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-#[Route('/module/contact')]
+
 #[IsGranted("ROLE_CUSTOMER")]
+#[Route('/module/contact')]
 
 class ContactController extends AbstractController
 {
-    use potinsession;
-
+    use UserSessionTraitOld;
 
     #[Route('/process-module-contact/{id}', name:"process_contact")]
     public function processContact(DefaultModules $defaultModules,$id): RedirectResponse|Response
@@ -38,6 +39,13 @@ class ContactController extends AbstractController
             'comonModule',
             'module de contact',
             $this->board,2);
+
+        $vartwig=$this->menuNav->admin(
+            $this->board,
+            'ospaceblog',
+            links::ADMIN,
+            1
+        );
 
         return $this->render('aff_websiteadmin/home.html.twig', [
             'directory'=>'parameters',

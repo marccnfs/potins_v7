@@ -3,12 +3,12 @@
 
 namespace App\Controller\Customer;
 
-use App\Classe\potinsession;
+use App\Classe\UserSessionTraitOld;
 use App\Repository\PostEventRepository;
 use App\Repository\PostRepository;
 use App\Repository\SuiviNotifRepository;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FavorisController extends AbstractController
 {
-    use potinsession;
+    use UserSessionTraitOld;
 
 
     #[Route('/favoris/all/board/{page?}', name:"favoris_board")]

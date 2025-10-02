@@ -6,15 +6,15 @@ namespace App\Controller\Ressources;
 use App\Classe\MemberSession;
 use App\Entity\Ressources\Ressources;
 use App\Form\DeleteType;
+use App\Lib\Links;
 use App\Module\Ressourcecator;
 use App\Repository\CategoriesRepository;
 use App\Repository\RessourcesRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 
 #[IsGranted('ROLE_MEMBER')]
-#[Route('/admin')]
+#[Route('/member')]
 
 class RessourceController extends AbstractController
 {
@@ -76,13 +76,12 @@ class RessourceController extends AbstractController
             return $this->redirectToRoute('module_ressources');
         }
 
-        $vartwig=$this->menuNav->templatingadmin(
-            'manage_ressource',
-            $this->board->getNameboard(),
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'manage_ressource',
+            links::ADMIN,
             5
         );
-
 
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'ressources',
@@ -128,12 +127,13 @@ class RessourceController extends AbstractController
             $ressourcecator->removeRessource($ressource);
             return $this->redirectToRoute('module_ressources', ['board'=>$this->board->getSlug()]);        }
 
-        $vartwig = $this->menuNav->templatingadmin(
+
+        $vartwig=$this->menuNav->admin(
+            $this->board,
             'delete',
-            'delete carte',
-            $this->board,5);
-
-
+            links::ADMIN,
+            5
+        );
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'replacejs'=>false,
             'form' => $form->createView(),

@@ -2,14 +2,10 @@
 
 namespace App\Controller\Game;
 
-// src/Controller/MobileEntryController.php
-
-
-use App\Classe\PublicSession;
 use App\Classe\UserSessionTrait;
+use App\Classe\UserSessionTraitOld;
 use App\Entity\Games\MobileLink;
 use App\Entity\Games\EscapeGame;
-use Doctrine\ORM\EntityManagerInterface as EM;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;

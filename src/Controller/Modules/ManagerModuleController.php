@@ -4,13 +4,14 @@
 namespace App\Controller\Modules;
 
 use App\Classe\MemberSession;
+use App\Lib\Links;
 use App\Lib\MsgAjax;
 use App\Repository\BoardRepository;
 use App\Repository\ServicesRepository;
 use App\Module\Modulator;
 use App\Util\DefaultModules;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,12 +34,12 @@ class ManagerModuleController extends AbstractController
             'namemodule'=>$activ
         ]);
 
-        $servicestat=true;
-            $vartwig=$this->menuNav->templatingadmin(
-                'initModules',
-                "activation d'un service",
-                $this->board,2);
-
+        $vartwig=$this->menuNav->admin(
+            $this->board,
+            'initModules',
+            links::ADMIN,
+            2
+        );
             return $this->render('ptn_parameters/home.html.twig', [
                 'directory'=>'parameters',
                 'replacejs'=>false,

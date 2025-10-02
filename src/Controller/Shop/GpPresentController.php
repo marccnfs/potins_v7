@@ -12,7 +12,7 @@ use App\Repository\GpRessourcesRepository;
 use App\Repository\PostRepository;
 use App\Service\Search\SearchRessources;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

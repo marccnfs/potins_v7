@@ -4,7 +4,7 @@
 namespace App\Controller\Admin;
 
 
-use App\Classe\adminsession;
+use App\Classe\UserSessionTrait;
 use App\Entity\Customer\Services;
 use App\Entity\Module\ModuleList;
 use App\Entity\Boards\Board;
@@ -12,11 +12,9 @@ use App\Lib\Links;
 use App\Repository\CustomersRepository;
 use App\Repository\ModuleListRepository;
 use App\Repository\ProductsRepository;
-use App\Repository\BoardslistRepository;
 use App\Repository\WbordersRepository;
 use App\Repository\BoardRepository;
 use App\Service\backoffice\Initbacktor;
-use App\Service\Messages\Messageor;
 use App\Util\DefaultModules;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,7 +30,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class BoardController extends AbstractController // board-v5-1/back-admin/?keyboard=v5-12020test
 {
 
-    use adminsession;
+    use UserSessionTrait;
 
 
     #[Route('back-admin', name:"admin_index")]
@@ -42,7 +40,7 @@ class BoardController extends AbstractController // board-v5-1/back-admin/?keybo
        // if($keyboard!=$this->getParameter('key_admin')) $this->redirectToRoute('app_logout');
 
         $initback['fact']=$initbacktor->init();
-        $vartwig=$this->menuNav->templateControl(
+        $vartwig=$this->menuNav->admin(
             Links::CUSTOMER_LIST,
             'boardadmin',
             "boardadmin",

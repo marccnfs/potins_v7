@@ -3,9 +3,11 @@
 
 namespace App\Controller\Reviews;
 
-use App\Classe\MemberSession;
+
+use App\Classe\UserSessionTrait;
 use App\Entity\Posts\Post;
 use App\Form\DeleteType;
+use App\Lib\Links;
 use App\Repository\GpReviewRepository;
 use App\Repository\PostRepository;
 use App\Repository\ReviewRepository;
@@ -23,7 +25,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ReviewController extends AbstractController
 {
-    use MemberSession;
+    use UserSessionTrait;
 
     /**
      * @throws NonUniqueResultException
@@ -42,10 +44,10 @@ class ReviewController extends AbstractController
             $rw=['id'=>0,'titre'=>'','soustitre'=>'','type'=>'0'];  // 0 correspond a fiche resume
         }
 
-        $vartwig=$this->menuNav->templatingadmin(
-            'editreview',
-            $this->board->getNameboard(),
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'editreview',
+            links::ADMIN,
             2
         );
 
@@ -81,13 +83,12 @@ class ReviewController extends AbstractController
             $rw=['id'=>0,'titre'=>'','soustitre'=>'','type'=>'1'];  // 1 correspond a fiche trame
         }
 
-        $vartwig=$this->menuNav->templatingadmin(
-            'editreview',
-            $this->board->getNameboard(),
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'editreview',
+            links::ADMIN,
             2
         );
-
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'review',
             'replacejs'=>false,
@@ -118,11 +119,13 @@ class ReviewController extends AbstractController
             $this->addFlash('info', 'post supprimé.');
             return $this->redirectToRoute('module_blog', ['board'=>$this->board->getSlug()]);
         }
-        $vartwig = $this->menuNav->templatingadmin(
-            'deletepost',
-            'delete post',
-            $this->board,2);
 
+        $vartwig=$this->menuNav->admin(
+            $this->board,
+            'deletepost',
+            links::ADMIN,
+            2
+        );
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'potins',
             'replacejs'=>false,

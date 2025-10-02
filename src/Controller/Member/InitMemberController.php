@@ -3,6 +3,7 @@
 namespace App\Controller\Member;
 
 use App\Classe\initMember;
+use App\Classe\UserSessionTraitOld;
 use App\Entity\Customer\Customers;
 use App\Entity\Member\Boardslist;
 use App\Entity\Users\User;
@@ -19,7 +20,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[IsGranted('ROLE_MEMBER')]
@@ -28,8 +29,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class InitMemberController extends AbstractController
 {
-    use initMember;
-
+    use UserSessionTraitOld;
 
     #[Route('initialisation-de-votre-panneau', name:"intit_board_default")]
     public function newWebsite(MemberFactor $memberFactor,Modulator $modulator, Request $request, EventDispatcherInterface $dispatcher, BoardlistFactor $boardlistor): RedirectResponse|Response
@@ -49,11 +49,7 @@ class InitMemberController extends AbstractController
             return $this->redirectToRoute('office_member');
         }
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::PUBLIC,
-            'initboard',
-            0,
-            "nocity");
+        $vartwig=$this->menuNav->templatepotins('initboard', Links::PUBLIC);
 
         return $this->render($this->useragentP.'ptn_account/home.html.twig', [
             'directory'=>"registration",

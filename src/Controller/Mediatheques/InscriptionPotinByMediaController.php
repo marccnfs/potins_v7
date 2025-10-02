@@ -2,7 +2,7 @@
 
 namespace App\Controller\Mediatheques;
 
-use App\Classe\MemberSession;
+use App\Classe\UserSessionTrait;
 use App\Entity\Admin\Orders;
 use App\Entity\Admin\PreOrderResa;
 use App\Form\DeleteType;
@@ -34,7 +34,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class InscriptionPotinByMediaController extends AbstractController
 {
-    use MemberSession;
+    use UserSessionTrait;
 
     #[Route('resa-potins-media/{id}/{date}', name:"resa_potins_media")]
     public function newInscriptionPotinsByMedia($id,$date, Request $request, PostEventRepository $eventrepo, Resator $resator, Identificat $identificator,): Response
@@ -53,10 +53,7 @@ class InscriptionPotinByMediaController extends AbstractController
             return $this->redirectToRoute("valid_resa_media_potins",['id'=>$preO->getId()]);
         }
         $vartwig=$this->menuNav->templatepotins(
-            Links::CUSTOMER_LIST,
-            'Wadorder',
-            "Wadorder",
-            'all');
+            'Wadorder',Links::CUSTOMER_LIST);
 
         $replace = false;
 
@@ -91,10 +88,7 @@ class InscriptionPotinByMediaController extends AbstractController
             }
         }
         $vartwig=$this->menuNav->templatepotins(
-            Links::CUSTOMER_LIST,
-            'validpreorderesa',
-            "validpreorderesa",
-            'all');
+            'validpreorderesa',Links::CUSTOMER_LIST);
 
         $replace = false;
 
@@ -119,11 +113,7 @@ class InscriptionPotinByMediaController extends AbstractController
         $sub=$order->getListproducts()[0]->getSubscription();
         $event=$sub->getEvent();
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::CUSTOMER_LIST,
-            'confirmresa',
-            "confirmresa",
-            'all');
+        $vartwig=$this->menuNav->templatepotins('confirmresa',Links::CUSTOMER_LIST);
 
         $replace = false;
 
@@ -147,10 +137,7 @@ class InscriptionPotinByMediaController extends AbstractController
         $event=$sub->getEvent();
 
         $vartwig=$this->menuNav->templatepotins(
-            Links::CUSTOMER_LIST,
-            'confirmresa',
-            "confirmresa",
-            'all');
+            'confirmresa',Links::CUSTOMER_LIST);
 
         $replace = false;
 
@@ -177,11 +164,7 @@ class InscriptionPotinByMediaController extends AbstractController
             $creatorUser->modifCustomer($customer);
             return $this->redirectToRoute("office_media");
         }
-        $vartwig=$this->menuNav->templatepotins(
-            Links::CUSTOMER_LIST,
-            'editcustomer',
-            "editcustomer",
-            'all');
+        $vartwig=$this->menuNav->templatepotins('editcustomer',Links::CUSTOMER_LIST);
 
         $replace = false;
 
@@ -222,11 +205,7 @@ class InscriptionPotinByMediaController extends AbstractController
             $commandar->MajPartPotin($registered);
             return $this->redirectToRoute("office_media");
         }
-        $vartwig=$this->menuNav->templatepotins(
-            Links::CUSTOMER_LIST,
-            'editorderesa',
-            "editorderesa",
-            'all');
+        $vartwig=$this->menuNav->templatepotins('editorderesa',Links::CUSTOMER_LIST);
 
         $replace = false;
 
@@ -256,10 +235,10 @@ class InscriptionPotinByMediaController extends AbstractController
             $commandar->deleteOneParticpant($registered);
             return $this->redirectToRoute('office_media');
         }
-        $vartwig=$this->menuNav->templatingadmin(
-            'deleteorderesa',
-            $this->board->getNameBoard(),
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'deleteorderesa',
+            links::ADMIN,
             1
         );
         $replace = false;
@@ -292,10 +271,11 @@ class InscriptionPotinByMediaController extends AbstractController
             $commandar->deleteParticpant($order);
             return $this->redirectToRoute('office_media');
         }
-        $vartwig=$this->menuNav->templatingadmin(
-            'deleteorderesa',
-            $this->board->getNameBoard(),
+
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'deleteorderesa',
+            links::ADMIN,
             1
         );
         $replace = false;

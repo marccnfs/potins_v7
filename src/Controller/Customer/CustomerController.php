@@ -4,6 +4,7 @@
 namespace App\Controller\Customer;
 
 use App\Classe\customersession;
+use App\Classe\UserSessionTraitOld;
 use App\Lib\Links;
 use App\Repository\OrdersRepository;
 use App\Repository\PostRepository;
@@ -11,7 +12,7 @@ use App\Repository\SuiviNotifRepository;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -20,18 +21,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CustomerController extends AbstractController
 {
-    use customersession;
+    use UserSessionTraitOld;
 
     #[Route('/espace-personnel/usager', name:"customer_space")] //TODO liste des activités (faites et a faire
     public function spaceCustomer(): Response
     {
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::PUBLIC,
-            'listpotins',
-            4,    // 4 = pas de valid
-            "nocity"
-        );
+        $vartwig=$this->menuNav->templatepotins('listpotins', Links::PUBLIC);
 
         return $this->render($this->useragentP.'ptn_customer/home.html.twig', [
             'directory'=>"main",
@@ -48,12 +44,8 @@ class CustomerController extends AbstractController
     {
         $agenda=$orderrepo->findResaCustomer($this->customer->getNumclient());
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::PUBLIC,
-            'agendaresa',
-            4,    // 4 = pas de valid
-            "nocity"
-        );
+
+        $vartwig=$this->menuNav->templatepotins('agendaresa', Links::PUBLIC);
 
         return $this->render($this->useragentP.'ptn_customer/home.html.twig', [
             'directory'=>"main",

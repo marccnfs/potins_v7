@@ -30,11 +30,6 @@ class PotinsController extends AbstractController
 {
     use UserSessionTrait;
 
-    public function __construct(){
-        $this->userSession();
-        $board=$this->resolveCurrentBoard();
-    }
-
     #[Route('/potins/manage/{id?}', name: 'potins_manage', methods: ['GET', 'POST'])]
     public function managePotins(
         Request $request,
@@ -102,9 +97,9 @@ class PotinsController extends AbstractController
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'potins',
             'replacejs'=>false,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
             'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'potin'=>$potin,
             'vartwig'=>$vartwig,
             'is_edit' => $id !== null
@@ -205,9 +200,9 @@ class PotinsController extends AbstractController
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'potins',
             'replacejs'=>false,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
             'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'post'=>0,
             'vartwig'=>$vartwig,
             'locatecity'=>0
@@ -229,9 +224,9 @@ class PotinsController extends AbstractController
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'potins',
             'replacejs'=>false,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
             'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'post'=>$post,
             'vartwig'=>$vartwig,
             'locatecity'=>0
@@ -253,9 +248,9 @@ class PotinsController extends AbstractController
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'potins',
             'replacejs'=>false,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
             'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'post'=>$post->getId(),
             'vartwig'=>$vartwig,
             'locatecity'=>0
@@ -278,11 +273,10 @@ class PotinsController extends AbstractController
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'potins',
             'replacejs'=>false,
-            'board'=>$this->board,
             'post'=>$post,
-          //  'content'=>$content,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
+            'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'vartwig'=>$vartwig,
             'admin'=>[true,$this->member->getPermission()],
             'locatecity'=>0,
@@ -305,9 +299,9 @@ class PotinsController extends AbstractController
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'potins',
             'replacejs'=>false,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
             'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'post'=>$post,
             'vartwig'=>$vartwig,
             'locatecity'=>0
@@ -329,10 +323,10 @@ class PotinsController extends AbstractController
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'potins',
             'replacejs'=>false,
-            'board'=>$this->board,
             'post'=>$post,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
+            'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'vartwig'=>$vartwig,
             'admin'=>[true,$this->member->getPermission()],
             'locatecity'=>0,
@@ -361,12 +355,12 @@ class PotinsController extends AbstractController
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'potins',
             'replacejs'=>false,
-            'board'=>$this->board,
             'post'=>$post,
             'art'=>$article,
             'content'=>$content,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
+            'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'vartwig'=>$vartwig,
         ]);
     }
@@ -396,9 +390,9 @@ class PotinsController extends AbstractController
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'potins',
             'replacejs'=>false,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
             'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'article'=>$article,
             'form' => $form->createView(),
             'vartwig'=>$vartwig,
@@ -432,9 +426,9 @@ class PotinsController extends AbstractController
             'directory'=>'potins',
             'replacejs'=>false,
             'form' => $form->createView(),
-            'board' => $this->board,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
+            'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'vartwig' => $vartwig,
             'author' => $post->getAuthor()->getId()==$this->member->getId(),
             'admin'=>[true,$this->member->getPermission()]
@@ -466,9 +460,9 @@ class PotinsController extends AbstractController
             'directory'=>'potins',
             'replacejs'=>false,
             'form' => $form->createView(),
-            'board' => $this->board,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
+            'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'vartwig' => $vartwig,
             'author' => $post->getAuthor()->getId()==$this->member->getId(),
             'admin'=>[true,$this->member->getPermission()],

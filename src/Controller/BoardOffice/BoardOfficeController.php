@@ -23,15 +23,9 @@ class BoardOfficeController extends AbstractController
 {
     use UserSessionTrait;
 
-    public function __construct(){
-        $this->userSession();
-        $board=$this->resolveCurrentBoard();
-    }
-
     #[Route('/tableau-de-bord', name:"office_member")]
     public function ospaceBlog(PostRepository $postationRepository): Response
     {
-
         $posts=$postationRepository->findPstKey($this->board->getCodesite());
         $vartwig=$this->menuNav->admin(
             $this->board,
@@ -141,9 +135,8 @@ class BoardOfficeController extends AbstractController
             'replacejs'=>false,
             'vartwig'=>$vartwig,
             'board'=>$this->board,
-            'website'=>$this->board,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'reviews'=>$tabreviews,
         ]);
     }

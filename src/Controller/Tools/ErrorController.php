@@ -3,7 +3,7 @@
 
 namespace App\Controller\Tools;
 
-use App\Classe\potinsession;
+use App\Classe\UserSessionTrait;
 use App\Lib\Links;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/tools/error')]
 class ErrorController extends AbstractController
 {
-    use potinsession;
+    use UserSessionTrait;
 
 
     #[Route('/erreur_requete/{err}}', name:"api-error")]

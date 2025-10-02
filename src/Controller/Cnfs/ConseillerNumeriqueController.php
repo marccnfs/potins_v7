@@ -2,7 +2,7 @@
 
 namespace App\Controller\Cnfs;
 
-use App\Classe\PublicSession;
+use App\Classe\UserSessionTrait;
 use App\Lib\Links;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ConseillerNumeriqueController extends AbstractController
 {
 
- use PublicSession;
+    use UserSessionTrait;
 
     #[Route('/conseiller-numerique', name:"cnfs")]
     public function cnfs(): Response

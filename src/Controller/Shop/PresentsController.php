@@ -12,7 +12,7 @@ use App\Repository\CategoriesRepository;
 use App\Repository\OffresRepository;
 use App\Repository\RessourcesRepository;
 use Doctrine\ORM\NonUniqueResultException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;

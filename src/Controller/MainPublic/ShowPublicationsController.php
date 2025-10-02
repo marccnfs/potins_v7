@@ -3,7 +3,7 @@
 
 namespace App\Controller\MainPublic;
 
-use App\Classe\PublicSession;
+use App\Classe\UserSessionTraitOld;
 use App\Lib\Links;
 use App\Repository\DocstoreRepository;
 use App\Repository\PostEventRepository;
@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ShowPublicationsController extends AbstractController
 {
-    use PublicSession;
+    use UserSessionTraitOld;
 
     /**
      * @throws NonUniqueResultException

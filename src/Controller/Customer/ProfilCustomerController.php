@@ -2,7 +2,8 @@
 
 namespace App\Controller\Customer;
 
-use App\Classe\customersession;
+use ApiPlatform\State\Pagination\PaginatorInterface;
+use App\Classe\UserSessionTrait;
 use App\Entity\Customer\Customers;
 use App\Lib\Links;
 use App\Repository\PrivateConversRepository;
@@ -18,23 +19,21 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
-#[IsGranted('ROLE_CUSTOMER')]
+#[IsGranted('ROLE_USER')]
 #[Route('/customer/profil/')]
 
 class ProfilCustomerController extends AbstractController
 {
-    use customersession;
+    use UserSessionTrait;
 
 
     #[Route('mon-espace-affichange', name:"profil_dispatch")]
     public function profilDispatch(PaginatorInterface $paginator, PrivateConversRepository $privateConversRepository, PrivateMessageor $messageor, Request $request): RedirectResponse|Response
     {
 
-        $vartwig=$this->menuNav->templateCustomer(
-            Links::CUSTOMER_LIST,
+        $vartwig=$this->menuNav->templatePotins(
             'profilshow',
-            "Mon espace AffiChanGe",
-            1
+            Links::CUSTOMER_LIST,
         );
 
         return $this->render($this->useragentP.'ptn_customer/home.html.twig', [
@@ -55,17 +54,12 @@ class ProfilCustomerController extends AbstractController
     public function profilCustomer(): RedirectResponse|Response
     {
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::CUSTOMER_LIST,
-            'profilcontact',
-            4,    // 4 = pas de valid
-            "nocity"
-        );
+        $vartwig=$this->menuNav->templatepotins('profilcontact',Links::CUSTOMER_LIST);
 
         return $this->render($this->useragentP.'ptn_customer/home.html.twig', [
             'directory'=>"profil",
             'replacejs'=>$replacejs??null,
-            'customer'=>$this->customer,
+            'customer'=>$this->currentCustomer,
             'vartwig'=>$vartwig,
             'permissions'=>[0,0,0],
         ]);
@@ -85,16 +79,14 @@ class ProfilCustomerController extends AbstractController
           //  $this->addFlash('success', 'Vos informations ont bien été mises à jour');
             return $this->redirectToRoute('profil_customer');
         }
-        $vartwig=$this->menuNav->templateCustomer(
-            Links::CUSTOMER_LIST,
-            'profiledit',
-            "Mon compte",
-            3  );
+        $vartwig=$this->menuNav->templatePotins(
+            'profiledit',Links::CUSTOMER_LIST,
+          );
 
         return $this->render($this->useragentP.'ptn_customer/home.html.twig', [
             'replacejs'=>$replacejs??null,
             'directory'=>"profil",
-            'customer'=>$customer,
+            'customer'=>$this->currentCustomer,
             'profil'=>$customer->getProfil(),
             'vartwig'=>$vartwig,
             'form'=>$form->createView(),
@@ -118,21 +110,20 @@ class ProfilCustomerController extends AbstractController
             // $spaceWebtor->majDistach( $member, $form); //todo ???? a voir
             $this->em->flush();
             $this->reClearInit();
-            $sessioninit->initSession($this->member);
+            $sessioninit->initSession($this->currentMember);
             $this->addFlash('success', 'Vos informations ont bien été mises à jour');
             return $this->redirectToRoute('profil_customer');
         }
-        $vartwig=$this->menuNav->templateCustomer(
-            Links::CUSTOMER_LIST,
-            'profiledit',
-            "infos contacts",
-            4  );
+        $vartwig=$this->menuNav->templatePotins(
+            'profiledit',Links::CUSTOMER_LIST,
+             );
 
         return $this->render($this->useragentP.'ptn_customer/home.html.twig', [
             'directory'=>"profil",
             'replacejs'=>$replacejs??null,
             'twigform'=>'form_update',
-            'member'=>$this->member,
+            'customer'=>$this->currentCustomer,
+            'member'=>$this->currentMember,
             'board'=>$this->board,
             'vartwig'=>$vartwig,
             'form'=>$form->createView(),

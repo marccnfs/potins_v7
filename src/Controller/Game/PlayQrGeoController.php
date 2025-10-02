@@ -1,10 +1,8 @@
 <?php
 
-// src/Controller/PlayQrGeoController.php
 namespace App\Controller\Game;
 
 use App\Attribute\RequireParticipant;
-use App\Classe\PublicSession;
 use App\Classe\UserSessionTrait;
 use App\Entity\Games\EscapeGame;
 use App\Service\MobileLinkManager;

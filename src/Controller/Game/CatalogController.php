@@ -1,8 +1,7 @@
 <?php
 namespace App\Controller\Game;
 
-use App\Attribute\RequireParticipant;
-use App\Classe\PublicSession;
+use App\Classe\UserSessionTrait;
 use App\Entity\Users\Participant;
 use App\Lib\Links;
 use App\Repository\EscapeGameRepository;
@@ -14,10 +13,9 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class CatalogController extends AbstractController
 {
-    use PublicSession;
+    use UserSessionTrait;
 
     #[Route('/catalog', name: 'catalog')]
-//    #[RequireParticipant]
     public function index(Request $req, EscapeGameRepository $repo): Response
     {
         $participantId = $this->requestStack->getSession()->get('participant_id');

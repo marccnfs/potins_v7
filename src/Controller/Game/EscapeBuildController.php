@@ -2,7 +2,7 @@
 
 namespace App\Controller\Game;
 
-use App\Classe\PublicSession;
+use App\Classe\UserSessionTrait;
 use App\Entity\Games\EscapeGame;
 use App\Entity\Games\Puzzle;
 use App\Form\PuzzleCryptexType;
@@ -16,20 +16,14 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/atelier/eg')]
 class EscapeBuildController extends AbstractController
 {
-    use PublicSession;
-
-    public function __construct(private EntityManagerInterface $em) {}
+    use UserSessionTrait;
 
 
     #[Route('/escape/build_one', name: 'build_one')]
     public function index(): Response
     {
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            'build',
-            0,
-            "nocity");
+        $vartwig=$this->menuNav->templatepotins('build',Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
@@ -45,11 +39,7 @@ class EscapeBuildController extends AbstractController
     public function overview(EscapeGame $eg): Response {
         $this->denyAccessUnlessGranted('EDIT', $eg);
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            'overview',
-            0,
-            "nocity");
+        $vartwig=$this->menuNav->templatepotins('overview',Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
@@ -101,11 +91,7 @@ class EscapeBuildController extends AbstractController
             return $this->redirectToRoute('wizard_overview', ['id'=>$eg->getId()]);
         }
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            "step{$step}",
-            0,
-            "nocity");
+        $vartwig=$this->menuNav->templatepotins("step{$step}",Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
@@ -160,11 +146,7 @@ class EscapeBuildController extends AbstractController
             return $this->redirectToRoute('wizard_overview', ['id'=>$eg->getId()]);
         }
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            'build',
-            0,
-            "nocity");
+        $vartwig=$this->menuNav->templatepotins('build',Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
@@ -180,12 +162,7 @@ class EscapeBuildController extends AbstractController
     public function SaveEtape(): Response
     {
 
-
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            'build',
-            0,
-            "nocity");
+        $vartwig=$this->menuNav->templatepotins('build',Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
@@ -202,12 +179,7 @@ class EscapeBuildController extends AbstractController
         $this->denyAccessUnlessGranted('EDIT', $eg);
         $puzzle = $eg->getPuzzleByStep($step) ?? throw $this->createNotFoundException();
 
-
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            "preview/step{$step}",
-            0,
-            "nocity");
+        $vartwig=$this->menuNav->templatepotins("preview/step{$step}",Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
@@ -233,12 +205,7 @@ class EscapeBuildController extends AbstractController
         $this->em->flush();
         $this->addFlash('success','Escape Game publié !');
 
-
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            'play_entry',
-            0,
-            "nocity");
+        $vartwig=$this->menuNav->templatepotins('play_entry',Links::GAMES);
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
@@ -254,14 +221,7 @@ class EscapeBuildController extends AbstractController
     #[Route('/play/{shareSlug}', name: 'play_game')]
     public function PlayGame(): Response
     {
-
-
-        $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            'build',
-            0,
-            "nocity");
-
+        $vartwig=$this->menuNav->templatepotins('build',Links::GAMES);
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
             'customer'=>$this->customer,

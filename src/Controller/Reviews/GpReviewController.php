@@ -6,6 +6,7 @@ namespace App\Controller\Reviews;
 use App\Classe\MemberSession;
 use App\Form\DeleteType;
 use App\Form\GpReviewType;
+use App\Lib\Links;
 use App\Module\GpRessourcator;
 use App\Module\Reviewscator;
 use App\Repository\GpRessourcesRepository;
@@ -19,9 +20,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
-//#[IsGranted('ROLE_MEMBER')]
+#[IsGranted('ROLE_MEMBER')]
 #[Route('/member/gpreview')]
 
 class GpReviewController extends AbstractController
@@ -45,6 +47,12 @@ class GpReviewController extends AbstractController
             'ospacegpreview',
             $this->board->getNameboard(),
             $this->board,
+            5
+        );
+        $vartwig=$this->menuNav->admin(
+            $this->board,
+            'manage_ressource',
+            links::ADMIN,
             5
         );
 
@@ -83,7 +91,12 @@ class GpReviewController extends AbstractController
             $this->board,
             5
         );
-
+        $vartwig=$this->menuNav->admin(
+            $this->board,
+            'manage_ressource',
+            links::ADMIN,
+            5
+        );
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'review',
             'replacejs'=>false,
@@ -113,7 +126,12 @@ class GpReviewController extends AbstractController
         'delete formule',
             $this->board,5);
 
-
+        $vartwig=$this->menuNav->admin(
+            $this->board,
+            'manage_ressource',
+            links::ADMIN,
+            5
+        );
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
         'directory'=>'ressources',
         'replacejs'=>false,

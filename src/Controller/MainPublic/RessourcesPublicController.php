@@ -2,7 +2,7 @@
 
 namespace App\Controller\MainPublic;
 
-use App\Classe\PublicSession;
+use App\Classe\UserSessionTrait;
 use App\Lib\Links;
 use App\Service\Search\SearchRessources;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class RessourcesPublicController extends AbstractController
 {
 
- use PublicSession;
+    use UserSessionTrait;
 
     #[Route('/ressources', name:"ressources")]
     public function allRessources(SearchRessources $searchRessources): Response

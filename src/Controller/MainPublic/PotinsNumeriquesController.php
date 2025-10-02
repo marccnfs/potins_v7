@@ -2,7 +2,6 @@
 
 namespace App\Controller\MainPublic;
 
-use App\Classe\PublicSession;
 use App\Classe\UserSessionTrait;
 use App\Lib\Links;
 use App\Repository\BoardRepository;

@@ -2,7 +2,8 @@
 
 namespace App\Controller\Game;
 
-use App\Classe\PublicSession;
+
+use App\Classe\UserSessionTrait;
 use App\Lib\Links;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -11,17 +12,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ArController extends AbstractController
 {
-    use PublicSession;
+    use UserSessionTrait;
 
     #[Route('/ra/intro', name: 'ar_intro')]
     public function intro(): Response
     {
 
         $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
             '_intro',
-            0,
-            "nocity");
+            Links::ACCUEIL);
 
 
         return $this->render('pwa/ar/home.html.twig', [
@@ -38,11 +37,8 @@ class ArController extends AbstractController
     {
 
         $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
             '_mindar_demo',
-            0,
-            "nocity");
-
+            Links::ACCUEIL);
 
         return $this->render('pwa/ar/home.html.twig', [
             'replacejs'=>false,
@@ -56,14 +52,9 @@ class ArController extends AbstractController
     #[Route('/ra/mindar/create', name: 'ar_mindar_create')]
     public function create(): Response
     {
-
-
         $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
             '_mindar_create',
-            0,
-            "nocity");
-
+            Links::ACCUEIL);
 
         return $this->render('pwa/ar/home.html.twig', [
             'replacejs'=>false,

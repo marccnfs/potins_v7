@@ -3,7 +3,7 @@
 namespace App\Controller\Game;
 
 use App\Attribute\RequireParticipant;
-use App\Classe\PublicSession;
+
 use App\Classe\UserSessionTrait;
 use App\Entity\Games\MobileLink;
 use App\Lib\Links;

@@ -9,8 +9,13 @@ use App\Lib\Links;
 use App\Lib\MsgAjax;
 use App\Module\Evenator;
 use App\Module\EvenatorPotin;
+use App\Repository\DocstoreRepository;
+use App\Repository\OrderProductsRepository;
 use App\Repository\PostEventRepository;
 use App\Repository\PostRepository;
+use App\Service\Modules\Resator;
+use App\Service\Search\ListEvent;
+use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,10 +34,6 @@ class EventPotinsController extends AbstractController
 {
     use UserSessionTrait;
 
-    public function __construct(){
-        $this->userSession();
-        $board=$this->resolveCurrentBoard();
-    }
 
     #[Route('/add-event-potin-ajx', name:"add_event_potin_ajx")]
     public function addEvenPotintAjx(Request $request, EvenatorPotin $evenator): JsonResponse
@@ -64,10 +65,10 @@ class EventPotinsController extends AbstractController
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'event',
             'replacejs'=>false,
-            'board' => $this->board,
             'potin'=>$potin,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
+            'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'event'=>null,
             'vartwig'=>$vartwig,
             'locatecity'=>0
@@ -92,15 +93,44 @@ class EventPotinsController extends AbstractController
         return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'directory'=>'event',
             'replacejs'=>false,
-            'board' => $this->board,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
+            'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
             'event'=>$json,
             'potin'=>$event->getPotin(),
             'vartwig'=>$vartwig,
             'admin'=>[true,[1,1,1]],
-            'locatecity'=>0,
             'back'=> $this->generateUrl('module_event',['board' => $this->board->getSlug()]),
+        ]);
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    #[Route('/details-event/{id}', name:"details_event")]
+    public function detailsEvent(ListEvent $listEvent,Resator $resator,PostEventRepository $postEventRepository, $id): RedirectResponse|Response
+    {
+        $event = $postEventRepository->findEventById($id);
+        $dateevent=$resator->BuildTDateOfOneEvent($event);
+        $tabOrderParticpants=$listEvent->listParticipantPotin($id); // rechercher le customer et les participants
+
+        $vartwig=$this->menuNav->admin(
+            $this->board,
+            'details',
+            links::ADMIN,
+            3
+        );
+
+        return $this->render($this->useragentP.'ptn_office/home.html.twig', [
+            'directory'=>'event',
+            'replacejs'=>false,
+            'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
+            'event'=>$event,
+            'date'=>$dateevent,
+            'orders'=>$tabOrderParticpants,
+            'vartwig'=>$vartwig,
         ]);
     }
 
@@ -128,9 +158,9 @@ class EventPotinsController extends AbstractController
         'directory'=>'event',
         'replacejs'=>false,
         'form' => $form->createView(),
-        'board' => $this->board,
-        'member'=>$this->member,
-        'customer'=>$this->customer,
+        'board'=>$this->board,
+        'member'=>$this->currentMember,
+        'customer'=>$this->currentCustomer,
         'vartwig' => $vartwig,
         'author'=>true,
          'admin'=>[true,[1,1,1]],
@@ -147,5 +177,87 @@ class EventPotinsController extends AbstractController
         $evenator->publiedOneEvent($event);
         return $this->redirectToRoute('module_event', ['nameboard' => $this->board->getSlug()]);
     }
+
+    #[Route('/add-doc/{orderprodid}', name:"add_doc")]
+    public function addDoc(OrderProductsRepository $orderProductsRepository,$orderprodid): RedirectResponse|Response
+    {
+        $orderprod=$orderProductsRepository->find($orderprodid);
+
+
+        $vartwig=$this->menuNav->admin(
+            $this->board,
+            'add_doc',
+            links::ADMIN,
+            3
+        );
+
+        return $this->render($this->useragentP.'ptn_office/home.html.twig', [
+            'directory'=>'event',
+            'replacejs'=>false,
+            'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
+            'orderprod'=>$orderprod,
+            'vartwig'=>$vartwig,
+            'anotherhead'=>"_dropzone"
+        ]);
+    }
+
+    #[Route('/download-doc/{id}/{idevent}', name:"download_doc")]
+    public function downLoadDoc($id, $idevent, DocstoreRepository $docstoreRepository)
+    {
+        $fichier=$docstoreRepository->find($id);
+        if ($fichier == null){
+
+            return $this->redirectToRoute('details_event', ['id'=>$idevent]); }
+        else{
+            return $this->file($this->getParameter('upload_directory').'/'.$fichier->getName(), $fichier->getNomOriginal());
+        }
+    }
+
+    #[Route('/delete-doc/{id}/{idevent}', name:"delete_doc")]
+    public function deleteDoc($id, $idevent, DocstoreRepository $docstoreRepository): RedirectResponse
+    {
+        $fichier=$docstoreRepository->find($id);
+        if ($fichier == null){
+            $this->addFlash('notice', 'fichier introuvable');
+        }
+        else{
+            $orderproduct=$fichier->getProduct();
+            $orderproduct->removeDoc($fichier);
+            $this->em->persist($orderproduct);
+            $this->em->flush();
+        }
+        return $this->redirectToRoute('details_event', ['id'=>$idevent]);
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    #[Route('/add-participant', name:"add_participant")]
+    public function addParticpant(PostEventRepository $eventRepository,$id): RedirectResponse|Response
+    {
+        $event= $eventRepository->findEventByOneId($id);
+
+        $vartwig=$this->menuNav->admin(
+            $this->board,
+            'add_part',
+            links::ADMIN,
+            3
+        );
+
+        return $this->render($this->useragentP.'ptn_office/home.html.twig', [
+            'directory'=>'event',
+            'replacejs'=>false,
+            'board'=>$this->board,
+            'member'=>$this->currentMember,
+            'customer'=>$this->currentCustomer,
+            'event'=>$event,
+            'vartwig'=>$vartwig,
+            'locatecity'=>0
+        ]);
+    }
+
+
 
 }

@@ -6,270 +6,229 @@ namespace App\Classe;
 use App\Entity\Boards\Board;
 use App\Entity\Customer\Customers;
 use App\Entity\Member\Activmember;
-use App\Entity\Member\Boardslist;
 use App\Entity\Users\Participant;
 use App\Entity\Users\User;
-
-use App\Repository\ActivMemberRepository;
+use App\Repository\CustomersRepository;
 use App\Repository\BoardRepository;
 use App\Repository\BoardslistRepository;
-use App\Repository\CustomersRepository;
-use App\Repository\PostEventRepository;
+use App\Repository\ActivMemberRepository;
 use App\Repository\UserRepository;
-
+use App\Repository\PostEventRepository;
 use App\Service\MenuNavigator;
-
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Contracts\Service\Attribute\Required;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
+/**
+ * Trait UserSessionTrait (Symfony 7-ready) — v2
+ *
+ * Ajouts vs v1 :
+ * - Méthode publique ensureUserSessionBooted() pour permettre à un EventSubscriber
+ *   d'initialiser le contexte sans violer la visibilité protected de bootUserSession().
+ */
 trait UserSessionTrait
 {
-    // ————— Dépendances (nullables tant que non bootées) —————
+    // ===== Dépendances (nullables pour rester tolérant avant boot) ================================
     protected ?RequestStack $requestStack = null;
     protected ?EntityManagerInterface $em = null;
-    protected ?MenuNavigator $menuNav = null;
     protected ?Security $security = null;
+    protected ?MenuNavigator $menuNav = null;
+    protected ?RouterInterface $router = null;
+    protected ?LoggerInterface $logger = null;
 
+    // Repositories optionnels (si votre contrôleur en a besoin)
+    protected ?CustomersRepository $customersRepo = null;
     protected ?BoardRepository $boardRepo = null;
     protected ?BoardslistRepository $boardslistRepo = null;
-    protected ?CustomersRepository $customersRepo = null;
     protected ?UserRepository $userRepository = null;
     protected ?ActivMemberRepository $activMemberRepo = null;
     protected ?PostEventRepository $postEventRepo = null;
-    protected ?RouterInterface $router = null;
 
-    protected ?UploaderHelper $helper = null; // Vich helper
+    // Outils optionnels
+    protected ?UploaderHelper $uploaderHelper = null;
 
-    // ————— Cache courant + alias compatibles contrôleurs —————
+    // ===== État courant mis en cache =============================================================
     protected ?Customers $currentCustomer = null;
-    protected ?Activmember $currentMember = null;
-    protected ?Board $currentBoard = null;
+    protected ?Activmember $currentMember  = null;
+    protected ?Board $currentBoard         = null;
 
     // alias pour compatibilité avec le code existant
     protected ?Customers $customer = null;
     protected ?Activmember $member = null;
     protected ?Board $board = null;
 
-    // ————— Infos agent —————
+    // Détection d'agent
     protected bool $isMobile = false;
     protected string $agentPrefix = 'desk/';
-    protected string $useragentP = 'desk/'; // utilisé dans tes renders
+    protected string $useragentP = 'desk/';
 
-    // ========= Boot (appelé par le setter #[Required] ci-dessous OU par un __construct) =========
-    protected function bootUserSession(
-        RequestStack $requestStack,
-        EntityManagerInterface $em,
-        MenuNavigator $menuNav,
-        Security $security,
-        ?UploaderHelper $helper = null,
-        ?BoardRepository $boardRepo = null,
-        ?BoardslistRepository $boardslistRepo = null,
-        ?CustomersRepository $customersRepo = null,
-        ?UserRepository $userRepository = null,
-        ?ActivMemberRepository $activMemberRepo = null,
-        ?PostEventRepository $postEventRepo = null,
-        ?RouterInterface $router = null,
-    ): void {
-        $this->requestStack   = $requestStack;
-        $this->em             = $em;
-        $this->menuNav        = $menuNav;
-        $this->security       = $security;
-        $this->helper         = $helper;
-
-        $this->boardRepo      = $boardRepo;
-        $this->boardslistRepo = $boardslistRepo;
-        $this->customersRepo  = $customersRepo;
-        $this->userRepository = $userRepository;
-        $this->activMemberRepo= $activMemberRepo;
-        $this->postEventRepo  = $postEventRepo;
-        $this->router         = $router;
-
-        $this->detectAgent();
-    }
-
-    // ========= Setter autowiré (évite d’écrire des __construct partout) =========
+    // ====== Initialisation des dépendances (évite __construct bruyant) ===========================
     #[Required]
     public function initUserSessionDeps(
         RequestStack $requestStack,
-        EntityManagerInterface $em,
-        MenuNavigator $menuNav,
         Security $security,
-        ?UploaderHelper $helper = null,
+        MenuNavigator $menuNav,
+        ?EntityManagerInterface $em = null,
+        ?RouterInterface $router = null,
+        ?LoggerInterface $logger = null,
+        ?UploaderHelper $uploaderHelper = null,
         ?CustomersRepository $customersRepo = null,
+        ?BoardRepository $boardRepo = null,
+        ?BoardslistRepository $boardslistRepo = null,
+        ?UserRepository $userRepository = null,
+        ?ActivMemberRepository $activMemberRepo = null,
+        ?PostEventRepository $postEventRepo = null,
     ): void {
-        $this->bootUserSession(
-            requestStack: $requestStack,
-            em: $em,
-            menuNav: $menuNav,
-            security: $security,
-            helper: $helper,
-            customersRepo: $customersRepo,
-        );
+        $this->requestStack     = $requestStack;
+        $this->security         = $security;
+        $this->menuNav        = $menuNav;
+        $this->em               = $em;
+        $this->router           = $router;
+        $this->logger           = $logger;
+        $this->uploaderHelper   = $uploaderHelper;
+        $this->customersRepo    = $customersRepo;
+        $this->boardRepo        = $boardRepo;
+        $this->boardslistRepo   = $boardslistRepo;
+        $this->userRepository   = $userRepository;
+        $this->activMemberRepo  = $activMemberRepo;
+        $this->postEventRepo    = $postEventRepo;
     }
 
-    // ========= Helpers bas niveau =========
-    protected function session(): SessionInterface
+    // ====== Boot du contexte utilisateur (SAFE / sans exception) ================================
+    /**
+     * Initialise le "contexte" (customer, board, avatar, agent...) si un utilisateur est disponible.
+     * Ne lève JAMAIS d'exception : si pas d'utilisateur, sort simplement.
+     */
+    protected function bootUserSession(): void
     {
-        if (!$this->requestStack) {
-            throw new \LogicException('UserSessionTrait non initialisé. (bootUserSession() non appelé)');
-        }
-        $session = $this->requestStack->getSession();
-        if (!$session->isStarted()) {
-            $session->start();
-        }
-        return $session;
-    }
+        // Agent (mobile / desk)
+        $this->detectAgent();
 
-    protected function detectAgent(?Request $request = null): void
-    {
-        $req = $request ?? $this->requestStack?->getCurrentRequest();
-        $ua  = $req?->headers->get('User-Agent') ?? ($_SERVER['HTTP_USER_AGENT'] ?? '');
-
-        if (\preg_match('/mob/i', $ua)) {
-            $this->isMobile    = true;
-            $this->agentPrefix = 'mobile/';
-        } else {
-            $this->isMobile    = false;
-            $this->agentPrefix = 'desk/';
-        }
-        $this->useragentP = $this->agentPrefix;
-        $this->session()->set('agent', $this->agentPrefix);
-    }
-
-    public function clearinit(): void
-    {
-        foreach (['city','idcustomer','lat','lon','iddisptachweb','permission','idcity','typeuser','mailmember','idboard','avatar'] as $k) {
-            if ($this->session()->has($k)) $this->session()->remove($k);
-        }
-        $this->currentCustomer = $this->customer = null;
-        $this->currentMember   = $this->member   = null;
-        $this->currentBoard    = $this->board    = null;
-    }
-
-
-    // ========= Public session (contexte Twig public de base) =========
-    public function publicSession(array $meta = [], string $html = ''): array
-    {
-        return [
-            'agent'       => $this->agentPrefix,
-            'isMobile'    => $this->isMobile,
-            'permission'  => $this->session()->get('permission', null),
-            'idcity'      => $this->session()->get('idcity', null),
-
-            'title'       => (string)($meta['title'] ?? ''),
-            'titlepage'   => (string)($meta['titlepage'] ?? ($meta['title'] ?? '')),
-            'description' => (string)($meta['description'] ?? ''),
-            'maintwig'    => $html,
-            'linkbar'     => $meta['menu']      ?? [],
-            'tagueries'   => $meta['tagueries'] ?? [],
-        ];
-    }
-
-    // ========= User/member/customer =========
-    public function userSession(): void
-    {
-        $user = $this->security?->getUser();
-        if (!$user instanceof UserInterface) {
-            throw new AccessDeniedException();
-        }
-        if ($user instanceof User) {
-            //$scutomer=$this->customersRepo->find($user->getCustomer()->getId());
-            $this->currentCustomer = $user->getCustomer();
-            $this->customer        = $this->currentCustomer;
-
-            // côté Customers, ton getMember() existe
-            $this->currentMember   = $this->currentCustomer?->getMember();
-            $this->member          = $this->currentMember;
-        }
-    }
-
-    /** Charge le client courant depuis la session 'idcustomer', sinon via userSession() */
-    public function customerSession(): ?Customers
-    {
-        if ($this->currentCustomer instanceof Customers) return $this->currentCustomer;
-
-        $id = $this->session()->get('idcustomer');
-        if ($id && $this->customersRepo) {
-            $this->currentCustomer = $this->customersRepo->find($id);
-            $this->customer        = $this->currentCustomer;
-            return $this->currentCustomer;
+        // Si pas de token ou pas authentifié (remembered suffit), on sort proprement.
+        if (!$this->security?->getToken() || !$this->security->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $this->currentCustomer = null;
+            $this->currentMember   = null;
+            $this->currentBoard    = null;
+            $this->session()?->remove('idcustomer');
+            $this->session()?->remove('idboard');
+            $this->session()?->remove('avatar');
+            return;
         }
 
-        // fallback : utilisateur connecté → customer
-        $this->userSession();
-        return $this->currentCustomer;
-    }
-
-    /** Résout/retourne le membre courant si possible (via session mail ou user) */
-    public function memberSession(): ?Activmember
-    {
-        if ($this->currentMember instanceof Activmember) return $this->currentMember;
-
-        // si déjà chargé par userSession()
-        $this->userSession();
-        if ($this->currentMember instanceof Activmember) return $this->currentMember;
-
-        // sinon via repo + email si nécessaire (à adapter si tu veux)
-        return null;
-    }
-
-    // ========= Admin-like helpers =========
-    public function withAdminNavFlags(array $ctx, int|string $nav): array
-    {
-        $active = \is_numeric($nav) ? \max(1, \min(7, (int)$nav)) : 0;
-        for ($i = 1; $i <= 7; $i++) {
-            $ctx['m'.$i] = ($i === $active);
-        }
-        return $ctx;
-    }
-
-    public function resolveCurrentBoard(): ?Board
-    {
-        if ($this->currentBoard instanceof Board) {
-            // aligne l’alias
-            $this->board = $this->currentBoard;
-            return $this->currentBoard;
+        $user = $this->security->getUser();
+        if (!$user instanceof User) {
+            // Un autre type d'utilisateur (ex: InMemoryUser) : ne rien faire, rester neutre
+            $this->currentCustomer = null;
+            $this->currentMember   = null;
+            $this->currentBoard    = null;
+            return;
         }
 
-        // 1) via session
-        $s = $this->session();
-        if ($s->has('idboard') && $this->boardRepo) {
-            $b = $this->boardRepo->find((int)$s->get('idboard'));
-            if ($b instanceof Board) {
-                $this->currentBoard = $b;
-                $this->board = $b;
-                return $b;
+        // ---- Customer (si présent sur l'entité User) -------------------------------------------
+        $customer = null;
+        if (\method_exists($user, 'getCustomer')) {
+            /** @var Customers|null $customer */
+            $customer = $user->getCustomer();
+        }
+        $this->currentCustomer = $customer;
+
+        if ($customer && \method_exists($customer, 'getId')) {
+            $this->session()->set('idcustomer', $customer->getId());
+        }
+
+        // ---- Board (si vous avez une relation Customer -> Board) --------------------------------
+        $board = null;
+
+        // Exemple 1 : direct $customer->getBoard()
+        //if (!$board && $customer && \method_exists($customer, 'getBoard')) {
+        //    $board = $customer->getBoard();
+        //}
+
+        // Exemple 2 : via un wrapper $customer->getBoardwbcustomer()?->getBoard()
+        if (!$board && $customer && \method_exists($customer, 'getBoardwbcustomer')) {
+            $wb = $customer->getBoardwbcustomer();
+            if ($wb && \method_exists($wb, 'getBoard')) {
+                $board = $wb->getBoard();
             }
         }
 
-        // 2) via customer → wbCustomer → board
-        $this->customerSession();
-        $this->initBoard(); // sécurisée, pose aussi $this->currentBoard/$this->board si trouvé
+        //dump($customer,$board);
 
-        return $this->currentBoard;
+        if ($board instanceof Board) {
+            $this->currentBoard = $board;
+            $this->board = $this->currentBoard;
+            $this->session()->set('idboard', \method_exists($board, 'getId') ? $board->getId() : null);
+        } else {
+            $this->currentBoard = null;
+            $this->session()->remove('idboard');
+        }
+
+        // ---- Avatar (VichUploader) --------------------------------------------------------------
+        if ($this->uploaderHelper && \method_exists($user, 'getAvatar') && $user->getAvatar()) {
+            // IMPORTANT : passer le nom du CHAMP file (ex: "imageFile"), PAS le mapping
+            try {
+                $avatarPath = $this->uploaderHelper->asset($user->getAvatar(), 'imageFile');
+                if ($avatarPath) {
+                    $this->session()->set('avatar', $avatarPath);
+                }
+            } catch (\Throwable $e) {
+                $this->logger?->warning('Avatar asset() failed', ['exception' => $e]);
+            }
+        }
+
+        // ---- Autres champs courants (ex: email) -------------------------------------------------
+        if (\method_exists($user, 'getEmail') && $user->getEmail()) {
+            $this->session()->set('mailmember', $user->getEmail());
+        }
     }
 
-    /** Raccourci : récupérer une Boardslist "admin site" (id par défaut 4, ajuste selon ton domaine) */
-    public function getAdminPwSite(int $id = 4): ?Boardslist
+    /**
+     * Proxy public pour permettre à un EventSubscriber d'initialiser le contexte.
+     */
+    public function ensureUserSessionBooted(): void
     {
-        return $this->boardslistRepo?->find($id);
+        $this->bootUserSession();
     }
 
-    /** Compat: méthode utilitaire retrouvée dans tes traits */
-    public function getDispatchByEmail(string $email): mixed
+    // ====== Helpers =========================================================================
+
+    /** Retourne la Session courante, ou null si indisponible (ex: CLI). */
+    protected function session(): ?SessionInterface
     {
-        if (!$this->activMemberRepo) return null;
-        return \method_exists($this->activMemberRepo, 'finddispatchmail')
-            ? $this->activMemberRepo->finddispatchmail($email)
-            : $this->activMemberRepo->findOneBy(['email' => $email]);
+        return $this->requestStack?->getSession();
+    }
+
+    /** Ajoute un flash (silencieux si pas de session). */
+    protected function flash(string $type, string $message): void
+    {
+        $this->session()?->getFlashBag()->add($type, $message);
+    }
+
+    /** Retourne l'utilisateur App\Entity\Users\User ou null. */
+    protected function getUserOrNull(): ?User
+    {
+        $u = $this->security?->getUser();
+        return $u instanceof User ? $u : null;
+    }
+
+    /**
+     * Retourne l'utilisateur App\Entity\Users\User ou lève une AccessDeniedException.
+     * À utiliser dans une ACTION qui REQUIERT un utilisateur (plutôt que dans le __construct).
+     */
+    protected function requireUser(): User
+    {
+        $user = $this->getUserOrNull();
+        if (!$user instanceof User) {
+            throw new AccessDeniedException();
+        }
+        return $user;
     }
 
     // ========= PublicSession: participant courant =========
@@ -283,69 +242,48 @@ trait UserSessionTrait
         return $p;
     }
 
-    // ========= Setters pratiques sur la session =========
-    public function setTypeUser(?string $type): void
+    /** Indique si un utilisateur est présent (remembered ou fully). */
+    protected function isLoggedIn(): bool
     {
-        $s = $this->session();
-        if ($type === null) { $s->remove('typeuser'); return; }
-        $s->set('typeuser', $type);
+        return (bool) ($this->security?->isGranted('IS_AUTHENTICATED_REMEMBERED'));
     }
 
-    /** Ecrit le mail membre en session (utilisé par memberSession) */
-    public function setMemberEmail(?string $email): void
-    {
-        $s = $this->session();
-        if ($email === null || $email === '') {
-            if ($s->has('mailmember')) $s->remove('mailmember');
-            $this->currentMember = null;
-            return;
-        }
-        $s->set('mailmember', $email);
-        $this->currentMember = null; // force rechargement
-    }
+    /** Raccourcis pour lire l’état courant initialisé par bootUserSession(). */
+    protected function currentCustomer(): ?Customers { return $this->currentCustomer; }
+    protected function currentMember(): ?Activmember { return $this->currentMember; }
+    protected function currentBoard(): ?Board { return $this->currentBoard; }
 
-    public function setCustomerId(?int $id): void
+    /** Détection naïve de l’agent pour poser 'agent' = 'mobile/' ou 'desk/' en session. */
+    protected function detectAgent(): void
     {
-        $s = $this->session();
-        if ($id === null) { $s->remove('idcustomer'); $this->currentCustomer = $this->customer = null; return; }
-        $s->set('idcustomer', $id);
-        $this->currentCustomer = $this->customer = null; // force reload
-    }
-
-    public function setBoardId(?int $id): void
-    {
-        $s = $this->session();
-        if ($id === null) { $s->remove('idboard'); $this->currentBoard = $this->board = null; return; }
-        $s->set('idboard', $id);
-        $this->currentBoard = $this->board = null; // force reload
-    }
-
-    // ========= Initialisation du board + avatar (sécurisée) =========
-    protected function initBoard(): void
-    {
-        // Customer peut être null
-        $customer = $this->currentCustomer ?? $this->customer ?? null;
-        if (!$customer instanceof Customers) {
+        $req = $this->requestStack?->getCurrentRequest();
+        if (!$req) {
+            $this->isMobile = false;
+            $this->agentPrefix = 'desk/';
+            $this->useragentP = $this->agentPrefix;
             return;
         }
 
-        // Profil / Avatar optionnels
-        $profil = \method_exists($customer, 'getProfil') ? $customer->getProfil() : null;
-        $avatar = $profil && \method_exists($profil, 'getAvatar') ? $profil->getAvatar() : null;
+        $ua = (string) ($req->headers->get('User-Agent') ?? '');
+        $isMobile = \preg_match('/Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i', $ua) === 1;
 
-        // 👉 Vich helper présent + avatar + mapping "imageFile" dans App\Entity\Media\Avatar
-        if ($avatar && $this->helper) {
-            // NB: on doit passer le **nom du champ** annoté (imageFile), pas le nom de mapping ('avatar')
-            $this->session()->set('avatar', $this->helper->asset($avatar, 'imageFile'));
+        $this->isMobile   = $isMobile;
+        $this->agentPrefix = $isMobile ? 'mobile/' : 'desk/';
+        $this->useragentP  = $this->agentPrefix;
+
+        $this->session()?->set('agent', $this->agentPrefix);
+    }
+
+    /** Remise à zéro des variables de contexte (utile après logout par ex.). */
+    protected function clearUserContext(): void
+    {
+        foreach (['agent','idcustomer','idboard','avatar','mailmember'] as $k) {
+            if ($this->session()?->has($k)) {
+                $this->session()->remove($k);
+            }
         }
-
-        // Board via la relation Wbcustomers → Board (si présente)
-        $wb = \method_exists($customer, 'getBoardwbcustomer') ? $customer->getBoardwbcustomer() : null;
-        $board = $wb && \method_exists($wb, 'getBoard') ? $wb->getBoard() : null;
-
-        if ($board instanceof Board) {
-            $this->currentBoard = $board;
-            $this->board        = $board;
-        }
+        $this->currentCustomer = null;
+        $this->currentMember   = null;
+        $this->currentBoard    = null;
     }
 }

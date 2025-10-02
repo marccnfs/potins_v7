@@ -3,7 +3,7 @@
 namespace App\Controller\Game;
 
 use App\Attribute\RequireParticipant;
-use App\Classe\PublicSession;
+use App\Classe\UserSessionTrait;
 use App\Entity\Games\EscapeGame;
 use App\Entity\Media\Illustration;
 use App\Entity\Users\Participant;
@@ -22,7 +22,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class EscapeGardenController extends AbstractController
 {
-    use PublicSession;
+    use UserSessionTrait;
 
     #[Route('/escape/home', name: 'home')]
     public function index2(EscapeGameRepository $repo,Security $security): Response {
