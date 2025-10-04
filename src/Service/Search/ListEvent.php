@@ -4,6 +4,7 @@
 namespace App\Service\Search;
 
 use App\Repository\OrdersRepository;
+use App\Repository\OrderProductsRepository;
 use App\Repository\PostEventRepository;
 use App\Service\Modules\Resator;
 use Doctrine\ORM\NonUniqueResultException;
@@ -15,44 +16,54 @@ class ListEvent
     private OrdersRepository $orderrepo;
     private PostEventRepository $eventrepo;
     private Resator $resator;
+    private OrderProductsRepository $orderProductsRepository;
 
-    public function __construct(OrdersRepository $orderrepo, PostEventRepository $eventrepo, Resator $resator)
-    {
-        $this->orderrepo = $orderrepo;
+    public function __construct(OrdersRepository $orderrepo, PostEventRepository $eventrepo, Resator $resator, OrderProductsRepository $orderProductsRepository)
+    {  $this->orderrepo = $orderrepo;
         $this->eventrepo=$eventrepo;
         $this->resator=$resator;
+        $this->orderProductsRepository = $orderProductsRepository;
     }
 
     public function listEventResa($locatemediaId): array
     {
         $events= $this->eventrepo->findEventByOneLocateMedia($locatemediaId);
 
-        $orders = $this->orderrepo->findOrderEventByLocateMedia($locatemediaId);
+        $orderProducts = $this->orderProductsRepository->findPendingByBoardIdWithAssociations($locatemediaId);
+
 
         $tabdatesevents=[];
-        foreach ($events as $l_event) {
-            $tabdatesevents[$l_event->getId()]=$this->resator->BuildTabDateEvent($l_event);
 
-            if ($orders) {
-                foreach ($orders as $order){
+        foreach ($events as $event) {
+            $tabdatesevents[$event->getId()]=$this->resator->BuildTabDateEvent($event);
+        }
 
-                    if (!$order->isValider() && $order->getListproducts()[0]->getSubscription()->getEvent()->getId()===$l_event->getId()){
-
-                        //  $tabdatesevents[$l_event->getId()]['order'][$order->getId]=$order;
-
-                        $producs=$order->getListproducts(); // toutes les inscriptions pour cet order
-
-                        foreach ($producs as $prod){
-                            foreach ($tabdatesevents[$l_event->getId()]['date'] as $key => $date) {
-                                if ($key === $prod->getSubscription()->getStarttime()->getTimestamp()) {
-                                    $tabdatesevents[$l_event->getId()]['date'][$key][] = $prod;
-                                }
-                            }
-                        }
-
-                    }
-                }
+        foreach ($orderProducts as $orderProduct) {
+            $subscription = $orderProduct->getSubscription();
+            if ($subscription === null) {
+                continue;
             }
+
+            $event = $subscription->getEvent();
+            if ($event === null) {
+                continue;
+            }
+
+            $eventId = $event->getId();
+            if (!isset($tabdatesevents[$eventId])) {
+                continue;
+            }
+
+            $starttime = $subscription->getStarttime();
+            if ($starttime === null) {
+                continue;
+            }
+
+            $timestamp = $starttime->getTimestamp();
+            if (!isset($tabdatesevents[$eventId]['date'][$timestamp])) {
+                $tabdatesevents[$eventId]['date'][$timestamp] = [];
+            }
+            $tabdatesevents[$eventId]['date'][$timestamp][] = $orderProduct;
         }
         return $tabdatesevents;
     }

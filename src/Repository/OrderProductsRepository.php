@@ -40,6 +40,31 @@ class OrderProductsRepository extends ServiceEntityRepository
         }
     }
 
+    public function findPendingByBoardIdWithAssociations(int $boardId): array
+    {
+        return $this->createQueryBuilder('orderProduct')
+            ->leftJoin('orderProduct.subscription', 'subscription')
+            ->addSelect('subscription')
+            ->leftJoin('subscription.event', 'event')
+            ->addSelect('event')
+            ->leftJoin('event.locatemedia', 'board')
+            ->leftJoin('orderProduct.registered', 'registered')
+            ->addSelect('registered')
+            ->leftJoin('orderProduct.docs', 'docs')
+            ->addSelect('docs')
+            ->leftJoin('orderProduct.order', 'orderEntity')
+            ->addSelect('orderEntity')
+            ->andWhere('board.id = :boardId')
+            ->setParameter('boardId', $boardId)
+            ->andWhere('orderEntity.valider = :validated')
+            ->setParameter('validated', false)
+            ->orderBy('event.id', 'ASC')
+            ->addOrderBy('subscription.starttime', 'ASC')
+            ->addOrderBy('orderProduct.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 
     public function findOrderProdWithEventAndRegistered($value): array
     {
@@ -56,8 +81,11 @@ class OrderProductsRepository extends ServiceEntityRepository
             ->addSelect('pt')
             ->getQuery()
             ->getResult()
-        ;
-   }
+            ;
+    }
+
+
+
 
     /**
      * @throws NonUniqueResultException

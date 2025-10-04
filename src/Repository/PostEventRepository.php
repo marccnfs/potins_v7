@@ -43,6 +43,39 @@ class PostEventRepository extends ServiceEntityRepository
         }
     }
 
+    public function queryKeyEvent(): QueryBuilder
+    {
+        return $this->createQueryBuilder('p')
+            -> andwhere('p.deleted = false')
+            -> leftJoin('p.appointment', 'ap')
+            -> addSelect('ap')
+            -> leftJoin('ap.idPeriods', 'pr')
+            -> addSelect('pr')
+            -> leftJoin('ap.tabdate', 'td')
+            -> addSelect('td')
+            -> leftJoin('ap.localisation', 'loc')
+            -> addSelect('loc')
+            -> leftJoin('p.tagueries', 'tag')
+            -> addSelect('tag')
+            -> leftJoin('p.media', 'm')
+            -> addSelect('m')
+            -> leftJoin('m.imagejpg', 'pic')
+            -> addSelect('pic')
+            -> leftJoin('p.potin', 'ptn')
+            -> addSelect('ptn')
+            -> leftJoin('ptn.htmlcontent', 'ctn')
+            -> addSelect('ctn')
+            -> leftJoin('ptn.media', 'md')
+            -> addSelect('md')
+            -> leftJoin('p.locatemedia', 'lm')
+            -> addSelect('lm')
+            -> leftJoin('lm.locality', 'cty')
+            -> addSelect('cty')
+            -> leftJoin('md.imagejpg', 'jpg')
+            -> addSelect('jpg');
+    }
+
+
     public function findEventByOneLocateMedia($id){
         $date=new dateTime();
         $date->sub(new DateInterval('P1D'));
@@ -188,37 +221,6 @@ class PostEventRepository extends ServiceEntityRepository
 
 
 
-    public function queryKeyEvent(): QueryBuilder
-    {
-        return $this->createQueryBuilder('p')
-            -> andwhere('p.deleted = false')
-            -> leftJoin('p.appointment', 'ap')
-            -> addSelect('ap')
-            -> leftJoin('ap.idPeriods', 'pr')
-            -> addSelect('pr')
-            -> leftJoin('ap.tabdate', 'td')
-            -> addSelect('td')
-            -> leftJoin('ap.localisation', 'loc')
-            -> addSelect('loc')
-            -> leftJoin('p.tagueries', 'tag')
-            -> addSelect('tag')
-            -> leftJoin('p.media', 'm')
-            -> addSelect('m')
-            -> leftJoin('m.imagejpg', 'pic')
-            -> addSelect('pic')
-            -> leftJoin('p.potin', 'ptn')
-            -> addSelect('ptn')
-            -> leftJoin('ptn.htmlcontent', 'ctn')
-            -> addSelect('ctn')
-            -> leftJoin('ptn.media', 'md')
-            -> addSelect('md')
-            -> leftJoin('p.locatemedia', 'lm')
-            -> addSelect('lm')
-            -> leftJoin('lm.locality', 'cty')
-            -> addSelect('cty')
-            -> leftJoin('md.imagejpg', 'jpg')
-            -> addSelect('jpg');
-    }
 
     public function queryEventandPotin(): QueryBuilder
     {

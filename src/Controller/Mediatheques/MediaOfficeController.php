@@ -3,7 +3,8 @@
 
 namespace App\Controller\Mediatheques;
 
-use App\Classe\MemberSession;
+use App\Classe\UserSessionTrait;
+use App\Lib\Links;
 use App\Service\Search\ListEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,16 +17,17 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class MediaOfficeController extends AbstractController
 {
-    use MemberSession;
+    use UserSessionTrait;
 
     #[Route('/planning-media', name:"office_media")]
     public function officeMediaBoard(ListEvent $listEvent): Response
     {
         $tabdatesevents=$listEvent->listEventResa($this->board->getId());
-        $vartwig=$this->menuNav->templatingadmin(
-            'media_office',
-            $this->board->getNameBoard(),
+
+        $vartwig=$this->menuNav->admin(
             $this->board,
+            'media_office',
+            links::ADMIN,
             1
         );
 
