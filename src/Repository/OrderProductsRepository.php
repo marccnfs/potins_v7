@@ -47,6 +47,8 @@ class OrderProductsRepository extends ServiceEntityRepository
             ->addSelect('subscription')
             ->leftJoin('subscription.event', 'event')
             ->addSelect('event')
+            ->leftJoin('subscription.wbprodorder', 'wb')
+            ->addSelect('wb')
             ->leftJoin('event.locatemedia', 'board')
             ->leftJoin('orderProduct.registered', 'registered')
             ->addSelect('registered')

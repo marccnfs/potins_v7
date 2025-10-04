@@ -65,6 +65,14 @@ class PuzzleVideoQuizType extends AbstractType
                 'required' => false,
                 'data'     => $cfg['okMessage'] ?? 'Bravo !',
             ])
+            ->add('finalClue', TextareaType::class, [
+                'label'    => 'Indice final',
+                'mapped'   => false,
+                'required' => false,
+                'attr'     => ['rows' => 2],
+                'data'     => $cfg['finalClue'] ?? '',
+                'help'     => 'Fragment ou mot-clé révélé après la vidéo.',
+            ])
 
             ->add('hintsJson', TextareaType::class, [
                 'label'    => 'Indices (JSON)',

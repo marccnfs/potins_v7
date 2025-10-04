@@ -30,7 +30,7 @@ class Subscription
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTime $endtime;
 
-    #[ORM\OneToOne(targetEntity: WbOrderProducts::class, mappedBy: 'subscription')]
+    #[ORM\OneToOne(targetEntity: WbOrderProducts::class, mappedBy: 'subscription',fetch: 'LAZY')]
     private ?WbOrderProducts $wbprodorder = null;
 
     #[ORM\ManyToOne(targetEntity: PostEvent::class)]

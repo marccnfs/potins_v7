@@ -1,71 +1,116 @@
 {# templates/escape/garden.html.twig #}
 {% block body %}
-<div class="_wb">
-    <div class="container_bo_member">
-        <div class="bo_content">
+    {% set fragmentsPayload = [] %}
+    {% for i in 1..totalSteps %}
+        {% set fragmentsPayload = fragmentsPayload|merge([{ 'step': i, 'text': fragments[i], 'label': stepLabels[i] }]) %}
+    {% endfor %}
+    <div class="_wb end-wrapper"
+         data-controller="telemetry finale share"
+         data-telemetry-slug-value="{{ eg.shareSlug }}"
+         data-telemetry-csrf-value="{{ csrf_token('play') }}"
+         data-finale-slug-value="{{ eg.shareSlug }}"
+         data-finale-fragments-value="{{ fragmentsPayload|json_encode|e('html_attr') }}"
+         data-finale-final-prompt-value="{{ (finale.prompt ?? '')|e('html_attr') }}"
+         data-finale-final-reveal-value="{{ (finale.reveal ?? '')|e('html_attr') }}"
+         data-finale-missing-fragments-value="{{ missingFragments|json_encode|e('html_attr') }}"
+         data-finale-total-steps-value="{{ totalSteps }}">
+        <div class="container_bo_member">
+            <div class="bo_content">
+                <div class="end-layout">
+                    <section class="end-hero card">
+                        <header class="end-title-block">
+                            <h1 class="end-title">Félicitations 🎉</h1>
+                            <p class="end-text">
+                                Tu as terminé <strong>{{ eg.title }}</strong> !
+                            </p>
+                            {% if finale.prompt %}
+                                <p class="end-prompt" data-finale-target="prompt">{{ finale.prompt|nl2br }}</p>
+                            {% else %}
+                                <p class="end-prompt muted" data-finale-target="prompt">Collecte les fragments pour découvrir le message secret…</p>
+                            {% endif %}
+                        </header>
+                        <div class="end-stats">
+                            <div class="stat">
+                                <div class="stat-value">{{ totalSteps }}/{{ totalSteps }}</div>
+                                <div class="stat-label">Épreuves réussies</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" data-finale-target="duration" data-share-target="duration">—</div>
+                                <div class="stat-label">Temps total</div>
+                            </div>
+                        </div>
 
-    {% set total = 6 %}
-    {% set steps = {
-        1: 'Cryptex numérique',
-        2: 'QR code géolocalisé',
-        3: 'Puzzle numérique',
-        4: 'Formulaire logique',
-        5: 'Vidéo interactive',
-        6: 'Code HTML minimal'
-    } %}
 
-    <div class="end-layout" data-controller="confetti share">
-        <canvas class="confetti-canvas" data-confetti-target="canvas"></canvas>
+                        <div class="end-actions">
+                            <a class="btn btn-primary" href="{{ path('play_entry', { slug: eg.shareSlug }) }}">Rejouer</a>
+                            <button class="btn btn-light" data-action="share#copy">Partager le lien</button>
+                            <a class="btn" href="{{ path('wizard_overview', { id: eg.id }) }}">Retour à l’atelier</a>
+                        </div>
+                    </section>
 
-        <section class="end-hero card">
-            <h1 class="end-title">Félicitations 🎉</h1>
-            <p class="end-text">
-                Tu as terminé <strong>{{ eg.title }}</strong> !
-                {% if eg.universe %}<br><span class="muted">{{ eg.universe|join(' ') }}</span>{% endif %}
-            </p>
+                    <section class="card finale-card" data-finale-target="module">
+                        <div class="finale-card__header">
+                            <h2>Révélation finale</h2>
+                            <p class="muted">Réorganise les fragments ou saisis la phrase complète pour déclencher la révélation.</p>
+                        </div>
 
-            <div class="end-stats">
-                <div class="stat">
-                    <div class="stat-value">6/6</div>
-                    <div class="stat-label">Épreuves réussies</div>
+                        {% if missingFragments %}
+                            <div class="alert alert-warning" data-finale-target="missingNotice">
+                                <strong>Fragments manquants :</strong>
+                                <ul>
+                                    {% for step in missingFragments %}
+                                        <li>{{ stepLabels[step] }} — ajoute un « Indice final » dans l’atelier.</li>
+                                    {% endfor %}
+                                </ul>
+                                <p class="muted">Tu peux quand même tester l’interface ci-dessous, mais la phrase finale sera incomplète.</p>
+                            </div>
+                        {% endif %}
+
+                        <div class="finale-board" data-finale-target="board">
+                            <div class="finale-pool" data-finale-target="pool" aria-label="Fragments mélangés"></div>
+                            <ol class="finale-slots" data-finale-target="slots" aria-label="Ordre final"></ol>
+                        </div>
+
+                        <div class="finale-manual" data-finale-target="manual">
+                            <label for="finale-input" class="finale-manual__label">Saisie libre</label>
+                            <textarea id="finale-input"
+                                      class="finale-manual__input"
+                                      rows="2"
+                                      placeholder="Tape la phrase si tu connais déjà la solution"
+                                      data-finale-target="input"></textarea>
+                        </div>
+
+                        <div class="finale-actions">
+                            <button class="btn btn-light" type="button" data-action="finale#shuffle" data-finale-target="shuffle">🔀 Remélanger</button>
+                            <button class="btn btn-primary" type="button" data-action="finale#validate" data-finale-target="validate">Valider</button>
+                        </div>
+
+                        <div class="finale-feedback" data-finale-target="feedback" role="status"></div>
+
+                        <section class="finale-reveal" data-finale-target="reveal" hidden>
+                            <header>
+                                <h3>Message final</h3>
+                            </header>
+                            <p class="finale-reveal__text" data-finale-target="revealText"></p>
+                            <p class="finale-reveal__time muted" data-finale-target="finalTime"></p>
+                            <div class="finale-celebration" data-finale-target="celebration"></div>
+                        </section>
+                    </section>
+
+                    <section class="card recap-card">
+                        <h2>Récapitulatif des épreuves</h2>
+                        <ol class="steps-list">
+                            {% for i in 1..totalSteps %}
+                                <li class="step-item">
+                                    <span class="badge badge-success">Terminé</span>
+                                    <span class="step-index">{{ i }}</span>
+                                    <span class="step-title">{{ stepLabels[i] }}</span>
+                                    <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: i }) }}">Revoir</a>
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    </section>
                 </div>
-                {# Option : durée si tu l’enregistres (localStorage ou BDD). On tente un affichage depuis localStorage. #}
-                <div class="stat">
-                    <div class="stat-value" data-share-target="duration">—</div>
-                    <div class="stat-label">Temps total</div>
-                </div>
-            </div>
-
-            <div class="end-actions">
-                <a class="btn btn-primary" href="{{ path('play_entry', { slug: eg.shareSlug }) }}">Rejouer</a>
-                <button class="btn btn-light" data-action="share#copy">Partager le lien</button>
-                <a class="btn" href="{{ path('wizard_overview', { id: eg.id }) }}">Retour à l’atelier</a>
-            </div>
-        </section>
-
-        <section class="card">
-            <h2>Récapitulatif des épreuves</h2>
-            <ol class="steps-list">
-                {% for i in 1..total %}
-                    <li class="step-item">
-                        <span class="badge badge-success">Terminé</span>
-                        <span class="step-index">{{ i }}</span>
-                        <span class="step-title">{{ steps[i] }}</span>
-                        <a class="btn btn-light" href="{{ path('play_step', { slug: eg.shareSlug, step: i }) }}">Revoir</a>
-                    </li>
-                {% endfor %}
-            </ol>
-        </section>
-
-        <section class="card tip">
-            <h2>Envie d’aller plus loin ?</h2>
-            <ul class="bullets">
-                <li>Ajoute des <strong>indices</strong> supplémentaires sur les étapes difficiles.</li>
-                <li>Personnalise la page d’accueil avec des <strong>images</strong> et un <strong>teaser</strong>.</li>
-                <li>Propose un <strong>score</strong> (temps ou indices utilisés) pour challenger les équipes.</li>
-            </ul>
-        </section>
-    </div>
 
         </div>
     </div>

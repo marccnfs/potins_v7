@@ -16,6 +16,7 @@ import HintsController from "./hints_controller";
 import ConfettiController from "./confetti_controller";
 import ShareController from "./share_controller";
 import MenuController from "./menu_controller";
+import FinaleController from "./finale_controller";
 
 
 
@@ -36,3 +37,4 @@ Stimulus.register("hints", HintsController);
 Stimulus.register("confetti", ConfettiController);
 Stimulus.register("share", ShareController);
 Stimulus.register("menu", MenuController);
+Stimulus.register("finale", FinaleController);

@@ -44,6 +44,14 @@ class PuzzleHtmlMinType extends AbstractType
             ->add('okMessage', TextType::class, [
                 'label'=>'Message de réussite', 'mapped'=>false, 'required'=>false, 'data'=>$cfg['okMessage'] ?? 'Bravo !',
             ])
+            ->add('finalClue', TextareaType::class, [
+                'label'    => 'Indice final',
+                'mapped'   => false,
+                'required' => false,
+                'attr'     => ['rows' => 2],
+                'data'     => $cfg['finalClue'] ?? '',
+                'help'     => 'Fragment supplémentaire dévoilé après validation de cette épreuve.',
+            ])
 
             ->add('hintsJson', TextareaType::class, [
                 'label'    => 'Indices (JSON)',

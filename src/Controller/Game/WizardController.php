@@ -83,6 +83,16 @@ class WizardController extends AbstractController
             $u['objectif']   = (string)$form->get('goal')->getData();
             $u['modeEmploi'] = (string)$form->get('howto')->getData();
             $u['guide']      = (string)$form->get('guide')->getData();
+            $finalPrompt = trim((string)$form->get('finalPrompt')->getData());
+            $finalReveal = trim((string)$form->get('finalReveal')->getData());
+            if ($finalPrompt !== '' || $finalReveal !== '') {
+                $u['finale'] = [
+                    'prompt' => $finalPrompt,
+                    'reveal' => $finalReveal,
+                ];
+            } else {
+                unset($u['finale']);
+            }
             $eg->setUniverse($u);
 
             // 3) Titres d’étapes (array 1..6)
@@ -249,6 +259,7 @@ class WizardController extends AbstractController
                     $prompt  = (string)$form->get('prompt')->getData();
                     $solution   = strtoupper((string)$form->get('solution')->getData() ?: '');
                     $hashMode   = (bool)$form->get('hashMode')->getData();
+                    $finalClue = trim((string)$form->get('finalClue')->getData());
 
                     // 3) Indices (JSON) — normalisation & exigence >= 1
                     $hintsJson = (string) $form->get('hintsJson')->getData();
@@ -283,6 +294,7 @@ class WizardController extends AbstractController
                         'scramble' => (bool)$form->get('scramble')->getData(),
                         'autocheck'=> (bool)$form->get('autocheck')->getData(),
                         'successMessage' => (string)$form->get('successMessage')->getData() ?: 'Bravo !',
+                        'finalClue' => $finalClue,
                         'hints'     => $hints,
                     ]);
 
@@ -329,6 +341,7 @@ class WizardController extends AbstractController
                     $qrValidateMessage = trim((string)$form->get('qrValidateMessage')->getData());
                     $qrAnswerTitle = trim((string)$form->get('qrAnswerTitle')->getData());
                     $qrAnswerBody = (string)$form->get('qrAnswerBody')->getData();
+                    $finalClue = trim((string)$form->get('finalClue')->getData());
 
                     // 3) Indices (JSON) — normalisation & exigence >= 1
                     $hintsJson = (string) $form->get('hintsJson')->getData();
@@ -369,6 +382,7 @@ class WizardController extends AbstractController
                             'prompt' => $prompt,
                             'mode'   => 'qr_only',
                             'qrOnly' => $qrOnly,
+                            'finalClue' => $finalClue,
                             'hints'  => $hints,
                         ]);
                     } else {
@@ -382,6 +396,7 @@ class WizardController extends AbstractController
                             'okMessage' => $okMessage,
                             'denyMessage'      => $denyMessage,
                             'needHttpsMessage' => $needHttpsMessage,
+                            'finalClue' => $finalClue,
                             'hints'     => $hints,
                         ]);
                     }
@@ -403,6 +418,7 @@ class WizardController extends AbstractController
                     $rows    = (int) ($form->get('rows')->getData() ?? ($old['rows'] ?? 3));
                     $cols    = (int) ($form->get('cols')->getData() ?? ($old['cols'] ?? 3));
                     $okMsg   = (string) $form->get('okMessage')->getData();
+                    $finalClue = trim((string)$form->get('finalClue')->getData());
 
                     // bornes de sécurité (au cas où)
                     $rows = max(2, min(10, $rows));
@@ -477,6 +493,7 @@ class WizardController extends AbstractController
                         'rows'      => $rows,
                         'cols'      => $cols,
                         'okMessage' => $okMsg,
+                        'finalClue' => $finalClue,
                         'hints'     => $hints,
                     ]);
 
@@ -499,6 +516,7 @@ class WizardController extends AbstractController
                     $raw = (string)$form->get('questionsJson')->getData();
                     $okMsg   = (string)$form->get('okMessage')->getData();
                     $failMsg = (string)$form->get('failMessage')->getData();
+                    $finalClue = trim((string)$form->get('finalClue')->getData());
 
                     try {
                         $data = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
@@ -568,6 +586,7 @@ class WizardController extends AbstractController
                         'questions'   => $questions,
                         'okMessage' => $okMsg,
                         'failMessage' =>$failMsg,
+                        'finalClue' => $finalClue,
                         'hints'     => $hints,
                     ]);
 
@@ -584,6 +603,8 @@ class WizardController extends AbstractController
                     $title   = (string)$form->get('title')->getData();
                     $prompt  = (string)$form->get('prompt')->getData();
                     $okMsg   = (string)$form->get('okMessage')->getData();
+                    $finalClue = trim((string)$form->get('finalClue')->getData());
+
 
                     $cues = [];
                     $raw = (string)$form->get('cuesJson')->getData();
@@ -648,6 +669,7 @@ class WizardController extends AbstractController
                         'videoPath' => $videoPath,
                         'cues'      => \is_array($cues) ? $cues : [],
                         'okMessage' => $okMsg,
+                        'finalClue' => $finalClue,
                         'hints'     => $hints,
                     ]);
 
@@ -665,6 +687,7 @@ class WizardController extends AbstractController
                     $starterHtml = (string)$form->get('starterHtml')->getData();
                     $checks     = json_decode((string)$form->get('checksJson')->getData(), true) ?: [];
                     $okMessage   = (string)$form->get('okMessage')->getData();
+                    $finalClue = trim((string)$form->get('finalClue')->getData());
 
                     // 3) Indices (JSON) — normalisation & exigence >= 1
                     $hintsJson = (string) $form->get('hintsJson')->getData();
@@ -693,6 +716,7 @@ class WizardController extends AbstractController
                         'starterHtml' => $starterHtml,
                         'checks'      => $checks,
                         'okMessage' => $okMessage,
+                        'finalClue' => $finalClue,
                         'hints'     => $hints,
                     ]);
 

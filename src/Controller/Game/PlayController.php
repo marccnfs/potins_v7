@@ -198,6 +198,50 @@ class PlayController extends AbstractController
             ?? throw $this->createNotFoundException();
         $participant=$this->currentParticipant($req);
         $vartwig=$this->menuNav->templatepotins('the_end',Links::GAMES);
+        $total = 6;
+        $fragments = [];
+        $missing = [];
+        for ($i = 1; $i <= $total; ++$i) {
+            $puzzle = $eg->getPuzzleByStep($i);
+            $clue = null;
+            if ($puzzle) {
+                $cfg = $puzzle->getConfig() ?? [];
+                $raw = $cfg['finalClue'] ?? null;
+                if (\is_string($raw)) {
+                    $raw = trim($raw);
+                }
+                if (\is_string($raw) && $raw !== '') {
+                    $clue = $raw;
+                }
+            }
+            if ($clue === null) {
+                $missing[] = $i;
+            }
+            $fragments[$i] = $clue;
+        }
+
+        $universe = \is_array($eg->getUniverse()) ? $eg->getUniverse() : [];
+        $finale = \is_array($universe['finale'] ?? null) ? $universe['finale'] : [];
+        $finalPrompt = \is_string($finale['prompt'] ?? null) ? trim($finale['prompt']) : '';
+        $finalReveal = \is_string($finale['reveal'] ?? null) ? trim($finale['reveal']) : '';
+
+        $defaultLabels = [
+            1 => 'Cryptex numérique',
+            2 => 'QR code géolocalisé',
+            3 => 'Puzzle numérique',
+            4 => 'Formulaire logique',
+            5 => 'Vidéo interactive',
+            6 => 'Code HTML minimal',
+        ];
+        $customTitles = $eg->getTitresEtapes() ?? [];
+        $stepLabels = [];
+        for ($i = 1; $i <= $total; ++$i) {
+            $label = trim((string)($customTitles[$i] ?? ''));
+            if ($label === '') {
+                $label = $defaultLabels[$i] ?? sprintf('Étape %d', $i);
+            }
+            $stepLabels[$i] = $label;
+        }
 
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
@@ -206,6 +250,14 @@ class PlayController extends AbstractController
             'participant'=>$participant,
             'vartwig'=>$vartwig,
             'eg'=>$eg,
+            'fragments'=>$fragments,
+            'missingFragments'=>$missing,
+            'finale'=>[
+                'prompt' => $finalPrompt,
+                'reveal' => $finalReveal,
+            ],
+            'stepLabels'=>$stepLabels,
+            'totalSteps'=>$total,
         ]);
 
     }

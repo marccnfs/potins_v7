@@ -82,8 +82,9 @@
                             {% if subtitle %}
                                 <p class="hero-sub" style="opacity:.9;margin:.2rem 0 .6rem 0;">{{ subtitle|striptags|length > 180 ? (subtitle|striptags|slice(0,180) ~ '…') : subtitle|raw }}</p>
                             {% else %}
-                                <p class="hero-sub" style="opacity:.9;margin:.2rem 0 .6rem 0;">Prêt·e pour l’aventure ? Résous {{ total }} épreuves pour dévoiler le secret…</p>{% endif %}
+                                <p class="hero-sub" style="opacity:.9;margin:.2rem 0 .6rem 0;">Prêt·e pour l’aventure ? Résous {{ total }} épreuves pour dévoiler le secret…</p>
                             {% endif %}
+
                             <div class="hero-actions" style="display:flex;gap:.5rem;flex-wrap:wrap;">
                                 {% if active %}
                                     <a class="btn btn-primary" href="{{ path('play_step', { slug: eg.shareSlug, step: resume }) }}">Reprendre à l’étape {{ resume }}</a>

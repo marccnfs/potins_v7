@@ -19,6 +19,7 @@ class EscapeUniverseType extends AbstractType
         /** @var EscapeGame $eg */
         $eg = $options['eg'];
         $universe = is_array($eg->getUniverse()) ? $eg->getUniverse() : [];
+        $finale = is_array($universe['finale'] ?? null) ? $universe['finale'] : [];
         $stepTitles = $eg->getTitresEtapes() ?? [1=>'',2=>'',3=>'',4=>'',5=>'',6=>''];
 
         $b
@@ -37,6 +38,18 @@ class EscapeUniverseType extends AbstractType
             ->add('howto', TextareaType::class, [
                 'mapped'=>false, 'required'=>false, 'attr'=>['rows'=>3],
                 'data'=>$universe['modeEmploi'] ?? '', 'label'=>'Mode d’emploi (facultatif)',
+            ])
+            ->add('finalPrompt', TextareaType::class, [
+                'mapped'=>false, 'required'=>false, 'attr'=>['rows'=>3],
+                'data'=>$finale['prompt'] ?? '',
+                'label'=>'Introduction de la révélation finale',
+                'help'=>'Texte affiché avant la reconstitution des fragments.',
+            ])
+            ->add('finalReveal', TextareaType::class, [
+                'mapped'=>false, 'required'=>false, 'attr'=>['rows'=>3],
+                'data'=>$finale['reveal'] ?? '',
+                'label'=>'Message final révélé',
+                'help'=>'Message ou récompense affiché une fois les fragments remis dans l’ordre.',
             ])
             ->add('guide', ChoiceType::class, [
                 'mapped'=>false, 'required'=>false, 'expanded'=>false,

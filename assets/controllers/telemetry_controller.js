@@ -5,6 +5,22 @@ export default class extends Controller {
     static values = { slug: String, csrf: String, step: Number, restart: Boolean }
 
     connect(){
+        const storageBase = `eg:${this.slugValue}`;
+        const startedKey = `${storageBase}:startedAt`;
+        const totalKey = `${storageBase}:totalMs`;
+        const finaleKey = `${storageBase}:finalOrder`;
+        try {
+            if (this.hasRestartValue && this.restartValue) {
+                localStorage.setItem(startedKey, String(Date.now()));
+                localStorage.removeItem(totalKey);
+                localStorage.removeItem(finaleKey);
+            } else if (!localStorage.getItem(startedKey)) {
+                localStorage.setItem(startedKey, String(Date.now()));
+            }
+        } catch (err) {
+            console.warn('telemetry_controller: unable to access localStorage', err);
+        }
+
         // Start dès l’entrée de jeu
         const startBody = new FormData();
         if (this.hasStepValue) {

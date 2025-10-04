@@ -65,6 +65,14 @@ class PuzzleCryptexType extends AbstractType
                 'mapped' => false,
                 'data'     => $cfg['successMessage'] ?? 'Bravo !',
             ])
+            ->add('finalClue', TextareaType::class, [
+                'label'    => 'Indice final',
+                'mapped'   => false,
+                'required' => false,
+                'attr'     => ['rows' => 2],
+                'data'     => $cfg['finalClue'] ?? '',
+                'help'     => 'Fragment à collecter pour le message secret.',
+            ])
             ->add('hintsJson', TextareaType::class, [
                 'label'    => 'Indices (JSON)',
                 'mapped'   => false,

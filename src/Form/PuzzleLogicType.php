@@ -67,6 +67,14 @@ class PuzzleLogicType extends AbstractType
             ->add('failMessage', TextType::class, [
                 'label'=>'Message en cas d’erreur', 'mapped'=>false, 'required'=>false, 'data'=>$cfg['failMessage'] ?? 'Réessaie.',
             ])
+            ->add('finalClue', TextareaType::class, [
+                'label'    => 'Indice final',
+                'mapped'   => false,
+                'required' => false,
+                'attr'     => ['rows' => 2],
+                'data'     => $cfg['finalClue'] ?? '',
+                'help'     => 'Texte affiché dans l’ultime énigme pour reconstituer le message secret.',
+            ])
 
             ->add('hintsJson', TextareaType::class, [
                 'label'    => 'Indices (JSON)',
