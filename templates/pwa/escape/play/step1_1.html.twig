@@ -8,9 +8,7 @@
                     <h2>Étape {{ step }} —  {% if puzzle.title  %} {{ puzzle.title }} {% endif %}</h2>
                     {% if puzzle.prompt %}<p class="text-muted">{{ puzzle.prompt|nl2br }}</p>{% endif %}
 
-
-                    {% include 'pwa/escape/puzzles/_' ~ puzzle.type ~ '.html.twig' with { cfg: puzzle.config, eg: eg, step: step } %}
-
+                    {% include 'pwa/escape/puzzles/_' ~ puzzle.type ~ '.html.twig' with { cfg: puzzle.config, eg: eg, step: step, view: 'player' } %}
                     <div data-playflow-target="next" hidden class="mt-4">
                         {% if step < 6 %}
                             <a class="btn btn-primary" href="{{ path('play_step', {slug: eg.shareSlug, step: step+1}) }}">Étape suivante</a>

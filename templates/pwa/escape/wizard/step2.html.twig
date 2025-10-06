@@ -2,6 +2,9 @@
 {% block body %}
     {% set cfg = puzzle.config is iterable ? puzzle.config : {} %}
     {% set target = cfg.target|default({}) %}
+    {% set isQrOnly = cfg.mode|default('geo') == 'qr_only' %}
+    {% set qrOnlyRoutes = qrOnlyOptions is iterable ? qrOnlyOptions : {} %}
+
 
     <div class="_wb">
         <div class="container_bo_member">
@@ -49,6 +52,74 @@
                                 <p id="preview-qronly-answer-body" class="muted">Le texte s’affichera ici.</p>
                             </section>
                         </section>
+
+                        {% if isQrOnly %}
+                            <section class="card"
+                                     data-controller="qr-print"
+                                     data-qr-print-fetch-url-value="{{ qrOnlyRoutes.fetchUrl|default('') }}"
+                                     data-qr-print-print-url-value="{{ qrOnlyRoutes.printUrl|default('') }}"
+                                     data-qr-print-fallback-message-value="{{ 'escape.wizard.step2.qr_only.fallback'|trans }}"
+                                     data-qr-print-ready-message-value="{{ 'escape.wizard.step2.qr_only.status_ready'|trans }}"
+                                     data-qr-print-generated-message-value="{{ 'escape.wizard.step2.qr_only.status_generated'|trans }}"
+                                     data-qr-print-generating-message-value="{{ 'escape.wizard.step2.qr_only.status_generating'|trans }}"
+                                     data-qr-print-error-message-value="{{ 'escape.wizard.step2.qr_only.status_error'|trans }}"
+                                     data-qr-print-print-warning-value="{{ 'escape.wizard.step2.qr_only.status_print_missing'|trans }}"
+                                     data-qr-print-expires-pattern-value="{{ 'escape.wizard.step2.qr_only.expires'|trans({'%time%':'__TIME__'}) }}">
+                                <h3 style="margin:0 0 .5rem">{{ 'escape.wizard.step2.qr_only.title'|trans }}</h3>
+                                <p class="muted">{{ 'escape.wizard.step2.qr_only.description'|trans }}</p>
+
+                                <div class="muted"
+                                     data-qr-print-target="placeholder">
+                                    {{ qrOnlyRoutes.fetchUrl is defined and qrOnlyRoutes.fetchUrl ? 'escape.wizard.step2.qr_only.status_ready'|trans : 'escape.wizard.step2.qr_only.fallback'|trans }}
+                                </div>
+
+                                <div class="qr-print" data-qr-print-target="details" hidden>
+                                    <div class="qr-print__row">
+                                        <figure class="qr-print__figure">
+                                            <img data-qr-print-target="qrImage"
+                                                 src=""
+                                                 alt="{{ 'escape.wizard.step2.qr_only.qr_alt'|trans }}"
+                                                 width="220"
+                                                 height="220">
+                                            <figcaption class="muted" data-qr-print-target="expires"></figcaption>
+                                        </figure>
+
+                                        <div class="qr-print__answer" data-qr-print-target="answerWrapper" hidden>
+                                            <h4>{{ 'escape.wizard.step2.qr_only.answer_title'|trans }}</h4>
+                                            <img data-qr-print-target="answerImage"
+                                                 src=""
+                                                 alt="{{ 'escape.wizard.step2.qr_only.answer_alt'|trans }}"
+                                                 width="180"
+                                                 height="180">
+                                            <p class="muted">
+                                                <a data-qr-print-target="answerLink" href="#" target="_blank" rel="noopener">
+                                                    {{ 'escape.wizard.step2.qr_only.answer_link'|trans }}
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <p class="muted" data-qr-print-target="directWrapper" hidden>
+                                        {{ 'escape.wizard.step2.qr_only.direct_label'|trans }}
+                                        <a data-qr-print-target="directLink" href="#" target="_blank" rel="noopener"></a>
+                                    </p>
+
+                                    <div class="qr-print__actions">
+                                        <button type="button" class="btn btn-light"
+                                                data-qr-print-target="generateButton"
+                                                data-action="qr-print#generate">
+                                            {{ 'escape.wizard.step2.qr_only.generate'|trans }}
+                                        </button>
+                                        <button type="button" class="btn btn-light"
+                                                data-qr-print-target="printButton"
+                                                data-action="qr-print#print">
+                                            {{ 'escape.wizard.step2.qr_only.print'|trans }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </section>
+                        {% endif %}
+
 
                         {{ form_start(form, { attr: { id: 'form-step2' } }) }}
                         <section class="card">

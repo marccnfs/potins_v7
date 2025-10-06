@@ -14,13 +14,16 @@ use App\Form\PuzzleVideoQuizType;
 use App\Form\PuzzleHtmlMinType;
 use App\Lib\Links;
 use App\Service\MobileLinkManager;
+use App\Entity\Games\Puzzle;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\{Request, Response};
+use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use App\Attribute\RequireParticipant;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use DateTimeInterface;
 
 
 #[Route('/atelier/eg')]
@@ -56,6 +59,126 @@ class WizardController extends AbstractController
 
         return $this->redirectToRoute('wizard_universe', ['id'=>$eg->getId()]);
     }
+
+    #[Route('/{id}/etape/{step}/qr', name:'wizard_step_qr', methods:['POST'])]
+    #[RequireParticipant]
+    public function stepQr(MobileLinkManager $mobile, EscapeGame $eg, int $step, Request $req): JsonResponse
+    {
+        $participant = $this->currentParticipant($req);
+        if (!$eg->getOwner() || $eg->getOwner()->getId() !== $participant->getId()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $puzzle = $eg->getPuzzleByStep($step);
+        if (!$puzzle || $puzzle->getType() !== 'qr_geo') {
+            return $this->json(['error' => 'puzzle_not_ready'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $cfg = $puzzle->getConfig() ?? [];
+        $mode = is_string($cfg['mode'] ?? null) ? $cfg['mode'] : 'geo';
+        if ($mode !== 'qr_only') {
+            return $this->json(['error' => 'invalid_mode'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $repo = $this->em->getRepository(MobileLink::class);
+        $link = $repo->findOneBy([
+            'participant' => $participant,
+            'escapeGame'  => $eg,
+            'step'        => $step,
+            'usedAt'      => null,
+        ]);
+
+        $expired = $link && $link->getExpiresAt() && $link->getExpiresAt() < new \DateTimeImmutable();
+        if (!$link || $expired) {
+            $link = $mobile->create($participant, $eg, $step, ttlMinutes: 15);
+        }
+
+        $payload = $this->buildWizardQrPayload($mobile, $eg, $puzzle, $cfg, $link);
+        if ($payload['updated']) {
+            $this->em->persist($puzzle);
+            $this->em->flush();
+        }
+
+        $expiresAt = $payload['expiresAt'];
+
+        return $this->json([
+            'qr'        => $payload['qr'],
+            'token'     => $link->getToken(),
+            'directUrl' => $payload['directUrl'],
+            'expiresAt' => $expiresAt instanceof DateTimeInterface ? $expiresAt->format(DateTimeInterface::ATOM) : null,
+            'answerUrl' => $payload['answerUrl'],
+            'answerQr'  => $payload['answerQr'],
+        ]);
+    }
+
+    #[Route('/{id}/etape/{step}/qr/print/{token}', name:'wizard_step_qr_print', methods:['GET'])]
+    #[RequireParticipant]
+    public function stepQrPrint(MobileLinkManager $mobile, EscapeGame $eg, int $step, string $token, Request $req): Response
+    {
+        $participant = $this->currentParticipant($req);
+        if (!$eg->getOwner() || $eg->getOwner()->getId() !== $participant->getId()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $link = $this->em->getRepository(MobileLink::class)->findOneBy(['token' => $token]);
+        if (!$link || $link->getEscapeGame()->getId() !== $eg->getId() || $link->getStep() !== $step) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($link->getParticipant()?->getId() !== $participant->getId()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $puzzle = $eg->getPuzzleByStep($step) ?? throw $this->createNotFoundException();
+        if ($puzzle->getType() !== 'qr_geo') {
+            throw $this->createNotFoundException();
+        }
+
+        $cfg = $puzzle->getConfig() ?? [];
+        $mode = is_string($cfg['mode'] ?? null) ? $cfg['mode'] : 'geo';
+        if ($mode !== 'qr_only') {
+            throw $this->createNotFoundException();
+        }
+
+        $payload = $this->buildWizardQrPayload($mobile, $eg, $puzzle, $cfg, $link);
+        if ($payload['updated']) {
+            $this->em->persist($puzzle);
+            $this->em->flush();
+        }
+
+        return $this->render('pwa/escape/wizard/qr_print.html.twig', [
+            'eg'      => $eg,
+            'puzzle'  => $puzzle,
+            'link'    => $link,
+            'payload' => $payload,
+            'step'    => $step,
+        ]);
+    }
+
+    #[Route('/{id}/etape/{step}/qr-answer/{code}', name:'wizard_step_qr_answer', methods:['GET'])]
+    public function stepQrAnswer(EscapeGame $eg, int $step, string $code): Response
+    {
+        $puzzle = $eg->getPuzzleByStep($step) ?? throw $this->createNotFoundException();
+        if ($puzzle->getType() !== 'qr_geo') {
+            throw $this->createNotFoundException();
+        }
+
+        $cfg = $puzzle->getConfig() ?? [];
+        $mode = is_string($cfg['mode'] ?? null) ? $cfg['mode'] : 'geo';
+        $qrOnly = is_array($cfg['qrOnly'] ?? null) ? $cfg['qrOnly'] : [];
+
+        if ($mode !== 'qr_only' || ($qrOnly['answerSlug'] ?? null) !== $code) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->render('mobile/qr_simple.html.twig', [
+            'title'    => $qrOnly['answerTitle'] ?? 'Réponse de l’étape',
+            'message'  => $qrOnly['answerBody'] ?? '',
+            'subtitle' => $cfg['title'] ?? $puzzle->getTitle(),
+            'variant'  => 'answer',
+        ]);
+    }
+
 
     #[Route('/wizard/{id}/universe', name: 'wizard_universe', methods: ['GET','POST'])]
     #[RequireParticipant]
@@ -717,6 +840,7 @@ class WizardController extends AbstractController
                         'checks'      => $checks,
                         'okMessage' => $okMessage,
                         'finalClue' => $finalClue,
+
                         'hints'     => $hints,
                     ]);
 
@@ -735,7 +859,17 @@ class WizardController extends AbstractController
             return $this->redirectToRoute('wizard_overview', ['id'=>$eg->getId()]);
         }
 
-
+        $qrOnlyOptions = null;
+        if ($step === 2) {
+            $cfg = $puzzle->getConfig() ?? [];
+            $mode = is_string($cfg['mode'] ?? null) ? $cfg['mode'] : 'geo';
+            if ($mode === 'qr_only' && $puzzle->getId()) {
+                $qrOnlyOptions = [
+                    'fetchUrl' => $this->generateUrl('wizard_step_qr', ['id' => $eg->getId(), 'step' => $step]),
+                    'printUrl' => $this->generateUrl('wizard_step_qr_print', ['id' => $eg->getId(), 'step' => $step, 'token' => '__TOKEN__']),
+                ];
+            }
+        }
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
             'directory'=>'wizard',
@@ -746,6 +880,7 @@ class WizardController extends AbstractController
             'puzzle'=>$puzzle,
             'form'=>$form,
             'step'=>$step,
+            'qrOnlyOptions' => $qrOnlyOptions,
              '_t' => time(),         // bust cache
             ]);
 
@@ -830,6 +965,45 @@ class WizardController extends AbstractController
 
         return self::STEP_DEFINITIONS[$step]['type'];
     }
+
+    /**
+     * @return array{
+     *     qr: string,
+     *     directUrl: string,
+     *     answerUrl: string,
+     *     answerQr: string,
+     *     expiresAt: ?\DateTimeInterface,
+     *     updated: bool
+     * }
+     */
+    private function buildWizardQrPayload(MobileLinkManager $mobile, EscapeGame $eg, Puzzle $puzzle, array $cfg, MobileLink $link): array
+    {
+        $qrOnly = is_array($cfg['qrOnly'] ?? null) ? $cfg['qrOnly'] : [];
+        $updated = false;
+
+        if (!isset($qrOnly['answerSlug']) || !is_string($qrOnly['answerSlug']) || $qrOnly['answerSlug'] === '') {
+            $qrOnly['answerSlug'] = bin2hex(random_bytes(5));
+            $cfg['qrOnly'] = $qrOnly;
+            $puzzle->setConfig($cfg);
+            $updated = true;
+        }
+
+        $answerUrl = $this->generateUrl('wizard_step_qr_answer', [
+            'id'   => $eg->getId(),
+            'step' => $puzzle->getStep(),
+            'code' => $qrOnly['answerSlug'],
+        ], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        return [
+            'qr'        => $mobile->buildQrDataUri($link),
+            'directUrl' => $this->generateUrl('mobile_entry', ['token' => $link->getToken()], UrlGeneratorInterface::ABSOLUTE_URL),
+            'answerUrl' => $answerUrl,
+            'answerQr'  => $mobile->buildQrForUrl($answerUrl),
+            'expiresAt' => $link->getExpiresAt(),
+            'updated'   => $updated,
+        ];
+    }
+
 
     public function mergeHints($form,$cfg,$puzzle){
         $hints = [];

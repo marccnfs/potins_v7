@@ -7,7 +7,7 @@
                     <h2>Étape {{ step }} — {{ puzzle.title }}</h2>
                     {% if puzzle.prompt %}<p class="text-muted">{{ puzzle.prompt|nl2br }}</p>{% endif %}
 
-                    {% include 'pwa/escape/puzzles/_' ~ puzzle.type ~ '.html.twig' with { cfg: puzzle.config, eg: eg, step: step, extras: extras|default({})  } %}
+                    {% include 'pwa/escape/puzzles/_' ~ puzzle.type ~ '.html.twig' with { cfg: puzzle.config, eg: eg, step: step, extras: extras|default({}), view: 'wizard' } %}
 
                     <div data-playflow-target="next" hidden class="mt-4">
                         {% if step < 6 %}

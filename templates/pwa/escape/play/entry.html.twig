@@ -16,6 +16,9 @@
 
             {% set resume = resumeStep|default(progress ? (progress|last + 1 > total ? total : progress|last + 1) : 1) %}
             {% set pct = total > 0 ? (done / total * 100) | round(0, 'floor') : 0 %}
+            {% set active = activeSession|default(null) %}
+            {% set attempts = recentSessions|default([]) %}
+            {% set best = bestSession|default(null) %}
 
             <div class="play-layout">
                 {# --- Colonne INFO --- #}

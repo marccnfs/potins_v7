@@ -1,3 +1,5 @@
+{% set view = view|default('wizard') %}
+{% set isPlayer = view == 'player' %}
 {% set token = extras.token|default(null) %}
 {% set qr    = extras.qr|default(null) %}
 {% set exp   = extras.expiresAt|default(null) %}
@@ -8,44 +10,62 @@
     <section>
         <div class="grid2">
             <aside class="card">
-                <h2>📍 QR à cacher</h2>
-                <p>Imprime et cache ce QR code à l’endroit choisi. Quand il est scanné, l’étape se valide immédiatement et le message défini s’affiche sur le téléphone.</p>
+                {% if isPlayer %}
+                    <h2>📍 Scanner le QR</h2>
+                    <p>Repère le QR code caché par l’organisateur puis scanne-le avec ton téléphone pour débloquer la suite.</p>
+                    <p class="muted">Autorise l’ouverture du lien si ton téléphone te le propose.</p>
+                {% else %}
+                    <h2>📍 QR à cacher</h2>
+                    <p>Imprime et cache ce QR code à l’endroit choisi. Quand il est scanné, l’étape se valide immédiatement et le message défini s’affiche sur le téléphone.</p>
+                {% endif %}
 
                 {% if qr and token %}
-                    <img id="qr-validation" src="{{ qr }}" alt="QR localisation" width="280" height="280">
-                    <p class="muted">Valable jusqu’à {{ exp ? exp|date('H:i') : 'bientôt' }}.</p>
-                    <p class="muted">Lien direct : <a href="{{ absolute_url(path('mobile_entry', { token: token })) }}" target="_blank" rel="noopener">ouvrir sur mobile</a></p>
+                    {% if not isPlayer %}
+                        <img id="qr-validation" src="{{ qr }}" alt="QR localisation" width="280" height="280">
+                        <p class="muted">Valable jusqu’à {{ exp ? exp|date('H:i') : 'bientôt' }}.</p>
+                        <p class="muted">Lien direct : <a href="{{ absolute_url(path('mobile_entry', { token: token })) }}" target="_blank" rel="noopener">ouvrir sur mobile</a></p>
+                    {% endif %}
 
-                    <div id="qr-status" class="muted">Prêt à être scanné…</div>
+                    <div id="qr-status" class="muted">{{ isPlayer ? 'En attente du scan…' : 'Prêt à être scanné…' }}</div>
 
-                    <div class="mt">
-                        <button id="qr-regen" class="btn btn-light">♻️ Regénérer</button>
-                    </div>
-                {% else %}
+                    {% if not isPlayer %}
+                        <div class="mt">
+                            <button id="qr-regen" class="btn btn-light">♻️ Regénérer</button>
+                        </div>
+                    {% endif %}
+                {% elseif not isPlayer %}
                     <p class="error">QR indisponible. Recharge la page.</p>
                 {% endif %}
             </aside>
 
             <main class="card">
-                <h3>Consigne</h3>
-                <p>{{ puzzle.prompt|default('Cache le QR code au bon endroit pour débloquer la suite de l’escape.') }}</p>
+                {% if isPlayer %}
+                <h3>Objectif</h3>
+                <p>{{ puzzle.prompt|default('Trouve le QR code caché et scanne-le avec ton téléphone pour continuer l’aventure.') }}</p>
 
-                <h4>Message affiché sur mobile</h4>
-                <p>{{ qrOnly.validateMessage|default('Bravo, étape validée !') }}</p>
-
-                <h4>QR « réponse » à imprimer</h4>
-                {% if extras.answerQr is defined %}
-                    <img id="qr-answer" src="{{ extras.answerQr }}" alt="QR réponse" width="220" height="220">
-                    <p class="muted">À remettre aux joueurs après validation. <a href="{{ extras.answerUrl }}" target="_blank" rel="noopener">Ouvrir la page réponse</a>.</p>
+                    <h4>Après le scan</h4>
+                    <p>Un message s’affichera automatiquement sur ton mobile pour confirmer la validation.</p>
                 {% else %}
-                    <p class="muted">Enregistre l’étape pour générer le QR réponse.</p>
-                {% endif %}
+                    <h3>Consigne</h3>
+                    <p>{{ puzzle.prompt|default('Cache le QR code au bon endroit pour débloquer la suite de l’escape.') }}</p>
 
-                {% if qrOnly.answerBody is defined and qrOnly.answerBody %}
-                    <details class="mt">
-                        <summary>Aperçu du contenu « réponse »</summary>
-                        <p>{{ qrOnly.answerBody|nl2br }}</p>
-                    </details>
+                    <h4>Message affiché sur mobile</h4>
+                    <p>{{ qrOnly.validateMessage|default('Bravo, étape validée !') }}</p>
+
+                    <h4>QR « réponse » à imprimer</h4>
+                    {% if extras.answerQr is defined %}
+                        <img id="qr-answer" src="{{ extras.answerQr }}" alt="QR réponse" width="220" height="220">
+                        <p class="muted">À remettre aux joueurs après validation. <a href="{{ extras.answerUrl }}" target="_blank" rel="noopener">Ouvrir la page réponse</a>.</p>
+                    {% else %}
+                        <p class="muted">Enregistre l’étape pour générer le QR réponse.</p>
+                    {% endif %}
+
+                    {% if qrOnly.answerBody is defined and qrOnly.answerBody %}
+                        <details class="mt">
+                            <summary>Aperçu du contenu « réponse »</summary>
+                            <p>{{ qrOnly.answerBody|nl2br }}</p>
+                        </details>
+                    {% endif %}
                 {% endif %}
             </main>
         </div>
@@ -60,29 +80,46 @@
              data-qr-geo-need-https-message-value="{{ cfg.needHttpsMessage|default('HTTPS requis') }}">
         <div class="grid2">
             <aside class="card">
-                <h2>📍 QR géolocalisé</h2>
-                <p>Scanne ce QR avec ton téléphone et autorise la localisation. Si tu es dans la bonne zone, l’étape sera validée automatiquement.</p>
+                {% if isPlayer %}
+                    <h2>📍 Validation sur place</h2>
+                    <p>Quand tu es prêt, scanne le QR code fourni par l’organisateur et autorise la géolocalisation pour confirmer que tu es au bon endroit.</p>
+                {% else %}
+                    <h2>📍 QR géolocalisé</h2>
+                    <p>Imprime ou affiche ce QR et demande aux joueurs de le scanner depuis la zone définie. La validation est automatique si leur position est correcte.</p>
+                {% endif %}
 
                 {% if qr and token %}
-                    <img id="qr-validation" src="{{ qr }}" alt="QR code" width="280" height="280">
-                    <p class="muted">Valable jusqu’à {{ exp ? exp|date('H:i') : 'bientôt' }}.</p>
-                    <p class="muted">Lien direct : <a href="{{ absolute_url(path('mobile_entry', { token: token })) }}" target="_blank" rel="noopener">ouvrir sur mobile</a></p>
+                    {% if not isPlayer %}
+                        <img id="qr-validation" src="{{ qr }}" alt="QR code" width="280" height="280">
+                        <p class="muted">Valable jusqu’à {{ exp ? exp|date('H:i') : 'bientôt' }}.</p>
+                        <p class="muted">Lien direct : <a href="{{ absolute_url(path('mobile_entry', { token: token })) }}" target="_blank" rel="noopener">ouvrir sur mobile</a></p>
+                    {% endif %}
 
-                    <div id="qr-status" class="muted">En attente de validation…</div>
+                    <div id="qr-status" class="muted">{{ isPlayer ? 'Scanne le QR et autorise la localisation pour valider.' : 'En attente de validation…' }}</div>
 
-                    <div class="mt">
-                        <button id="qr-regen" class="btn btn-light">♻️ Regénérer</button>
-                    </div>
-                {% else %}
+                    {% if not isPlayer %}
+                        <div class="mt">
+                            <button id="qr-regen" class="btn btn-light">♻️ Regénérer</button>
+                        </div>
+                    {% endif %}
+                {% elseif not isPlayer %}
                     <p class="error">QR indisponible. Recharge la page.</p>
                 {% endif %}
             </aside>
 
             <main class="card">
-                <h3>Consigne</h3>
-                <p>{{ puzzle.prompt|default('Rends-toi au bon endroit et valide ta position sur mobile.') }}</p>
-                <h4>Objectif</h4>
-                <p>{{ cfg.objectif|default('Être dans le rayon autorisé autour du point cible.') }}</p>
+                {% if isPlayer %}
+                    <h3>Objectif</h3>
+                    <p>{{ puzzle.prompt|default('Rends-toi au bon endroit puis vérifie ta position en scannant le QR code.') }}</p>
+                    <h4>Astuce</h4>
+                    <p>{{ cfg.objectif|default('Assure-toi d’être dans le rayon autorisé autour du point cible.') }}</p>
+                    <p class="muted">Si ton téléphone te le demande, accepte la localisation pour finaliser l’étape.</p>
+                {% else %}
+                    <h3>Consigne</h3>
+                    <p>{{ puzzle.prompt|default('Rends-toi au bon endroit et valide ta position sur mobile.') }}</p>
+                    <h4>Objectif</h4>
+                    <p>{{ cfg.objectif|default('Être dans le rayon autorisé autour du point cible.') }}</p>
+                {% endif %}
             </main>
         </div>
     </section>

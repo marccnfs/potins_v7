@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ 'escape.wizard.step2.print.title'|trans({'%title%': puzzle.title}) }}</title>
+    <style>
+        :root {
+            color-scheme: light;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 2.5rem 1.5rem;
+            font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+            background: #fff;
+            color: #111;
+        }
+        .page {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.2rem;
+        }
+        h2 {
+            margin: 0 0 0.75rem;
+            font-size: 1.2rem;
+        }
+        p {
+            margin: 0.35rem 0;
+        }
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+        .qr-box {
+            border: 2px dashed #8c8c8c;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            width: min(100%, 360px);
+            background: #fafafa;
+        }
+        .qr-box img {
+            display: block;
+            margin: 0 auto 0.75rem;
+        }
+        .note {
+            font-size: 0.9rem;
+            color: #444;
+        }
+        .note a {
+            color: inherit;
+            word-break: break-all;
+        }
+        @media print {
+            body {
+                padding: 1.5rem;
+            }
+            .qr-box {
+                background: transparent;
+                border-color: #666;
+            }
+        }
+    </style>
+</head>
+<body>
+<main class="page">
+    <header>
+        <h1>{{ 'escape.wizard.step2.print.heading'|trans }}</h1>
+        <p class="note">{{ 'escape.wizard.step2.print.subtitle'|trans({'%step%': step, '%title%': puzzle.title}) }}</p>
+    </header>
+
+    <section class="grid">
+        <div class="qr-box">
+            <h2>{{ 'escape.wizard.step2.print.hidden_title'|trans }}</h2>
+            <img src="{{ payload.qr }}" alt="{{ 'escape.wizard.step2.qr_only.qr_alt'|trans }}" width="280" height="280">
+            {% if payload.expiresAt %}
+                <p class="note">{{ 'escape.wizard.step2.print.expires'|trans({'%time%': payload.expiresAt|date('H\hi')}) }}</p>
+            {% endif %}
+            {% if payload.directUrl %}
+                <p class="note">{{ 'escape.wizard.step2.print.direct'|trans({'%url%': payload.directUrl}) }}</p>
+            {% endif %}
+        </div>
+
+        {% if payload.answerQr %}
+            <div class="qr-box">
+                <h2>{{ 'escape.wizard.step2.print.answer_title'|trans }}</h2>
+                <img src="{{ payload.answerQr }}" alt="{{ 'escape.wizard.step2.qr_only.answer_alt'|trans }}" width="240" height="240">
+                <p class="note">{{ 'escape.wizard.step2.print.answer_note'|trans }}</p>
+                {% if payload.answerUrl %}
+                    <p class="note"><a href="{{ payload.answerUrl }}" target="_blank" rel="noopener">{{ payload.answerUrl }}</a></p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </section>
+</main>
+
+<script>
+    window.addEventListener('load', () => {
+        setTimeout(() => window.print(), 200);
+    });
+</script>
+</body>
+</html>

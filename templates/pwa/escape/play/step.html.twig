@@ -58,7 +58,7 @@
                     {# --- Colonne JEU --- #}
                     <main class="play-main">
                         <div class="card">
-                            {% include 'pwa/escape/puzzles/_' ~ puzzle.type ~ '.html.twig' with { cfg: puzzle.config, eg: eg, step: step, extras: extras|default({}) } %}
+                            {% include 'pwa/escape/puzzles/_' ~ puzzle.type ~ '.html.twig' with { cfg: puzzle.config, eg: eg, step: step, extras: extras|default({}), view: 'player' } %}
                         </div>
 
                         <footer class="play-footer">
