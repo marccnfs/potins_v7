@@ -896,9 +896,13 @@ class WizardController extends AbstractController
         }
        // $this->denyAccessUnlessGranted('EDIT', $eg);
         $puzzle = $eg->getPuzzleByStep($step) ?? throw $this->createNotFoundException();
+        $cfg = $puzzle->getConfig() ?? [];
+        $mode = is_string($cfg['mode'] ?? null) ? $cfg['mode'] : 'geo';
 
         // --- AJOUT SPÉCIFIQUE QR GEO ---
-        $extras = [];
+        $extras = [
+            'mode' => $mode,
+        ];
         if ($puzzle->getType() === 'qr_geo') {
 
             $link = $this->em->getRepository(MobileLink::class)->findOneBy([
@@ -913,11 +917,25 @@ class WizardController extends AbstractController
                 $link = $mobile->create($participant, $eg, $step, ttlMinutes: 15);
             }
 
-            $extras = [
-                'qr'        => $mobile->buildQrDataUri($link),                  // data:image/png;base64,...
-                'token'     => $link->getToken(),
-                'expiresAt' => $link->getExpiresAt(),
-            ];
+            if ($mode === 'qr_only') {
+                $payload = $this->buildWizardQrPayload($mobile, $eg, $puzzle, $cfg, $link);
+
+                if ($payload['updated']) {
+                    $this->em->persist($puzzle);
+                    $this->em->flush();
+                }
+
+                unset($payload['updated']);
+                $extras = array_merge($extras, $payload);
+            } else {
+                $extras = array_merge($extras, [
+                    'qr'        => $mobile->buildQrDataUri($link),                  // data:image/png;base64,...
+                    'directUrl' => $this->generateUrl('mobile_entry', ['token' => $link->getToken()], UrlGeneratorInterface::ABSOLUTE_URL),
+                    'expiresAt' => $link->getExpiresAt(),
+                ]);
+            }
+
+            $extras['token'] = $link->getToken();
         }
 
         $vartwig=$this->menuNav->templatepotins("step",Links::GAMES);
@@ -929,7 +947,7 @@ class WizardController extends AbstractController
             'vartwig'=>$vartwig,
             'eg'     => $eg,
             'puzzle' => $puzzle,
-            'cfg'    => $puzzle->getConfig() ?? [],
+            'cfg'    => $cfg,
             'step'   => $step,
             'extras' => $extras,
             'participant'=>$participant,

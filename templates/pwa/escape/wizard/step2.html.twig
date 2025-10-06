@@ -1,4 +1,5 @@
 {# templates/escape/garden.html.twig #}
+{% trans_default_domain 'affi' %}
 {% block body %}
     {% set cfg = puzzle.config is iterable ? puzzle.config : {} %}
     {% set target = cfg.target|default({}) %}
