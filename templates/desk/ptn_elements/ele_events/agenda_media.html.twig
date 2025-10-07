@@ -1,47 +1,92 @@
 {% for tabevent in tabevents %}
     {% set l_event = tabevent.event %}
-    {% for key, l_date in tabevent.date %}
-        {% set totnbpart = l_date|length %}
+    {% for key, schedule in tabevent.date %}
+        {% set totnbpart = schedule.count %}
         {% set col = loop.index0 < 3 ? loop.index0 : 3 %}
 
         <div class="event-block">
-            <!-- En-tête de l'événement -->
+
             <div class="event-header color-event-{{ col }}">
                 <h3>{{ l_event.potin.titre|lower|capitalize }}</h3>
                 <p class="event-date">Date : {{ key|date('d-m-Y') }}</p>
             </div>
 
-            <!-- Informations sur l'événement -->
             <div class="event-info">
                 <div class="info-item">
-                    <span class="label">Participants :</span>
+                    <span class="label">Capacité :</span>
                     <span class="value">{{ l_event.potin.numberPart ?? 0 }}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">Restants :</span>
-                    <span class="value">{{ l_event.potin.numberPart - totnbpart }}</span>
+                    <span class="label">Places restantes :</span>
+                    {% set remaining = (l_event.potin.numberPart|default(0)) - (totnbpart|default(0)) %}
+                    <span class="value">{{ max(remaining, 0) }}</span>
                 </div>
             </div>
 
-            <!-- Liste des inscrits -->
             <div class="participants">
-                <h4>Inscrits :</h4>
-                <ul>
-                    {% for prod in l_date %}
-                        <li>
-                            <span>{{ prod.registered.lastname|capitalize }} {{ prod.registered.firstname|capitalize }}</span>
-                            <a href="{{ path('edit_registered_media', { 'order': prod.order.id, 'id': prod.registered.id }) }}" class="btn btn-primary">
-                                <i class="fa fa-eye"></i> Voir
-                            </a>
-                            <a href="{{ path('form-delete_participant_resamedia', { 'order': prod.order.id, 'id': prod.registered.id }) }}" class="btn btn-danger">
-                                <i class="fa fa-trash"></i> Supprimer
-                            </a>
-                        </li>
+                <h4>Réservations :</h4>
+                {% if schedule.orders is not empty %}
+                {% for reservation in schedule.orders %}
+                    <div class="reservation-group">
+                        <div class="referent-header">
+                            <div class="referent-info">
+                                <strong>Référent :</strong>
+                                <span>{{ reservation.referent.name ?? 'Non renseigné' }}</span>
+                                {% if reservation.referent.email %}
+                                    <span class="contact-item"><i class="fa fa-envelope"></i> {{ reservation.referent.email }}</span>
+                                {% endif %}
+                                {% if reservation.referent.phone %}
+                                    <span class="contact-item"><i class="fa fa-phone"></i> {{ reservation.referent.phone }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="referent-actions">
+                                {% if reservation.referent.customer %}
+                                    <a href="{{ path('edit_customer_registered_media', { 'idcustomer': reservation.referent.customer.id }) }}" class="btn btn-outline-primary btn-sm">
+                                        Modifier le référent
+                                    </a>
+                                {% endif %}
+                                <a href="{{ path('form-delete_resamedia', { 'orderId': reservation.order.id }) }}" class="btn btn-outline-danger btn-sm">
+                                    Annuler la demande
+                                </a>
+                            </div>
+                        </div>
+
+                        {% if reservation.participants is not empty %}
+                            <ul class="participant-list">
+                                {% for prod in reservation.participants %}
+                                    {% set registered = prod.registered %}
+                                    <li>
+                                            <span>
+                                                {% if registered %}
+                                                    {{ registered.lastname|capitalize }} {{ registered.firstname|capitalize }}
+                                                {% else %}
+                                                    Participant en cours de création
+                                                {% endif %}
+                                            </span>
+                                        {% if registered %}
+                                            <div class="participant-actions">
+                                                <a href="{{ path('edit_registered_media', { 'order': prod.order.id, 'id': registered.id }) }}" class="btn btn-primary btn-sm">
+                                                    Modifier
+                                                </a>
+                                                <a href="{{ path('form-delete_participant_resamedia', { 'order': prod.order.id, 'id': registered.id }) }}" class="btn btn-danger btn-sm">
+                                                    Supprimer
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="no-participant">Aucun participant renseigné pour le moment.</p>
+                        {% endif %}
+                    </div>
                     {% endfor %}
-                </ul>
+                {% else %}
+                    <p class="no-reservation">Aucune réservation en attente pour cette date.</p>
+                {% endif %}
             </div>
 
-            <!-- Bouton de réservation -->
+
             <div class="event-action">
                 {% if totnbpart < l_event.potin.numberPart %}
                     <a href="{{ path('resa_potins_media', { 'id': l_event.id, 'date': key }) }}" class="btn btn-success">

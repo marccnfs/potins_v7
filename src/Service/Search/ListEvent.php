@@ -3,6 +3,7 @@
 
 namespace App\Service\Search;
 
+use App\Entity\Admin\OrderProducts;
 use App\Repository\OrdersRepository;
 use App\Repository\OrderProductsRepository;
 use App\Repository\PostEventRepository;
@@ -35,7 +36,7 @@ class ListEvent
         $tabdatesevents=[];
 
         foreach ($events as $event) {
-            $tabdatesevents[$event->getId()]=$this->resator->BuildTabDateEvent($event);
+            $tabdatesevents[$event->getId()] = $this->initializeEventDates($event);
         }
 
         foreach ($orderProducts as $orderProduct) {
@@ -51,7 +52,7 @@ class ListEvent
 
             $eventId = $event->getId();
             if (!isset($tabdatesevents[$eventId])) {
-                continue;
+                $tabdatesevents[$eventId] = $this->initializeEventDates($event);
             }
 
             $starttime = $subscription->getStarttime();
@@ -61,9 +62,9 @@ class ListEvent
 
             $timestamp = $starttime->getTimestamp();
             if (!isset($tabdatesevents[$eventId]['date'][$timestamp])) {
-                $tabdatesevents[$eventId]['date'][$timestamp] = [];
+                $tabdatesevents[$eventId]['date'][$timestamp] = $this->createEmptyScheduleBucket();
             }
-            $tabdatesevents[$eventId]['date'][$timestamp][] = $orderProduct;
+            $this->appendOrderProductToSchedule($tabdatesevents[$eventId]['date'][$timestamp], $orderProduct);
         }
         return $tabdatesevents;
     }
@@ -159,5 +160,88 @@ class ListEvent
         }
 
         return $orders; //$listparticpants; //$tabplayer;
+    }
+
+    private function initializeEventDates($event): array
+    {
+        $eventData = $this->resator->BuildTabDateEvent($event);
+        $formatted = [
+            'event' => $eventData['event'] ?? $event,
+            'date' => [],
+        ];
+
+        if (!empty($eventData['date'])) {
+            foreach (array_keys($eventData['date']) as $timestamp) {
+                $formatted['date'][$timestamp] = $this->createEmptyScheduleBucket();
+            }
+        }
+
+        return $formatted;
+    }
+
+    private function createEmptyScheduleBucket(): array
+    {
+        return [
+            'orders' => [],
+            'participants' => [],
+            'count' => 0,
+        ];
+    }
+
+    private function appendOrderProductToSchedule(array &$schedule, OrderProducts $orderProduct): void
+    {
+        $registered = $orderProduct->getRegistered();
+        if ($registered !== null) {
+            $schedule['participants'][] = $orderProduct;
+            $schedule['count']++;
+        }
+
+        $order = $orderProduct->getOrder();
+        if ($order === null || $order->getId() === null) {
+            return;
+        }
+
+        $orderId = $order->getId();
+        if (!isset($schedule['orders'][$orderId])) {
+            $schedule['orders'][$orderId] = [
+                'order' => $order,
+                'referent' => $this->buildReferentContext($orderProduct),
+                'participants' => [],
+            ];
+        }
+
+        if ($registered !== null) {
+            $schedule['orders'][$orderId]['participants'][] = $orderProduct;
+        }
+    }
+
+    private function buildReferentContext(OrderProducts $orderProduct): array
+    {
+        $order = $orderProduct->getOrder();
+        $numClient = $order?->getNumclient();
+        $customer = $numClient?->getIdcustomer();
+        $profil = $customer?->getProfil();
+
+        $firstname = $profil?->getFirstname();
+        $lastname = $profil?->getLastname();
+        $displayName = trim(($firstname ?? '') . ' ' . ($lastname ?? ''));
+
+        $email = $customer?->getEmailcontact();
+        if ($email === null && $profil !== null) {
+            $email = $profil->getEmailsecours();
+        }
+
+        $phone = $profil?->getTelephonemobile();
+        if ($phone === null && $profil !== null) {
+            $phone = $profil->getTelephonefixe();
+        }
+
+        return [
+            'name' => $displayName !== '' ? $displayName : null,
+            'email' => $email,
+            'phone' => $phone,
+            'customer' => $customer,
+            'profil' => $profil,
+        ];
     }
 }

@@ -4,6 +4,26 @@
         <h3>Réservation du {{ preorder.resaAt|date('j/m/Y') }} - {{ event.titre|capitalize }}</h3>
     </div>
 
+    {% set profil = preorder.customer ? preorder.customer.profil : null %}
+    <div class="referent-summary">
+        <h4>Référent</h4>
+        <p>
+            {{ profil ? (profil.firstname ~ ' ' ~ profil.lastname)|trim : 'Non renseigné' }}
+        </p>
+        <ul class="referent-coords">
+            {% if preorder.customer and preorder.customer.emailcontact %}
+                <li><i class="fa fa-envelope"></i> {{ preorder.customer.emailcontact }}</li>
+            {% elseif profil and profil.emailsecours %}
+                <li><i class="fa fa-envelope"></i> {{ profil.emailsecours }}</li>
+            {% endif %}
+            {% if profil and profil.telephonemobile %}
+                <li><i class="fa fa-phone"></i> {{ profil.telephonemobile }}</li>
+            {% elseif profil and profil.telephonefixe %}
+                <li><i class="fa fa-phone"></i> {{ profil.telephonefixe }}</li>
+            {% endif %}
+        </ul>
+    </div>
+
     <!-- Section des participants -->
     <div class="participant-section">
         <div class="participant-header">
@@ -23,6 +43,12 @@
                 data-index="{{ form.listproducts|length > 0 ? form.listproducts|last.vars.name + 1 : 0 }}"
                 data-prototype="{{ form_widget(form.listproducts.vars.prototype)|e('html_attr') }}">
             </ul>
+
+            <button type="button" class="btn btn-secondary add-participant" data-collection-class="tags">
+                Ajouter un participant
+            </button>
+            <p class="form-hint">Ajoutez autant de participants que nécessaire pour ce même référent.</p>
+
 
             <!-- Autres champs restants -->
             {{ form_rest(form) }}

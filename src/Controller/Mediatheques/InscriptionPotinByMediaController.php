@@ -20,7 +20,6 @@ use App\Service\Gestion\Commandar;
 use App\Service\Modules\Resator;
 use App\Service\Registration\CreatorUser;
 use App\Service\Registration\Identificat;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -235,17 +234,17 @@ class InscriptionPotinByMediaController extends AbstractController
             $commandar->deleteOneParticpant($registered);
             return $this->redirectToRoute('office_media');
         }
-        $vartwig=$this->menuNav->admin(
-            $this->board,
+        $vartwig=$this->menuNav->templatingadmin(
             'deleteorderesa',
-            links::ADMIN,
+            $this->board->getNameBoard(),
+            $this->board,
             1
         );
-        $replace = false;
+
         return $this->render($this->useragentP.'ptn_media/home.html.twig', [
             'directory'=>'resa',
             'form' => $form->createView(),
-            'replacejs'=>$replace,
+            'replacejs'=>$replace??null,
             'board' => $this->board,
             'event'=>$event,
             'member'=>$this->member,
@@ -254,17 +253,21 @@ class InscriptionPotinByMediaController extends AbstractController
         ]);
     }
 
-    #[Route('/form-delete-resamedia/{order}/{id}', name:"form-delete_resamedia")] //todo
-    public function deleteResa(RegisteredRepository $regisrepo,OrdersRepository $ordersRepository,Commandar $commandar,Request $request,$id,$idorder): RedirectResponse|Response
-    {
 
-        $order=$ordersRepository->findOrderEvent($idorder);
-        $orginalListproduc=new ArrayCollection();
-        foreach ($order->getListproducts() as $product){
-            $orginalListproduc->add($product);
+
+    #[Route('/form-delete-resamedia/{orderId}', name:"form-delete_resamedia")]
+    public function deleteResa(OrdersRepository $ordersRepository,Commandar $commandar,Request $request,int $orderId): RedirectResponse|Response
+    {
+        $order=$ordersRepository->findOrderEvent($orderId);
+        if (!$order) {
+            throw $this->createNotFoundException('Réservation introuvable.');
         }
 
-        $event=$order->getListproducts()[0]->getSubscription()->getEvent();
+        $event = null;
+        if (!$order->getListproducts()->isEmpty()) {
+            $firstProduct = $order->getListproducts()->first();
+            $event = $firstProduct?->getSubscription()?->getEvent();
+        }
         $form = $this->createForm(DeleteType::class, $order);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

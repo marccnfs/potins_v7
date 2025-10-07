@@ -2,44 +2,57 @@
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', () => {
             const registeredElement = document.getElementById('registered');
-            if (!registeredElement) {
-                console.error("L'élément avec l'ID 'registered' est introuvable.");
-                return;
-            }
-
-            const nb = parseInt(registeredElement.dataset.number, 10);
-
 
             const addTagFormDeleteLink = (item) => {
                 const removeFormButton = document.createElement('button');
+                removeFormButton.type = 'button';
                 removeFormButton.innerText = 'Supprimer';
-                removeFormButton.className = 'btn btn-danger btn-sm';
-
+                removeFormButton.className = 'btn btn-danger btn-sm remove-participant';
                 item.appendChild(removeFormButton);
 
-                removeFormButton.addEventListener('click', (e) => {
-                    e.preventDefault();
+                removeFormButton.addEventListener('click', (event) => {
+                    event.preventDefault();
                     item.remove();
                 });
+
             };
 
-            const addFormToCollection = (collectionClass, index) => {
+            const addFormToCollection = (collectionClass, allowRemoval = true) => {
                 const collectionHolder = document.querySelector(`.${collectionClass}`);
+                if (!collectionHolder) {
+                    return;
+                }
+
+                const prototype = collectionHolder.dataset.prototype;
+                if (!prototype) {
+                    return;
+                }
+
+                const currentIndex = parseInt(collectionHolder.dataset.index || collectionHolder.children.length, 10);
                 const item = document.createElement('li');
-                item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index);
+                item.innerHTML = prototype.replace(/__name__/g, currentIndex);
                 collectionHolder.appendChild(item);
-                collectionHolder.dataset.index++;
-                if (index !== 0) {
+                collectionHolder.dataset.index = String(currentIndex + 1);
+
+                if (allowRemoval) {
                     addTagFormDeleteLink(item);
                 }
             };
 
             // Générer automatiquement les formulaires pour les participants
-            let i = 0;
-            while (i < nb) {
-                addFormToCollection('tags', i);
-                i++;
+            const nb = registeredElement ? parseInt(registeredElement.dataset.number, 10) : 0;
+
+            for (let i = 0; i < nb; i += 1) {
+                addFormToCollection('tags', i !== 0);
             }
+
+            document.querySelectorAll('.add-participant').forEach((button) => {
+                const targetClass = button.dataset.collectionClass || 'tags';
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    addFormToCollection(targetClass, true);
+                });
+            });
         });
     </script>
 {% endblock %}
