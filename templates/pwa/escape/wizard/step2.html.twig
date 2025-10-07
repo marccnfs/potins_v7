@@ -54,18 +54,19 @@
                             </section>
                         </section>
 
-                        {% if isQrOnly %}
-                            <section class="card"
-                                     data-controller="qr-print"
-                                     data-qr-print-fetch-url-value="{{ qrOnlyRoutes.fetchUrl|default('') }}"
-                                     data-qr-print-print-url-value="{{ qrOnlyRoutes.printUrl|default('') }}"
-                                     data-qr-print-fallback-message-value="{{ 'escape.wizard.step2.qr_only.fallback'|trans }}"
-                                     data-qr-print-ready-message-value="{{ 'escape.wizard.step2.qr_only.status_ready'|trans }}"
-                                     data-qr-print-generated-message-value="{{ 'escape.wizard.step2.qr_only.status_generated'|trans }}"
-                                     data-qr-print-generating-message-value="{{ 'escape.wizard.step2.qr_only.status_generating'|trans }}"
-                                     data-qr-print-error-message-value="{{ 'escape.wizard.step2.qr_only.status_error'|trans }}"
-                                     data-qr-print-print-warning-value="{{ 'escape.wizard.step2.qr_only.status_print_missing'|trans }}"
-                                     data-qr-print-expires-pattern-value="{{ 'escape.wizard.step2.qr_only.expires'|trans({'%time%':'__TIME__'}) }}">
+                        <section class="card"
+                                 data-step2-mode="qr_only"
+                                 hidden
+                                 data-controller="qr-print"
+                                 data-qr-print-fetch-url-value="{{ qrOnlyRoutes.fetchUrl|default('') }}"
+                                 data-qr-print-print-url-value="{{ qrOnlyRoutes.printUrl|default('') }}"
+                                 data-qr-print-fallback-message-value="{{ 'escape.wizard.step2.qr_only.fallback'|trans }}"
+                                 data-qr-print-ready-message-value="{{ 'escape.wizard.step2.qr_only.status_ready'|trans }}"
+                                 data-qr-print-generated-message-value="{{ 'escape.wizard.step2.qr_only.status_generated'|trans }}"
+                                 data-qr-print-generating-message-value="{{ 'escape.wizard.step2.qr_only.status_generating'|trans }}"
+                                 data-qr-print-error-message-value="{{ 'escape.wizard.step2.qr_only.status_error'|trans }}"
+                                 data-qr-print-print-warning-value="{{ 'escape.wizard.step2.qr_only.status_print_missing'|trans }}"
+                                 data-qr-print-expires-pattern-value="{{ 'escape.wizard.step2.qr_only.expires'|trans({'%time%':'__TIME__'}) }}">
                                 <h3 style="margin:0 0 .5rem">{{ 'escape.wizard.step2.qr_only.title'|trans }}</h3>
                                 <p class="muted">{{ 'escape.wizard.step2.qr_only.description'|trans }}</p>
 
@@ -119,7 +120,6 @@
                                     </div>
                                 </div>
                             </section>
-                        {% endif %}
 
 
                         {{ form_start(form, { attr: { id: 'form-step2' } }) }}

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Lib\Links;
+
 /**
  * Construit des contextes (tableaux) destinés à Twig pour différents écrans.
  *
@@ -85,6 +87,61 @@ final class MenuNavigator
 
         return $ctx;
     }
+
+    /**
+     * Legacy wrapper kept for controllers that still rely on the historic API.
+     *
+     * @param array $metaOrContext "Links" meta array or an already initialised context
+     * @param string $twigfile     Twig fragment name stored in "maintwig"
+     * @param string $page         Human readable page title
+     * @param int|string $nav      Active menu index (1..7)
+     */
+    public function newtemplateControlCustomer(
+        array $metaOrContext,
+        string $twigfile,
+        string $page,
+        int|string $nav
+    ): array {
+        // Construit une base cohérente avec l'ancien service.
+        $ctx = $this->templatePotins($twigfile, $metaOrContext);
+
+        $ctx['entity']    = false;
+        $ctx['title']     = $page;
+        $ctx['titlepage'] = $page;
+
+        $active = is_numeric($nav) ? max(1, min(7, (int) $nav)) : 0;
+        for ($i = 1; $i <= 7; $i++) {
+            $ctx['m' . $i] = ($i === $active);
+        }
+
+        return $ctx;
+    }
+
+    /**
+     * Legacy wrapper for historic admin templates.
+     *
+     * @param string $twigfile Twig fragment name stored in "maintwig"
+     * @param string $title    Page title displayed by Twig
+     * @param object $board    Board entity exposing getListmodules()
+     * @param int|string $nav  Active navigation index (1..7)
+     * @param array|null $meta Optional meta array, defaults to Links::ADMIN
+     */
+    public function templatingadmin(
+        string $twigfile,
+        string $title,
+        object $board,
+        int|string $nav,
+        ?array $meta = null
+    ): array {
+        $meta = $meta ?? Links::ADMIN;
+
+        $ctx = $this->admin($board, $twigfile, $meta, $nav);
+        $ctx['title']     = $title;
+        $ctx['titlepage'] = $title;
+
+        return $ctx;
+    }
+
 
     /**
      * Construit les clés communes du contexte à partir de $meta et du HTML.

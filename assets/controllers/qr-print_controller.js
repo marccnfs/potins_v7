@@ -44,7 +44,7 @@ export default class extends Controller {
         }
 
         if (this.hasDetailsTarget) {
-            this.detailsTarget.hidden = true;
+            this.detailsTarget.hidden = !this.fetchUrlValue;
         }
     }
 
