@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType; // pour deleteIds si tu veux en per-item
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -26,6 +27,28 @@ class EscapeUniverseType extends AbstractType
             ->add('title', TextType::class, [
                 'mapped'=>false, 'required'=>true,
                 'data'=>$eg->getTitle(), 'label'=>"Titre de l’escape game",
+            ])
+            ->add('difficulty', ChoiceType::class, [
+                'mapped' => false,
+                'required' => false,
+                'placeholder' => '— Niveau de difficulté —',
+                'choices' => [
+                    'Facile' => 'easy',
+                    'Moyenne' => 'medium',
+                    'Difficile' => 'hard',
+                ],
+                'data' => $eg->getDifficulty(),
+                'label' => 'Difficulté',
+                'help' => 'Indique à tes joueurs si l’escape est plutôt accessible ou corsé.',
+            ])
+            ->add('durationMinutes', IntegerType::class, [
+                'mapped' => false,
+                'required' => false,
+                'label' => 'Durée indicative (minutes)',
+                'data' => $eg->getDurationMinutes(),
+                'attr' => ['min' => 5, 'max' => 240, 'step' => 5],
+                'empty_data' => '',
+                'help' => 'Temps moyen pour terminer l’escape. Utilisé pour les filtres du catalogue.',
             ])
             ->add('context', TextareaType::class, [
                 'mapped'=>false, 'required'=>false, 'attr'=>['rows'=>4],

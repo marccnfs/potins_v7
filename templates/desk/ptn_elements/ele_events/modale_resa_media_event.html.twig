@@ -10,10 +10,18 @@
             <p>Âge minimum : {{ event.potin.agepotin|default('N/A') }} ans</p>
         </div>
         <div class="event-image">
-            {% if event.potin.media.imagejpg|length > 0 %}
-                <img src="{{ asset('upload/module/' ~ event.potin.media.imagejpg[0].namefile) }}" alt="Image de l'événement">
+            {% set images = [] %}
+
+            {% if event.potin is defined and event.potin.media is defined and event.potin.media.imagejpg is defined %}
+                {% set images = event.potin.media.imagejpg %}
+            {% endif %}
+
+            {% set firstImage = images|first %}
+
+            {% if firstImage %}
+                <img src="{{ asset('upload/module/' ~ firstImage.namefile) }}" alt="Image de l'événement">
             {% else %}
-                <p>Aucune image disponible</p>
+                <div class="no-image">Aucune image</div>
             {% endif %}
         </div>
     </div>

@@ -42,6 +42,12 @@ class EscapeGame
     #[ORM\Column(type: 'boolean',nullable: true, options:["default"=>false])]
     private bool $published = false;
 
+    #[ORM\Column(length: 16, nullable: true)]
+    private ?string $difficulty = null;
+
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
+    private ?int $durationMinutes = null;
+
     #[ORM\Column(length: 120, unique: true, nullable: true)]
     private ?string $shareSlug = null; // pour l'URL publique
 
@@ -117,6 +123,51 @@ class EscapeGame
         $this->published = $published;
 
         return $this;
+    }
+
+    public function getDifficulty(): ?string
+    {
+        return $this->difficulty;
+    }
+
+    public function setDifficulty(?string $difficulty): static
+    {
+        $this->difficulty = $difficulty !== '' ? $difficulty : null;
+
+        return $this;
+    }
+
+    public function getDurationMinutes(): ?int
+    {
+        return $this->durationMinutes;
+    }
+
+    public function setDurationMinutes(?int $durationMinutes): static
+    {
+        if ($durationMinutes !== null) {
+            $durationMinutes = max(0, (int) $durationMinutes);
+        }
+
+        $this->durationMinutes = $durationMinutes ?: null;
+
+        return $this;
+    }
+
+    public function getDurationCategory(): ?string
+    {
+        if ($this->durationMinutes === null) {
+            return null;
+        }
+
+        if ($this->durationMinutes <= 15) {
+            return 'short';
+        }
+
+        if ($this->durationMinutes <= 30) {
+            return 'medium';
+        }
+
+        return 'long';
     }
 
     public function getShareSlug(): ?string

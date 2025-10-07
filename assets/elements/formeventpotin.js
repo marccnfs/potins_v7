@@ -21,7 +21,7 @@ updateTextareaHeight(document.getElementById('contentOne'));
 export default function Formeventpotin(props){
 
     // old : let redirect="/board/Events/"+props.board
-    let redirect='/programmation-potins'
+    let redirect='/board-office/programmation-potins'
 
     let options={"pict":"","partner":[],"potin":"","titre":"","description":"","adresse":""}
     if(props.event){
@@ -115,7 +115,7 @@ export default function Formeventpotin(props){
     }
 
     return (
-        <FetchFormEvent action='potins/event/add-event-potin-ajx' className="form-elastic" onSuccess={onSuccess}
+        <FetchFormEvent action='/potins/event/add-event-potin-ajx' className="form-elastic" onSuccess={onSuccess}
                         edit={edit}
                         board={props.board}
                         potin={props.potin}

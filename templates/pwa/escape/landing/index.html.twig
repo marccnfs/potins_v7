@@ -52,9 +52,9 @@
                     {% for eg in list %}
                         <article class="card">
                             <div class="thumb" aria-hidden="true">
-                                {# si tu as une image d’univers: eg.coverPath #}
-                                {% if eg.coverPath is defined and eg.coverPath %}
-                                    <img src="{{ asset(eg.coverPath) }}" alt="">
+                                {% set cover = eg.illustrations|first %}
+                                {% if cover %}
+                                    <img src="{{ vich_uploader_asset(cover, 'imageFile') }}" alt="{{ eg.title }}">
                                 {% else %}
                                     <div class="ph"></div>
                                 {% endif %}

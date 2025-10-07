@@ -77,13 +77,13 @@ class CreatorUser
             $identity->setFirstname($form['name']->getData()??"");
             $identity->setSex($form['sexe']->getData()??null);
             $identity->setTelephonemobile($form['telephone']->getData()??"");
-            $identity->setMdpfirst(bin2hex(random_bytes(5)));
+            //$identity->setMdpfirst(bin2hex(random_bytes(5)));
             $identity->setEmailfirst($form['email']->getData());
             $customer->setProfil($identity);
             $user->addRole("ROLE_USAGER");
             $user->setDatemajAt(new \DateTime());
             $user->setEmail($form['email']->getData());
-            $this->passwordUpdater->hashPasswordstring($user, $identity->getMdpfirst());
+            $this->passwordUpdater->hashPasswordstring($user, bin2hex(random_bytes(5)));
             $this->assertPasswordHasBeenHashed($user);
             $this->canonicalizer->updateCanonicalFields($user);
             $numeroclient->setNumero($nums->getNumClient());
@@ -125,18 +125,14 @@ class CreatorUser
         }
 
         $identity = new ProfilUser();
-        if(!$stringpass){
-            $identity->setMdpfirst(bin2hex(random_bytes(5)));
-        }else{
-            $identity->setMdpfirst($stringpass);
-        }
+
         $identity->setEmailfirst($mail);
         $customer->setProfil($identity);
         $user->addRole($ismember?"ROLE_MEMBER":"ROLE_CUSTOMER");
         $user->setDatemajAt(new \DateTime());
         $user->setEmail($mail);
 
-        $this->passwordUpdater->hashPasswordstring($user, $identity->getMdpfirst());
+        $this->passwordUpdater->hashPasswordstring($user, bin2hex(random_bytes(5)));
         $this->assertPasswordHasBeenHashed($user);
         $this->canonicalizer->updateCanonicalFields($user);
 
@@ -189,18 +185,14 @@ class CreatorUser
         }
 
         $identity = new ProfilUser();
-        if(!$stringpass){
-            $identity->setMdpfirst(bin2hex(random_bytes(5)));
-        }else{
-            $identity->setMdpfirst($stringpass);
-        }
+
         $identity->setEmailfirst($mail);
         $customer->setProfil($identity);
         $user->addRole("ROLE_MEDIA");
         $user->setDatemajAt(new \DateTime());
         $user->setEmail($mail);
 
-        $this->passwordUpdater->hashPasswordstring($user, $identity->getMdpfirst());
+        $this->passwordUpdater->hashPasswordstring($user, bin2hex(random_bytes(5)));
         $this->assertPasswordHasBeenHashed($user);
         $this->canonicalizer->updateCanonicalFields($user);
 

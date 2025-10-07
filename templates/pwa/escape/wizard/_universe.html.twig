@@ -53,6 +53,10 @@
                             <div class="grid2">
                                 <div>
                                     {{ form_row(form.title) }}
+                                    <div class="grid2" style="gap:.75rem;">
+                                        {{ form_row(form.difficulty) }}
+                                        {{ form_row(form.durationMinutes) }}
+                                    </div>
                                     {{ form_row(form.context) }}
                                     {{ form_row(form.goal) }}
                                     {{ form_row(form.howto) }}

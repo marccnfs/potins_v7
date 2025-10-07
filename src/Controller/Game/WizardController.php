@@ -226,6 +226,23 @@ class WizardController extends AbstractController
             }
             $eg->setTitresEtapes($titles);
 
+            $allowedDifficulties = ['easy', 'medium', 'hard'];
+            $difficultyValue = $form->get('difficulty')->getData();
+            if (\is_string($difficultyValue) && in_array($difficultyValue, $allowedDifficulties, true)) {
+                $eg->setDifficulty($difficultyValue);
+            } else {
+                $eg->setDifficulty(null);
+            }
+
+            $durationValue = $form->get('durationMinutes')->getData();
+            if ($durationValue !== null && $durationValue !== '') {
+                $durationValue = (int) $durationValue;
+                $eg->setDurationMinutes($durationValue > 0 ? $durationValue : null);
+            } else {
+                $eg->setDurationMinutes(null);
+            }
+
+
             // 4) Ajout d’images (FileType multiple, unmapped)
             /** @var \Symfony\Component\HttpFoundation\File\UploadedFile[] $newImages */
             $newImages = $form->get('newImages')->getData() ?? [];

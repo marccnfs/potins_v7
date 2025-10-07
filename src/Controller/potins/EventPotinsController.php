@@ -34,14 +34,14 @@ class EventPotinsController extends AbstractController
 {
     use UserSessionTrait;
 
-
     #[Route('/add-event-potin-ajx', name:"add_event_potin_ajx")]
     public function addEvenPotintAjx(Request $request, EvenatorPotin $evenator): JsonResponse
     {
         if($request->isXmlHttpRequest())
         {
             $data = json_decode((string) $request->getContent(), true);
-            $issue=$evenator->newEventPotin($data,$this->member, $this->board);
+
+            $issue=$evenator->newEventPotin($data,$this->currentMember(), $this->currentBoard);
             return new JsonResponse($issue);
         }else{
             return new JsonResponse(MsgAjax::MSG_ERRORRQ);

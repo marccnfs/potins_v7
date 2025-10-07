@@ -30,7 +30,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[IsGranted('ROLE_MEDIA')]
-#[Route('/media/gest-potins')]
+#[Route('/media/gest-potins/')]
 
 class InscriptionPotinByMediaController extends AbstractController
 {

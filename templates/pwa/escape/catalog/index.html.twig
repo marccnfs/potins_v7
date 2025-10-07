@@ -3,6 +3,22 @@
 {%- endmacro %}
 {% import _self as m %}
 
+{% set cards = cards|default([]) %}
+{% set difficultyLabels = difficultyLabels|default({
+    'easy': 'Facile',
+    'medium': 'Moyenne',
+    'hard': 'Difficile'
+}) %}
+{% set durationLabels = durationLabels|default({
+    'short': '≤ 15 min',
+    'medium': '16–30 min',
+    'long': '30+ min'
+}) %}
+{% set sortLabels = sortLabels|default({
+    'new': 'Nouveaux',
+    'popular': 'Populaires',
+    'title': 'Titre A→Z'
+}) %}
 <div class="catalog">
 
         <header class="cat-hero">
@@ -12,20 +28,20 @@
                 <input type="search" name="q" value="{{ q }}" placeholder="Rechercher (IA, Histoire, code...)">
                 <select name="difficulty">
                     <option value="">Difficulté</option>
-                    <option value="easy"   {{ difficulty=='easy'?'selected' }} >Facile</option>
-                    <option value="medium" {{ difficulty=='medium'?'selected' }}>Moyenne</option>
-                    <option value="hard"   {{ difficulty=='hard'?'selected' }} >Difficile</option>
+                    {% for key, label in difficultyLabels %}
+                        <option value="{{ key }}" {{ difficulty==key?'selected' }}>{{ label }}</option>
+                    {% endfor %}
                 </select>
                 <select name="duration">
                     <option value="">Durée</option>
-                    <option value="short"  {{ duration=='short'?'selected' }} >≤ 15 min</option>
-                    <option value="medium" {{ duration=='medium'?'selected' }}>16–30 min</option>
-                    <option value="long"   {{ duration=='long'?'selected' }} >30+ min</option>
+                    {% for key, label in durationLabels %}
+                        <option value="{{ key }}" {{ duration==key?'selected' }}>{{ label }}</option>
+                    {% endfor %}
                 </select>
                 <select name="sort">
-                    <option value="new"     {{ sort=='new'?'selected' }}>Nouveaux</option>
-                    <option value="popular" {{ sort=='popular'?'selected' }}>Populaires</option>
-                    <option value="title"   {{ sort=='title'?'selected' }}>Titre A→Z</option>
+                    {% for key, label in sortLabels %}
+                        <option value="{{ key }}" {{ sort==key?'selected' }}>{{ label }}</option>
+                    {% endfor %}
                 </select>
                 <button class="btn btn-primary" type="submit">Filtrer</button>
                 {% if q or difficulty or duration or sort!='new' %}
@@ -35,13 +51,15 @@
             <div class="count muted">{{ total }} résultat{{ total>1?'s':'' }}</div>
         </header>
 
-        {% if games|length %}
+    {% if cards|length %}
             <section class="cards">
-                {% for eg in games %}
+                {% for card in cards %}
+                    {% set eg = card.game %}
+                    {% set cover = card.cover %}
                     <article class="card">
                         <a class="thumb" href="{{ path('play_entry', { slug: eg.shareSlug }) }}">
-                            {% if eg.coverPath is defined and eg.coverPath %}
-                                <img src="{{ asset(eg.coverPath) }}" alt="">
+                            {% if cover %}
+                                <img src="{{ vich_uploader_asset(cover, 'imageFile') }}" alt="{{ eg.title }}">
                             {% else %}
                                 <div class="ph"></div>
                             {% endif %}
@@ -51,20 +69,22 @@
                                 <a href="{{ path('play_entry', { slug: eg.shareSlug }) }}">{{ eg.title }}</a>
                             </h3>
                             <p class="desc">
-                                par <strong>{{ eg.owner ? (eg.owner.nickname ?? 'Anonyme') : '—' }}</strong>
-                                · {{ eg.universe ? eg.universe|join(' ') : '...' }}
+                                par <strong>{{ card.ownerName }}</strong>
+                                {% if card.summary %}
+                                    · {{ card.summary }}
+                                {% endif %}
                             </p>
 
                         </div>
                         <div class="badges">
-                            {% if eg.difficulty is defined and eg.difficulty %}
-                                <span class="badge">{{ eg.difficulty|capitalize }}</span>
+                            {% if card.difficultyLabel %}
+                                <span class="badge">{{ card.difficultyLabel }}</span>
                             {% endif %}
-                            {% if eg.durationMinutes is defined and eg.durationMinutes %}
-                                <span class="badge">{{ eg.durationMinutes }} min</span>
+                            {% if card.durationLabel %}
+                                <span class="badge">{{ card.durationLabel }}</span>
                             {% endif %}
-                            {% if eg.playsCount is defined and eg.playsCount %}
-                                <span class="badge">▶ {{ eg.playsCount }}</span>
+                            {% if card.playsCount %}
+                                <span class="badge">▶ {{ card.playsCount }}</span>
                             {% endif %}
                         </div>
                         <div class="actions">

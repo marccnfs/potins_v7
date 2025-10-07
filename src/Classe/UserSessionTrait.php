@@ -137,7 +137,9 @@ trait UserSessionTrait
             /** @var Customers|null $customer */
             $customer = $user->getCustomer();
         }
+
         $this->currentCustomer = $customer;
+        $this->currentMember=$customer->getMember();
 
         if ($customer && \method_exists($customer, 'getId')) {
             $this->session()->set('idcustomer', $customer->getId());
