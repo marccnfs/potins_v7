@@ -1,6 +1,8 @@
 {# templates/escape/garden.html.twig #}
 {% block body %}
     {% set cfg = puzzle.config is iterable ? puzzle.config : {} %}
+    {% set stepIndex = 1 %}
+    {% set stepTitle = eg.titresEtapes[stepIndex]|default('Cryptex numérique') %}
 
     <div class="_wb">
         <div class="container_bo_member">
@@ -14,7 +16,7 @@
 
                             <header style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin-bottom:.75rem">
                                 <div>
-                                    <h1 style="margin:0">Étape 1 — Cryptex numérique</h1>
+                                    <h1 style="margin:0">Étape {{ stepIndex }} — {{ stepTitle }}</h1>
                                     {% if puzzle.prompt %}<p class="text-muted" style="margin:.25rem 0 0">{{ puzzle.prompt }}</p>{% endif %}
                                 </div>
                                 <div style="display:flex;gap:.5rem;flex-wrap:wrap">
@@ -46,7 +48,8 @@
 
                             {{ form_start(form, { attr: { id: 'form-step1' } }) }}
                             <section class="card">
-                                <div class="grid" style="grid-template-columns:minmax(260px,1fr) minmax(320px,1fr)">
+                            {#    <div class="grid" style="grid-template-columns:minmax(260px,1fr) minmax(320px,1fr)"> #}
+                                <div class="nogrid">
                                     <div>
                                         {{ form_row(form.title) }}
                                         {{ form_row(form.prompt) }}
@@ -62,6 +65,15 @@
                                         {{ form_row(form.successMessage) }}
                                     </div>
                                 </div>
+                                {#    <div class="grid" style="grid-template-columns:minmax(260px,1fr) minmax(320px,1fr)"> #}
+                                <div class="nogrid">
+                                    <div>
+                                        {{ form_row(form.finalClue) }}
+                                    </div>
+                                    <div>
+                                        {% include 'pwa/escape/wizard/_hints_field.html.twig' with { field: form.hintsJson } %}
+                                    </div>
+                                </div>
                                 {#
                                 <div class="form-actions" style="display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem">
                                     <button class="btn btn-primary">Enregistrer</button>
@@ -71,11 +83,12 @@
                                 </div>
                                 #}
                             </section>
-                            {{ form_end(form) }}
+                            {{ form_rest(form) }}
+                            {{ form_end(form, { render_rest: false }) }}
 
                             <div class="sticky-save">
                                 <div class="sticky-inner">
-                                    <span class="text-muted">Étape 1 — Cryptex</span>
+                                    <span class="text-muted">Étape {{ stepIndex }} — {{ stepTitle }}</span>
                                     <div style="display:flex;gap:.5rem">
                                         <button form="form-step1" class="btn btn-primary">Enregistrer</button>
                                         {% if puzzle.ready %}<a class="btn btn-light" href="{{ path('wizard_preview_step', { id: eg.id, step: 1 }) }}" target="_blank">Aperçu</a>{% endif %}

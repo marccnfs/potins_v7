@@ -224,9 +224,30 @@ class InscriptionPotinByMediaController extends AbstractController
     #[Route('/form-delete-participant-potins/{order}/{id}', name:"form-delete_participant_resamedia")]
     public function deleteParticipantResa(RegisteredRepository $regisrepo,OrdersRepository $ordersRepository,Commandar $commandar,Request $request,$order,$id): RedirectResponse|Response
     {
-        $order=$ordersRepository->findOrderEvent($order);
-        $registered=$regisrepo->find($id);
-        $event=$order->getListproducts()[0]->getSubscription()->getEvent();
+        $order = $ordersRepository->findOrderEvent($order);
+        if (!$order) {
+            throw $this->createNotFoundException('Réservation introuvable.');
+        }
+
+        $registered = $regisrepo->find($id);
+        if (!$registered) {
+            throw $this->createNotFoundException('Participant introuvable.');
+        }
+
+        $relatedProduct = null;
+        foreach ($order->getListproducts() as $product) {
+            $participant = $product->getRegistered();
+            if ($participant !== null && $participant->getId() === $registered->getId()) {
+                $relatedProduct = $product;
+                break;
+            }
+        }
+
+        if ($relatedProduct === null) {
+            throw $this->createNotFoundException('Participant introuvable pour cette réservation.');
+        }
+
+        $event = $relatedProduct->getSubscription()?->getEvent();
 
         $form = $this->createForm(DeleteType::class, $registered);
         $form->handleRequest($request);
@@ -241,10 +262,12 @@ class InscriptionPotinByMediaController extends AbstractController
             1
         );
 
+        $replace = false;
+
         return $this->render($this->useragentP.'ptn_media/home.html.twig', [
             'directory'=>'resa',
             'form' => $form->createView(),
-            'replacejs'=>$replace??null,
+            'replacejs'=>$replace,
             'board' => $this->board,
             'event'=>$event,
             'member'=>$this->member,

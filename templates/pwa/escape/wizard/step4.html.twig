@@ -1,5 +1,7 @@
 {% block body %}
     {% set cfg = puzzle.config is iterable ? puzzle.config : {} %}
+    {% set stepIndex = 4 %}
+    {% set stepTitle = eg.titresEtapes[stepIndex]|default('Formulaire à piège logique') %}
     <div class="_wb">
         <div class="container_bo_member">
             <div class="bo_content">
@@ -12,7 +14,7 @@
 
                         <header style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin-bottom:.75rem">
                             <div>
-                                <h1 style="margin:0">Étape 4 — Formulaire à piège logique</h1>
+                                <h1 style="margin:0">Étape {{ stepIndex }} — {{ stepTitle }}</h1>
                                 {% if puzzle.prompt %}<p class="text-muted" style="margin:.25rem 0 0">{{ puzzle.prompt }}</p>{% endif %}
                             </div>
                             <div style="display:flex;gap:.5rem;flex-wrap:wrap">
@@ -40,7 +42,8 @@
 
                         {{ form_start(form, { attr: { id: 'form-step4' } }) }}
                         <section class="card">
-                            <div class="grid" style="grid-template-columns:minmax(260px,1fr) minmax(320px,1fr)">
+                            {#    <div class="grid" style="grid-template-columns:minmax(260px,1fr) minmax(320px,1fr)"> #}
+                            <div class="nogrid">
                                 <div>
                                     {{ form_row(form.title) }}
                                     {{ form_row(form.prompt) }}
@@ -52,6 +55,15 @@
                                     {# <p class="text-muted" style="margin-top:.5rem">Accepte <strong>soit</strong> <code>[ ... ]</code> <strong>soit</strong> <code>{"questions":[ ... ]}</code>.</p> #}
                                 </div>
                             </div>
+                            {# <div class="grid" style="grid-template-columns:minmax(260px,1fr) minmax(320px,1fr);gap:1rem;margin-top:1rem">#}
+                                <div class="nogrid">
+                                    <div>
+                                    {{ form_row(form.finalClue) }}
+                                    </div>
+                                <div>
+                                    {% include 'pwa/escape/wizard/_hints_field.html.twig' with { field: form.hintsJson } %}
+                                </div>
+                            </div>
                             {#
                             <div class="form-actions" style="display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem">
                                 <button class="btn btn-primary">Enregistrer</button>
@@ -61,11 +73,12 @@
                             </div>
                             #}
                         </section>
-                        {{ form_end(form) }}
+                        {{ form_rest(form) }}
+                        {{ form_end(form, { render_rest: false }) }}
 
                         <div class="sticky-save">
                             <div class="sticky-inner">
-                                <span class="text-muted">Étape 4 — Formulaire logique</span>
+                                <span class="text-muted">Étape {{ stepIndex }} — {{ stepTitle }}</span>
                                 <div style="display:flex;gap:.5rem">
                                     <button form="form-step4" class="btn btn-primary">Enregistrer</button>
                                     {% if puzzle.ready %}<a class="btn btn-light" href="{{ path('wizard_preview_step', { id: eg.id, step: 4 }) }}" target="_blank">Aperçu</a>{% endif %}

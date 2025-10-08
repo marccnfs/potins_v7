@@ -1,0 +1,57 @@
+{#
+Widget commun pour éditer les indices d'une étape.
+Usage : {% include 'pwa/escape/wizard/_hints_field.html.twig' with { field: form.hintsJson } %}
+#}
+{% set hasErrors = field.vars.errors|length > 0 %}
+{% set placeholder = placeholder|default('Indice') %}
+<div class="form-group hints-field"
+     data-controller="wizard-hints"
+     data-wizard-hints-min-value="{{ min|default(1) }}"
+     data-wizard-hints-placeholder-value="{{ placeholder }}">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.5rem;">
+        {{ form_label(field) }}
+        <span class="badge bg-light text-muted"
+              data-wizard-hints-target="counter"
+              style="font-size:.85rem;font-weight:500;">0/0</span>
+    </div>
+
+    <div class="hints-list"
+         data-wizard-hints-target="list"
+         style="display:flex;flex-direction:column;gap:.5rem;"></div>
+
+    <template data-wizard-hints-target="template">
+        <div class="hint-row"
+             data-hint-row
+             style="display:flex;align-items:center;gap:.5rem;">
+            <input type="text"
+                   class="form-control{{ hasErrors ? ' is-invalid' : '' }}"
+                   data-wizard-hints-target="input"
+                   data-action="input->wizard-hints#sync blur->wizard-hints#sync keydown.enter->wizard-hints#maybeAddFromEnter"
+                   placeholder="{{ placeholder }}">
+            <button type="button"
+                    class="btn btn-light btn-sm"
+                    data-action="wizard-hints#remove"
+                    title="Supprimer cet indice">✕</button>
+        </div>
+    </template>
+
+    <div style="margin-top:.25rem;">
+        <button type="button" class="btn btn-light btn-sm" data-action="wizard-hints#add">+ Ajouter un indice</button>
+    </div>
+
+    {{ form_errors(field) }}
+    {{ form_help(field) }}
+
+    <div style="display:none;">
+        {% set widgetAttr = field.vars.attr|merge({
+            'data-wizard-hints-target': 'field',
+            'class': (field.vars.attr.class|default('') ~ ' wizard-hints__field')|trim,
+            'style': 'display:none;'
+        }) %}
+        {{ form_widget(field, { attr: widgetAttr }) }}
+    </div>
+
+    <noscript>
+        <p class="alert alert-warning" style="margin-top:.5rem;">Active JavaScript pour renseigner les indices.</p>
+    </noscript>
+</div>

@@ -22,7 +22,21 @@ class MediaOfficeController extends AbstractController
     #[Route('/planning-media', name:"office_media")]
     public function officeMediaBoard(ListEvent $listEvent): Response
     {
-        $tabdatesevents=$listEvent->listEventResa($this->board->getId());
+        $tabdatesevents = $listEvent->listEventResa($this->board->getId());
+
+        $todayTimestamp = (new \DateTimeImmutable('today'))->getTimestamp();
+        foreach ($tabdatesevents as $eventId => &$eventData) {
+            foreach ($eventData['date'] as $timestamp => $schedule) {
+                if ($timestamp < $todayTimestamp) {
+                    unset($eventData['date'][$timestamp]);
+                }
+            }
+
+            if (empty($eventData['date'])) {
+                unset($tabdatesevents[$eventId]);
+            }
+        }
+        unset($eventData);
 
         $vartwig=$this->menuNav->admin(
             $this->board,

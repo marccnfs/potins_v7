@@ -5,6 +5,8 @@
     {% set target = cfg.target|default({}) %}
     {% set isQrOnly = cfg.mode|default('geo') == 'qr_only' %}
     {% set qrOnlyRoutes = qrOnlyOptions is iterable ? qrOnlyOptions : {} %}
+    {% set stepIndex = 2 %}
+    {% set stepTitle = eg.titresEtapes[stepIndex]|default('QR code (géoloc ou caché)') %}
 
 
     <div class="_wb">
@@ -19,7 +21,7 @@
 
                         <header style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin-bottom:.75rem">
                             <div>
-                                <h1 style="margin:0">Étape 2 — QR code (géoloc ou caché)</h1>
+                                <h1 style="margin:0">Étape {{ stepIndex }} — {{ stepTitle }}</h1>
                                 {% if puzzle.prompt %}<p class="text-muted" style="margin:.25rem 0 0">{{ puzzle.prompt }}</p>{% endif %}
                             </div>
                             <div style="display:flex;gap:.5rem;flex-wrap:wrap">
@@ -124,7 +126,8 @@
 
                         {{ form_start(form, { attr: { id: 'form-step2' } }) }}
                         <section class="card">
-                            <div class="grid" style="grid-template-columns:minmax(260px,1fr) minmax(320px,1fr);gap:1rem">
+                            {#    <div class="grid" style="grid-template-columns:minmax(260px,1fr) minmax(320px,1fr)"> #}
+                            <div class="nogrid">
                                 <div>
                                     {{ form_row(form.title) }}
                                     {{ form_row(form.prompt) }}
@@ -149,8 +152,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="margin-top:1rem">
-                                {{ form_row(form.hintsJson) }}
+                          {#   <div class="grid" style="margin-top:1rem;grid-template-columns:minmax(260px,1fr) minmax(320px,1fr);gap:1rem"> #}
+                                <div class="nogrid">
+                                <div>
+                                    {{ form_row(form.finalClue) }}
+                                </div>
+                                <div>
+                                    {% include 'pwa/escape/wizard/_hints_field.html.twig' with { field: form.hintsJson } %}
+                                </div>
                             </div>
                             {#
                             <div class="form-actions" style="display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem">
@@ -166,7 +175,7 @@
 
                         <div class="sticky-save">
                             <div class="sticky-inner">
-                                <span class="text-muted">Étape 2 — QR code</span>
+                                <span class="text-muted">Étape {{ stepIndex }} — {{ stepTitle }}</span>
                                 <div style="display:flex;gap:.5rem">
                                     <button form="form-step2" class="btn btn-primary">Enregistrer</button>
                                     {% if puzzle.ready %}<a class="btn btn-light" href="{{ path('wizard_preview_step', { id: eg.id, step: 2 }) }}" target="_blank">Aperçu</a>{% endif %}

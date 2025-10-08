@@ -106,7 +106,7 @@ class PuzzleQrGeoType extends AbstractType
 
 
             ->add('hintsJson', TextareaType::class, [
-                'label'    => 'Indices (JSON)',
+                'label'    => 'Indices',
                 'mapped'   => false,
                 'required' => true, // on force à fournir quelque chose
                 'attr'     => [
@@ -114,7 +114,7 @@ class PuzzleQrGeoType extends AbstractType
                     'placeholder' => '["Indice 1","Indice 2"]',
                     'spellcheck' => 'false'
                 ],
-                'help'     => 'Mettre un tableau JSON de chaînes : ["Indice 1","Indice 2"]. Au moins 1 indice requis (impacte le score).',
+                'help'     => 'Ajoute 1 à 3 indices courts. Ils seront révélés aux joueurs en cas de besoin (au moins un indice requis).',
                 'data'     => isset($cfg['hints'])
                     ? json_encode($cfg['hints'], JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE)
                     : "",

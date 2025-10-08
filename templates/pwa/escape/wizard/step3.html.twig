@@ -1,6 +1,8 @@
 {# templates/escape/garden.html.twig #}
 {% block body %}
     {% set cfg = puzzle.config is iterable ? puzzle.config : {} %}
+    {% set stepIndex = 3 %}
+    {% set stepTitle = eg.titresEtapes[stepIndex]|default('Puzzle (image en tuiles)') %}
     <div class="_wb">
         <div class="container_bo_member">
             <div class="bo_content">
@@ -13,7 +15,7 @@
 
                         <header style="display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin-bottom:.75rem">
                             <div>
-                                <h1 style="margin:0">Étape 3 — Puzzle (image en tuiles)</h1>
+                                <h1 style="margin:0">Étape {{ stepIndex }} — {{ stepTitle }}</h1>
                                 {% if puzzle.prompt %}<p class="text-muted" style="margin:.25rem 0 0">{{ puzzle.prompt }}</p>{% endif %}
                             </div>
                             <div style="display:flex;gap:.5rem;flex-wrap:wrap">
@@ -53,17 +55,14 @@
                         {# --- Carte FORMULAIRE --- #}
                         {{ form_start(form, { attr: { id: 'form-step3', enctype: 'multipart/form-data' } }) }}
                         <section class="card">
-                            <div class="grid" style="grid-template-columns:minmax(260px, 1fr) minmax(320px, 1fr)">
+                            {#    <div class="grid" style="grid-template-columns:minmax(260px,1fr) minmax(320px,1fr)"> #}
+                            <div class="nogrid">
                                 <div>
                                     {{ form_row(form.title) }}
                                     {{ form_row(form.prompt) }}
                                     {{ form_row(form.imageFile) }}
                                     <p class="text-muted" style="margin-top:.5rem">
                                         Formats conseillés : <code>.jpg</code>, <code>.png</code>, <code>.webp</code> — 1600px de large minimum.
-                                    </p>
-                                    {{ form_row(form.hintsJson) }}
-                                    <p class="text-muted" style="margin-top:.25rem">
-                                        Exemple : <code>["Commence par les bords","Repère les couleurs fortes","Regarde le coin en bas à droite"]</code>
                                     </p>
                                 </div>
                                 <div>
@@ -75,6 +74,19 @@
                                     <p class="text-muted" style="margin:.5rem 0 0">3×3 pour commencer ; 4×4 pour les plus costauds 😉</p>
                                 </div>
                             </div>
+
+                            {#    <div class="grid" style="grid-template-columns:minmax(260px,1fr) minmax(320px,1fr)"> #}
+                            <div class="nogrid">
+                                <div>
+                                    {{ form_row(form.finalClue) }}
+                                </div>
+                                <div>
+                                    {% include 'pwa/escape/wizard/_hints_field.html.twig' with { field: form.hintsJson } %}
+                                    <p class="text-muted" style="margin-top:.25rem">
+                                        Exemple : <em>Commence par les bords</em>, <em>Repère les couleurs fortes</em>, <em>Regarde le coin en bas à droite</em>…
+                                    </p>
+                                </div>
+                            </div>
 {#
                             <div class="form-actions" style="display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem">
                                 <button class="btn btn-primary">Enregistrer</button>
@@ -84,12 +96,13 @@
                             </div>
 #}
                         </section>
-                        {{ form_end(form) }}
+                        {{ form_rest(form) }}
+                        {{ form_end(form, { render_rest: false }) }}
 
                         {# --- Barre d’action collante (confort) --- #}
                         <div class="sticky-save">
                             <div class="sticky-inner">
-                                <span class="text-muted">Étape 3 — Puzzle</span>
+                                <span class="text-muted">Étape {{ stepIndex }} — {{ stepTitle }}</span>
                                 <div style="display:flex;gap:.5rem">
                                     <button form="form-step3" class="btn btn-primary">Enregistrer</button>
                                     {% if puzzle.ready %}
