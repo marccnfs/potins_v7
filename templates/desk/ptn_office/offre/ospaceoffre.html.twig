@@ -3,9 +3,17 @@
     <div class="container_bo_member">
         {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
         <section class="bo_content">
-            <!-- offres publiées -->
-            <div class="head-wb-space"></div>
+            <header class="dashboard-header">
+                <span class="dashboard-kicker">Boutique</span>
+                <h1 class="dashboard-title">Offres</h1>
+                <p class="dashboard-subtitle">Proposez vos services et suivez leur visibilité.</p>
+            </header>
+
+            {{ include('desk/ptn_office/partials/_alerts.html.twig') }}
+
+            <section class="dashboard-card">
                 {{ include('desk/ptn_office/offre/ptn_offre.html.twig') }}
+            </section>
         </section>
     </div>
 {%  endblock body %}

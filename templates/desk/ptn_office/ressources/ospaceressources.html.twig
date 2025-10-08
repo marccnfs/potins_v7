@@ -3,15 +3,23 @@
     <div class="container_bo_member">
         {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
         <div class="bo_content">
-            <div class="zone-bar-show">
-                <div class="bar-item">
+            <header class="dashboard-header">
+                <span class="dashboard-kicker">Contenus pédagogiques</span>
+                <h1 class="dashboard-title">Ressources</h1>
+                <p class="dashboard-subtitle">Partagez vos fiches pratiques et vos supports pédagogiques.</p>
+            </header>
+
+            {{ include('desk/ptn_office/partials/_alerts.html.twig') }}
+
+            <section class="dashboard-card">
+                <div class="dashboard-toolbar">
                     <a href="{{ path('ressource_manage') }}" class="btn-add">
-                        <i class="fa fa-plus"></i> Nouvelle ressource
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Nouvelle ressource
                     </a>
                 </div>
-            </div>
-            <h1 class="dashboard-title">Ressources</h1>
-        {{ include('desk/ptn_office/ressources/carteofboard.html.twig') }}
+                {{ include('desk/ptn_office/ressources/carteofboard.html.twig') }}
+            </section>
         </div>
     </div>
 </div>

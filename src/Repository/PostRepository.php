@@ -223,14 +223,13 @@ class PostRepository extends ServiceEntityRepository
     public function findPstKey($key){
         $qb=$this->queryPostAll();
         return $qb
-            -> andWhere('p.keymodule =:key')
-            -> setParameter('key', $key)
-            -> andwhere('p.deleted = false')
-            -> orderBy('p.createAt', 'ASC')
-            -> getQuery()
-            -> getResult();
+            ->andWhere('p.keymodule = :key')
+            ->setParameter('key', $key)
+            ->andWhere('p.deleted = false')
+            ->orderBy('p.createAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
-
 
 
     /**

@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
+use DateTimeInterface;
 
 #[ORM\Entity(repositoryClass: EscapeGameRepository::class)]
 #[ORM\Table(name:"aff_escapegame")]
@@ -428,6 +429,31 @@ class EscapeGame
         }
 
         return $this;
+    }
+    public function getOwnerDisplayName(): string
+    {
+        foreach ([$this->owner, $this->participant] as $participant) {
+            if (!$participant instanceof Participant) {
+                continue;
+            }
+
+            $nickname = $participant->getNickname();
+            if ($nickname) {
+                return $nickname;
+            }
+
+            $firstname = $participant->getPrenom();
+            if ($firstname) {
+                return $firstname;
+            }
+        }
+
+        return 'Anonyme';
+    }
+
+    public function getLastActivityAt(): ?DateTimeInterface
+    {
+        return $this->datemaj_at ?? $this->created_at;
     }
 
 }

@@ -4,7 +4,7 @@
 namespace App\Service\backoffice;
 
 
-use App\Repository\Entity\FacturesRepository;
+use App\Repository\FacturesRepository;
 
 
 class Initbacktor

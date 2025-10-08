@@ -1,7 +1,7 @@
 {% block body %}
 <div class="_wb">
     <div class="container_bo_member">
-        <div class="bo_content">
+        <div class="escape_content">
                 {% set total = total ?? 6 %}
                 {% set steps = {
                     1: eg.titresEtapes[1]|default('Cryptex numérique'),
@@ -50,7 +50,7 @@
                             <h1>✨ Crée / édite l’univers</h1>
                             {{ form_start(form, { attr: { enctype: 'multipart/form-data' } }) }}
 
-                            <div class="grid2">
+                            <div class="nogrid">
                                 <div>
                                     {{ form_row(form.title) }}
                                     <div class="grid2" style="gap:.75rem;">

@@ -1,0 +1,26 @@
+{% set labels = {
+    'success': 'Succès',
+    'error': 'Erreur',
+    'warning': 'Attention',
+    'info': 'Information',
+    'notice': 'Information'
+} %}
+{% set icons = {
+    'success': 'fa-check-circle',
+    'error': 'fa-times-circle',
+    'warning': 'fa-exclamation-triangle',
+    'info': 'fa-info-circle',
+    'notice': 'fa-info-circle'
+} %}
+
+{% for type, label in labels %}
+    {% for message in app.flashes(type) %}
+        <div class="dashboard-alert dashboard-alert--{{ type }}">
+            <span class="dashboard-alert__icon"><i class="fa {{ icons[type]|default('fa-info-circle') }}" aria-hidden="true"></i></span>
+            <div class="dashboard-alert__content">
+                <span class="dashboard-alert__title">{{ label }}</span>
+                <p class="dashboard-alert__message">{{ message|raw }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endfor %}

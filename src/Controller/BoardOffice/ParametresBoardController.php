@@ -2,14 +2,12 @@
 
 namespace App\Controller\BoardOffice;
 
-
-use App\Classe\UserSessionTraitOld;
+use App\Classe\UserSessionTrait;
 use App\Entity\Boards\Opendays;
 use App\Event\WebsiteCreatedEvent;
 use App\Lib\Links;
 use App\Lib\MsgAjax;
 use App\Repository\BoardRepository;
-use App\Repository\OffresRepository;
 use App\Repository\PostRepository;
 use App\Repository\SectorsRepository;
 use App\Service\SpaceWeb\BoardlistFactor;
@@ -26,18 +24,12 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use App\Form\WebsiteType;
 
 
-#[IsGranted('ROLE_MEMBER')]
-#[Route('admin-website/param/')]
+//#[IsGranted('ROLE_MEDIA')]
+#[Route('mediatheque/param/')]
 
 class ParametresBoardController extends AbstractController
 {
-    use UserSessionTraitOld;
-
-    public function __construct(){
-        $this->userSession();
-        $board=$this->resolveCurrentBoard();
-    }
-
+    use UserSessionTrait;
 
     #[Route('parameters', name:"parameters")]
     public function parametersWebsite(SectorsRepository $reposector, PostRepository $postationRepository): Response
@@ -54,7 +46,7 @@ class ParametresBoardController extends AbstractController
             'directory'=>'parameters',
             'replacejs'=>false,
             'board'=>$this->board,
-            'member'=>$this->member,
+            'member'=>$this->currentMember(),
             'test1'=>(bool)(($email = $this->board->getTemplate()->getEmailspaceweb())),
             'test2'=>(bool)(($reposector->findOneBy(['codesite'=>$this->board->getCodesite()]))),
             'email'=>$email,

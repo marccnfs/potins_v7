@@ -40,29 +40,7 @@ class PlayController extends AbstractController
         }
 
         $totalSteps = max(1, $eg->getPuzzles()->count() ?: 6);
-        $httpProgressMap = [];
-        if ($req->hasSession()) {
-            $session = $req->getSession();
-            $stored = $session->get('play_progress_'.$eg->getId(), []);
-            if (\is_array($stored)) {
-                foreach ($stored as $key => $value) {
-                    if (\is_int($key) || ctype_digit((string) $key)) {
-                        $step = (int) $key;
-                        $flag = \is_bool($value) ? $value : (bool) $value;
-                    } elseif (\is_int($value) || ctype_digit((string) $value)) {
-                        $step = (int) $value;
-                        $flag = true;
-                    } else {
-                        continue;
-                    }
-                    if ($flag && $step >= 1 && $step <= $totalSteps) {
-                        $httpProgressMap[$step] = true;
-                    }
-                }
-            }
-        }
-        $httpProgress = array_keys($httpProgressMap);
-        sort($httpProgress);
+        $httpProgress = $this->loadHttpProgress($req, (int) $eg->getId(), $totalSteps);
 
         $activeSession = $playSessionRepo->findLatestActiveForParticipant($eg, $participant);
         $recentSessions = $playSessionRepo->findRecentForParticipant($eg, $participant, 5);
@@ -76,10 +54,10 @@ class PlayController extends AbstractController
 
         sort($progressSteps);
         $doneCount = min(\count($progressSteps), $totalSteps);
-        $lastStep = $doneCount ? max($progressSteps) : 0;
+        $firstIncomplete = $this->firstIncompleteStep($progressSteps, $totalSteps);
         $resumeStep = $activeSession
             ? $activeSession->getResumeStep($totalSteps)
-            : ($doneCount >= $totalSteps ? $totalSteps : max(1, min($totalSteps, $lastStep + 1)));
+            : ($firstIncomplete ?? $totalSteps);
 
         $bestSession = null;
         foreach ($recentSessions as $session) {
@@ -192,13 +170,41 @@ class PlayController extends AbstractController
     // src/Controller/PlayController.php
     #[Route('/{slug}/the-end', name: 'play_the_end')]
     #[RequireParticipant]
-    public function theEnd(Request $req,EscapeGameRepository $repo, string $slug): Response
+    public function theEnd(Request $req,EscapeGameRepository $repo, PlaySessionRepository $playSessionRepo, string $slug): Response
     {
         $eg = $repo->findOneBy(['shareSlug'=>$slug, 'published'=>true])
             ?? throw $this->createNotFoundException();
         $participant=$this->currentParticipant($req);
         $vartwig=$this->menuNav->templatepotins('the_end',Links::GAMES);
-        $total = 6;
+        $total = max(1, $eg->getPuzzles()->count() ?: 6);
+
+        $httpProgress = $this->loadHttpProgress($req, (int) $eg->getId(), $total);
+        $activeSession = $playSessionRepo->findLatestActiveForParticipant($eg, $participant);
+        $dbProgress = $activeSession ? $activeSession->getProgressSteps() : [];
+
+        if (!$dbProgress) {
+            $recent = $playSessionRepo->findRecentForParticipant($eg, $participant, 1);
+            $candidate = $recent[0] ?? null;
+            if ($candidate) {
+                $dbProgress = $candidate->getProgressSteps();
+            }
+        }
+
+        $progressSteps = $dbProgress ?: $httpProgress;
+        if ($dbProgress && $httpProgress) {
+            $progressSteps = array_values(array_unique(array_merge($dbProgress, $httpProgress)));
+        }
+        $progressSteps = array_filter($progressSteps, static fn ($step) => $step >= 1 && $step <= $total);
+        sort($progressSteps);
+
+        if (\count($progressSteps) < $total) {
+            $redirectStep = $this->firstIncompleteStep($progressSteps, $total) ?? 1;
+
+            return $this->redirectToRoute('play_step', [
+                'slug' => $eg->getShareSlug(),
+                'step' => $redirectStep,
+            ]);
+        }
         $fragments = [];
         $missing = [];
         for ($i = 1; $i <= $total; ++$i) {
@@ -260,6 +266,65 @@ class PlayController extends AbstractController
             'totalSteps'=>$total,
         ]);
 
+    }
+
+    /**
+     * @return int[]
+     */
+    private function loadHttpProgress(Request $req, int $gameId, int $totalSteps): array
+    {
+        if (!$req->hasSession() || $gameId <= 0) {
+            return [];
+        }
+
+        $session = $req->getSession();
+        $stored = $session->get('play_progress_'.$gameId, []);
+        if (!\is_array($stored)) {
+            return [];
+        }
+
+        $progressMap = [];
+        foreach ($stored as $key => $value) {
+            if (\is_int($key) || ctype_digit((string) $key)) {
+                $step = (int) $key;
+                $flag = \is_bool($value) ? $value : (bool) $value;
+            } elseif (\is_int($value) || ctype_digit((string) $value)) {
+                $step = (int) $value;
+                $flag = true;
+            } else {
+                continue;
+            }
+
+            if ($flag && $step >= 1 && $step <= $totalSteps) {
+                $progressMap[$step] = true;
+            }
+        }
+
+        $progress = array_keys($progressMap);
+        sort($progress);
+
+        return $progress;
+    }
+
+    private function firstIncompleteStep(array $progressSteps, int $totalSteps): ?int
+    {
+        $totalSteps = max(1, $totalSteps);
+        $indexed = [];
+        foreach ($progressSteps as $step) {
+            if (\is_int($step)) {
+                $indexed[$step] = true;
+            } elseif (\is_string($step) && ctype_digit($step)) {
+                $indexed[(int) $step] = true;
+            }
+        }
+
+        for ($i = 1; $i <= $totalSteps; ++$i) {
+            if (!isset($indexed[$i])) {
+                return $i;
+            }
+        }
+
+        return null;
     }
 
 }

@@ -168,13 +168,12 @@ class PostEventRepository extends ServiceEntityRepository
     public function findEventKey($key){
         $qb=$this->queryKeyEvent();
         return $qb
-            -> andWhere('p.keymodule =:key')
-            -> setParameter('key', $key)
-            -> andwhere('p.deleted = false')
-            -> orderBy('p.create_at', 'ASC')
-            -> getQuery()
-            //-> getResult();
-           -> getArrayResult();
+            ->andWhere('p.keymodule = :key')
+            ->setParameter('key', $key)
+            ->andWhere('p.deleted = false')
+            ->orderBy('p.create_at', 'DESC')
+            ->getQuery()
+            ->getArrayResult();
     }
 
     public function findEventById($id){

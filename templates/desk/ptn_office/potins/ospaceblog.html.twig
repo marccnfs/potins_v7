@@ -2,10 +2,23 @@
 <div class="_wb">
     <div class="container_bo_member">
         {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
-        <h1 class="dashboard-title">Tableau de bord</h1>
+
         <div class="bo_content">
-            {{ include('desk/ptn_office/potins/link_bar_blog.html.twig',{city:'null'}) }}
-            {{ include('desk/ptn_office/potins/affi_blog.html.twig') }}
+            <header class="dashboard-header">
+                <span class="dashboard-kicker">Vue d'ensemble</span>
+                <h1 class="dashboard-title">Tableau de bord</h1>
+                <p class="dashboard-subtitle">Administrez vos publications et suivez l'activité de votre panneau.</p>
+            </header>
+
+            {{ include('desk/ptn_office/partials/_alerts.html.twig') }}
+
+            <section class="dashboard-card">
+                {{ include('desk/ptn_office/potins/link_bar_blog.html.twig', {city: 'null'}) }}
+            </section>
+
+            <section class="dashboard-card">
+                {{ include('desk/ptn_office/potins/affi_blog.html.twig') }}
+            </section>
         </div>
     </div>
 </div>

@@ -230,18 +230,15 @@ class PlaySession
 
     public function getResumeStep(int $totalSteps = 6): int
     {
-        $progress = $this->getProgressSteps();
-        if (empty($progress)) {
-            return 1;
-        }
+        $totalSteps = max(1, $totalSteps);
+        $progress = array_flip($this->getProgressSteps());
 
-        $max = max($progress);
-        $candidate = $this->currentStep ?? 0;
-        if ($candidate <= 0) {
-            $candidate = $max + 1;
+        for ($step = 1; $step <= $totalSteps; ++$step) {
+            if (!isset($progress[$step])) {
+                return $step;
+            }
         }
-
-        return max(1, min($totalSteps, max($max + 1, $candidate)));
+        return $totalSteps;
     }
 
     private function computeScore(int $durationMs, int $hintsUsed, bool $completed): int {

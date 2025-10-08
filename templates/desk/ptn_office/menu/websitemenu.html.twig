@@ -1,36 +1,74 @@
 <div class="menu-bo_sp">
-    <div class="menu-container">
-        <div class="menu-item {{ vartwig.m1 ? 'menu-active' : '' }}">
-            <a href="{{ path('office_member') }}">
-                <i class="fa fa-home"></i> Affiches
+    <div class="menu-header">
+        <span class="menu-kicker">Tableau de bord</span>
+        <h2 class="menu-title">{{ board.nameboard }}</h2>
+        <p class="menu-subtitle">Gérez vos contenus, vos modules et vos publications.</p>
+    </div>
+
+    <nav class="menu-container" aria-label="Navigation du tableau de bord">
+        <a href="{{ path('office_member') }}" class="menu-entry {{ vartwig.m1 ? 'menu-entry--active' : '' }}">
+            <span class="menu-entry__icon"><i class="fa fa-home" aria-hidden="true"></i></span>
+            <span class="menu-entry__content">
+                <span class="menu-entry__title">Affiches</span>
+                <span class="menu-entry__hint">Articles et annonces</span>
+            </span>
+        </a>
+
+        <a href="{{ path('module_event') }}" class="menu-entry {{ vartwig.m2 ? 'menu-entry--active' : '' }}">
+            <span class="menu-entry__icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+            <span class="menu-entry__content">
+                <span class="menu-entry__title">Événements</span>
+                <span class="menu-entry__hint">Planifier vos ateliers</span>
+            </span>
+        </a>
+
+        <a href="{{ path('module_offre') }}" class="menu-entry {{ vartwig.m3 ? 'menu-entry--active' : '' }}">
+            <span class="menu-entry__icon"><i class="fa fa-tags" aria-hidden="true"></i></span>
+            <span class="menu-entry__content">
+                <span class="menu-entry__title">Offres</span>
+                <span class="menu-entry__hint">Produits et services</span>
+            </span>
+        </a>
+
+        {% if isActivity('module_found', vartwig.tabActivities) %}
+        <a href="{{ path('module_ressources') }}" class="menu-entry {{ vartwig.m4 ? 'menu-entry--active' : '' }}">
+            <span class="menu-entry__icon"><i class="fa fa-database" aria-hidden="true"></i></span>
+            <span class="menu-entry__content">
+                    <span class="menu-entry__title">Ressources</span>
+                    <span class="menu-entry__hint">Guides et tutoriels</span>
+                </span>
+        </a>
             </a>
-        </div>
-        <div class="menu-item {{ vartwig.m2 ? 'menu-active' : '' }}">
-            <a href="{{ path('module_event') }}">
-                <i class="fa fa-calendar"></i> Événements
+        {% else %}
+            <div class="menu-entry menu-entry--inactive">
+                <span class="menu-entry__icon"><i class="fa fa-database" aria-hidden="true"></i></span>
+                <div class="menu-entry__content">
+                    <span class="menu-entry__title">Ressources</span>
+                    <span class="menu-entry__hint">Activez le module pour y accéder</span>
+                </div>
+                <a href="{{ path('addmodule_website', {'activ': 'module_found', 'id': board.id}) }}" class="menu-entry__action">Installer</a>
+            </div>
+        {% endif %}
+
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <a href="{{ path('module_escape_admin') }}" class="menu-entry {{ vartwig.m5 ? 'menu-entry--active' : '' }}">
+            <span class="menu-entry__icon"><i class="fa fa-puzzle-piece" aria-hidden="true"></i></span>
+            <span class="menu-entry__content">
+                    <span class="menu-entry__title">Escape games</span>
+                    <span class="menu-entry__hint">Modérer les créations</span>
+                </span>
             </a>
-        </div>
-        {#
-        <div class="menu-item {{ vartwig.m2 ? 'menu-active' : '' }}">
-            <a href="{{ path('module_offre') }}">
-                <i class="fa fa-tags"></i> Offre
-            </a>
-        </div>
-        #}
-        <div class="menu-item {{ vartwig.m3 ? 'menu-active' : '' }}">
-            {% if isActivity('module_found', vartwig.tabActivities) %}
-                <a href="{{ path('module_ressources') }}">
-                    <i class="fa fa-database"></i> Ressources
-                </a>
-            {% else %}
-                <h3>Vos Menus</h3>
-                <a href="{{ path('addmodule_website', {'activ': 'module_found', 'id': board.id}) }}" class="btn btn-install">Installer</a>
-            {% endif %}
-        </div>
-        <div class="menu-item">
-            <a href="{{ path('registration_mediatheque_stpone') }}">
-                <i class="fa fa-folder"></i> Nouvelle médiathèque
-            </a>
-        </div>
+        {% endif %}
+    </nav>
+
+    <div class="menu-section">
+        <h3 class="menu-section__title">Actions rapides</h3>
+        <a href="{{ path('registration_mediatheque_stpone') }}" class="menu-entry menu-entry--secondary">
+            <span class="menu-entry__icon"><i class="fa fa-folder" aria-hidden="true"></i></span>
+            <span class="menu-entry__content">
+                <span class="menu-entry__title">Nouvelle médiathèque</span>
+                <span class="menu-entry__hint">Créer un espace dédié</span>
+            </span>
+        </a>
     </div>
 </div>

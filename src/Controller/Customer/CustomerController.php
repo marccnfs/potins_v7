@@ -86,7 +86,7 @@ class CustomerController extends AbstractController
             'board'=>$this->board,
             'website'=>$this->board,
             'dispatch'=>$this->member,
-            'posts'=>array_reverse($posts),
+            'posts'=>$posts,
             'locatecity'=>0
         ]);
     }
@@ -121,7 +121,7 @@ class CustomerController extends AbstractController
             'board'=>$this->board,
             'website'=>$this->board,
             'dispatch'=>$this->dispatch,
-            'shops'=>array_reverse($shops),
+            'shops'=>$shops,
             'locatecity'=>0
         ]);
     }

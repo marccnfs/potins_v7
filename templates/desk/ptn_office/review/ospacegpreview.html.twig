@@ -3,9 +3,17 @@
     <div class="container_bo_member">
         {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
         <section class="bo_content">
-            <div class="head-wb-space"></div>
-        <!-- affiches du board customer -->
-        {{ include('desk/ptn_office/review/listreviews.html.twig') }}
+            <header class="dashboard-header">
+                <span class="dashboard-kicker">Retours utilisateurs</span>
+                <h1 class="dashboard-title">Avis et témoignages</h1>
+                <p class="dashboard-subtitle">Centralisez les retours pour valoriser vos ateliers.</p>
+            </header>
+
+            {{ include('desk/ptn_office/partials/_alerts.html.twig') }}
+
+            <section class="dashboard-card">
+                {{ include('desk/ptn_office/review/listreviews.html.twig') }}
+            </section>
         </section>
     </div>
 </div>

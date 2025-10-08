@@ -40,17 +40,18 @@ class BoardController extends AbstractController // board-v5-1/back-admin/?keybo
        // if($keyboard!=$this->getParameter('key_admin')) $this->redirectToRoute('app_logout');
 
         $initback['fact']=$initbacktor->init();
+
         $vartwig=$this->menuNav->admin(
-            Links::CUSTOMER_LIST,
+            $this->board,
             'boardadmin',
-            "boardadmin",
-            'all');
+            Links::ADMIN,
+            1);
 
         return $this->render('aff_master/home.html.twig', [
             'directory'=>'admin',
             'init'=>$initback,
             'website'=>true,
-            'customer'=>$this->dispatch,
+            'customer'=>$this->currentCustomer(),
             'msgs'=>$msgs??[],
             'admin'=>[true],
             'vartwig'=>$vartwig
@@ -61,16 +62,17 @@ class BoardController extends AbstractController // board-v5-1/back-admin/?keybo
     #[Route('back-admin/maj-customer/function', name:"back_admin_maj_customer")]
     public function majCustomers(): Response
     {
-        $vartwig=$this->menuNav->templateControl(
-            Links::CUSTOMER_LIST,
+        $vartwig=$this->menuNav->admin(
+            $this->board,
             'functions',
-            "functions",
-            'all');
+            Links::ADMIN,
+            1);
+
 
         return $this->render('aff_master/home.html.twig', [
             'directory'=>'customer',
             'website'=>true,
-            'customer'=>$this->dispatch,
+            'customer'=>$this->currentCustomer,
             'admin'=>[true],
             'vartwig'=>$vartwig
         ]);
@@ -109,11 +111,11 @@ class BoardController extends AbstractController // board-v5-1/back-admin/?keybo
             }
         }
 
-        $vartwig=$this->menuNav->templateControl(
-            Links::CUSTOMER_LIST,
+        $vartwig=$this->menuNav->admin(
+            $this->board,
             'tabresults',
-            "validation maj",
-            'all');
+            Links::ADMIN,
+            1);
 
         return $this->render('aff_master/home.html.twig', [
             'directory'=>'customer',
@@ -153,11 +155,11 @@ class BoardController extends AbstractController // board-v5-1/back-admin/?keybo
            }
         }
 
-        $vartwig=$this->menuNav->templateControl(
-            Links::CUSTOMER_LIST,
+        $vartwig=$this->menuNav->admin(
+            $this->board,
             'tabresults',
-            "validation maj",
-            'all');
+            Links::ADMIN,
+            1);
 
         return $this->render('aff_master/home.html.twig', [
             'directory'=>'customer',
@@ -175,11 +177,12 @@ class BoardController extends AbstractController // board-v5-1/back-admin/?keybo
         if($keyboard!=$this->getParameter('key_admin')) $this->redirectToRoute('app_logout');
         $websites=$this->wbrepo->findAll();
 
-        $vartwig=$this->menuNav->templateControl(
-            Links::CUSTOMER_LIST,
+
+        $vartwig=$this->menuNav->admin(
+            $this->board,
             'websites',
-            "websites",
-            'all');
+            Links::ADMIN,
+            1);
 
         return $this->render('aff_master/home.html.twig', [
             'customer'=>$this->dispatch,

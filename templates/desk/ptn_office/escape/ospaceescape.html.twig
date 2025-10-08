@@ -1,0 +1,108 @@
+{% block body %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
+            <div class="bo_content">
+                <header class="dashboard-header">
+                    <span class="dashboard-kicker">Modération</span>
+                    <h1 class="dashboard-title">Escape games</h1>
+                    <p class="dashboard-subtitle">Surveillez les jeux créés par la communauté et décidez de leur publication.</p>
+                </header>
+
+                {{ include('desk/ptn_office/partials/_alerts.html.twig') }}
+
+                <section class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <h2 class="dashboard-card__title">Vue d'ensemble</h2>
+                    </div>
+                    <div class="dashboard-grid dashboard-grid--stats">
+                        <div class="dashboard-stat">
+                            <span class="dashboard-stat__label">Escape games</span>
+                            <span class="dashboard-stat__value">{{ escapeStats.total }}</span>
+                        </div>
+                        <div class="dashboard-stat">
+                            <span class="dashboard-stat__label">Publié</span>
+                            <span class="dashboard-stat__value dashboard-stat__value--success">{{ escapeStats.published }}</span>
+                        </div>
+                        <div class="dashboard-stat">
+                            <span class="dashboard-stat__label">Brouillon</span>
+                            <span class="dashboard-stat__value dashboard-stat__value--warning">{{ escapeStats.draft }}</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <h2 class="dashboard-card__title">Escape games créés</h2>
+                        <p class="dashboard-card__hint">Les actions sont instantanées et notifient les créateurs.</p>
+                    </div>
+
+                    {% if escapeGames %}
+                        <table class="dashboard-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Titre</th>
+                                <th scope="col">Créateur</th>
+                                <th scope="col">Dernière activité</th>
+                                <th scope="col">Statut</th>
+                                <th scope="col" class="dashboard-table__actions">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for game in escapeGames %}
+                                <tr>
+                                    <td data-label="Titre">
+                                        <span class="dashboard-table__title">{{ game.title }}</span>
+                                        {% if game.shareSlug %}
+                                            <span class="dashboard-table__meta">Slug : {{ game.shareSlug }}</span>
+                                        {% endif %}
+                                        {% if game.createdAt %}
+                                            <span class="dashboard-table__meta">Créé le {{ game.createdAt|date('d/m/Y') }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td data-label="Créateur">
+                                        <span class="dashboard-table__title">{{ game.ownerDisplayName }}</span>
+                                    </td>
+                                    <td data-label="Dernière activité">
+                                        {% if game.lastActivityAt %}
+                                            {{ game.lastActivityAt|date('d/m/Y') }}
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </td>
+                                    <td data-label="Statut">
+                                    <span class="badge {{ game.published ? 'badge--success' : 'badge--warning' }}">
+                                        {{ game.published ? 'Publié' : 'Brouillon' }}
+                                    </span>
+                                    </td>
+                                    <td data-label="Actions" class="dashboard-table__actions">
+                                        <div class="dashboard-actions">
+                                            <form method="post" action="{{ path('module_escape_status', {id: game.id}) }}" class="dashboard-actions__form" onsubmit="return confirm('{{ game.published ? 'Retirer de la publication' : 'Publier' }} « {{ game.title }} » ?');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('status_escape_' ~ game.id) }}">
+                                                <input type="hidden" name="target_status" value="{{ game.published ? 'unpublish' : 'publish' }}">
+                                                <button class="btn-link {{ game.published ? 'btn-link--warning' : 'btn-link--success' }}" type="submit">
+                                                    <i class="fa {{ game.published ? 'fa-eye-slash' : 'fa-eye' }}" aria-hidden="true"></i>
+                                                    {{ game.published ? 'Retirer' : 'Publier' }}
+                                                </button>
+                                            </form>
+                                            <form method="post" action="{{ path('module_escape_delete', {id: game.id}) }}" class="dashboard-actions__form" onsubmit="return confirm('Supprimer définitivement « {{ game.title }} » ?');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete_escape_' ~ game.id) }}">
+                                                <button class="btn-link btn-link--danger" type="submit">
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                    Supprimer
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="dashboard-empty">Aucun escape game n'a encore été créé. Vous serez averti lorsqu'un utilisateur partagera un nouveau jeu.</p>
+                    {% endif %}
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

@@ -15,29 +15,20 @@ class EscapeGameRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, EscapeGame::class);
     }
+    /**
+     * Retourne l'ensemble des escape games avec leurs propriétaires.
+     *
+     * @return EscapeGame[]
+     */
+    public function findAllForAdministration(): array
+    {
+        return $this->createQueryBuilder('eg')
+            ->leftJoin('eg.owner', 'owner')->addSelect('owner')
+            ->leftJoin('eg.participant', 'participant')->addSelect('participant')
+            ->orderBy('eg.created_at', 'DESC')
+            ->addOrderBy('eg.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 
-    //    /**
-    //     * @return EscapeGame[] Returns an array of EscapeGame objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('e.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?EscapeGame
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

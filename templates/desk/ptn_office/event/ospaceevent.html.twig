@@ -3,8 +3,17 @@
     <div class="container_bo_member">
         {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
         <div class="bo_content">
-            <h1 class="dashboard-title">Liste des évenments</h1>
+            <header class="dashboard-header">
+                <span class="dashboard-kicker">Programmation</span>
+                <h1 class="dashboard-title">Événements</h1>
+                <p class="dashboard-subtitle">Organisez vos ateliers et suivez les prochaines dates.</p>
+            </header>
+
+            {{ include('desk/ptn_office/partials/_alerts.html.twig') }}
+
+            <section class="dashboard-card">
                 {{ include('desk/ptn_office/event/ptn_event.html.twig') }}
+            </section>
         </div>
     </div>
 </div>
