@@ -1,17 +1,17 @@
 <?php
-namespace App\Controller\Game;
+namespace App\Controller\Game\Escape;
 
 use App\Classe\UserSessionTrait;
 use App\Entity\Games\PlaySession;
 use App\Entity\Users\Participant;
 use App\Lib\Links;
 use App\Repository\EscapeGameRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Doctrine\ORM\Tools\Pagination\Paginator;
-use Doctrine\Common\Collections\Collection;
 
 class CatalogController extends AbstractController
 {

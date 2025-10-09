@@ -21,12 +21,12 @@ final class EventController extends AbstractController
     {
         $p = $participantContext->getParticipantOrFail();
 
-        // valeur par défaut : aujourd’hui 10:00–12:00 (Europe/Paris)
-        $nowParis = new \DateTimeImmutable('today 10:00', new \DateTimeZone('Europe/Paris'));
+        // valeur par défaut : aujourd’hui 09:00–10:00 (Europe/Paris)
+        $nowParis = new \DateTimeImmutable('today 09:00', new \DateTimeZone('Europe/Paris'));
         $form = $this->createForm(EventType::class);
 
         $form->get('startsAtLocal')->setData($nowParis);
-        $form->get('endsAtLocal')->setData($nowParis->modify('+2 hours'));
+        $form->get('endsAtLocal')->setData($nowParis->modify('+1 hour'));
         $form->get('timezone')->setData('Europe/Paris');
 
         $form->handleRequest($req);

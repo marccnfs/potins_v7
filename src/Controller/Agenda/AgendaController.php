@@ -25,7 +25,8 @@ use Symfony\Component\Routing\Attribute\Route;
     {
         $allowedViews = ['month', 'week', 'day'];
         $viewParam = $req->query->get('view');
-        $view = \in_array($viewParam, $allowedViews, true) ? $viewParam : 'month';
+        $defaultView = 'week';
+        $view = \in_array($viewParam, $allowedViews, true) ? $viewParam : $defaultView;
 
         $today = new \DateTimeImmutable('today');
         $dateParam = $req->query->get('date');
@@ -94,6 +95,10 @@ use Symfony\Component\Routing\Attribute\Route;
                 'category'      => $e->getCategory()->value,
                 'startsAtLocal' => $sLocal->format('d/m H:i'),
                 'endsAtLocal'   => $eLocal->format('d/m H:i'),
+                'startsAtTime'  => $sLocal->format('H:i'),
+                'endsAtTime'    => $eLocal->format('H:i'),
+                'dateLocal'     => $sLocal->format('Y-m-d'),
+                'weekday'       => $sLocal->format('N'),
                 'locationName'  => $e->getLocationName(),
                 'isAllDay'      => $e->isAllDay(),
                 'commune'       => $e->getCommuneCode(),

@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Controller\Game;
+namespace App\Controller\Game\Escape;
 
 use App\Attribute\RequireParticipant;
-use App\Classe\PublicSession;
 use App\Classe\UserSessionTrait;
 use App\Entity\Games\EscapeGame;
+use App\Entity\Games\PlaySession;
 use App\Entity\Users\Participant;
 use DateTimeImmutable;
-use App\Entity\Games\PlaySession;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

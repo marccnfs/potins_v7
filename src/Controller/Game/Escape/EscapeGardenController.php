@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Game;
+namespace App\Controller\Game\Escape;
 
 use App\Attribute\RequireParticipant;
 use App\Classe\UserSessionTrait;
@@ -10,14 +10,14 @@ use App\Entity\Media\Illustration;
 use App\Entity\Users\Participant;
 use App\Form\ParticipantProfileType;
 use App\Lib\Links;
-use App\Repository\PlaySessionRepository;
 use App\Repository\EscapeGameRepository;
+use App\Repository\PlaySessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 

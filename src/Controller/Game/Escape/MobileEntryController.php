@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Controller\Game;
+namespace App\Controller\Game\Escape;
 
 use App\Classe\UserSessionTrait;
-use App\Classe\UserSessionTraitOld;
-use App\Entity\Games\MobileLink;
 use App\Entity\Games\EscapeGame;
+use App\Entity\Games\MobileLink;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class MobileEntryController extends AbstractController
 {

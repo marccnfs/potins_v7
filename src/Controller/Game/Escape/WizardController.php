@@ -1,30 +1,30 @@
 <?php
-namespace App\Controller\Game;
+namespace App\Controller\Game\Escape;
 
+use App\Attribute\RequireParticipant;
 use App\Classe\UserSessionTrait;
 use App\Entity\Games\EscapeGame;
 use App\Entity\Games\EscapeWorkshopSession;
 use App\Entity\Games\MobileLink;
+use App\Entity\Games\Puzzle;
 use App\Entity\Media\Illustration;
 use App\Form\EscapeUniverseType;
 use App\Form\PuzzleCryptexType;
+use App\Form\PuzzleHtmlMinType;
+use App\Form\PuzzleLogicType;
 use App\Form\PuzzleQrGeoType;
 use App\Form\PuzzleSliderType;
-use App\Form\PuzzleLogicType;
 use App\Form\PuzzleVideoQuizType;
-use App\Form\PuzzleHtmlMinType;
 use App\Lib\Links;
 use App\Service\MobileLinkManager;
-use App\Entity\Games\Puzzle;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
-use Symfony\Component\Form\FormError;
-use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\String\Slugger\AsciiSlugger;
-use App\Attribute\RequireParticipant;
-use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use DateTimeInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 
 #[Route('/atelier/eg')]

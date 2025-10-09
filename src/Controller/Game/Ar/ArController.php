@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Controller\Game;
+namespace App\Controller\Game\Ar;
 
 
 use App\Classe\UserSessionTrait;
 use App\Lib\Links;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 class ArController extends AbstractController

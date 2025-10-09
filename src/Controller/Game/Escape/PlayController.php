@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Controller\Game;
+namespace App\Controller\Game\Escape;
 
 use App\Attribute\RequireParticipant;
-
 use App\Classe\UserSessionTrait;
 use App\Entity\Games\MobileLink;
 use App\Lib\Links;

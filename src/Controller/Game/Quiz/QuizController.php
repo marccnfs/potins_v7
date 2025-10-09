@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller\Quiz;
+namespace App\Controller\Game\Quiz;
 
+use App\Classe\UserSessionTrait;
 use App\Entity\Quiz\Questionnaire;
-use App\Classe\PublicSession;
 use App\Entity\Quiz\Quiz;
 use App\Entity\Quiz\Userquizz;
 use App\Form\QuestionType;
@@ -19,18 +19,17 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class QuizController extends AbstractController
 {
-    use PublicSession;
+    use userSessionTrait;
 
     #[Route('/quiz', name:"quiz")]
     public function index(QuestionRepository $questionRepository): Response
     {
         $questions = $questionRepository->findAll();
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::PUBLIC,
+        $vartwig=$this->menuNav->templatePotins(
             'quiz',
-            2,
-            "");
+            Links::PUBLIC);
+
         $post=['id'=>1];
 
         return $this->render($this->useragentP.'ptn_quiz/home.html.twig', [
@@ -43,8 +42,6 @@ class QuizController extends AbstractController
             'customer'=>$this->customer,
             'questions' => $questions,
             ]);
-
-
     }
 
     #[Route('/quiz/submit', name:"quiz_submit", methods:"POST")]
@@ -59,11 +56,7 @@ class QuizController extends AbstractController
                 $score++;
             }
         }
-        $vartwig=$this->menuNav->templatepotins(
-            Links::PUBLIC,
-            'reponsequiz',
-            2,
-            "");
+        $vartwig=$this->menuNav->templatePotins('reponsequiz',Links::PUBLIC);
         $post=['id'=>1];
 
         return $this->render($this->useragentP.'ptn_quiz/home.html.twig', [
@@ -88,11 +81,7 @@ class QuizController extends AbstractController
         $this->em->persist($quiz);
         $this->em->flush();
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::PUBLIC,
-            'start',
-            2,
-            "");
+        $vartwig=$this->menuNav->templatePotins('start',Links::PUBLIC);
         $post=['id'=>1];
 
         return $this->render($this->useragentP.'ptn_quiz/home.html.twig', [
@@ -128,11 +117,7 @@ class QuizController extends AbstractController
             return $this->redirectToRoute('quiz_questions', ['qrCode' => $qrCode]);
         }
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::PUBLIC,
-            'register',
-            2,
-            "");
+        $vartwig=$this->menuNav->templatePotins('register',Links::PUBLIC);
         $post=['id'=>1];
 
         return $this->render($this->useragentP.'ptn_quiz/home.html.twig', [
@@ -169,12 +154,8 @@ class QuizController extends AbstractController
 
         // Récupérez les questions du quiz
         $questions = $quiz->getQuestionaire(); // Assurez-vous que cette méthode existe
-dump($questions);
-        $vartwig=$this->menuNav->templatepotins(
-            Links::PUBLIC,
-            'quiz',
-            2,
-            "");
+
+        $vartwig=$this->menuNav->templatePotins('quiz',Links::PUBLIC);
         $post=['id'=>1];
 
         return $this->render($this->useragentP.'ptn_quiz/home.html.twig', [
@@ -195,11 +176,8 @@ dump($questions);
     {
         $quizzes = $quizRepository->findAll();
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::PUBLIC,
-            'admin',
-            2,
-            "");
+        $vartwig=$this->menuNav->templatePotins('admin',Links::PUBLIC);
+
         $post=['id'=>1];
 
         return $this->render($this->useragentP.'ptn_quiz/home.html.twig', [
@@ -231,11 +209,7 @@ dump($questions);
             return $this->redirectToRoute('quiz_admin');
         }
 
-        $vartwig=$this->menuNav->templatepotins(
-            Links::PUBLIC,
-            'new',
-            2,
-            "");
+        $vartwig=$this->menuNav->templatePotins('new',Links::PUBLIC);
         $post=['id'=>1];
 
         return $this->render($this->useragentP.'ptn_quiz/home.html.twig', [
@@ -266,11 +240,8 @@ dump($questions);
 
             return $this->redirectToRoute('quiz_admin');
         }
-        $vartwig=$this->menuNav->templatepotins(
-            Links::PUBLIC,
-            'new_question',
-            2,
-            "");
+        $vartwig=$this->menuNav->templatepotins('new_question',Links::PUBLIC);
+
         $post=['id'=>1];
 
         return $this->render($this->useragentP.'ptn_quiz/home.html.twig', [
