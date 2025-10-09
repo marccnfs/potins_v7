@@ -2,7 +2,7 @@
 
 namespace App\Controller\Agenda;
 
-use App\Classe\PublicSession;
+use App\Classe\UserSessionTrait;
 use App\Entity\Agenda\Event;
 use App\Form\Agenda\EventType;
 use App\Lib\Links;
@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class EventController extends AbstractController
 {
-    use PublicSession;
+    use UserSessionTrait;
 
     #[Route('/events/new', name: 'event_new')]
     public function new(Request $req, ParticipantContext $participantContext): Response
@@ -127,10 +127,7 @@ final class EventController extends AbstractController
         }
 
         $vartwig=$this->menuNav->templatepotins(
-            Links::ACCUEIL,
-            '_form',
-            0,
-            "nocity");
+            '_form',Links::ACCUEIL);
 
 
         return $this->render('pwa/agenda/home.html.twig', [

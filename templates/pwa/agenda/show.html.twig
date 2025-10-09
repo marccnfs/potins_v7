@@ -28,6 +28,7 @@
             <a class="btn" href="{{ path('event_ics', {slug: e.slug}) }}">Ajouter à mon agenda (.ics)</a>
             {% if canManage %}
                 <a class="btn btn-light" href="{{ path('event_edit', {slug: e.slug}) }}">Éditer</a>
+                <a class="btn btn-light" href="{{ path('agenda_request', {slug: e.slug}) }}">Demander un rendez-vous</a>
             {% endif %}
         </nav>
 

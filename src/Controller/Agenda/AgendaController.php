@@ -2,7 +2,7 @@
 
 namespace App\Controller\Agenda;
 
-use App\Classe\PublicSession;
+use App\Classe\UserSessionTrait;
 use App\Entity\Agenda\Event;
 use App\Entity\Users\Participant;
 use App\Lib\Links;
@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Attribute\Route;
      class AgendaController extends AbstractController
 
 {
-    use PublicSession;
+    use UserSessionTrait;
 
     #[Route('/agenda', name: 'agenda_index')]
     public function index(Request $req): Response
@@ -36,7 +36,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
         $vartwig=$this->menuNav->templatePotins(
             '_index',
-            "agenda cnfs"
+            Links::AGENDA
         );
 
 
@@ -116,9 +116,9 @@ use Symfony\Component\Routing\Attribute\Route;
         $startsLocal = $event->getStartsAt()->setTimezone($tz);
         $endsLocal   = $event->getEndsAt()->setTimezone($tz);
 
-        $vartwig=$this->menuNav->templatepotins(
+        $vartwig=$this->menuNav->templatePotins(
             '_show',
-            'show agenda');
+            Links::AGENDA);
 
 
         return $this->render('pwa/agenda/home.html.twig', [

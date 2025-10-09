@@ -1,0 +1,28 @@
+{% block body %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
+            <div class="bo_content">
+                <header class="dashboard-header">
+                    <span class="dashboard-kicker">Suivi hebdomadaire</span>
+                    <h1 class="dashboard-title">Agenda CNFS</h1>
+                    <p class="dashboard-subtitle">Visualisez les ateliers planifiés cette semaine et accédez rapidement aux demandes de rendez-vous.</p>
+                </header>
+
+                {{ include('desk/ptn_office/partials/_alerts.html.twig') }}
+
+                <section class="dashboard-card">
+                    {{ include('pwa/agenda/board_week.html.twig', { date: date }, with_context = false) }}
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+{% use "js/js_agenda.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

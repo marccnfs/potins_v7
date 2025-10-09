@@ -2,7 +2,7 @@
 
 namespace App\Controller\Agenda;
 
-use App\Classe\PublicSession;
+use App\Classe\UserSessionTrait;
 use App\Entity\Agenda\Enrollment;
 use App\Entity\Agenda\Event;
 use App\Enum\EventStatus;
@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class EnrollmentController extends AbstractController
 {
-    use PublicSession;
+    use UserSessionTrait;
 
     #[Route('/events/{slug}/enroll', name: 'event_enroll', methods: ['POST'])]
     public function enroll(string $slug, Request $req,ParticipantContext $participantContext ): RedirectResponse

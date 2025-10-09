@@ -20,6 +20,7 @@ use App\Service\MenuNavigator;
 use App\Service\Search\SearchRessources;
 use App\Service\Search\SearchReviews;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -63,6 +64,23 @@ class BoardOfficeController extends AbstractController
             'locatecity' => 0,
         ]);
     }
+
+    #[Route('/agenda-cnfs', name: 'module_agenda', methods: ['GET'])]
+    public function agenda(Request $request): Response
+    {
+        $dateParam = $request->query->get('date');
+        try {
+            $date = $dateParam ? new DateTimeImmutable($dateParam) : new DateTimeImmutable('today');
+        } catch (\Exception) {
+            $date = new DateTimeImmutable('today');
+        }
+
+        return $this->renderDashboard('agenda', 'ospaceagenda', 6, [
+            'date' => $date,
+        ]);
+    }
+
+
 
 
     #[Route('/offres-potins', name: 'module_offre')]

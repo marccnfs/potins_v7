@@ -2,6 +2,7 @@
      data-controller="board-week"
      data-board-week-fetch-url-value="{{ path('agenda_feed') }}"
      data-board-week-date-value="{{ date|date('Y-m-d') }}"
+     data-board-week-request-url-value="{{ path('agenda_request', {slug: '__SLUG__'}) }}"
 >
     <header class="card" style="margin-bottom:12px;">
         <div style="display:flex; gap:8px; align-items:center; justify-content:space-between; flex-wrap:wrap;">

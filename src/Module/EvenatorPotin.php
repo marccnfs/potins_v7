@@ -12,6 +12,7 @@ use App\Lib\MsgAjax;
 use App\Repository\BoardRepository;
 use App\Repository\PostEventRepository;
 use App\Repository\PostRepository;
+use App\Service\Agenda\PostEventAgendaSynchronizer;
 use App\Util\CalDateAppointement;
 use DateTime;
 use DateTimeImmutable;
@@ -36,6 +37,7 @@ class EvenatorPotin
     private Post $potin;
     private Board $locatemedia;
     private PostRepository $postRepository;
+    private PostEventAgendaSynchronizer $agendaSync;
 
 
     public function __construct(
@@ -44,6 +46,7 @@ class EvenatorPotin
         PostRepository $postRepository,
         PostEventRepository $postEventRepository,
         CalDateAppointement $calDate,
+        PostEventAgendaSynchronizer $agendaSync,
     )
     {
         $this->em = $entityManager;
@@ -52,6 +55,7 @@ class EvenatorPotin
         $this->repoevent=$postEventRepository;
         $this->boardrepo=$boardRepository;
         $this->postRepository=$postRepository;
+        $this->agendaSync = $agendaSync;
     }
 
     protected function initEvent($data, $board): bool
@@ -121,6 +125,8 @@ class EvenatorPotin
         $this->em->persist($board);
         $this->em->persist($this->locatemedia);
         $this->em->flush();
+
+        $this->agendaSync->syncFromPostEvent($this->postevent);
         return MsgAjax::MSG_POSTOK;
     }
 
@@ -143,6 +149,7 @@ class EvenatorPotin
                 $el->setPublied(false);
             }
             $this->em->persist($el);
+            $this->agendaSync->syncFromPostEvent($el);
         }
         $this->em->flush();
         return MsgAjax::MSG_POSTOK;
@@ -156,6 +163,7 @@ class EvenatorPotin
     {
         $event->setSector(Null);
         $event->setAuthor(Null);
+        $this->agendaSync->removeForPostEvent($event);
         $this->em->remove($event->getAppointment());
         $this->em->remove($event);
         $this->em->flush();
@@ -171,6 +179,7 @@ class EvenatorPotin
         $event->setPublied(!$event->getPublied());
         $this->em->persist($event);
         $this->em->flush();
+        $this->agendaSync->syncFromPostEvent($event);
         return MsgAjax::MSG_POSTOK;
     }
 

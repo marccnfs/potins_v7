@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-    static values = { fetchUrl: String, date: String }
+    static values = { fetchUrl: String, date: String, requestUrl: String }
     static targets = ["grid", "headline"]
 
     connect() { this.load(); }
@@ -70,12 +70,15 @@ export default class extends Controller {
 
     renderEvent(e) {
         const communeClass = this.communeClass(e.commune); // <-- direct depuis feed
+        const requestUrl = this.requestUrlValue
+            ? this.requestUrlValue.replace('__SLUG__', encodeURIComponent(e.slug))
+            : `/rdv/${encodeURIComponent(e.slug)}`;
         return `
     <div class="event-pill ${communeClass}">
       <div class="event-title">${e.title} ${e.category ? `<span class="badge">${e.category}</span>` : ''}</div>
       <div class="event-meta">${e.isAllDay ? 'Toute la journée' : `${e.startsAtLocal} — ${e.endsAtLocal}`}${e.locationName?` • ${e.locationName}`:''}</div>
       <div class="event-actions">
-        <a class="btn-ghost" href="/rdv?event=${encodeURIComponent(e.slug)}">Prendre RDV</a>
+        <a class="btn-ghost" href="${requestUrl}">Prendre RDV</a>
       </div>
     </div>`;
     }

@@ -49,7 +49,7 @@ Class Links
         'description'=>"les potins numeriques, espace d'échanges et d'informations autour du numérique. Les techniques, logiciel, matériel. Comment devenir autonome. Information, atelier collectif",
         'tagueries'=>[0=>["name"=>"atelier numérique, médiathèque, cnfs, conseiller numérique, service aux usagers"]],
         'title'=>"votre agenda",
-        'menu'=>[0=>"active",1=>'',2=>'',3=>'',4=>'',5=>'']];
+        'menu'=>[0=>'',1=>'',2=>"active",3=>'',4=>'',5=>'']];
 
     const MEDIATHEQUE =[
         'description'=>"les potins numeriques, espace d'échanges et d'informations autour du numérique. Les techniques, logiciel, matériel. Comment devenir autonome. Information, atelier collectif",

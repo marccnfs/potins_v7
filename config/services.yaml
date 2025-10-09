@@ -35,6 +35,7 @@ parameters:
     puzzle_images_public: '/uploads/puzzles'
     puzzle_videos_dir: '%kernel.project_dir%/public/uploads/videos'
     puzzle_videos_public: '/uploads/videos'
+    agenda.cnfs_participant_code: 'CNFS'
 
 services:
     Doctrine\ORM\Mapping\Driver\AttributeDriver:
@@ -58,6 +59,7 @@ services:
             string $locales: '%app_locales%'
             string $defaultLocale: '%locale%'
             string $emailSender: '%app.notifications.email_sender%'
+            string $cnfsParticipantCode: '%agenda.cnfs_participant_code%'
 
     App\Service\PythonShellService:
         arguments:

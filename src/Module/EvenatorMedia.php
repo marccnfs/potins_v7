@@ -15,6 +15,7 @@ use App\Repository\BoardRepository;
 use App\Repository\GpsRepository;
 use App\Repository\PostEventRepository;
 use App\Service\Localisation\LocalisationServices;
+use App\Service\Agenda\PostEventAgendaSynchronizer;
 use App\Util\CalDateAppointement;
 use DateTime;
 use DateTimeImmutable;
@@ -46,6 +47,7 @@ class EvenatorMedia  // todo duplicata de evenator mais pas utilisé -> voir eve
     private Adresses|null $adresse;
     private GpsRepository $gpsRepository;
     private Gps $gps;
+    private PostEventAgendaSynchronizer $agendaSync;
 
 
     public function __construct(
@@ -55,7 +57,8 @@ class EvenatorMedia  // todo duplicata de evenator mais pas utilisé -> voir eve
         CalDateAppointement $calDate,
         LocalisationServices $locate,
         AdressesRepository $adressesRepository,
-        GpsRepository $gpsRepository
+        GpsRepository $gpsRepository,
+        PostEventAgendaSynchronizer $agendaSync
     )
     {
         $this->em = $entityManager;
@@ -66,6 +69,7 @@ class EvenatorMedia  // todo duplicata de evenator mais pas utilisé -> voir eve
         $this->locate=$locate;
         $this->adressrepo=$adressesRepository;
         $this->gpsRepository=$gpsRepository;
+        $this->agendaSync = $agendaSync;
     }
 
     /**
@@ -181,6 +185,7 @@ class EvenatorMedia  // todo duplicata de evenator mais pas utilisé -> voir eve
         $this->em->persist($sector);
         $this->em->persist($this->postevent);
         $this->em->flush();
+        $this->agendaSync->syncFromPostEvent($this->postevent);
         return MsgAjax::MSG_POSTOK;
     }
 
