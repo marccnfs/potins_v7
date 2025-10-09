@@ -1,57 +1,67 @@
-<div class="bk_content">
-    <div class="tab_lit_bo">
-        {% for event in events %}
-
-            {% if event.media.imagejpg[0] is defined %}
+<div class="dashboard-card">
+    <div class="dashboard-card__header">
+        <div>
+            <p class="dashboard-card__hint">Gestion des événements</p>
+            <h3 class="dashboard-card__title">Événements programmés</h3>
+        </div>
+        {% set eventCollection = events|default([]) %}
+        <span class="dashboard-badge">
+            <i class="fa fa-calendar"></i>
+            {{ eventCollection|length }} évènement{% if eventCollection|length > 1 %}s{% endif %}
+        </span>
+    </div>
+    {% if eventCollection|length > 0 %}
+    <ul class="dashboard-list">
+        {% for event in eventCollection %}
+            {% set ill = 'img/AffiChange.png' %}
+            {% if event.media is defined and event.media.imagejpg[0] is defined %}
                 {% set ill = event.media.imagejpg[0].getwebPath %}
-            {% else %}
-                {% set ill = 'img/AffiChange.png' %}
             {% endif %}
 
-            <div class="tab_l1_post">
-                <!-- En-tête de l'événement -->
-                <div class="event-header">
-                    <div class="event-image">
-                        <img src="{{ asset('upload/module/' ~ ill) }}" alt="Image de l'événement">
+        <li class="dashboard-list__item">
+            <div class="dashboard-thumb">
+                <img src="{{ asset(ill) }}" alt="Illustration de {{ event.titre }}">
                     </div>
-                    <div class="event-details">
-                        <h3>{{ event.titre }}</h3>
-                        <p class="event-location">Lieu : {{ event.locatemedia.nameboard }}</p>
-                        <p class="event-dates">
+            <div class="dashboard-list__content">
+                <span class="dashboard-table__title">{{ event.titre }}</span>
+                <span class="dashboard-table__meta">
+                            <i class="fa fa-map-marker"></i>
+                            {{ event.locatemedia.nameboard }}
+                        </span>
+                <span class="dashboard-table__meta">
+                            <i class="fa fa-clock-o"></i>
                             {% if event.appointment.starttime|date('d/m/Y') == event.appointment.endtime|date('d/m/Y') %}
-                                {{ event.appointment.starttime|date('d/m/Y') }}
+                                {{ event.appointment.starttime|date('d/m/Y H:i') }}
                             {% else %}
-                                {{ event.appointment.starttime|date('d/m/Y') }} au {{ event.appointment.endtime|date('d/m/Y') }}
+                                {{ event.appointment.starttime|date('d/m/Y H:i') }} → {{ event.appointment.endtime|date('d/m/Y H:i') }}
                             {% endif %}
                         </p>
+                     </span>
+                <span class="dashboard-badge {{ event.publied ? 'badge--success' : 'badge--warning' }}">
+                            <i class="fa fa-flag{% if event.publied %}-checkered{% endif %}"></i>
+                            {% if event.publied %}Publié{% else %}En attente{% endif %}
+                        </span>
                     </div>
-                </div>
 
-                <!-- Actions sur l'événement -->
-                <div class="event-actions">
-                    <a href="{{ path('details_event', {'id': event.id}) }}" class="btn btn-primary">
-                        <i class="fa fa-info-circle"></i> Détails
-                    </a>
-                    <a href="{{ path('edit_event_potin', {'id': event.id}) }}" class="btn btn-warning">
-                        <i class="fa fa-edit"></i> Modifier
-                    </a>
-                    <a href="{{ path('form-publied_event_potin', {'id': event.id}) }}" class="btn btn-success">
-                        {% if event.publied %}
-                            <i class="fa fa-flag-checkered"></i> Publié
-                        {% else %}
-                            <i class="fa fa-flag"></i> Non publié
-                        {% endif %}
-                    </a>
-                    <a href="{{ path('form-delete_event_potin', {'id': event.id}) }}" class="btn btn-danger">
-                        <i class="fa fa-trash"></i> Supprimer
-                    </a>
-                </div>
+            <div class="dashboard-list__actions">
+                <a href="{{ path('details_event', {'id': event.id}) }}" class="btn-link">
+                    <i class="fa fa-info-circle"></i> Détails
+                </a>
+                <a href="{{ path('edit_event_potin', {'id': event.id}) }}" class="btn-link btn-link--warning">
+                    <i class="fa fa-edit"></i> Modifier
+                </a>
+                <a href="{{ path('form-publied_event_potin', {'id': event.id}) }}" class="btn-link {{ event.publied ? 'btn-link--success' : 'btn-link--warning' }}">
+                    <i class="fa fa-flag{% if event.publied %}-checkered{% endif %}"></i>
+                    {% if event.publied %}Publié{% else %}Publier{% endif %}
+                </a>
+                <a href="{{ path('form-delete_event_potin', {'id': event.id}) }}" class="btn-link btn-link--danger">
+                    <i class="fa fa-trash"></i> Supprimer
+                </a>
             </div>
-        {% else %}
-            <!-- Aucun événement -->
-            <div class="no-events">
-                <p>Aucun événement programmé pour l'instant.</p>
-            </div>
+        </li>
         {% endfor %}
-    </div>
+    </ul>
+    {% else %}
+        <p class="dashboard-empty">Aucun événement programmé pour l'instant.</p>
+    {% endif %}
 </div>

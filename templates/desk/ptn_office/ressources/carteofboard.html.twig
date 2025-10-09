@@ -1,49 +1,55 @@
-<div class="ptn_content">
-    <div class="bk_content">
-        <div class="table-container">
-
-        {% for key, cat in articles %}
-            <div class="titre_tab">
-                <div class="card-{{ cat[0].categorie.coul }}">{{ key }}</div>
-            </div>
-            <table>
-                <colgroup>
-                    <col class="col-label">
-                    <col class="col-action">
-                    <col class="col-action">
-                </colgroup>
-                <thead>
-                <tr>
-                    <th>Désignation</th>
-                    <th>Action 1</th>
-                    <th>Action 2</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for art in cat %}
-                <tr>
-                    <td>{{ art.titre }}</td>
-                    <td>
-                        <a href="{{ path('ressource_manage', {id: art.id}) }}" class="btn btn-warning">
-                            <i class="fa fa-edit"></i> Éditer
-                        </a>
-                    </td>
-                    <td>
-                        <form method="post" action="{{ path('delete_carte', {id: art.id}) }}" style="display: inline-block;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet élément ?')">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ art.id) }}">
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fa fa-trash"></i> Supprimer
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        {% endfor %}
+<div class="dashboard-card">
+    <div class="dashboard-card__header">
+        <div>
+            <p class="dashboard-card__hint">Ressources</p>
+            <h3 class="dashboard-card__title">Cartes et contenus associés</h3>
         </div>
+        {#
+        <div class="dashboard-action-list">
+            {% if board is defined %}
+                <a class="btn btn-primary" href="{{ path('ressource_manage', {'id': board.id}) }}">
+                    <i class="fa fa-plus"></i> Nouvelle ressource
+                </a>
+            {% endif %}
+        </div>
+        #}
     </div>
+    {% if articles|length > 0 %}
+        {% for key, cat in articles %}
+             {% if cat|length > 0 %}
+        <div class="dashboard-section">
+            <div class="dashboard-section__header">
+                <h4 class="dashboard-section__title">
+                    <span class="dashboard-badge card-{{ cat[0].categorie.coul|default('') }}">{{ key }}</span>
+                </h4>
+            </div>
+            <ul class="dashboard-list">
+                {% for art in cat %}
+                    <li class="dashboard-list__item">
+                        <div class="dashboard-list__content">
+                            <span class="dashboard-table__title">{{ art.titre }}</span>
+                        </div>
+                        <div class="dashboard-list__actions">
+                            <a href="{{ path('ressource_manage', {id: art.id}) }}" class="btn-link btn-link--warning">
+                                <i class="fa fa-edit"></i> Éditer
+                            </a>
+                            <form method="post" action="{{ path('delete_carte', {id: art.id}) }}" class="dashboard-actions__form" onsubmit="return confirm('Voulez-vous vraiment supprimer cet élément ?')">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ art.id) }}">
+                                <button type="submit" class="btn-link btn-link--danger">
+                                    <i class="fa fa-trash"></i> Supprimer
+                                </button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+        {% endfor %}
+    {% else %}
+        <p class="dashboard-empty">Aucune ressource n'a encore été enregistrée.</p>
+    {% endif %}
 </div>
 
 

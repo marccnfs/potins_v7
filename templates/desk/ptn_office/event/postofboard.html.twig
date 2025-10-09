@@ -1,32 +1,41 @@
-<div class="flrow">
-    <div class="fx-cub ii_cub2">
-        <div class="O_list-cube">
-            <div class="list-incub">
-                {%  if potin.media.imagejpg[0] is defined  %}
-                    {%  set ill= potin.media.imagejpg[0].getwebPath %}
-                {%  else %}
-                    {%  set ill= "img/AffiChange.png" %}
-                {% endif %}
-                <div class="mod-incub">
-                    <div class="pos-incub-i">
-                        <div class="pos-incub-l w-cb1">
-                            <div class="tit-pos-cub">{{ potin.titre }}</div>
-                            <div class="inf_cub">
-                                <div class="illust-list">
-                                    <div class="iner-illust" style="background-image: url('{{ asset(ill) }}')"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="pos-incub-px">
-                            <div class="account_module">
-                                <div class="publiedby">publié par : {{ potin.author.name }} </div>
-                                <p>le : {{ potin.createAt|date("j-m-Y") }}</p>
-                            </div>
-                            <div class="account_module">
-                                <x-eventpotin event="{{event}}" potin="{{ potin.id }}" board="{{ board.id }}"></x-eventpotin>
-                            </div>
-                        </div>
-                    </div>
+{% set ill = 'img/AffiChange.png' %}
+{% if potin.media is defined and potin.media.imagejpg[0] is defined %}
+    {% set ill = potin.media.imagejpg[0].getwebPath %}
+{% endif %}
+
+<div class="dashboard-card">
+    <div class="dashboard-card__header">
+        <div>
+            <p class="dashboard-card__hint">Potin associé</p>
+            <h3 class="dashboard-card__title">{{ potin.titre }}</h3>
+        </div>
+        <span class="dashboard-badge">
+            <i class="fa fa-calendar"></i>
+            {{ potin.createAt|date('d/m/Y') }}
+        </span>
+    </div>
+
+    <div class="dashboard-card__body">
+        <div class="dashboard-card__media">
+            <img src="{{ asset(ill) }}" alt="Illustration du potin">
+        </div>
+
+        <div class="dashboard-card__meta">
+            <div>
+                <span class="dashboard-meta__label">Publié par</span>
+                <span class="dashboard-meta__value">{{ potin.author.name }}</span>
+            </div>
+            <div>
+                <span class="dashboard-meta__label">Identifiant</span>
+                <span class="dashboard-meta__value">#{{ potin.id }}</span>
+            </div>
+
+            <div class="dashboard-section">
+                <div class="dashboard-section__header">
+                    <h4 class="dashboard-section__title">Planifier une action</h4>
+                </div>
+                <div class="dashboard-section__content">
+                    <x-eventpotin event="{{ event }}" potin="{{ potin.id }}" board="{{ board.id }}"></x-eventpotin>
                 </div>
             </div>
         </div>

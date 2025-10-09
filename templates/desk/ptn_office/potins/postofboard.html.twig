@@ -1,110 +1,160 @@
-<div class="bk_content">
-    <div class="tab_lit_bo">
+{% if posts|length > 0 %}
+<div class="dashboard-grid dashboard-grid--cards">
         {% for tab in posts %}
             {% set ill = 'img/AffiChange.png' %}
-            {%  if tab.media.imagejpg[0].namefile is defined %}
+            {% if tab.media is defined and tab.media.imagejpg[0].namefile is defined %}
                 {% set ill = tab.media.imagejpg[0].getwebPath %}
-            {% else %}
-                {% if tab.imageName %}
-                    {% set ill = vich_uploader_asset(tab, 'ImageFile') %}
-                {% endif %}
+            {% elseif tab.imageName %}
+                {% set ill = vich_uploader_asset(tab, 'ImageFile') %}
             {% endif %}
 
-            <div class="tab_l1_post">
-                <!-- En-tête du post -->
-                <div class="tab_ptn_row">
-                    <div class="tab_ptn_col1">
-                        <img src="{{ asset(ill) }}" alt="Image">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <div>
+                        <p class="dashboard-card__hint">Affiche</p>
+                        <h3 class="dashboard-card__title">{{ tab.titre }}</h3>
                     </div>
-                    <div class="tab_ptn_col2">
-                        <h3>{{ tab.titre }}</h3>
-                        <p class="post-date">Publié le : {{ tab.createAt|date('j-m-Y') }}</p>
+                    <span class="dashboard-badge {{ tab.publied ? 'badge--success' : 'badge--warning' }}">
+                        <i class="fa fa-flag{% if tab.publied %}-checkered{% endif %}"></i>
+                        {% if tab.publied %}Publié{% else %}Brouillon{% endif %}
+                    </span>
+                </div>
+
+                <div class="dashboard-card__body">
+                    <div class="dashboard-card__media">
+                        <img src="{{ asset(ill) }}" alt="Illustration de {{ tab.titre }}">
                     </div>
-                </div>
-
-                <!-- Section Vidéo -->
-                <div class="tab_ptn_section">
-                    <h4>Vidéos</h4>
-                    <a href="{{ path('add-iframe-potin', {'id':tab.id}) }}" class="tab_ptn_section_btn btn-primary">Ajouter une vidéo</a>
-                    <ul class="tab_ptn_list">
-                        {% for video in tab.iframevideo %}
-                            <li class="tab_l1_list_brd">
-                                <div>{{ video.fileblob }}</div>
-                                <div class="tab_ptn_cmd">
-                                    <a href="{{ path('add-iframe-potin', {'id':tab.id}) }}" class="btn btn-warning">Modifier</a>
-                                    <a href="{{ path('add-iframe-potin', {'id':tab.id}) }}" class="btn btn-danger">Supprimer</a>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-
-                <!-- Section Link -->
-                <div class="tab_ptn_section">
-                    <h4>Lien</h4>
-                    <a href="{{ path('add-link-potin', {'id':tab.id}) }}" class="tab_ptn_section_btn btn-primary">Ajouter un lien</a>
-                    <ul class="tab_ptn_list">
-                        <li class="tab_l1_list_brd">
-                            <div>{{ tab.link }}</div>
-                            <div class="tab_ptn_cmd">
-                                <a href="{{ path('edit_link_potin', {'id':tab.id}) }}" class="btn btn-warning">Modifier</a>
-                                {#  <a href="{{ path('delete-link-potin', {'id':tab.id}) }}" class="btn btn-danger">Supprimer</a> #}
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Section Articles -->
-                <div class="tab_ptn_section">
-                    <h4>Articles</h4>
-                    <a href="{{ path('add-article-potin', {'id':tab.id}) }}" class="tab_ptn_section_btn btn-primary">Ajouter un article</a>
-                    <ul class="tab_ptn_list">
-                        {% for article in tab.htmlcontent %}
-                            <li class="tab_l1_list_brd">
-                                <div>{{ article.fileblob }}</div>
-                                <div class="tab_ptn_cmd">
-                                    <a href="{{ path('edit_article_potin', {'id':article.id}) }}" class="btn btn-warning">Modifier</a>
-                                    <a href="{{ path('delete-article-potin', {'id':article.id}) }}" class="btn btn-danger">Supprimer</a>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-
-                <!-- Section Outils -->
-                <div class="pot_bo w-cb3">
-                   {#  {% if (member.id is same as (tab.author.id)) or (member.id == 1) %} #}
-                        <div class="tools-msg">
-                            <a class="e-tool" title="Édition de l'affiche" href="{{ path('potins_manage', {'id':tab.id}) }}">
-                                <i class="fa fa-edit" data-descr="Éditer"></i>
-                            </a>
-                            <a class="e-tool" title="État de la publication" href="{{ path('publied_post', {'id':tab.id, 'board':board.id}) }}">
-                                {% if tab.publied %}
-                                    <div class="_icO-rd green"><i class="fa fa-flag-checkered"></i></div>
-                                {% else %}
-                                    <div class="_icO-rd red"><i class="fa fa-flag"></i></div>
-                                {% endif %}
-                            </a>
-                            <a class="e-tool" title="Messagerie" href="{{ path('form-delete_post', {'id':tab.id}) }}">
-                                <i class="fa fa-trash"></i>
-                            </a>
-                            <a class="e-tool" title="Agenda des potins" href="{{ path('event_potins', {'id':tab.id}) }}">
-                                <i class="fa fa-calendar"></i>
-                            </a>
-                            <a class="e-tool" title="Ressources" href="{{ path('group_ressources', {'id':tab.id}) }}">
-                                <i class="fa fa-database"></i>
-                            </a>
-                            <a class="e-tool" title="Review" href="{{ path('manage_group_review', {'id':tab.id}) }}">
-                                <i class="fa fa-podcast"></i>
-                            </a>
+                    <div class="dashboard-card__meta">
+                        <div>
+                            <span class="dashboard-meta__label">Créé le</span>
+                            <span class="dashboard-meta__value">{{ tab.createAt|date('d/m/Y') }}</span>
                         </div>
-                  {#  {% endif %}  #}
+                        {% if tab.author is defined %}
+                            <div>
+                                <span class="dashboard-meta__label">Auteur</span>
+                                <span class="dashboard-meta__value">{{ tab.author.name }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
-        {% else %}
-            <div class="pop-board">
-                <p>Aucun contenu disponible pour le moment.</p>
+
+                <div class="dashboard-section">
+                    <div class="dashboard-section__header">
+                        <h4 class="dashboard-section__title">Vidéos</h4>
+                        <a href="{{ path('add-iframe-potin', {'id': tab.id}) }}" class="btn btn-primary">
+                            <i class="fa fa-plus"></i> Ajouter une vidéo
+                        </a>
+                    </div>
+                    {% if tab.iframevideo|length > 0 %}
+                        <ul class="dashboard-list">
+                            {% for video in tab.iframevideo %}
+                                <li class="dashboard-list__item">
+                                    <div class="dashboard-list__content">
+                                        <span class="dashboard-table__title">{{ video.fileblob }}</span>
+                                    </div>
+                                    <div class="dashboard-list__actions">
+                                        <a href="{{ path('add-iframe-potin', {'id': tab.id}) }}" class="btn-link btn-link--warning">
+                                            <i class="fa fa-edit"></i> Modifier
+                                        </a>
+                                        <a href="{{ path('add-iframe-potin', {'id': tab.id}) }}" class="btn-link btn-link--danger">
+                                            <i class="fa fa-trash"></i> Supprimer
+                                        </a>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="dashboard-empty">Aucune vidéo enregistrée.</p>
+                    {% endif %}
+                </div>
+
+                <div class="dashboard-section">
+                    <div class="dashboard-section__header">
+                        <h4 class="dashboard-section__title">Lien</h4>
+                        <a href="{{ path('add-link-potin', {'id': tab.id}) }}" class="btn btn-primary">
+                            <i class="fa fa-link"></i> Ajouter un lien
+                        </a>
+                    </div>
+                    {% if tab.link %}
+                    <ul class="dashboard-list">
+                        <li class="dashboard-list__item">
+                            <div class="dashboard-list__content">
+                                <span class="dashboard-table__title">{{ tab.link }}</span>
+                            </div>
+                            <div class="dashboard-list__actions">
+                                <a href="{{ path('edit_link_potin', {'id': tab.id}) }}" class="btn-link btn-link--warning">
+                                    <i class="fa fa-edit"></i> Modifier
+                                </a>
+                                </div>
+                            </li>
+                    </ul>
+                    {% else %}
+                        <p class="dashboard-empty">Aucun lien associé.</p>
+                    {% endif %}
+                </div>
+
+                <div class="dashboard-section">
+                    <div class="dashboard-section__header">
+                        <h4 class="dashboard-section__title">Articles</h4>
+                        <a href="{{ path('add-article-potin', {'id': tab.id}) }}" class="btn btn-primary">
+                            <i class="fa fa-file-text-o"></i> Ajouter un article
+                        </a>
+                    </div>
+                    {% if tab.htmlcontent|length > 0 %}
+                        <ul class="dashboard-list">
+                            {% for article in tab.htmlcontent %}
+                                <li class="dashboard-list__item">
+                                    <div class="dashboard-list__content">
+                                        <span class="dashboard-table__title">{{ article.fileblob }}</span>
+                                    </div>
+                                    <div class="dashboard-list__actions">
+                                        <a href="{{ path('edit_article_potin', {'id': article.id}) }}" class="btn-link btn-link--warning">
+                                            <i class="fa fa-edit"></i> Modifier
+                                        </a>
+                                        <a href="{{ path('delete-article-potin', {'id': article.id}) }}" class="btn-link btn-link--danger">
+                                            <i class="fa fa-trash"></i> Supprimer
+                                        </a>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="dashboard-empty">Aucun article rédigé pour ce potin.</p>
+                    {% endif %}
+                </div>
+
+                <div class="dashboard-section">
+                    <div class="dashboard-section__header">
+                        <h4 class="dashboard-section__title">Actions rapides</h4>
+                    </div>
+                    <div class="dashboard-action-list">
+                        <a class="btn-link" href="{{ path('potins_manage', {'id': tab.id}) }}">
+                            <i class="fa fa-edit"></i> Éditer
+                        </a>
+                        <a class="btn-link {{ tab.publied ? 'btn-link--success' : 'btn-link--warning' }}" href="{{ path('publied_post', {'id': tab.id, 'board': board.id}) }}">
+                            <i class="fa fa-flag{% if tab.publied %}-checkered{% endif %}"></i>
+                            {% if tab.publied %}Publié{% else %}Publier{% endif %}
+                        </a>
+                        <a class="btn-link btn-link--danger" href="{{ path('form-delete_post', {'id': tab.id}) }}">
+                            <i class="fa fa-trash"></i> Supprimer
+                        </a>
+                        <a class="btn-link" href="{{ path('event_potins', {'id': tab.id}) }}">
+                            <i class="fa fa-calendar"></i> Agenda
+                        </a>
+                        <a class="btn-link" href="{{ path('group_ressources', {'id': tab.id}) }}">
+                            <i class="fa fa-database"></i> Ressources
+                        </a>
+                        <a class="btn-link" href="{{ path('manage_group_review', {'id': tab.id}) }}">
+                            <i class="fa fa-podcast"></i> Review
+                        </a>
+                    </div>
+                </div>
+
             </div>
         {% endfor %}
     </div>
-</div>
+{% else %}
+    <div class="dashboard-card">
+        <p class="dashboard-empty">Aucun contenu disponible pour le moment.</p>
+    </div>
+{% endif %}

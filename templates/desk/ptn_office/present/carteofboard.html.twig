@@ -1,35 +1,54 @@
- <div class="flcol">
-    <div class="pos-incub-i">
-        <a class="bt-newmod" href="{{ path('new_carte',{'id':board.id}) }}">Ressource +</a>
+<div class="dashboard-card">
+    <div class="dashboard-card__header">
+        <div>
+            <p class="dashboard-card__hint">Ressources</p>
+            <h3 class="dashboard-card__title">Cartes disponibles</h3>
+        </div>
+        <div class="dashboard-action-list">
+            {% if board is defined %}
+                <a class="btn btn-primary" href="{{ path('new_carte', {'id': board.id}) }}">
+                    <i class="fa fa-plus"></i> Ajouter une ressource
+                </a>
+            {% endif %}
+        </div>
     </div>
 
-    <div class="w100">
-                    {%  for key, cat in articles %}
-                        <table class="aff_table t_size_list">
-                            <thead class="card-{{ cat[0].categorie.coul }}">
-                            <tr>
-                                <th>{{ key }}</th>
-                                {#  <th><i class="fa fa-cog"></i></th> #}
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            {%  for art in cat %}
-                                <tr>
-                                    <td>{{  art.titre }}</td>
-                                    <td><a href="{{path('edit_carte', {id: art.id})}}" class="btn btn-primary">editer</a>
-                                        <form method="post" action="{{path('delete_carte', {id: art.id})}}" style="display: inline-block"; onsubmit="return confirm('voulez vraiment supprimer cet élèment ?')">
-                                            <input type="hidden" name="_method" value="DELETE">
-                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ art.id) }}">
-                                            <button class="btn btn-danger">supprimer</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    {%  endfor %}
-                </div>
+    {% if articles|length > 0 %}
+    {% for key, cat in articles %}
+    {% if cat|length > 0 %}
+    <div class="dashboard-section">
+        <div class="dashboard-section__header">
+            <h4 class="dashboard-section__title">
+                <span class="dashboard-badge card-{{ cat[0].categorie.coul|default('') }}">{{ key }}</span>
+            </h4>
+        </div>
+        <ul class="dashboard-list">
+            {% for art in cat %}
+                <li class="dashboard-list__item">
+                    <div class="dashboard-list__content">
+                        <span class="dashboard-table__title">{{ art.titre }}</span>
+                    </div>
+                    <div class="dashboard-list__actions">
+                        <a href="{{ path('edit_carte', {id: art.id}) }}" class="btn-link btn-link--warning">
+                            <i class="fa fa-edit"></i> Éditer
+                        </a>
+                        <form method="post" action="{{ path('delete_carte', {id: art.id}) }}" class="dashboard-actions__form" onsubmit="return confirm('Voulez-vous vraiment supprimer cet élément ?')">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ art.id) }}">
+                            <button class="btn-link btn-link--danger" type="submit">
+                                <i class="fa fa-trash"></i> Supprimer
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% else %}
+        <p class="dashboard-empty">Aucune carte n'a encore été créée.</p>
+    {% endif %}
 
 </div>
 
