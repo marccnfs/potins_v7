@@ -16,10 +16,10 @@ final class EventController extends AbstractController
 {
     use UserSessionTrait;
 
-    #[Route('/events/new', name: 'event_new')]
+    #[Route('agenda/events/new', name: 'event_new')]
     public function new(Request $req, ParticipantContext $participantContext): Response
     {
-        $p = $participantContext->getParticipantOrFail();
+        //$p = $participantContext->getParticipantOrFail();
 
         // valeur par défaut : aujourd’hui 09:00–10:00 (Europe/Paris)
         $nowParis = new \DateTimeImmutable('today 09:00', new \DateTimeZone('Europe/Paris'));
@@ -58,6 +58,7 @@ final class EventController extends AbstractController
                 $e->setLocationName($form->get('locationName')->getData());
                 $e->setLocationAddress($form->get('locationAddress')->getData());
                 $e->setCapacity($form->get('capacity')->getData());
+                $e->setCommuneCode($form->get('communeCode')->getData() ?: 'autre');
                 $e->setCategory($form->get('category')->getData());
                 $e->setVisibility($form->get('visibility')->getData());
                 $e->setPublished((bool) $form->get('published')->getData());
@@ -69,14 +70,20 @@ final class EventController extends AbstractController
                 return $this->redirectToRoute('event_show', ['slug' => $e->getSlug()]);
             }
         }
+        $vartwig=$this->menuNav->templatePotins(
+            '_form',Links::ACCUEIL);
 
-        return $this->render('pwa/agenda/form.html.twig', [
+        return $this->render('pwa/agenda/home.html.twig', [
             'form' => $form,
             'mode' => 'new',
+            'replacejs'=>false,
+            'customer'=>$this->customer,
+            'vartwig'=>$vartwig,
+            'directory'=>'agenda',
         ]);
     }
 
-    #[Route('/events/{slug}/edit', name: 'event_edit')]
+    #[Route('agenda/events/{slug}/edit', name: 'event_edit')]
     public function edit(string $slug, Request $req, ParticipantContext $participantContext): Response
     {
         $p = $participantContext->getParticipantOrFail();
@@ -141,7 +148,7 @@ final class EventController extends AbstractController
         ]);
     }
 
-    #[Route('/events/{slug}/delete', name: 'event_delete', methods: ['POST'])]
+    #[Route('agenda/events/{slug}/delete', name: 'event_delete', methods: ['POST'])]
     public function delete(string $slug, Request $req, ParticipantContext $participantContext): Response
     {
         $this->denyUnlessCsrf($req, 'delete_'.$slug);

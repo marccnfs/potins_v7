@@ -12,16 +12,26 @@
                 {{ include('desk/ptn_office/partials/_alerts.html.twig') }}
 
                 <section class="dashboard-card">
+                    <h2 class="dashboard-card__title">Planifier un créneau</h2>
+                    <p>Créez vos rendez-vous publics directement depuis l’outil agenda. Le formulaire vous permet de :</p>
+                    <ul class="dashboard-list">
+                        <li>choisir la commune d’intervention ;</li>
+                        <li>définir le type d’activité (RDV public, atelier collectif, permanence, formation, indisponibilité…);</li>
+                        <li>renseigner la date, l’horaire et la durée ;</li>
+                        <li>bloquer un créneau en cas d’absence ou de congés.</li>
+                    </ul>
+                    <p>
+                        <a class="btn" href="{{ path('event_new') }}">Ajouter un créneau à l’agenda</a>
+                    </p>
+                </section>
+
+                <section class="dashboard-card">
                     {{ include('pwa/agenda/board_week.html.twig', { date: date }, with_context = false) }}
                 </section>
             </div>
         </div>
     </div>
 {% endblock %}
-
-
-
-
 {% use "js/js_agenda.html.twig" %}
 {% block javascripts %}
     {{ parent() }}

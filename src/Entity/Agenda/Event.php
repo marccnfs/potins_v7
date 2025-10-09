@@ -127,6 +127,26 @@ class Event
     public function getCommuneCode(): string { return $this->communeCode; }
     public function setCommuneCode(string $code): void { $this->communeCode = $code; $this->touch(); }
 
+    public function getCommuneLabel(): string
+    {
+        return match (strtolower($this->communeCode ?? '')) {
+            'pellerin'  => 'Le Pellerin',
+            'montagne'  => 'La Montagne',
+            'sjb'       => 'Saint-Jean-de-Boiseau',
+            default     => 'Autre / Hors zone',
+        };
+    }
+
+    public function getCategoryLabel(): string
+    {
+        return $this->category->label();
+    }
+
+    public function canReceiveRequests(): bool
+    {
+        return $this->category->isBookable();
+    }
+
     // --- Getters/Setters (subset) ---
     public function getId(): Uuid
     {

@@ -73,14 +73,19 @@ export default class extends Controller {
     }
 
     renderEventItem(e) {
+        const eventUrl = this.eventUrl(e);
+        const requestable = this.isRequestable(e);
+        const requestUrl = requestable ? this.requestUrl(e) : null;
+        const categoryLabel = this.categoryLabel(e);
         return `
         <li class="event">
-          <a href="/events/${e.slug}">
+           <a class="event-link" href="${eventUrl}">
             <div class="time">${e.isAllDay ? 'Toute la journée' : `${e.startsAtLocal} — ${e.endsAtLocal}`}</div>
             <div class="title">${e.title}</div>
             ${e.locationName ? `<div class="loc">${e.locationName}</div>` : ``}
-            <span class="badge">${e.category}</span>
+               ${categoryLabel ? `<span class="badge">${categoryLabel}</span>` : ''}
           </a>
+          ${requestable ? `<div class="event-actions"><a class="btn btn-light" href="${requestUrl}">Demander un rendez-vous</a></div>` : ''}
         </li>`;
     }
 
@@ -190,14 +195,19 @@ export default class extends Controller {
         const time = event.isAllDay
             ? 'Toute la journée'
             : `${this.formatHour(event.startsAtTime)} – ${this.formatHour(event.endsAtTime)}`;
+        const eventUrl = this.eventUrl(event);
+        const requestable = this.isRequestable(event);
+        const requestUrl = requestable ? this.requestUrl(event) : null;
+        const categoryLabel = this.categoryLabel(event);
         return `
             <li class="event">
-                <a href="/events/${event.slug}">
+                 <a class="event-link" href="${eventUrl}">
                     <div class="time">${time}</div>
                     <div class="title">${event.title}</div>
                     ${event.locationName ? `<div class="loc">${event.locationName}</div>` : ''}
-                    <span class="badge">${event.category}</span>
+                       ${categoryLabel ? `<span class="badge">${categoryLabel}</span>` : ''}
                 </a>
+                 ${requestable ? `<div class="event-actions"><a class="btn btn-light" href="${requestUrl}">Demander un rendez-vous</a></div>` : ''}
             </li>`;
     }
 
@@ -227,5 +237,42 @@ export default class extends Controller {
         const [y, m, d] = dateStr.split('-').map(Number);
         if ([y, m, d].some(Number.isNaN)) return new Date(dateStr);
         return new Date(y, m - 1, d);
+    }
+    eventUrl(event) {
+        if (event.eventUrl) {
+            return event.eventUrl;
+        }
+        return `/events/${encodeURIComponent(event.slug)}`;
+    }
+
+    requestUrl(event) {
+        if (event.requestUrl) {
+            return event.requestUrl;
+        }
+        return `/rdv/${encodeURIComponent(event.slug)}`;
+    }
+
+    categoryLabel(event) {
+        if (event.categoryLabel) {
+            return event.categoryLabel;
+        }
+        switch ((event.category || '').toLowerCase()) {
+            case 'rdv': return 'RDV public';
+            case 'atelier': return 'Atelier collectif';
+            case 'permanence': return 'Permanence';
+            case 'formation': return 'Formation';
+            case 'indispo': return 'Indisponible';
+            case 'externe': return 'Événement externe';
+            case 'autre': return 'Autre activité';
+            default: return '';
+        }
+    }
+
+    isRequestable(event) {
+        if (typeof event.canRequest === 'boolean') {
+            return event.canRequest;
+        }
+        const raw = (event.category || '').toLowerCase();
+        return ['rdv', 'atelier', 'permanence'].includes(raw);
     }
 }

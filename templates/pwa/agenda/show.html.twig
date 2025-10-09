@@ -7,10 +7,8 @@
                 {{ startsLocal|date(e.isAllDay ? 'd F Y' : 'd F Y, H:i') }}
                 —
                 {{ endsLocal|date(e.isAllDay ? 'd F Y' : 'H:i') }}
-                • {{ e.category.value|capitalize }}
-                {% if e.communeCode is defined %}
-                    <span class="badge">{{ e.communeCode|upper }}</span>
-                {% endif %}
+                • {{ e.categoryLabel }}
+                <span class="badge">{{ e.communeLabel }}</span>
             </div>
         </header>
 
@@ -26,9 +24,11 @@
 
         <nav class="actions" style="display:flex; gap:8px; flex-wrap:wrap;" aria-label="Actions">
             <a class="btn" href="{{ path('event_ics', {slug: e.slug}) }}">Ajouter à mon agenda (.ics)</a>
+            {% if e.canReceiveRequests() %}
+                <a class="btn btn-light" href="{{ path('agenda_request', {slug: e.slug}) }}">Demander un rendez-vous</a>
+            {% endif %}
             {% if canManage %}
                 <a class="btn btn-light" href="{{ path('event_edit', {slug: e.slug}) }}">Éditer</a>
-                <a class="btn btn-light" href="{{ path('agenda_request', {slug: e.slug}) }}">Demander un rendez-vous</a>
             {% endif %}
         </nav>
 

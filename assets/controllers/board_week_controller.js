@@ -69,17 +69,15 @@ export default class extends Controller {
     }
 
     renderEvent(e) {
-        const communeClass = this.communeClass(e.commune); // <-- direct depuis feed
-        const requestUrl = this.requestUrlValue
-            ? this.requestUrlValue.replace('__SLUG__', encodeURIComponent(e.slug))
-            : `/rdv/${encodeURIComponent(e.slug)}`;
+        const communeClass = this.communeClass(e.commune);
+        const categoryLabel = this.categoryLabel(e);
+        const requestable = this.isRequestable(e);
+        const requestUrl = requestable ? this.requestUrl(e) : null;
         return `
     <div class="event-pill ${communeClass}">
-      <div class="event-title">${e.title} ${e.category ? `<span class="badge">${e.category}</span>` : ''}</div>
-      <div class="event-meta">${e.isAllDay ? 'Toute la journée' : `${e.startsAtLocal} — ${e.endsAtLocal}`}${e.locationName?` • ${e.locationName}`:''}</div>
-      <div class="event-actions">
-        <a class="btn-ghost" href="${requestUrl}">Prendre RDV</a>
-      </div>
+      <div class="event-title">${e.title} ${categoryLabel ? `<span class="badge">${categoryLabel}</span>` : ''}</div>
+      <div class="event-meta">${e.isAllDay ? 'Toute la journée' : `${e.startsAtLocal} — ${e.endsAtLocal}`}${e.locationName ? ` • ${e.locationName}` : ''}</div>
+      ${requestable ? `<div class="event-actions"><a class="btn-ghost" href="${requestUrl}">Prendre RDV</a></div>` : ''}
     </div>`;
     }
 
@@ -90,6 +88,40 @@ export default class extends Controller {
             case 'sjb':      return 'c-sjb';
             default:         return 'c-autre';
         }
+    }
+    categoryLabel(event) {
+        return event.categoryLabel || this.humanCategory(event.category);
+    }
+
+    humanCategory(raw) {
+        switch ((raw || '').toLowerCase()) {
+            case 'rdv': return 'RDV public';
+            case 'atelier': return 'Atelier collectif';
+            case 'permanence': return 'Permanence';
+            case 'formation': return 'Formation';
+            case 'indispo': return 'Indisponible';
+            case 'externe': return 'Événement externe';
+            case 'autre': return 'Autre activité';
+            default: return '';
+        }
+    }
+
+    isRequestable(event) {
+        if (typeof event.canRequest === 'boolean') {
+            return event.canRequest;
+        }
+        const raw = (event.category || '').toLowerCase();
+        return ['rdv', 'atelier', 'permanence'].includes(raw);
+    }
+
+    requestUrl(event) {
+        if (event.requestUrl) {
+            return event.requestUrl;
+        }
+        if (this.requestUrlValue) {
+            return this.requestUrlValue.replace('__SLUG__', encodeURIComponent(event.slug));
+        }
+        return `/rdv/${encodeURIComponent(event.slug)}`;
     }
 
     // helpers

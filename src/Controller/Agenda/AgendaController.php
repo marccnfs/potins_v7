@@ -93,6 +93,7 @@ use Symfony\Component\Routing\Attribute\Route;
                 'slug'          => $e->getSlug(),
                 'title'         => $e->getTitle(),
                 'category'      => $e->getCategory()->value,
+                'categoryLabel' => $e->getCategoryLabel(),
                 'startsAtLocal' => $sLocal->format('d/m H:i'),
                 'endsAtLocal'   => $eLocal->format('d/m H:i'),
                 'startsAtTime'  => $sLocal->format('H:i'),
@@ -102,6 +103,10 @@ use Symfony\Component\Routing\Attribute\Route;
                 'locationName'  => $e->getLocationName(),
                 'isAllDay'      => $e->isAllDay(),
                 'commune'       => $e->getCommuneCode(),
+                'communeLabel'  => $e->getCommuneLabel(),
+                'canRequest'    => $e->canReceiveRequests(),
+                'eventUrl'      => $this->generateUrl('event_show', ['slug' => $e->getSlug()]),
+                'requestUrl'    => $this->generateUrl('agenda_request', ['slug' => $e->getSlug()]),
             ];
         }
 

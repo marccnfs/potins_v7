@@ -63,15 +63,9 @@ final class EventType extends AbstractType
                 'required' => false,
             ])
             ->add('category', F\EnumType::class, [
-                'label' => 'Catégorie',
+                'label' => 'Type d’activité',
                 'class' => EventCategory::class,
-                'choice_label' => fn(EventCategory $c) => match ($c) {
-                    EventCategory::ATELIER => 'Atelier',
-                    EventCategory::RDV => 'RDV',
-                    EventCategory::EXTERNE => 'Externe',
-                    EventCategory::AUTRE => 'Autre',
-                },
-
+                'choice_label' => fn(EventCategory $c) => $c->label(),
             ])
             ->add('visibility', F\EnumType::class, [
                 'label' => 'Visibilité',

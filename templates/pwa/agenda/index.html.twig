@@ -31,13 +31,16 @@
         <section class="card tip">
             <h3>Filtres</h3>
             <form data-controller="agenda-filters">
-                <label>Catégorie</label>
+                <label>Type d’activité</label>
                 <select data-agenda-filters-target="category">
-                    <option value="">Toutes</option>
-                    <option value="atelier">Ateliers</option>
+                    <option value="rdv">RDV publics</option>
+                    <option value="atelier">Ateliers collectifs</option>
+                    <option value="permanence">Permanences</option>
+                    <option value="formation">Formations</option>
+                    <option value="indispo">Indisponibilités</option>
                     <option value="rdv">RDV</option>
                     <option value="externe">Événements externes</option>
-                    <option value="autre">Autres</option>
+                    <option value="autre">Autres activités</option>
                 </select>
             </form>
         </section>
