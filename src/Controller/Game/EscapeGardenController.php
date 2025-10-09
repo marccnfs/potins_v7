@@ -5,6 +5,7 @@ namespace App\Controller\Game;
 use App\Attribute\RequireParticipant;
 use App\Classe\UserSessionTrait;
 use App\Entity\Games\EscapeGame;
+use App\Entity\Games\EscapeWorkshopSession;
 use App\Entity\Media\Illustration;
 use App\Entity\Users\Participant;
 use App\Form\ParticipantProfileType;
@@ -175,17 +176,29 @@ class EscapeGardenController extends AbstractController
             return $this->redirectToRoute('participant_entry');
         }
 
+        $prenom = trim((string) $request->request->get('prenom'));
+        $codeAtelier = strtoupper(trim((string) $request->request->get('code_atelier')));
+        $codeSecret = strtoupper(trim((string) $request->request->get('code_secret')));
+
+        if ($prenom === '' || $codeAtelier === '' || $codeSecret === '') {
+            $this->addFlash('error', 'Merci de renseigner ton prénom, le code atelier et ton code secret.');
+            return $this->redirectToRoute('participant_entry');
+        }
+
+        $workshop = $this->em->getRepository(EscapeWorkshopSession::class)->findOneByCode($codeAtelier);
+        if (!$workshop) {
+            $this->addFlash('error', 'Ce code atelier n’est pas reconnu. Vérifie-le auprès de ton médiateur.');
+            return $this->redirectToRoute('participant_entry');
+        }
+
         $participant = new Participant();
-
-        $participant->setPrenom($request->request->get('prenom'));
-        $participant->setCodeAtelier($request->request->get('code_atelier'));
-        $participant->setCodeSecret($request->request->get('code_secret'));
-
+        $participant->setPrenom($prenom);
+        $participant->setCodeAtelier($workshop->getCode());
+        $participant->setCodeSecret($codeSecret);
 
         $this->em->persist($participant);
         $this->em->flush();
         $this->requestStack->getSession()->set('participant_id', $participant->getId());
-       // $request->getSession()->set('participant_id', $participant->getId());
 
         return $this->redirectToRoute('dashboard_my_escapes');
     }
@@ -198,9 +211,9 @@ class EscapeGardenController extends AbstractController
             return $this->redirectToRoute('participant_entry');
         }
 
-        $prenom = $request->request->get('prenom');
-        $codeAtelier = $request->request->get('code_atelier');
-        $codeSecret = $request->request->get('code_secret');
+        $prenom = trim((string) $request->request->get('prenom'));
+        $codeAtelier = strtoupper(trim((string) $request->request->get('code_atelier')));
+        $codeSecret = strtoupper(trim((string) $request->request->get('code_secret')));
 
         $participant = $this->em->getRepository(Participant::class)->findOneBy([
             'prenom' => $prenom,

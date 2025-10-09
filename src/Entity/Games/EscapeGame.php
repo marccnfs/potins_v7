@@ -70,6 +70,11 @@ class EscapeGame
     #[ORM\OneToMany(targetEntity: MobileLink::class, mappedBy: 'escapeGame', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $mobilelink;
 
+    #[ORM\ManyToOne(targetEntity: EscapeWorkshopSession::class, inversedBy: 'escapeGames')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?EscapeWorkshopSession $workshopSession = null;
+
+
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $created_at;
 
@@ -377,6 +382,18 @@ class EscapeGame
     public function getSessions(): Collection
     {
         return $this->sessions;
+    }
+
+    public function getWorkshopSession(): ?EscapeWorkshopSession
+    {
+        return $this->workshopSession;
+    }
+
+    public function setWorkshopSession(?EscapeWorkshopSession $workshopSession): static
+    {
+        $this->workshopSession = $workshopSession;
+
+        return $this;
     }
 
     public function addSession(PlaySession $session): static

@@ -33,10 +33,12 @@ class ParticipantProfileType extends AbstractType
             ])
             ->add('codeAtelier', TextType::class, [
                 'label'=>'Code atelier','required'=>false,
+                'help'=>'Code à 4 chiffres communiqué pendant la session.',
                 'attr'=>['maxlength'=>20,'placeholder'=>'Code atelier']
             ])
             ->add('codeSecret', TextType::class, [
                 'label'=>'Code secret','required'=>true,
+                'help'=>'Il reste privé et te permet de te reconnecter.',
                 'attr'=>['maxlength'=>4,'placeholder'=>'Ton code secret']
             ])
             /*

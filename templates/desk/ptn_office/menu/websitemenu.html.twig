@@ -58,6 +58,13 @@
                     <span class="menu-entry__hint">Modérer les créations</span>
                 </span>
             </a>
+            <a href="{{ path('module_escape_workshops') }}" class="menu-entry {{ vartwig.m6 ? 'menu-entry--active' : '' }}">
+                <span class="menu-entry__icon"><i class="fa fa-hashtag" aria-hidden="true"></i></span>
+                <span class="menu-entry__content">
+                    <span class="menu-entry__title">Sessions d'atelier</span>
+                    <span class="menu-entry__hint">Générer les codes atelier</span>
+                </span>
+            </a>
         {% endif %}
     </nav>
 

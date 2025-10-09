@@ -1,0 +1,12 @@
+{% block body %}
+<div class="container-websit">
+    <div class="before_board"></div>
+    {{ include('mobile/ptn_elements/ele_boards/affi_board.html.twig') }}
+</div>
+{%  endblock body %}
+{% use "js/js_potins.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+

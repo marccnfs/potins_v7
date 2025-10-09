@@ -3,6 +3,7 @@ namespace App\Controller\Game;
 
 use App\Classe\UserSessionTrait;
 use App\Entity\Games\EscapeGame;
+use App\Entity\Games\EscapeWorkshopSession;
 use App\Entity\Games\MobileLink;
 use App\Entity\Media\Illustration;
 use App\Form\EscapeUniverseType;
@@ -46,6 +47,14 @@ class WizardController extends AbstractController
     {
         $participant=$this->currentParticipant($req);
 
+        $codeAtelier = strtoupper(trim((string) $participant->getCodeAtelier()));
+        $workshop = $this->em->getRepository(EscapeWorkshopSession::class)->findOneByCode($codeAtelier);
+
+        if (!$workshop) {
+            $this->addFlash('error', 'Impossible de créer un escape game sans code atelier valide. Demande un code à ton médiateur.');
+            return $this->redirectToRoute('dashboard_my_escapes');
+        }
+
         // Création d’un nouveau EG minimal et redirection vers l’univers
         $eg = new EscapeGame();
         $eg->setOwner($participant);
@@ -53,6 +62,8 @@ class WizardController extends AbstractController
         $eg->setUniverse([ 'contexte'=>'', 'objectif'=>'', 'modeEmploi'=>'', 'guide'=>null ]);
         $eg->setTitresEtapes([1=>'',2=>'',3=>'',4=>'',5=>'',6=>'']);
         $eg->setPublished(false);
+        $eg->setWorkshopSession($workshop);
+        $participant->addEscapeGame($eg);
         // $eg->setOwner($this->getUser()); // si tu as une sécu d’édition
         $this->em->persist($eg);
         $this->em->flush();

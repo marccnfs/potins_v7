@@ -1,0 +1,109 @@
+{% block body %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
+            <div class="bo_content">
+                <header class="dashboard-header">
+                    <span class="dashboard-kicker">Ateliers escape game</span>
+                    <h1 class="dashboard-title">Gestion des sessions</h1>
+                    <p class="dashboard-subtitle">Générez les codes ateliers et regroupez les escape games par séance.</p>
+                </header>
+
+                {{ include('desk/ptn_office/partials/_alerts.html.twig') }}
+
+                <section class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <h2 class="dashboard-card__title">Créer une nouvelle session</h2>
+                        <p class="dashboard-card__hint">Associez un atelier «&nbsp;escape game&nbsp;» et générez un code à partager aux participants.</p>
+                    </div>
+                    {{ form_start(form) }}
+                    <div class="form-grid">
+                        {{ form_row(form.label) }}
+                        {{ form_row(form.event) }}
+                        <div class="form-field form-field--inline">
+                            {{ form_row(form.isMaster) }}
+                        </div>
+                        {{ form_row(form.customCode) }}
+                    </div>
+                    <div class="dashboard-actions dashboard-actions--right">
+                        <button type="submit" class="btn btn-primary">Enregistrer la session</button>
+                    </div>
+                    {{ form_end(form) }}
+                </section>
+
+                <section class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <h2 class="dashboard-card__title">Sessions enregistrées</h2>
+                        <p class="dashboard-card__hint">Chaque session regroupe les escape games créés avec son code.</p>
+                    </div>
+
+                    {% if sessions is not empty %}
+                        <div class="dashboard-stack">
+                            {% for session in sessions %}
+                                <article class="dashboard-panel">
+                                    <header class="dashboard-panel__header">
+                                        <div>
+                                            <h3 class="dashboard-panel__title">{{ session.displayName }}</h3>
+                                            <p class="dashboard-panel__meta">Code atelier&nbsp;: <strong>{{ session.code }}</strong>{% if session.isMaster %} — Code maître{% endif %}</p>
+                                            {% if session.event %}
+                                                <p class="dashboard-panel__meta">Atelier lié&nbsp;: {{ session.event.titre }}
+                                                    {% if session.event.appointment and session.event.appointment.starttime %}
+                                                        — {{ session.event.appointment.starttime|date('d/m/Y H:i') }}
+                                                    {% endif %}
+                                                </p>
+                                            {% else %}
+                                                <p class="dashboard-panel__meta muted">Aucun atelier associé</p>
+                                            {% endif %}
+                                        </div>
+                                        <form method="post" action="{{ path('module_escape_workshops_delete', {id: session.id}) }}" class="dashboard-actions__form" onsubmit="return confirm('Supprimer la session « {{ session.displayName }} » ?');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete_escape_workshop_' ~ session.id) }}">
+                                            <button class="btn-link btn-link--danger" type="submit"><i class="fa fa-trash" aria-hidden="true"></i> Supprimer</button>
+                                        </form>
+                                    </header>
+                                    {% if session.escapeGames is not empty %}
+                                        <ul class="dashboard-list">
+                                            {% for game in session.escapeGames %}
+                                                <li class="dashboard-list__item">
+                                                    <div>
+                                                        <span class="dashboard-list__title">{{ game.title }}</span>
+                                                        <span class="dashboard-list__meta">Créé par {{ game.ownerDisplayName }}{% if game.createdAt %} — {{ game.createdAt|date('d/m/Y') }}{% endif %}</span>
+                                                    </div>
+                                                    <span class="badge">{{ game.published ? 'Publié' : 'Brouillon' }}</span>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <p class="dashboard-panel__empty">Aucun escape game rattaché pour le moment.</p>
+                                    {% endif %}
+                                </article>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="dashboard-empty">Aucune session n’a encore été créée. Commencez par générer un code pour votre prochain atelier.</p>
+                    {% endif %}
+                </section>
+
+                {% if legacyGames is not empty %}
+                    <section class="dashboard-card dashboard-card--warning">
+                        <div class="dashboard-card__header">
+                            <h2 class="dashboard-card__title">Escapes sans session</h2>
+                            <p class="dashboard-card__hint">Ces jeux ont été créés avant la mise en place des codes ateliers. Vous pouvez les rattacher à la main si besoin.</p>
+                        </div>
+                        <ul class="dashboard-list">
+                            {% for game in legacyGames %}
+                                <li class="dashboard-list__item">
+                                    <div>
+                                        <span class="dashboard-list__title">{{ game.title }}</span>
+                                        <span class="dashboard-list__meta">Créé par {{ game.ownerDisplayName }}{% if game.createdAt %} — {{ game.createdAt|date('d/m/Y') }}{% endif %}</span>
+                                    </div>
+                                    <span class="badge">{{ game.published ? 'Publié' : 'Brouillon' }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </section>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+

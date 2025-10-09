@@ -43,6 +43,7 @@
                             <tr>
                                 <th scope="col">Titre</th>
                                 <th scope="col">Créateur</th>
+                                <th scope="col">Atelier</th>
                                 <th scope="col">Dernière activité</th>
                                 <th scope="col">Statut</th>
                                 <th scope="col" class="dashboard-table__actions">Actions</th>
@@ -62,6 +63,21 @@
                                     </td>
                                     <td data-label="Créateur">
                                         <span class="dashboard-table__title">{{ game.ownerDisplayName }}</span>
+                                    </td>
+                                    <td data-label="Atelier">
+                                        {% if game.workshopSession %}
+                                            <span class="dashboard-table__title">{{ game.workshopSession.displayName }}</span>
+                                            {% if game.workshopSession.event %}
+                                                <span class="dashboard-table__meta">{{ game.workshopSession.event.titre }}</span>
+                                                {% if game.workshopSession.event.appointment and game.workshopSession.event.appointment.starttime %}
+                                                    <span class="dashboard-table__meta">{{ game.workshopSession.event.appointment.starttime|date('d/m/Y H:i') }}</span>
+                                                {% endif %}
+                                            {% else %}
+                                                <span class="dashboard-table__meta">Code maître</span>
+                                            {% endif %}
+                                        {% else %}
+                                            <span class="dashboard-table__meta">Non attribué</span>
+                                        {% endif %}
                                     </td>
                                     <td data-label="Dernière activité">
                                         {% if game.lastActivityAt %}

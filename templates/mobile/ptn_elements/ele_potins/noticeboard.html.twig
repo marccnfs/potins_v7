@@ -1,0 +1,113 @@
+<div class="flex-board">
+    {%  if orderwbs|length >0 %}
+        {% for key, scorewbs in orderwbs %}
+            {%  set link='show_board' %}
+            {%  set website = wbsiteloc[key] %}
+            {{ include('mobile/ptn_elements/ele_boards/card_website_board.html.twig') }}
+        {% endfor %}
+    {% else %}
+        <div class="pop_item-rep">
+            {#  <i class="fa fa-times abs-croos"></i> #}
+            <div class="notbd-img">
+                <div class="iner-img_notbd" style="background-image: url('{{ asset('img/pinsaffi.png' ) }}')"></div>
+            </div>
+            <div class="modal_innerpopo">
+                <p>rien par ici...</p>
+                <div class="me_ampoul">
+                    snif
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+
+{#
+    {%  if wbsiteloc|length >0 %}
+        {% for website in wbsiteloc %}
+        {%  set link='show_website' %}
+        {{ include('aff_website/website/view/card_website_board.html.twig') }}
+        {% endfor %}
+    {% endif %}
+#}
+
+</div>
+
+
+
+
+{#
+       {% for website in wbsiteloc %}
+           {% if isActivity(website.id, pws) %}
+               {%  set link='ospace' %}
+           {%  else %}
+               {%  set link='show_website' %}
+           {%  endif %}
+
+               {{ include('aff_website/website/view/card_website_board.html.twig') }}
+
+                    <div class="wb_board">
+                                       class="pop_item-rep_v6"
+
+                                       <div class="notbd-img">
+                                           <div class="iner-img_notbd" style="background-image: url('{{ asset('spaceweb/template/'~rocket.template.logo.namefile??'img/pinsaffi.png' ) }}')"></div>
+                                       </div>
+                                       <div class="modal_innerpopo">
+                                           <h3>{{rocket.namewebsite}}</h3>
+                                       </div>
+                                       <div class="_tagone">
+                                           {% if rocket.template.tagueries|length > 0 %}
+                                               <div class="_fx-R fx-c">
+                                                   {% for tag in rocket.template.tagueries|slice(0,1) %}
+                                                       {%  if tag.name is not same as("") %}
+                                                           <div class="ltl-tag">
+                                                               <div class="bull_tag active" >
+                                                                   <div class="-br-Ma">{{tag.name}}</div>
+                                                               </div>
+                                                           </div>
+                                                       {% endif %}
+                                                   {% endfor %}
+                                               </div>
+                                           {% endif %}
+                                       </div>
+
+                        </div>
+         {% endfor %}
+                    #}
+
+{#
+    {% elseif wbsiteelse is defined and wbsiteelse|length >0 %}
+            <div class="flex-board">
+                <h3> rien sur cette localité, mais à proximité :</h3>
+            </div>
+            <div class="flex-board">
+                {% for rocket in wbsiteelse %}
+                    <div class="wb_board">
+                        <div class="_tagone">
+                            {% if rocket.template.tagueries|length > 0 %}
+                                <div class="_fx-R fx-c">
+                                    {% for tag in rocket.template.tagueries|slice(0,2) %}
+                                        {%  if tag.name is not same as("") %}
+                                            <div class="ltl-tag">
+                                                <div class="bull_tag active" >
+                                                    <div class="-br-Ma">{{tag.name}}</div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <a href="{{ path( 'show_website', {"city":rocket.locality.slugcity,"nameboard":rocket.slug }) }}" class="pop_item-rep_v6" data-website="{{ rocket.id }}">
+
+                            <div class="notbd-img">
+                                <div class="iner-img_notbd" style="background-image: url('{{ asset('spaceweb/template/'~rocket.template.logo.namefile??'img/pinsaffi.png' ) }}')"></div>
+                            </div>
+                            <div class="modal_innerpopo">
+                                <h3>{{rocket.namewebsite}}</h3>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+#}
+

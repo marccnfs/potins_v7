@@ -1,0 +1,113 @@
+{% block body %}
+<div class="container-websit">
+    {%  set entity, typ = potin, "blog" %}
+    <div class="pwa-potin-pg">
+
+            <div class="pwa-potin-comment">
+                <h1>{{ potin.titre|lower|capitalize }}</h1>
+                <div class="pwa-titlpotin">
+                    {% if potin.subject is not same as (" ") %}
+                        <h3>{{ potin.subject|raw|lower|capitalize }}</h3> {# {{post.subject|u.truncate(80, '...')|lower|capitalize}} #}
+                    {% endif %}
+                </div>
+                {{ include('mobile/ptn_elements/ele_echanges/bar_echanges.html.twig') }}
+            </div>
+            <article class="w-potin">
+                {{ include('mobile/ptn_elements/ele_potins/modale_potin_v2.html.twig') }}
+            </article>
+
+            <div class="more_rss">
+                <div class="pwa-zone-info-potin">
+                    <div class="potin_ressources">
+                        <div class="form-groupfields glass-label">
+                            <div class="process-module_glass">
+                                <div class="stape-process-lit" >
+                                    <h5>les ressources :</h5>
+                                </div>
+                            </div>
+                        </div>
+                        {%  for ressource in ressources %}
+                            {{ include('desk/ptn_elements/ele_ressources/widget_ressources.html.twig') }}
+                        {%  endfor %}
+                        {%  for ressource in ressources %}
+                            {{ include('desk/ptn_elements/ele_ressources/widget_ressources.html.twig') }}
+                        {%  endfor %}
+                    </div>
+                </div>
+            </div>
+
+            {% if  potin.gpreview is not null %}
+                <div class="btn_review">
+                    <div class="pwa-zone-info-potin">
+                        <div class="zone-bar-author">
+                            <div class="in_bar_board">
+                                <div class="af_flx fx-c">
+                                    <div class="author">&thinsp;Retour sur les ateliers<br>(accès réservé aux participants) {# : {{ post.author.customer.profil.firstname }} #}</div>
+
+                                    {#   {% if isPlayer(customer.id, tabplayer) %} #}
+                                    <button class="link_code"><i class="fa fa-sign-in" id="goaccess"></i></button>
+                                    <div class="pwa-pop-code" id="codeaccess" data-post={{ potin.id }} style="display:none">
+                                        <h2>Entrez votre code d'accès :</h2>
+                                        <div id="testcode"></div>
+                                        <test-access></test-access>
+                                        <button class="close_pop"><i class="fa fa-window-close-o" id="closecode"></i></button>
+                                    </div>
+                                    {#  {%  endif %} #}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w_review">
+                            <div class="pict_wall">
+                                {% if potin.gpreview.media.imagejpg is defined %}
+                                    {% for pict in potin.gpreview.media.imagejpg %}
+                                        <div class="little-pic-block" style="background-image: url({{ asset(pict.getWebPath) }})"></div>
+                                    {% endfor %}
+                                {%  endif %}
+                            </div>
+                            <div class="pwa-list-content">
+                                <ul class="pwa-bk-content-coul">
+                                    {% for rw in potin.gpreview.reviews %}
+                                        <li>{{rw.titre}}
+                                            {% set typ =  rw.type?"1":"0"%}
+                                            <a class="btn btn-primary" href="{{path('show_potin_review_pdf',{type:typ, slug:potin.slug, id:potin.id,  })}}"><i class="fa fa-eye"></i></a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {%  endif %}
+            <div class="content_mb_with_icone_pg">
+                <div class="content_mb_with_icone_list">
+                    <div class="cadre_title">
+                        <h3>et aussi :</h3>
+                    </div>
+                        <div class="tgl-100">
+                            {% if potins|length >0 %}
+                                <div class="fx-content_rep_potinary">
+                                    {{ include('mobile/ptn_elements/ele_potins/lastpotins.html.twig') }}
+                                </div>
+                            {%  else %}
+                                <div class="fx-content_rep_potinary">
+                                    <div class="flex-board">
+                                        <div class="flex-notb_v6-fix">
+                                            <h3>  Aucun potin disponible</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                </div>
+            </div>
+    </div>
+</div>
+{%  endblock body %}
+    {% block footer %}
+        {{ include ('mobile/footer/potins_footer.html.twig') }}
+    {% endblock footer %}
+{% use "js/js_public_codeaccess.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

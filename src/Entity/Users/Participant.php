@@ -108,7 +108,7 @@ class Participant
 
     public function setCodeAtelier(string $codeAtelier): static
     {
-        $this->codeAtelier = $codeAtelier;
+        $this->codeAtelier = strtoupper(trim($codeAtelier));
 
         return $this;
     }
@@ -120,7 +120,7 @@ class Participant
 
     public function setCodeSecret(string $codeSecret): static
     {
-        $this->codeSecret = $codeSecret;
+        $this->codeSecret = strtoupper(trim($codeSecret));
 
         return $this;
     }

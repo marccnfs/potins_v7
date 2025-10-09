@@ -8,8 +8,11 @@ namespace App\Controller\BoardOffice;
 use App\Classe\UserSessionTrait;
 use App\Entity\Boards\Board;
 use App\Entity\Games\EscapeGame;
+use App\Entity\Games\EscapeWorkshopSession;
+use App\Form\EscapeWorkshopSessionType;
 use App\Lib\Links;
 use App\Repository\EscapeGameRepository;
+use App\Repository\EscapeWorkshopSessionRepository;
 use App\Repository\OffresRepository;
 use App\Repository\PostEventRepository;
 use App\Repository\PostRepository;
@@ -27,6 +30,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Form\FormError;
 
 
 #[IsGranted(new Expression('is_granted("ROLE_MEMBER") or is_granted("ROLE_SUPER_ADMIN")'))]
@@ -119,6 +123,103 @@ class BoardOfficeController extends AbstractController
             ],
         ]);
     }
+
+    #[Route('/escape-workshops', name: 'module_escape_workshops', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_SUPER_ADMIN')]
+    public function escapeWorkshops(
+        Request $request,
+        EscapeWorkshopSessionRepository $sessionRepository,
+        PostEventRepository $eventRepository,
+        EscapeGameRepository $escapeGameRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $board = $this->requireBoard();
+
+        $availableEvents = $eventRepository->findEscapeGameWorkshops($board->getCodesite());
+        $session = new EscapeWorkshopSession();
+
+        $form = $this->createForm(EscapeWorkshopSessionType::class, $session, [
+            'escape_events' => $availableEvents,
+        ]);
+
+        $form->handleRequest($request);
+
+        $candidateCode = null;
+
+        if ($form->isSubmitted()) {
+            if (!$session->isMaster() && !$session->getEvent()) {
+                $form->get('event')->addError(new FormError('Sélectionnez un atelier « escape game » pour créer une session.'));
+            }
+
+            $customCode = strtoupper(trim((string) $form->get('customCode')->getData()));
+            if ($session->isMaster()) {
+                $candidateCode = $customCode !== '' ? $customCode : 'MASTER';
+                if ($sessionRepository->existsCode($candidateCode)) {
+                    $form->get('customCode')->addError(new FormError('Ce code est déjà utilisé.'));
+                }
+            } else {
+                if ($customCode !== '') {
+                    if (!preg_match('/^\d{4}$/', $customCode)) {
+                        $form->get('customCode')->addError(new FormError('Le code doit contenir exactement 4 chiffres.'));
+                    } elseif ($sessionRepository->existsCode($customCode)) {
+                        $form->get('customCode')->addError(new FormError('Ce code est déjà utilisé.'));
+                    } else {
+                        $candidateCode = $customCode;
+                    }
+                }
+
+                if ($candidateCode === null) {
+                    $candidateCode = $sessionRepository->generateUniqueCode();
+                }
+            }
+
+            if ($form->isValid()) {
+                $session->setCode($candidateCode ?? $sessionRepository->generateUniqueCode());
+                if ($session->isMaster() && !$form->get('label')->getData()) {
+                    $session->setLabel('Code maître escape game');
+                }
+
+                $entityManager->persist($session);
+                $entityManager->flush();
+
+                $this->addFlash('success', sprintf('Session « %s » créée avec le code %s.', $session->getDisplayName(), $session->getCode()));
+
+                return $this->redirectToRoute('module_escape_workshops');
+            }
+        }
+
+        $sessions = $sessionRepository->findAllWithRelations();
+        $legacyGames = $escapeGameRepository->createQueryBuilder('legacy')
+            ->leftJoin('legacy.owner', 'legacyOwner')->addSelect('legacyOwner')
+            ->leftJoin('legacy.participant', 'legacyParticipant')->addSelect('legacyParticipant')
+            ->andWhere('legacy.workshopSession IS NULL')
+            ->orderBy('legacy.created_at', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        return $this->renderDashboard('escape', 'ospaceworkshops', 6, [
+            'form' => $form->createView(),
+            'sessions' => $sessions,
+            'legacyGames' => $legacyGames,
+        ]);
+    }
+
+    #[Route('/escape-workshops/{id}/delete', name: 'module_escape_workshops_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_SUPER_ADMIN')]
+    public function deleteEscapeWorkshop(EscapeWorkshopSession $session, Request $request, EntityManagerInterface $entityManager): RedirectResponse
+    {
+        $this->validateCsrf('delete_escape_workshop_' . $session->getId(), $request->request->get('_token'));
+
+        $label = $session->getDisplayName();
+
+        $entityManager->remove($session);
+        $entityManager->flush();
+
+        $this->addFlash('success', sprintf('La session « %s » a été supprimée.', $label));
+
+        return $this->redirectToRoute('module_escape_workshops');
+    }
+
 
     #[Route('/escape-games/{id}/status', name: 'module_escape_status', methods: ['POST'])]
     #[IsGranted('ROLE_SUPER_ADMIN')]

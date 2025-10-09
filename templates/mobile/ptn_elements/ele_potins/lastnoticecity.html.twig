@@ -1,0 +1,24 @@
+<div class="flex-notb_v6-fix">
+    {% for notice in lastsnotice %}
+        {%  if notice.post is defined %}
+            <div class="pwa-last-postall-v6">
+                {{include('mobile/ptn_elements/ele_potins/noticecity.html.twig')}}
+                {%  if notice.post.htmlcontent.fileblob is defined %}
+                <content-notices data-cat="post" data-id="{{notice.post.id}}"></content-notices>
+                {%  endif %}
+            </div>
+        {%  elseif  notice.offre is defined%}
+            <div class="pwa-last-postall-v6">
+                {{include('mobile/ptn_elements/ele_potins/offrecity.html.twig')}}
+                {%  if notice.offre.product.htmlcontent.fileblob is defined %}
+                <content-notices data-cat="offre" data-id="{{notice.offre.id}}"></content-notices>
+                {%  endif %}
+            </div>
+        {%  endif %}
+    {%  else %}
+        <div class="flex-board">
+            <h3>  Pas de nouvelle affiche actuellement sur {{ city|capitalize }}</h3>
+        </div>
+    {%  endfor %}
+</div>
+

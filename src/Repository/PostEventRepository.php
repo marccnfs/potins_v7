@@ -186,6 +186,35 @@ class PostEventRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return PostEvent[]
+     */
+    public function findEscapeGameWorkshops(string $keymodule): array
+    {
+        $qb   = $this->createQueryBuilder('e'); // évite 'event' comme alias
+        $expr = $qb->expr();
+
+        return $qb
+            ->leftJoin('e.potin', 'p')->addSelect('p')
+            ->leftJoin('e.appointment', 'a')->addSelect('a')
+            ->andWhere('e.keymodule = :key')
+            ->andWhere('e.deleted = false')
+            ->andWhere(
+                $expr->orX(
+                    $expr->like('LOWER(e.titre)', ':search'),
+                    $expr->eq("COALESCE(LOWER(p.slug), '')", ':slug'),
+                    $expr->like("COALESCE(LOWER(p.titre), '')", ':search')
+                )
+            )
+            ->setParameter('key', $keymodule)
+            ->setParameter('search', '%escape%')
+            ->setParameter('slug', 'escape-game')
+            ->orderBy('a.starttime', 'ASC')
+            ->addOrderBy('e.titre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @throws NonUniqueResultException
      */
     public function findEventByOneId($id){

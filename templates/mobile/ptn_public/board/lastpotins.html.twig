@@ -1,0 +1,23 @@
+{% block body %}
+<div class="pwa-pg-ptn">
+
+    <div class="pwa-col">
+        <h2>les derniers potins numériques</h2>
+        <p>Retour sur les potins réalisés, leurs ressources...</p>
+
+        <div class="content_mob_all">
+            <div class="pwa-iner-col">
+                <x-Tag class="w-neutre"></x-Tag>
+            </div>
+  {{ include('mobile/ptn_elements/ele_potins/lastnoticecity.html.twig') }}
+        </div>
+
+    {{ include ('mobile/footer/potins_footer.html.twig') }}
+    </div>
+</div>
+{%  endblock body %}
+{% use "js/js_potins.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+

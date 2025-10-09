@@ -1,0 +1,52 @@
+{% block body %}
+<div class="container-websit">
+    <div class="wb-zone-cmd">
+        <!-- head du board -->
+    </div>
+    <div class="twpart-website">
+        {%  if board.attached %}
+            {{ include('mobile/ptn_elements/ele_boards/card_website_new.html.twig') }}
+            <div class="_wb-module-first-col">
+
+                <div class="ol-2 tglaff"  id="tgl_9" style="display: none">
+                    {% if member is null %}
+                        {{ include('aff_messagery/board/form/form_contact_board.html.twig') }}
+                    {%  else %}
+                        <div id="adcomment">
+                            <add-comment slug="{{ board.slug }}" id="{{  board.id }}" module="_board"></add-comment>
+                        </div>
+                    {%  endif %}
+                </div>
+
+                <div class="ol-3 tglaff"  id="tgl_2" style="display: none">
+                  {#   {{ include('desk/ptn_elements/ele_boards/websiteLink.html.twig') }}  #}
+                </div>
+
+                {%  if notices['event']|length >0 %}
+                    {%  set event =notices['event']|first %}
+                    {{ include('mobile/ptn_elements/ele_events/modale_event.html.twig') }}
+                {%  endif %}
+                {%  if notices['menu'] is defined and notices['menu']|length >0 %}
+                    {%  set menu =notices['menu'] %}
+                    {{ include('mobile/ptn_elements/ele_menus/modale_menu.html.twig') }}
+                {%  endif %}
+
+
+             {#    {{ include('aff_board/website/view/modale_board.html.twig') }} #}
+            </div>
+        {% else %}
+            {{ include('mobile/ptn_elements/ele_boards/card_website-noatttached.html.twig') }}
+        {%  endif %}
+    </div>
+    {#
+    <section class="affi_board">
+        {%  set ite = 0 %}
+        {{ include('aff_board/boards/'~agent~'/showforallothers.html.twig') }}
+    </section>
+    #}
+</div>
+{%  endblock body %}
+{% use "js/js_public_wb.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
