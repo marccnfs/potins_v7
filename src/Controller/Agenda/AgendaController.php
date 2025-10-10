@@ -146,8 +146,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
     private function canManage(Event $e): bool
     {
-        $p = $this->getUserParticipant(); // voir ci-dessous
-        return $p && $e->getOrganizer()->getId() === $p->getId();
+        return $this->security?->isGranted('ROLE_SUPER_ADMIN') ?? false;
     }
 
     private function getUserParticipant(): ?Participant

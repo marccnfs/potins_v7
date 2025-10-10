@@ -2,12 +2,10 @@
 
 namespace App\Entity\Agenda;
 
-use App\Entity\Users\Participant;
 use App\Enum\EventCategory;
 use App\Enum\EventStatus;
 use App\Enum\EventVisibility;
 use App\Repository\EventRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
@@ -32,10 +30,6 @@ class Event
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
-
-    #[ORM\ManyToOne(targetEntity: Participant::class)]
-    #[ORM\JoinColumn(nullable: false, onDelete: 'RESTRICT')]
-    private Participant $organizer;
 
     #[ORM\Column(length: 24, options: ['default' => 'autre'])]
     private string $communeCode = 'autre';
@@ -88,7 +82,6 @@ class Event
     private \DateTimeImmutable $updatedAt;
 
     public function __construct(
-        Participant        $organizer,
         string             $title,
         \DateTimeImmutable $startsAtUtc,
         \DateTimeImmutable $endsAtUtc,
@@ -96,7 +89,6 @@ class Event
     )
     {
         $this->id = Uuid::v7();
-        $this->organizer = $organizer;
         $this->title = $title;
         $this->assertPeriodIsValid($startsAtUtc, $endsAtUtc);
         $this->startsAt = $startsAtUtc;
@@ -182,17 +174,6 @@ class Event
     public function setDescription(?string $d): void
     {
         $this->description = $d;
-        $this->touch();
-    }
-
-    public function getOrganizer(): Participant
-    {
-        return $this->organizer;
-    }
-
-    public function setOrganizer(Participant $p): void
-    {
-        $this->organizer = $p;
         $this->touch();
     }
 

@@ -4,16 +4,13 @@ namespace App\Service\Agenda;
 
 use App\Entity\Agenda\Event;
 use App\Entity\Module\PostEvent;
-use App\Entity\Users\Participant;
 use App\Enum\EventCategory;
 use App\Repository\EventRepository;
-use App\Repository\ParticipantRepository;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Synchronise l'entité historique {@see PostEvent} avec le nouvel agenda public.
@@ -30,9 +27,6 @@ final class PostEventAgendaSynchronizer
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly EventRepository $eventRepository,
-        private readonly ParticipantRepository $participantRepository,
-        #[Autowire('%agenda.cnfs_participant_code%')]
-        private readonly string $cnfsParticipantCode,
         private readonly LoggerInterface $logger,
     ) {
     }
@@ -68,14 +62,7 @@ final class PostEventAgendaSynchronizer
         $endsUtc = $this->toUtc($end);
 
         if (!$event) {
-            $organizer = $this->resolveOrganizer();
-            if (!$organizer) {
-                $this->logger->error('Aucun organisateur CNFS disponible pour alimenter l’agenda.');
-                return;
-            }
-
             $event = new Event(
-                organizer: $organizer,
                 title: (string) $postEvent->getTitre(),
                 startsAtUtc: $startsUtc,
                 endsAtUtc: $endsUtc,
@@ -131,28 +118,6 @@ final class PostEventAgendaSynchronizer
         $immutable = $date instanceof DateTimeImmutable ? $date : DateTimeImmutable::createFromInterface($date);
         $withTz = $immutable->setTimezone(new DateTimeZone(self::DEFAULT_TZ));
         return $withTz->setTimezone(new DateTimeZone('UTC'));
-    }
-
-    private function resolveOrganizer(): ?Participant
-    {
-        $participant = $this->participantRepository->findOneBy(['codeSecret' => $this->cnfsParticipantCode]);
-        if ($participant instanceof Participant) {
-            return $participant;
-        }
-
-        $fallback = $this->participantRepository->findOneBy([], ['id' => 'ASC']);
-        if ($fallback instanceof Participant) {
-            $this->logger->warning('Participant CNFS introuvable, utilisation du premier participant en base.', [
-                'expectedCode' => $this->cnfsParticipantCode,
-                'fallbackId' => $fallback->getId(),
-            ]);
-
-            return $fallback;
-        }
-
-        $this->logger->error('Aucun participant disponible pour alimenter l’agenda.');
-
-        return null;
     }
 
     private function resolveLocationName(PostEvent $postEvent): ?string

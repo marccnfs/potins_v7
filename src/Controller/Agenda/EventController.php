@@ -17,10 +17,9 @@ final class EventController extends AbstractController
     use UserSessionTrait;
 
     #[Route('agenda/events/new', name: 'event_new')]
-    public function new(Request $req, ParticipantContext $participantContext): Response
+    public function new(Request $req): Response
     {
-        //$p = $participantContext->getParticipantOrFail();
-
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
         // valeur par défaut : aujourd’hui 09:00–10:00 (Europe/Paris)
         $nowParis = new \DateTimeImmutable('today 09:00', new \DateTimeZone('Europe/Paris'));
         $form = $this->createForm(EventType::class);
@@ -46,7 +45,6 @@ final class EventController extends AbstractController
                     ->setTimezone(new \DateTimeZone('UTC'));
 
                 $e = new Event(
-                    organizer: $p,
                     title:      (string) $form->get('title')->getData(),
                     startsAtUtc:$startUtc,
                     endsAtUtc:  $endUtc,
@@ -84,11 +82,11 @@ final class EventController extends AbstractController
     }
 
     #[Route('agenda/events/{slug}/edit', name: 'event_edit')]
-    public function edit(string $slug, Request $req, ParticipantContext $participantContext): Response
+    public function edit(string $slug, Request $req): Response
     {
-        $p = $participantContext->getParticipantOrFail();
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
         $e = $this->em->getRepository(Event::class)->findOneBy(['slug' => $slug]);
-        if (!$e || $e->getOrganizer()->getId() !== $p->getId()) {
+        if (!$e) {
             throw $this->createNotFoundException();
         }
 
@@ -149,13 +147,13 @@ final class EventController extends AbstractController
     }
 
     #[Route('agenda/events/{slug}/delete', name: 'event_delete', methods: ['POST'])]
-    public function delete(string $slug, Request $req, ParticipantContext $participantContext): Response
+    public function delete(string $slug, Request $req): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
         $this->denyUnlessCsrf($req, 'delete_'.$slug);
 
-        $p = $participantContext->getParticipantOrFail();
         $e = $this->em->getRepository(Event::class)->findOneBy(['slug' => $slug]);
-        if (!$e || $e->getOrganizer()->getId() !== $p->getId()) {
+        if (!$e) {
             throw $this->createNotFoundException();
         }
 
