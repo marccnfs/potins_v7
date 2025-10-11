@@ -1,0 +1,56 @@
+{% block body %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
+            <div class="bo_content">
+                <header class="dashboard-header">
+                    <span class="dashboard-kicker">Suivi des contacts</span>
+                    <h1 class="dashboard-title">Demandes de rendez-vous</h1>
+                    <p class="dashboard-subtitle">Retrouvez ici l’ensemble des demandes envoyées depuis l’agenda public.</p>
+                </header>
+
+                {{ include('desk/ptn_office/partials/_alerts.html.twig') }}
+
+                <section class="dashboard-card">
+                    {% if requests is not empty %}
+                        <table class="dashboard-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Contact</th>
+                                <th scope="col">Atelier</th>
+                                <th scope="col">Coordonnées</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for request in requests %}
+                                {% set profile = request.contact.useridentity %}
+                                <tr>
+                                    <td data-label="Date">
+                                        <span class="dashboard-table__title">{{ request.createAt|date('d/m/Y') }}</span>
+                                        <span class="dashboard-table__meta">{{ request.createAt|date('H\hi') }}</span>
+                                        <span class="badge">{{ request.city|default('Commune à préciser') }}</span>
+                                    </td>
+                                    <td data-label="Contact">
+                                        <span class="dashboard-table__title">{{ profile.firstname ? profile.firstname ~ ' ' ~ profile.lastname : request.contact.emailCanonical }}</span>
+                                        <span class="dashboard-table__meta">{{ profile.emailsecours ?? request.contact.emailCanonical }}</span>
+                                    </td>
+                                    <td data-label="Atelier">
+                                        <span class="dashboard-table__title">{{ request.titre }}</span>
+                                        <span class="dashboard-table__meta">{{ request.text|nl2br }}</span>
+                                    </td>
+                                    <td data-label="Coordonnées">
+                                        <span class="dashboard-table__meta"><strong>Téléphone :</strong> {{ profile.telephonemobile ?? 'Non communiqué' }}</span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="muted">Aucune demande de contact n’a encore été enregistrée.</p>
+                    {% endif %}
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock %}

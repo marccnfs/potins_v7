@@ -29,6 +29,17 @@
                 <span class="menu-entry__hint">Vue hebdomadaire partagée</span>
             </span>
         </a>
+
+        <a href="{{ path('module_agenda_requests') }}" class="menu-entry {{ vartwig.m7 ? 'menu-entry--active' : '' }}">
+            <span class="menu-entry__icon"><i class="fa fa-address-book" aria-hidden="true"></i></span>
+            <span class="menu-entry__content">
+                <span class="menu-entry__title">Demandes de contact</span>
+                <span class="menu-entry__hint">Suivre les prises de rendez-vous</span>
+            </span>
+            {% if contactRequestsCount|default(0) > 0 %}
+                <span class="badge" aria-label="{{ contactRequestsCount }} demande{{ contactRequestsCount > 1 ? 's' : '' }} en attente">{{ contactRequestsCount }}</span>
+            {% endif %}
+        </a>
 {#
         <a href="{{ path('module_offre') }}" class="menu-entry {{ vartwig.m3 ? 'menu-entry--active' : '' }}">
             <span class="menu-entry__icon"><i class="fa fa-tags" aria-hidden="true"></i></span>

@@ -26,7 +26,38 @@
                 </section>
 
                 <section class="dashboard-card">
-                    {{ include('pwa/agenda/board_week.html.twig', { date: date }, with_context = false) }}
+                    {{ include('desk/ptn_public/agenda/board_week.html.twig', { date: date }, with_context = false) }}
+                </section>
+                <section class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <h2 class="dashboard-card__title">Demandes récentes</h2>
+                        <a class="btn btn-light" href="{{ path('module_agenda_requests') }}">Voir toutes les demandes</a>
+                    </div>
+
+                    {% if recentRequests is not empty %}
+                        <ul class="dashboard-requests">
+                            {% for request in recentRequests %}
+                                {% set profile = request.contact.useridentity %}
+                                <li class="dashboard-request">
+                                    <header class="dashboard-request__header">
+                                        <div>
+                                            <span class="dashboard-request__title">{{ profile.firstname ? profile.firstname ~ ' ' ~ profile.lastname : request.contact.emailCanonical }}</span>
+                                            <span class="dashboard-request__meta">{{ request.createAt|date('d/m/Y \à H\hi') }}</span>
+                                        </div>
+                                        <span class="badge">{{ request.city|default('Commune à préciser') }}</span>
+                                    </header>
+                                    <p class="dashboard-request__subject">{{ request.titre }}</p>
+                                    <p class="dashboard-request__body">{{ request.text|nl2br }}</p>
+                                    <ul class="dashboard-request__contact">
+                                        <li><strong>Email :</strong> {{ profile.emailsecours ?? request.contact.emailCanonical }}</li>
+                                        <li><strong>Téléphone :</strong> {{ profile.telephonemobile ?? 'Non communiqué' }}</li>
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="muted">Aucune demande reçue depuis l’agenda public pour le moment.</p>
+                    {% endif %}
                 </section>
             </div>
         </div>

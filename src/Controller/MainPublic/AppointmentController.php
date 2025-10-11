@@ -84,7 +84,7 @@ final class AppointmentController extends AbstractController
 
             $this->addFlash('success', 'Votre demande de rendez-vous a bien été enregistrée. Nous vous recontactons rapidement.');
 
-            return $this->redirectToRoute('event_show', ['slug' => $event->getSlug()]);
+            return $this->redirectToRoute('agenda_request_confirmation', ['slug' => $event->getSlug()]);
         }
 
         $vartwig = $this->menuNav->templatePotins('request', Links::AGENDA);
@@ -94,6 +94,28 @@ final class AppointmentController extends AbstractController
             'vartwig' => $vartwig,
             'directory' => 'agenda',
             'form' => $form->createView(),
+            'event' => $event,
+            'board' => $this->currentBoard(),
+            'member' => $this->currentMember,
+            'customer' => $this->currentCustomer,
+        ]);
+    }
+
+    #[Route('/rdv/{slug}/confirmation', name: 'agenda_request_confirmation', methods: ['GET'])]
+    public function confirmation(string $slug): Response
+    {
+        /** @var Event|null $event */
+        $event = $this->em->getRepository(Event::class)->findOneBy(['slug' => $slug]);
+        if (!$event || !$event->isPublished()) {
+            throw $this->createNotFoundException();
+        }
+
+        $vartwig = $this->menuNav->templatePotins('request_confirmation', Links::AGENDA);
+
+        return $this->render($this->useragentP . 'ptn_public/home.html.twig', [
+            'replacejs' => false,
+            'vartwig' => $vartwig,
+            'directory' => 'agenda',
             'event' => $event,
             'board' => $this->currentBoard(),
             'member' => $this->currentMember,

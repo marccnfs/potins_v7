@@ -11,6 +11,7 @@ use App\Entity\Games\EscapeGame;
 use App\Entity\Games\EscapeWorkshopSession;
 use App\Form\EscapeWorkshopSessionType;
 use App\Lib\Links;
+use App\Repository\CommentrdvRepository;
 use App\Repository\EscapeGameRepository;
 use App\Repository\EscapeWorkshopSessionRepository;
 use App\Repository\OffresRepository;
@@ -40,6 +41,10 @@ use Symfony\Component\Form\FormError;
 class BoardOfficeController extends AbstractController
 {
     use UserSessionTrait;
+
+    public function __construct(private readonly CommentrdvRepository $commentRepository)
+    {
+    }
 
     #[Route('/tableau-de-bord', name: 'office_member')]
     public function dashboard(PostRepository $postRepository): Response
@@ -77,6 +82,15 @@ class BoardOfficeController extends AbstractController
 
         return $this->renderDashboard('agenda', 'ospaceagenda', 6, [
             'date' => $date,
+            'recentRequests' => $this->commentRepository->findRecentAgendaRequests(),
+        ]);
+    }
+
+    #[Route('/contacts-agenda', name: 'module_agenda_requests', methods: ['GET'])]
+    public function agendaRequests(): Response
+    {
+        return $this->renderDashboard('agenda', 'requests', 7, [
+            'requests' => $this->commentRepository->findAllAgendaRequests(),
         ]);
     }
 
@@ -326,6 +340,10 @@ class BoardOfficeController extends AbstractController
         $menuNav = $this->requireMenuNav();
 
         $vartwig = $menuNav->admin($board, $twig, Links::ADMIN, $nav);
+
+        if (!array_key_exists('contactRequestsCount', $payload)) {
+            $payload['contactRequestsCount'] = $this->commentRepository->countAgendaRequests();
+        }
 
         return $this->render($this->agentPrefix . 'ptn_office/home.html.twig', array_merge([
             'directory' => $directory,

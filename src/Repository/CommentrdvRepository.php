@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Users\Commentrdv;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,28 +22,40 @@ class CommentrdvRepository extends ServiceEntityRepository
         parent::__construct($registry, Commentrdv::class);
     }
 
-//    /**
-//     * @return Commentrdv[] Returns an array of Commentrdv objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return list<Commentrdv>
+     */
+    public function findRecentAgendaRequests(int $limit = 5): array
+    {
+        return $this->createAgendaRequestQueryBuilder()
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?Commentrdv
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    /**
+     * @return list<Commentrdv>
+     */
+    public function findAllAgendaRequests(): array
+    {
+        return $this->createAgendaRequestQueryBuilder()
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function countAgendaRequests(): int
+    {
+        return (int) $this->createQueryBuilder('request')
+            ->select('COUNT(request.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    private function createAgendaRequestQueryBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder('request')
+            ->leftJoin('request.contact', 'contact')->addSelect('contact')
+            ->leftJoin('contact.useridentity', 'profile')->addSelect('profile')
+            ->orderBy('request.createAt', 'DESC');
+    }
 }
