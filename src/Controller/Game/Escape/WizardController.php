@@ -90,6 +90,8 @@ class WizardController extends AbstractController
         if ($mode !== 'qr_only') {
             return $this->json(['error' => 'invalid_mode'], Response::HTTP_BAD_REQUEST);
         }
+        $qrOnly = is_array($cfg['qrOnly'] ?? null) ? $cfg['qrOnly'] : [];
+        $ttl = !empty($qrOnly['noExpiry']) ? null : 15;
 
         $repo = $this->em->getRepository(MobileLink::class);
         $link = $repo->findOneBy([
@@ -100,8 +102,9 @@ class WizardController extends AbstractController
         ]);
 
         $expired = $link && $link->getExpiresAt() && $link->getExpiresAt() < new \DateTimeImmutable();
-        if (!$link || $expired) {
-            $link = $mobile->create($participant, $eg, $step, ttlMinutes: 15);
+        $ttlChanged = $link ? (($ttl === null && $link->getExpiresAt() !== null) || ($ttl !== null && !$link->getExpiresAt())) : false;
+        if (!$link || $expired || $ttlChanged) {
+            $link = $mobile->create($participant, $eg, $step, ttlMinutes: $ttl);
         }
 
         $payload = $this->buildWizardQrPayload($mobile, $eg, $puzzle, $cfg, $link);
@@ -117,6 +120,7 @@ class WizardController extends AbstractController
             'token'     => $link->getToken(),
             'directUrl' => $payload['directUrl'],
             'expiresAt' => $expiresAt instanceof DateTimeInterface ? $expiresAt->format(DateTimeInterface::ATOM) : null,
+            'noExpiry'  => !empty($qrOnly['noExpiry']),
         ]);
     }
 
@@ -154,6 +158,8 @@ class WizardController extends AbstractController
             $this->em->persist($puzzle);
             $this->em->flush();
         }
+
+        unset($payload['updated']);
 
         return $this->render('pwa/escape/wizard/qr_print.html.twig', [
             'eg'      => $eg,
@@ -488,6 +494,7 @@ class WizardController extends AbstractController
                     $needHttpsMessage = (string)$form->get('needHttpsMessage')->getData();
                     $mode = (string) $form->get('mode')->getData();
                     $qrValidateMessage = trim((string)$form->get('qrValidateMessage')->getData());
+                    $qrNoExpiry = (bool)$form->get('qrNoExpiry')->getData();
                     $finalClue = trim((string)$form->get('finalClue')->getData());
                     // 3) Indices (JSON) — normalisation & exigence >= 1
                     $hintsJson = (string) $form->get('hintsJson')->getData();
@@ -524,6 +531,7 @@ class WizardController extends AbstractController
                         $qrOnly['answerBody'] = $qrAnswerBody;*/
                         $qrOnly = [
                             'validateMessage' => $qrValidateMessage !== '' ? $qrValidateMessage : 'Bravo !',
+                            'noExpiry' => $qrNoExpiry,
                         ];
                         $cfg = array_replace($cfg, [
                             'title'  => $title,
@@ -930,6 +938,9 @@ class WizardController extends AbstractController
         ];
         if ($puzzle->getType() === 'qr_geo') {
 
+            $qrOnly = is_array($cfg['qrOnly'] ?? null) ? $cfg['qrOnly'] : [];
+            $ttl = ($mode === 'qr_only' && !empty($qrOnly['noExpiry'])) ? null : 15;
+
             $link = $this->em->getRepository(MobileLink::class)->findOneBy([
                 'participant' => $participant,
                 'escapeGame'  => $eg,
@@ -938,8 +949,9 @@ class WizardController extends AbstractController
             ]);
 
             $expired = $link && $link->getExpiresAt() && $link->getExpiresAt() < new \DateTimeImmutable();
-            if (!$link || $expired) {
-                $link = $mobile->create($participant, $eg, $step, ttlMinutes: 15);
+            $ttlChanged = $link ? (($ttl === null && $link->getExpiresAt() !== null) || ($ttl !== null && !$link->getExpiresAt())) : false;
+            if (!$link || $expired || $ttlChanged) {
+                $link = $mobile->create($participant, $eg, $step, ttlMinutes: $ttl);
             }
 
             if ($mode === 'qr_only') {
@@ -1041,6 +1053,7 @@ class WizardController extends AbstractController
             //'answerUrl' => $answerUrl,
             //'answerQr'  => $mobile->buildQrForUrl($answerUrl),
             'expiresAt' => $link->getExpiresAt(),
+            'noExpiry'  => !empty($qrOnly['noExpiry']),
             'updated'   => $updated,
         ];
     }

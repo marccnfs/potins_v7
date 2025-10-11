@@ -18,14 +18,18 @@ class MobileLinkManager
 {
     public function __construct(private EM $em, private UrlGeneratorInterface $urlGen) {}
 
-    public function create(Participant $p, EscapeGame $eg, int $step, int $ttlMinutes = 15): MobileLink
+    public function create(Participant $p, EscapeGame $eg, int $step, ?int $ttlMinutes = 15): MobileLink
     {
         $link = new MobileLink();
         $link->setParticipant($p);
         $link->setEscapeGame($eg);
         $link->setStep($step);
         $link->setToken(bin2hex(random_bytes(16)));
-        $link->setExpiresAt((new \DateTimeImmutable())->modify("+{$ttlMinutes} minutes"));
+        if ($ttlMinutes === null) {
+            $link->setExpiresAt(null);
+        } else {
+            $link->setExpiresAt((new \DateTimeImmutable())->modify("+{$ttlMinutes} minutes"));
+        }
         $this->em->persist($link);
         $this->em->flush();
 

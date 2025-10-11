@@ -9,6 +9,7 @@ export default class extends Controller {
         "directLink",
         "generateButton",
         "printButton",
+        "toolbarPrintButton",
         "expires"
     ];
 
@@ -21,7 +22,8 @@ export default class extends Controller {
         generatingMessage: String,
         errorMessage: String,
         printWarningMessage: String,
-        expiresPattern: String
+        expiresPattern: String,
+        noExpiryMessage: String
     };
 
     connect() {
@@ -30,19 +32,36 @@ export default class extends Controller {
     }
 
     resetState() {
+        this.token = null;
         if (!this.hasFetchUrlValue || !this.fetchUrlValue) {
             this.showMessage(this.fallbackMessageValue || "");
             this.disableButton(this.generateButtonTarget);
             this.disableButton(this.printButtonTarget);
+            if (this.hasToolbarPrintButtonTarget) {
+                this.disableButton(this.toolbarPrintButtonTarget);
+            }
         } else {
             this.showMessage(this.readyMessageValue || "");
             this.enableButton(this.generateButtonTarget);
             this.disableButton(this.printButtonTarget);
+            if (this.hasToolbarPrintButtonTarget) {
+                this.disableButton(this.toolbarPrintButtonTarget);
+            }
         }
 
         if (this.hasDetailsTarget) {
             this.detailsTarget.hidden = !this.fetchUrlValue;
         }
+
+        if (this.hasDirectWrapperTarget) {
+            this.directWrapperTarget.hidden = true;
+        }
+
+        if (this.hasQrImageTarget) {
+            this.qrImageTarget.src = "";
+        }
+
+        this.updateExpires(null, false);
     }
 
     showMessage(message) {
@@ -95,6 +114,9 @@ export default class extends Controller {
             this.applyData(data);
             this.showMessage(this.generatedMessageValue || "");
             this.enableButton(this.printButtonTarget);
+            if (this.hasToolbarPrintButtonTarget) {
+                this.enableButton(this.toolbarPrintButtonTarget);
+            }
         } catch (error) {
             console.error(error);
             this.showMessage(this.errorMessageValue || "");
@@ -131,11 +153,7 @@ export default class extends Controller {
             }
         }
 
-
-        if (this.hasExpiresTarget) {
-            const formatted = this.formatExpires(data.expiresAt);
-            this.expiresTarget.textContent = formatted;
-        }
+        this.updateExpires(data.expiresAt ?? null, data.noExpiry === true);
     }
 
     formatExpires(value) {
@@ -158,6 +176,27 @@ export default class extends Controller {
         }
 
         return formattedTime;
+    }
+
+    updateExpires(expiresAt, noExpiry) {
+        if (!this.hasExpiresTarget) {
+            return;
+        }
+
+        if (noExpiry && this.hasNoExpiryMessageValue && this.noExpiryMessageValue) {
+            this.expiresTarget.textContent = this.noExpiryMessageValue;
+            this.expiresTarget.hidden = false;
+            return;
+        }
+
+        const formatted = this.formatExpires(expiresAt);
+        if (formatted !== "") {
+            this.expiresTarget.textContent = formatted;
+            this.expiresTarget.hidden = false;
+        } else {
+            this.expiresTarget.textContent = "";
+            this.expiresTarget.hidden = true;
+        }
     }
 
     print(event) {

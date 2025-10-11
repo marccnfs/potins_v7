@@ -5,6 +5,7 @@
 {% set exp   = extras.expiresAt|default(null) %}
 {% set mode  = extras.mode|default(cfg.mode|default('geo')) %}
 {% set qrOnly = cfg.qrOnly is iterable ? cfg.qrOnly : {} %}
+{% set noExpiry = extras.noExpiry|default(qrOnly.noExpiry|default(false)) %}
 
 {% if mode == 'qr_only' %}
     <section>
@@ -22,7 +23,11 @@
                 {% if qr and token %}
                     {% if not isPlayer %}
                         <img id="qr-validation" src="{{ qr }}" alt="QR localisation" width="280" height="280">
-                        <p class="muted">Valable jusqu’à {{ exp ? exp|date('H:i') : 'bientôt' }}.</p>
+                        {% if noExpiry %}
+                            <p class="muted">{{ 'escape.wizard.step2.qr_only.expires_disabled'|trans }}</p>
+                        {% else %}
+                            <p class="muted">Valable jusqu’à {{ exp ? exp|date('H:i') : 'bientôt' }}.</p>
+                        {% endif %}
                         <p class="muted">Lien direct : <a href="{{ absolute_url(path('mobile_entry', { token: token })) }}" target="_blank" rel="noopener">ouvrir sur mobile</a></p>
                     {% endif %}
 
@@ -83,7 +88,11 @@
                 {% if qr and token %}
                     {% if not isPlayer %}
                         <img id="qr-validation" src="{{ qr }}" alt="QR code" width="280" height="280">
-                        <p class="muted">Valable jusqu’à {{ exp ? exp|date('H:i') : 'bientôt' }}.</p>
+                        {% if noExpiry %}
+                            <p class="muted">{{ 'escape.wizard.step2.qr_only.expires_disabled'|trans }}</p>
+                        {% else %}
+                            <p class="muted">Valable jusqu’à {{ exp ? exp|date('H:i') : 'bientôt' }}.</p>
+                        {% endif %}
                         <p class="muted">Lien direct : <a href="{{ absolute_url(path('mobile_entry', { token: token })) }}" target="_blank" rel="noopener">ouvrir sur mobile</a></p>
                     {% endif %}
 

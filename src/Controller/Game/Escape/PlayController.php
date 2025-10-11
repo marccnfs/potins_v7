@@ -103,6 +103,11 @@ class PlayController extends AbstractController
         $extras = [];
         if ($puzzle->getType() === 'qr_geo') {
 
+            $mode = is_string($cfg['mode'] ?? null) ? $cfg['mode'] : 'geo';
+            $qrOnly = is_array($cfg['qrOnly'] ?? null) ? $cfg['qrOnly'] : [];
+            $ttl = ($mode === 'qr_only' && !empty($qrOnly['noExpiry'])) ? null : 15;
+
+
             $link = $this->em->getRepository(MobileLink::class)->findOneBy([
                 'participant' => $participant,
                 'escapeGame'  => $eg,
@@ -111,16 +116,17 @@ class PlayController extends AbstractController
             ]);
 
             $expired = $link && $link->getExpiresAt() && $link->getExpiresAt() < new \DateTimeImmutable();
-            if (!$link || $expired) {
-                $link = $mobile->create($participant, $eg, $step, ttlMinutes: 15);
+            $ttlChanged = $link ? (($ttl === null && $link->getExpiresAt() !== null) || ($ttl !== null && !$link->getExpiresAt())) : false;
+            if (!$link || $expired || $ttlChanged) {
+                $link = $mobile->create($participant, $eg, $step, ttlMinutes: $ttl);
             }
-            $mode = is_string($cfg['mode'] ?? null) ? $cfg['mode'] : 'geo';
 
             $extras = [
                 'mode'      => $mode,
                 'qr'        => $mobile->buildQrDataUri($link),
                 'token'     => $link->getToken(),
                 'expiresAt' => $link->getExpiresAt(),
+                'noExpiry'  => ($mode === 'qr_only') && !empty($qrOnly['noExpiry']),
             ];
 
         }

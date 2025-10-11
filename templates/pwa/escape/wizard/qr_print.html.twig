@@ -85,7 +85,9 @@
         <div class="qr-box">
             <h2>{{ 'escape.wizard.step2.print.hidden_title'|trans }}</h2>
             <img src="{{ payload.qr }}" alt="{{ 'escape.wizard.step2.qr_only.qr_alt'|trans }}" width="280" height="280">
-            {% if payload.expiresAt %}
+            {% if payload.noExpiry %}
+                <p class="note">{{ 'escape.wizard.step2.print.expires_disabled'|trans }}</p>
+            {% elseif payload.expiresAt %}
                 <p class="note">{{ 'escape.wizard.step2.print.expires'|trans({'%time%': payload.expiresAt|date('H\hi')}) }}</p>
             {% endif %}
             {% if payload.directUrl %}

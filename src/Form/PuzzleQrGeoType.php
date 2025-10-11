@@ -7,6 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Range;
@@ -51,7 +52,13 @@ class PuzzleQrGeoType extends AbstractType
                 'data'     => $qrOnly['validateMessage'] ?? 'Bravo !',
                 'help'     => 'Texte montré immédiatement quand le QR caché est scanné (valide l’étape et révèle l’indice final).',
             ])
-
+            ->add('qrNoExpiry', CheckboxType::class, [
+                'label'    => 'Durée de validité illimitée',
+                'mapped'   => false,
+                'required' => false,
+                'data'     => (bool)($qrOnly['noExpiry'] ?? false),
+                'help'     => 'Si coché, le QR généré ne s’expire plus automatiquement après 15 minutes.',
+            ])
             ->add('lat', NumberType::class, [
                 'label'=>'Latitude', 'mapped'=>false, 'required'=>false, 'data'=>$target['lat'] ?? null,
                 'scale'=>8, 'attr'=>['step'=>'any', 'placeholder'=>'48.8566'],
