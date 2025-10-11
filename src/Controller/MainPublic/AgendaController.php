@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Agenda;
+namespace App\Controller\MainPublic;
 
 use App\Classe\UserSessionTrait;
 use App\Entity\Agenda\Event;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-     class AgendaController extends AbstractController
+class AgendaController extends AbstractController
 
 {
     use UserSessionTrait;
@@ -41,7 +41,7 @@ use Symfony\Component\Routing\Attribute\Route;
         );
 
 
-        return $this->render('pwa/agenda/home.html.twig', [
+        return $this->render($this->useragentP.'ptn_public/home.html.twig', [
             'replacejs'=>false,
             'vartwig'=>$vartwig,
             'directory'=>'agenda',
@@ -131,7 +131,7 @@ use Symfony\Component\Routing\Attribute\Route;
             Links::AGENDA);
 
 
-        return $this->render('pwa/agenda/home.html.twig', [
+        return $this->render($this->useragentP.'ptn_public/home.html.twig', [
             'replacejs'=>false,
             'vartwig'=>$vartwig,
             'directory'=>'agenda',

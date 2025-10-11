@@ -1,10 +1,10 @@
-{% block title %}{{ e.title }} — Événement{% endblock %}
+{% block title %}{{ mode == 'edit' ? 'Modifier' : 'Créer' }} un événement{% endblock %}
 {% block body %}
     <div class="_wb">
         <div class="container_bo_member">
-           {#  {{ include('pwa/escape/landing/slideleft.html.twig') }} #}
+            {#  {{ include('pwa/escape/landing/slideleft.html.twig') }} #}
             <div class="bo_content">
-                {{ include('pwa/agenda/show.html.twig') }}
+                {{ include('desk/ptn_office/agenda/form.html.twig') }}
             </div>
         </div>
     </div>

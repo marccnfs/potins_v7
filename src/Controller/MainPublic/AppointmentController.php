@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Agenda;
+namespace App\Controller\MainPublic;
 
 use App\Classe\UserSessionTrait;
 use App\Entity\Agenda\Event;
@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+
 
 final class AppointmentController extends AbstractController
 {
@@ -88,13 +89,15 @@ final class AppointmentController extends AbstractController
 
         $vartwig = $this->menuNav->templatePotins('request', Links::AGENDA);
 
-        return $this->render('pwa/agenda/home.html.twig', [
+        return $this->render($this->useragentP.'ptn_public/home.html.twig', [
             'replacejs' => false,
             'vartwig' => $vartwig,
             'directory' => 'agenda',
             'form' => $form->createView(),
             'event' => $event,
-            'customer' => $this->customer,
+            'board' => $this->currentBoard(),
+            'member' => $this->currentMember,
+            'customer' => $this->currentCustomer,
         ]);
     }
 }

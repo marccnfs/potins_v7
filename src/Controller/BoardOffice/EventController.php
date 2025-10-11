@@ -1,22 +1,31 @@
 <?php
 
-namespace App\Controller\Agenda;
+namespace App\Controller\BoardOffice;
 
 use App\Classe\UserSessionTrait;
 use App\Entity\Agenda\Event;
+use App\Entity\Boards\Board;
 use App\Form\Agenda\EventType;
 use App\Lib\Links;
-use App\Service\ParticipantContext;
+use App\Service\MenuNavigator;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+#[IsGranted(new Expression('is_granted("ROLE_MEMBER") or is_granted("ROLE_SUPER_ADMIN")'))]
+#[Route('/board-office')]
+
 
 final class EventController extends AbstractController
 {
     use UserSessionTrait;
 
-    #[Route('agenda/events/new', name: 'event_new')]
+    #[Route('/agenda/events/new', name: 'event_new')]
     public function new(Request $req): Response
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
@@ -71,17 +80,19 @@ final class EventController extends AbstractController
         $vartwig=$this->menuNav->templatePotins(
             '_form',Links::ACCUEIL);
 
-        return $this->render('pwa/agenda/home.html.twig', [
+        return $this->render($this->useragentP.'ptn_office/home.html.twig', [
             'form' => $form,
             'mode' => 'new',
             'replacejs'=>false,
-            'customer'=>$this->customer,
+            'board' => $this->currentBoard(),
+            'member' => $this->currentMember,
+            'customer' => $this->currentCustomer,
             'vartwig'=>$vartwig,
             'directory'=>'agenda',
         ]);
     }
 
-    #[Route('agenda/events/{slug}/edit', name: 'event_edit')]
+    #[Route('/agenda/events/{slug}/edit', name: 'event_edit')]
     public function edit(string $slug, Request $req): Response
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
@@ -131,22 +142,15 @@ final class EventController extends AbstractController
             }
         }
 
-        $vartwig=$this->menuNav->templatepotins(
-            '_form',Links::ACCUEIL);
-
-
-        return $this->render('pwa/agenda/home.html.twig', [
-            'replacejs'=>false,
-            'customer'=>$this->customer,
-            'vartwig'=>$vartwig,
-            'directory'=>'agenda',
+        return $this->renderDashboard('agenda','_form',4, [
             'form' => $form,
             'mode' => 'edit',
             'e'    => $e,
         ]);
+
     }
 
-    #[Route('agenda/events/{slug}/delete', name: 'event_delete', methods: ['POST'])]
+    #[Route('/agenda/events/{slug}/delete', name: 'event_delete', methods: ['POST'])]
     public function delete(string $slug, Request $req): Response
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
@@ -171,4 +175,50 @@ final class EventController extends AbstractController
             throw $this->createAccessDeniedException('CSRF invalide.');
         }
     }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function renderDashboard(string $directory, string $twig, int $nav, array $payload = []): Response
+    {
+        $board = $this->requireBoard();
+        $menuNav = $this->requireMenuNav();
+
+        $vartwig = $menuNav->admin($board, $twig, Links::ADMIN, $nav);
+
+        return $this->render($this->agentPrefix . 'ptn_office/home.html.twig', array_merge([
+            'directory' => $directory,
+            'replacejs' => false,
+            'vartwig' => $vartwig,
+            'board' => $board,
+            'member' => $this->currentMember,
+            'customer' => $this->currentCustomer,
+        ], $payload));
+    }
+
+    private function validateCsrf(string $id, ?string $token): void
+    {
+        if (!$this->isCsrfTokenValid($id, $token ?? '')) {
+            throw new BadRequestHttpException('Jeton de sécurité invalide.');
+        }
+    }
+
+    private function requireBoard(): Board
+    {
+        if (!$this->board instanceof Board) {
+            throw $this->createNotFoundException('Aucun panneau sélectionné.');
+        }
+
+        return $this->board;
+    }
+
+    private function requireMenuNav(): MenuNavigator
+    {
+        if (!$this->menuNav instanceof MenuNavigator) {
+            throw new RuntimeException('Le service MenuNavigator est indisponible.');
+        }
+
+        return $this->menuNav;
+    }
+
 }

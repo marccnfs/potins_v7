@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Agenda;
+namespace App\Controller\MainPublic;
 
 use App\Classe\UserSessionTrait;
 use App\Entity\Agenda\Enrollment;
@@ -29,31 +29,13 @@ final class EnrollmentController extends AbstractController
 
         $p = $participantContext->getParticipantOrFail();
 
-        // capacité
-/* $capacity = $event->getCapacity();
-$repo = $this->em->getRepository(Enrollment::class);
-$confirmedCount = $repo->count(['event' => $event, 'status' => 'confirmed']);
-*/
         return $this->em->wrapInTransaction(function () use ($event, $p, $slug) {
             $this->em->lock($event, LockMode::PESSIMISTIC_WRITE);
 
-/*
-$status = 'confirmed';
-
-if ($capacity !== null && $confirmedCount >= $capacity) {
-$status = 'waitlist';
-}
-*/
             $capacity = $event->getCapacity();
             $repo = $this->em->getRepository(Enrollment::class);
             $confirmedCount = $repo->count(['event' => $event, 'status' => 'confirmed']);
-/*
-$existing = $repo->findOneBy(['event' => $event, 'participant' => $p]);
-if ($existing) {
-$this->addFlash('info', 'Déjà inscrit(e).');
-return $this->redirectToRoute('event_show', ['slug' => $slug]);
-}
-*/
+
             $status = 'confirmed';
             if ($capacity !== null && $confirmedCount >= $capacity) {
                 $status = 'waitlist';
@@ -67,11 +49,7 @@ return $this->redirectToRoute('event_show', ['slug' => $slug]);
             $enr = new Enrollment($event, $p, $status);
             $this->em->persist($enr);
             $this->em->flush();
-/*
-$enr = new Enrollment($event, $p, $status);
-$this->em->persist($enr);
-$this->em->flush();
-*/
+
             $this->addFlash('success', $status === 'confirmed' ? 'Inscription confirmée.' : 'Liste d’attente.');
             return $this->redirectToRoute('event_show', ['slug' => $slug]);
         });
@@ -87,29 +65,12 @@ $this->em->flush();
 
         $p = $participantContext->getParticipantOrFail();
         $repo = $this->em->getRepository(Enrollment::class);
-        /*
-        $enr = $repo->findOneBy(['event' => $event, 'participant' => $p]);
 
-        if (!$enr) {
-            $this->addFlash('info', 'Vous n’êtes pas inscrit(e).');
-            return $this->redirectToRoute('event_show', ['slug' => $slug]);
-        }
-        */
         return $this->em->wrapInTransaction(function () use ($event, $p, $repo, $slug) {
             $this->em->lock($event, LockMode::PESSIMISTIC_WRITE);
-/*
-        $this->em->remove($enr);
-        $this->em->flush();
-*/
+
             $enr = $repo->findOneBy(['event' => $event, 'participant' => $p]);
 
-/*        // Promotion premier en liste d’attente si capacité
-        if ($event->getCapacity() !== null) {
-            $wait = $repo->findBy(['event' => $event, 'status' => 'waitlist'], ['createdAt' => 'ASC'], 1);
-            if ($wait) {
-                $w = $wait[0];
-                $w->setStatus('confirmed');
-                $this->em->flush();*/
             if (!$enr) {
                 $this->addFlash('info', 'Vous n’êtes pas inscrit(e).');
                 return $this->redirectToRoute('event_show', ['slug' => $slug]);

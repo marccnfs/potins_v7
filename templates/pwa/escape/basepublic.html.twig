@@ -13,21 +13,6 @@
     {% endblock %}
         {{ encore_entry_link_tags('app') }}
 </head>
-{#
-<script>
-if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-                navigator.serviceWorker.register('./_service-worker.js').then(function(registration) {
-                        // Registration was successful
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                }, function(err) {
-                        // registration failed :(
-                        console.log('ServiceWorker registration failed: ', err);
-                });
-        });
-}
-</script>
-#}
 {%  set agent = app.session.get('agent') %}
 <body class="wbesitemob">
 <div class="wb-inf-" data-agent="{{ agent }}" data-replacejs="no"></div>

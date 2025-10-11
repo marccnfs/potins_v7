@@ -1,10 +1,9 @@
-{% block title %}{{ mode == 'edit' ? 'Modifier' : 'Créer' }} un événement{% endblock %}
+{% block title %}Agenda — Planning des événements{% endblock %}
 {% block body %}
     <div class="_wb">
         <div class="container_bo_member">
-            {#  {{ include('pwa/escape/landing/slideleft.html.twig') }} #}
             <div class="bo_content">
-                {{ include('pwa/agenda/form.html.twig') }}
+                {{ include('desk/ptn_public/agenda/index.html.twig') }}
             </div>
         </div>
     </div>

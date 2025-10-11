@@ -2,7 +2,7 @@
 
 namespace App\Tests\Controller\Agenda;
 
-use App\Controller\Agenda\AgendaController;
+use App\Controller\MainPublic\AgendaController;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
@@ -13,7 +13,7 @@ class AgendaControllerTest extends TestCase
 {
     private function createController(): AgendaController
     {
-        return new class extends AgendaController {
+        return new class extends \App\Controller\MainPublic\AgendaController {
             public function __construct() {}
             protected function render(string $view, array $parameters = [], Response $response = null): Response
             {
@@ -27,7 +27,7 @@ class AgendaControllerTest extends TestCase
 
     private function setPrivate(object $object, string $property, $value): void
     {
-        $ref = new \ReflectionClass(AgendaController::class);
+        $ref = new \ReflectionClass(\App\Controller\MainPublic\AgendaController::class);
         $prop = $ref->getProperty($property);
         $prop->setAccessible(true);
         $prop->setValue($object, $value);
