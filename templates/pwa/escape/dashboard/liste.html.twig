@@ -1,15 +1,26 @@
 <div class="dash">
 
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash-message flash-{{ type }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {% if games is not empty %}
     <header class="dash-head">
         <div>
             <h1>Mes escape games</h1>
             <p class="muted">Retrouve tes créations, poursuis leur édition, publie ou joue.</p>
         </div>
         <div class="actions">
+            <a class="btn btn-light" href="{{ path('dashboard_example') }}">Découvrir un exemple</a>
             <a class="btn" href="{{ path('dashboard_my_sessions') }}">Voir mes parties</a>
             <a class="btn btn-primary" href="{{ path('wizard_start') }}">+ Créer un nouvel escape</a>
         </div>
     </header>
+    {%  endif %}
 
     {% if games is not empty %}
         <section class="cards">
@@ -66,6 +77,7 @@
         <section class="empty">
             <h2>Tu n’as pas encore créé d’escape</h2>
             <p>Commence par définir l’univers de ton jeu, puis ajoute tes 6 épreuves guidées.</p>
+            <a class="btn btn-light" href="{{ path('dashboard_example') }}">Découvrir un exemple</a>
             <a class="btn btn-primary" href="{{ path('wizard_start') }}">Créer mon premier escape</a>
         </section>
     {% endif %}

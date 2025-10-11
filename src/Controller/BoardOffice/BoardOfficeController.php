@@ -206,7 +206,7 @@ class BoardOfficeController extends AbstractController
             }
         }
 
-        $sessions = $sessionRepository->findAllWithRelations();
+        $sessions = $sessionRepository->findAllWithRelations($board->getCodesite());
         $legacyGames = $escapeGameRepository->createQueryBuilder('legacy')
             ->leftJoin('legacy.owner', 'legacyOwner')->addSelect('legacyOwner')
             ->leftJoin('legacy.participant', 'legacyParticipant')->addSelect('legacyParticipant')
@@ -221,6 +221,44 @@ class BoardOfficeController extends AbstractController
             'legacyGames' => $legacyGames,
         ]);
     }
+
+    #[Route('/escape-games/{id}/attach-session', name: 'module_escape_attach_session', methods: ['POST'])]
+    #[IsGranted('ROLE_SUPER_ADMIN')]
+    public function attachEscapeToWorkshop(
+        EscapeGame $escapeGame,
+        Request $request,
+        EscapeWorkshopSessionRepository $sessionRepository,
+        EntityManagerInterface $entityManager
+    ): RedirectResponse {
+        $board = $this->requireBoard();
+
+        $this->validateCsrf('attach_escape_workshop_' . $escapeGame->getId(), $request->request->get('_token'));
+
+        $sessionId = $request->request->getInt('workshop_session_id');
+        if ($sessionId <= 0) {
+            $this->addFlash('danger', 'Sélectionnez une session valide pour rattacher cet escape game.');
+
+            return $this->redirectToRoute('module_escape_workshops');
+        }
+
+        $session = $sessionRepository->find($sessionId);
+        if (!$session) {
+            throw new BadRequestHttpException('Session introuvable.');
+        }
+
+        if (!$session->isMaster() && $session->getEvent()?->getKeymodule() !== $board->getCodesite()) {
+            throw $this->createAccessDeniedException('Cette session n’appartient pas à votre tableau de bord.');
+        }
+
+        $session->addEscapeGame($escapeGame);
+        $session->touch();
+        $entityManager->flush();
+
+        $this->addFlash('success', sprintf('« %s » est maintenant rattaché à la session « %s » (%s).', $escapeGame->getTitle(), $session->getDisplayName(), $session->getCode()));
+
+        return $this->redirectToRoute('module_escape_workshops');
+    }
+
 
     #[Route('/escape-workshops/{id}/delete', name: 'module_escape_workshops_delete', methods: ['POST'])]
     #[IsGranted('ROLE_SUPER_ADMIN')]

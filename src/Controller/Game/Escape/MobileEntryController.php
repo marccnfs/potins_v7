@@ -41,12 +41,18 @@ class MobileEntryController extends AbstractController
             }
 
             $qrOnly = is_array($cfg['qrOnly'] ?? null) ? $cfg['qrOnly'] : [];
+            $finalClue = '';
+            $rawClue = $cfg['finalClue'] ?? null;
+            if (\is_string($rawClue)) {
+                $finalClue = trim($rawClue);
+            }
 
             return $this->render('mobile/qr_simple.html.twig', [
-                'title'    => 'Étape validée !',
-                'message'  => $qrOnly['validateMessage'] ?? 'Bravo !',
-                'subtitle' => $cfg['title'] ?? $puzzle?->getTitle(),
-                'variant'  => 'validation',
+                'title'     => 'Étape validée !',
+                'message'   => $qrOnly['validateMessage'] ?? 'Bravo !',
+                'subtitle'  => $cfg['title'] ?? $puzzle?->getTitle(),
+                'finalClue' => $finalClue,
+                'variant'   => 'validation',
             ]);
         }
 

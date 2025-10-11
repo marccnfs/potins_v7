@@ -2,6 +2,15 @@
 <main class="register-container">
     <h1>👤 Espace Participant – Escape Game</h1>
 
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash-message flash-{{ type }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+
     <section id="choice-section">
         <p>Que veux-tu faire ?</p>
         <button id="btn-register">🆕 Créer un compte</button>

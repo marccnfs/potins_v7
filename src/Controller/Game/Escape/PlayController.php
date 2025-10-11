@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 
 #[Route('/play')]
 class PlayController extends AbstractController
@@ -123,29 +123,6 @@ class PlayController extends AbstractController
                 'expiresAt' => $link->getExpiresAt(),
             ];
 
-            if ($mode === 'qr_only') {
-                $qrOnly = is_array($cfg['qrOnly'] ?? null) ? $cfg['qrOnly'] : [];
-                $updated = false;
-                if (!isset($qrOnly['answerSlug']) || !is_string($qrOnly['answerSlug']) || $qrOnly['answerSlug'] === '') {
-                    $qrOnly['answerSlug'] = bin2hex(random_bytes(5));
-                    $cfg['qrOnly'] = $qrOnly;
-                    $updated = true;
-                }
-
-                if ($updated) {
-                    $puzzle->setConfig($cfg);
-                    $this->em->flush();
-                }
-
-                $answerUrl = $this->generateUrl('play_qr_geo_answer', [
-                    'slug' => $slug,
-                    'step' => $step,
-                    'code' => $qrOnly['answerSlug'],
-                ], UrlGeneratorInterface::ABSOLUTE_URL);
-
-                $extras['answerUrl'] = $answerUrl;
-                $extras['answerQr'] = $mobile->buildQrForUrl($answerUrl);
-            }
         }
 
         $vartwig=$this->menuNav->templatepotins('step',Links::GAMES);

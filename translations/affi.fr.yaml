@@ -98,7 +98,7 @@ escape:
         step2:
             qr_only:
                 title: "QR à cacher"
-                description: "Génère le QR à imprimer et à dissimuler sur le terrain."
+                description: "Génère le QR à imprimer et à dissimuler sur le terrain. Une fois scanné, il valide l’étape et affiche l’indice final."
                 fallback: "Enregistre l’étape en mode « QR caché » pour activer la génération."
                 status_ready: "Clique sur « Générer » pour créer un nouveau QR."
                 status_generated: "QR prêt ! Tu peux l’imprimer ou le cacher."
@@ -107,9 +107,6 @@ escape:
                 status_print_missing: "Génère un QR avant d’ouvrir l’impression."
                 expires: "Valable jusqu’à %time%."
                 qr_alt: "QR à cacher"
-                answer_title: "QR « réponse »"
-                answer_alt: "QR réponse"
-                answer_link: "Ouvrir la page réponse"
                 generate: "Générer"
                 print: "Imprimer"
                 direct_label: "Lien direct :"
@@ -120,5 +117,3 @@ escape:
                 hidden_title: "QR à découper et à cacher"
                 expires: "Valable jusqu’à %time%."
                 direct: "Lien direct : %url%"
-                answer_title: "QR « réponse »"
-                answer_note: "À partager aux joueurs après validation."

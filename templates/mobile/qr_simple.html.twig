@@ -8,6 +8,8 @@
     .muted{color:#64748b;margin:0 0 .75rem;font-size:.95rem}
     p{line-height:1.5;margin:.5rem 0;font-size:1.05rem}
     .footer{margin-top:1.5rem;font-size:.9rem;color:#64748b}
+    .final-clue{margin-top:1.25rem;padding:1rem;border-radius:12px;background:#f1f5f9;border:1px dashed #94a3b8}
+    .final-clue h2{margin:0 0 .5rem;font-size:1.25rem}
 </style>
 <section class="card">
     <h1>{{ title ?? 'Bravo !' }}</h1>
@@ -16,6 +18,12 @@
         <p>{{ message|nl2br }}</p>
     {% else %}
         <p>Bravo, tu viens de valider cette étape !</p>
+    {% endif %}
+    {% if finalClue is defined and finalClue %}
+        <section class="final-clue">
+            <h2>Indice final</h2>
+            <p>{{ finalClue|nl2br }}</p>
+        </section>
     {% endif %}
     {% if variant != 'answer' %}
         <p class="footer">Étape validée automatiquement ✔</p>

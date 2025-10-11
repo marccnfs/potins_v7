@@ -45,28 +45,11 @@ class PuzzleQrGeoType extends AbstractType
                 'help'    => 'Choisis « QR caché » si tu préfères cacher un code à scanner plutôt que d’utiliser la localisation.',
             ])
             ->add('qrValidateMessage', TextType::class, [
-                'label'    => 'Message affiché sur le QR « localisation »',
+                'label'    => 'Message affiché après le scan',
                 'mapped'   => false,
                 'required' => false,
                 'data'     => $qrOnly['validateMessage'] ?? 'Bravo !',
-                'help'     => 'Texte montré immédiatement quand le QR caché est scanné (valide l’étape).',
-            ])
-            ->add('qrAnswerTitle', TextType::class, [
-                'label'    => 'Titre de la page « réponse »',
-                'mapped'   => false,
-                'required' => false,
-                'data'     => $qrOnly['answerTitle'] ?? 'Réponse de l’étape',
-            ])
-            ->add('qrAnswerBody', TextareaType::class, [
-                'label'    => 'Contenu de la page « réponse »',
-                'mapped'   => false,
-                'required' => false,
-                'data'     => $qrOnly['answerBody'] ?? '',
-                'attr'     => [
-                    'rows' => 3,
-                    'placeholder' => 'Texte ou solution à révéler après validation.',
-                ],
-                'help'     => 'Ce texte s’affiche via un second QR code (optionnel) une fois l’étape validée.',
+                'help'     => 'Texte montré immédiatement quand le QR caché est scanné (valide l’étape et révèle l’indice final).',
             ])
 
             ->add('lat', NumberType::class, [

@@ -93,16 +93,6 @@
             {% endif %}
         </div>
 
-        {% if payload.answerQr %}
-            <div class="qr-box">
-                <h2>{{ 'escape.wizard.step2.print.answer_title'|trans }}</h2>
-                <img src="{{ payload.answerQr }}" alt="{{ 'escape.wizard.step2.qr_only.answer_alt'|trans }}" width="240" height="240">
-                <p class="note">{{ 'escape.wizard.step2.print.answer_note'|trans }}</p>
-                {% if payload.answerUrl %}
-                    <p class="note"><a href="{{ payload.answerUrl }}" target="_blank" rel="noopener">{{ payload.answerUrl }}</a></p>
-                {% endif %}
-            </div>
-        {% endif %}
     </section>
 </main>
 

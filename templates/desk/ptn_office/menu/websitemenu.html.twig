@@ -29,7 +29,7 @@
                 <span class="menu-entry__hint">Vue hebdomadaire partagée</span>
             </span>
         </a>
-
+{#
         <a href="{{ path('module_offre') }}" class="menu-entry {{ vartwig.m3 ? 'menu-entry--active' : '' }}">
             <span class="menu-entry__icon"><i class="fa fa-tags" aria-hidden="true"></i></span>
             <span class="menu-entry__content">
@@ -37,7 +37,7 @@
                 <span class="menu-entry__hint">Produits et services</span>
             </span>
         </a>
-
+#}
         {% if isActivity('module_found', vartwig.tabActivities) %}
         <a href="{{ path('module_ressources') }}" class="menu-entry {{ vartwig.m4 ? 'menu-entry--active' : '' }}">
             <span class="menu-entry__icon"><i class="fa fa-database" aria-hidden="true"></i></span>

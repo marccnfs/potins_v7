@@ -306,6 +306,23 @@ class EscapeGardenController extends AbstractController
 
     }
 
+    #[Route('/escape/mes-escapes/exemple', name: 'dashboard_example')]
+    #[RequireParticipant]
+    public function showExample(Participant $participant): Response
+    {
+        $vartwig=$this->menuNav->templatepotins(
+            '_example',
+            Links::GAMES);
+
+        return $this->render('pwa/escape/home.html.twig', [
+            'replacejs' => false,
+            'directory' => 'dashboard',
+            'vartwig' => $vartwig,
+            'participant' => $participant,
+        ]);
+    }
+
+
     #[Route('/escape/universe', name: 'escape_universe')]
     #[RequireParticipant]
     public function universe(Participant $participant,Request $request, SessionInterface $session, EntityManagerInterface $em, SluggerInterface $slugger): Response

@@ -25,8 +25,6 @@ class PlayQrGeoController extends AbstractController
             return $this->json(['ok'=>false], 404);
         }
 
-        // Invalide d’anciens liens en attente (optionnel)
-        // ...
 
         $link = $mobile->create($participant, $eg, $step, 15);
         $qr   = $mobile->buildQrDataUri($link);
@@ -39,6 +37,7 @@ class PlayQrGeoController extends AbstractController
         ]);
     }
 
+    /*
     #[Route('/play/{slug}/step/{step}/qr-answer/{code}', name: 'play_qr_geo_answer', methods: ['GET'])]
     public function answer(EscapeGame $eg, int $step, string $code): Response
     {
@@ -62,5 +61,5 @@ class PlayQrGeoController extends AbstractController
             'variant'  => 'answer',
         ]);
     }
-
+    */
 }

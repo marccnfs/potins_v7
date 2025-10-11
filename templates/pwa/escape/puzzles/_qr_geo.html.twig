@@ -44,27 +44,19 @@
                 <p>{{ puzzle.prompt|default('Trouve le QR code caché et scanne-le avec ton téléphone pour continuer l’aventure.') }}</p>
 
                     <h4>Après le scan</h4>
-                    <p>Un message s’affichera automatiquement sur ton mobile pour confirmer la validation.</p>
+                    <p>Un message s’affichera automatiquement sur ton mobile pour confirmer la validation et révéler l’indice final.</p>
                 {% else %}
                     <h3>Consigne</h3>
                     <p>{{ puzzle.prompt|default('Cache le QR code au bon endroit pour débloquer la suite de l’escape.') }}</p>
 
                     <h4>Message affiché sur mobile</h4>
                     <p>{{ qrOnly.validateMessage|default('Bravo, étape validée !') }}</p>
-
-                    <h4>QR « réponse » à imprimer</h4>
-                    {% if extras.answerQr is defined %}
-                        <img id="qr-answer" src="{{ extras.answerQr }}" alt="QR réponse" width="220" height="220">
-                        <p class="muted">À remettre aux joueurs après validation. <a href="{{ extras.answerUrl }}" target="_blank" rel="noopener">Ouvrir la page réponse</a>.</p>
+                    <h4>Indice final transmis</h4>
+                    {% set finalClue = cfg.finalClue|default('')|trim %}
+                    {% if finalClue %}
+                        <p>{{ finalClue|nl2br }}</p>
                     {% else %}
-                        <p class="muted">Enregistre l’étape pour générer le QR réponse.</p>
-                    {% endif %}
-
-                    {% if qrOnly.answerBody is defined and qrOnly.answerBody %}
-                        <details class="mt">
-                            <summary>Aperçu du contenu « réponse »</summary>
-                            <p>{{ qrOnly.answerBody|nl2br }}</p>
-                        </details>
+                        <p class="muted">Aucun indice final n’est défini pour cette étape.</p>
                     {% endif %}
                 {% endif %}
             </main>

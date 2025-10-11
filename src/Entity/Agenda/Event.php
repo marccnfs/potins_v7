@@ -82,20 +82,22 @@ class Event
     private \DateTimeImmutable $updatedAt;
 
     public function __construct(
-        string             $title,
-        \DateTimeImmutable $startsAtUtc,
-        \DateTimeImmutable $endsAtUtc,
-        string             $timezone = 'Europe/Paris'
+        string $title = '',
+        ?\DateTimeImmutable $startsAtUtc = null,
+        ?\DateTimeImmutable $endsAtUtc = null,
+        string $timezone = 'Europe/Paris'
     )
     {
         $this->id = Uuid::v7();
+        $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
+        $startsAtUtc ??= $now;
+        $endsAtUtc ??= $startsAtUtc->modify('+1 hour');
         $this->title = $title;
         $this->assertPeriodIsValid($startsAtUtc, $endsAtUtc);
         $this->startsAt = $startsAtUtc;
         $this->endsAt = $endsAtUtc;
         $this->timezone = $timezone;
         $this->slug = self::slugify($title . '-' . bin2hex(random_bytes(3)));
-        $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
         $this->createdAt = $now;
         $this->updatedAt = $now;
     }

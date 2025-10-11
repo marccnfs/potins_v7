@@ -117,8 +117,6 @@ class WizardController extends AbstractController
             'token'     => $link->getToken(),
             'directUrl' => $payload['directUrl'],
             'expiresAt' => $expiresAt instanceof DateTimeInterface ? $expiresAt->format(DateTimeInterface::ATOM) : null,
-            'answerUrl' => $payload['answerUrl'],
-            'answerQr'  => $payload['answerQr'],
         ]);
     }
 
@@ -165,7 +163,7 @@ class WizardController extends AbstractController
             'step'    => $step,
         ]);
     }
-
+/*
     #[Route('/{id}/etape/{step}/qr-answer/{code}', name:'wizard_step_qr_answer', methods:['GET'])]
     public function stepQrAnswer(EscapeGame $eg, int $step, string $code): Response
     {
@@ -190,7 +188,7 @@ class WizardController extends AbstractController
         ]);
     }
 
-
+*/
     #[Route('/wizard/{id}/universe', name: 'wizard_universe', methods: ['GET','POST'])]
     #[RequireParticipant]
     public function universe(EscapeGame $eg, Request $req, SluggerInterface $slugger): Response
@@ -490,10 +488,7 @@ class WizardController extends AbstractController
                     $needHttpsMessage = (string)$form->get('needHttpsMessage')->getData();
                     $mode = (string) $form->get('mode')->getData();
                     $qrValidateMessage = trim((string)$form->get('qrValidateMessage')->getData());
-                    $qrAnswerTitle = trim((string)$form->get('qrAnswerTitle')->getData());
-                    $qrAnswerBody = (string)$form->get('qrAnswerBody')->getData();
                     $finalClue = trim((string)$form->get('finalClue')->getData());
-
                     // 3) Indices (JSON) — normalisation & exigence >= 1
                     $hintsJson = (string) $form->get('hintsJson')->getData();
                     $hints     = $this->parseHintsFromJson($hintsJson); // <— helper montré précédemment
@@ -520,14 +515,16 @@ class WizardController extends AbstractController
                     if (!is_array($cfg)) { $cfg = []; }
 
                     if ($mode === 'qr_only') {
-                        $qrOnly = is_array($cfg['qrOnly'] ?? null) ? $cfg['qrOnly'] : [];
+                      /*  $qrOnly = is_array($cfg['qrOnly'] ?? null) ? $cfg['qrOnly'] : [];
                         if (!isset($qrOnly['answerSlug']) || !is_string($qrOnly['answerSlug']) || $qrOnly['answerSlug'] === '') {
                             $qrOnly['answerSlug'] = bin2hex(random_bytes(5));
                         }
                         $qrOnly['validateMessage'] = $qrValidateMessage !== '' ? $qrValidateMessage : 'Bravo !';
                         $qrOnly['answerTitle'] = $qrAnswerTitle !== '' ? $qrAnswerTitle : 'Réponse de l’étape';
-                        $qrOnly['answerBody'] = $qrAnswerBody;
-
+                        $qrOnly['answerBody'] = $qrAnswerBody;*/
+                        $qrOnly = [
+                            'validateMessage' => $qrValidateMessage !== '' ? $qrValidateMessage : 'Bravo !',
+                        ];
                         $cfg = array_replace($cfg, [
                             'title'  => $title,
                             'prompt' => $prompt,
@@ -1016,8 +1013,6 @@ class WizardController extends AbstractController
      * @return array{
      *     qr: string,
      *     directUrl: string,
-     *     answerUrl: string,
-     *     answerQr: string,
      *     expiresAt: ?\DateTimeInterface,
      *     updated: bool
      * }
@@ -1027,24 +1022,24 @@ class WizardController extends AbstractController
         $qrOnly = is_array($cfg['qrOnly'] ?? null) ? $cfg['qrOnly'] : [];
         $updated = false;
 
-        if (!isset($qrOnly['answerSlug']) || !is_string($qrOnly['answerSlug']) || $qrOnly['answerSlug'] === '') {
-            $qrOnly['answerSlug'] = bin2hex(random_bytes(5));
+        if (array_key_exists('answerSlug', $qrOnly) || array_key_exists('answerTitle', $qrOnly) || array_key_exists('answerBody', $qrOnly)) {
+            unset($qrOnly['answerSlug'], $qrOnly['answerTitle'], $qrOnly['answerBody']);
             $cfg['qrOnly'] = $qrOnly;
             $puzzle->setConfig($cfg);
             $updated = true;
         }
-
+/*
         $answerUrl = $this->generateUrl('wizard_step_qr_answer', [
             'id'   => $eg->getId(),
             'step' => $puzzle->getStep(),
             'code' => $qrOnly['answerSlug'],
         ], UrlGeneratorInterface::ABSOLUTE_URL);
-
+*/
         return [
             'qr'        => $mobile->buildQrDataUri($link),
             'directUrl' => $this->generateUrl('mobile_entry', ['token' => $link->getToken()], UrlGeneratorInterface::ABSOLUTE_URL),
-            'answerUrl' => $answerUrl,
-            'answerQr'  => $mobile->buildQrForUrl($answerUrl),
+            //'answerUrl' => $answerUrl,
+            //'answerQr'  => $mobile->buildQrForUrl($answerUrl),
             'expiresAt' => $link->getExpiresAt(),
             'updated'   => $updated,
         ];

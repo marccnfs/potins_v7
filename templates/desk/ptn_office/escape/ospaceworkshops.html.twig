@@ -92,9 +92,26 @@
                         <ul class="dashboard-list">
                             {% for game in legacyGames %}
                                 <li class="dashboard-list__item">
-                                    <div>
+                                    <div class="dashboard-list__content">
                                         <span class="dashboard-list__title">{{ game.title }}</span>
                                         <span class="dashboard-list__meta">Créé par {{ game.ownerDisplayName }}{% if game.createdAt %} — {{ game.createdAt|date('d/m/Y') }}{% endif %}</span>
+                                    </div>
+                                    <div class="dashboard-list__actions">
+                                        {% if sessions is not empty %}
+                                            <form method="post" action="{{ path('module_escape_attach_session', {id: game.id}) }}" class="dashboard-actions__form">
+                                                <label for="attach_session_{{ game.id }}" class="sr-only">Sélectionner une session</label>
+                                                <select id="attach_session_{{ game.id }}" name="workshop_session_id" class="form-control" required>
+                                                    <option value="" disabled selected hidden>Choisir une session…</option>
+                                                    {% for session in sessions %}
+                                                        <option value="{{ session.id }}">{{ session.displayName }} — {{ session.code }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <input type="hidden" name="_token" value="{{ csrf_token('attach_escape_workshop_' ~ game.id) }}">
+                                                <button type="submit" class="btn btn-primary btn-sm">Rattacher</button>
+                                            </form>
+                                        {% else %}
+                                            <span class="dashboard-panel__meta muted">Aucune session disponible.</span>
+                                        {% endif %}
                                     </div>
                                     <span class="badge">{{ game.published ? 'Publié' : 'Brouillon' }}</span>
                                 </li>

@@ -5,9 +5,6 @@ export default class extends Controller {
         "placeholder",
         "details",
         "qrImage",
-        "answerWrapper",
-        "answerImage",
-        "answerLink",
         "directWrapper",
         "directLink",
         "generateButton",
@@ -134,20 +131,6 @@ export default class extends Controller {
             }
         }
 
-        if (this.hasAnswerWrapperTarget) {
-            if (data.answerQr) {
-                this.answerWrapperTarget.hidden = false;
-                if (this.hasAnswerImageTarget) {
-                    this.answerImageTarget.src = data.answerQr;
-                }
-                if (this.hasAnswerLinkTarget && data.answerUrl) {
-                    this.answerLinkTarget.href = data.answerUrl;
-                    this.answerLinkTarget.textContent = data.answerUrl;
-                }
-            } else {
-                this.answerWrapperTarget.hidden = true;
-            }
-        }
 
         if (this.hasExpiresTarget) {
             const formatted = this.formatExpires(data.expiresAt);

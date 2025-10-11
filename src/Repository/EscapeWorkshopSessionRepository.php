@@ -53,9 +53,9 @@ final class EscapeWorkshopSessionRepository extends ServiceEntityRepository
     /**
      * @return array<int, EscapeWorkshopSession>
      */
-    public function findAllWithRelations(): array
+    public function findAllWithRelations(?string $boardCode = null): array
     {
-        return $this->createQueryBuilder('session')
+        $qb = $this->createQueryBuilder('session')
             ->leftJoin('session.event', 'event')->addSelect('event')
             ->leftJoin('event.appointment', 'appointment')->addSelect('appointment')
             ->leftJoin('event.potin', 'potin')->addSelect('potin')
@@ -63,7 +63,17 @@ final class EscapeWorkshopSessionRepository extends ServiceEntityRepository
             ->leftJoin('game.owner', 'owner')->addSelect('owner')
             ->orderBy('session.isMaster', 'DESC')
             ->addOrderBy('event.titre', 'ASC')
-            ->addOrderBy('session.label', 'ASC')
+            ->addOrderBy('session.label', 'ASC');
+
+        if ($boardCode !== null && $boardCode !== '') {
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    'session.isMaster = true',
+                    'event.keymodule = :boardCode'
+                )
+            )->setParameter('boardCode', $boardCode);
+        }
+        return $qb
             ->getQuery()
             ->getResult();
     }

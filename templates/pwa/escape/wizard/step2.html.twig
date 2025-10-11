@@ -51,8 +51,7 @@
                             <section id="preview-qronly" class="preview-block" hidden>
                                 <p><strong>Mode QR caché</strong></p>
                                 <p>Message mobile : <span id="preview-qronly-msg">Bravo !</span></p>
-                                <p>Page « réponse » : <strong id="preview-qronly-answer-title">Réponse de l’étape</strong></p>
-                                <p id="preview-qronly-answer-body" class="muted">Le texte s’affichera ici.</p>
+                                <p>Indice final : <span id="preview-qronly-clue" class="muted">Non renseigné</span></p>
                             </section>
                         </section>
 
@@ -88,19 +87,7 @@
                                             <figcaption class="muted" data-qr-print-target="expires"></figcaption>
                                         </figure>
 
-                                        <div class="qr-print__answer" data-qr-print-target="answerWrapper" hidden>
-                                            <h4>{{ 'escape.wizard.step2.qr_only.answer_title'|trans }}</h4>
-                                            <img data-qr-print-target="answerImage"
-                                                 src=""
-                                                 alt="{{ 'escape.wizard.step2.qr_only.answer_alt'|trans }}"
-                                                 width="180"
-                                                 height="180">
-                                            <p class="muted">
-                                                <a data-qr-print-target="answerLink" href="#" target="_blank" rel="noopener">
-                                                    {{ 'escape.wizard.step2.qr_only.answer_link'|trans }}
-                                                </a>
-                                            </p>
-                                        </div>
+
                                     </div>
 
                                     <p class="muted" data-qr-print-target="directWrapper" hidden>
@@ -147,8 +134,6 @@
                                     </div>
                                     <div data-step2-mode="qr_only" hidden>
                                         {{ form_row(form.qrValidateMessage) }}
-                                        {{ form_row(form.qrAnswerTitle) }}
-                                        {{ form_row(form.qrAnswerBody) }}
                                     </div>
                                 </div>
                             </div>
@@ -201,8 +186,7 @@
                 deny:'{{ form.denyMessage.vars.id }}',
                 https:'{{ form.needHttpsMessage.vars.id }}',
                 qrMsg:'{{ form.qrValidateMessage.vars.id }}',
-                qrAnswerTitle:'{{ form.qrAnswerTitle.vars.id }}',
-                qrAnswerBody:'{{ form.qrAnswerBody.vars.id }}'
+                finalClue:'{{ form.finalClue.vars.id }}'
             };
             let t;const deb=(fn)=>{clearTimeout(t);t=setTimeout(fn,180);};
 
@@ -232,10 +216,10 @@
                 const titleEl = document.getElementById('preview-qronly-answer-title');
                 const bodyEl = document.getElementById('preview-qronly-answer-body');
                 if (msgEl) msgEl.textContent = val(ids.qrMsg, 'Bravo !');
-                if (titleEl) titleEl.textContent = val(ids.qrAnswerTitle, 'Réponse de l’étape');
-                if (bodyEl) {
-                    const value = val(ids.qrAnswerBody, '');
-                    bodyEl.textContent = value.trim() !== '' ? value : 'Le texte s’affichera ici.';
+                const clueEl = document.getElementById('preview-qronly-clue');
+                if (clueEl) {
+                    const value = val(ids.finalClue, '');
+                    clueEl.textContent = value.trim() !== '' ? value : 'Non renseigné';
                 }
             }
             function applyMode(){
