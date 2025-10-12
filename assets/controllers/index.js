@@ -19,6 +19,7 @@ import ShareController from "./share_controller";
 import MenuController from "./menu_controller";
 import FinaleController from "./finale_controller";
 import WizardHintsController from "./wizard_hints_controller";
+import BoardWeekController from "./board_week_controller";
 
 
 
@@ -42,3 +43,4 @@ Stimulus.register("share", ShareController);
 Stimulus.register("menu", MenuController);
 Stimulus.register("finale", FinaleController);
 Stimulus.register("wizard-hints", WizardHintsController);
+Stimulus.register("board-week", BoardWeekController);

@@ -105,6 +105,7 @@ export default class extends Controller {
       <div class="event-title">${e.title} ${categoryLabel ? `<span class="badge">${categoryLabel}</span>` : ''}</div>
       <div class="event-meta">${e.isAllDay ? 'Toute la journée' : `${e.startsAtLocal} — ${e.endsAtLocal}`}${e.locationName ? ` • ${e.locationName}` : ''}</div>
       ${requestable ? `<div class="event-actions"><a class="btn-ghost" href="${requestUrl}">Prendre RDV</a></div>` : ''}
+      ${manageMenu}
     </div>`;
     }
 
@@ -205,6 +206,7 @@ export default class extends Controller {
         const [h, m] = hhmm.split(':').map(x=>parseInt(x,10));
         return (h < 12) || (h === 12 && (m||0) < 30);
     }
+
     toggleEventMenu(event) {
         const target = event.currentTarget;
         if (!target) return;
