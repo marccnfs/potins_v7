@@ -74,7 +74,11 @@ final class EventController extends AbstractController
                 $this->em->flush();
 
                 $this->addFlash('success', 'Événement créé.');
-                return $this->redirectToRoute('event_show', ['slug' => $e->getSlug()]);
+                $eventDate = $e->getStartsAt()->setTimezone(new \DateTimeZone($e->getTimezone()));
+
+                return $this->redirectToRoute('module_agenda', [
+                    'date' => $eventDate->format('Y-m-d'),
+                ]);
             }
         }
         $vartwig=$this->menuNav->templatePotins(
@@ -138,7 +142,11 @@ final class EventController extends AbstractController
 
                 $this->em->flush();
                 $this->addFlash('success', 'Événement mis à jour.');
-                return $this->redirectToRoute('event_show', ['slug' => $e->getSlug()]);
+                $eventDate = $e->getStartsAt()->setTimezone(new \DateTimeZone($e->getTimezone()));
+
+                return $this->redirectToRoute('module_agenda', [
+                    'date' => $eventDate->format('Y-m-d'),
+                ]);
             }
         }
 
@@ -185,7 +193,7 @@ final class EventController extends AbstractController
 
         $this->addFlash('success', 'Événement dupliqué. Vous pouvez maintenant le personnaliser.');
 
-        return $this->redirectToRoute('event_edit', ['slug' => $copy->getSlug()]);
+        return $this->redirectToRoute('event_edit', ['slug' => $copy->getSlug()], Response::HTTP_SEE_OTHER);
     }
 
     private function denyUnlessCsrf(Request $req, string $id): void
