@@ -77,13 +77,17 @@ export default class extends Controller {
         const requestable = this.isRequestable(e);
         const requestUrl = requestable ? this.requestUrl(e) : null;
         const categoryLabel = this.categoryLabel(e);
+        const title = this.escapeHtml(e.title);
+        const time = e.isAllDay ? 'Toute la journée' : `${e.startsAtLocal} — ${e.endsAtLocal}`;
+        const location = e.locationName ? `<div class="loc">${this.escapeHtml(e.locationName)}</div>` : ``;
+        const badge = categoryLabel ? `<span class="badge">${this.escapeHtml(categoryLabel)}</span>` : '';
         return `
         <li class="event">
            <a class="event-link" href="${eventUrl}">
-            <div class="time">${e.isAllDay ? 'Toute la journée' : `${e.startsAtLocal} — ${e.endsAtLocal}`}</div>
-            <div class="title">${e.title}</div>
-            ${e.locationName ? `<div class="loc">${e.locationName}</div>` : ``}
-               ${categoryLabel ? `<span class="badge">${categoryLabel}</span>` : ''}
+             <div class="time">${this.escapeHtml(time)}</div>
+            <div class="title">${title}</div>
+            ${location}
+               ${badge}
           </a>
           ${requestable ? `<div class="event-actions"><a class="btn btn-light" href="${requestUrl}">Demander un rendez-vous</a></div>` : ''}
         </li>`;
@@ -199,15 +203,20 @@ export default class extends Controller {
         const requestable = this.isRequestable(event);
         const requestUrl = requestable ? this.requestUrl(event) : null;
         const categoryLabel = this.categoryLabel(event);
+        const styleAttr = this.communeStyle(event);
+        const commune = this.communeBadge(event);
+        const location = event.locationName ? `<div class="agenda-event__loc">${this.escapeHtml(event.locationName)}</div>` : '';
+        const category = categoryLabel ? `<span class="badge agenda-event__badge">${this.escapeHtml(categoryLabel)}</span>` : '';
         return `
-            <li class="event">
-                 <a class="event-link" href="${eventUrl}">
-                    <div class="time">${time}</div>
-                    <div class="title">${event.title}</div>
-                    ${event.locationName ? `<div class="loc">${event.locationName}</div>` : ''}
-                       ${categoryLabel ? `<span class="badge">${categoryLabel}</span>` : ''}
-                </a>
-                 ${requestable ? `<div class="event-actions"><a class="btn btn-light" href="${requestUrl}">Demander un rendez-vous</a></div>` : ''}
+             <li class="agenda-event"${styleAttr}>
+                <div class="agenda-event__meta">
+                    <span class="agenda-event__time">${this.escapeHtml(time)}</span>
+                    ${commune}
+                </div>
+                <a class="agenda-event__title" href="${eventUrl}">${this.escapeHtml(event.title)}</a>
+                ${location}
+                ${category}
+                ${requestable ? `<div class="agenda-event__actions"><a class="btn btn-light" href="${requestUrl}">Demander un rendez-vous</a></div>` : ''}
             </li>`;
     }
 
@@ -237,6 +246,21 @@ export default class extends Controller {
         const [y, m, d] = dateStr.split('-').map(Number);
         if ([y, m, d].some(Number.isNaN)) return new Date(dateStr);
         return new Date(y, m - 1, d);
+    }
+    escapeHtml(value) {
+        if (value === null || value === undefined) {
+            return '';
+        }
+        return String(value).replace(/[&<>"']/g, (char) => {
+            switch (char) {
+                case '&': return '&amp;';
+                case '<': return '&lt;';
+                case '>': return '&gt;';
+                case '"': return '&quot;';
+                case "'": return '&#39;';
+                default: return char;
+            }
+        });
     }
     eventUrl(event) {
         if (event.eventUrl) {
@@ -274,5 +298,57 @@ export default class extends Controller {
         }
         const raw = (event.category || '').toLowerCase();
         return ['rdv', 'atelier', 'permanence'].includes(raw);
+    }
+    communeStyle(event) {
+        const base = this.normalizeHex(event.communeColor);
+        if (!base) {
+            return '';
+        }
+        const tint = this.tintHex(base, 0.82);
+        if (!tint) {
+            return ` style="--agenda-commune-color: ${base};"`;
+        }
+        return ` style="--agenda-commune-color: ${base}; --agenda-commune-color-bg: ${tint};"`;
+    }
+
+    communeBadge(event) {
+        const label = typeof event.communeLabel === 'string' ? event.communeLabel.trim() : '';
+        if (!label) {
+            return '';
+        }
+        return `<span class="agenda-event__commune">${this.escapeHtml(label)}</span>`;
+    }
+
+    normalizeHex(color) {
+        if (typeof color !== 'string') {
+            return '';
+        }
+        const value = color.trim();
+        if (!value) {
+            return '';
+        }
+        const match = value.match(/^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/);
+        if (!match) {
+            return '';
+        }
+        let hex = match[1];
+        if (hex.length === 3) {
+            hex = hex.split('').map(ch => ch + ch).join('');
+        }
+        return `#${hex.toLowerCase()}`;
+    }
+
+    tintHex(hex, ratio = 0.82) {
+        const normalized = this.normalizeHex(hex);
+        if (!normalized) {
+            return '';
+        }
+        const clamp = Math.max(0, Math.min(1, Number(ratio)));
+        const r = parseInt(normalized.slice(1, 3), 16);
+        const g = parseInt(normalized.slice(3, 5), 16);
+        const b = parseInt(normalized.slice(5, 7), 16);
+        const lighten = (channel) => Math.round(channel + (255 - channel) * clamp);
+        const toHex = (value) => value.toString(16).padStart(2, '0');
+        return `#${toHex(lighten(r))}${toHex(lighten(g))}${toHex(lighten(b))}`;
     }
 }

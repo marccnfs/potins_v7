@@ -1,12 +1,13 @@
-<section class="wizard-layout"
-     data-controller="agenda-nav agenda-calendar"
+<section class="wizard-layout is-aside-collapsed"
+     data-controller="agenda-nav agenda-calendar agenda-layout"
      data-agenda-nav-view-value="{{ view }}"
      data-agenda-nav-date-value="{{ date|date('Y-m-d') }}"
      data-agenda-calendar-fetch-url-value="{{ path('agenda_feed') }}"
      data-agenda-calendar-view-value="{{ view }}"
-     data-agenda-calendar-date-value="{{ date|date('Y-m-d') }}">
+     data-agenda-calendar-date-value="{{ date|date('Y-m-d') }}"
+     data-agenda-layout-collapsed-class="is-aside-collapsed">
 
-    <aside class="wizard-aside">
+    <aside class="wizard-aside" id="agenda-sidebar" data-agenda-layout-target="aside" aria-hidden="true">
         <nav class="card" aria-label="Changer de vue">
             <h2 class="aside-title">🗓️ Agenda</h2>
             <ol class="aside-steps">
@@ -30,9 +31,10 @@
 
         <section class="card tip">
             <h3>Filtres</h3>
-            <form data-controller="agenda-filters">
+            <form data-controller="agenda-filters" id="agenda-filters">
                 <label>Type d’activité</label>
                 <select data-agenda-filters-target="category">
+                    <option value="">Toutes les activités</option>
                     <option value="rdv">RDV publics</option>
                     <option value="atelier">Ateliers collectifs</option>
                     <option value="permanence">Permanences</option>
@@ -49,13 +51,23 @@
     <main class="wizard-main">
         <section class="card">
             <header class="agenda-header">
-                <nav class="controls" aria-label="Navigation du calendrier">
-                    <button class="btn" data-action="agenda-nav#prev" aria-label="Précédent">‹</button>
+                <div class="agenda-header__toolbar">
+                    <nav class="controls" aria-label="Navigation du calendrier">
+                        <button class="btn" data-action="agenda-nav#prev" aria-label="Précédent">‹</button>
 
-                    <input type="date" data-agenda-nav-target="datePicker">
-                    <button class="btn" data-action="agenda-nav#next" aria-label="Suivant">›</button>
-                    <button class="btn btn-light" data-action="agenda-nav#today">Aujourd’hui</button>
-                </nav>
+                        <input type="date" data-agenda-nav-target="datePicker">
+                        <button class="btn" data-action="agenda-nav#next" aria-label="Suivant">›</button>
+                        <button class="btn btn-light" data-action="agenda-nav#today">Aujourd’hui</button>
+                    </nav>
+                    <button class="btn btn-light btn-toggle-filters"
+                            type="button"
+                            data-action="agenda-layout#toggle"
+                            data-agenda-layout-target="toggle"
+                            aria-controls="agenda-sidebar"
+                            aria-expanded="false">
+                        <span data-agenda-layout-target="toggleLabel">Afficher les filtres</span>
+                    </button>
+                </div>
                 <h1 data-agenda-nav-target="headline"></h1>
                 <p class="muted agenda-weekly-note">Affichage des créneaux d’accompagnement du mardi au samedi : 9h00–12h30 et 14h00–18h30 du mardi au vendredi, et 10h00–12h00 pour les événements Potins numériques du samedi.</p>
             </header>
