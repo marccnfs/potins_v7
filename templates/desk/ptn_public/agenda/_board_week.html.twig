@@ -4,7 +4,11 @@
         <div class="container_bo_member">
             {#  {{ include('pwa/escape/landing/slideleft.html.twig') }} #}
             <div class="bo_content">
-                {{ include('desk/ptn_public/agenda/board_week.html.twig') }}
+                {{ include('desk/ptn_public/agenda/board_week.html.twig', {
+                    show_requests: true,
+                    manage: false,
+                    context: 'public'
+                }, with_context = false) }}
             </div>
         </div>
     </div>

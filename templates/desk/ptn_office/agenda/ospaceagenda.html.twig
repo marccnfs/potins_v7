@@ -26,7 +26,12 @@
                 </section>
 
                 <section class="dashboard-card">
-                    {{ include('desk/ptn_public/agenda/board_week.html.twig', { date: date }, with_context = false) }}
+                    {{ include('desk/ptn_public/agenda/board_week.html.twig', {
+                        date: date,
+                        show_requests: false,
+                        manage: true,
+                        context: 'office'
+                    }, with_context = false) }}
                 </section>
                 <section class="dashboard-card">
                     <div class="dashboard-card__header">

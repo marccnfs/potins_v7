@@ -131,9 +131,39 @@ class Event
         };
     }
 
+    public function getCommuneColor(): string
+    {
+        return match (strtolower($this->communeCode ?? '')) {
+            'pellerin'  => '#1e90ff',
+            'montagne'  => '#10b981',
+            'sjb'       => '#f59e0b',
+            default     => '#9ca3af',
+        };
+    }
+
     public function getCategoryLabel(): string
     {
         return $this->category->label();
+    }
+
+    public function duplicate(): self
+    {
+        $copy = new self($this->title, $this->startsAt, $this->endsAt, $this->timezone);
+        $copy->setTitle($this->title . ' (copie)');
+        $copy->setDescription($this->description);
+        $copy->setCommuneCode($this->communeCode);
+        $copy->setAllDay($this->isAllDay);
+        $copy->setLocationName($this->locationName);
+        $copy->setLocationAddress($this->locationAddress);
+        $copy->setCapacity($this->capacity);
+        $copy->setVisibility($this->visibility);
+        $copy->setStatus($this->status);
+        $copy->setPublished(false);
+        $copy->setCategory($this->category);
+        $copy->setSourceType($this->sourceType);
+        $copy->setSourceId($this->sourceId);
+
+        return $copy;
     }
 
     public function canReceiveRequests(): bool

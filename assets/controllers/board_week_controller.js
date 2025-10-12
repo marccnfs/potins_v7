@@ -1,10 +1,26 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-    static values = { fetchUrl: String, date: String, requestUrl: String }
+    static values = {
+        fetchUrl: String,
+        date: String,
+        requestUrl: String,
+        context: String,
+        manage: Boolean,
+        showRequests: Boolean,
+    }
+
     static targets = ["grid", "headline"]
 
-    connect() { this.load(); }
+    connect() {
+        this.boundCloseMenu = this.handleDocumentClick.bind(this);
+        document.addEventListener('click', this.boundCloseMenu);
+        this.load();
+    }
+
+    disconnect() {
+        document.removeEventListener('click', this.boundCloseMenu);
+    }
 
     prevWeek() { this.shiftDays(-7); }
     nextWeek() { this.shiftDays(7); }
@@ -69,26 +85,57 @@ export default class extends Controller {
     }
 
     renderEvent(e) {
-        const communeClass = this.communeClass(e.commune);
+        const communeColor = this.communeColor(e.communeColor);
+        const textColor = this.textColorFor(communeColor);
         const categoryLabel = this.categoryLabel(e);
-        const requestable = this.isRequestable(e);
+        const requestable = this.shouldShowRequests() && this.isRequestable(e);
         const requestUrl = requestable ? this.requestUrl(e) : null;
+        const manageEnabled = this.manageEnabled() && e.manage;
+        const manageMenu = manageEnabled ? this.renderManageMenu(e.manage) : '';
+        const attrs = [
+            'class="event-pill"',
+            `style="--commune-color:${communeColor}; --commune-text:${textColor};"`
+        ];
+        if (manageEnabled) {
+            attrs.push('data-action="click->board-week#toggleEventMenu"');
+            attrs.push('data-has-menu="true"');
+        }
         return `
-    <div class="event-pill ${communeClass}">
+     <div ${attrs.join(' ')}>
       <div class="event-title">${e.title} ${categoryLabel ? `<span class="badge">${categoryLabel}</span>` : ''}</div>
       <div class="event-meta">${e.isAllDay ? 'Toute la journée' : `${e.startsAtLocal} — ${e.endsAtLocal}`}${e.locationName ? ` • ${e.locationName}` : ''}</div>
       ${requestable ? `<div class="event-actions"><a class="btn-ghost" href="${requestUrl}">Prendre RDV</a></div>` : ''}
     </div>`;
     }
 
-    communeClass(code) {
-        switch ((code || 'autre').toLowerCase()) {
-            case 'pellerin': return 'c-pellerin';
-            case 'montagne': return 'c-montagne';
-            case 'sjb':      return 'c-sjb';
-            default:         return 'c-autre';
-        }
+    renderManageMenu(manage) {
+        const edit = manage.editUrl ? `<a class="btn btn-light" href="${manage.editUrl}">Modifier</a>` : '';
+        const duplicate = manage.duplicateUrl ? `
+            <form method="post" action="${manage.duplicateUrl}" class="event-manage-form" data-action="submit->board-week#closeMenus">
+                <input type="hidden" name="_token" value="${manage.duplicateToken}">
+                <button type="submit" class="btn btn-light">Dupliquer</button>
+            </form>` : '';
+        const remove = manage.deleteUrl ? `
+            <form method="post" action="${manage.deleteUrl}" class="event-manage-form" data-action="submit->board-week#confirmDelete">
+                <input type="hidden" name="_token" value="${manage.deleteToken}">
+                <button type="submit" class="btn btn-danger">Supprimer</button>
+            </form>` : '';
+
+        return `
+      <div class="event-manage-menu" data-board-week-menu hidden>
+        <p class="event-manage-label">Gérer ce créneau</p>
+        <div class="event-manage-actions">
+          ${edit}
+          ${duplicate}
+          ${remove}
+        </div>
+      </div>`;
     }
+
+    communeColor(raw) {
+        return raw || '#f3f4f6';
+    }
+
     categoryLabel(event) {
         return event.categoryLabel || this.humanCategory(event.category);
     }
@@ -124,6 +171,14 @@ export default class extends Controller {
         return `/rdv/${encodeURIComponent(event.slug)}`;
     }
 
+    shouldShowRequests() {
+        return !this.hasShowRequestsValue || this.showRequestsValue;
+    }
+
+    manageEnabled() {
+        return this.hasManageValue && this.manageValue;
+    }
+
     // helpers
     weekRange(d) {
         const day = (d.getDay()+6)%7; // lundi=0
@@ -149,5 +204,54 @@ export default class extends Controller {
         if (!hhmm) return true;
         const [h, m] = hhmm.split(':').map(x=>parseInt(x,10));
         return (h < 12) || (h === 12 && (m||0) < 30);
+    }
+    toggleEventMenu(event) {
+        const target = event.currentTarget;
+        if (!target) return;
+        if (event.target.closest('.event-manage-menu')) {
+            return;
+        }
+        const menu = target.querySelector('.event-manage-menu');
+        if (!menu) return;
+        const willOpen = menu.hasAttribute('hidden');
+        this.closeMenus();
+        if (willOpen) {
+            menu.removeAttribute('hidden');
+        }
+    }
+
+    closeMenus() {
+        this.element.querySelectorAll('.event-manage-menu').forEach(menu => menu.setAttribute('hidden', ''));
+    }
+
+    handleDocumentClick(event) {
+        if (!this.element.contains(event.target)) {
+            this.closeMenus();
+        }
+    }
+
+    confirmDelete(event) {
+        if (!confirm('Confirmer la suppression de ce créneau ?')) {
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        }
+        this.closeMenus();
+    }
+
+    textColorFor(hex) {
+        const color = (hex || '').replace('#', '');
+        if (color.length !== 6) {
+            return '#111827';
+        }
+        const r = parseInt(color.substring(0,2), 16) / 255;
+        const g = parseInt(color.substring(2,4), 16) / 255;
+        const b = parseInt(color.substring(4,6), 16) / 255;
+        const luminance = 0.2126 * this.linearize(r) + 0.7152 * this.linearize(g) + 0.0722 * this.linearize(b);
+        return luminance > 0.55 ? '#111827' : '#ffffff';
+    }
+
+    linearize(value) {
+        return value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
     }
 }

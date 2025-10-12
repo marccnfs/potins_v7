@@ -1,8 +1,16 @@
+{% set initialDate = date is defined ? date : 'now' %}
+{% set showRequestsValue = show_requests is defined ? show_requests : true %}
+{% set manageValue = manage is defined ? manage : false %}
+{% set contextValue = context is defined ? context : 'public' %}
+
 <div class="container"
      data-controller="board-week"
      data-board-week-fetch-url-value="{{ path('agenda_feed') }}"
-     data-board-week-date-value="{{ date|date('Y-m-d') }}"
+     data-board-week-date-value="{{ initialDate|date('Y-m-d') }}"
      data-board-week-request-url-value="{{ path('agenda_request', {slug: '__SLUG__'}) }}"
+     data-board-week-show-requests-value="{{ showRequestsValue ? 'true' : 'false' }}"
+     data-board-week-manage-value="{{ manageValue ? 'true' : 'false' }}"
+     data-board-week-context-value="{{ contextValue }}"
 >
     <header class="card" style="margin-bottom:12px;">
         <div style="display:flex; gap:8px; align-items:center; justify-content:space-between; flex-wrap:wrap;">

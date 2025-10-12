@@ -168,6 +168,26 @@ final class EventController extends AbstractController
         return $this->redirectToRoute('agenda_index');
     }
 
+    #[Route('/agenda/events/{slug}/duplicate', name: 'event_duplicate', methods: ['POST'])]
+    public function duplicate(string $slug, Request $req): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+        $this->denyUnlessCsrf($req, 'duplicate_'.$slug);
+
+        $source = $this->em->getRepository(Event::class)->findOneBy(['slug' => $slug]);
+        if (!$source) {
+            throw $this->createNotFoundException();
+        }
+
+        $copy = $source->duplicate();
+        $this->em->persist($copy);
+        $this->em->flush();
+
+        $this->addFlash('success', 'Événement dupliqué. Vous pouvez maintenant le personnaliser.');
+
+        return $this->redirectToRoute('event_edit', ['slug' => $copy->getSlug()]);
+    }
+
     private function denyUnlessCsrf(Request $req, string $id): void
     {
         $token = $req->request->get('_token');

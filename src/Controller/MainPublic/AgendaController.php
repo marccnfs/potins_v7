@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class AgendaController extends AbstractController
 
@@ -51,7 +52,7 @@ class AgendaController extends AbstractController
     }
 
     #[Route('/agenda/feed.json', name: 'agenda_feed', methods: ['GET'])]
-    public function feed(Request $req, EventRepository $eventRepository): JsonResponse
+    public function feed(Request $req, EventRepository $eventRepository, CsrfTokenManagerInterface $csrf): JsonResponse
     {
         $from = $req->query->get('from'); // YYYY-MM-DD (local Europe/Paris)
         $to   = $req->query->get('to');
@@ -89,6 +90,17 @@ class AgendaController extends AbstractController
             $sLocal = $e->getStartsAt()->setTimezone($tz);
             $eLocal = $e->getEndsAt()->setTimezone($tz);
 
+            $manage = null;
+            if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+                $manage = [
+                    'editUrl'       => $this->generateUrl('event_edit', ['slug' => $e->getSlug()]),
+                    'duplicateUrl'  => $this->generateUrl('event_duplicate', ['slug' => $e->getSlug()]),
+                    'duplicateToken'=> $csrf->getToken('duplicate_' . $e->getSlug())->getValue(),
+                    'deleteUrl'     => $this->generateUrl('event_delete', ['slug' => $e->getSlug()]),
+                    'deleteToken'   => $csrf->getToken('delete_' . $e->getSlug())->getValue(),
+                ];
+            }
+
             $out[] = [
                 'slug'          => $e->getSlug(),
                 'title'         => $e->getTitle(),
@@ -104,9 +116,11 @@ class AgendaController extends AbstractController
                 'isAllDay'      => $e->isAllDay(),
                 'commune'       => $e->getCommuneCode(),
                 'communeLabel'  => $e->getCommuneLabel(),
+                'communeColor'  => $e->getCommuneColor(),
                 'canRequest'    => $e->canReceiveRequests(),
                 'eventUrl'      => $this->generateUrl('event_show', ['slug' => $e->getSlug()]),
                 'requestUrl'    => $this->generateUrl('agenda_request', ['slug' => $e->getSlug()]),
+                'manage'        => $manage,
             ];
         }
 
