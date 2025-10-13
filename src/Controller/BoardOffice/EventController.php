@@ -43,32 +43,32 @@ final class EventController extends AbstractController
             // conversion Local→UTC
             $tz = new \DateTimeZone($form->get('timezone')->getData() ?: 'Europe/Paris');
             $startLocal = $form->get('startsAtLocal')->getData(); // \DateTimeInterface
-            $endLocal   = $form->get('endsAtLocal')->getData();
+            $endLocal = $form->get('endsAtLocal')->getData();
 
             if (!$startLocal || !$endLocal) {
                 $this->addFlash('danger', 'Dates invalides.');
             } else {
                 $startUtc = (new \DateTimeImmutable($startLocal->format('Y-m-d H:i:s'), $tz))
                     ->setTimezone(new \DateTimeZone('UTC'));
-                $endUtc   = (new \DateTimeImmutable($endLocal->format('Y-m-d H:i:s'), $tz))
+                $endUtc = (new \DateTimeImmutable($endLocal->format('Y-m-d H:i:s'), $tz))
                     ->setTimezone(new \DateTimeZone('UTC'));
 
                 $e = new Event(
-                    title:      (string) $form->get('title')->getData(),
-                    startsAtUtc:$startUtc,
-                    endsAtUtc:  $endUtc,
-                    timezone:   (string) $form->get('timezone')->getData(),
+                    title: (string)$form->get('title')->getData(),
+                    startsAtUtc: $startUtc,
+                    endsAtUtc: $endUtc,
+                    timezone: (string)$form->get('timezone')->getData(),
                 );
 
                 $e->setDescription($form->get('description')->getData());
-                $e->setAllDay((bool) $form->get('isAllDay')->getData());
+                $e->setAllDay((bool)$form->get('isAllDay')->getData());
                 $e->setLocationName($form->get('locationName')->getData());
                 $e->setLocationAddress($form->get('locationAddress')->getData());
                 $e->setCapacity($form->get('capacity')->getData());
                 $e->setCommuneCode($form->get('communeCode')->getData() ?: 'autre');
                 $e->setCategory($form->get('category')->getData());
                 $e->setVisibility($form->get('visibility')->getData());
-                $e->setPublished((bool) $form->get('published')->getData());
+                $e->setPublished((bool)$form->get('published')->getData());
 
                 $this->em->persist($e);
                 $this->em->flush();
@@ -81,18 +81,18 @@ final class EventController extends AbstractController
                 ]);
             }
         }
-        $vartwig=$this->menuNav->templatePotins(
-            '_form',Links::ACCUEIL);
+        $vartwig = $this->menuNav->templatePotins(
+            '_form', Links::ACCUEIL);
 
-        return $this->render($this->useragentP.'ptn_office/home.html.twig', [
+        return $this->render($this->useragentP . 'ptn_office/home.html.twig', [
             'form' => $form,
             'mode' => 'new',
-            'replacejs'=>false,
+            'replacejs' => false,
             'board' => $this->currentBoard(),
             'member' => $this->currentMember,
             'customer' => $this->currentCustomer,
-            'vartwig'=>$vartwig,
-            'directory'=>'agenda',
+            'vartwig' => $vartwig,
+            'directory' => 'agenda',
         ]);
     }
 
@@ -117,26 +117,26 @@ final class EventController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $tz = new \DateTimeZone($form->get('timezone')->getData() ?: 'Europe/Paris');
             $startLocal = $form->get('startsAtLocal')->getData();
-            $endLocal   = $form->get('endsAtLocal')->getData();
+            $endLocal = $form->get('endsAtLocal')->getData();
 
             if (!$startLocal || !$endLocal) {
                 $this->addFlash('danger', 'Dates invalides.');
             } else {
                 $startUtc = (new \DateTimeImmutable($startLocal->format('Y-m-d H:i:s'), $tz))
                     ->setTimezone(new \DateTimeZone('UTC'));
-                $endUtc   = (new \DateTimeImmutable($endLocal->format('Y-m-d H:i:s'), $tz))
+                $endUtc = (new \DateTimeImmutable($endLocal->format('Y-m-d H:i:s'), $tz))
                     ->setTimezone(new \DateTimeZone('UTC'));
 
                 $e->setTitle($form->get('title')->getData());
                 $e->setDescription($form->get('description')->getData());
                 $e->setTimezone($form->get('timezone')->getData());
-                $e->setAllDay((bool) $form->get('isAllDay')->getData());
+                $e->setAllDay((bool)$form->get('isAllDay')->getData());
                 $e->setLocationName($form->get('locationName')->getData());
                 $e->setLocationAddress($form->get('locationAddress')->getData());
                 $e->setCapacity($form->get('capacity')->getData());
                 $e->setCategory($form->get('category')->getData());
                 $e->setVisibility($form->get('visibility')->getData());
-                $e->setPublished((bool) $form->get('published')->getData());
+                $e->setPublished((bool)$form->get('published')->getData());
                 $e->setPeriod($startUtc, $endUtc);
                 $e->setCommuneCode($form->get('communeCode')->getData() ?: 'autre');
 
@@ -150,10 +150,10 @@ final class EventController extends AbstractController
             }
         }
 
-        return $this->renderDashboard('agenda','_form',4, [
+        return $this->renderDashboard('agenda', '_form', 4, [
             'form' => $form,
             'mode' => 'edit',
-            'e'    => $e,
+            'e' => $e,
         ]);
 
     }
@@ -162,7 +162,7 @@ final class EventController extends AbstractController
     public function delete(string $slug, Request $req): Response
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
-        $this->denyUnlessCsrf($req, 'delete_'.$slug);
+        $this->denyUnlessCsrf($req, 'delete_' . $slug);
 
         $e = $this->em->getRepository(Event::class)->findOneBy(['slug' => $slug]);
         if (!$e) {
@@ -180,7 +180,7 @@ final class EventController extends AbstractController
     public function duplicate(string $slug, Request $req): Response
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
-        $this->denyUnlessCsrf($req, 'duplicate_'.$slug);
+        $this->denyUnlessCsrf($req, 'duplicate_' . $slug);
 
         $source = $this->em->getRepository(Event::class)->findOneBy(['slug' => $slug]);
         if (!$source) {
@@ -193,7 +193,14 @@ final class EventController extends AbstractController
 
         $this->addFlash('success', 'Événement dupliqué. Vous pouvez maintenant le personnaliser.');
 
-        return $this->redirectToRoute('event_edit', ['slug' => $copy->getSlug()], Response::HTTP_SEE_OTHER);
+        $targetUrl = $this->generateUrl('event_edit', ['slug' => $copy->getSlug()]);
+        $response = $this->redirect($targetUrl, Response::HTTP_SEE_OTHER);
+
+        if ($this->isTurboRequest($req)) {
+            $response->headers->set('Turbo-Location', $targetUrl);
+        }
+
+        return $response;
     }
 
     private function denyUnlessCsrf(Request $req, string $id): void
@@ -249,4 +256,14 @@ final class EventController extends AbstractController
         return $this->menuNav;
     }
 
+    private function isTurboRequest(Request $req): bool
+    {
+        if ($req->headers->has('Turbo-Frame')) {
+            return true;
+        }
+
+        $accept = $req->headers->get('Accept') ?? '';
+
+        return str_contains($accept, 'text/vnd.turbo-stream.html');
+    }
 }
