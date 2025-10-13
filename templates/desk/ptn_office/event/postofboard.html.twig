@@ -35,7 +35,12 @@
                     <h4 class="dashboard-section__title">Planifier une action</h4>
                 </div>
                 <div class="dashboard-section__content">
-                    <x-eventpotin event="{{ event }}" potin="{{ potin.id }}" board="{{ board.id }}"></x-eventpotin>
+                    <x-eventpotin
+                        event="{{ event }}"
+                        potin="{{ potin.id }}"
+                        board="{{ board.id }}"
+                        mediatheques="{{ mediatheques|default([])|json_encode|e('html_attr') }}"
+                    ></x-eventpotin>
                 </div>
             </div>
         </div>

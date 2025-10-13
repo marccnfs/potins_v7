@@ -4,6 +4,7 @@
 namespace App\Controller\potins;
 
 use App\Classe\UserSessionTrait;
+use App\Entity\Boards\Board;
 use App\Form\DeleteType;
 use App\Lib\Links;
 use App\Lib\MsgAjax;
@@ -71,7 +72,8 @@ class EventPotinsController extends AbstractController
             'customer'=>$this->currentCustomer,
             'event'=>null,
             'vartwig'=>$vartwig,
-            'locatecity'=>0
+            'locatecity'=>0,
+            'mediatheques' => $this->buildMediathequeOptions(),
         ]);
     }
 
@@ -101,6 +103,7 @@ class EventPotinsController extends AbstractController
             'vartwig'=>$vartwig,
             'admin'=>[true,[1,1,1]],
             'back'=> $this->generateUrl('module_event',['board' => $this->board->getSlug()]),
+            'mediatheques' => $this->buildMediathequeOptions(),
         ]);
     }
 
@@ -256,6 +259,24 @@ class EventPotinsController extends AbstractController
         ]);
     }
 
+    /**
+     * @return array<int, array{id:int,name:string,city:?string}>
+     */
+    private function buildMediathequeOptions(): array
+    {
+        if (!$this->boardRepo) {
+            return [];
+        }
 
+        $boards = $this->boardRepo->findAllMediatheques();
+
+        return array_map(static function (Board $board): array {
+            return [
+                'id' => $board->getId(),
+                'name' => $board->getNameboard() ?? '',
+                'city' => $board->getLocality()?->getCity(),
+            ];
+        }, $boards);
+    }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Entity\Boards;
 
+use App\Repository\LinksBoardsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -20,7 +21,7 @@ class LinksBoards
     #[ORM\Column(nullable: true)]
     private ?string $codesite;
 
-    #[ORM\OneToMany(mappedBy: 'links', targetEntity: Board::class)]
+    #[ORM\OneToMany(targetEntity: Board::class, mappedBy: 'links')]
     #[ORM\JoinColumn(nullable: true)]
     private Collection $boards;
 

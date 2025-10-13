@@ -143,6 +143,21 @@ class BoardRepository extends ServiceEntityRepository
             -> getResult();
     }
 
+    /**
+     * @return Board[]
+     */
+    public function findAllMediatheques(): array
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.locatemedia = :state')
+            ->andWhere('b.active = :active')
+            ->setParameter('state', true)
+            ->setParameter('active', true)
+            ->orderBy('b.nameboard', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 
     /**
      * @return array|int|string

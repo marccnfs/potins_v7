@@ -23,7 +23,12 @@
                                 <p>le : {{ potin.createAt|date("j-m-Y") }}</p>
                             </div>
                             <div class="account_module">
-                                <x-eventpotin event="{{event}}" potin="{{ potin.id }}" board="{{ board.id }}"></x-eventpotin>
+                                <x-eventpotin
+                                    event="{{ event }}"
+                                    potin="{{ potin.id }}"
+                                    board="{{ board.id }}"
+                                    mediatheques="{{ mediatheques|default([])|json_encode|e('html_attr') }}"
+                                ></x-eventpotin>
                             </div>
                         </div>
                     </div>

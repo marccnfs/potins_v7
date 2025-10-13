@@ -1,0 +1,68 @@
+{% block body %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
+            <div class="bo_content">
+                <header class="dashboard-header">
+                    <span class="dashboard-kicker">Programmation</span>
+                    <h1 class="dashboard-title">Programmer un potin</h1>
+                    <p class="dashboard-subtitle">Sélectionnez un potin pour créer un nouvel événement associé.</p>
+                </header>
+
+                {{ include('desk/ptn_office/partials/_alerts.html.twig') }}
+
+                {% set postCollection = posts|default([]) %}
+                <section class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <div>
+                            <p class="dashboard-card__hint">Potins disponibles</p>
+                            <h3 class="dashboard-card__title">Choisissez un potin à programmer</h3>
+                        </div>
+                        <span class="dashboard-badge">
+                        <i class="fa fa-newspaper-o"></i>
+                        {{ postCollection|length }} potin{% if postCollection|length > 1 %}s{% endif %}
+                    </span>
+                    </div>
+
+                    {% if postCollection|length > 0 %}
+                        <ul class="dashboard-list">
+                            {% for post in postCollection %}
+                                {% set ill = 'img/AffiChange.png' %}
+                                {% if post.media is defined and post.media.imagejpg[0] is defined %}
+                                    {% set ill = post.media.imagejpg[0].getwebPath %}
+                                {% endif %}
+                                <li class="dashboard-list__item">
+                                    <div class="dashboard-thumb">
+                                        <img src="{{ asset(ill) }}" alt="Illustration du potin {{ post.titre }}">
+                                    </div>
+                                    <div class="dashboard-list__content">
+                                        <span class="dashboard-table__title">{{ post.titre }}</span>
+                                        <span class="dashboard-table__meta">
+                                        <i class="fa fa-calendar"></i>
+                                        Publié le {{ post.createAt|date('d/m/Y') }}
+                                    </span>
+                                        <span class="dashboard-table__meta">
+                                        <i class="fa fa-user"></i>
+                                        {{ post.author.name }}
+                                    </span>
+                                    </div>
+                                    <div class="dashboard-list__actions">
+                                        <a class="btn btn-primary" href="{{ path('event_potins', {'id': post.id}) }}">
+                                            <i class="fa fa-calendar-plus-o"></i> Programmer
+                                        </a>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="dashboard-empty">Aucun potin disponible pour la programmation pour le moment.</p>
+                    {% endif %}
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+{% use "js/js_customer_wb.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -5,10 +5,15 @@
             <h3 class="dashboard-card__title">Événements programmés</h3>
         </div>
         {% set eventCollection = events|default([]) %}
-        <span class="dashboard-badge">
-            <i class="fa fa-calendar"></i>
-            {{ eventCollection|length }} évènement{% if eventCollection|length > 1 %}s{% endif %}
-        </span>
+        <div class="dashboard-card__header-actions" style="display:flex; align-items:center; gap:0.75rem;">
+            <a class="btn btn-primary" href="{{ path('module_event_new') }}">
+                <i class="fa fa-calendar-plus-o"></i> Programmer un potin
+            </a>
+            <span class="dashboard-badge">
+                <i class="fa fa-calendar"></i>
+                {{ eventCollection|length }} évènement{% if eventCollection|length > 1 %}s{% endif %}
+            </span>
+        </div>
     </div>
     {% if eventCollection|length > 0 %}
     <ul class="dashboard-list">

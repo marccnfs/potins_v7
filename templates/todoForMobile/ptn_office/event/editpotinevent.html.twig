@@ -3,7 +3,12 @@
     {{ include('pwa/ptn_office/menu/websitemenu.html.twig') }}
     <section class="_wb-ospace">
         <div class="regester-bk">
-            <x-eventpotin board="{{ board.id }}" potin="{{ potin.id }}" event="{{event|serialize(format = 'json') }}"></x-eventpotin>
+            <x-eventpotin
+                board="{{ board.id }}"
+                potin="{{ potin.id }}"
+                event="{{ event|serialize(format = 'json') }}"
+                mediatheques="{{ mediatheques|default([])|json_encode|e('html_attr') }}"
+            ></x-eventpotin>
         </div>
     </section>
 </div>

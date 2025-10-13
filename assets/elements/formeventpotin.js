@@ -1,11 +1,58 @@
 import {FetchFormEvent, FormField, FormPrimaryButton, FormSecondaryButton} from '../components/Form.jsx'
-import {useState, useEffect, useCallback} from 'preact/hooks'
+import {useState, useEffect, useMemo} from 'preact/hooks'
 import {Alert} from '../components/Alert.jsx'
 import { h } from "preact";
 import CalendarEvent from "../functions/calendar";
-import {SearchPartnerEvent} from "./search/SearchPartnerEvent";
 
-let init=true;
+const createEmptySchedule = () => ({
+    'Dim': [],
+    'Lun': [],
+    'Mar': [],
+    'Mer': [],
+    'Jeu': [],
+    'Ven': [],
+    'Sam': [],
+});
+
+const normalizePartner = (partner) => {
+    if (!partner) {
+        return [];
+    }
+
+    if (Array.isArray(partner)) {
+        if (partner.length === 0) {
+            return [];
+        }
+
+        return normalizePartner(partner[0]);
+    }
+
+    if (typeof partner === 'object') {
+        const identifier = partner.id ?? partner.ID ?? null;
+
+        if (identifier === null || identifier === undefined) {
+            return [];
+        }
+
+        const locality = partner.locality ?? partner.locatemedia ?? {};
+        return [{
+            id: String(identifier),
+            name: partner.name ?? partner.nameboard ?? partner.title ?? '',
+            city: locality.city ?? locality.nameloc ?? partner.city ?? null,
+        }];
+    }
+
+    if (typeof partner === 'number' || typeof partner === 'string') {
+        return [{
+            id: String(partner),
+            name: '',
+            city: null,
+        }];
+    }
+
+    return [];
+};
+
 
 
 function updateTextareaHeight(input) {
@@ -20,132 +67,180 @@ updateTextareaHeight(document.getElementById('contentOne'));
 
 export default function Formeventpotin(props){
 
-    // old : let redirect="/board/Events/"+props.board
-    let redirect='/board-office/programmation-potins'
+    const redirect = '/board-office/programmation-potins';
+    const mediatheques = Array.isArray(props.mediatheques) ? props.mediatheques : [];
+    const eventData = props.event && typeof props.event === 'object' ? props.event : null;
 
-    let options={"pict":"","partner":[],"potin":"","titre":"","description":"","adresse":""}
-    if(props.event){
-        options.id=props.event.id;
-        options.partner=props.event['locatemedia']??[];
-        //options.sector=props.event.sector;
-        //options.adresse=props.event.sector.adresse[0].label ??"";
-        options.appointments=props.event.appointment;
-        //options.titre=props.event.titre ??"";
-        options.description=props.event.description ??"";
-        options.mediatheque=props.event.mediatheque ??"";
-        options.board=props.board;
-        options.potin=props.potin;
+    const baseDescription = eventData?.description ?? '';
+    const basePartner = useMemo(() => {
+        if (!eventData) {
+            return [];
         }
 
-    const [success, setSuccess] = useState(false)
-    const [namepartner, setNamePartner] = useState("")
-    const [changPartner, setChangPartner]=useState(false)
-    const [partner, setPartner] = useState(false)
-    const [tabpartners, setTabpartners]=useState(options.partner)
-    const [description, setDescription] = useState(options.description)
-    const [changDate, setChangDate]=useState(false)
-    const [tabunique, setTabunique]=useState({'Dim':[],'Lun':[],'Mar':[],'Mer':[],'Jeu':[],'Ven':[],'Sam':[]})
-    const [dateselect, setDateselect]=useState(false)
-    const [edit, setEdit]=useState(false)
-    const [stateform, setStateform]=useState(false)
-    const [statedescription, setStatedescription]=useState(false)
-    const [mediatheque, setMediatheque] = useState(options.mediatheque)
-    const [statemediatheque, setStatemediatheque]=useState(false)
+        return normalizePartner(eventData.locatemedia ?? eventData.mediatheque ?? null);
+    }, [eventData]);
 
-
-    if(props.event && init){
-        setEdit(true)
-        setTabunique(options.appointments.tabdate['tabdatejso'])
-        setDateselect(true)
-        if(tabpartners){
-            setPartner(true)
+    const baseTabunique = useMemo(() => {
+        const appointment = eventData?.appointment;
+        if (appointment && appointment.tabdate && appointment.tabdate['tabdatejso']) {
+            return appointment.tabdate['tabdatejso'];
         }
-        init=!init;
-    }
+
+        return createEmptySchedule();
+    }, [eventData]);
+
+    const [success, setSuccess] = useState(false);
+    const [description, setDescription] = useState(baseDescription);
+    const [tabunique, setTabunique] = useState(baseTabunique);
+    const [dateselect, setDateselect] = useState(Boolean(eventData));
+    const [changDate, setChangDate] = useState(false);
+    const [edit, setEdit] = useState(Boolean(eventData));
+    const [tabpartners, setTabpartners] = useState(basePartner);
+    const [selectedMediaId, setSelectedMediaId] = useState(basePartner[0]?.id ?? '');
+    const [changPartner, setChangPartner] = useState(false);
+    const [stateform, setStateform] = useState(false);
+
+    useEffect(() => {
+        setEdit(Boolean(eventData));
+        setDescription(baseDescription);
+        setTabunique(baseTabunique);
+        setDateselect(Boolean(eventData));
+        setChangDate(false);
+        setTabpartners(basePartner);
+        setSelectedMediaId(basePartner[0]?.id ?? '');
+        setChangPartner(false);
+    }, [eventData, baseDescription, baseTabunique, basePartner]);
+
+    useEffect(() => {
+        const hasDescription = description.trim().length > 0;
+        const hasMedia = selectedMediaId !== '';
+        const hasDates = dateselect;
+
+        setStateform(hasDescription && hasMedia && hasDates);
+    }, [description, selectedMediaId, dateselect]);
+
+    const selectedMedia = useMemo(() => {
+        if (!selectedMediaId) {
+            return null;
+        }
+        return mediatheques.find(item => String(item.id) === String(selectedMediaId)) ?? null;
+    }, [mediatheques, selectedMediaId]);
 
     if (success) {
-        return <Alert>Votre evenement à bien été crée/modifié</Alert>
+        return <Alert>Votre evenement à bien été crée/modifié</Alert>;
     }
 
-    function handleChange(e){
-       setDescription(e.target.value)
-       setStatedescription(true)
-       valueForm()
-    }
+    const handleDescriptionChange = (e) => {
+        setDescription(e.target.value);
+    };
 
-    function handleChangeMedia(e){
-        setMediatheque(e.target.value)
-        setStatemediatheque(true)
-        valueForm()
-    }
+    const handleTabChange = (tabtemp) => {
+        setTabunique(tabtemp);
+        setDateselect(true);
+        setChangDate(true);
+    };
 
-    const handleTabChange = function(tabtemp){
-        setTabunique(tabtemp)
-        setDateselect(true)
-        setChangDate(true)
-        valueForm()
-    }
-    function handleChangePartner(select){
-        setTabpartners(select)
-        setNamePartner(select.id)
-        setChangPartner(true)
-        valueForm()
-    }
+    const handleMediaChange = (e) => {
+        const value = e.target.value;
+        setSelectedMediaId(value);
 
-    function valueForm(){
-        if(statedescription && changPartner && dateselect)setStateform(true)
-    }
+        if (!value) {
+            setTabpartners([]);
+            setChangPartner(false);
+            return;
+        }
 
-    function onSuccess(response){
-        setSuccess(response.success)
-        AsyncRetrun()
-    }
-    function handleloadpagebefore(e){
-        e.preventDefault()
+        const choice = mediatheques.find(item => String(item.id) === value);
+
+        if (choice) {
+            setTabpartners([{ id: String(choice.id), name: choice.name ?? '', city: choice.city ?? null }]);
+            setChangPartner(true);
+        } else {
+            setTabpartners([]);
+            setChangPartner(false);
+        }
+    };
+
+    const onSuccess = (response) => {
+        setSuccess(response.success);
+        AsyncReturn();
+    };
+
+    const handleLoadPrevious = (e) => {
+        e.preventDefault();
         window.location.replace(redirect);
-    }
-    async function AsyncRetrun(){
+    };
+
+    const AsyncReturn = async () => {
         await delay(1);
         window.location.replace(redirect);
-    }
-    function delay(n){
-        return new Promise(function(resolve){
-            setTimeout(resolve,n*1000);
+
+    };
+
+    const delay = (n) => {
+        return new Promise((resolve) => {
+            setTimeout(resolve, n * 1000);
         });
-    }
+    };
 
     return (
-        <FetchFormEvent action='/potins/event/add-event-potin-ajx' className="form-elastic" onSuccess={onSuccess}
-                        edit={edit}
-                        board={props.board}
-                        potin={props.potin}
-                        changeTabDate={changDate}
-                        changePartner={{changPartner}}
-                        tabdate={tabunique}
-                        tabpartners={tabpartners}
-                        event={props.event.id}>
+        <FetchFormEvent
+            action='/potins/event/add-event-potin-ajx'
+            className="form-elastic"
+            onSuccess={onSuccess}
+            edit={edit}
+            board={props.board}
+            potin={props.potin}
+            changeTabDate={changDate}
+            changePartner={{changPartner}}
+            tabdate={tabunique}
+            tabpartners={tabpartners}
+            event={props.event.id}
+        >
+            <FormField
+                name='description'
+                type='event'
+                value={description}
+                onChange={handleDescriptionChange}
+                required
+                wrapperClass=''
+            >
+            </FormField>
 
-                    <FormField name='description' type='event' value={description}  onChange={handleChange} required wrapperClass=''>
-                    </FormField>
+            <div className="form-group">
+                <h3>quand ?</h3>
+                <CalendarEvent parse={tabunique} edit={edit} onTabchange={handleTabChange}/>
+            </div>
 
-                    <div className="form-group">
-                        <h3>quand ?</h3>
-                        <CalendarEvent parse={tabunique} edit={edit} onTabchange={handleTabChange}/>
-                    </div>
+            <div className="form-group">
+                <h3>où ?</h3>
+                <div className="form-field">
+                    <label htmlFor="postevent-mediatheque">Choisir la médiathèque</label>
+                    <select
+                        id="postevent-mediatheque"
+                        value={selectedMediaId}
+                        onChange={handleMediaChange}
+                        required
+                    >
+                        <option value="">Sélectionnez une médiathèque</option>
+                        {mediatheques.map((media) => (
+                            <option key={media.id} value={media.id}>
+                                {media.name}{media.city ? ` — ${media.city}` : ''}
+                            </option>
+                        ))}
+                    </select>
+                    {selectedMedia?.city && (
+                        <p className="form-hint">Localisation : {selectedMedia.city}</p>
+                    )}
+                </div>
+            </div>
 
-                    <div className="form-group">
-                    <h3>avec :</h3>
-                        <div className="bk-fix-zoneform">
-                           <SearchPartnerEvent tabpartner={tabpartners} onChangePartner={handleChangePartner}  defaultValue={namepartner}/>
-                        </div>
-                    </div>
-
-                    <div className='full'>
-                       {stateform &&
-                        <FormPrimaryButton>Envoyer</FormPrimaryButton>
-                       }
-                       <FormSecondaryButton onClick={handleloadpagebefore}>annuler</FormSecondaryButton>
-                    </div>
+            <div className='full'>
+                {stateform &&
+                    <FormPrimaryButton>Envoyer</FormPrimaryButton>
+                }
+                <FormSecondaryButton onClick={handleLoadPrevious}>annuler</FormSecondaryButton>
+            </div>
 
         </FetchFormEvent>
     )

@@ -70,6 +70,17 @@ class BoardOfficeController extends AbstractController
         ]);
     }
 
+    #[Route('/programmation-potins/nouveau', name: 'module_event_new', methods: ['GET'])]
+    public function newEvent(PostRepository $postRepository): Response
+    {
+        $board = $this->requireBoard();
+        $posts = $postRepository->ListpostByKey($board->getCodesite());
+
+        return $this->renderDashboard('event', 'selectpotin', 2, [
+            'posts' => $posts,
+        ]);
+    }
+
     #[Route('/agenda-cnfs', name: 'module_agenda', methods: ['GET'])]
     public function agenda(Request $request): Response
     {

@@ -1,11 +1,13 @@
 <div class="flrow">
     <div class="fx-cub ii_cub2">
         <div class="O_list-cube">
-            {#
+
             <div class="pos-incub-i">
-                <a class="bt-newmod" href="{{ path('new_generic_event') }}">Nouvel Evenement</a>
+                <a class="bt-newmod" href="{{ path('module_event_new') }}">
+                    <i class="fa fa-calendar-plus-o"></i> Programmer un potin
+                </a>
             </div>
-            #}
+
             <div class="list-incub">
         {%  for event in events %}
             {%  if event.media.imagejpg[0] is defined  %}

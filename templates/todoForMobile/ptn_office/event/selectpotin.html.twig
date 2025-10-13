@@ -1,0 +1,41 @@
+{% block body %}
+    <div class="container-bo_v5">
+        {{ include('pwa/ptn_office/menu/websitemenu.html.twig') }}
+        <section class="_wb-ospace">
+            <header class="mob-dashboard-header">
+                <span class="mob-dashboard-kicker">Programmation</span>
+                <h1 class="mob-dashboard-title">Programmer un potin</h1>
+                <p class="mob-dashboard-subtitle">Choisissez un potin pour créer un événement.</p>
+            </header>
+
+            {% set postCollection = posts|default([]) %}
+            {% if postCollection|length > 0 %}
+                <ul class="mobile-card-list">
+                    {% for post in postCollection %}
+                        {% set ill = 'img/AffiChange.png' %}
+                        {% if post.media is defined and post.media.imagejpg[0] is defined %}
+                            {% set ill = post.media.imagejpg[0].getwebPath %}
+                        {% endif %}
+                        <li class="mobile-card">
+                            <div class="mobile-card__thumb" style="background-image: url('{{ asset(ill) }}')"></div>
+                            <div class="mobile-card__content">
+                                <h3 class="mobile-card__title">{{ post.titre }}</h3>
+                                <p class="mobile-card__meta">Publié le {{ post.createAt|date('d/m/Y') }}</p>
+                                <p class="mobile-card__meta">Par {{ post.author.name }}</p>
+                                <a class="btn btn-primary" href="{{ path('event_potins', {'id': post.id}) }}">
+                                    <i class="fa fa-calendar-plus-o"></i> Programmer
+                                </a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="dashboard-empty">Aucun potin disponible pour la programmation.</p>
+            {% endif %}
+        </section>
+    </div>
+{% endblock %}
+{% use "js/js-eventpotin.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
