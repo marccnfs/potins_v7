@@ -1,21 +1,18 @@
 {% block body %}
-    <main class="affibodyfixed_v5">
-        <div class="vagmenu nav-af" id="stripped" data-agent="{{ agent }}">
-            {{ include('svg/'~agent~'/vaguenocityt.html.twig') }}
-        </div>
-    </main>
-    <div class="showwb_fx_v6">
-        <div class="contact-fixed">
-            <div class="_fx-C cdr-lit-trans" >
-            </div>
-        </div>
-    </div>
-    <div class="fx_wb-c">
-        {{ include('aff_website/header/headerwp-simple.html.twig') }}
-        {{ include('public/page/view/confirm_msg.html.twig') }}
-    </div>
-{%  endblock body %}
-{% use "js/js_wb.html.twig" %}
+    {{ include('mobile/ptn_public/apropos/_layout.html.twig', {
+        agent: agent,
+        title: 'Vos données et vos droits',
+        subtitle: 'Gestion des accès et suppression des informations',
+        hero_image: 'imgdoc/potins/social.png',
+        content_template: 'mobile/ptn_public/apropos/content/keep.html.twig'
+    }) }}
+{% endblock %}
+
+{% block footer %}
+    {{ include('mobile/footer/potins_footer.html.twig') }}
+{% endblock footer %}
+
+{% use 'js/js_potins.html.twig' %}
 {% block javascripts %}
     {{ parent() }}
 {% endblock %}

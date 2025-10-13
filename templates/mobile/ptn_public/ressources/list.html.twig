@@ -1,40 +1,42 @@
 {% block body %}
-<div class="pwa-pg-ptn">
+    <div class="pwa-pg-ptn" data-agent="{{ agent }}">
 
-    <div class="pwa-col">
-        <h2>Les ressources des Potins</h2>
-        <p>Retrouvez tous les logiciels, applis et matériels, les astuces et tutos...</p>
-
-        <div class="content_mob_all">
-            <div class="pwa-search-ressource">
-                <div class="pwa-ressource-imput">
-                    <x-ressources cat="all"></x-ressources>
-                </div>
+        <section class="pwa-card pwa-card--header">
+            <div class="pwa-card__body">
+                <h1>Les ressources des Potins</h1>
+                <p>Retrouvez logiciels, applications, matériels et fiches pratiques partagés pendant les ateliers.</p>
             </div>
+        </section>
 
-            {% if ressources|length >0 %}
-        <div class="tgl-100">
-            <div class="pwa-fx-content-rep-potinary">
-                {{ include('pwa/ptn_elements/ele_ressources/lastressources.html.twig') }}
-            </div>
-        </div>
-    {%  else %}
-        <div class="tgl-100">
-            <div class="pwa-fx-content-rep-potinary">
-                <div class="flex-board">
-                    <div class="flex-notb_v6-fix">
-                        <h3>  Aucune ressource disponible</h3>
+        <section class="pwa-card pwa-card--search" id="catalogue">
+            <div class="pwa-card__body">
+                <div class="pwa-search-ressource">
+                    <div class="pwa-ressource-imput">
+                        <x-ressources cat="all"></x-ressources>
                     </div>
                 </div>
             </div>
-        </div>
-    {% endif %}
+        </section>
 
-        </div>
-    {{ include ('pwa/footer/potins_footer.html.twig') }}
-    </div>
+        <section class="pwa-card">
+            <div class="pwa-card__body">
+                {% if ressources|length > 0 %}
+                    <div class="pwa-fx-content-rep-potinary">
+                        {{ include('mobile/ptn_elements/ele_ressources/lastressources.html.twig') }}
+                    </div>
+                {% else %}
+                    <div class="pwa-empty-state">
+                        <h3>Aucune ressource disponible pour le moment</h3>
+                        <p>Revenez bientôt ou contactez l'équipe pour partager vos besoins.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
 </div>
 {%  endblock body %}
+{% block footer %}
+    {{ include('mobile/footer/potins_footer.html.twig') }}
+{% endblock footer %}
 {% use "js/js_potins.html.twig" %}
 {% block javascripts %}
     {{ parent() }}

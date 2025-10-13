@@ -1,48 +1,38 @@
 {% block body %}
-    <div class="pwa-pg-ptn">
-        <div class="pwa-col">
-            <button class="btn btn-secondary" onclick="history.back();"><i class="fa fa-arrow-circle-o-left">Retour</i></button>
-        </div>
-    </div>
-    {#
-    <div class="search_ressource">
-        <div class="ressource_imput">
-            <x-ressources class="w100" cat="all"></x-ressources>
-        </div>
-    </div>
-    #}
-
-    <div class="pwa-wp-ressourc">
-
-        <div class="pwa-potin-ressourc">
-            <article class="pwa-w-ressourc">
-                {{ include('pwa/ptn_elements/ele_ressources/modale_ressource.html.twig') }}
-            </article>
-        </div>
-
-        <div class="pwa-other-resourc-blk pwa-r-ctnt">
-            <div class="pwa-title-block">
-                <h2 class="pwa-title">voir aussi</h2>
+    <div class="pwa-pg-ptn" data-agent="{{ agent }}">
+        <section class="pwa-card pwa-card--header">
+            <div class="pwa-card__body pwa-card__body--actions">
+                <button class="btn btn-secondary" onclick="history.back();">
+                    <i class="fa fa-arrow-circle-o-left"></i> Retour
+                </button>
             </div>
+        </section>
 
-            <div class="pwa-other-resourc">
-                {%  for ressource in ressources %}
-                    {{ include('pwa/ptn_elements/ele_ressources/widget_ressources.html.twig') }}
-                {%  endfor %}
+        <section class="pwa-card">
+            <div class="pwa-card__body">
+                <article class="pwa-w-ressourc">
+                    {{ include('pwa/ptn_elements/ele_ressources/modale_ressource.html.twig') }}
+                </article>
             </div>
+        </section>
 
-        </div>
-        {#
-        todo liste d'autres ressources dans la meme categorie
-              {{ include('desk/ptn_elements/ele_potinaries/tabOrderPotins.html.twig') }}
-        #}
+        {% if ressources is defined and ressources|length > 0 %}
+        <section class="pwa-card pwa-card--highlight">
+            <div class="pwa-card__body">
+                <h2 class="pwa-title">Voir aussi</h2>
+                <div class="pwa-other-resourc">
+                    {%  for ressource in ressources %}
+                        {{ include('pwa/ptn_elements/ele_ressources/widget_ressources.html.twig') }}
+                    {%  endfor %}
+                </div>
+            </div>
+        </section>
+        {% endif %}
     </div>
 {%  endblock body %}
-
-    {% block footer %}
-        {{ include ('pwa/footer/potins_footer.html.twig') }}
-    {% endblock footer %}
-
+{% block footer %}
+    {{ include ('mobile/footer/potins_footer.html.twig') }}
+{% endblock footer %}
 {% use "js/js_potins.html.twig" %}
 {% block javascripts %}
     {{ parent() }}

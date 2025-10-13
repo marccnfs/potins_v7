@@ -1,22 +1,16 @@
 {% block body %}
-    <main class="affibodyfixed_v5">
-        <div class="vagmenu nav-af" id="stripped" data-agent="{{ agent }}">
-                {{ include('svg/'~agent~'/vaguenocityt.html.twig') }}
-        </div>
-    </main>
-    <div class="_pg_wb-pb_v6">
-            <div class="pi-switch">
-                <div class="fx-pw-dk-col">
-                    {{ include('aff_public/page/desk/cgU.html.twig') }}
-                </div>
-            </div>
-        </div>
-    {{ include('footer/desk/affichange_footer.html.twig') }}
-{%  endblock body %}
-{% block javascripts %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    {{ encore_entry_script_tags('affi') }}
+    {{ include('mobile/ptn_public/apropos/_layout.html.twig', {
+        agent: agent,
+        title: 'Conditions générales d\'utilisation',
+        subtitle: 'Version imprimable',
+        hero_image: 'imgdoc/potins/social.png',
+        content_template: 'mobile/ptn_public/apropos/content/pagecgu.html.twig'
+    }) }}
 {% endblock %}
+
+{% block footer %}
+    {{ include('mobile/footer/potins_footer.html.twig') }}
+{% endblock footer %}
 
 
 

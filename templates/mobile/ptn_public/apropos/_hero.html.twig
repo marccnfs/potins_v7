@@ -1,0 +1,9 @@
+<section class="pwa-hero pwa-hero--legal">
+    <div class="pwa-hero__media" style="background-image: url('{{ asset(hero_image|default('imgdoc/potins/social.png')) }}');" aria-hidden="true"></div>
+    <div class="pwa-hero__content">
+        <h1>{{ title }}</h1>
+        {% if subtitle is defined and subtitle %}
+            <p>{{ subtitle }}</p>
+        {% endif %}
+    </div>
+</section>

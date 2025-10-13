@@ -1,48 +1,48 @@
 {% block body %}
-<div id="pagehome" class="homepage-wrapper--desk" data-agent="{{ agent }}">
+    <div id="pagehome" class="pwa-homepage-wrapper" data-agent="{{ agent }}">
 
-    <div class="fx-pag">
-        <div class="fx-row-pag">
-            <div class="left_row">
-                <div class="cadre_pict">
-                    <div class="bkg_cadre" style="background-image: url('{{ asset('imgdoc/potins/social.png') }}')">
-                    </div>
-                </div>
-                <div class="cadre_title">
-                    <h1>Découvrez</h1>
-                </div>
-                <div class="cadre_content">
-                     <div class="arg-cont-bk">
-
-                         <div class="text_cadre">
-                           Chez les potins numériques, on aime les nouvelles technologies. Et c'est autour d'ateliers au sein des 3 médiathèques que ça se passe. Et parce que l'on apprend mieux en pratiquant, nous avons mis en place des ateliers numériques tout public pour découvrir de nouvelles tendances numériques.
-                             Chaque semaine, un nouveau thème. Retrouverez nos derniers potins sur le site pour revenir sur un atelier pour en découvrir d'autres.
-                         </div>
-
-                    </div>
-                 </div>
-                <div class="cadre_title">
-                    <h2>Retrouvez tous les derniers Potins</h2>
-                </div>
+        <section class="pwa-hero pwa-hero--with-media">
+            <div class="pwa-hero__content">
+                <h1>Apprendre et expérimenter</h1>
+                <p>
+                    Aux Potins numériques, on se retrouve pour découvrir et tester ensemble les technologies d'aujourd'hui.
+                    Robotique, impression 3D, création sonore, montage vidéo… chaque atelier est l'occasion d'essayer.
+                </p>
+                <a class="pwa-hero__cta btn" href="{{ path('rdv_samedi') }}">Voir les prochains ateliers</a>
             </div>
-            <div class="right_row">
-                <div class="pic_right">
-                    <div class="bkg_right" style="background-image: url('{{ asset('imgdoc/potins/3d_1.JPG') }}')"></div>
-                </div>
-            </div>
-         </div>
+            <div class="pwa-hero__media" style="background-image: url('{{ asset('imgdoc/potins/3d_1.JPG') }}');" aria-hidden="true"></div>
+        </section>
 
-    </div>
-    <div class="bk-separate"></div>
+        <section class="pwa-card">
+            <div class="pwa-card__body">
+                <h2>Des rendez-vous pour tous les publics</h2>
+                <p>
+                    Les ateliers sont ouverts aux curieux de tous âges. Nous adaptons les contenus en fonction des groupes pour garder
+                    un rythme convivial et participatif.
+                </p>
+                <p>
+                    Chaque séance mêle présentation, démonstration et pratique afin que chacun puisse repartir avec des idées et des ressources pour continuer à explorer.
+                </p>
+            </div>
+        </section>
+        <section class="pwa-card pwa-card--highlight">
+            <div class="pwa-card__body">
+                <h3>Un aperçu des thèmes abordés :</h3>
+                <ul class="pwa-list">
+                    <li>Création numérique : musique assistée par ordinateur, vidéo et graphisme.</li>
+                    <li>Découverte technologique : robotique, programmation créative, réalité virtuelle.</li>
+                    <li>Culture numérique : parentalité, usages responsables, protection des données.</li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="pwa-bk-separate"></div>
 </div>
 {% endblock %}
-
 {% block footer %}
-    {{ include ('pwa/footer/potins_footer.html.twig') }}
+    {{ include('mobile/footer/potins_footer.html.twig') }}
 {% endblock footer %}
-
 {% use "js/js_potins.html.twig" %}
 {% block javascripts %}
     {{ parent() }}
 {% endblock %}
-

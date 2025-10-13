@@ -1,46 +1,47 @@
 {% block body %}
-<div id="pagehome" class="homepage-wrapper--desk" data-agent="{{ agent }}">
+    <div id="pagehome" class="pwa-homepage-wrapper" data-agent="{{ agent }}">
 
-    <div class="fx-pag">
-        <div class="fx-row-pag">
-            <div class="left_row">
-                <div class="cadre_pict">
-                    <div class="bkg_cadre" style="background-image: url('{{ asset('imgdoc/potins/social.png') }}')">
-                    </div>
-                </div>
-                <div class="cadre_title">
-                    <h1>Découvrez</h1>
-                </div>
-                <div class="cadre_content">
-                     <div class="arg-cont-bk">
-
-                         <div class="text_cadre">
-                           Chez les potins numériques, on aime les nouvelles technologies. Et c'est autour d'ateliers au sein des 3 médiathèques que ça se passe. Et parce que l'on apprend mieux en pratiquant, nous avons mis en place des ateliers numériques tout public pour découvrir de nouvelles tendances numériques.
-                             Chaque semaine, un nouveau thème. Retrouverez nos derniers potins sur le site pour revenir sur un atelier pour en découvrir d'autres.
-                         </div>
-
-                    </div>
-                 </div>
-                <div class="cadre_title">
-                    <h2>Retrouvez tous les derniers Potins</h2>
-                </div>
+        <section class="pwa-hero pwa-hero--with-media">
+            <div class="pwa-hero__content">
+                <h1>Les ressources des Potins</h1>
+                <p>
+                    Tutoriels, fiches techniques, recommandations d'applications et de matériels… Retrouvez les supports partagés pendant les ateliers.
+                </p>
+                <a class="pwa-hero__cta btn" href="{{ path('ressources') }}">Explorer la médiathèque</a>
             </div>
-            <div class="right_row">
-                <div class="pic_right">
-                    <div class="bkg_right" style="background-image: url('{{ asset('imgdoc/potins/3d_1.JPG') }}')"></div>
-                </div>
-            </div>
-         </div>
+            <div class="pwa-hero__media" style="background-image: url('{{ asset('imgdoc/potins/social.png') }}');" aria-hidden="true"></div>
+        </section>
 
-    </div>
-    <div class="bk-separate"></div>
+        <section class="pwa-card">
+            <div class="pwa-card__body">
+                <h2>Une sélection pour apprendre, créer et partager</h2>
+                <p>
+                    Chaque semaine, les Potins numériques mettent en avant des ressources pour prolonger les découvertes faites en atelier.
+                    Documents pas-à-pas, références d'applications mobiles, projets inspirants… Tout est réuni dans cette bibliothèque.
+                </p>
+                <p>
+                    Filtrez par thématique, par matériel ou par public afin de trouver rapidement ce dont vous avez besoin pour continuer à pratiquer chez vous.
+                </p>
+            </div>
+        </section>
+
+        <section class="pwa-card pwa-card--highlight">
+            <div class="pwa-card__body">
+                <h3>À retrouver dans l'espace ressources :</h3>
+                <ul class="pwa-list">
+                    <li>Des fiches "pas à pas" pour refaire les ateliers à la maison.</li>
+                    <li>Des liens vers les logiciels et applications utilisés.</li>
+                    <li>Des recommandations d'ouvrages et de podcasts à écouter.</li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="pwa-bk-separate"></div>
 </div>
 {% endblock %}
-
 {% block footer %}
-    {{ include('pwa/footer/potins_footer.html.twig') }}
+    {{ include('mobile/footer/potins_footer.html.twig') }}
 {% endblock footer %}
-
 {% use "js/js_potins.html.twig" %}
 {% block javascripts %}
     {{ parent() }}

@@ -20,13 +20,16 @@
 <script>
 if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-                navigator.serviceWorker.register('./_service-worker.js').then(function(registration) {
-                        // Registration was successful
+            var swUrl = '{{ asset('_service-worker.js') }}';
+            if (!swUrl) {
+                return;
+            }
+            navigator.serviceWorker.register(swUrl).then(function(registration) {
                         console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                }, function(err) {
-                        // registration failed :(
-                        console.log('ServiceWorker registration failed: ', err);
-                });
+            }).catch(function(err) {
+                console.warn('ServiceWorker registration failed:', err);
+            });
+
         });
 }
 </script>

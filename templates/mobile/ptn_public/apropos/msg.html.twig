@@ -1,3 +1,18 @@
-<div class="jambotron">
-    <h5>{{ msg }}</h5>
-</div>
+{% block body %}
+    {{ include('mobile/ptn_public/apropos/_layout.html.twig', {
+        agent: agent,
+        title: 'Information',
+        subtitle: 'Message du service Affichange',
+        hero_image: 'imgdoc/potins/social.png',
+        content_template: 'mobile/ptn_public/apropos/content/msg.html.twig'
+    }) }}
+{% endblock %}
+
+{% block footer %}
+    {{ include('mobile/footer/potins_footer.html.twig') }}
+{% endblock footer %}
+
+{% use 'js/js_potins.html.twig' %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

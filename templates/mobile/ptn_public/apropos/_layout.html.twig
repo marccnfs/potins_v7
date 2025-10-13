@@ -1,0 +1,24 @@
+{% set hero_image = hero_image|default('imgdoc/potins/social.png') %}
+<div class="pwa-page-legal" data-agent="{{ agent }}">
+    {{ include('mobile/ptn_public/apropos/_hero.html.twig', {
+        title: title,
+        subtitle: subtitle|default(null),
+        hero_image: hero_image
+    }) }}
+
+    <section class="pwa-card pwa-card--legal">
+        <div class="pwa-card__body">
+            {{ include(content_template) }}
+        </div>
+    </section>
+
+    {% if extra_sections is defined %}
+        {% for section in extra_sections %}
+            <section class="pwa-card pwa-card--legal">
+                <div class="pwa-card__body">
+                    {{ include(section) }}
+                </div>
+            </section>
+        {% endfor %}
+    {% endif %}
+</div>
