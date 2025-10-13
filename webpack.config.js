@@ -60,9 +60,7 @@ Encore
     .addEntry('chatbotfull', './assets/js/chatbotfull.js')
     .addEntry('ia-animations', './assets/js/ia-animations.js')
     .addEntry('escape-garden', './assets/js/escape-garden.js')
-    .copyFiles({from: './node_modules/mind-ar/dist/', to: 'mindar/[path][name].[ext]'})
-    .copyFiles({from: './public/models', to: 'models/[path][name].[ext]'})
-    .copyFiles({from: './public/audio', to: 'audio/[path][name].[ext]'})
+
 
     // Runtime séparé (recommandé)
     .enableSingleRuntimeChunk()
@@ -95,6 +93,17 @@ Encore
         from: 'node_modules/tinymce/skins',
         to: 'tinymce/skins/[path][name].[ext]',
     })
+    .copyFiles({
+        from: './node_modules/mind-ar/dist/',
+        to: 'mindar/[path][name].[ext]'})
+
+    .copyFiles({
+        from: './public/models',
+        to: 'models/[path][name].[ext]'})
+
+    .copyFiles({
+        from: './public/audio',
+        to: 'audio/[path][name].[ext]'})
 ;
 
 // --- Récupérer et ajuster la config Webpack brute

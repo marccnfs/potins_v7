@@ -10,6 +10,7 @@ use App\Entity\Agenda\Periods;
 use App\Entity\Agenda\Tabdate;
 use DateInterval;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CalDateAppointement
@@ -40,8 +41,33 @@ class CalDateAppointement
     public function initAppointEvent($now,$gps,$cl_Tabdate, $tabdate,$dateselect,$datanow,Appointments $appointment): Appointments
     {
         $appointment->setTypeAppointment(4);
-        $appointment->setStarttime(current($tabdate));
-        $appointment->setEndtime(end($tabdate));
+        $start = current($tabdate);
+        $end = end($tabdate);
+
+        if (!$start instanceof DateTimeImmutable && $start !== false) {
+            $start = DateTimeImmutable::createFromMutable($start);
+        }
+        if (!$end instanceof DateTimeImmutable && $end !== false) {
+            $end = DateTimeImmutable::createFromMutable($end);
+        }
+
+        if (!$start instanceof DateTimeImmutable) {
+            $start = (new DateTimeImmutable('now'))->setTime(0, 0, 0);
+        }
+
+        if (!$end instanceof DateTimeImmutable) {
+            $end = $start;
+        }
+
+        $start = $start->setTime(0, 0, 0);
+        $end = $end->setTime(23, 59, 59);
+
+        if ($end <= $start) {
+            $end = $start->modify('+1 day');
+        }
+
+        $appointment->setStarttime($start);
+        $appointment->setEndtime($end);
         $appointment->setLocalisation($gps);
         $appointment->setStatut(true);
         $appointment->setConfirmed(true);

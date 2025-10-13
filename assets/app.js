@@ -21,4 +21,5 @@ import './styles/pwa.css';
 import './styles/media.css';
 import './styles/form.css';
 import './styles/another.css';
+import './styles/ar.scss';
 

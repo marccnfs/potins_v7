@@ -127,7 +127,11 @@ export default function Formeventpotin(props){
     }, [mediatheques, selectedMediaId]);
 
     if (success) {
-        return <Alert>Votre evenement à bien été crée/modifié</Alert>;
+        return (
+            <div className="event-potins-form__feedback">
+                <Alert>Votre événement a bien été créé/modifié</Alert>
+            </div>
+        );
     }
 
     const handleDescriptionChange = (e) => {
@@ -186,7 +190,7 @@ export default function Formeventpotin(props){
     return (
         <FetchFormEvent
             action='/potins/event/add-event-potin-ajx'
-            className="form-elastic"
+            className="form-elastic event-potins-form"
             onSuccess={onSuccess}
             edit={edit}
             board={props.board}
@@ -197,49 +201,88 @@ export default function Formeventpotin(props){
             tabpartners={tabpartners}
             event={props.event.id}
         >
-            <FormField
-                name='description'
-                type='event'
-                value={description}
-                onChange={handleDescriptionChange}
-                required
-                wrapperClass=''
-            >
-            </FormField>
+            <header className="event-potins-form__header">
+                <h2 className="event-potins-form__title">Programmer un évènement potin</h2>
+                <p className="event-potins-form__lead">Complétez les informations ci-dessous pour publier votre animation dans la programmation.</p>
+            </header>
 
-            <div className="form-group">
-                <h3>quand ?</h3>
-                <CalendarEvent parse={tabunique} edit={edit} onTabchange={handleTabChange}/>
-            </div>
-
-            <div className="form-group">
-                <h3>où ?</h3>
-                <div className="form-field">
-                    <label htmlFor="postevent-mediatheque">Choisir la médiathèque</label>
-                    <select
-                        id="postevent-mediatheque"
-                        value={selectedMediaId}
-                        onChange={handleMediaChange}
-                        required
-                    >
-                        <option value="">Sélectionnez une médiathèque</option>
-                        {mediatheques.map((media) => (
-                            <option key={media.id} value={media.id}>
-                                {media.name}{media.city ? ` — ${media.city}` : ''}
-                            </option>
-                        ))}
-                    </select>
-                    {selectedMedia?.city && (
-                        <p className="form-hint">Localisation : {selectedMedia.city}</p>
-                    )}
+            <section className="event-potins-form__section">
+                <div className="event-potins-form__card">
+                    <div className="event-potins-form__section-header">
+                        <span className="event-potins-form__step">1</span>
+                        <div>
+                            <h3>Décrivez l'évènement</h3>
+                            <p className="event-potins-form__hint">Partagez les informations essentielles et le ton de votre potin.</p>
+                        </div>
+                    </div>
+                    <div className="event-potins-form__field-group">
+                        <label className="event-potins-form__label" htmlFor='description'>Description</label>
+                        <FormField
+                            name='description'
+                            type='event'
+                            value={description}
+                            onChange={handleDescriptionChange}
+                            placeholder="Décrivez brièvement le déroulé de l'évènement..."
+                            required
+                            wrapperClass='event-potins-form__textarea'
+                        >
+                        </FormField>
+                        <p className="event-potins-form__support">La description sera reprise telle quelle dans la fiche publique de l'évènement.</p>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <div className='full'>
+            <section className="event-potins-form__section">
+                <div className="event-potins-form__card">
+                    <div className="event-potins-form__section-header">
+                        <span className="event-potins-form__step">2</span>
+                        <div>
+                            <h3>Planifiez les dates</h3>
+                            <p className="event-potins-form__hint">Sélectionnez une ou plusieurs sessions dans le calendrier.</p>
+                        </div>
+                    </div>
+                    <div className="event-potins-form__calendar">
+                        <CalendarEvent parse={tabunique} edit={edit} onTabchange={handleTabChange}/>
+                    </div>
+                </div>
+            </section>
+
+            <section className="event-potins-form__section">
+                <div className="event-potins-form__card">
+                    <div className="event-potins-form__section-header">
+                        <span className="event-potins-form__step">3</span>
+                        <div>
+                            <h3>Choisissez la médiathèque</h3>
+                            <p className="event-potins-form__hint">Associez l'évènement au lieu qui l'accueille.</p>
+                        </div>
+                    </div>
+                    <div className="event-potins-form__field-group">
+                        <label className="event-potins-form__label" htmlFor="postevent-mediatheque">Médiathèque</label>
+                        <select
+                            id="postevent-mediatheque"
+                            value={selectedMediaId}
+                            onChange={handleMediaChange}
+                            required
+                        >
+                            <option value="">Sélectionnez une médiathèque</option>
+                            {mediatheques.map((media) => (
+                                <option key={media.id} value={media.id}>
+                                    {media.name}{media.city ? ` — ${media.city}` : ''}
+                                </option>
+                            ))}
+                        </select>
+                        {selectedMedia?.city && (
+                            <p className="event-potins-form__support">Localisation : {selectedMedia.city}</p>
+                        )}
+                    </div>
+                </div>
+            </section>
+
+            <div className='event-potins-form__actions'>
                 {stateform &&
-                    <FormPrimaryButton>Envoyer</FormPrimaryButton>
+                    <FormPrimaryButton>Enregistrer l'évènement</FormPrimaryButton>
                 }
-                <FormSecondaryButton onClick={handleLoadPrevious}>annuler</FormSecondaryButton>
+                <FormSecondaryButton onClick={handleLoadPrevious}>Annuler</FormSecondaryButton>
             </div>
 
         </FetchFormEvent>

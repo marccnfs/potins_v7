@@ -50,7 +50,7 @@ class ArController extends AbstractController
 
 
     #[Route('/ra/mindar/create', name: 'ar_mindar_create')]
-    public function create(): Response
+    public function create(\App\Service\MindArPackLocator $locator): Response
     {
         $vartwig=$this->menuNav->templatepotins(
             '_mindar_create',
@@ -61,6 +61,7 @@ class ArController extends AbstractController
             'customer'=>$this->customer,
             'vartwig'=>$vartwig,
             'directory'=>'ar',
+            'packs' => $locator->listPacks(),
         ]);
     }
 
