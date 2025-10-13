@@ -1,10 +1,16 @@
-<a href="{{ path('show_ressource',{"id":ressource.id}) }}" class="widget_event_card_date color-event-1">
+<a href="{{ path('show_ressource', {"id": ressource.id}) }}"
+   class="widget_event_card_date color-event-1"
+   aria-label="{{ ressource.titre }}">
     <div class="widget_inner-event">
         <div class="event-locate">
             <div class="rss-inf2">
-                <h3>{{ ressource.titre  }}</h3>
+                <h3>{{ ressource.titre }}</h3>
             </div>
-            <div class="rss-dis">{{ ressource.descriptif|u.truncate(80, '...')|lower|capitalize }}</div>
+            {% if ressource.descriptif is not same as (" ") and ressource.descriptif is not empty %}
+                <div class="rss-dis">
+                    {{ ressource.descriptif|striptags|u.truncate(100, '…') }}
+                </div>
+            {% endif %}
         </div>
     </div>
 </a>

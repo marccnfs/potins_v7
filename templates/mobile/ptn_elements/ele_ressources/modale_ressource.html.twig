@@ -1,55 +1,41 @@
 <div class="pwa-titlpotin">
-    <h2 title="ressouce : {{ ressource.titre }}">{{ ressource.titre|lower|capitalize }}</h2>
+<h2 title="Ressource : {{ ressource.titre }}">{{ ressource.titre }}</h2>
+{% if ressource.pict is not null %}
     <div class="pwa-illus-rss" data-ce-columns="1" data-ce-images="1">
-        <figure role="group" aria-label="{{ressource.titre}}">
-            {% if ressource.pict is not null %}
-                <img src="{{ asset(ressource.pict.getwebpath) }}" alt="{{ressource.titre}}">
-                <figcaption class="pwa-caption">{{ressource.titre}}</figcaption>
-            {% endif %}
+        <figure role="group" aria-label="{{ ressource.titre }}">
+            <img src="{{ asset(ressource.pict.getwebpath) }}"
+                 alt="{{ ressource.titre }}"
+                 loading="lazy">
+            <figcaption class="pwa-caption">{{ ressource.titre }}</figcaption>
         </figure>
     </div>
+{% endif %}
 </div>
-<div class="pwa-illustr-ressourc" >
-    <div class="pwa-como">
-        {% if ressource.composition is not same as (" ") %}
-            <h3>{{ ressource.composition|raw|lower|capitalize }}</h3> {# {{post.subject|u.truncate(80, '...')|lower|capitalize}} #}
-        {% endif %}
-    </div>
+<div class="pwa-illustr-ressourc">
+    {% if ressource.composition is not same as (" ") and ressource.composition is not empty %}
+        <div class="pwa-como">
+            <p>{{ ressource.composition|raw }}</p>
+        </div>
+    {%  endif %}
+
+    {% if ressource.descriptif is not same as (" ") and ressource.descriptif is not empty %}
     <div class="pwa-iner-compo">
-
-
-
         <div class="pwa-txt-r1">
-            <p>Coactique aliquotiens nostri pedites ad eos persequendos scandere clivos sublimes etiam si lapsantibus plantis fruticeta prensando vel dumos ad vertices venerint summos, inter arta tamen et invia nullas acies explicare permissi nec firmare nisu valido gressus: hoste discursatore rupium abscisa volvente, ruinis ponderum inmanium consternuntur, aut ex necessitate ultima fortiter dimicante, superati periculose per prona discedunt.
-            </p>
-        </div>
-
-    </div>
-
-    {#
-    <div class="pt_pict_ressourc">
-        {% if ressource.pict is not null %}
-        <div class="bac_img" style="background-image: url('{{ asset('spaceweb/template/'~ressource.pict.namefile) }}')"></div>
-        {% endif %}
-    </div>
-    #}
-</div>
-<div class="pwa-inner-ressourc">
-    <div class="pwa-ressourc-content">
-        <div class="pwa-r-ctnt">
-            <p class="pwa-iner-list">{{ressource.descriptif}}</p>
+            {{ ressource.descriptif|raw }}
         </div>
     </div>
+    {%  endif %}
 </div>
-<div class="pwa-inner-post">
-    {% if content is not same as ("") %}
+{% if content is not same as ("") %}
+    <div class="pwa-inner-post">
         <div class="pwa-post-content">
             <div class="article_content">
                 {{ content|raw }}
             </div>
         </div>
-    {% endif %}
-</div>
+    </div>
+{% endif %}
+
 
 
 

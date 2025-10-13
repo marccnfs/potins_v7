@@ -1,33 +1,42 @@
-<div class="illustr-potin" >
+<div class="illustr-potin">
     <div class="pt_pict_rec">
         {% if potin.media.imagejpg[0].namefile is defined %}
-            <div class="bac_img" style="background-image: url({{ asset(potin.media.imagejpg[0].getWebPath) }})"></div>
-        {% else %}
-            {% if potin.imageName %}
-                <div class="bac_img" style="background-image: url('{{ vich_uploader_asset(potin, 'ImageFile') }}');"></div>
-            {% endif %}
+            <div class="bac_img"
+                 style="background-image: url({{ asset(potin.media.imagejpg[0].getWebPath) }})"
+                 role="presentation">
+                <img src="{{ asset(potin.media.imagejpg[0].getWebPath) }}"
+                     alt="{{ potin.titre }}"
+                     loading="lazy">
+            </div>
+        {% elseif potin.imageName %}
+            <div class="bac_img"
+                 style="background-image: url('{{ vich_uploader_asset(potin, 'ImageFile') }}')"
+                 role="presentation">
+                <img src="{{ vich_uploader_asset(potin, 'ImageFile') }}"
+                     alt="{{ potin.titre }}"
+                     loading="lazy">
+            </div>
         {% endif %}
     </div>
 </div>
 
-{%  if contents|length > 0 %}
-    {%  for content in contents %}
-        <div class="pwa-inner-post">
-            {% if content is not same as ("") %}
+{% if contents|length > 0 %}
+    {% for content in contents %}
+        {% if content is not same as ("") %}
+            <div class="pwa-inner-post">
                 <div class="pwa-post-content">
                     <div class="pwa-article-content">
-                        {#  {{ include('bacasable/content.html.twig')|raw }} #}
                         {{ content|raw }}
                     </div>
                 </div>
-            {% endif %}
-        </div>
-        {%  if loop.index == 1  %}
-            <div class="videoWrapper" >{{ potin.iframevideo|raw }}</div>
+            </div>
         {% endif %}
-    {%  endfor %}
-{% else %}
-    <div class="illustr-potin" >{{ potin.iframevideo }}</div>
+        {% if loop.index == 1 and potin.iframevideo is not empty %}
+            <div class="videoWrapper">{{ potin.iframevideo|raw }}</div>
+        {% endif %}
+    {% endfor %}
+{% elseif potin.iframevideo is not empty %}
+    <div class="videoWrapper">{{ potin.iframevideo|raw }}</div>
 {% endif %}
 
 

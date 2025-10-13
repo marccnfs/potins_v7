@@ -1,34 +1,48 @@
 <div class="pg_other">
     <div class="pwa-board-list-replace">
-
-
-
         {% for potin in potins %}
-            <a href="{{ path('show_potin',{"slug":potin.slug, "id":potin.id}) }}" class="pwa-potinary-card">
+            <a href="{{ path('show_potin', {"slug": potin.slug, "id": potin.id}) }}"
+               class="pwa-potinary-card"
+               aria-label="{{ potin.titre }}">
+
                 <div class="pwa-inner-potinary">
-                    <h3 class="pwa-goaff-potinary-fix min30 card-{{potin.agePotin }}">{{ potin.agePotin }}</h3>
+                    <p class="pwa-goaff-potinary-fix min30 card-{{ potin.agePotin }}">{{ potin.agePotin }}</p>
                     <div class="pwa-w-titlpotinary">
-                        <h3 title="evenement de {{ potin.titre }}">{{ potin.titre|lower|capitalize }}</h3>
-                        {% if potin.subject is not same as (" ") %}
-                            <h5>{{ potin.subject|raw|lower|capitalize }}</h5> {# {{post.subject|u.truncate(80, '...')|lower|capitalize}} #}
+                        <h3 title="Potin : {{ potin.titre }}">{{ potin.titre }}</h3>
+                        {% if potin.subject is not same as (" ") and potin.subject is not empty %}
+                            <p class="pwa-potinary-subtitle">{{ potin.subject|striptags|u.truncate(120, '…') }}</p>
                         {% endif %}
                     </div>
-                    <div class="pwa-potinary-b">{{ potin.createAt|date('j/m/Y')|lower|capitalize }}</div>
-                    {#   <div class="author">categorie : {{ potinary.categorie.name }}</div> #}
+
+                    <time class="pwa-potinary-b" datetime="{{ potin.createAt|date('c') }}">{{ potin.createAt|date('d/m/Y') }}</time>
                 </div>
-                <div class="pwa-illustr-potinary-card" >
+
+                <div class="pwa-illustr-potinary-card">
                     <div class="pwa-e-pictfull-card">
                         {% if potin.media.imagejpg[0].namefile is defined %}
-                            <div class="pwa-pict-event" style="background-image: url('{{ asset(potin.media.imagejpg[0].getWebPath) }}')"></div>
-                        {% else %}
-                            {% if potin.imageName %}
-                                <div class="pwa-pict-event" style="background-image: url('{{ vich_uploader_asset(potin, 'ImageFile') }}');"></div>
-                            {% endif %}
+
+                            <div class="pwa-pict-event"
+                                 style="background-image: url('{{ asset(potin.media.imagejpg[0].getWebPath) }}')"
+                                 role="presentation">
+                                <img src="{{ asset(potin.media.imagejpg[0].getWebPath) }}"
+                                     alt="{{ potin.titre }}"
+                                     loading="lazy">
+                            </div>
+                        {% elseif potin.imageName %}
+                            <div class="pwa-pict-event"
+                                 style="background-image: url('{{ vich_uploader_asset(potin, 'ImageFile') }}')"
+                                 role="presentation">
+                                <img src="{{ vich_uploader_asset(potin, 'ImageFile') }}"
+                                     alt="{{ potin.titre }}"
+                                     loading="lazy">
+                            </div>
+
                         {% endif %}
                     </div>
                 </div>
             </a>
-        {%  endfor %}
-
+        {% else %}
+            <p class="pwa-empty-state">Aucun potin disponible pour le moment.</p>
+        {% endfor %}
     </div>
 </div>

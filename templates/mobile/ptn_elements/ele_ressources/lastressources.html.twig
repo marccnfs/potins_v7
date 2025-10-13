@@ -1,24 +1,46 @@
-{% for potinary in ressources %}
-        <a href="{{ path('show_ressource',{"id":potinary.id}) }}" class="pwa-potinary-card">
-                <div class="pwa-inner-potinary">
-                        <h3 class="pwa-goaff-potinary-fix min30 card-{{potinary.categorie.coul }}">{{ potinary.categorie.name }}</h3>
-                        <div class="pwa-w-titlpotinary">
-                                <h2 title="evenement de {{ potinary.titre }}">{{ potinary.titre|lower|capitalize }}</h2>
-                                {% if potinary.composition is not same as (" ") %}
-                                        <h3>{{ potinary.composition|raw|lower|capitalize }}</h3> {# {{post.subject|u.truncate(80, '...')|lower|capitalize}} #}
-                                {% endif %}
-                        </div>
-                        <div class="pwa-potinary-b">{{ potinary.descriptif|u.truncate(80, '...')|lower|capitalize }}</div>
-                        <div class="author">categorie : {{ potinary.categorie.name }}</div>
+{% if ressources is not empty %}
+    {% for potinary in ressources %}
+        <a href="{{ path('show_ressource', {"id": potinary.id}) }}"
+           class="pwa-potinary-card"
+           aria-label="{{ potinary.titre }}">
+            <div class="pwa-inner-potinary">
+                <p class="pwa-goaff-potinary-fix min30 card-{{ potinary.categorie.coul }}">
+                    {{ potinary.categorie.name }}
+                </p>
+                <div class="pwa-w-titlpotinary">
+                    <h2 class="pwa-potinary-title" title="Ressource : {{ potinary.titre }}">
+                        {{ potinary.titre }}
+                    </h2>
+                    {% if potinary.composition is not same as (" ") and potinary.composition is not empty %}
+                        <p class="pwa-potinary-subtitle">
+                            {{ potinary.composition|striptags }}
+                        </p>
+                    {% endif %}
                 </div>
-                <div class="pwa-illustr-potinary-card" >
-                        <div class="e_pictfull_card">
-                                {% if potinary.pict is not null %}
-                                        <div class="pict_event" style="background-image: url('{{ asset('spaceweb/template/'~potinary.pict.namefile) }}')"></div>
-                                {% endif %}
-                        </div>
+                <p class="pwa-potinary-b">
+                    {{ potinary.descriptif|striptags|u.truncate(120, '…') }}
+                </p>
+                <p class="author">
+                    {{ 'Catégorie : %name%'|trans({'%name%': potinary.categorie.name}) }}
+                </p>
+            </div>
+            {% if potinary.pict is not null %}
+            <div class="pwa-illustr-potinary-card">
+                <div class="e_pictfull_card">
+                    <div class="pict_event"
+                         style="background-image: url('{{ asset('spaceweb/template/' ~ potinary.pict.namefile) }}')"
+                         role="presentation">
+                        <img src="{{ asset('spaceweb/template/' ~ potinary.pict.namefile) }}"
+                             alt="{{ potinary.titre }}"
+                             loading="lazy">
+                    </div>
                 </div>
+            </div>
+            {% endif %}
         </a>
-{%  endfor %}
+    {% endfor %}
+{% else %}
+    <p class="pwa-empty-state">{{ 'Aucune ressource disponible pour le moment.'|trans }}</p>
+{% endif %}
 
 
