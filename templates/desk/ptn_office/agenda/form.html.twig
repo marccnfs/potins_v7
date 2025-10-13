@@ -29,14 +29,14 @@
 
         <div class="actions">
             <button class="btn">Enregistrer</button>
-            {% if mode == 'edit' and e is defined %}
-                <form method="post" action="{{ path('event_delete', {slug: e.slug}) }}" style="display:inline">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete_' ~ e.slug) }}">
-                    <button class="btn btn-danger">Supprimer</button>
-                </form>
-            {% endif %}
         </div>
         {{ form_end(form) }}
+        {% if mode == 'edit' and e is defined %}
+            <form method="post" action="{{ path('event_delete', {slug: e.slug}) }}" style="display:inline">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete_' ~ e.slug) }}">
+                <button class="btn btn-danger">Supprimer</button>
+            </form>
+        {% endif %}
     </div>
 </div>
 

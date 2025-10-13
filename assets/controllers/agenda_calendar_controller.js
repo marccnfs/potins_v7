@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-    static values = { view: String, date: String, fetchUrl: String }
+    static values = { view: String, date: String, fetchUrl: String, postEvents: Array }
     static targets = ["grid"]
 
     connect() {
@@ -150,6 +150,17 @@ export default class extends Controller {
             }
         });
 
+        const saturday = days.find(d => d.weekday === 6);
+        if (saturday) {
+            const potinsSlot = saturday.slots.find(slot => slot.id === 'potins');
+            if (potinsSlot && potinsSlot.events.length === 0) {
+                const fallbackEvents = this.saturdayPostEventsForWeek(saturday.date);
+                if (fallbackEvents.length) {
+                    potinsSlot.events = fallbackEvents;
+                }
+            }
+        }
+
         const html = [`<div class="agenda-week">`];
         days.forEach(day => {
             html.push(`
@@ -218,6 +229,77 @@ export default class extends Controller {
                 ${category}
                 ${requestable ? `<div class="agenda-event__actions"><a class="btn btn-light" href="${requestUrl}">Demander un rendez-vous</a></div>` : ''}
             </li>`;
+    }
+
+    saturdayPostEventsForWeek(date) {
+        if (!Array.isArray(this.postEventsValue) || !(date instanceof Date)) {
+            return [];
+        }
+
+        const startOfDay = new Date(date);
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date(date);
+        endOfDay.setHours(23, 59, 59, 999);
+
+        return this.postEventsValue
+            .map(raw => this.normalizePostEvent(raw))
+            .filter(event => event && event.startsAt && event.startsAt >= startOfDay && event.startsAt <= endOfDay)
+            .map(event => this.agendaEventFromPost(event));
+    }
+
+    normalizePostEvent(raw) {
+        if (!raw || typeof raw !== 'object') {
+            return null;
+        }
+        const start = raw.startsAt ? new Date(raw.startsAt) : null;
+        if (start && Number.isNaN(start.getTime())) {
+            return null;
+        }
+        const end = raw.endsAt ? new Date(raw.endsAt) : null;
+        if (end && Number.isNaN(end.getTime())) {
+            return null;
+        }
+
+        return {
+            id: raw.id,
+            title: typeof raw.title === 'string' ? raw.title : '',
+            startsAt: start,
+            endsAt: end,
+            url: typeof raw.url === 'string' ? raw.url : '',
+            location: typeof raw.location === 'string' ? raw.location : '',
+            categoryLabel: typeof raw.categoryLabel === 'string' ? raw.categoryLabel : '',
+            category: typeof raw.category === 'string' ? raw.category : '',
+            communeLabel: typeof raw.communeLabel === 'string' ? raw.communeLabel : '',
+            communeColor: typeof raw.communeColor === 'string' ? raw.communeColor : '',
+        };
+    }
+
+    agendaEventFromPost(event) {
+        const timeString = (date) => {
+            if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+                return '';
+            }
+            return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+        };
+
+        const startsAt = timeString(event.startsAt);
+        const endsAt = timeString(event.endsAt);
+        const isAllDay = !startsAt;
+
+        return {
+            id: event.id,
+            title: event.title || '',
+            eventUrl: event.url || '',
+            locationName: event.location || '',
+            categoryLabel: event.categoryLabel || 'Potins numériques',
+            category: event.category || 'potin',
+            canRequest: false,
+            isAllDay,
+            startsAtTime: startsAt,
+            endsAtTime: endsAt,
+            communeLabel: event.communeLabel || '',
+            communeColor: event.communeColor || '',
+        };
     }
 
     eventFitsSlot(event, slot) {
@@ -293,11 +375,16 @@ export default class extends Controller {
     }
 
     isRequestable(event) {
+        const category = (event.category || '').toLowerCase();
+        const label = typeof event.categoryLabel === 'string' ? event.categoryLabel.toLowerCase() : '';
+        const isRdvPublic = category === 'rdv' || label === 'rdv public';
+        if (!isRdvPublic) {
+            return false;
+        }
         if (typeof event.canRequest === 'boolean') {
             return event.canRequest;
         }
-        const raw = (event.category || '').toLowerCase();
-        return ['rdv', 'atelier', 'permanence'].includes(raw);
+        return category === 'rdv';
     }
     communeStyle(event) {
         const base = this.normalizeHex(event.communeColor);

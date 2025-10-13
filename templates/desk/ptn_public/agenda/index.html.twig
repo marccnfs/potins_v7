@@ -5,6 +5,7 @@
      data-agenda-calendar-fetch-url-value="{{ path('agenda_feed') }}"
      data-agenda-calendar-view-value="{{ view }}"
      data-agenda-calendar-date-value="{{ date|date('Y-m-d') }}"
+     data-agenda-calendar-post-events-value='{{ postEvents|json_encode|e('html_attr') }}'
      data-agenda-layout-collapsed-class="is-aside-collapsed">
 
     <aside class="wizard-aside" id="agenda-sidebar" data-agenda-layout-target="aside" aria-hidden="true">

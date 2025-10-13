@@ -168,14 +168,12 @@ class EventPotinsController extends AbstractController
         ]);
     }
 
-
     #[Route('/form-publied-event-potin/{id}', name:"form-publied_event_potin")]
     public function publiedEvent(PostEventRepository $postEventRepository,Evenator $evenator, $id): RedirectResponse|Response
     {
         $event = $postEventRepository->find($id);
-        $this->initBoardByKey($event->getKeymodule());
         $evenator->publiedOneEvent($event);
-        return $this->redirectToRoute('module_event', ['nameboard' => $this->board->getSlug()]);
+        return $this->redirectToRoute('module_event');
     }
 
     #[Route('/add-doc/{orderprodid}', name:"add_doc")]

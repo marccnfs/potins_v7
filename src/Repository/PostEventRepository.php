@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Module\PostEvent;
 use DateInterval;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
@@ -142,6 +143,38 @@ class PostEventRepository extends ServiceEntityRepository
             -> orderBy('p.create_at', 'ASC')
             -> getQuery()
             -> getResult();
+    }
+
+    /**
+     * @return PostEvent[]
+     */
+    public function findUpcomingForAgenda(int $limit = 12): array
+    {
+        $now = new DateTimeImmutable();
+
+        $qb = $this->createQueryBuilder('event')
+            ->leftJoin('event.appointment', 'appointment')->addSelect('appointment')
+            ->leftJoin('event.locatemedia', 'board')->addSelect('board')
+            ->leftJoin('event.potin', 'potin')->addSelect('potin')
+            ->andWhere('event.deleted = false')
+            ->andWhere('event.publied = true')
+            ->andWhere('appointment.starttime IS NOT NULL');
+
+        $expr = $qb->expr();
+        $qb->andWhere(
+            $expr->orX(
+                $expr->gte('appointment.endtime', ':now'),
+                $expr->gte('appointment.starttime', ':now')
+            )
+        )
+            ->setParameter('now', $now)
+            ->orderBy('appointment.starttime', 'ASC');
+
+        if ($limit > 0) {
+            $qb->setMaxResults($limit);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     public function findLastByCityBeforeWeek($city){ // todo ici plusieru technique pour les dates

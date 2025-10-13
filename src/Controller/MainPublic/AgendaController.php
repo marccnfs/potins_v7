@@ -41,6 +41,53 @@ class AgendaController extends AbstractController
             Links::AGENDA
         );
 
+        $postEvents = [];
+        if ($this->postEventRepo) {
+            $tzParis = new \DateTimeZone('Europe/Paris');
+            foreach ($this->postEventRepo->findUpcomingForAgenda() as $postEvent) {
+                $appointment = $postEvent->getAppointment();
+                if (!$appointment) {
+                    continue;
+                }
+
+                $startsAt = $appointment->getStarttime();
+                if (!$startsAt) {
+                    continue;
+                }
+
+                $endsAt = $appointment->getEndtime();
+                $startsAtParis = $startsAt->setTimezone($tzParis);
+                $endsAtParis = $endsAt ? $endsAt->setTimezone($tzParis) : null;
+
+                $url = $this->generateUrl('show_event_id', ['id' => $postEvent->getId()]);
+                $potin = $postEvent->getPotin();
+                if ($potin && $potin->getSlug()) {
+                    $url = $this->generateUrl('show_potin', [
+                        'slug' => $potin->getSlug(),
+                        'id'   => $potin->getId(),
+                    ]);
+                }
+
+                $location = $postEvent->getLocatemedia()?->getNameboard();
+                $localisation = $appointment->getLocalisation();
+                $communeLabel = $localisation?->getCity() ?: $localisation?->getNameloc();
+                $communeCode = $localisation?->getCode();
+
+                $postEvents[] = [
+                    'id'            => $postEvent->getId(),
+                    'title'         => (string) ($postEvent->getTitre() ?? ''),
+                    'startsAt'      => $startsAtParis->format(DATE_ATOM),
+                    'endsAt'        => $endsAtParis?->format(DATE_ATOM),
+                    'location'      => $location,
+                    'url'           => $url,
+                    'category'      => 'potin',
+                    'categoryLabel' => 'Potins numériques',
+                    'communeLabel'  => $communeLabel,
+                    'communeCode'   => $communeCode,
+                ];
+            }
+        }
+
 
         return $this->render($this->useragentP.'ptn_public/home.html.twig', [
             'replacejs'=>false,
@@ -48,6 +95,7 @@ class AgendaController extends AbstractController
             'directory'=>'agenda',
             'view' => $view,
             'date' => $date,
+            'postEvents' => $postEvents,
         ]);
     }
 
