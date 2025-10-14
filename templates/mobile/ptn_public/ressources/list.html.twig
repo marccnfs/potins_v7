@@ -4,35 +4,77 @@
         <section class="pwa-card pwa-card--header">
             <div class="pwa-card__body">
                 <h1>Les ressources des Potins</h1>
-                <p>Retrouvez logiciels, applications, matériels et fiches pratiques partagés pendant les ateliers.</p>
+                <p>Guides pas à pas, applications conseillées et fiches pratiques accessibles où que vous soyez.</p>
             </div>
         </section>
 
         <section class="pwa-card pwa-card--search" id="catalogue">
             <div class="pwa-card__body">
-                <div class="pwa-search-ressource">
-                    <div class="pwa-ressource-imput">
-                        <x-ressources cat="all"></x-ressources>
+                <form class="pwa-ressource-filter" method="get" action="{{ path('ressources') }}">
+                    <div class="pwa-ressource-filter__field">
+                        <label for="ressource-search">Recherche par mots-clés</label>
+                        <input
+                            type="search"
+                            name="q"
+                            id="ressource-search"
+                            value="{{ filters.q }}"
+                            placeholder="Titre, outil, usage…"
+                        >
                     </div>
-                </div>
+                    <div class="pwa-ressource-filter__field">
+                        <label for="ressource-category">Catégorie</label>
+                        <div class="pwa-select-wrapper">
+                            <select name="categorie" id="ressource-category">
+                                <option value="">Toutes les catégories</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}" {% if category.id == filters.categorie %}selected{% endif %}>{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="pwa-ressource-filter__actions">
+                        <button type="submit" class="btn btn--full">Filtrer</button>
+                        {% if filters.q or filters.categorie %}
+                            <a class="btn btn--ghost" href="{{ path('ressources') }}">Réinitialiser</a>
+                        {% endif %}
+                    </div>
+                </form>
             </div>
         </section>
 
-        <section class="pwa-card">
+        <section class="pwa-card pwa-card--results">
             <div class="pwa-card__body">
+                <header class="pwa-ressource-summary">
+                    <h2>{{ ressources|length }} résultat{% if ressources|length > 1 %}s{% endif %}</h2>
+                    {% if filters.q or filters.categorie %}
+                        <p class="pwa-ressource-summary__filters">
+                            {% if filters.q %}<span>Mot-clé : «&nbsp;{{ filters.q }}&nbsp;»</span>{% endif %}
+                            {% if filters.categorie %}
+                                {% for category in categories %}
+                                    {% if category.id == filters.categorie %}
+                                    <span>Catégorie : {{ category.name }}</span>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </p>
+                    {% else %}
+                        <p>Affichage de l'ensemble des ressources disponibles.</p>
+                    {% endif %}
+                </header>
+
                 {% if ressources|length > 0 %}
                     <div class="pwa-fx-content-rep-potinary">
                         {{ include('mobile/ptn_elements/ele_ressources/lastressources.html.twig') }}
                     </div>
                 {% else %}
                     <div class="pwa-empty-state">
-                        <h3>Aucune ressource disponible pour le moment</h3>
-                        <p>Revenez bientôt ou contactez l'équipe pour partager vos besoins.</p>
+                        <h3>Aucune ressource trouvée</h3>
+                        <p>Essayez une autre combinaison de mots-clés ou sélectionnez une autre catégorie.</p>
                     </div>
                 {% endif %}
             </div>
         </section>
-</div>
+    </div>
 {%  endblock body %}
 {% block footer %}
     {{ include('mobile/footer/potins_footer.html.twig') }}

@@ -25,7 +25,13 @@
                     <li class="level-1more"><a href="{{ path('board_all') }}" class="souslink-bar">Les derniers potins</a></li>
                 </ul>
             </li>
-            <li class="level-1"><a href="{{ path('ressources') }}" class="link-bar {{ vartwig.linkbar[3] }}">Ressources</a></li>
+            <li class="level-abs">
+                <div class="link-bar {{ vartwig.linkbar[3] }}">Ressources <i class="fa fa-chevron-down"></i></div>
+                <ul class="_hov">
+                    <li class="level-1more"><a href="{{ path('ressources') }}" class="souslink-bar">Catalogue</a></li>
+                    <li class="level-1more"><a href="{{ path('ressources_info') }}" class="souslink-bar">Infos ressources</a></li>
+                </ul>
+            </li>
             <li class="level-1"><a href="{{ path('cnfs') }}" class="link-bar {{ vartwig.linkbar[4] }}">CNFS</a></li>
             <li class="level-1"><a href="{{ path('noticezer') }}" class="link-bar {{ vartwig.linkbar[5] }}">Info locale</a></li>
         </ul>

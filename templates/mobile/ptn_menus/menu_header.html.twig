@@ -60,7 +60,13 @@
             <li><a href="{{ path('events_all') }}">Les prochains potins</a></li>
             <li><a href="{{ path('board_all') }}">Les derniers potins</a></li>
             <li><a href="{{ path('agenda_index') }}">Agenda</a></li>
-            <li><a href="{{ path('ressources') }}">Ressources</a></li>
+            <li class="pwa-menu__group">
+                <a href="{{ path('ressources') }}" class="pwa-menu__parent">Ressources</a>
+                <ul class="pwa-menu__sublist">
+                    <li><a href="{{ path('ressources') }}">Catalogue</a></li>
+                    <li><a href="{{ path('ressources_info') }}">Infos ressources</a></li>
+                </ul>
+            </li>
             <li><a href="{{ path('cnfs') }}">CNFS</a></li>
             {# <li><a href="{{ path('noticezer') }}">Info locale</a></li> #}
 

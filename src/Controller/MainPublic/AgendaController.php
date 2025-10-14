@@ -168,7 +168,7 @@ class AgendaController extends AbstractController
                 'communeColor'  => $e->getCommuneColor(),
                 'canRequest'    => $e->canReceiveRequests(),
                 'eventUrl'      => $this->generateUrl('event_show', ['slug' => $e->getSlug()]),
-                'requestUrl'    => $this->generateUrl('agenda_request', ['slug' => $e->getSlug()]),
+                'requestUrl'    => $this->generateUrl('agenda_request_prenez_rendez_vous', ['slug' => $e->getSlug()]),
                 'manage'        => $manage,
             ];
         }

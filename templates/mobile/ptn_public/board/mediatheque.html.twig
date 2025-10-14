@@ -1,11 +1,8 @@
 {% block body %}
 <div class="pwa-pg-ptn">
-
     <div class="pwa-col">
         <div class="content_mob_all">
-
             {{ include('mobile/ptn_elements/ele_boards/card_website_new.html.twig') }}
-
             <section class="pwa-section pwa-section--stack">
                 <header class="pwa-section__header">
                     <span class="pwa-hero__badge">Agenda</span>
@@ -23,8 +20,8 @@
                     <p class="pwa-empty-state">Pas de nouvelle date actuellement. Revenez très vite&nbsp;!</p>
                 {% endif %}
             </section>
-
-        {{ include ('mobile/footer/potins_footer.html.twig') }}
+            {{ include ('mobile/footer/potins_footer.html.twig') }}
+        </div>
     </div>
 </div>
 {%  endblock body %}
@@ -32,6 +29,4 @@
 {% block javascripts %}
     {{ parent() }}
 {% endblock %}
-
-
 

@@ -22,7 +22,7 @@ final class AppointmentController extends AbstractController
 {
     use UserSessionTrait;
 
-    #[Route('/rdv/{slug}', name: 'agenda_request', methods: ['GET', 'POST'])]
+    #[Route('/prenez-rendez-vous/{slug}', name: 'agenda_request_prenez_rendez_vous', methods: ['GET', 'POST'])]
     public function request(string $slug, Request $request, ContactRepository $contacts, Canonicalizer $canonicalizer): Response
     {
         /** @var Event|null $event */

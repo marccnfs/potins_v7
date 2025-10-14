@@ -1,22 +1,73 @@
 {% block body %}
-    <div class="search-section">
-        <h2 class="section-title">Rechercher une ressource technique</h2>
-        <div class="search-container">
-            <x-ressources class="w100" cat="all"></x-ressources>
-        </div>
-    </div>
+    <div class="ressources-page" data-agent="{{ agent }}">
+        <section class="ressources-hero">
+            <div class="ressources-hero__content">
+                <h1>Les ressources des Potins</h1>
+                <p>Explorez nos fiches pratiques, outils et recommandations testées pendant les ateliers.</p>
+            </div>
+            <div class="ressources-hero__meta">
+                <span class="ressources-count">{{ ressources|length }} ressource{% if ressources|length > 1 %}s{% endif %}</span>
+                {% if filters.q or filters.categorie %}
+                    <span class="ressources-count ressources-count--filtered">Filtre actif</span>
+                {% endif %}
+            </div>
+        </section>
 
-    {% if ressources|length > 0 %}
-        <div class="ressource-container">
-            {{ include('desk/ptn_elements/ele_ressources/allressources.html.twig') }}
-        </div>
-    {% else %}
-        <div class="no-ressources">
-            <h3>Aucune ressource disponible</h3>
-        </div>
-    {% endif %}
+        <section class="ressources-filters" aria-labelledby="ressources-filters-title">
+            <h2 id="ressources-filters-title" class="sr-only">Filtres de recherche</h2>
+            <form class="ressources-filter-form" method="get" action="{{ path('ressources') }}">
+                <div class="ressources-filter-form__field">
+                    <label for="desk-ressource-search">Recherche par mots-clés</label>
+                    <input
+                        type="search"
+                        id="desk-ressource-search"
+                        name="q"
+                        value="{{ filters.q }}"
+                        placeholder="Titre, usage, outil…"
+                    >
+                </div>
+                <div class="ressources-filter-form__field">
+                    <label for="desk-ressource-category">Catégorie</label>
+                    <select name="categorie" id="desk-ressource-category">
+                        <option value="">Toutes les catégories</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}" {% if category.id == filters.categorie %}selected{% endif %}>{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="ressources-filter-form__actions">
+                    <button type="submit" class="btn">Appliquer</button>
+                    {% if filters.q or filters.categorie %}
+                        <a href="{{ path('ressources') }}" class="btn btn--ghost">Effacer</a>
+                    {% endif %}
+                </div>
+            </form>
+            {% if filters.q or filters.categorie %}
+                <p class="ressources-active-filters">
+                    {% if filters.q %}<span>Mot-clé : «&nbsp;{{ filters.q }}&nbsp;»</span>{% endif %}
+                    {% if filters.categorie %}
+                        {% for category in categories %}
+                            {% if category.id == filters.categorie %}
+                            <span>Catégorie : {{ category.name }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </p>
+            {% endif %}
+        </section>
+
+        <section class="ressources-results">
+            {% if ressources|length > 0 %}
+                {{ include('desk/ptn_elements/ele_ressources/allressources.html.twig') }}
+            {% else %}
+                <div class="ressources-empty">
+                    <h2>Aucune ressource trouvée</h2>
+                    <p>Modifiez vos mots-clés ou sélectionnez une autre catégorie pour relancer la recherche.</p>
+                </div>
+            {% endif %}
+        </section>
+    </div>
     {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
-   {#  {{ include('desk/ptn_public/footer/potins_footer.html.twig') }} #}
 {%  endblock body %}
 {% use "js/js_public.html.twig" %}
 {% block javascripts %}

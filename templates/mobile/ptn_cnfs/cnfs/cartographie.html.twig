@@ -1,0 +1,46 @@
+{% block body %}
+    <div class="carto-wrapper">
+        <!-- 🟢 Loader pendant le chargement -->
+        <div id="carto-loader">
+            <p>🔄 Chargement de la cartographie...</p>
+        </div>
+
+        <section class="carto-section">
+            <div class="carto-container">
+                <h3 class="carto-title">Liste des conseillers numériques</h3>
+                <fr-mediation-numerique-cartographie
+                        id="carto-map"
+                        titre="Médiation numérique Pays de Retz"
+                        source="https://api.conseiller-numerique.gouv.fr/permanences"
+                        latitude="47.1953115"
+                        longitude="-1.7248714"
+                        zoom="12"
+                        style="display: none;">
+                </fr-mediation-numerique-cartographie>
+            </div>
+        </section>
+
+        {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+    </div>
+{% endblock body %}
+
+{% use "js/js_public_cnfs.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+    <script
+            src="https://cdn.jsdelivr.net/npm/@gouvfr-anct/cartographie-nationale@5.15.0/cartographie.js"
+            type="module">
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const cartoMap = document.getElementById("carto-map");
+            const loader = document.getElementById("carto-loader");
+
+            // Attendre 2 secondes avant d'afficher la carte (simulateur de lazy loading)
+            setTimeout(() => {
+                loader.style.display = "none";
+                cartoMap.style.display = "block";
+            }, 2000);
+        });
+    </script>
+{% endblock %}

@@ -6,6 +6,7 @@ namespace App\Service\Search;
 
 use App\Entity\Module\GpRessources;
 use App\Entity\Ressources\Ressources;
+use App\Repository\CategoriesRepository;
 use App\Repository\GpRessourcesRepository;
 use App\Repository\RessourcesRepository;
 
@@ -14,13 +15,16 @@ class SearchRessources
 
     private RessourcesRepository $ressourceRepository;
     private GpRessourcesRepository $gpRessourceRepo;
+    private CategoriesRepository $categoriesRepository;
 
-
-
-    public function __construct(RessourcesRepository $ressourceRepository, GpRessourcesRepository $gpRessourcesRepository)
-    {
+    public function __construct(
+        RessourcesRepository $ressourceRepository,
+        GpRessourcesRepository $gpRessourcesRepository,
+        CategoriesRepository $categoriesRepository
+    ) {
         $this->ressourceRepository=$ressourceRepository;
         $this->gpRessourceRepo=$gpRessourcesRepository;
+        $this->categoriesRepository = $categoriesRepository;
     }
 
     public function findGroupeRessourcesOfPotins($id): array //todo refaire pour gpressource
@@ -71,6 +75,15 @@ class SearchRessources
         return $this->ressourceRepository->find($id);
     }
 
+    public function searchPublic(?string $keyword, ?int $categoryId): array
+    {
+        return $this->ressourceRepository->searchPublic($keyword, $categoryId);
+    }
+
+    public function getCategories(): array
+    {
+        return $this->categoriesRepository->findBy([], ['name' => 'ASC']);
+    }
 
     public function searchOneRsscWithOtherRsscCat($id): bool|array
     {

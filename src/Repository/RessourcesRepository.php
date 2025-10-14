@@ -55,6 +55,35 @@ class RessourcesRepository extends ServiceEntityRepository
             -> getResult();
     }
 
+    public function searchPublic(?string $keyword, ?int $categoryId): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->andWhere('r.deleted = false')
+            ->leftJoin('r.categorie', 'ct')
+            ->addSelect('ct')
+            ->leftJoin('r.pict', 'p')
+            ->addSelect('p')
+            ->orderBy('r.titre', 'ASC');
+
+        if ($keyword) {
+            $normalizedKeyword = mb_strtolower($keyword);
+            $qb
+                ->andWhere('LOWER(r.titre) LIKE :keyword OR LOWER(r.descriptif) LIKE :keyword OR LOWER(COALESCE(r.infos, \'\')) LIKE :keyword')
+                ->setParameter('keyword', '%' . $normalizedKeyword . '%');
+        }
+
+        if ($categoryId) {
+            $qb
+                ->andWhere('ct.id = :category')
+                ->setParameter('category', $categoryId);
+        }
+
+        return $qb
+            ->getQuery()
+            ->getResult();
+    }
+
+
     public function findForIndex(){
         return $this->createQueryBuilder('r')
             -> andwhere('r.deleted = false')
