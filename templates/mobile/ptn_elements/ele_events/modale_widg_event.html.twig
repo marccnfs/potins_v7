@@ -44,12 +44,12 @@
                         <path d="M12 12c2.486 0 4.5-2.014 4.5-4.5S14.486 3 12 3a4.499 4.499 0 00-4.5 4.5C7.5 9.986 9.514 12 12 12zm0 2.25c-3.004 0-9 1.508-9 4.5v1.75a.5.5 0 00.5.5h17a.5.5 0 00.5-.5v-1.75c0-2.992-5.996-4.5-9-4.5z"></path>
                     </svg>
                     <div class="ptn-inf4">
-                        <span class="ptn-inf2">dès {{events[0].potin.agePotin }} ans</span>
+                        <span class="ptn-inf2">dès {{ events[0].potin.agepotin }} ans</span>
                     </div>
                 </div>
             </div>
     </div>
-        {{ include('pwa/ptn_elements/ele_events/bar_resa.html.twig') }}
+        {{ include('mobile/ptn_elements/ele_events/bar_resa.html.twig') }}
     </div>
 
     <div class="illustr-event_card" >
@@ -60,7 +60,7 @@
                     {#  <img src="{{ asset(tabevent.event.potin.media.imagejpg[0].getWebPath) }}" alt="image affiche">#}
                 {% endif %}
             {%  else %}
-                {% if events[0].media.imagejpg|length > 0 and event.media.imagejpg[0].namefile is defined %}
+                {% if events[0].media.imagejpg|length > 0 and events[0].media.imagejpg[0].namefile is defined %}
                     <img src="{{ asset(events[0].media.imagejpg[0].getWebPath) }}" alt="image affiche">
                 {% endif %}
             {% endif %}
