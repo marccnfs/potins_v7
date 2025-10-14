@@ -3,17 +3,18 @@
 
         <section class="pwa-hero pwa-hero--with-media">
             <div class="pwa-hero__content">
+                <span class="pwa-hero__badge">Médiathèque</span>
                 <h1>Les ressources des Potins</h1>
                 <p>
-                    Tutoriels, fiches techniques, recommandations d'applications et de matériels… Retrouvez les supports partagés pendant les ateliers.
+                    Tutoriels, fiches techniques, recommandations d'applications et de matériels… Retrouvez les supports partagés pendant les ateliers.   Naviguez facilement, même depuis votre mobile, grâce à une interface pensée pour les écrans compacts.
                 </p>
                 <a class="pwa-hero__cta btn" href="{{ path('ressources') }}">Explorer la médiathèque</a>
             </div>
             <div class="pwa-hero__media" style="background-image: url('{{ asset('imgdoc/potins/social.png') }}');" aria-hidden="true"></div>
         </section>
 
-        <section class="pwa-card">
-            <div class="pwa-card__body">
+        <section class="pwa-section">
+            <header class="pwa-section__header">
                 <h2>Une sélection pour apprendre, créer et partager</h2>
                 <p>
                     Chaque semaine, les Potins numériques mettent en avant des ressources pour prolonger les découvertes faites en atelier.
@@ -22,6 +23,30 @@
                 <p>
                     Filtrez par thématique, par matériel ou par public afin de trouver rapidement ce dont vous avez besoin pour continuer à pratiquer chez vous.
                 </p>
+            </header>
+
+            <div class="pwa-feature-grid">
+                <article class="pwa-feature-card">
+                    <span class="pwa-feature-card__icon" aria-hidden="true">📚</span>
+                    <div class="pwa-feature-card__body">
+                        <h3>Guides pas à pas</h3>
+                        <p>Des fiches illustrées et des tutoriels détaillés pour refaire les ateliers à votre rythme.</p>
+                    </div>
+                </article>
+                <article class="pwa-feature-card">
+                    <span class="pwa-feature-card__icon" aria-hidden="true">📱</span>
+                    <div class="pwa-feature-card__body">
+                        <h3>Applications recommandées</h3>
+                        <p>Les outils testés par les animateurs : applications mobiles, logiciels, services en ligne.</p>
+                    </div>
+                </article>
+                <article class="pwa-feature-card">
+                    <span class="pwa-feature-card__icon" aria-hidden="true">🎧</span>
+                    <div class="pwa-feature-card__body">
+                        <h3>Ressources à écouter et à voir</h3>
+                        <p>Podcasts, vidéos, conférences… une sélection pour prolonger la découverte.</p>
+                    </div>
+                </article>
             </div>
         </section>
 
@@ -36,8 +61,20 @@
             </div>
         </section>
 
+        <section class="pwa-section pwa-section--cta">
+            <div class="pwa-card">
+                <div class="pwa-card__body pwa-card__body--actions">
+                    <div>
+                        <h3>Besoin d'un coup de main&nbsp;?</h3>
+                        <p>Contactez l'équipe des Potins pour être accompagné dans vos recherches.</p>
+                    </div>
+                    <a class="btn" href="{{ path('agenda_index') }}">Prendre rendez-vous</a>
+                </div>
+            </div>
+        </section>
+
         <div class="pwa-bk-separate"></div>
-</div>
+    </div>
 {% endblock %}
 {% block footer %}
     {{ include('mobile/footer/potins_footer.html.twig') }}

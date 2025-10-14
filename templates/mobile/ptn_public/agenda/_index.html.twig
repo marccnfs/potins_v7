@@ -1,0 +1,83 @@
+{% block body %}
+    <section class="pwa-agenda"
+             data-controller="agenda-nav agenda-calendar"
+             data-agenda-nav-view-value="{{ view }}"
+             data-agenda-nav-date-value="{{ date|date('Y-m-d') }}"
+             data-agenda-calendar-fetch-url-value="{{ path('agenda_feed') }}"
+             data-agenda-calendar-view-value="{{ view }}"
+             data-agenda-calendar-date-value="{{ date|date('Y-m-d') }}"
+             data-agenda-calendar-post-events-value='{{ postEvents|json_encode|e('html_attr') }}'>
+
+        <header class="pwa-agenda__header">
+            <span class="pwa-hero__badge">Agenda</span>
+            <h1>Planifiez vos rendez-vous numériques</h1>
+            <p>
+                Retrouvez d'un coup d'œil les ateliers, permanences et événements Potins numériques.
+                Les actions rapides restent accessibles au pouce pour une navigation confortable sur mobile.
+            </p>
+            <div class="pwa-agenda__views" role="tablist" aria-label="Choisir une vue agenda">
+                <button class="pwa-chip {{ view == 'month' ? 'is-active' : '' }}" data-action="agenda-nav#setView" data-view-param="month" type="button">Mois</button>
+                <button class="pwa-chip {{ view == 'week' ? 'is-active' : '' }}" data-action="agenda-nav#setView" data-view-param="week" type="button">Semaine</button>
+                <button class="pwa-chip {{ view == 'day' ? 'is-active' : '' }}" data-action="agenda-nav#setView" data-view-param="day" type="button">Jour</button>
+            </div>
+        </header>
+
+        <div class="pwa-agenda__toolbar">
+            <button class="btn btn-light" type="button" data-action="agenda-nav#prev" aria-label="Période précédente">‹</button>
+            <input type="date" class="pwa-agenda__date" data-agenda-nav-target="datePicker" aria-label="Choisir une date">
+            <button class="btn btn-light" type="button" data-action="agenda-nav#next" aria-label="Période suivante">›</button>
+            <button class="btn" data-action="agenda-nav#today" type="button">Aujourd’hui</button>
+        </div>
+
+        <form class="pwa-agenda__filters" data-controller="agenda-filters">
+            <label for="agenda-category">Type d’activité</label>
+            <select id="agenda-category" class="pwa-select" data-agenda-filters-target="category">
+                <option value="">Toutes les activités</option>
+                <option value="rdv">RDV publics</option>
+                <option value="atelier">Ateliers collectifs</option>
+                <option value="permanence">Permanences</option>
+                <option value="formation">Formations</option>
+                <option value="indispo">Indisponibilités</option>
+                <option value="rdv">RDV</option>
+                <option value="externe">Événements externes</option>
+                <option value="autre">Autres activités</option>
+            </select>
+        </form>
+
+        <div class="pwa-agenda__headline" data-agenda-nav-target="headline"></div>
+
+        <div class="pwa-card pwa-agenda__calendar">
+            <div class="pwa-card__body">
+                <div data-agenda-calendar-target="grid" class="agenda-grid"></div>
+            </div>
+        </div>
+
+        {% if postEvents|length > 0 %}
+            <section class="pwa-agenda__upcoming">
+                <h2>Prochains potins</h2>
+                <ul class="pwa-upcoming-list">
+                    {% for event in postEvents %}
+                        {% set start = event.startsAt|date('d/m/Y H\hi') %}
+                        <li class="pwa-upcoming-item">
+                            <a href="{{ event.url }}" class="pwa-upcoming-link">
+                                <span class="pwa-upcoming-date">{{ start }}</span>
+                                <span class="pwa-upcoming-title">{{ event.title }}</span>
+                                {% if event.location %}
+                                    <span class="pwa-upcoming-location">{{ event.location }}</span>
+                                {% elseif event.communeLabel %}
+                                    <span class="pwa-upcoming-location">{{ event.communeLabel }}</span>
+                                {% endif %}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        {% else %}
+            <p class="pwa-empty-state">Aucun potin planifié pour le moment. Revenez bientôt !</p>
+        {% endif %}
+    </section>
+{% endblock %}
+{% use "js/js_agenda.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

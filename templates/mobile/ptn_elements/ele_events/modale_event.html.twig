@@ -1,36 +1,42 @@
-<div class="rap-event">
-    <div class="inner-event_list">
-        <div class="ev_titlevent">
-            <h2 title="evenement de {{ board.nameboard }}">{{ event.titre|lower|capitalize }}</h2>
-            {% if event.description is not same as (" ") %}
-                <h3>{{ event.description|raw|lower|capitalize }}</h3> {# {{post.subject|u.truncate(80, '...')|lower|capitalize}} #}
-            {% endif %}
+{% set potin = event.potin ?? null %}
+{% set potinImage = potin and potin.media.imagejpg|length > 0 and potin.media.imagejpg[0].namefile is defined ? potin.media.imagejpg[0].getWebPath : null %}
+{% set eventImage = event.media is defined and event.media.imagejpg|length > 0 and event.media.imagejpg[0].namefile is defined ? event.media.imagejpg[0].getWebPath : null %}
+{% set title = event.titre|default('')|striptags|trim %}
+{% set description = event.description is defined ? event.description|striptags|trim : '' %}
+
+<article class="pwa-event-card">
+    <header class="pwa-event-card__header">
+        <p class="pwa-event-card__date">
+            <span class="pwa-event-card__day">{{ event.appointment.starttime|date('d') }}</span>
+            <span class="pwa-event-card__month">{{ event.appointment.starttime|date('M')|lower|capitalize }}</span>
+        </p>
+        <div class="pwa-event-card__headline">
+            <h3 class="pwa-event-card__title">{{ title|u.lower|u.title }}</h3>
+            {% if description %}
+                <p class="pwa-event-card__excerpt">{{ description|u.truncate(120, '…')|u.lower|u.title }}</p> {% endif %}
+            {%  endif %}
         </div>
-     {#   <time itemprop = "startDate" class="dateevent">mis en ligne le : {{ event.createAt|date("d-m-Y") }}</time> #}
-        <div class="bk_date" itemprop = "startDate" pubdate><b>le {{ event.appointment.starttime|date("d-m-Y") }} </b></div>
-      {#  <div class="author">par : {{ event.author.name }}</div>  #}
-        <div class="two_col">
+    </header>
 
-            <div class="enc_pictfull">
-                {% if event.potin is not null %}
-                    {% if event.potin.media.imagejpg|length > 0 and event.potin.media.imagejpg[0].namefile is defined %}
-                        <img src="{{ asset(event.potin.media.imagejpg[0].getWebPath) }}" alt="image affiche">
-                    {% endif %}
-                {%  else %}
-                    {% if event.media.imagejpg|length > 0 and event.media.imagejpg[0].namefile is defined %}
-                        <img src="{{ asset(event.media.imagejpg[0].getWebPath) }}" alt="image affiche">
-                    {% endif %}
-                {% endif %}
-            </div>
+    {% set imagePath = potinImage ?: eventImage %}
+    {% if imagePath %}
+        <figure class="pwa-event-card__media">
+            <img src="{{ asset(imagePath) }}" alt="Illustration de {{ title|u.lower|u.title }}">
+        </figure>
+    {% endif %}
 
-            <a class=" button-wp" href="{{path('show_post',{'slug':event.potin.slug,'id':event.potin.id }) }}">
-                <button class="pop_button"><i class="fa fa-arrow-right" aria-hidden="true"></i>en savoir plus</button>
+    <footer class="pwa-event-card__footer">
+        <time class="pwa-event-card__meta" datetime="{{ event.appointment.starttime|date('Y-m-d') }}">
+            {{ event.appointment.starttime|date('d/m/Y') }}
+        </time>
+        {% if potin %}
+        <a class="pwa-event-card__link" href="{{ path('show_potin', {'slug': potin.slug, 'id': potin.id}) }}">
+            <span>En savoir plus</span>
+            <i class="fa fa-arrow-right" aria-hidden="true"></i>
             </a>
-        </div>
-    </div>
-
-
-</div>
+        {% endif %}
+    </footer>
+</article>
 
 
 

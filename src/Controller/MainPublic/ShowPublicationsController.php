@@ -52,6 +52,7 @@ class ShowPublicationsController extends AbstractController
             'potins'=>$otherpotins,
             'ressources'=>$ressourcespotins,
             'entity'=>$tab['post']->getId(),
+            'customer' => $this->customer,
         ]);
     }
 
@@ -92,6 +93,7 @@ class ShowPublicationsController extends AbstractController
             'mcdata'=>true,
             'events'=>$tabevent,
             'post'=>$tab['post'],
+            'customer' => $this->customer,
         ]);
     }
 
@@ -139,7 +141,8 @@ class ShowPublicationsController extends AbstractController
             'mcdata'=>true,
             'post'=>$post,
             'entity'=>$post->getId(),
-            'pdfreview'=>$fichepdf
+            'pdfreview'=>$fichepdf,
+            'customer' => $this->customer,
         ]);
     }
 
@@ -171,6 +174,7 @@ class ShowPublicationsController extends AbstractController
             'posts'=>$tab['posts'],
             'events'=>$eventstab,
             'entity'=>$tab['post']->getId(),
+            'customer' => $this->customer,
         ]);
     }
 

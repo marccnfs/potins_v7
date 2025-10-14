@@ -30,6 +30,7 @@ class ListAllPotinsController extends AbstractController
             'replacejs'=>!empty($lastnotices),
             'vartwig'=>$vartwig,
             'lastsnotice'=>$lastnotices,
+            'customer' => $this->customer,
         ]);
     }
 
@@ -44,9 +45,10 @@ class ListAllPotinsController extends AbstractController
         $tab=$searchmodule->findLastBeforeWeek();
         return $this->render($this->useragentP.'ptn_public/home.html.twig', [
             'directory'=>'board',
-            'replacejs'=>!empty($lastnotices),
+            'replacejs'=>!empty($tab),
             'vartwig'=>$vartwig,
             'events'=>$tab,
+            'customer' => $this->customer,
         ]);
     }
 }

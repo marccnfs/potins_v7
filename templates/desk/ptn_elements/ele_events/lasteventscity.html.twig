@@ -71,7 +71,7 @@
                             </div>
                         </div>
 
-                        {%  if customer is not null %}
+                        {%  if customer is defined and customer is not null %}
                             {%  if is_granted("ROLE_MEDIA") %}
                                     <nav class="relational_abs">
                                         <a href="{{ path('resa_potins_media',{'id':event[0].id, 'date':event[0].appointment.starttime|date("d-m-Y") }) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">Réservez</a>
@@ -81,7 +81,7 @@
                                         <a href="{{ path('back_admin_cmd_potins',{'id':event[0].id}) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">Réservez</a>
                                     </nav>
                             {% endif %}
-                       {%  else %}
+                        {%  else %}
                            <nav class="relational_abs">
                                <a href="{{ path('show_event_id',{'id':event[0].potin.id}) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">en savoir plus</a>
                            </nav>

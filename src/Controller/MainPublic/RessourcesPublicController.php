@@ -30,6 +30,7 @@ class RessourcesPublicController extends AbstractController
             'replacejs'=>false,
             'ressources'=>$ressources,
             'vartwig'=>$vartwig,
+            'customer' => $this->customer,
         ]);
     }
 
@@ -52,6 +53,7 @@ class RessourcesPublicController extends AbstractController
             'ressources'=>$ressource['rsscs'],
             'content'=>$ressource['content'],
             'otherressources'=>[],
+            'customer' => $this->customer,
         ]);
     }
 

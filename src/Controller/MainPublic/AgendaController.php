@@ -96,6 +96,7 @@ class AgendaController extends AbstractController
             'view' => $view,
             'date' => $date,
             'postEvents' => $postEvents,
+            'customer' => $this->customer,
         ]);
     }
 
@@ -198,6 +199,7 @@ class AgendaController extends AbstractController
             'vartwig'=>$vartwig,
             'directory'=>'agenda',
             'e'           => $event,
+            'customer'    => $this->customer,
             'startsLocal' => $startsLocal,
             'endsLocal'   => $endsLocal,
             'canManage'   => $this->canManage($event),

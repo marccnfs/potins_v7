@@ -5,29 +5,24 @@
         <div class="content_mob_all">
 
             {{ include('mobile/ptn_elements/ele_boards/card_website_new.html.twig') }}
-            <div class="pwa-wb-module-first-col">
-                {%  if notices|length >0 %}
-                    {# {%  set event =notices|first %}  #}
-                    <div class="wp-event">
-                        <h3 class="ptn_event">Prochains Potins</h3>
-                        {%  for event in notices %}
+
+            <section class="pwa-section pwa-section--stack">
+                <header class="pwa-section__header">
+                    <span class="pwa-hero__badge">Agenda</span>
+                    <h2>Prochains Potins</h2>
+                    <p>Les prochains ateliers et rencontres à ne pas manquer. Réservez votre place directement depuis votre téléphone.</p>
+                </header>
+
+                {% if notices|length > 0 %}
+                    <div class="pwa-event-list">
+                        {% for event in notices %}
                             {{ include('mobile/ptn_elements/ele_events/modale_event.html.twig') }}
-                        {%  endfor %}
+                        {% endfor %}
                     </div>
-                {%  else %}
-                    <div class="wp-event">
-                        <h3 class="ptn_event">Prochains Potins</h3>
-                        <h5>pas de nouvelle date actuellement</h5>
-                    </div>
-                {%  endif %}
-                {#
-                {%  if notices['menu'] is defined and notices['menu']|length >0 %}
-                    {%  set menu =notices['menu'] %}
-                    {{ include('aff_website/formule/view/modale_menu.html.twig') }}
-                {%  endif %}
-                #}
-            </div>
-        </div>
+                {% else %}
+                    <p class="pwa-empty-state">Pas de nouvelle date actuellement. Revenez très vite&nbsp;!</p>
+                {% endif %}
+            </section>
 
         {{ include ('mobile/footer/potins_footer.html.twig') }}
     </div>

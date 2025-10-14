@@ -1,10 +1,10 @@
 {% for event in events %}
-{% if loop.index0 < 3  %}
-    {%  set col = loop.index0 %}
-{% else %}
-    {%  set col = 3 %}
-{% endif %}
-<div class="mb-event_card color-event-{{ col }}">
+    {% if loop.index0 < 3  %}
+        {%  set col = loop.index0 %}
+    {% else %}
+        {%  set col = 3 %}
+    {% endif %}
+    <div class="mb-event_card color-event-{{ col }}">
     <div class="pwa-inner-event">
          <div class="w_titlevent">
                 <h2 title="evenement de {{ event[0].potin.titre }}">{{ event[0].potin.titre|lower|capitalize }}</h2>
@@ -67,15 +67,26 @@
             </div>
         </div>
 
-            {%  if customer is not null %}
+        {%  if customer is defined and customer is not null %}
+                {%  if is_granted("ROLE_MEDIA") %}
                 <nav class="pwa-relational">
                     <a href="{{ path('back_admin_cmd_potins',{'id':event[0].id}) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">Réservez</a>
                 </nav>
-           {%  else %}
+                {%  else %}
                <nav class="pwa-relational">
                    <a href="{{ path('show_event_id',{'id':event[0].potin.id}) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">en savoir plus</a>
                </nav>
-            {% endif %}
+                {% endif %}
+        {%  else %}
+                <nav class="relational_abs">
+                    <a href="{{ path('show_event_id',{'id':event[0].potin.id}) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">en savoir plus</a>
+                </nav>
+                {#
+                <nav class="relational_abs">
+                    <a href="{{ path('new_identify') }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">en savoir plus</a>
+                </nav>
+                #}
+        {% endif %}
 
     </div>
 
@@ -94,6 +105,12 @@
         </div>
     </div>
 </div>
-{%  endfor %}
 
+{%  else %}
+    <div class="flex-board">
+        <div class="flex-notb_v6-fix">
+            <h3>  Pas de nouveau potin programmé actuellement</h3>
+        </div>
+    </div>
+{%  endfor %}
 
