@@ -225,11 +225,6 @@ class Article
         return $this;
     }
 
-
-
-
-
-
     public function getExtension(): ?string
     {
         return $this->extension;

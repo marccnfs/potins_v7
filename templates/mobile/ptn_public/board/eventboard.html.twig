@@ -3,19 +3,22 @@
 
     <div class="pwa-col">
         <div class="separator"></div>
-        <h2>Nos prochains potins</h2>
-        <p>découvrez une technologie, un logiciel, des loisirs numériques</p>
+        <div class="pwa-event-header">
+            <h2>Nos prochains potins</h2>
+            <p class="pwa-event-subtitle">découvrez une technologie, un logiciel ou un loisir numérique près de chez vous</p>
+        </div>
 
         <div class="content_mob_all">
-                <div class="pwa-iner-col">
-                    <x-Tag class="w-neutre"></x-Tag>
-                </div>
+            <div class="pwa-iner-col">
+                <x-Tag class="w-neutre"></x-Tag>
+                <p class="pwa-event-legend">Chaque carte met en avant la date, le lieu et l'âge conseillé pour participer.</p>
+            </div>
         {% if events|length >0 %}
                 {{ include('mobile/ptn_elements/ele_events/lasteventscity.html.twig') }}
         {%  else %}
                 <div class="flex-board">
                     <div class="flex-notb_v6-fix">
-                        <h3>  Pas de nouveau potins programmé actuellement</h3>
+                        <h3>  Pas de nouveau potin programmé actuellement</h3>
                     </div>
                 </div>
         {% endif %}
