@@ -6,9 +6,9 @@
         </nav>
 
         <div class="flex-notb_v6">
-            {% for otherpost in potins|slice(0, 6) %}
+            {% for otherpost in posts|slice(0, 6) %}
                 <div class="pwa-last-potin">
-                    {{include('pwa/ptn_elements/ele_boards/poppost.html.twig')}}
+                    {{include('mobile/ptn_elements/ele_boards/poppost.html.twig')}}
                 </div>
             {% else %}
                 <div class="affiche">

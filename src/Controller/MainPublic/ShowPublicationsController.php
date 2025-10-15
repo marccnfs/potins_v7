@@ -163,7 +163,7 @@ class ShowPublicationsController extends AbstractController
             'showevent',
             Links::SHOWPOST );
 
-
+dump($eventstab);
         return $this->render($this->useragentP.'ptn_public/home.html.twig', [
             'directory'=>'show',
             'replacejs'=>!empty($tab['posts']),
