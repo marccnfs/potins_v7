@@ -2,9 +2,22 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
     static values = { view: String, date: String, fetchUrl: String, postEvents: Array }
-    static targets = ["grid"]
+    static targets = ["grid", "cta"]
 
     connect() {
+        if (this.hasCtaTarget) {
+            this.ctaClickHandler = (event) => {
+                if (this.ctaDisabled) {
+                    event.preventDefault();
+                }
+            };
+            this.ctaDefaultLabel = this.ctaTarget.dataset.defaultLabel || this.ctaTarget.textContent.trim();
+            this.ctaEmptyLabel = this.ctaTarget.dataset.emptyLabel || this.ctaDefaultLabel;
+            this.ctaErrorLabel = this.ctaTarget.dataset.errorLabel || this.ctaEmptyLabel;
+            this.ctaDisabled = true;
+            this.ctaTarget.addEventListener('click', this.ctaClickHandler);
+            this.disableCta(this.ctaDefaultLabel);
+        }
         this.load();
         this.element.addEventListener('agenda-nav:change', (e) => {
             const { view, date } = e.detail;
@@ -14,6 +27,13 @@ export default class extends Controller {
         });
         document.addEventListener('agenda-filters:changed', () => this.load());
     }
+
+    disconnect() {
+        if (this.hasCtaTarget && this.ctaClickHandler) {
+            this.ctaTarget.removeEventListener('click', this.ctaClickHandler);
+        }
+    }
+
 
     async load() {
         const { from, to } = this.range(this.viewValue, this.dateValue);
@@ -25,6 +45,11 @@ export default class extends Controller {
         const cat = this.currentCategory();
         if (cat) url.searchParams.set('category', cat);
 
+        if (this.hasCtaTarget) {
+            this.disableCta(this.ctaDefaultLabel);
+        }
+
+
         try {
             const res = await fetch(url.toString());
             if (!res.ok) throw new Error(res.statusText);
@@ -34,6 +59,9 @@ export default class extends Controller {
             console.error('Agenda load error', err);
             this.gridTarget.innerHTML = `<p class="muted">Erreur lors du chargement des événements.</p>`;
             document.querySelector('.toast-stack')?.controller?.push('Impossible de charger les événements.');
+            if (this.hasCtaTarget) {
+                this.disableCta(this.ctaErrorLabel);
+            }
         }
     }
 
@@ -44,10 +72,12 @@ export default class extends Controller {
         }
         if (!Array.isArray(events) || !events.length) {
             this.gridTarget.innerHTML = `<p class="muted">Aucun événement.</p>`;
+            this.updateCta([]);
             return;
         }
         this.gridTarget.innerHTML =
             `<ul class="agenda-ul">` + events.map(e => this.renderEventItem(e)).join('') + `</ul>`;
+        this.updateCta(events);
     }
 
     range(view, dateStr) {
@@ -204,6 +234,46 @@ export default class extends Controller {
 
         html.push(`</div>`);
         this.gridTarget.innerHTML = html.join('');
+        this.updateCta(events);
+    }
+
+    updateCta(events) {
+        if (!this.hasCtaTarget) {
+            return;
+        }
+        const requestable = Array.isArray(events) ? events.find(event => this.isRequestable(event)) : null;
+        if (requestable) {
+            this.enableCta(this.requestUrl(requestable));
+        } else {
+            this.disableCta();
+        }
+    }
+
+    enableCta(url) {
+        if (!this.hasCtaTarget) {
+            return;
+        }
+        const cta = this.ctaTarget;
+        cta.textContent = this.ctaDefaultLabel;
+        cta.href = url || '#';
+        cta.dataset.disabled = 'false';
+        cta.classList.remove('is-disabled');
+        cta.removeAttribute('aria-disabled');
+        this.ctaDisabled = false;
+    }
+
+    disableCta(label) {
+        if (!this.hasCtaTarget) {
+            return;
+        }
+        const cta = this.ctaTarget;
+        const text = label || this.ctaEmptyLabel;
+        cta.textContent = text;
+        cta.href = '#';
+        cta.dataset.disabled = 'true';
+        cta.classList.add('is-disabled');
+        cta.setAttribute('aria-disabled', 'true');
+        this.ctaDisabled = true;
     }
 
     renderWeekEvent(event) {

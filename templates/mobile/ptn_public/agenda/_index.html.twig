@@ -15,6 +15,13 @@
                 Retrouvez d'un coup d'œil les ateliers, permanences et événements Potins numériques.
                 Les actions rapides restent accessibles au pouce pour une navigation confortable sur mobile.
             </p>
+            <div class="pwa-agenda__cta">
+                <a class="btn"
+                   data-agenda-calendar-target="cta"
+                   data-default-label="Demandez un rendez-vous"
+                   data-empty-label="Aucun rendez-vous réservable pour le moment"
+                   href="#">Demandez un rendez-vous</a>
+            </div>
             <div class="pwa-agenda__views" role="tablist" aria-label="Choisir une vue agenda">
                 <button class="pwa-chip {{ view == 'month' ? 'is-active' : '' }}" data-action="agenda-nav#setView" data-view-param="month" type="button">Mois</button>
                 <button class="pwa-chip {{ view == 'week' ? 'is-active' : '' }}" data-action="agenda-nav#setView" data-view-param="week" type="button">Semaine</button>

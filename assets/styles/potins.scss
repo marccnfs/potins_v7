@@ -9944,6 +9944,23 @@ section {
     gap: 1rem;
 }
 
+.agenda-header__cta {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.agenda-header__cta .btn {
+    min-width: 220px;
+    justify-content: center;
+}
+
+.agenda-header__cta .btn.is-disabled,
+.agenda-header__cta .btn[aria-disabled="true"] {
+    pointer-events: none;
+    opacity: .6;
+}
+
+
 .agenda-header__toolbar {
     display: flex;
     flex-wrap: wrap;

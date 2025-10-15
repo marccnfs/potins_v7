@@ -1,33 +1,44 @@
 {% block body %}
-<div class="pwa-pg-ptn">
-
-    <div class="pwa-col">
-        <div class="separator"></div>
-        <div class="pwa-event-header">
-            <h2>Nos prochains potins</h2>
-            <p class="pwa-event-subtitle">découvrez une technologie, un logiciel ou un loisir numérique près de chez vous</p>
+<section class="pwa-hero pwa-hero--with-media">
+    <div class="pwa-hero__content">
+        <span class="pwa-hero__badge">Agenda</span>
+        <h1>Nos prochains potins</h1>
+        <p>
+            Découvrez les ateliers et animations numériques prévus dans les semaines à venir. Chaque fiche met en avant la
+            date, le lieu et le public concerné pour préparer votre venue en quelques instants.
+        </p>
+        <a class="pwa-hero__cta btn" href="{{ path('agenda_index') }}">Consulter l’agenda</a>
         </div>
+    <div class="pwa-hero__media" style="background-image: url('{{ asset('imgdoc/potins/social.png') }}');" aria-hidden="true"></div>
+</section>
 
-        <div class="content_mob_all">
-            <div class="pwa-iner-col">
+<section class="pwa-section">
+    <header class="pwa-section__header">
+        <h2>Choisissez votre prochain rendez-vous</h2>
+        <p>
+            Filtrez les événements par thématique, par commune ou par format grâce aux étiquettes. Une navigation pensée pour
+            le mobile vous permet de réserver sans effort.
+        </p>
+    </header>
+
+    <div class="pwa-card">
+        <div class="pwa-card__body">
+            <div class="pwa-card__actions">
                 <x-Tag class="w-neutre"></x-Tag>
-                <p class="pwa-event-legend">Chaque carte met en avant la date, le lieu et l'âge conseillé pour participer.</p>
-            </div>
-        {% if events|length >0 %}
-                {{ include('mobile/ptn_elements/ele_events/lasteventscity.html.twig') }}
-        {%  else %}
-                <div class="flex-board">
-                    <div class="flex-notb_v6-fix">
-                        <h3>  Pas de nouveau potin programmé actuellement</h3>
-                    </div>
                 </div>
-        {% endif %}
+            <p class="pwa-muted">Chaque carte présente la date, la tranche d’âge recommandée et les lieux proposés.</p>
+            {% if events|length > 0 %}
+                {{ include('mobile/ptn_elements/ele_events/lasteventscity.html.twig') }}
+            {% else %}
+                <div class="pwa-empty-state">Pas de nouveau potin programmé actuellement. Revenez bientôt !</div>
+            {% endif %}
         </div>
     </div>
-</div>
-{{ include('mobile/footer/potins_footer.html.twig') }}
-
+</section>
 {%  endblock body %}
+{% block footer %}
+    {{ include('mobile/footer/potins_footer.html.twig') }}
+{% endblock footer %}
 {% use "js/js_potins.html.twig" %}
 {% block javascripts %}
     {{ parent() }}

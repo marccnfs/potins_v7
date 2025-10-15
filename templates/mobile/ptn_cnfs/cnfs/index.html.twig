@@ -1,63 +1,89 @@
 {% block body %}
 
-    <div id="pagehome" class="homepage-wrapper" data-agent="{{ agent }}">
+<section class="pwa-hero pwa-hero--with-media">
+    <div class="pwa-hero__content">
+        <span class="pwa-hero__badge">CNFS</span>
+        <h1>Contre l'exclusion numérique</h1>
+        <p class="pwa-muted"><strong>Source :</strong> <span data-published-date="22/11/2023">gouvernement.fr</span></p>
+        <p>
+            Depuis 2021, 4 000 conseillers numériques accompagnent gratuitement les Français pour mieux maîtriser le numérique :
+            prise en main des outils, réalisation de démarches en ligne ou encore découverte de nouveaux usages.
+        </p>
+        <a class="pwa-hero__cta btn" href="{{ path('carto_cnfs') }}" target="_blank" rel="noopener">Trouver un conseiller</a>
+        </div>
+    <div class="pwa-hero__media" style="background-image: url('{{ asset('imgdoc/potins/social.png') }}');" aria-hidden="true"></div>
+</section>
 
-        <!-- Section d'introduction -->
-        <div class="hero-section">
-            <div class="hero-image" style="background-image: url({{ asset('imgdoc/potins/social.png') }});"></div>
-            <div class="hero-content">
-                <h1>Contre l'exclusion numérique</h1>
-                <p class="source-info"><strong>Source :</strong> <span data-published-date="22/11/2023">gouvernement.fr</span></p>
-                <p class="intro-text">
-                    Depuis 2021, 4 000 conseillers numériques accompagnent gratuitement les Français pour mieux maîtriser le numérique,
-                    de l'utilisation d'un ordinateur à la création de contenus en ligne.
-                </p>
+    <section class="pwa-section">
+        <header class="pwa-section__header">
+            <h2>Le rôle des conseillers numériques</h2>
+            <p>
+                Les conseillers numériques constituent un réseau de professionnels formés pour proposer des solutions personnalisées à
+                chaque public. Ils interviennent sur tout le territoire pour répondre aux besoins quotidiens des citoyens.
+            </p>
+        </header>
+        <div class="pwa-feature-grid">
+            <article class="pwa-feature-card">
+                <span class="pwa-feature-card__icon" aria-hidden="true">💡</span>
+                <div class="pwa-feature-card__body">
+                    <h3>Développer l’autonomie</h3>
+                    <p>Aide à l’usage des outils numériques du quotidien et découverte des services en ligne essentiels.</p>
+                </div>
+            </article>
+            <article class="pwa-feature-card">
+                <span class="pwa-feature-card__icon" aria-hidden="true">🛡️</span>
+                <div class="pwa-feature-card__body">
+                    <h3>Encourager des usages responsables</h3>
+                    <p>Sensibilisation à la sécurité numérique et accompagnement dans les démarches administratives.</p>
+                </div>
+            </article>
+            <article class="pwa-feature-card">
+                <span class="pwa-feature-card__icon" aria-hidden="true">🤝</span>
+                <div class="pwa-feature-card__body">
+                    <h3>Accompagner chaque profil</h3>
+                    <p>Des ateliers individuels ou collectifs pour débutants, familles, seniors ou professionnels.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+    <section class="pwa-card pwa-card--highlight">
+        <div class="pwa-card__body">
+            <h2>En savoir plus en vidéo</h2>
+            <p>Découvrez le témoignage de Stéphane, conseiller numérique France services.</p>
+            <div class="pwa-video">
+                <iframe src="https://www.youtube.com/embed/LxSSj8I-kZw" allowfullscreen title="Présentation du métier de conseiller numérique"></iframe>
             </div>
         </div>
+    </section>
 
-        <!-- Section Missions -->
-        <section class="missions-section">
-            <h2>Quelles sont les missions des conseillers numériques ?</h2>
-            <p class="mission-text">
-                Les conseillers numériques forment un réseau de professionnels spécialisés dans l’accompagnement numérique des citoyens,
-                qu’ils soient débutants ou non. Ils offrent, partout en France, des solutions personnalisées pour :
-            </p>
-            <ul class="mission-list">
-                <li><i class="fas fa-user"></i> Aider les Français à utiliser les outils numériques du quotidien.</li>
-                <li><i class="fas fa-shield-alt"></i> Sensibiliser aux enjeux du numérique et encourager des usages responsables.</li>
-                <li><i class="fas fa-globe"></i> Accompagner les citoyens dans la réalisation de démarches en ligne.</li>
-            </ul>
-
-            <!-- Vidéo informative -->
-            <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/LxSSj8I-kZw" allowfullscreen></iframe>
-                <p class="video-caption">Stéphane, conseiller numérique France services.</p>
+    <section class="pwa-section">
+        <header class="pwa-section__header">
+            <h2>Un accompagnement sur mesure</h2>
+            <p>Les conseillers numériques peuvent vous aider à :</p>
+        </header>
+        <ul class="pwa-grid-list">
+            <li><i class="fas fa-envelope" aria-hidden="true"></i> Utiliser une messagerie et les réseaux sociaux.</li>
+            <li><i class="fas fa-briefcase" aria-hidden="true"></i> Rédiger un CV et rechercher un emploi en ligne.</li>
+            <li><i class="fas fa-shopping-cart" aria-hidden="true"></i> Acheter sur Internet en toute sécurité.</li>
+            <li><i class="fas fa-user-shield" aria-hidden="true"></i> Protéger vos données et sécuriser vos connexions.</li>
+            <li><i class="fas fa-laptop" aria-hidden="true"></i> Prendre en main des outils bureautiques et collaboratifs.</li>
+            <li><i class="fas fa-university" aria-hidden="true"></i> Accompagner vos enfants dans leurs usages du numérique.</li>
+        </ul>
+    </section>
+    <section class="pwa-section pwa-section--cta">
+        <div class="pwa-card">
+            <div class="pwa-card__body pwa-card__body--actions">
+                <div>
+                    <h3>Trouver un conseiller près de chez vous</h3>
+                    <p>Consultez la cartographie nationale pour identifier l’accompagnement le plus proche.</p>
+                </div>
+                <a href="{{ path('carto_cnfs') }}" class="btn" target="_blank" rel="noopener">Rechercher</a>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Section Comment les conseillers numériques peuvent aider -->
-        <section class="help-section">
-            <h2>Comment les conseillers numériques peuvent-ils vous aider ?</h2>
-            <p>Les conseillers numériques accompagnent les citoyens pour :</p>
-            <div class="help-grid">
-                <div class="help-item"><i class="fas fa-envelope"></i> Utiliser une messagerie et les réseaux sociaux.</div>
-                <div class="help-item"><i class="fas fa-briefcase"></i> Trouver un emploi et rédiger un CV.</div>
-                <div class="help-item"><i class="fas fa-shopping-cart"></i> Réserver et acheter en ligne en toute sécurité.</div>
-                <div class="help-item"><i class="fas fa-user-shield"></i> Sécuriser ses connexions et protéger ses données.</div>
-                <div class="help-item"><i class="fas fa-laptop"></i> Apprendre à utiliser des outils numériques (bureautique, etc.).</div>
-                <div class="help-item"><i class="fas fa-university"></i> Accompagner ses enfants dans l’usage du numérique.</div>
-            </div>
-        </section>
 
-        <!-- Section Trouver un conseiller -->
-        <section class="advisor-section">
-            <h2>Trouver un conseiller numérique près de chez vous</h2>
-            <p>Utilisez la cartographie nationale pour localiser un conseiller numérique proche de vous.</p>
-            <a href="{{ path('carto_cnfs') }}" class="btn-advisor" target="_blank">Rechercher</a>
-        </section>
-
-        {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
-    </div>
+    {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
 
 {%  endblock body %}
 

@@ -1,32 +1,40 @@
 {% block body %}
-    <div class="pwa-container">
-        <span class="pwa-hero__badge">Demande de rendez-vous</span>
-        <h1>{{ event.title }}</h1>
-        <p class="pwa-muted">
-            {{ event.startsAt|date('d F Y H:i', event.timezone) }}
-            {% if not event.isAllDay %}
-                → {{ event.endsAt|date('H:i', event.timezone) }}
-            {% endif %}
-            • {{ event.categoryLabel }}
-            • {{ event.locationName ?? 'Lieu à confirmer' }}
-        </p>
+    <section class="pwa-hero pwa-hero--compact">
+        <div class="pwa-hero__content">
+            <span class="pwa-hero__badge">Demande de rendez-vous</span>
+            <h1>{{ event.title }}</h1>
+            <p class="pwa-muted">
+                {{ event.startsAt|date('d F Y H:i', event.timezone) }}
+                {% if not event.isAllDay %}
+                    → {{ event.endsAt|date('H:i', event.timezone) }}
+                {% endif %}
+                • {{ event.categoryLabel }}
+                • {{ event.locationName ?? 'Lieu à confirmer' }}
+            </p>
+            <p>
+                Complétez vos coordonnées pour que l’équipe CNFS puisse vous recontacter et finaliser votre rendez-vous.
+            </p>
+        </div>
+    </section>
 
-        <p>Complétez vos coordonnées pour que l’équipe CNFS puisse vous recontacter à propos de cet atelier.</p>
-
+    <section class="pwa-section">
         <div class="pwa-card">
             <div class="pwa-card__body">
+                <h2>Vos informations</h2>
+                <p class="pwa-muted">Les champs marqués d’un astérisque sont obligatoires.</p>
+
                 <div class="pwa-form">
                     {{ form_start(form) }}
                     {{ form_row(form.email) }}
                     {{ form_row(form.phone) }}
                     {{ form_row(form.message) }}
-                    <div class="pwa-form__actions" style="display:flex; flex-direction:column; gap:0.75rem;">
+                    <div class="pwa-form__actions">
                         {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary'}}) }}
-                        <a class="btn btn-light" href="{{ path('event_show', {slug: event.slug}) }}">Annuler</a>
+                        <a class="btn btn-light" href="{{ path('agenda_index') }}">Annuler</a>
                     </div>
                     {{ form_end(form) }}
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 {% endblock %}

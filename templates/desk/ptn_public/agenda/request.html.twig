@@ -21,7 +21,7 @@
         {{ form_row(form.message) }}
         <div class="actions" style="margin-top: 1rem; display:flex; gap:.5rem;">
             {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary'}}) }}
-            <a class="btn btn-light" href="{{ path('event_show', {slug: event.slug}) }}">Annuler</a>
+            <a class="btn btn-light" href="{{ path('agenda_index') }}">Annuler</a>
         </div>
         {{ form_end(form) }}
     </article>
