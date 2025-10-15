@@ -1,71 +1,82 @@
-{% for event in events %}
-    {% if loop.index0 < 3  %}
-        {%  set col = loop.index0 %}
-    {% else %}
-        {%  set col = 3 %}
-    {% endif %}
-    {% set primaryEvent = event[0] %}
-    {% set primaryPotin = primaryEvent.potin %}
-    {% set appointment = primaryEvent.appointment ?? null %}
-    {% set locationNames = [] %}
-    {% for locate in event %}
-        {% if locate.locatemedia is defined and locate.locatemedia is not null and locate.locatemedia.nameboard is not empty %}
-            {% set locationNames = locationNames|merge([locate.locatemedia.nameboard]) %}
-        {% endif %}
-    {% endfor %}
-   {# {% set locationNames = locationNames|unique %} #}
-    {% set locationNames = locationNames|reduce((carry, item) => item in carry ? carry : carry|merge([item]), []) %}
+{% for group in events %}
+    {% set col = loop.index0 < 3 ? loop.index0 : 3 %}
+    {% set potin = group.potin %}
+    {% set primaryEvent = group.primaryEvent %}
+    {% set featuredLocation = group.events|first %}
+    {% set bookingEvent = featuredLocation ? featuredLocation.bookingEvent : primaryEvent %}
+    {% set featuredDate = group.nextDate ?? (featuredLocation ? featuredLocation.nextDate : null) %}
+    {% set bookingDate = featuredDate ?? bookingEvent.appointment.starttime ?? primaryEvent.appointment.starttime %}
 
     <div class="mb-event_card color-event-{{ col }}">
 
         <div class="mb-event-media">
             <div class="e_pictfull_card">
-                {% if primaryPotin is not null and primaryPotin.media.imagejpg|length > 0 and primaryPotin.media.imagejpg[0].namefile is defined %}
-                    <div class="pict_event" style="background-image: url('{{ asset('upload/module/'~primaryPotin.media.imagejpg[0].namefile) }}')"></div>
-                {% elseif primaryEvent.media is defined and primaryEvent.media.imagejpg|length > 0 and primaryEvent.media.imagejpg[0].namefile is defined %}
-                    <img src="{{ asset(primaryEvent.media.imagejpg[0].getWebPath) }}" alt="image affiche">
+                {% if potin is not null and potin.media.imagejpg|length > 0 and potin.media.imagejpg[0].namefile is defined %}
+                    <div class="pict_event" style="background-image: url('{{ asset('upload/module/'~potin.media.imagejpg[0].namefile) }}')"></div>
+                {% elseif bookingEvent.media is defined and bookingEvent.media.imagejpg|length > 0 and bookingEvent.media.imagejpg[0].namefile is defined %}
+                    <img src="{{ asset(bookingEvent.media.imagejpg[0].getWebPath) }}" alt="image affiche">
                 {% endif %}
+            </div>
+            {% if bookingDate %}
 
-
-        </div>
-            {% if appointment %}
                 <div class="mb-event-dateBadge">
-                    <span class="mb-event-date">{{ appointment.starttime|date('d/m') }}</span>
-                    <span class="mb-event-time">{{ appointment.starttime|date('H\hi') }}</span>
+                    <span class="mb-event-date">{{ bookingDate|date('d/m') }}</span>
+                    <span class="mb-event-time">{{ bookingDate|date('H\hi') }}</span>
                 </div>
             {% endif %}
         </div>
 
         <div class="mb-event-content">
             <div class="mb-event-meta">
-                {% if primaryPotin.agepotin is defined and primaryPotin.agepotin is not null %}
-                    <span class="mb-event-age">Dès {{ primaryPotin.agepotin }} ans</span>
-        {% endif %}
-
-
-                {% if appointment %}
-                    <span class="mb-event-duration">À partir du {{ appointment.starttime|date('d/m/Y') }}</span>
+                {% if potin.agepotin is defined and potin.agepotin is not null %}
+                    <span class="mb-event-age">Dès {{ potin.agepotin }} ans</span>
+                {% endif %}
+                {% if bookingDate %}
+                    <span class="mb-event-duration">À partir du {{ bookingDate|date('d/m/Y') }}</span>
                 {% endif %}
             </div>
-            <h3 class="mb-event-title" title="evenement de {{ primaryPotin.titre }}">{{ primaryPotin.titre|lower|capitalize }}</h3>
+            <h3 class="mb-event-title" title="evenement de {{ potin.titre }}">{{ potin.titre|lower|capitalize }}</h3>
             {% if primaryEvent.description is defined and primaryEvent.description is not same as (" ") %}
                 <p class="mb-event-description">{{ primaryEvent.description|raw|lower|capitalize }}</p>
             {% endif %}
             <div class="mb-event-infos">
-                {% if appointment %}
+                {% if bookingDate %}
                     <div class="mb-event-info-item">
                         <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img" fill="currentColor" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" class="info-svg">
                             <path d="M7 2a1 1 0 011 1v1h8V3a1 1 0 112 0v1h1.5A2.5 2.5 0 0122 6.5v13A2.5 2.5 0 0119.5 22h-15A2.5 2.5 0 012 19.5v-13A2.5 2.5 0 014.5 4H6V3a1 1 0 011-1zm12.5 6h-15c-.276 0-.5.224-.5.5V19.5c0 .276.224.5.5.5h15a.5.5 0 00.5-.5V8.5a.5.5 0 00-.5-.5zM7 11h4a1 1 0 110 2H7a1 1 0 010-2z"></path>
                         </svg>
-                        <span class="ptn-inf2">{{ appointment.starttime|date('d/m/Y \à H\hi') }}</span>
+                        <span class="ptn-inf2">{{ bookingDate|date('d/m/Y \à H\hi') }}</span>
                     </div>
                 {% endif %}
-                {% if locationNames is not empty %}
+                {% if group.events|length > 0 %}
                     <div class="mb-event-info-item">
                         <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img" fill="currentColor" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" class="info-svg">
                             <path d="M12 2a7 7 0 017 7c0 4.418-4.03 8.5-6.315 10.512a1 1 0 01-1.37 0C9.03 17.5 5 13.418 5 9a7 7 0 017-7zm0 9.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"></path>
                         </svg>
-                        <span class="ptn-inf2">{{ locationNames|join(', ') }}</span>
+                        <div class="ptn-inf2">
+                            {% for location in group.events %}
+                                {% set board = location.board %}
+                                <div class="mb-event-location">
+                                    {% if board %}
+                                        <span class="mb-event-location-name">{{ board.nameboard }}</span>
+                                        {% if board.locality is defined and board.locality %}
+                                            <span class="mb-event-location-city"> — {{ board.locality.city }}</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="mb-event-location-name">Médiathèque à confirmer</span>
+                                    {% endif %}
+                                    {% if location.dates|length > 0 %}
+                                        <span class="mb-event-location-dates">
+                                                {% for label, dateObj in location.dates %}
+                                                    {{ dateObj|date('d/m/Y') }}{% if not loop.last %}, {% endif %}
+                                                {% endfor %}
+                                        </span>
+                                    {% else %}
+                                        <span class="mb-event-location-dates">Dates à venir</span>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 {% endif %}
             </div>
@@ -73,17 +84,17 @@
             <div class="mb-event-actions">
                 {% if customer is defined and customer is not null %}
                     {% if is_granted("ROLE_MEDIA") %}
-                        <a href="{{ path('back_admin_cmd_potins',{'id':primaryEvent.id}) }}" class="mb-event-button" title="rendez-vous">Réservez</a>
+                        <a href="{{ path('back_admin_cmd_potins',{'id':bookingEvent.id}) }}" class="mb-event-button" title="rendez-vous">Réservez</a>
                     {% else %}
-                        <a href="{{ path('show_event_id',{'id':primaryPotin.id}) }}" class="mb-event-button" title="rendez-vous">Voir le détail</a>
+                        <a href="{{ path('show_event_id',{'id':potin.id}) }}" class="mb-event-button" title="rendez-vous">Voir le détail</a>
                     {% endif %}
                 {% else %}
-                    <a href="{{ path('show_event_id',{'id':primaryPotin.id}) }}" class="mb-event-button" title="rendez-vous">Voir le détail</a>
+                    <a href="{{ path('show_event_id',{'id':potin.id}) }}" class="mb-event-button" title="rendez-vous">Voir le détail</a>
                 {% endif %}
             </div>
         </div>
     </div>
-{%  else %}
+{% else %}
     <div class="flex-board">
         <div class="flex-notb_v6-fix">
             <h3>  Pas de nouveau potin programmé actuellement</h3>

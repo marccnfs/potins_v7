@@ -10,7 +10,7 @@
             </article>
         </div>
         <div class="potin_echange">
-            {{ include('desk/ptn_elements/ele_events/modale_widg_event.html.twig') }}
+            {{ include('desk/ptn_elements/ele_events/modale_widg_event.html.twig', { eventSummary: eventSummary ?? null, eventGroups: events }) }}
             <div class="cub-form">
                 <div class="act-ct">
                     <div class="cbe-fx">
@@ -40,15 +40,8 @@
                 </div>
             </div>
             {%  for event in events %}
-            {{ include('desk/ptn_elements/ele_events/widget_datesevent.html.twig') }}
+                {{ include('desk/ptn_elements/ele_events/widget_datesevent.html.twig', { location: event }) }}
             {%  endfor %}
-            {#
-            {{ include('desk/ptn_elements/ele_echanges/bar_echanges.html.twig') }}
-
-            <div class="w_echanges">
-                {{ include('desk/ptn_elements/ele_echanges/potin_echange.html.twig') }}
-            </div>
-            #}
         </div>
     </div>
         {{ include('desk/ptn_elements/ele_potins/tabOrderPotins.html.twig') }}

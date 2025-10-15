@@ -6,10 +6,10 @@
         <div class="pwa-wp-potin">
 
             <div class="event-resa">
-                {{ include('mobile/ptn_elements/ele_events/modale_widg_event.html.twig') }}
+                {{ include('mobile/ptn_elements/ele_events/modale_widg_event.html.twig', { eventSummary: eventSummary ?? null, eventGroups: events }) }}
 
                 <div class="w_resa">
-                    {{ include('mobile/ptn_elements/ele_events/event_resa.html.twig') }}
+                    {{ include('mobile/ptn_elements/ele_events/event_resa.html.twig', { eventGroups: events }) }}
                 </div>
             </div>
 

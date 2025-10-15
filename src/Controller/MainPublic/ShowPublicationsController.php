@@ -148,22 +148,18 @@ class ShowPublicationsController extends AbstractController
 
 
     #[Route('eventshow/{id}', name:"show_event_id")]
-    public function showEventId(Searchmodule $searchmodule,Resator $resator, $id ): Response
+    public function showEventId(Searchmodule $searchmodule, $id ): Response
     {
         $tab=$searchmodule->searchEventWithPostAndBoard($id);
         if(!$tab)return $this->redirectToRoute('board_all');
         $eventstab=$tab['events'];
-        foreach ($eventstab as &$ev){
-            $finddate=$resator->listDatesEvent($ev);
-            $ev['dates']=$finddate;
-        }
+
 
         $vartwig = $this->menuNav->postinfoObj(
             $tab['post'],
             'showevent',
             Links::SHOWPOST );
 
-dump($eventstab);
         return $this->render($this->useragentP.'ptn_public/home.html.twig', [
             'directory'=>'show',
             'replacejs'=>!empty($tab['posts']),
@@ -173,6 +169,7 @@ dump($eventstab);
             'post'=>$tab['post'],
             'posts'=>$tab['posts'],
             'events'=>$eventstab,
+            'eventSummary' => $tab['eventSummary'] ?? null,
             'entity'=>$tab['post']->getId(),
             'customer' => $this->customer,
         ]);

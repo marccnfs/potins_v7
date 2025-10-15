@@ -130,7 +130,7 @@ class PostEventRepository extends ServiceEntityRepository
             -> setParameter('id', $id)
             -> orderBy('p.create_at', 'ASC')
             -> getQuery()
-            -> getArrayResult();
+            -> getResult();
     }
 
     public function findLastBeforeWeek(){

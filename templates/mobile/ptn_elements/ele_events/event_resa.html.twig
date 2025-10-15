@@ -1,7 +1,8 @@
 <div class="pwa-w-iner-echanges">
     <div class="ol-2 tglaff"  id="tgl_9" style="display: none">
-        {%  for event in events %}
-            {{ include('mobile/ptn_elements/ele_events/widget_datesevent.html.twig') }}
+        {% set groups = eventGroups is defined ? eventGroups : events %}
+        {%  for event in groups %}
+            {{ include('mobile/ptn_elements/ele_events/widget_datesevent.html.twig', { location: event }) }}
         {%  endfor %}
     </div>
 </div>

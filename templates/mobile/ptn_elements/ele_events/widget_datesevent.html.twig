@@ -4,24 +4,27 @@
 {% else %}
     {%  set col = 3 %}
 {% endif %}
+{% set locationData = location is defined ? location : event %}
+{% set bookingEvent = locationData.bookingEvent ?? locationData.event ?? locationData %}
+{% set dateList = locationData.dates is defined ? locationData.dates : [] %}
+{% set firstDate = dateList|length > 0 ? (dateList|first) : null %}
+{% set board = locationData.board ?? bookingEvent.locatemedia ?? null %}
 <div class="widget_event_card_date color-event-{{ col }}">
     <div class="widget_inner-event">
         <div class="info_dat">
-            {% set firstDate = event.dates|length > 0 ? (event.dates|first) : null %}
+
             {%  if customer is not null %}
                 <nav class="relational_relat">
                     {% if is_granted('ROLE_MEDIA') %}
-                        <a href="{{ path('resa_potins_media',{'id':event.id, 'date': firstDate ? firstDate.timestamp : event.appointment.starttime|date('U') }) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">Réservez</a>
+                        <a href="{{ path('resa_potins_media',{'id':bookingEvent.id, 'date': firstDate ? firstDate.timestamp : bookingEvent.appointment.starttime|date('U') }) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">Réservez</a>
                     {% else %}
-                        <a href="{{ path('back_admin_cmd_potins',{'id':event.id}) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">Réservez</a>
-                    {% endif %}
+                        <a href="{{ path('back_admin_cmd_potins',{'id':bookingEvent.id}) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">Réservez</a>                    {% endif %}
                 </nav>
             {%  else %}
 
                 <nav class="relational_relat">
                     {% if firstDate %}
-                        <a href="{{ path('resa_potins_public',{'id':event.id,'timestamp':firstDate.timestamp}) }}" class="nav1 btn  hide-on-mobile" title="Réservez votre place">Réservez</a>
-                    {% else %}
+                        <a href="{{ path('resa_potins_public',{'id':bookingEvent.id,'timestamp':firstDate.timestamp}) }}" class="nav1 btn  hide-on-mobile" title="Réservez votre place">Réservez</a>                    {% else %}
                         <span class="nav1 btn disabled">Complet</span>
                     {% endif %}
                 </nav>
@@ -29,7 +32,7 @@
             {% endif %}
 
             <div class="event-locate">
-                {% for label, datep in event.dates %}
+                {% for label, datep in dateList %}
                 <div class="event-dates">
                     <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img" fill="currentColor" width="700pt" height="700pt" viewBox="0 0 700 700"  aria-hidden="true" class="info-svg">
                         <g>
@@ -53,10 +56,8 @@
                     <div class="event-inf4">
                         <span class="event-inf2">{{ datep|date("d-m-Y") }}</span>
                         {% if customer is null %}
-                            <a href="{{ path('resa_potins_public',{'id':event.id,'timestamp':datep.timestamp}) }}" class="nav1 btn btn-small">Je m'inscris</a>
-                        {% endif %}
+                            <a href="{{ path('resa_potins_public',{'id':bookingEvent.id,'timestamp':datep.timestamp}) }}" class="nav1 btn btn-small">Je m'inscris</a>                        {% endif %}
                     </div>
-
                 </div>
                 {%  endfor %}
             </div>
@@ -67,9 +68,11 @@
                         <path d="m336.52 519.93c3.3281 4.0117 8.2656 6.332 13.477 6.332s10.148-2.3203 13.477-6.332l137.2-168c31.152-38.203 46.633-86.812 43.305-135.99-3.3242-49.184-25.207-95.266-61.219-128.93-36.016-33.66-83.469-52.383-132.76-52.383s-96.746 18.723-132.76 52.383c-36.012 33.66-57.895 79.742-61.219 128.93-3.3281 49.18 12.152 97.789 43.305 135.99zm13.477-413.7c32.488 0 63.648 12.906 86.621 35.879 22.973 22.973 35.879 54.129 35.879 86.621 0 32.488-12.906 63.645-35.879 86.617-22.973 22.977-54.133 35.883-86.621 35.883s-63.648-12.906-86.621-35.883c-22.973-22.973-35.879-54.129-35.879-86.617 0-32.492 12.906-63.648 35.879-86.621 22.973-22.973 54.133-35.879 86.621-35.879z"/>
                     </svg>
                     <div class="event-inf4">
-                        {% if event.locatemedia %}
-                            <span class="event-inf2">{{ event.locatemedia.nameboard  }}</span>
-                            <div class="event-inf2">{{ event.locatemedia.locality.city }}</div>
+                        {% if board %}
+                            <span class="event-inf2">{{ board.nameboard  }}</span>
+                            {% if board.locality is defined and board.locality %}
+                                <div class="event-inf2">{{ board.locality.city }}</div>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
