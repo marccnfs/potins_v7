@@ -5,10 +5,12 @@ namespace App\Service\Search;
 
 
 use App\Entity\Module\GpReview;
+use App\Entity\Posts\Article;
+use App\Entity\Posts\Post;
+use App\Repository\BoardRepository;
 use App\Repository\GpReviewRepository;
 use App\Repository\PostEventRepository;
 use App\Repository\PostRepository;
-use App\Repository\BoardRepository;
 use Doctrine\ORM\NonUniqueResultException;
 
 class Searchmodule
@@ -19,57 +21,34 @@ class Searchmodule
     private GpReviewRepository $gpReviewRepository;
 
 
-    public function __construct(BoardRepository      $websiteRepository, PostEventRepository $postEventRepository,
-                                PostRepository $postRepository, GpReviewRepository $gpReviewRepository)
+    public function __construct(
+        BoardRepository     $websiteRepository,
+        PostEventRepository $postEventRepository,
+        PostRepository      $postRepository,
+        GpReviewRepository  $gpReviewRepository
+    )
     {
 
         $this->postRepository = $postRepository;
-        $this->postEventRepository=$postEventRepository;
-        $this->websiteRepository=$websiteRepository;
-        $this->gpReviewRepository=$gpReviewRepository;
+        $this->postEventRepository = $postEventRepository;
+        $this->websiteRepository = $websiteRepository;
+        $this->gpReviewRepository = $gpReviewRepository;
     }
-
 
     /**
      * @throws NonUniqueResultException
      */
     public function searchAllInfoWithReviewsAndRessourcesOfOnePotinId($id): bool|array
     {
-        $contents=[];
-        $post=$this->postRepository->findOnePostAndReviews($id);
-        if($post->getHtmlcontent()){
-            foreach ($post->getHtmlcontent() as $cont){
-                if($cont->getFileblob()){
-                    $contents[]=file_get_contents($cont->getphpPathblob());;
-                }
-            }
-        }
-        return ['post'=>$post,'contents'=>$contents];
-    }
+        $post = $this->postRepository->findOnePostAndReviews($id);
 
-
-    /**
-     * @param $id
-     * @return bool|array
-     * @throws NonUniqueResultException
-     */
-    public function searchOnePostAndListAndMsg($id): bool|array
-    {
-        $posts=[];
-        $post=$this->postRepository->findOnePostAndMsg($id);
-
-        if($post){
-            $board=$this->websiteRepository->findWbByKey($post->getKeymodule());
-            if($post->getHtmlcontent()->getFileblob()){
-                $content=file_get_contents($post->getHtmlcontent()->getphpPathblob());
-            }else{
-                $content="";
-            }
-            $posts=$this->postRepository->findPostsByKeyWithOutId($post->getKeymodule(),$id);
-            return ['board'=>$board,'posts'=>$posts, 'post'=>$post,'content'=>$content, 'key'=>$post->getKeymodule(), "msgp"=>$post->getTbmessages()];
-        }else{
+        if (!$post) {
             return false;
         }
+        return [
+            'post' => $post,
+            'contents' => $this->readHtmlContents($post),
+        ];
     }
 
     public function searchAllPotinsOther(): bool|array
@@ -81,25 +60,6 @@ class Searchmodule
     {
         return $this->postRepository->findAllPotinsActivWithOutPotinsId($id);
     }
-
-    public function searchOnePotinAndReviewsWithOtherPotins($id): bool|array
-    {
-        $contents=[];
-        // if(!$post=$this->postRepository->findOnePostAndReviews($id)) return false;
-        $events=$this->postEventRepository->findEventByIdPotin($id);
-        $post=$events[0]->getPotin();
-        //$board=$this->websiteRepository->findWbByKey($post->getKeymodule()); todo reactiver si besoin
-        if($post->getHtmlcontent()){
-            foreach ($post->getHtmlcontent() as $cont){
-                if($cont->getFileblob()){
-                    $contents[]=file_get_contents($cont->getphpPathblob());;
-                }
-
-            }
-        }
-        //$posts=$this->postRepository->findAllPotinsActivWithOutPotinsId($post->getId()); // todo reactiver si besoin
-        return ['board'=>[],'posts'=>[],'events'=>$events, 'post'=>$post,'contents'=>$contents, 'key'=>$post->getKeymodule()/*, "msgp"=>$post->getTbmessages()*/];    }
-
 
     /**
      * @throws NonUniqueResultException
@@ -114,87 +74,98 @@ class Searchmodule
      */
     public function searchOnePotinAndReview($id): bool|array
     {
-        //$contents=[];
-        if(!$post=$this->postRepository->findOnePostAndReviews($id)) return false;
+        $post = $this->postRepository->findOnePostAndReviews($id);
 
-        //$board=$this->websiteRepository->findWbByKey($post->getKeymodule());
-        /*
-        if($post->getHtmlcontent()){
-            foreach ($post->getHtmlcontent() as $cont){
-                if($cont->getFileblob()){
-                    $contents[]=file_get_contents($cont->getphpPathblob());;
-                }
-            }
+        if (!$post) {
+            return false;
         }
-        */
-        //$posts=$this->postRepository->findAllPotinsActivWithOutPotinsId($post->getId()); // todo reactiver si besoin
-        return ['board'=>[],'posts'=>[],'post'=>$post,'contents'=>[] /*'key'=>$post->getKeymodule(), "msgp"=>$post->getTbmessages()*/];
+        return [
+            'board' => [],
+            'posts' => [],
+            'post' => $post,
+            'contents' => [],
+        ];
     }
 
     public function searchEventWithPostAndBoard($id): bool|array
     {
-        //$event=$this->postEventRepository->findEventById($id);
-        $events=$this->postEventRepository->findAllEventsByIdPotin($id);
-        if($events){
-            $potin=$this->postRepository->find($events[0]['potin']['id']);
-            $board=$this->websiteRepository->findWbByKey($events[0]['keymodule']);
-            if($potin->getHtmlcontent()->getFileblob()){
-                $content=file_get_contents($potin->getHtmlcontent()->getphpPathblob());
-           /* if($potin['htmlcontent']['fileblob']){
-               $dir= __DIR__ . '/../../../public/5764xs4m/blobtxt8_4/'.$potin['htmlcontent']['fileblob'];
-                //$content=file_get_contents($potin['htmlcontent']['phpPathblob']);
-                $content=file_get_contents($dir);
-           */
-            }else{
-                $content="";
-            }
-            $posts=$this->postRepository->findAllPotinsActivWithOutPotinsId($potin->getId());
-            return ['events'=>$events,'board'=>$board,'posts'=>$posts, 'post'=>$potin,'content'=>$content, 'key'=>$events[0]['keymodule']];
-        }else{
+        $events = $this->postEventRepository->findAllEventsByIdPotin($id);
+        if (!$events) {
             return false;
         }
+
+        $potinId = $events[0]['potin']['id'] ?? null;
+        if (!$potinId) {
+            return false;
+        }
+
+        $potin = $this->postRepository->find($potinId);
+        if (!$potin) {
+            return false;
+        }
+        $keymodule = $events[0]['keymodule'] ?? null;
+        $board = $keymodule ? $this->websiteRepository->findWbByKey($keymodule) : null;
+        $posts = $this->postRepository->findAllPotinsActivWithOutPotinsId($potin->getId());
+
+        return [
+            'events' => $events,
+            'board' => $board,
+            'posts' => $posts,
+            'post' => $potin,
+            'content' => $this->readFirstHtmlContent($potin),
+            'key' => $keymodule,
+        ];
     }
 
     public function findLastBeforeWeek(): bool|array
     {
+        $events = $this->postEventRepository->findLastBeforeWeek();
+        $tabevents = [];
 
-        $events=$this->postEventRepository->findLastBeforeWeek();
-        $tabevents=[];
-        if($events){
-            foreach ($events as $key=> $event){
-                $tabevents[$event->getPotin()->getId()][]=$event;
+        if ($events) {
+            foreach ($events as $event) {
+                $tabevents[$event->getPotin()->getId()][] = $event;
             }
-            //$potin=$this->postRepository->find($events[0]['potin']['id']);
-           // $board=$this->websiteRepository->findWbByKey($events[0]['keymodule']);
-
             return $tabevents;
-        }else{
-            return false;
         }
+        return false;
+
     }
 
     /**
-     * @param $id
-     * @return bool|array
-     * @throws NonUniqueResultException
+     * @return string[]
      */
-    public function searchOnePostAndMsgP($id): bool|array
+    private function readHtmlContents(Post $post): array
     {
+        $contents = [];
 
-        $post=$this->postRepository->findOnePostAndMsg($id);
-
-        if($post){
-            $board=$this->websiteRepository->findWbByKey($post->getKeymodule());
-            if($post->getHtmlcontent()->getFileblob()){
-                $content=file_get_contents($post->getHtmlcontent()->getphpPathblob());
-            }else{
-                $content="";
+        foreach ($post->getHtmlcontent() as $article) {
+            if (!$article instanceof Article) {
+                continue;
             }
 
-            return ['board'=>$board, 'post'=>$post,'content'=>$content, 'key'=>$post->getKeymodule(), "msgp"=>$post->getTbmessages()];
-        }else{
-            return false;
+            $fileName = $article->getFileblob();
+            if (!$fileName) {
+                continue;
+            }
+
+            $path = $article->getphpPathblob();
+            if (!is_string($path) || !is_file($path)) {
+                continue;
+            }
+
+            $data = file_get_contents($path);
+            if ($data !== false) {
+                $contents[] = $data;
+            }
         }
+        return $contents;
     }
 
+    private function readFirstHtmlContent(Post $post): string
+    {
+        $contents = $this->readHtmlContents($post);
+
+        return $contents[0] ?? '';
+    }
 }

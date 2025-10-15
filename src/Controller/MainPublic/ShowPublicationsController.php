@@ -27,7 +27,7 @@ class ShowPublicationsController extends AbstractController
     public function showPotin(SearchRessources $searchRessources,Searchmodule $searchmodule,ListEvent $listEvent,$id,$slug): Response
     {
         $tab=$searchmodule->searchAllInfoWithReviewsAndRessourcesOfOnePotinId($id);
-        if(!$tab['post'])return $this->redirectToRoute('board_all');
+        if(!is_array($tab) || empty($tab['post']))return $this->redirectToRoute('board_all');
 
         $otherpotins=$searchmodule->searchAllOtherPotinsWithOutThisOne($id);
 
@@ -74,7 +74,7 @@ class ShowPublicationsController extends AbstractController
         $tabevent=[];
         $tab=$searchmodule->searchOnePotinAndReview($id);
 
-        if(!$tab['post'])return $this->redirectToRoute('board_all');
+        if(!is_array($tab) || empty($tab['post']))return $this->redirectToRoute('board_all');
 
         $events=$postEventRepository->findEventByOnePotin($tab['post']->getId());
 
