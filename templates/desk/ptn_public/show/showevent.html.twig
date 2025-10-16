@@ -1,57 +1,83 @@
 {% block body %}
-<div class="container-websit">
-    <div class="before_board"></div>
-    {%  set entity, typ = post, "blog" %}
-    <div class="potin_pg">
-    <div class="wp-potin">
-        <div class="potin_board">
-            <article class="w-potin">
+    {% set eventGroups = events ?? [] %}
+    {% set summary = eventSummary ?? null %}
+    {% set referenceLocation = eventGroups|first|default(null) %}
+    {% set primaryEvent =
+        (summary is not null and summary.primaryEvent is defined) ? summary.primaryEvent :
+        (referenceLocation is not null and referenceLocation.bookingEvent is defined) ? referenceLocation.bookingEvent :
+        (referenceLocation is not null and referenceLocation.event is defined) ? referenceLocation.event :
+        (referenceLocation is not null ? referenceLocation : null)
+    %}
+    {% set nextDate =
+        (summary is not null and summary.nextDate is defined) ? summary.nextDate :
+        (referenceLocation is not null and referenceLocation.nextDate is defined) ? referenceLocation.nextDate :
+        (referenceLocation is not null and referenceLocation.dates is defined and referenceLocation.dates|length > 0)
+        ? referenceLocation.dates|first
+        : null
+    %}
+
+    <div class="container-websit container-showevent">
+        <div class="before_board"></div>
+        {% set entity, typ = post, "blog" %}
+
+        <header class="header-showevent">
+            <h1>{{ post.titre|lower|capitalize }}</h1>
+            {% if nextDate %}
+                <time class="datepotin" datetime="{{ nextDate|date('Y-m-d') }}">
+                    Prochaine date : {{ nextDate|date('d/m/Y') }}
+                </time>
+            {% elseif post.createAt is defined %}
+                <time class="datepotin" datetime="{{ post.createAt|date('Y-m-d') }}">
+                    Mis en ligne le : {{ post.createAt|date('d/m/Y') }}
+                </time>
+            {% endif %}
+        </header>
+
+        <div class="eventshow-layout">
+            <section class="eventshow-main">
                 {{ include('desk/ptn_elements/ele_potins/modale_potin.html.twig') }}
-            </article>
-        </div>
-        <div class="potin_echange">
-            {{ include('desk/ptn_elements/ele_events/modale_widg_event.html.twig', { eventSummary: eventSummary ?? null, eventGroups: events }) }}
-            <div class="cub-form">
-                <div class="act-ct">
-                    <div class="cbe-fx">
-                        <div class="cbe_cnt">
-                            <div class="c_i_b">
-                                <div class="in_cib">
+            </section>
 
-                                    <div class="form-groupfields glass-label">
-                                        <div class="glass-title_form">
-                                            <h3>Participez !</h3>
-                                        </div>
+            <aside class="eventshow-sidebar">
+                {{ include('desk/ptn_elements/ele_events/modale_widg_event.html.twig', { eventSummary: eventSummary ?? null, eventGroups: events }) }}
 
-
-                                        <div class="process-module_glass">
-                                            <div class="stape-process-lit" >
-                                                <h5><strong>Choisissez une date dans une des localités proposées :</strong></h5>
-                                                p class="ptn-public-help">Cliquez sur le bouton « Réservez » pour ouvrir le formulaire d’inscription et confirmer votre présence.</p>
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="eventshow-callout">
+                    <h3>Participez !</h3>
+                    <p>
+                        Choisissez une date dans l’une des localités proposées, puis cliquez sur le bouton
+                        <strong>«&nbsp;Réservez&nbsp;»</strong> pour ouvrir le formulaire d’inscription et confirmer votre présence.
+                    </p>
                 </div>
-            </div>
-            {%  for event in events %}
-                {{ include('desk/ptn_elements/ele_events/widget_datesevent.html.twig', { location: event }) }}
-            {%  endfor %}
+            </aside>
         </div>
-    </div>
-        {{ include('desk/ptn_elements/ele_potins/tabOrderPotins.html.twig') }}
-    </div>
-{%  endblock body %}
 
-    {% block footer %}
-        {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
-    {% endblock footer %}
+        <section class="eventshow-dates">
+            <div class="eventshow-dates-header">
+                <h2>Dates disponibles</h2>
+                {% if primaryEvent is not null and primaryEvent.description is defined and primaryEvent.description %}
+                    <p class="eventshow-description">{{ primaryEvent.description|striptags }}</p>
+                {% endif %}
+            </div>
 
+            {% if eventGroups|length > 0 %}
+                <div class="eventshow-dates-grid">
+                    {% for event in eventGroups %}
+                        {{ include('desk/ptn_elements/ele_events/widget_datesevent.html.twig', { location: event }) }}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="eventshow-empty">Aucune date n’est planifiée pour le moment. Revenez vite !</p>
+            {% endif %}
+        </section>
+
+        <section class="eventshow-related">
+            {{ include('desk/ptn_elements/ele_potins/tabOrderPotins.html.twig') }}
+        </section>
+    </div>
+{% endblock body %}
+{% block footer %}
+    {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+{% endblock footer %}
 {% use "js/js_public_wb.html.twig" %}
 {% block javascripts %}
     {{ parent() }}

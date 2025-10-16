@@ -7880,6 +7880,124 @@ fr-mediation-numerique-cartographie {
     }
 }
 
+/* 🟢 Page événement (desk) */
+.container-showevent {
+    padding: 2rem 0 4rem;
+}
+
+.header-showevent {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.header-showevent h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.eventshow-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.eventshow-main {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.eventshow-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.eventshow-sidebar > * {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.eventshow-callout {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    border-left: 4px solid #2563eb;
+}
+
+.eventshow-callout h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+}
+
+.eventshow-callout p {
+    margin: 0;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.eventshow-dates {
+    margin-top: 3rem;
+}
+
+.eventshow-dates-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.eventshow-dates-header h2 {
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.eventshow-description {
+    color: #475569;
+    font-size: 1rem;
+    margin: 0 auto;
+    max-width: 720px;
+}
+
+.eventshow-dates-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.eventshow-empty {
+    text-align: center;
+    font-style: italic;
+    color: #64748b;
+}
+
+.eventshow-related {
+    margin-top: 4rem;
+}
+
+@media (max-width: 992px) {
+    .eventshow-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .eventshow-sidebar {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 640px) {
+    .header-showevent h1 {
+        font-size: 1.8rem;
+    }
+
+    .eventshow-callout h3 {
+        font-size: 1.2rem;
+    }
+}
+
 /* 🟢 Section Accès réservé */
 .access-section {
     text-align: center;
