@@ -126,11 +126,47 @@ class PostEventRepository extends ServiceEntityRepository
             //-> andWhere('ap.starttime >= :now')
             -> andWhere('ap.endtime >= :now')
             -> setParameter('now', $date)
-            -> andWhere('ptn.id >= :id')
+            -> andWhere('ptn.id = :id')
             -> setParameter('id', $id)
             -> orderBy('p.create_at', 'ASC')
             -> getQuery()
             -> getResult();
+    }
+
+    /**
+     * @param int[] $potinIds
+     * @return int[]
+     */
+    public function findPotinIdsWithUpcomingEvents(array $potinIds): array
+    {
+        if ($potinIds === []) {
+            return [];
+        }
+
+        $now = new DateTimeImmutable();
+
+        $qb = $this->createQueryBuilder('event')
+            ->select('DISTINCT IDENTITY(event.potin) AS potin_id')
+            ->leftJoin('event.appointment', 'appointment')
+            ->andWhere('event.deleted = false')
+            ->andWhere('event.publied = true')
+            ->andWhere('event.potin IN (:potinIds)')
+            ->setParameter('potinIds', $potinIds);
+
+        $expr = $qb->expr();
+        $qb->andWhere(
+            $expr->orX(
+                $expr->gte('appointment.endtime', ':now'),
+                $expr->gte('appointment.starttime', ':now')
+            )
+        )
+            ->setParameter('now', $now);
+
+        $results = $qb->getQuery()->getScalarResult();
+
+        return array_values(array_unique(array_map(static function ($row): int {
+            return (int) ($row['potin_id'] ?? 0);
+        }, $results)));
     }
 
     public function findLastBeforeWeek(){

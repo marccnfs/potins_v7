@@ -38,9 +38,24 @@ class Listpublications
         //$posts=$this->postRepository->findlast();  que les derniers par rapport au jour de consultation - x jours ??
         $posts=$this->postRepository->findAllPost();
 
+        $potinIds = [];
+        foreach ($posts as $post) {
+            if ($post instanceof Post && $post->getId() !== null) {
+                $potinIds[] = $post->getId();
+            }
+        }
+
+        $potinIdsWithEvents = $potinIds !== []
+            ? array_flip($this->postEventRepository->findPotinIdsWithUpcomingEvents($potinIds))
+            : [];
+
         /** @var Post $post */
         foreach ($posts as $post){
-            $taball[$post->getCreateAt()->getTimestamp()]=["post"=>$post];
+            $postId = $post->getId();
+            $taball[$post->getCreateAt()->getTimestamp()]=[
+                "post"=>$post,
+                "hasUpcomingEvent" => $postId !== null && isset($potinIdsWithEvents[$postId]),
+            ];
         }
         krsort($taball);
         return $taball;

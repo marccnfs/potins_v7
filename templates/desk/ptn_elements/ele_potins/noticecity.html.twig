@@ -1,8 +1,15 @@
 {% set post = notice.post ?? null %}
+{% set hasUpcomingEvent = notice.hasUpcomingEvent ?? false %}
 
 {% if post %}
 
     <a class="affiche_potin" href="{{ path('show_potin', { slug: post.slug, id: post.id }) }}">
+        {% if hasUpcomingEvent %}
+            <span class="potin-event-badge">
+                <span class="potin-event-badge__icon" aria-hidden="true">📅</span>
+                <span class="potin-event-badge__text">Évènement à venir</span>
+            </span>
+        {% endif %}
         {% if post.imageName %}
             <img class="img-allnotice" src="{{ vich_uploader_asset(post, 'ImageFile') }}" alt="image affiche">
         {% else %}

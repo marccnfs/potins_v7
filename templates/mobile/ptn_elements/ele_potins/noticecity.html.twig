@@ -1,6 +1,14 @@
+{% set hasUpcomingEvent = notice.hasUpcomingEvent ?? false %}
+
 <a class="affiche"
    href="{{ path('show_potin', {'slug': notice.post.slug, 'id': notice.post.id}) }}"
    aria-label="{{ notice.post.titre }}">
+    {% if hasUpcomingEvent %}
+        <span class="potin-event-badge potin-event-badge--mobile">
+            <span class="potin-event-badge__icon" aria-hidden="true">📅</span>
+            <span class="potin-event-badge__text">Évènement à venir</span>
+        </span>
+    {% endif %}
     <div class="evnet_titre_v8">{{ notice.post.titre }}</div>
     {% if notice.post.subject is not same as (" ") and notice.post.subject is not empty %}
         <div class="_fx-R_v2 _fx-convers_inv_v5">

@@ -3433,7 +3433,7 @@ a:active {
 .header-container {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding: 15px 30px;
     height: 100px;
     transition: height 0.4s ease-in-out;
