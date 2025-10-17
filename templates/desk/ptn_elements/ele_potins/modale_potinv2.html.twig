@@ -1,37 +1,3 @@
-{#
-<div class="fx-row-ress">
-    <div class="left_row_ress">
-          <div class="titlpotin">
-            <h2 title="ressouce : {{ potin.titre }}">{{ potin.titre|lower|capitalize }}</h2>
-        </div>
-
-        <div class="cadre_content">
-            <div class="text_cadre">
-                {% if potin.subject is not same as ("") %}
-                    <h3 class="potin-subject">{{ potin.subject|raw|lower|capitalize }}</h3>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    <div class="right_row_ress">
-        <div class="pic_right_ress">
-            {% if potin.media.imagejpg|length > 0 and potin.media.imagejpg[0].namefile is defined %}
-                <figure role="group" aria-label="image article">
-                    <img src="{{ asset(potin.media.imagejpg[0].getWebPath) }}" alt="illustration dall_e">
-                    <figcaption class="caption">"illustration dall_e"</figcaption>
-                </figure>
-            {% else %}
-                <figure role="group" aria-label="image article">
-                    {% if potin.imageName %}
-                        <img src="{{ vich_uploader_asset(potin, 'ImageFile') }}" alt="illustration dall_e">
-                        <figcaption class="caption">"illustration dall_e"</figcaption>
-                    {% endif %}
-                </figure>
-            {%  endif %}
-        </div>
-    </div>
-</div>
-#}
 <div class="potin-container">
     {% if potin.subject is not same as (" ") %}
         <h3 class="potin-subject">{{ potin.subject|raw|lower|capitalize }}</h3>

@@ -1,8 +1,36 @@
 {% block body %}
+    {% set potin = post %}
+    {% set potins = posts ?? [] %}
+    {% set ressources = ressources ?? [] %}
+    {% set eventGroups = events ?? [] %}
+    {% set summary = eventSummary ?? null %}
+    {% set referenceLocation = eventGroups|first|default(null) %}
+    {% set primaryEvent =
+        (summary is not null and summary.primaryEvent is defined) ? summary.primaryEvent :
+        (referenceLocation is not null and referenceLocation.bookingEvent is defined) ? referenceLocation.bookingEvent :
+        (referenceLocation is not null and referenceLocation.event is defined) ? referenceLocation.event :
+        (referenceLocation is not null ? referenceLocation : null) %}
+    {% set nextDate =
+        (summary is not null and summary.nextDate is defined) ? summary.nextDate :
+        (referenceLocation is not null and referenceLocation.nextDate is defined) ? referenceLocation.nextDate :
+        (referenceLocation is not null and referenceLocation.dates is defined and referenceLocation.dates|length > 0)
+        ? referenceLocation.dates|first
+        : null %}
     <div class="container-showpost">
         <div class="header-showpost">
             <h1>{{ potin.titre|lower|capitalize }}</h1>
-            <time itemprop="startDate" class="datepotin">Mis en ligne le : {{ potin.createAt|date("d-m-Y") }}</time>
+            {% if potin.description is defined and potin.description is not same as (" ") %}
+                <h3>{{ potin.description|raw|lower|capitalize }}</h3>
+            {% endif %}
+            {% if nextDate %}
+                <time class="datepotin" datetime="{{ nextDate|date('Y-m-d') }}">
+                    Prochaine date : {{ nextDate|date('d/m/Y') }}
+                </time>
+            {% elseif potin.createAt is defined %}
+                <time class="datepotin" datetime="{{ potin.createAt|date('Y-m-d') }}">
+                    Mis en ligne le : {{ potin.createAt|date('d/m/Y') }}
+                </time>
+            {% endif %}
         </div>
 
         <div class="content-grid">
@@ -13,6 +41,29 @@
 
             <!-- 🟢 Sidebar des ressources -->
             <aside class="sidebar">
+
+                <div class="eventshow-sidebar">
+                    <h3>🗓️ Prochaines dates</h3>
+                    {{ include('desk/ptn_elements/ele_events/modale_widg_event.html.twig', { eventSummary: summary, eventGroups: eventGroups }) }}
+{#
+                    {% if primaryEvent is not null and primaryEvent.description is defined and primaryEvent.description %}
+                        <p class="eventshow-description">{{ primaryEvent.description|striptags }}</p>
+                    {% endif %}
+#}
+
+                    {% if eventGroups|length > 0 %}
+                        <div class="eventshow-dates">
+                            <div class="eventshow-dates-grid">
+                                {% for event in eventGroups %}
+                                    {{ include('desk/ptn_elements/ele_events/widget_datesevent.html.twig', { location: event }) }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <p class="eventshow-empty">Aucune date n’est planifiée pour le moment. Revenez vite !</p>
+                    {% endif %}
+                </div>
+
                 <h3>📚 Ressources associées</h3>
                 {% for ressource in ressources %}
                     {{ include('desk/ptn_elements/ele_ressources/widget_lite_ressources.html.twig') }}
@@ -33,7 +84,7 @@
                     </div>
                 </div>
 
-                {%  if  potin.link is not null %}
+                {% if  potin.link is not null %}
                     <div class="list_content">
                         <h3>🎲 Crée ton escape game ici !</h3>
                         <div class="bk_content">
@@ -50,13 +101,14 @@
                         <div class="w_review">
                             <div class="pict_wall">
                                 {% for pict in potin.gpreview.media.imagejpg %}
-                                    <div class="little-pic-block" style="background-image: url({{ asset(pict.getWebPath) }})"></div>
+                                    <div class="little-pic-block"
+                                         style="background-image: url({{ asset(pict.getWebPath) }})"></div>
                                 {% endfor %}
                             </div>
                         </div>
                     {% endif %}
 
-                    {%  if  potin.gpreview.reviews|length > 0 %}
+                    {% if  potin.gpreview.reviews|length > 0 %}
                         <div class="list_content">
                             <h3>📄 Documents associés</h3>
                             <ul class="bk_content">
@@ -64,7 +116,8 @@
                                     <li>
                                         {{ rw.titre }}
                                         {% set typ = rw.type ? "1" : "0" %}
-                                        <a class="btn-view-pdf" href="{{ path('show_potin_review_pdf', {type: typ, slug: potin.slug, id: potin.id}) }}">
+                                        <a class="btn-view-pdf"
+                                           href="{{ path('show_potin_review_pdf', {type: typ, slug: potin.slug, id: potin.id}) }}">
                                             <i class="fa fa-eye"></i> Voir
                                         </a>
                                     </li>
@@ -77,11 +130,11 @@
         </div>
 
         <!-- 🟢 Autres ateliers -->
-      {#   <section class="related-posts">
+        {#   <section class="related-posts">
             <h3>📌 Autres ateliers à découvrir</h3>
             {{ include('desk/ptn_elements/ele_potins/tabOrderPotins.html.twig') }}
         </section>
-      #}
+        #}
 
         <div class="cadre_title related-posts">
             <h3>📌 Autres ateliers à découvrir</h3>
@@ -93,18 +146,17 @@
                     {{ include('desk/ptn_elements/ele_potins/lastpotinslist.html.twig') }}
                 </div>
             </div>
-        {%  else %}
+        {% else %}
             <div class="tgl-100">
                 <div class="fx-content_rep_potinary">
                     <div class="flex-board">
                         <div class="flex-notb_v6-fix">
-                            <h3>  Aucun potin disponible</h3>
+                            <h3> Aucun potin disponible</h3>
                         </div>
                     </div>
                 </div>
             </div>
         {% endif %}
-
 
 
     </div>

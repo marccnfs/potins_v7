@@ -1,3 +1,7 @@
+{% if potin.subject is not same as (" ") %}
+    <h3 class="potin-subject">{{ potin.subject|raw|lower|capitalize }}</h3>
+{% endif %}
+
 <div class="illustr-potin">
     <div class="pt_pict_rec">
         {% if potin.media.imagejpg[0].namefile is defined %}
@@ -8,7 +12,7 @@
                      alt="{{ potin.titre }}"
                      loading="lazy">
             </div>
-        {% elseif potin.imageName %}
+        {% else potin.imageName %}
             <div class="bac_img"
                  style="background-image: url('{{ vich_uploader_asset(potin, 'ImageFile') }}')"
                  role="presentation">
@@ -20,24 +24,38 @@
     </div>
 </div>
 
-{% if contents|length > 0 %}
-    {% for content in contents %}
-        {% if content is not same as ("") %}
-            <div class="pwa-inner-post">
-                <div class="pwa-post-content">
-                    <div class="pwa-article-content">
-                        {{ content|raw }}
-                    </div>
-                </div>
+
+<div class="pwa-inner-post">
+    {% for article in potin.htmlcontent %}
+    <div class="pwa-post-content">
+        <h2>{{ article.titre }}</h2>
+        <div class="pwa-article-content">
+            {{ article.contenu|raw }}
+        </div>
+
+        {% if article.mediaName is not null %}
+            <div class="article-media">
+                {% if article.mediaName matches '/\.(jpg|jpeg|png|gif)$/i' %}
+                    <img src="{{ asset('uploads/articles/' ~ article.mediaName) }}" alt="Illustration de {{ article.titre }}">
+                {% elseif article.mediaName matches '/\.(mp4|webm|ogg)$/i' %}
+                    <video controls>
+                        <source src="{{ asset('uploads/articles/' ~ article.mediaName) }}" type="video/mp4">
+                        Votre navigateur ne supporte pas la lecture de vidéos.
+                    </video>
+                {% endif %}
             </div>
         {% endif %}
-        {% if loop.index == 1 and potin.iframevideo is not empty %}
-            <div class="videoWrapper">{{ potin.iframevideo|raw }}</div>
-        {% endif %}
+    </div>
+</div>
+
+{#
+    {% if loop.index == 1 and potin.iframevideo is not empty %}
+        <div class="videoWrapper">{{ potin.iframevideo|raw }}</div>
+    {% endif %}
     {% endfor %}
 {% elseif potin.iframevideo is not empty %}
     <div class="videoWrapper">{{ potin.iframevideo|raw }}</div>
 {% endif %}
 
 
-
+#}

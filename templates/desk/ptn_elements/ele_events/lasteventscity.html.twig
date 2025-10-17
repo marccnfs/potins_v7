@@ -10,13 +10,13 @@
         {% set bookingDate = featuredDate ?? bookingEvent.appointment.starttime ?? primaryEvent.appointment.starttime %}
         <div class="wp-event_card color-event-{{ col }}">
             <div class="inner-event">
-                <div class="w_titlevent">
+                {# <div class="w_titlevent">
                     <h2 title="evenement de {{ potin.titre }}">{{ potin.titre|lower|capitalize }}</h2>
                     {% if primaryEvent.description is defined and primaryEvent.description is not same as (" ") %}
                         <h3>{{ primaryEvent.description|raw|lower|capitalize }}</h3>
                     {% endif %}
                 </div>
-
+                #}
                 <div class="info_event">
                     <div class="ptn-inf1">
                         <div class="ptn-info0">
@@ -107,13 +107,13 @@
                     {% endif %}
                 {% else %}
                     <nav class="relational_abs">
-                        <a href="{{ path('show_event_id',{'id':potin.id}) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">en savoir plus</a>
+                        <a href="{{ path('show_event_id',{'id':potin.id}) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">Découvrir l'atelier</a>                      <a href="{{ path('show_event_id',{'id':potin.id}) }}" class="nav1 btn  hide-on-mobile" title="rendez-vous">en savoir plus</a>
                     </nav>
                 {% endif %}
 
 
                 </div>
-
+{#
             <div class="illustr-event_card">
                 <div class="e_pictfull_card">
                     {% if potin is not null and potin.media.imagejpg|length > 0 and potin.media.imagejpg[0].namefile is defined %}
@@ -123,6 +123,7 @@
                     {% endif %}
                 </div>
             </div>
+#}
         </div>
     {% endfor %}
 {% else %}

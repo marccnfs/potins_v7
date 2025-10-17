@@ -86,10 +86,10 @@
                     {% if is_granted("ROLE_MEDIA") %}
                         <a href="{{ path('back_admin_cmd_potins',{'id':bookingEvent.id}) }}" class="mb-event-button" title="rendez-vous">Réservez</a>
                     {% else %}
-                        <a href="{{ path('show_event_id',{'id':potin.id}) }}" class="mb-event-button" title="rendez-vous">Voir le détail</a>
+                        <a href="{{ path('show_event_id',{'id':potin.id}) }}" class="mb-event-button" title="rendez-vous">Découvrir l'atelier</a>                       <a href="{{ path('show_event_id',{'id':potin.id}) }}" class="mb-event-button" title="rendez-vous">Voir le détail</a>
                     {% endif %}
                 {% else %}
-                    <a href="{{ path('show_event_id',{'id':potin.id}) }}" class="mb-event-button" title="rendez-vous">Voir le détail</a>
+                    <a href="{{ path('show_event_id',{'id':potin.id}) }}" class="mb-event-button" title="rendez-vous">Découvrir l'atelier</a>                    <a href="{{ path('show_event_id',{'id':potin.id}) }}" class="mb-event-button" title="rendez-vous">Voir le détail</a>
                 {% endif %}
             </div>
         </div>

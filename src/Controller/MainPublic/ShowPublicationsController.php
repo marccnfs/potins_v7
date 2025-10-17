@@ -38,6 +38,10 @@ class ShowPublicationsController extends AbstractController
             $ressourcespotins=[];
         }
 
+        $tabevent=$searchmodule->searchEventWithPostAndBoard($id);
+        if(!$tab)return $this->redirectToRoute('board_all');
+        $eventstab=$tabevent['events'];
+
         $vartwig = $this->menuNav->postinfoObj(
             $tab['post'],'showpost',Links::SHOWPOST );
 
@@ -48,9 +52,39 @@ class ShowPublicationsController extends AbstractController
             'vartwig' => $vartwig,
             'contents'=>$tab['contents'],
             'mcdata'=>true,
-            'potin'=>$tab['post'],
-            'potins'=>$otherpotins,
+            'post'=>$tab['post'],
+            'posts'=>$otherpotins,
+            'events'=>$eventstab,
+            'eventSummary' => $eventstab['eventSummary'] ?? null,
             'ressources'=>$ressourcespotins,
+            'entity'=>$tab['post']->getId(),
+            'customer' => $this->customer,
+        ]);
+    }
+
+    #[Route('eventshow/{id}', name:"show_event_id")]//todo a supprimer car double emploi avec #[Route('potin/{slug}/{id}', name:"show_potin")]
+    public function showEventId(Searchmodule $searchmodule, $id ): Response
+    {
+        $tab=$searchmodule->searchEventWithPostAndBoard($id);
+        if(!$tab)return $this->redirectToRoute('board_all');
+        $eventstab=$tab['events'];
+
+
+        $vartwig = $this->menuNav->postinfoObj(
+            $tab['post'],
+            'showevent',
+            Links::SHOWPOST );
+
+        return $this->render($this->useragentP.'ptn_public/home.html.twig', [
+            'directory'=>'show',
+            'replacejs'=>!empty($tab['posts']),
+            'vartwig' => $vartwig,
+            'contents'=>$tab['content'],
+            'mcdata'=>true,
+            'post'=>$tab['post'],
+            'posts'=>$tab['posts'],
+            'events'=>$eventstab,
+            'eventSummary' => $tab['eventSummary'] ?? null,
             'entity'=>$tab['post']->getId(),
             'customer' => $this->customer,
         ]);
@@ -145,34 +179,4 @@ class ShowPublicationsController extends AbstractController
             'customer' => $this->customer,
         ]);
     }
-
-
-    #[Route('eventshow/{id}', name:"show_event_id")]
-    public function showEventId(Searchmodule $searchmodule, $id ): Response
-    {
-        $tab=$searchmodule->searchEventWithPostAndBoard($id);
-        if(!$tab)return $this->redirectToRoute('board_all');
-        $eventstab=$tab['events'];
-
-
-        $vartwig = $this->menuNav->postinfoObj(
-            $tab['post'],
-            'showevent',
-            Links::SHOWPOST );
-
-        return $this->render($this->useragentP.'ptn_public/home.html.twig', [
-            'directory'=>'show',
-            'replacejs'=>!empty($tab['posts']),
-            'vartwig' => $vartwig,
-            'content'=>$tab['content'],
-            'mcdata'=>true,
-            'post'=>$tab['post'],
-            'posts'=>$tab['posts'],
-            'events'=>$eventstab,
-            'eventSummary' => $tab['eventSummary'] ?? null,
-            'entity'=>$tab['post']->getId(),
-            'customer' => $this->customer,
-        ]);
-    }
-
 }

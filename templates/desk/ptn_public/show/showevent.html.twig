@@ -1,4 +1,7 @@
 {% block body %}
+    {% set potin = post %}
+    {% set potins = posts ?? [] %}
+    {% set ressources = ressources ?? [] %}
     {% set eventGroups = events ?? [] %}
     {% set summary = eventSummary ?? null %}
     {% set referenceLocation = eventGroups|first|default(null) %}
@@ -12,69 +15,135 @@
         (summary is not null and summary.nextDate is defined) ? summary.nextDate :
         (referenceLocation is not null and referenceLocation.nextDate is defined) ? referenceLocation.nextDate :
         (referenceLocation is not null and referenceLocation.dates is defined and referenceLocation.dates|length > 0)
-        ? referenceLocation.dates|first
-        : null
+            ? referenceLocation.dates|first
+            : null
     %}
-q
-    <div class="container-websit container-showevent">
-        <div class="before_board"></div>
-        {% set entity, typ = post, "blog" %}
 
-        <header class="header-showevent">
-            <h1>{{ post.titre|lower|capitalize }}</h1>
-            {% if nextDate %}
+<div class="container-showpost">
+    <div class="header-showpost">
+        <h1>{{ potin.titre|lower|capitalize }}</h1>
+        {% if nextDate %}
                 <time class="datepotin" datetime="{{ nextDate|date('Y-m-d') }}">
                     Prochaine date : {{ nextDate|date('d/m/Y') }}
                 </time>
-            {% elseif post.createAt is defined %}
-                <time class="datepotin" datetime="{{ post.createAt|date('Y-m-d') }}">
-                    Mis en ligne le : {{ post.createAt|date('d/m/Y') }}
-                </time>
-            {% endif %}
-        </header>
+        {% elseif potin.createAt is defined %}
+            <time class="datepotin" datetime="{{ potin.createAt|date('Y-m-d') }}">
+                Mis en ligne le : {{ potin.createAt|date('d/m/Y') }}
+            </time>
+        {% endif %}
 
-        <div class="eventshow-layout">
-            <section class="eventshow-main">
-                {{ include('desk/ptn_elements/ele_potins/modale_potin.html.twig') }}
-            </section>
-
-            <aside class="eventshow-sidebar">
-                {{ include('desk/ptn_elements/ele_events/modale_widg_event.html.twig', { eventSummary: eventSummary ?? null, eventGroups: events }) }}
-
-                <div class="eventshow-callout">
-                    <h3>Participez !</h3>
-                    <p>
-                        Choisissez une date dans l’une des localités proposées, puis cliquez sur le bouton
-                        <strong>«&nbsp;Réservez&nbsp;»</strong> pour ouvrir le formulaire d’inscription et confirmer votre présence.
-                    </p>
-                </div>
-            </aside>
+        </div>
+    <div class="content-grid">
+        <div class="main-content">
+            {{ include('desk/ptn_elements/ele_potins/modale_potinv2.html.twig') }}
         </div>
 
-        <section class="eventshow-dates">
-            <div class="eventshow-dates-header">
-                <h2>Dates disponibles</h2>
+        <aside class="sidebar">
+            <h3>📚 Ressources associées</h3>
+            {% for ressource in ressources %}
+                {{ include('desk/ptn_elements/ele_ressources/widget_lite_ressources.html.twig') }}
+            {% endfor %}
+
+            <div class="access-section">
+                <div class="author">🔒 Retour sur les ateliers<br>(accès réservé aux participants)</div>
+
+                <button class="link_code"><i class="fa fa-sign-in" id="goaccess"></i></button>
+
+                <div class="pop_code" id="codeaccess" data-post="{{ potin.id }}" style="display:none">
+                    <button class="close_pop" id="closecode">
+                        <i class="fa fa-times"></i>
+                    </button>
+                    <h2>Entrez votre code d'accès :</h2>
+                    <div id="testcode"></div>
+                    <test-access></test-access>
+                </div>
+                </div>
+            {% if potin.link is not null %}
+                <div class="list_content">
+                    <h3>🎲 Crée ton escape game ici !</h3>
+                    <div class="bk_content">
+                        <a class="btn-view-pdf" href={{ potin.link }}>
+                            ⛳ Go
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if potin.gpreview is not null %}
+                {% if potin.gpreview.media.imagejpg is defined %}
+                    <div class="w_review">
+                        <div class="pict_wall">
+                            {% for pict in potin.gpreview.media.imagejpg %}
+                                <div class="little-pic-block" style="background-image: url({{ asset(pict.getWebPath) }})"></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if potin.gpreview.reviews|length > 0 %}
+                    <div class="list_content">
+                        <h3>📄 Documents associés</h3>
+                        <ul class="bk_content">
+                            {% for rw in potin.gpreview.reviews %}
+                                <li>
+                                    {{ rw.titre }}
+                                    {% set typ = rw.type ? "1" : "0" %}
+                                    <a class="btn-view-pdf" href="{{ path('show_potin_review_pdf', {type: typ, slug: potin.slug, id: potin.id}) }}">
+                                        <i class="fa fa-eye"></i> Voir
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            <aside class="eventshow-sidebar">
+                <h3>🗓️ Prochaines dates</h3>
+                {{ include('desk/ptn_elements/ele_events/modale_widg_event.html.twig', { eventSummary: summary, eventGroups: eventGroups }) }}
+
                 {% if primaryEvent is not null and primaryEvent.description is defined and primaryEvent.description %}
                     <p class="eventshow-description">{{ primaryEvent.description|striptags }}</p>
                 {% endif %}
-            </div>
 
-            {% if eventGroups|length > 0 %}
-                <div class="eventshow-dates-grid">
-                    {% for event in eventGroups %}
-                        {{ include('desk/ptn_elements/ele_events/widget_datesevent.html.twig', { location: event }) }}
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p class="eventshow-empty">Aucune date n’est planifiée pour le moment. Revenez vite !</p>
-            {% endif %}
-        </section>
-
-        <section class="eventshow-related">
-            {{ include('desk/ptn_elements/ele_potins/tabOrderPotins.html.twig') }}
-        </section>
+                {% if eventGroups|length > 0 %}
+                    <div class="eventshow-dates">
+                        <div class="eventshow-dates-grid">
+                            {% for event in eventGroups %}
+                                {{ include('desk/ptn_elements/ele_events/widget_datesevent.html.twig', { location: event }) }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="eventshow-empty">Aucune date n’est planifiée pour le moment. Revenez vite !</p>
+                {% endif %}
+            </aside>
+        </aside>
     </div>
-{% endblock body %}
+
+    <div class="cadre_title related-posts">
+        <h3>📌 Autres ateliers à découvrir</h3>
+    </div>
+
+    {% if potins|length > 0 %}
+        <div class="tgl-100">
+            <div class="fx-content_rep_potinary">
+                {{ include('desk/ptn_elements/ele_potins/lastpotinslist.html.twig') }}
+            </div>
+        </div>
+    {% else %}
+        <div class="tgl-100">
+            <div class="fx-content_rep_potinary">
+                <div class="flex-board">
+                    <div class="flex-notb_v6-fix">
+                        <h3>  Aucun potin disponible</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    </div>
+{% endblock %}
 {% block footer %}
     {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
 {% endblock footer %}
