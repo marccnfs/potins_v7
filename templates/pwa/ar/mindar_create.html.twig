@@ -1,10 +1,13 @@
-<section class="container mx-auto p-4" data-controller="mindar-create">
-    <h1>Créateur Jardin Zen</h1>
+<section class="container mx-auto p-4 space-y-6" data-controller="mindar-create">
+    <div>
+        <h1>Créateur Jardin Zen</h1>
+        <p class="text-sm text-gray-600">Associe un modèle 3D, un son optionnel et un fichier cible MindAR pour générer une scène jouable.</p>
+    </div>
 
 
     <form class="space-y-4">
         <label class="block">Modèle 3D</label>
-        <select data-mindar-create-target="model">
+        <select data-mindar-create-target="model" class="w-full border rounded p-2">
             <option value="/build/models/lotus.glb">Lotus</option>
             <option value="/build/models/rock.glb">Pierre</option>
             <option value="/build/models/bamboo.glb">Bambou</option>
@@ -12,7 +15,7 @@
 
 
         <label class="block">Son</label>
-        <select data-mindar-create-target="sound">
+        <select data-mindar-create-target="sound" class="w-full border rounded p-2">
             <option value="">(aucun)</option>
             <option value="/build/audio/forest.mp3">Forêt</option>
             <option value="/build/audio/water.mp3">Eau</option>
@@ -20,18 +23,84 @@
 
 
         <label class="block">Fichier cible (.mind)</label>
-        <input type="file" accept=".mind" data-mindar-create-target="mindfile" />
+        <input type="file" accept=".mind" data-mindar-create-target="mindfile" class="w-full" />
 
 
-        <button type="button" data-action="mindar-create#preview" class="btn">Prévisualiser</button>
-        <button type="button" data-action="mindar-create#save" class="btn btn-primary">Enregistrer la scène</button>
+        <div class="flex flex-col gap-3 sm:flex-row">
+            <button type="button" data-action="mindar-create#preview" class="btn sm:w-auto">Prévisualiser</button>
+            <button type="button" data-action="mindar-create#save" class="btn btn-primary sm:w-auto">Enregistrer la scène</button>
+        </div>
     </form>
 
-
-    <hr class="my-6" />
-
-
-    <div id="preview" class="border rounded p-2">
-        <!-- La scène A‑Frame de prévisualisation est injectée par Stimulus -->
+    <div class="border rounded p-4 bg-gray-50">
+        <h2 class="font-semibold mb-2">Prévisualisation</h2>
+        <p class="text-sm text-gray-600 mb-4">Après avoir sélectionné un fichier .mind, clique sur « Prévisualiser » pour charger la scène dans A-Frame.</p>
+        <div id="preview"
+             data-mindar-create-target="preview"
+             class="aspect-video bg-white border rounded flex items-center justify-center text-gray-400 text-sm">
+            <!-- La scène A‑Frame de prévisualisation est injectée par Stimulus -->
+            Prévisualisation en attente…
+        </div>
     </div>
+
+    {% if packs is not empty %}
+        <div class="border rounded p-4 space-y-3">
+            <h2 class="font-semibold">Bibliothèque de packs MindAR</h2>
+            <p class="text-sm text-gray-600">Ces jeux de cibles sont déposés dans <code>public/mindar/packs</code> et copiés dans le build. Utilise le chemin indiqué pour renseigner le champ « Fichier cible » ou pour préparer des démonstrations.</p>
+            <ul class="space-y-2">
+                {% for pack in packs %}
+                    <li class="border rounded p-3 bg-white">
+                        <div class="flex flex-col gap-1">
+                            <strong>{{ pack.name }}</strong>
+                            <code class="text-xs break-all">{{ pack.pathMind }}</code>
+                            {% if pack.items is not empty %}
+                                <ul class="text-sm text-gray-600 list-disc list-inside mt-2">
+                                    {% for item in pack.items %}
+                                        <li>
+                                            <span class="font-medium">{{ item.label|default('Cible ' ~ loop.index) }}</span>
+                                            {% if item.description is defined and item.description %}
+                                                — {{ item.description }}
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <section class="border rounded p-4 space-y-3" data-controller="ar--mindar-build">
+        <h2 class="font-semibold">Générer un fichier .mind depuis le navigateur</h2>
+        <p class="text-sm text-gray-600">Ajoute une ou plusieurs images contrastées. Le compilateur MindAR évalue leur qualité puis produit un fichier utilisable par l’atelier.</p>
+
+
+        <input type="file"
+               accept="image/*"
+               multiple
+               data-ar--mindar-build-target="images"
+               class="w-full border rounded p-2" />
+
+        <div class="flex flex-col gap-3 sm:flex-row">
+            <button type="button"
+                    class="btn sm:w-auto"
+                    data-action="click->ar--mindar-build#compile">
+                Compiler localement
+            </button>
+            <button type="button"
+                    class="btn btn-secondary sm:w-auto"
+                    data-ar--mindar-build-target="uploadBtn"
+                    data-action="click->ar--mindar-build#upload"
+                    disabled>
+                Téléverser sur le serveur
+            </button>
+        </div>
+
+        <p class="text-sm text-gray-600" data-ar--mindar-build-target="score"></p>
+        <p class="text-xs text-gray-500">Le fichier généré est stocké en mémoire jusqu’au téléversement. Tu peux aussi le télécharger via l’outil CLI <code>node tools/mindar/build-mind.js &lt;image&gt; &lt;sortie&gt;</code>.</p>
+    </section>
+
+    <script src="/build/mindar/mindar-image-compiler.prod.js"></script>
 </section>
