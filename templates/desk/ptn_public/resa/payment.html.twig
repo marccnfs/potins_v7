@@ -19,7 +19,10 @@
                     </ul>
                     <p>Vous recevrez très prochainement un e-mail détaillant la marche à suivre pour régler votre réservation.</p>
                     <p>Besoin d’aide ? Contactez-nous et nous vous guiderons pas à pas.</p>
-                    <a class="btn" href="{{ path('show_event_id', {'id': event.potin.id}) }}">Retour au potin</a>
+                    {% set potinId = event.potin.id ?? null %}
+                    {% set potinSlug = (event.potin.slug ?? null) ?: (potinId ? 'potin-' ~ potinId : 'potin') %}
+                    {% if potinId %}
+                    <a class="btn" href="{{ path('show_potin', {'slug': potinSlug, 'id': potinId}) }}">Retour au potin</a>
                 </div>
             </div>
         </section>

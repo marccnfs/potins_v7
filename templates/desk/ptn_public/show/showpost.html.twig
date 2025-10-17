@@ -45,17 +45,12 @@
                 <div class="eventshow-sidebar">
                     <h3>🗓️ Prochaines dates</h3>
                     {{ include('desk/ptn_elements/ele_events/modale_widg_event.html.twig', { eventSummary: summary, eventGroups: eventGroups }) }}
-{#
-                    {% if primaryEvent is not null and primaryEvent.description is defined and primaryEvent.description %}
-                        <p class="eventshow-description">{{ primaryEvent.description|striptags }}</p>
-                    {% endif %}
-#}
 
                     {% if eventGroups|length > 0 %}
                         <div class="eventshow-dates">
                             <div class="eventshow-dates-grid">
                                 {% for event in eventGroups %}
-                                    {{ include('desk/ptn_elements/ele_events/widget_datesevent.html.twig', { location: event }) }}
+                                    {{ include('desk/ptn_elements/ele_events/widget_datesevent.html.twig', { location: event, colorIndex: loop.index0 }) }}
                                 {% endfor %}
                             </div>
                         </div>

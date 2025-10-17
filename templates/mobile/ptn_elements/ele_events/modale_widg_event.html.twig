@@ -22,7 +22,7 @@
 
 <div class="widget_event_card color-event-1">
     <div class="widget_inner-event">
-
+{#
         <div class="w_titlevent">
             {% if potin %}
                 <h2 title="evenement de {{ potin.titre }}">{{ potin.titre|lower|capitalize }}</h2>
@@ -33,7 +33,7 @@
                 <h3>{{ primaryEvent.description|raw|lower|capitalize }}</h3>
             {% endif %}
         </div>
-
+#}
         <div class="info_event">
             <div class="ptn-inf1">
                 <div class="ptn-info0">
@@ -70,7 +70,7 @@
         </div>
         {{ include('mobile/ptn_elements/ele_events/bar_resa.html.twig') }}
     </div>
-
+{#
     <div class="illustr-event_card" >
         <div class="e_pictfull_card">
             {% if potin is not null %}
@@ -84,4 +84,5 @@
             {% endif %}
         </div>
     </div>
+#}
 </div>

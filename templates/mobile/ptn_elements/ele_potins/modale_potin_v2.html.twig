@@ -12,7 +12,8 @@
                      alt="{{ potin.titre }}"
                      loading="lazy">
             </div>
-        {% else potin.imageName %}
+        {% else %}
+            {% if potin.imageName %}
             <div class="bac_img"
                  style="background-image: url('{{ vich_uploader_asset(potin, 'ImageFile') }}')"
                  role="presentation">
@@ -20,6 +21,7 @@
                      alt="{{ potin.titre }}"
                      loading="lazy">
             </div>
+            {% endif %}
         {% endif %}
     </div>
 </div>
@@ -46,6 +48,7 @@
             </div>
         {% endif %}
     </div>
+    {% endfor %}
 </div>
 
 {#

@@ -23,69 +23,75 @@ class ShowPublicationsController extends AbstractController
     /**
      * @throws NonUniqueResultException
      */
-    #[Route('potin/{slug}/{id}', name:"show_potin")]
-    public function showPotin(SearchRessources $searchRessources,Searchmodule $searchmodule,ListEvent $listEvent,$id,$slug): Response
-    {
-        $tab=$searchmodule->searchAllInfoWithReviewsAndRessourcesOfOnePotinId($id);
-        if(!is_array($tab) || empty($tab['post']))return $this->redirectToRoute('board_all');
+    #[Route('potin/{slug}/{id}', name:"show_potin", requirements: ['id' => '\\d+'])]
+    public function showPotin(
+        SearchRessources $searchRessources,
+        Searchmodule $searchmodule,
+        int $id,
+        string $slug
+    ): Response {
+        $potinData = $searchmodule->searchAllInfoWithReviewsAndRessourcesOfOnePotinId($id);
+        $eventData = $searchmodule->searchEventWithPostAndBoard($id);
 
-        $otherpotins=$searchmodule->searchAllOtherPotinsWithOutThisOne($id);
-
-
-        if($tab['post']->getGpressources()){
-            $ressourcespotins=$searchRessources->findRessourcesOfPotins($tab['post']->getGpressources()->getId());
-        }else{
-            $ressourcespotins=[];
+        if ((!is_array($potinData) || empty($potinData['post'])) && (!is_array($eventData) || empty($eventData['post']))) {
+            return $this->redirectToRoute('board_all');
         }
 
-        $tabevent=$searchmodule->searchEventWithPostAndBoard($id);
-        if(!$tab)return $this->redirectToRoute('board_all');
-        $eventstab=$tabevent['events'];
+        $post = $potinData['post'] ?? $eventData['post'];
+        if (!$post) {
+            return $this->redirectToRoute('board_all');
+        }
+
+        if (method_exists($post, 'getSlug')) {
+            $canonicalSlug = (string) $post->getSlug();
+            if ($canonicalSlug !== '' && $canonicalSlug !== $slug) {
+                return $this->redirectToRoute('show_potin', [
+                    'slug' => $canonicalSlug,
+                    'id' => $post->getId(),
+                ], 301);
+            }
+        }
+        $contents = [];
+        if (is_array($potinData) && !empty($potinData['contents'])) {
+            $contents = $potinData['contents'];
+        } elseif (is_array($eventData) && !empty($eventData['content'])) {
+            $eventContent = $eventData['content'];
+            $contents = is_array($eventContent) ? $eventContent : [$eventContent];
+        }
+
+        $otherPotins = [];
+        if (is_array($potinData) && !empty($potinData['post'])) {
+            $otherPotins = $searchmodule->searchAllOtherPotinsWithOutThisOne($post->getId()) ?: [];
+        } elseif (is_array($eventData) && isset($eventData['posts'])) {
+            $otherPotins = $eventData['posts'] ?: [];
+        }
+
+        $ressources = [];
+        if (method_exists($post, 'getGpressources') && $post->getGpressources()) {
+            $ressources = $searchRessources->findRessourcesOfPotins($post->getGpressources()->getId());
+        }
+
+        $events = is_array($eventData) ? ($eventData['events'] ?? []) : [];
+        $eventSummary = is_array($eventData) ? ($eventData['eventSummary'] ?? null) : null;
 
         $vartwig = $this->menuNav->postinfoObj(
-            $tab['post'],'showpost',Links::SHOWPOST );
+            $post,
+            'showpost',
+            Links::SHOWPOST
+        );
 
-
-        return $this->render($this->useragentP.'ptn_public/home.html.twig', [
-            'directory'=>'show',
-            'replacejs'=>!empty($tab['posts']),
+        return $this->render($this->useragentP . 'ptn_public/home.html.twig', [
+            'directory' => 'show',
+            'replacejs' => !empty($otherPotins),
             'vartwig' => $vartwig,
-            'contents'=>$tab['contents'],
-            'mcdata'=>true,
-            'post'=>$tab['post'],
-            'posts'=>$otherpotins,
-            'events'=>$eventstab,
-            'eventSummary' => $eventstab['eventSummary'] ?? null,
-            'ressources'=>$ressourcespotins,
-            'entity'=>$tab['post']->getId(),
-            'customer' => $this->customer,
-        ]);
-    }
-
-    #[Route('eventshow/{id}', name:"show_event_id")]//todo a supprimer car double emploi avec #[Route('potin/{slug}/{id}', name:"show_potin")]
-    public function showEventId(Searchmodule $searchmodule, $id ): Response
-    {
-        $tab=$searchmodule->searchEventWithPostAndBoard($id);
-        if(!$tab)return $this->redirectToRoute('board_all');
-        $eventstab=$tab['events'];
-
-
-        $vartwig = $this->menuNav->postinfoObj(
-            $tab['post'],
-            'showevent',
-            Links::SHOWPOST );
-
-        return $this->render($this->useragentP.'ptn_public/home.html.twig', [
-            'directory'=>'show',
-            'replacejs'=>!empty($tab['posts']),
-            'vartwig' => $vartwig,
-            'contents'=>$tab['content'],
-            'mcdata'=>true,
-            'post'=>$tab['post'],
-            'posts'=>$tab['posts'],
-            'events'=>$eventstab,
-            'eventSummary' => $tab['eventSummary'] ?? null,
-            'entity'=>$tab['post']->getId(),
+            'contents' => $contents,
+            'mcdata' => true,
+            'post' => $post,
+            'posts' => $otherPotins,
+            'events' => $events,
+            'eventSummary' => $eventSummary,
+            'ressources' => $ressources,
+            'entity' => $post->getId(),
             'customer' => $this->customer,
         ]);
     }

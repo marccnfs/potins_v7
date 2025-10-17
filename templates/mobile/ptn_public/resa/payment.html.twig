@@ -10,7 +10,11 @@
             {% endif %}
             <p><strong>Total :</strong> {{ total|number_format(2, ',', ' ') }} €</p>
             <p>Vous recevrez rapidement un message avec la procédure de paiement.</p>
-            <a class="btn" href="{{ path('show_event_id', {'id': event.potin.id}) }}">Retour au potin</a>
+            {% set potinId = event.potin.id ?? null %}
+            {% set potinSlug = (event.potin.slug ?? null) ?: (potinId ? 'potin-' ~ potinId : 'potin') %}
+            {% if potinId %}
+                <a class="btn" href="{{ path('show_potin', {'slug': potinSlug, 'id': potinId}) }}">Retour au potin</a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

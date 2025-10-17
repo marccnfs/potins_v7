@@ -59,11 +59,14 @@ class AgendaController extends AbstractController
                 $startsAtParis = $startsAt->setTimezone($tzParis);
                 $endsAtParis = $endsAt ? $endsAt->setTimezone($tzParis) : null;
 
-                $url = $this->generateUrl('show_event_id', ['id' => $postEvent->getId()]);
+                $url = $this->generateUrl('board_all');
                 $potin = $postEvent->getPotin();
-                if ($potin && $potin->getSlug()) {
+                if ($potin && $potin->getId()) {
+                    $slug = method_exists($potin, 'getSlug') && $potin->getSlug()
+                        ? $potin->getSlug()
+                        : sprintf('potin-%d', $potin->getId());
                     $url = $this->generateUrl('show_potin', [
-                        'slug' => $potin->getSlug(),
+                        'slug' => $slug,
                         'id'   => $potin->getId(),
                     ]);
                 }
