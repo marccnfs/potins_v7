@@ -77,7 +77,7 @@
                                     <td>
                                         {% if session.completed %}
                                             <span class="badge badge-success">Terminée</span>
-                                        {% elseif session is same as "active" %}
+                                        {% elseif session is same as(active) %}
                                             <span class="badge badge-primary">En cours</span>
                                         {% else %}
                                             <span class="badge">Interrompue</span>
