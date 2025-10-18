@@ -9427,7 +9427,7 @@ pre.code {
     height: 34px;
     border: 1px solid #e5e7eb;
     border-radius: .6rem;
-    background: #f8fafc;
+    background: #e20814;
     text-decoration: none;
     color: inherit;
     transition: background .2s ease, border-color .2s ease, color .2s ease;
@@ -9438,6 +9438,16 @@ pre.code {
     border-color: #93c5fd;
     color: #1d4ed8;
     font-weight: 600
+}
+
+.step-dot[data-status="upcoming"] {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+    color: #94a3b8;
+}
+
+.step-dot[data-status="current"] {
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, .15);
 }
 
 .step-dot.is-complete {
@@ -10438,12 +10448,6 @@ section {
     display: grid;
     grid-template-columns:1fr 1fr;
     gap: 1rem
-}
-
-.steps-grid {
-    display: grid;
-    grid-template-columns:1fr 1fr;
-    gap: .35rem .5rem
 }
 
 .illu-grid {
