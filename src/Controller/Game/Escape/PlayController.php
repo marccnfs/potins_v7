@@ -47,11 +47,9 @@ class PlayController extends AbstractController
         $dbProgress = $activeSession ? $activeSession->getProgressSteps() : [];
         $progressSteps = $dbProgress ?: $httpProgress;
         if ($dbProgress && $httpProgress) {
-            $progressSteps = array_values(array_unique(array_merge($dbProgress, $httpProgress)));
+            $progressSteps = array_merge($dbProgress, $httpProgress);
         }
-        $progressSteps = array_filter($progressSteps, static fn ($step) => $step >= 1 && $step <= $totalSteps);
-
-        sort($progressSteps);
+        $progressSteps = $this->normalizeProgressSteps($progressSteps, $totalSteps);
         $doneCount = min(\count($progressSteps), $totalSteps);
         $firstIncomplete = $this->firstIncompleteStep($progressSteps, $totalSteps);
         $resumeStep = $activeSession
@@ -103,10 +101,9 @@ class PlayController extends AbstractController
         $dbProgress = $activeSession ? $activeSession->getProgressSteps() : [];
         $progressSteps = $dbProgress ?: $httpProgress;
         if ($dbProgress && $httpProgress) {
-            $progressSteps = array_values(array_unique(array_merge($dbProgress, $httpProgress)));
+            $progressSteps = array_merge($dbProgress, $httpProgress);
         }
-        $progressSteps = array_filter($progressSteps, static fn ($s) => $s >= 1 && $s <= $totalSteps);
-        sort($progressSteps);
+        $progressSteps = $this->normalizeProgressSteps($progressSteps, $totalSteps);
 // --- AJOUT SPÉCIFIQUE QR GEO ---
         $cfg = $puzzle->getConfig() ?? [];
         $extras = [];
@@ -184,10 +181,9 @@ class PlayController extends AbstractController
 
         $progressSteps = $dbProgress ?: $httpProgress;
         if ($dbProgress && $httpProgress) {
-            $progressSteps = array_values(array_unique(array_merge($dbProgress, $httpProgress)));
+            $progressSteps = array_merge($dbProgress, $httpProgress);
         }
-        $progressSteps = array_filter($progressSteps, static fn ($step) => $step >= 1 && $step <= $total);
-        sort($progressSteps);
+        $progressSteps = $this->normalizeProgressSteps($progressSteps, $total);
 
         if (\count($progressSteps) < $total) {
             $redirectStep = $this->firstIncompleteStep($progressSteps, $total) ?? 1;
@@ -317,6 +313,47 @@ class PlayController extends AbstractController
         }
 
         return null;
+    }
+
+    /**
+     * @param array<int|string, mixed> $steps
+     *
+     * @return int[]
+     */
+    private function normalizeProgressSteps(array $steps, int $totalSteps): array
+    {
+        $totalSteps = max(1, $totalSteps);
+        $normalized = [];
+
+        foreach ($steps as $key => $value) {
+            if (\is_int($value) || (\is_string($value) && ctype_digit($value))) {
+                $step = (int) $value;
+                if ($step >= 1 && $step <= $totalSteps) {
+                    $normalized[$step] = true;
+                }
+
+                continue;
+            }
+
+            if (!\is_int($key) && !(\is_string($key) && ctype_digit($key))) {
+                continue;
+            }
+
+            $flag = \is_bool($value) ? $value : (bool) $value;
+            if (!$flag) {
+                continue;
+            }
+
+            $step = (int) $key;
+            if ($step >= 1 && $step <= $totalSteps) {
+                $normalized[$step] = true;
+            }
+        }
+
+        $result = array_keys($normalized);
+        sort($result);
+
+        return $result;
     }
 
 }
