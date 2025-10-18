@@ -11,7 +11,8 @@
             <div class="escape_content">
                 {% set step = step ?? 1 %}
                 {% set total = totalSteps|default(6) %}
-                <div class="play-layout" data-controller="hud" data-hud-total-value="{{ total }}" data-hud-step-value="{{ step }}">
+                {% set completed = progressSteps|default([]) %}
+                <div class="play-layout" data-controller="hud" data-hud-total-value="{{ total }}" data-hud-step-value="{{ step }}" data-hud-completed-steps-value="{{ completed|json_encode|e('html_attr') }}">
                     {# --- Colonne INFO --- #}
                     <aside class="play-aside">
                         <div class="card">
@@ -37,7 +38,9 @@
                                 <div class="bar-caption">Étape {{ step }} sur {{ total }}</div>
                                 <nav class="steps-grid">
                                     {% for i in 1..total %}
-                                        <a class="step-dot {{ i == step ? 'is-current' : '' }}"
+                                        {% set isDone = i in completed %}
+                                        <a class="step-dot {{ i == step ? 'is-current' : '' }} {{ isDone ? 'is-complete' : '' }}"
+                                           data-step="{{ i }}"
                                            href="{{ path('play_step', { slug: eg.shareSlug, step: i }) }}"
                                            title="Aller à l’étape {{ i }}">{{ i }}</a>
                                     {% endfor %}

@@ -88,7 +88,7 @@ class PlayController extends AbstractController
 
     #[Route('/{slug}/step/{step}', name:'play_step', methods:['GET'])]
     #[RequireParticipant]
-    public function step(Request $req,EscapeGameRepository $repo,MobileLinkManager $mobile, string $slug, int $step): Response
+    public function step(Request $req,EscapeGameRepository $repo,PlaySessionRepository $playSessionRepo,MobileLinkManager $mobile, string $slug, int $step): Response
     {
         $participant=$this->currentParticipant($req);
 
@@ -98,6 +98,15 @@ class PlayController extends AbstractController
         $puzzle = $eg->getPuzzleByStep($step) ?? throw $this->createNotFoundException();
         $totalSteps = max(1, $eg->getPuzzles()->count() ?: 6);
         $forceRestart = $req->query->getBoolean('restart', false);
+        $httpProgress = $this->loadHttpProgress($req, (int) $eg->getId(), $totalSteps);
+        $activeSession = $playSessionRepo->findLatestActiveForParticipant($eg, $participant);
+        $dbProgress = $activeSession ? $activeSession->getProgressSteps() : [];
+        $progressSteps = $dbProgress ?: $httpProgress;
+        if ($dbProgress && $httpProgress) {
+            $progressSteps = array_values(array_unique(array_merge($dbProgress, $httpProgress)));
+        }
+        $progressSteps = array_filter($progressSteps, static fn ($s) => $s >= 1 && $s <= $totalSteps);
+        sort($progressSteps);
 // --- AJOUT SPÉCIFIQUE QR GEO ---
         $cfg = $puzzle->getConfig() ?? [];
         $extras = [];
@@ -146,6 +155,7 @@ class PlayController extends AbstractController
             'extras' => $extras,
             'totalSteps' => $totalSteps,
             'forceRestart' => $forceRestart,
+            'progressSteps' => $progressSteps,
         ]);
 
     }

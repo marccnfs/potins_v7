@@ -30,7 +30,7 @@ class Registered
     private ?Sectors $sector = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private \DateTime $birthdate;
+    private ?DateTime $birthdate = null;
 
     #[ORM\Column(nullable: true)]
     private ?string $job = null;
@@ -106,7 +106,7 @@ class Registered
     public function setBirthdate($birthdate)
     {
         if($birthdate != null) {
-            $this->birthdate =  $birthdate;  //\DateTime::createFromFormat('d/m/Y',
+            $this->birthdate =  $birthdate;
         }
         return $this;
     }

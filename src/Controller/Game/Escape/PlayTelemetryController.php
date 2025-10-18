@@ -167,7 +167,8 @@ class PlayTelemetryController extends AbstractController
         }
 
         $step = filter_var($req->request->get('step'), FILTER_VALIDATE_INT);
-        if (!$step || $step < 1 || $step > 6) {
+        $totalSteps = max(1, $eg->getPuzzles()->count() ?: 6);
+        if (!$step || $step < 1 || $step > $totalSteps) {
             return new JsonResponse(['ok'=>false], 400);
         }
 
