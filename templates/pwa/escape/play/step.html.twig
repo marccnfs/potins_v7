@@ -34,8 +34,8 @@
                             </header>
 
                             <div class="hud-progress" data-hud-target="progressPanel">
-                                <div class="bar"><span class="fill" style="width: {{ (step/total*100)|round }}%"></span></div>
-                                <div class="bar-caption">Étape {{ step }} sur {{ total }}</div>
+                                <div class="bar"><span class="fill" data-hud-target="progressBar" style="width: {{ (step/total*100)|round }}%"></span></div>
+                                <div class="bar-caption" data-hud-target="progressCaption">Étape {{ step }} sur {{ total }}</div>
                                 <nav class="steps-grid">
                                     {% for i in 1..total %}
                                         {% set isDone = i in completed %}

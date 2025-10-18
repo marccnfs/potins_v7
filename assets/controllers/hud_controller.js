@@ -3,13 +3,14 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
     static values = { total: Number, step: Number, completedSteps: Array, slug: String }
-    static targets = ["progressPanel","helpPanel","nextBtn"]
+    static targets = ["progressPanel","helpPanel","nextBtn","progressBar","progressCaption"]
 
     connect(){
         this.onSolved = this.handleSolved.bind(this);
         document.addEventListener("puzzle:solved", this.onSolved, { once: true });
-        this._completedSteps = new Set(this.hasCompletedStepsValue ? this.completedStepsValue : []);
+        this._completedSteps = this.buildCompletedSet(this.hasCompletedStepsValue ? this.completedStepsValue : []);
         this.refreshCompletionState();
+        this.updateNavigationState();
         // Option : toast d’accueil
         const toast = document.querySelector(".toast-stack")?.controller;
     }
@@ -22,8 +23,14 @@ export default class extends Controller {
     toggleProgress(){ this.progressPanelTarget?.toggleAttribute("hidden"); }
 
     completedStepsValueChanged(value){
-        this._completedSteps = new Set(Array.isArray(value) ? value : []);
+        this._completedSteps = this.buildCompletedSet(value);
         this.refreshCompletionState();
+        this.updateNavigationState();
+    }
+
+    stepValueChanged(){
+        this.refreshCompletionState();
+        this.updateNavigationState();
     }
 
     refreshCompletionState(){
@@ -58,6 +65,7 @@ export default class extends Controller {
                 dot.removeAttribute("data-status");
             }
         });
+        this.refreshProgressHeader();
     }
 
     handleSolved(){
@@ -69,6 +77,7 @@ export default class extends Controller {
             this._completedSteps.add(this.stepValue);
             this.completedStepsValue = Array.from(this._completedSteps);
             this.refreshCompletionState();
+            this.updateNavigationState();
         }
 
         // Petit toast
@@ -107,5 +116,48 @@ export default class extends Controller {
     }
 
 
+    }
+    updateNavigationState(){
+        if (!this.hasNextBtnTarget) return;
+        const currentStep = this.hasStepValue ? this.stepValue : null;
+        if (currentStep === null) {
+            this.nextBtnTarget.hidden = true;
+            return;
+        }
+        const completed = this._completedSteps ?? new Set();
+        const isCompleted = completed.has(currentStep);
+        this.nextBtnTarget.hidden = !isCompleted;
+    }
+
+    refreshProgressHeader(){
+        const current = this.hasStepValue ? this.stepValue : null;
+        const total = this.hasTotalValue ? this.totalValue : null;
+        if (current === null || total === null || total <= 0) return;
+
+        const ratio = Math.min(Math.max(current / total, 0), 1);
+        if (this.hasProgressBarTarget) {
+            this.progressBarTarget.style.width = `${Math.round(ratio * 100)}%`;
+        }
+        if (this.hasProgressCaptionTarget) {
+            this.progressCaptionTarget.textContent = `Étape ${current} sur ${total}`;
+        }
+    }
+
+    buildCompletedSet(value){
+        if (!Array.isArray(value)) {
+            return new Set();
+        }
+        const normalized = value
+            .map((step) => {
+                if (typeof step === "number" && Number.isInteger(step)) {
+                    return step;
+                }
+                if (typeof step === "string" && step.trim() !== "" && /^\d+$/.test(step.trim())) {
+                    return Number.parseInt(step, 10);
+                }
+                return null;
+            })
+            .filter((step) => typeof step === "number");
+        return new Set(normalized);
     }
 }
