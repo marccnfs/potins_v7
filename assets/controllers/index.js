@@ -36,6 +36,7 @@ Stimulus.register("video-quiz", VideoQuizController);
 Stimulus.register("html-min", HtmlMinController);
 Stimulus.register("copy", CopyController);
 Stimulus.register("hud", HudController);
+Stimulus.register("telemetry", TelemetryController);
 Stimulus.register("modal", ModalController);
 Stimulus.register("toast", ToastController);
 Stimulus.register("hints", HintsController);
@@ -45,4 +46,4 @@ Stimulus.register("menu", MenuController);
 Stimulus.register("finale", FinaleController);
 Stimulus.register("wizard-hints", WizardHintsController);
 Stimulus.register("board-week", BoardWeekController)
-Stimulus.register("telemetry", TelemetryController);
+
