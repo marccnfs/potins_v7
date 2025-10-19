@@ -20,16 +20,28 @@ class EscapeGameRepository extends ServiceEntityRepository
      *
      * @return EscapeGame[]
      */
-    public function findAllForAdministration(): array
+    public function findAllForAdministration(?string $boardCode = null): array
     {
-        return $this->createQueryBuilder('eg')
+        $qb = $this->createQueryBuilder('eg')
             ->leftJoin('eg.owner', 'owner')->addSelect('owner')
             ->leftJoin('eg.participant', 'participant')->addSelect('participant')
             ->leftJoin('eg.workshopSession', 'session')->addSelect('session')
             ->leftJoin('session.event', 'sessionEvent')->addSelect('sessionEvent')
             ->leftJoin('sessionEvent.appointment', 'sessionAppointment')->addSelect('sessionAppointment')
             ->orderBy('eg.created_at', 'DESC')
-            ->addOrderBy('eg.id', 'DESC')
+            ->addOrderBy('eg.id', 'DESC');
+
+        if ($boardCode !== null && $boardCode !== '') {
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    'session.id IS NULL',
+                    'session.isMaster = true',
+                    'sessionEvent.keymodule = :boardCode'
+                )
+            )->setParameter('boardCode', $boardCode);
+        }
+
+        return $qb
             ->getQuery()
             ->getResult();
     }

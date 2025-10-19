@@ -66,14 +66,25 @@
                                     </td>
                                     <td data-label="Atelier">
                                         {% if game.workshopSession %}
-                                            <span class="dashboard-table__title">{{ game.workshopSession.displayName }}</span>
-                                            {% if game.workshopSession.event %}
-                                                <span class="dashboard-table__meta">{{ game.workshopSession.event.titre }}</span>
-                                                {% if game.workshopSession.event.appointment and game.workshopSession.event.appointment.starttime %}
-                                                    <span class="dashboard-table__meta">{{ game.workshopSession.event.appointment.starttime|date('d/m/Y H:i') }}</span>
+                                            {% set session = game.workshopSession %}
+                                            <span class="dashboard-table__title">
+                                                {% if session.event %}
+                                                    {{ session.event.titre }}
+                                                {% else %}
+                                                    {{ session.displayName }}
+                                                {% endif %}
+                                            </span>
+                                            {% if session.event %}
+                                                {% if session.displayName and session.displayName != session.event.titre %}
+                                                    <span class="dashboard-table__meta">{{ session.displayName }}</span>
+                                                {% endif %}
+                                                <span class="dashboard-table__meta">Code : {{ session.code }}</span>
+                                                {% if session.event.appointment and session.event.appointment.starttime %}
+                                                    <span class="dashboard-table__meta">{{ session.event.appointment.starttime|date('d/m/Y H:i') }}</span>
                                                 {% endif %}
                                             {% else %}
-                                                <span class="dashboard-table__meta">Code maître</span>
+                                                <span class="dashboard-table__meta">{{ session.isMaster ? 'Code maître' : 'Session sans atelier' }}</span>
+                                                <span class="dashboard-table__meta">Code : {{ session.code }}</span>
                                             {% endif %}
                                         {% else %}
                                             <span class="dashboard-table__meta">Non attribué</span>
@@ -93,6 +104,12 @@
                                     </td>
                                     <td data-label="Actions" class="dashboard-table__actions">
                                         <div class="dashboard-actions">
+                                            {% if game.workshopSession or game.owner or game.participant %}
+                                                <a class="btn-link" href="{{ path('module_escape_edit', {id: game.id}) }}">
+                                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                    Modifier
+                                                </a>
+                                            {% endif %}
                                             <form method="post" action="{{ path('module_escape_status', {id: game.id}) }}" class="dashboard-actions__form" onsubmit="return confirm('{{ game.published ? 'Retirer de la publication' : 'Publier' }} « {{ game.title }} » ?');">
                                                 <input type="hidden" name="_token" value="{{ csrf_token('status_escape_' ~ game.id) }}">
                                                 <input type="hidden" name="target_status" value="{{ game.published ? 'unpublish' : 'publish' }}">

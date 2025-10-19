@@ -17,6 +17,7 @@ use App\Repository\EscapeWorkshopSessionRepository;
 use App\Repository\OffresRepository;
 use App\Repository\PostEventRepository;
 use App\Repository\PostRepository;
+use App\Security\ParticipantProvider;
 use App\Service\MenuNavigator;
 use App\Service\Search\SearchRessources;
 use App\Service\Search\SearchReviews;
@@ -147,7 +148,9 @@ class BoardOfficeController extends AbstractController
     #[IsGranted('ROLE_SUPER_ADMIN')]
     public function escapeGames(EscapeGameRepository $escapeGameRepository): Response
     {
-        $escapeGames = $escapeGameRepository->findAllForAdministration();
+        $board = $this->requireBoard();
+        $escapeGames = $escapeGameRepository->findAllForAdministration($board->getCodesite());
+
 
         $published = 0;
         foreach ($escapeGames as $escapeGame) {
@@ -165,6 +168,26 @@ class BoardOfficeController extends AbstractController
                 'draft' => max(0, $total - $published),
             ],
         ]);
+    }
+
+    #[Route('/escape-games/{id}/edit', name: 'module_escape_edit', methods: ['GET'])]
+    #[IsGranted('ROLE_SUPER_ADMIN')]
+    public function editEscapeGame(
+        EscapeGame $escapeGame,
+        ParticipantProvider $participantProvider
+    ): RedirectResponse {
+        $this->requireBoard();
+
+        $participant = $escapeGame->getOwner() ?? $escapeGame->getParticipant();
+        if (!$participant) {
+            $this->addFlash('danger', sprintf('Impossible de modifier « %s » : aucun créateur associé.', $escapeGame->getTitle()));
+
+            return $this->redirectToRoute('module_escape_admin');
+        }
+
+        $participantProvider->setCurrent($participant);
+
+        return $this->redirectToRoute('wizard_overview', ['id' => $escapeGame->getId()]);
     }
 
     #[Route('/escape-workshops', name: 'module_escape_workshops', methods: ['GET', 'POST'])]
