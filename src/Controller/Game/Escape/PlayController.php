@@ -45,11 +45,7 @@ class PlayController extends AbstractController
         $recentSessions = $playSessionRepo->findRecentForParticipant($eg, $participant, 5);
 
         $dbProgress = $activeSession ? $activeSession->getProgressSteps() : [];
-        $progressSteps = $dbProgress ?: $httpProgress;
-        if ($dbProgress && $httpProgress) {
-            $progressSteps = array_merge($dbProgress, $httpProgress);
-        }
-        $progressSteps = $this->normalizeProgressSteps($progressSteps, $totalSteps);
+        $progressSteps = $this->mergeProgressSteps($totalSteps, $dbProgress, $httpProgress);
         $doneCount = min(\count($progressSteps), $totalSteps);
         $firstIncomplete = $this->firstIncompleteStep($progressSteps, $totalSteps);
         $resumeStep = $activeSession
@@ -99,11 +95,7 @@ class PlayController extends AbstractController
         $httpProgress = $this->loadHttpProgress($req, (int) $eg->getId(), $totalSteps);
         $activeSession = $playSessionRepo->findLatestActiveForParticipant($eg, $participant);
         $dbProgress = $activeSession ? $activeSession->getProgressSteps() : [];
-        $progressSteps = $dbProgress ?: $httpProgress;
-        if ($dbProgress && $httpProgress) {
-            $progressSteps = array_merge($dbProgress, $httpProgress);
-        }
-        $progressSteps = $this->normalizeProgressSteps($progressSteps, $totalSteps);
+        $progressSteps = $this->mergeProgressSteps($totalSteps, $dbProgress, $httpProgress);
 // --- AJOUT SPÉCIFIQUE QR GEO ---
         $cfg = $puzzle->getConfig() ?? [];
         $extras = [];
@@ -179,11 +171,7 @@ class PlayController extends AbstractController
             }
         }
 
-        $progressSteps = $dbProgress ?: $httpProgress;
-        if ($dbProgress && $httpProgress) {
-            $progressSteps = array_merge($dbProgress, $httpProgress);
-        }
-        $progressSteps = $this->normalizeProgressSteps($progressSteps, $total);
+        $progressSteps = $this->mergeProgressSteps($total, $dbProgress, $httpProgress);
 
         if (\count($progressSteps) < $total) {
             $redirectStep = $this->firstIncompleteStep($progressSteps, $total) ?? 1;
@@ -351,6 +339,31 @@ class PlayController extends AbstractController
         }
 
         $result = array_keys($normalized);
+        sort($result);
+
+        return $result;
+    }
+
+    /**
+     * @param array<int|string, mixed> ...$sources
+     *
+     * @return int[]
+     */
+    private function mergeProgressSteps(int $totalSteps, array ...$sources): array
+    {
+        $merged = [];
+
+        foreach ($sources as $source) {
+            if (empty($source)) {
+                continue;
+            }
+
+            foreach ($this->normalizeProgressSteps($source, $totalSteps) as $step) {
+                $merged[$step] = true;
+            }
+        }
+
+        $result = array_keys($merged);
         sort($result);
 
         return $result;
