@@ -5,6 +5,8 @@ namespace App\Controller\Game\Escape;
 use App\Classe\UserSessionTrait;
 use App\Entity\Games\EscapeGame;
 use App\Entity\Games\MobileLink;
+use App\Entity\Games\PlaySession;
+use App\Entity\Users\Participant;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,10 +37,9 @@ class MobileEntryController extends AbstractController
         }
 
         if ($mode === 'qr_only') {
-            if (!$link->getUsedAt()) {
-                $link->setUsedAt(new \DateTimeImmutable());
-                $this->em->flush();
-            }
+            $participant = $this->resolveParticipantForLink($link);
+            $participantLink = $participant ? $this->findParticipantLink($link, $participant) : null;
+            $this->registerScan($link, $participantLink);
 
             $qrOnly = is_array($cfg['qrOnly'] ?? null) ? $cfg['qrOnly'] : [];
             $finalClue = '';
@@ -63,33 +64,43 @@ class MobileEntryController extends AbstractController
     #[Route('/m/{token}/verify', name: 'mobile_verify', methods: ['POST'])]
     public function verify(Request $req, string $token): Response
     {
-        $link = $this->em->getRepository(MobileLink::class)->findOneBy(['token'=>$token]);
-        if (!$link || $link->getUsedAt()) return $this->json(['ok'=>false], 400);
+        $link = $this->em->getRepository(MobileLink::class)->findOneBy(['token' => $token]);
+        if (!$link) {
+            return $this->json(['ok' => false], 400);
+        }
 
         /** @var EscapeGame $eg */
         $eg = $link->getEscapeGame();
         $puzzle = $eg->getPuzzleByStep($link->getStep());
-        if (!$puzzle) return $this->json(['ok'=>false], 400);
+        if (!$puzzle) {
+            return $this->json(['ok' => false], 400);
+        }
 
         $cfg = $puzzle->getConfig() ?? [];
         if (($cfg['mode'] ?? 'geo') === 'qr_only') {
-            return $this->json(['ok'=>false], 400);
+            return $this->json(['ok' => false], 400);
         }
-        $target = $cfg['target'] ?? ['lat'=>0,'lng'=>0];
-        $radius = (int)($cfg['radiusMeters'] ?? 150);
+
+        $participant = $this->resolveParticipantForLink($link);
+        $participantLink = $participant ? $this->findParticipantLink($link, $participant) : null;
+        if ($link->getUsedAt() && (!$participantLink || $participantLink->getId() === $link->getId())) {
+            return $this->json(['ok' => false], 400);
+        }
+
+        $target = $cfg['target'] ?? ['lat' => 0, 'lng' => 0];
+        $radius = (int) ($cfg['radiusMeters'] ?? 150);
 
         $lat = (float) $req->request->get('lat');
         $lng = (float) $req->request->get('lng');
 
         // distance haversine
-        $d = self::distanceMeters($lat, $lng, (float)$target['lat'], (float)$target['lng']);
+        $d = self::distanceMeters($lat, $lng, (float) $target['lat'], (float) $target['lng']);
 
         if ($d <= $radius) {
-            $link->setUsedAt(new \DateTimeImmutable());
-            $this->em->flush();
+            $this->registerScan($link, $participantLink);
 
             // Ici tu peux aussi marquer l’étape comme "solved" côté serveur si tu as un statut
-            return $this->json(['ok'=>true, 'distance'=>$d]);
+            return $this->json(['ok' => true, 'distance' => $d]);
         }
 
         return $this->json(['ok'=>false, 'distance'=>$d], 200);
@@ -109,5 +120,68 @@ class MobileEntryController extends AbstractController
         $dLon = deg2rad($lon2-$lon1);
         $a = sin($dLat/2)**2 + cos(deg2rad($lat1))*cos(deg2rad($lat2))*sin($dLon/2)**2;
         return 2 * $R * asin(min(1, sqrt($a)));
+    }
+
+    private function resolveParticipantForLink(MobileLink $link): ?Participant
+    {
+        $session = $this->session();
+        $escape = $link->getEscapeGame();
+        if (!$session || !$escape || !$escape->getId()) {
+            return null;
+        }
+
+        $sid = $session->get('play_session_id_'.$escape->getId());
+        if (!$sid) {
+            return null;
+        }
+
+        $playSession = $this->em->getRepository(PlaySession::class)->find($sid);
+        if (!$playSession || $playSession->isCompleted()) {
+            return null;
+        }
+
+        if ($playSession->getEscapeGame()?->getId() !== $escape->getId()) {
+            return null;
+        }
+
+        return $playSession->getParticipant();
+    }
+
+    private function findParticipantLink(MobileLink $link, Participant $participant): ?MobileLink
+    {
+        return $this->em->getRepository(MobileLink::class)->findOneBy([
+            'participant' => $participant,
+            'escapeGame'  => $link->getEscapeGame(),
+            'step'        => $link->getStep(),
+        ]);
+    }
+
+    private function registerScan(MobileLink $scannedLink, ?MobileLink $participantLink): void
+    {
+        $now = new \DateTimeImmutable();
+        $changed = false;
+
+        if ($participantLink && !$participantLink->getUsedAt()) {
+            $participantLink->setUsedAt($now);
+            $changed = true;
+        }
+
+        $sameLink = $participantLink && $participantLink->getId() === $scannedLink->getId();
+        $sameParticipant = $participantLink && $scannedLink->getParticipant() && $participantLink->getParticipant()
+            && $participantLink->getParticipant()->getId() === $scannedLink->getParticipant()->getId();
+
+        if ($sameLink || (!$participantLink && !$scannedLink->getUsedAt()) || ($sameParticipant && !$scannedLink->getUsedAt())) {
+            if (!$scannedLink->getUsedAt()) {
+                $scannedLink->setUsedAt($now);
+                $changed = true;
+            }
+        } elseif (!$sameLink && !$sameParticipant && $scannedLink->getUsedAt()) {
+            $scannedLink->setUsedAt(null);
+            $changed = true;
+        }
+
+        if ($changed) {
+            $this->em->flush();
+        }
     }
 }
