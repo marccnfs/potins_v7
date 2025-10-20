@@ -106,7 +106,7 @@ class PlayTelemetryController extends AbstractController
             if ($step > 0) {
                 $progress['_current'] = $step;
             }
-
+            $progress['_ts'] = time();
             $store->set($progressKey, $progress);
         }
 
@@ -175,6 +175,7 @@ class PlayTelemetryController extends AbstractController
                 $progress[$i] = true;
             }
             $progress['_current'] = $totalSteps;
+            $progress['_ts'] = time();
             $req->getSession()->set('play_progress_'.$eg->getId(), $progress);
         }
         $this->em->persist($session);
@@ -226,6 +227,7 @@ class PlayTelemetryController extends AbstractController
             }
             $progress[$step] = true;
             $progress['_current'] = $resumeStep;
+            $progress['_ts'] = time();
             $session->set($key, $progress);
         }
 

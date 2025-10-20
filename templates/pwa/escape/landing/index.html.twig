@@ -61,7 +61,21 @@
                             </div>
                             <div class="meta">
                                 <h3 class="title">{{ eg.title }}</h3>
-                                <p class="desc">{{ eg.universe ? eg.universe|join(' ') : 'Plonge dans une aventure…' }}</p>
+                                <p class="desc">
+                                    {% set uni = eg.universe|default(null) %}
+
+                                    {% if uni is null %}
+                                        Plonge dans une aventure…
+                                    {% elseif uni is iterable %}
+                                        {{ uni
+                                        |map(u => u is iterable ? (u.name ?? u.label ?? u.title ?? '') : u)
+                                        |filter(u => u is not empty and (u is not iterable))
+                                        |join(' ')
+                                        }}
+                                    {% else %}
+                                        {{ uni }}
+                                    {% endif %}
+                                </p>
                             </div>
                             <div class="actions">
                                 <a class="btn btn-primary" href="{{ path('play_entry', { slug: eg.shareSlug }) }}">Jouer</a>
@@ -157,7 +171,21 @@
                             </div>
                             <div class="meta">
                                 <h3 class="title">{{ eg.title }}</h3>
-                                <p class="desc">{{ eg.universe ? eg.universe|join(' ') : 'Nouvelle aventure disponible.' }}</p>
+                                <p class="desc">
+                                    {% set uni = eg.universe|default(null) %}
+
+                                    {% if uni is null %}
+                                        Plonge dans une aventure…
+                                    {% elseif uni is iterable %}
+                                        {{ uni
+                                        |map(u => u is iterable ? (u.name ?? u.label ?? u.title ?? '') : u)
+                                        |filter(u => u is not empty and (u is not iterable))
+                                        |join(' ')
+                                        }}
+                                    {% else %}
+                                        {{ uni }}
+                                    {% endif %}
+                                </p>
                             </div>
                             <div class="actions">
                                 <a class="btn btn-primary" href="{{ path('play_entry', { slug: eg.shareSlug }) }}">Jouer</a>

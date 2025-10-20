@@ -22,6 +22,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/play')]
 class PlayController extends AbstractController
 {
+    private const HTTP_PROGRESS_TTL = 604800; // 7 days
     use UserSessionTrait;
 
     #[Route('/{slug}', name:'play_entry', methods:['GET'])]
@@ -43,10 +44,12 @@ class PlayController extends AbstractController
         }
 
         $totalSteps = max(1, $eg->getPuzzles()->count() ?: 6);
-        $httpProgress = $this->loadHttpProgress($req, (int) $eg->getId(), $totalSteps);
+        //$httpProgress = $this->loadHttpProgress($req, (int) $eg->getId(), $totalSteps);
 
         $activeSession = $playSessionRepo->findLatestActiveForParticipant($eg, $participant);
         $recentSessions = $playSessionRepo->findRecentForParticipant($eg, $participant, 5);
+
+        $httpProgress = $this->loadHttpProgress($req, (int) $eg->getId(), $totalSteps, $activeSession);
 
         $dbProgress = $activeSession ? $activeSession->getProgressSteps() : [];
         $progressSteps = $this->mergeProgressSteps($totalSteps, $dbProgress, $httpProgress);
@@ -101,7 +104,10 @@ class PlayController extends AbstractController
         $puzzle = $eg->getPuzzleByStep($step) ?? throw $this->createNotFoundException();
         $totalSteps = max(1, $eg->getPuzzles()->count() ?: 6);
         $forceRestart = $req->query->getBoolean('restart', false);
-        $httpProgress = $this->loadHttpProgress($req, (int) $eg->getId(), $totalSteps);
+
+        if ($forceRestart) {
+            $this->resetHttpSessionState($req, $eg);
+        }
         $activeSession = $playSessionRepo->findLatestActiveForParticipant($eg, $participant);
         $activeSession = $this->ensureActivePlaySession(
             $req,
@@ -112,6 +118,7 @@ class PlayController extends AbstractController
             $step,
             $activeSession,
         );
+        $httpProgress = $this->loadHttpProgress($req, (int) $eg->getId(), $totalSteps, $activeSession);
         $dbProgress = $activeSession ? $activeSession->getProgressSteps() : [];
         $progressSteps = $this->mergeProgressSteps($totalSteps, $dbProgress, $httpProgress);
 
@@ -190,7 +197,19 @@ class PlayController extends AbstractController
 
         $sessionStore = $req->hasSession() ? $req->getSession() : null;
         $sessionKey = 'play_session_id_'.$game->getId();
-        $progressKey = 'play_progress_'.$game->getId();  //todo
+        $progressKey = 'play_progress_'.$game->getId();
+        $toFlush = [];
+
+        if ($existing && $this->isSessionStale($existing)) {
+            $existing->setEndedAt(new DateTimeImmutable());
+            $existing->touch();
+            $toFlush[] = $existing;
+            $existing = null;
+            if ($sessionStore) {
+                $sessionStore->remove($sessionKey);
+                $sessionStore->remove($progressKey);
+            }
+        }
 
         if ($forceRestart && $sessionStore) {
             $sessionStore->remove($sessionKey);
@@ -209,7 +228,15 @@ class PlayController extends AbstractController
                     && $candidate->getEscapeGame()?->getId() === $game->getId()
                     && $candidate->getParticipant()?->getId() === $participant->getId()
                 ) {
-                    $sessionEntity = $candidate;
+                    if ($this->isSessionStale($candidate)) {
+                        $candidate->setEndedAt(new DateTimeImmutable());
+                        $candidate->touch();
+                        $toFlush[] = $candidate;
+                        $sessionStore->remove($sessionKey);
+                        $sessionStore->remove($progressKey);
+                    } else {
+                        $sessionEntity = $candidate;
+                    }
                 }
             }
         }
@@ -258,9 +285,16 @@ class PlayController extends AbstractController
                 }
 
                 $progress['_current'] = $step;
+                $progress['_ts'] = time();
                 $sessionStore->set($progressKey, $progress);
             } elseif (!$sessionStore->has($progressKey)) {
-                $sessionStore->set($progressKey, []);
+                $sessionStore->set($progressKey, ['_ts' => time()]);
+            } else {
+                $progress = $sessionStore->get($progressKey);
+                if (\is_array($progress)) {
+                    $progress['_ts'] = time();
+                    $sessionStore->set($progressKey, $progress);
+                }
             }
         }
 
@@ -277,8 +311,8 @@ class PlayController extends AbstractController
         $vartwig=$this->menuNav->templatepotins('the_end',Links::GAMES);
         $total = max(1, $eg->getPuzzles()->count() ?: 6);
 
-        $httpProgress = $this->loadHttpProgress($req, (int) $eg->getId(), $total);
         $activeSession = $playSessionRepo->findLatestActiveForParticipant($eg, $participant);
+        $httpProgress = $this->loadHttpProgress($req, (int) $eg->getId(), $total, $activeSession);
         $dbProgress = $activeSession ? $activeSession->getProgressSteps() : [];
 
         if (!$dbProgress) {
@@ -388,15 +422,39 @@ class PlayController extends AbstractController
     /**
      * @return int[]
      */
-    private function loadHttpProgress(Request $req, int $gameId, int $totalSteps): array
+    private function loadHttpProgress(Request $req, int $gameId, int $totalSteps, ?PlaySession $activeSession = null): array
     {
         if (!$req->hasSession() || $gameId <= 0) {
             return [];
         }
 
         $session = $req->getSession();
-        $stored = $session->get('play_progress_'.$gameId, []);
+        $progressKey = 'play_progress_'.$gameId;
+        $sessionKey = 'play_session_id_'.$gameId;
+        $stored = $session->get($progressKey, []);$stored = $session->get('play_progress_'.$gameId, []);
         if (!\is_array($stored)) {
+            return [];
+        }
+
+        $timestamp = null;
+        if (isset($stored['_ts'])) {
+            $rawTs = $stored['_ts'];
+            if (\is_int($rawTs)) {
+                $timestamp = $rawTs;
+            } elseif (\is_string($rawTs) && ctype_digit($rawTs)) {
+                $timestamp = (int) $rawTs;
+            }
+        }
+
+        if ($timestamp !== null && $timestamp <= time() - self::HTTP_PROGRESS_TTL) {
+            $session->remove($progressKey);
+            $session->remove($sessionKey);
+            return [];
+        }
+
+        if ($activeSession && $this->isSessionStale($activeSession)) {
+            $session->remove($progressKey);
+            $session->remove($sessionKey);
             return [];
         }
 
@@ -421,6 +479,27 @@ class PlayController extends AbstractController
         sort($progress);
 
         return $progress;
+    }
+
+    private function resetHttpSessionState(Request $req, EscapeGame $game): void
+    {
+        if (!$req->hasSession()) {
+            return;
+        }
+
+        $session = $req->getSession();
+        $session->remove('play_session_id_'.$game->getId());
+        $session->remove('play_progress_'.$game->getId());
+    }
+
+    private function isSessionStale(PlaySession $session): bool
+    {
+        $updatedAt = $session->getUpdatedAt() ?? $session->getCreatedAt();
+        if (!$updatedAt) {
+            return false;
+        }
+
+        return $updatedAt->getTimestamp() <= time() - self::HTTP_PROGRESS_TTL;
     }
 
     private function firstIncompleteStep(array $progressSteps, int $totalSteps): ?int
