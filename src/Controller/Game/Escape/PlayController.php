@@ -190,7 +190,7 @@ class PlayController extends AbstractController
 
         $sessionStore = $req->hasSession() ? $req->getSession() : null;
         $sessionKey = 'play_session_id_'.$game->getId();
-        $progressKey = 'play_progress_'.$game->getId();
+        $progressKey = 'play_progress_'.$game->getId();  //todo
 
         if ($forceRestart && $sessionStore) {
             $sessionStore->remove($sessionKey);
@@ -219,7 +219,7 @@ class PlayController extends AbstractController
         if ($forceRestart && $sessionEntity) {
             $sessionEntity->setEndedAt(new DateTimeImmutable());
             $sessionEntity->touch();
-            $needsFlush = true;
+            $toFlush[] = $sessionEntity;
             $sessionEntity = null;
         }
 
@@ -232,19 +232,36 @@ class PlayController extends AbstractController
             }
             $sessionEntity->touch();
             $this->em->persist($sessionEntity);
-            $needsFlush = true;
+            $toFlush[] = $sessionEntity;
         } elseif ($step > 0 && $sessionEntity->getCurrentStep() !== $step) {
             $sessionEntity->setCurrentStep($step);
             $sessionEntity->touch();
             $needsFlush = true;
         }
 
-        if ($needsFlush) {
+        if ($sessionEntity && $needsFlush) {
+            $this->em->persist($sessionEntity);
+            $toFlush[] = $sessionEntity;
+        }
+
+        if (!empty($toFlush)) {
             $this->em->flush();
         }
 
         if ($sessionStore && $sessionEntity) {
             $sessionStore->set($sessionKey, $sessionEntity->getId());
+
+            if ($step > 0) {
+                $progress = $sessionStore->get($progressKey, []);
+                if (!\is_array($progress)) {
+                    $progress = [];
+                }
+
+                $progress['_current'] = $step;
+                $sessionStore->set($progressKey, $progress);
+            } elseif (!$sessionStore->has($progressKey)) {
+                $sessionStore->set($progressKey, []);
+            }
         }
 
         return $sessionEntity;
@@ -291,6 +308,7 @@ class PlayController extends AbstractController
                     $activeSession->setProgressSteps($progressSteps);
                     $activeSession->setCurrentStep($total);
                     $activeSession->touch();
+                    $this->em->persist($activeSession);
                     $this->em->flush();
                 }
             }
@@ -531,6 +549,7 @@ class PlayController extends AbstractController
 
         if ($needsFlush) {
             $session->touch();
+            $this->em?->persist($session);
             $this->em?->flush();
         }
     }

@@ -84,11 +84,30 @@ class PlayTelemetryController extends AbstractController
             $session->setCurrentStep($step);
         }
         $session->touch();
-
+        $this->em->persist($session);
         $this->em->flush();
 
         if ($req->hasSession()) {
-            $req->getSession()->set('play_session_id_'.$eg->getId(), $session->getId());
+            $store = $req->getSession();
+            $sessionKey = 'play_session_id_'.$eg->getId();
+            $progressKey = 'play_progress_'.$eg->getId();
+
+            $store->set($sessionKey, $session->getId());
+
+            if ($forceRestart) {
+                $store->remove($progressKey);
+            }
+
+            $progress = $store->get($progressKey, []);
+            if (!\is_array($progress)) {
+                $progress = [];
+            }
+
+            if ($step > 0) {
+                $progress['_current'] = $step;
+            }
+
+            $store->set($progressKey, $progress);
         }
 
         return new JsonResponse([
@@ -115,7 +134,7 @@ class PlayTelemetryController extends AbstractController
         }
         $session->setHintsUsed($session->getHintsUsed()+1);
         $session->touch();
-
+        $this->em->persist($session);
         $this->em->flush();
 
         return new JsonResponse(['ok'=>true, 'hints'=>$session->getHintsUsed()]);
@@ -155,9 +174,10 @@ class PlayTelemetryController extends AbstractController
             for ($i = 1; $i <= $totalSteps; $i++) {
                 $progress[$i] = true;
             }
+            $progress['_current'] = $totalSteps;
             $req->getSession()->set('play_progress_'.$eg->getId(), $progress);
         }
-
+        $this->em->persist($session);
         $this->em->flush();
 
         return new JsonResponse(['ok'=>true, 'score'=>$score]);
@@ -184,17 +204,6 @@ class PlayTelemetryController extends AbstractController
             return new JsonResponse(['ok'=>false], 400);
         }
 
-        if ($req->hasSession()) {
-            $session = $req->getSession();
-            $key = 'play_progress_'.$eg->getId();
-            $progress = $session->get($key, []);
-            if (!\is_array($progress)) {
-                $progress = [];
-            }
-            $progress[$step] = true;
-            $session->set($key, $progress);
-        }
-
         $progressSteps = $sessionEntity->getProgressSteps();
         if (!\in_array($step, $progressSteps, true)) {
             $progressSteps[] = $step;
@@ -207,6 +216,18 @@ class PlayTelemetryController extends AbstractController
         $sessionEntity->touch();
         $this->em->persist($sessionEntity);
         $this->em->flush();
+
+        if ($req->hasSession()) {
+            $session = $req->getSession();
+            $key = 'play_progress_'.$eg->getId();
+            $progress = $session->get($key, []);
+            if (!\is_array($progress)) {
+                $progress = [];
+            }
+            $progress[$step] = true;
+            $progress['_current'] = $resumeStep;
+            $session->set($key, $progress);
+        }
 
         return new JsonResponse([
             'ok' => true,
