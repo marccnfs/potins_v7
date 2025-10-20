@@ -8,6 +8,7 @@ use App\Entity\Games\EscapeGame;
 use App\Entity\Games\PlaySession;
 use App\Entity\Users\Participant;
 use App\Repository\EscapeGameRepository;
+use App\Repository\PlaySessionRepository;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -195,11 +196,17 @@ class PlayTelemetryController extends AbstractController
         }
 
         $sessionEntity->addProgressStep($step);
-        $sessionEntity->setCurrentStep($step);
+        $progressSteps = $sessionEntity->getProgressSteps();
+        $resumeStep = $this->computeResumeStep($progressSteps, $totalSteps);
+        $sessionEntity->setCurrentStep($resumeStep);
         $sessionEntity->touch();
         $this->em->flush();
 
-        return new JsonResponse(['ok'=>true, 'steps'=>$sessionEntity->getProgressSteps()]);
+        return new JsonResponse([
+            'ok' => true,
+            'steps' => $progressSteps,
+            'resumeStep' => $resumeStep,
+        ]);
     }
 
     private function sessionFromRequest(Request $req, EscapeGame $eg, Participant $participant): ?PlaySession
@@ -209,10 +216,22 @@ class PlayTelemetryController extends AbstractController
         }
 
         $sid = $req->getSession()->get('play_session_id_'.$eg->getId());
+        $sessionRepo = $this->em->getRepository(PlaySession::class);
+        $session = null;
+
+        if (!$sid && $sessionRepo instanceof PlaySessionRepository) {
+            $session = $sessionRepo->findLatestActiveForParticipant($eg, $participant);
+            if ($session) {
+                $sid = $session->getId();
+                $req->getSession()->set('play_session_id_'.$eg->getId(), $sid);
+            }
+        }
         if (!$sid) {
             return null;
         }
-        $session = $this->em->getRepository(PlaySession::class)->find($sid);
+
+        $session ??= $sessionRepo->find($sid);
+
         if (!$session || !$session->getParticipant() || $session->getParticipant()->getId() !== $participant->getId()) {
             $req->getSession()->remove('play_session_id_'.$eg->getId());
             return null;
@@ -240,5 +259,26 @@ class PlayTelemetryController extends AbstractController
         }
 
         return $eg;
+    }
+
+    private function computeResumeStep(array $progressSteps, int $totalSteps): int
+    {
+        $totalSteps = max(1, $totalSteps);
+        $indexed = [];
+        foreach ($progressSteps as $step) {
+            if (\is_int($step)) {
+                $indexed[$step] = true;
+            } elseif (\is_string($step) && ctype_digit($step)) {
+                $indexed[(int) $step] = true;
+            }
+        }
+
+        for ($i = 1; $i <= $totalSteps; ++$i) {
+            if (!isset($indexed[$i])) {
+                return $i;
+            }
+        }
+
+        return $totalSteps;
     }
 }

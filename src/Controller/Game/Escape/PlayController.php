@@ -50,6 +50,10 @@ class PlayController extends AbstractController
 
         $dbProgress = $activeSession ? $activeSession->getProgressSteps() : [];
         $progressSteps = $this->mergeProgressSteps($totalSteps, $dbProgress, $httpProgress);
+
+        if ($activeSession && $this->em) {
+            $this->synchronizeSessionProgress($activeSession, $progressSteps, $totalSteps);
+        }
         $doneCount = min(\count($progressSteps), $totalSteps);
         $firstIncomplete = $this->firstIncompleteStep($progressSteps, $totalSteps);
         $resumeStep = $activeSession
@@ -109,6 +113,10 @@ class PlayController extends AbstractController
         );
         $dbProgress = $activeSession ? $activeSession->getProgressSteps() : [];
         $progressSteps = $this->mergeProgressSteps($totalSteps, $dbProgress, $httpProgress);
+        if ($activeSession && $this->em) {
+            $this->synchronizeSessionProgress($activeSession, $progressSteps, $totalSteps);
+        }
+
 
 // --- AJOUT SPÉCIFIQUE QR GEO ---
         $cfg = $puzzle->getConfig() ?? [];
@@ -498,5 +506,32 @@ class PlayController extends AbstractController
 
         return $result;
     }
+
+    private function synchronizeSessionProgress(PlaySession $session, array $progressSteps, int $totalSteps): void
+    {
+        $normalized = $this->normalizeProgressSteps($progressSteps, $totalSteps);
+        $needsFlush = false;
+
+        if ($session->getProgressSteps() !== $normalized) {
+            $session->setProgressSteps($normalized);
+            $needsFlush = true;
+        }
+
+        $resumeStep = $this->firstIncompleteStep($normalized, $totalSteps);
+        if ($resumeStep === null) {
+            $resumeStep = max(1, $totalSteps);
+        }
+
+        if ($session->getCurrentStep() !== $resumeStep) {
+            $session->setCurrentStep($resumeStep);
+            $needsFlush = true;
+        }
+
+        if ($needsFlush) {
+            $session->touch();
+            $this->em?->flush();
+        }
+    }
+
 
 }
