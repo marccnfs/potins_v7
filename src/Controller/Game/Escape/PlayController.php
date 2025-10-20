@@ -4,11 +4,15 @@ namespace App\Controller\Game\Escape;
 
 use App\Attribute\RequireParticipant;
 use App\Classe\UserSessionTrait;
+use App\Entity\Games\EscapeGame;
 use App\Entity\Games\MobileLink;
+use App\Entity\Games\PlaySession;
+use App\Entity\Users\Participant;
 use App\Lib\Links;
 use App\Repository\EscapeGameRepository;
 use App\Repository\PlaySessionRepository;
 use App\Service\MobileLinkManager;
+use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -94,6 +98,15 @@ class PlayController extends AbstractController
         $forceRestart = $req->query->getBoolean('restart', false);
         $httpProgress = $this->loadHttpProgress($req, (int) $eg->getId(), $totalSteps);
         $activeSession = $playSessionRepo->findLatestActiveForParticipant($eg, $participant);
+        $activeSession = $this->ensureActivePlaySession(
+            $req,
+            $eg,
+            $participant,
+            $playSessionRepo,
+            $forceRestart,
+            $step,
+            $activeSession,
+        );
         $dbProgress = $activeSession ? $activeSession->getProgressSteps() : [];
         $progressSteps = $this->mergeProgressSteps($totalSteps, $dbProgress, $httpProgress);
 // --- AJOUT SPÉCIFIQUE QR GEO ---
@@ -148,7 +161,83 @@ class PlayController extends AbstractController
         ]);
 
     }
-    // src/Controller/PlayController.php
+
+
+    private function ensureActivePlaySession(
+        Request $req,
+        EscapeGame $game,
+        Participant $participant,
+        PlaySessionRepository $repo,
+        bool $forceRestart,
+        int $step,
+        ?PlaySession $existing,
+    ): ?PlaySession {
+        if (!$this->em) {
+            return $existing;
+        }
+
+        $sessionStore = $req->hasSession() ? $req->getSession() : null;
+        $sessionKey = 'play_session_id_'.$game->getId();
+        $progressKey = 'play_progress_'.$game->getId();
+
+        if ($forceRestart && $sessionStore) {
+            $sessionStore->remove($sessionKey);
+            $sessionStore->remove($progressKey);
+        }
+
+        $sessionEntity = $existing;
+
+        if (!$forceRestart && !$sessionEntity && $sessionStore) {
+            $storedId = $sessionStore->get($sessionKey);
+            if (\is_scalar($storedId)) {
+                $candidate = $repo->find((int) $storedId);
+                if (
+                    $candidate
+                    && !$candidate->isCompleted()
+                    && $candidate->getEscapeGame()?->getId() === $game->getId()
+                    && $candidate->getParticipant()?->getId() === $participant->getId()
+                ) {
+                    $sessionEntity = $candidate;
+                }
+            }
+        }
+
+        $needsFlush = false;
+
+        if ($forceRestart && $sessionEntity) {
+            $sessionEntity->setEndedAt(new DateTimeImmutable());
+            $sessionEntity->touch();
+            $needsFlush = true;
+            $sessionEntity = null;
+        }
+
+        if (!$sessionEntity) {
+            $sessionEntity = new PlaySession();
+            $sessionEntity->setEscapeGame($game);
+            $sessionEntity->setParticipant($participant);
+            if ($step > 0) {
+                $sessionEntity->setCurrentStep($step);
+            }
+            $sessionEntity->touch();
+            $this->em->persist($sessionEntity);
+            $needsFlush = true;
+        } elseif ($step > 0 && $sessionEntity->getCurrentStep() !== $step) {
+            $sessionEntity->setCurrentStep($step);
+            $sessionEntity->touch();
+            $needsFlush = true;
+        }
+
+        if ($needsFlush) {
+            $this->em->flush();
+        }
+
+        if ($sessionStore && $sessionEntity) {
+            $sessionStore->set($sessionKey, $sessionEntity->getId());
+        }
+
+        return $sessionEntity;
+    }
+
     #[Route('/{slug}/the-end', name: 'play_the_end')]
     #[RequireParticipant]
     public function theEnd(Request $req,EscapeGameRepository $repo, PlaySessionRepository $playSessionRepo, string $slug): Response
