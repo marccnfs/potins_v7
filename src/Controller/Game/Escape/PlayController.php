@@ -109,9 +109,11 @@ class PlayController extends AbstractController
         );
         $dbProgress = $activeSession ? $activeSession->getProgressSteps() : [];
         $progressSteps = $this->mergeProgressSteps($totalSteps, $dbProgress, $httpProgress);
+
 // --- AJOUT SPÉCIFIQUE QR GEO ---
         $cfg = $puzzle->getConfig() ?? [];
         $extras = [];
+
         if ($puzzle->getType() === 'qr_geo') {
 
             $mode = is_string($cfg['mode'] ?? null) ? $cfg['mode'] : 'geo';
@@ -262,6 +264,28 @@ class PlayController extends AbstractController
 
         $progressSteps = $this->mergeProgressSteps($total, $dbProgress, $httpProgress);
 
+        $maxReached = max(
+            $this->maxProgressStep($progressSteps),
+            $this->maxProgressStep($httpProgress),
+            $activeSession?->getCurrentStep() ?? 0,
+        );
+
+        if ($maxReached >= $total && \count($progressSteps) < $total) {
+            $progressSteps = range(1, $total);
+
+            if ($activeSession && $this->em) {
+                $existingSteps = $activeSession->getProgressSteps();
+                $needsUpdate = $existingSteps !== $progressSteps || $activeSession->getCurrentStep() !== $total;
+
+                if ($needsUpdate) {
+                    $activeSession->setProgressSteps($progressSteps);
+                    $activeSession->setCurrentStep($total);
+                    $activeSession->touch();
+                    $this->em->flush();
+                }
+            }
+        }
+
         if (\count($progressSteps) < $total) {
             $redirectStep = $this->firstIncompleteStep($progressSteps, $total) ?? 1;
 
@@ -390,6 +414,23 @@ class PlayController extends AbstractController
         }
 
         return null;
+    }
+
+    private function maxProgressStep(array $steps): int
+    {
+        $max = 0;
+        foreach ($steps as $step) {
+            if (\is_int($step)) {
+                $max = max($max, $step);
+                continue;
+            }
+
+            if (\is_string($step) && ctype_digit($step)) {
+                $max = max($max, (int) $step);
+            }
+        }
+
+        return $max;
     }
 
     /**
