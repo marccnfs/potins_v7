@@ -7,6 +7,7 @@ use App\Classe\UserSessionTrait;
 use App\Entity\Games\EscapeGame;
 use App\Entity\Games\PlaySession;
 use App\Entity\Users\Participant;
+use App\Repository\EscapeGameRepository;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,14 +38,15 @@ class PlayTelemetryController extends AbstractController
 
     #[Route('/play/{slug}/start', name: 'play_start', methods: ['POST'])]
     #[RequireParticipant]
-    public function start(Request $req, EscapeGame $eg): JsonResponse
+    public function start(Request $req, EscapeGameRepository $repo, string $slug): JsonResponse
     {
         if (!$this->isCsrfValid($req)) {
             return new JsonResponse(['ok'=>false], 403);
         }
 
         $participant = $this->currentParticipant($req);
-        $repo = $this->em->getRepository(PlaySession::class);
+        $eg = $this->resolveGame($repo, $slug, $participant);
+        $sessionRepo = $this->em->getRepository(PlaySession::class);
 
         $forceRestart = filter_var($req->request->get('restart', false), FILTER_VALIDATE_BOOLEAN);
 
@@ -57,10 +59,10 @@ class PlayTelemetryController extends AbstractController
         if (!$forceRestart) {
             $session = $this->sessionFromRequest($req, $eg, $participant);
             if (!$session) {
-                $session = $repo->findLatestActiveForParticipant($eg, $participant);
+                $session = $sessionRepo->findLatestActiveForParticipant($eg, $participant);
             }
         } else {
-            $existing = $repo->findLatestActiveForParticipant($eg, $participant);
+            $existing = $sessionRepo->findLatestActiveForParticipant($eg, $participant);
             if ($existing) {
                 $existing->setEndedAt(new DateTimeImmutable());
                 $existing->touch();
@@ -98,13 +100,14 @@ class PlayTelemetryController extends AbstractController
 
     #[Route('/play/{slug}/hint', name: 'play_hint', methods: ['POST'])]
     #[RequireParticipant]
-    public function hint(Request $req, EscapeGame $eg): JsonResponse
+    public function hint(Request $req, EscapeGameRepository $repo, string $slug): JsonResponse
     {
         if (!$this->isCsrfValid($req)) {
             return new JsonResponse(['ok'=>false], 403);
         }
 
         $participant = $this->currentParticipant($req);
+        $eg = $this->resolveGame($repo, $slug, $participant);
         $session = $this->sessionFromRequest($req, $eg, $participant);
         if (!$session) {
             return new JsonResponse(['ok'=>false], 400);
@@ -119,13 +122,14 @@ class PlayTelemetryController extends AbstractController
 
     #[Route('/play/{slug}/finish', name: 'play_finish', methods: ['POST'])]
     #[RequireParticipant]
-    public function finish(Request $req, EscapeGame $eg): JsonResponse
+    public function finish(Request $req, EscapeGameRepository $repo, string $slug): JsonResponse
     {
         if (!$this->isCsrfValid($req)) {
             return new JsonResponse(['ok'=>false], 403);
         }
 
         $participant = $this->currentParticipant($req);
+        $eg = $this->resolveGame($repo, $slug, $participant);
         $session = $this->sessionFromRequest($req, $eg, $participant);
         if (!$session) {
             return new JsonResponse(['ok'=>false], 400);
@@ -160,19 +164,20 @@ class PlayTelemetryController extends AbstractController
 
     #[Route('/play/{slug}/progress', name: 'play_progress', methods: ['POST'])]
     #[RequireParticipant]
-    public function progress(Request $req, EscapeGame $eg): JsonResponse
+    public function progress(Request $req, EscapeGameRepository $repo, string $slug): JsonResponse
     {
         if (!$this->isCsrfValid($req)) {
             return new JsonResponse(['ok'=>false], 403);
         }
 
+        $participant = $this->currentParticipant($req);
+        $eg = $this->resolveGame($repo, $slug, $participant);
         $step = filter_var($req->request->get('step'), FILTER_VALIDATE_INT);
         $totalSteps = max(1, $eg->getPuzzles()->count() ?: 6);
         if (!$step || $step < 1 || $step > $totalSteps) {
             return new JsonResponse(['ok'=>false], 400);
         }
 
-        $participant = $this->currentParticipant($req);
         $sessionEntity = $this->sessionFromRequest($req, $eg, $participant);
         if (!$sessionEntity) {
             return new JsonResponse(['ok'=>false], 400);
@@ -218,5 +223,22 @@ class PlayTelemetryController extends AbstractController
             return null;
         }
         return $session;
+    }
+
+    private function resolveGame(EscapeGameRepository $repo, string $slug, Participant $participant): EscapeGame
+    {
+        $eg = $repo->findOneBy(['shareSlug' => $slug]);
+        if (!$eg) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$eg->isPublished()) {
+            $owner = $eg->getOwner();
+            if (!$owner || $owner->getId() !== $participant->getId()) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
+        return $eg;
     }
 }
