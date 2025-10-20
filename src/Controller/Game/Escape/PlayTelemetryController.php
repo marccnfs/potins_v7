@@ -195,11 +195,17 @@ class PlayTelemetryController extends AbstractController
             $session->set($key, $progress);
         }
 
-        $sessionEntity->addProgressStep($step);
         $progressSteps = $sessionEntity->getProgressSteps();
+        if (!\in_array($step, $progressSteps, true)) {
+            $progressSteps[] = $step;
+            sort($progressSteps);
+        }
+
+        $sessionEntity->setProgressSteps($progressSteps);
         $resumeStep = $this->computeResumeStep($progressSteps, $totalSteps);
         $sessionEntity->setCurrentStep($resumeStep);
         $sessionEntity->touch();
+        $this->em->persist($sessionEntity);
         $this->em->flush();
 
         return new JsonResponse([
