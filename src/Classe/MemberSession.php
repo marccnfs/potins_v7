@@ -69,7 +69,6 @@ trait MemberSession
 
         $this->clearinit();
         $tabuser=$this->sessioninit->InitCustomer($user);
-        dump($user);
         $this->member=$tabuser['member'];
         $this->customer=$this->member->getCustomer();
         $this->prepa();

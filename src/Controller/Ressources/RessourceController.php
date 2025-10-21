@@ -3,14 +3,14 @@
 
 namespace App\Controller\Ressources;
 
-use App\Classe\MemberSession;
+use App\Classe\UserSessionTrait;
 use App\Entity\Ressources\Ressources;
 use App\Form\DeleteType;
-use App\Lib\Links;
 use App\Module\Ressourcecator;
 use App\Repository\CategoriesRepository;
 use App\Repository\RessourcesRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -21,13 +21,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-#[IsGranted('ROLE_MEMBER')]
+#[IsGranted(new Expression('is_granted("ROLE_MEMBER") or is_granted("ROLE_SUPER_ADMIN")'))]
 #[Route('/member')]
 
 class RessourceController extends AbstractController
 {
-    use MemberSession;
 
+    use UserSessionTrait;
 
     #[Route('/ressource/manage/{id?}', name: 'ressource_manage', methods: ['GET', 'POST'])]
     public function manageRessource(
@@ -76,26 +76,15 @@ class RessourceController extends AbstractController
             return $this->redirectToRoute('module_ressources');
         }
 
-        $vartwig=$this->menuNav->admin(
-            $this->board,
-            'manage_ressource',
-            links::ADMIN,
-            5
-        );
+        $board = $this->requireBoard();
 
-        return $this->render($this->useragentP.'ptn_office/home.html.twig', [
-            'directory'=>'ressources',
-            'replacejs'=>false,
-            'member'=>$this->member,
-            'customer'=>$this->customer,
-            'board'=>$this->board,
-            'vartwig'=>$vartwig,
-            'ressource' => $ressource,
+        return $this->renderDashboard('ressources', 'manage_ressource', 5, [
+            'website' => $board,
             'cats' => $categories,
             'is_edit' => $id !== null,
-            'etat'=>$etat
+            'etat'=>$etat,
+            'ressource' => $ressource,
         ]);
-
     }
 
     #[Route('/ressource/delete/{id}', name: 'delete_ressource', methods: ['POST'])]
@@ -128,24 +117,14 @@ class RessourceController extends AbstractController
             return $this->redirectToRoute('module_ressources', ['board'=>$this->board->getSlug()]);        }
 
 
-        $vartwig=$this->menuNav->admin(
-            $this->board,
-            'delete',
-            links::ADMIN,
-            5
-        );
-        return $this->render($this->useragentP.'ptn_office/home.html.twig', [
-            'replacejs'=>false,
-            'form' => $form->createView(),
-            'member'=>$this->member,
-            'customer'=>$this->customer,
-            'board'=>$this->board,
-            'carte'=>$ressource,
-            'vartwig'=>$vartwig,
-            'directory'=>'ressources',
-            'admin'=>[true,[1,1,1]]
-        ]);
-    }
+        $board = $this->requireBoard();
 
+        return $this->renderDashboard('ressources', 'delete', 5, [
+            'website' => $board,
+            'form' => $form->createView(),
+            'carte'=>$ressource,
+        ]);
+
+    }
 
 }

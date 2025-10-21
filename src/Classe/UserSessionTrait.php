@@ -8,6 +8,7 @@ use App\Entity\Customer\Customers;
 use App\Entity\Member\Activmember;
 use App\Entity\Users\Participant;
 use App\Entity\Users\User;
+use App\Lib\Links;
 use App\Repository\CustomersRepository;
 use App\Repository\BoardRepository;
 use App\Repository\BoardslistRepository;
@@ -17,8 +18,11 @@ use App\Repository\PostEventRepository;
 use App\Service\MenuNavigator;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -288,4 +292,57 @@ trait UserSessionTrait
         $this->currentMember   = null;
         $this->currentBoard    = null;
     }
+
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function renderDashboard(string $directory, string $twig, int $nav, array $payload = []): Response
+    {
+        $board = $this->requireBoard();
+        $menuNav = $this->requireMenuNav();
+
+        $vartwig = $menuNav->admin($board, $twig, Links::ADMIN, $nav);
+
+        if ($nav === 1) {
+            if (!array_key_exists('contactRequestsCount', $payload)) {
+                $payload['contactRequestsCount'] = $this->commentRepository->countAgendaRequests();
+            }
+        }
+
+        return $this->render($this->agentPrefix . 'ptn_office/home.html.twig', array_merge([
+            'directory' => $directory,
+            'replacejs' => false,
+            'vartwig' => $vartwig,
+            'board' => $board,
+            'member' => $this->currentMember,
+            'customer' => $this->currentCustomer,
+        ], $payload));
+    }
+
+    private function validateCsrf(string $id, ?string $token): void
+    {
+        if (!$this->isCsrfTokenValid($id, $token ?? '')) {
+            throw new BadRequestHttpException('Jeton de sécurité invalide.');
+        }
+    }
+
+    private function requireBoard(): Board
+    {
+        if (!$this->board instanceof Board) {
+            throw $this->createNotFoundException('Aucun panneau sélectionné.');
+        }
+
+        return $this->board;
+    }
+
+    private function requireMenuNav(): MenuNavigator
+    {
+        if (!$this->menuNav instanceof MenuNavigator) {
+            throw new RuntimeException('Le service MenuNavigator est indisponible.');
+        }
+
+        return $this->menuNav;
+    }
+
 }
