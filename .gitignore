@@ -12,6 +12,9 @@
 !/public/index.php
 !/public/.htaccess
 !/public/robots.txt
+!/public/models
+!/public/audio
+!/public/mindar/*
 /templates/svg/
 ###< symfony/framework-bundle ###
 
