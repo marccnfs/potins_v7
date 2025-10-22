@@ -1,0 +1,15 @@
+{% block title %}ra - demo{% endblock %}
+{% use "js/js_public.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+{% block body %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            <div class="bo_content">
+                {{ include('pwa/ar_mindar/view.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

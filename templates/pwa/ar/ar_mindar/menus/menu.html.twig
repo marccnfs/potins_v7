@@ -1,0 +1,70 @@
+{# templates/pwa/escape/<directory>/menu.html.twig #}
+{#
+Attentes:
+  - variable "participant" (objet Participant ou null) — à passer depuis le contrôleur
+  - variable "brand_route" (string)                   — route de la page d’accueil (défaut: 'home')
+  - variable "nav" (array de routes pour les liens)  — voir defaults ci-dessous
+  - optionnel: "active" (string)                      — clé de l’onglet actif: 'play'|'create'|'mine'|'docs'
+#}
+
+
+{% set brand_route = brand_route|default('home') %}
+{% set active = active|default('') %}
+{% set nav = nav|default({
+    lotus:       'ar_lotus',
+    create:      'ar_createur',
+    sessions:    'dashboard_my_sessions',
+    mine:        'dashboard_my_escapes',
+    docs:        'docs_workshop',
+    login:       'participant_entry',
+    logout:      'participant_logout',
+    profile:     'participant_profile'
+    }) %}
+
+    <header class="xnav" data-controller="xnav">
+        <div class="xnav__inner">
+            <!-- gauche: logo -->
+            <a class="xnav__brand" href="{{ path(brand_route) }}" aria-label="Accueil">
+                <div class="navlogo-svg">{{ include('svg/potins/logopotins_svg_small.html.twig') }}</div>
+                <span class="xnav__logo">🧩</span>
+                <span class="xnav__brandname">Réalité Augmentée</span>
+             </a>
+
+            <!-- centre: navigation principale -->
+            <nav class="xnav__links" aria-label="Navigation principale">
+              <a class="xnav__link {{ active=='play' ? 'is-active' }}" href="{{ path(nav.lotus) }}">CDN</a>
+              <a class="xnav__link {{ active=='docs' ? 'is-active' }}" href="{{ path(nav.create) }}">Creation</a>
+            </nav>
+        </div>
+    </header>
+
+
+<script>
+(function(){
+  const burger = document.getElementById('xnav-burger');
+  const links  = document.querySelector('.xnav__links');
+  const btn    = document.getElementById('xnav-account-btn');
+  const menu   = document.getElementById('xnav-account-menu');
+
+  if (burger && links) {
+    burger.addEventListener('click', () => {
+      const open = links.classList.toggle('is-open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      // ferme le menu compte si ouvert
+      if (menu && !menu.hidden) { menu.hidden = true; btn?.setAttribute('aria-expanded','false'); }
+    });
+  }
+  if (btn && menu) {
+    btn.addEventListener('click', () => {
+      const isHidden = menu.hidden;
+      menu.hidden = !isHidden;
+      btn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+    });
+    document.addEventListener('click', (e)=>{
+      if (!menu.hidden && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+        menu.hidden = true; btn.setAttribute('aria-expanded','false');
+      }
+    });
+  }
+})();
+</script>

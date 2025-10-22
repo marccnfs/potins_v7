@@ -5,6 +5,7 @@ namespace App\Controller\Game\Ar;
 
 use App\Classe\UserSessionTrait;
 use App\Lib\Links;
+use App\Service\MindArPackLocator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,54 +15,71 @@ class ArController extends AbstractController
 {
     use UserSessionTrait;
 
+    #[Route('/ra/test0', name: 'ar_test0')]
+    public function test0(): Response
+    {
+        return $this->renderAr('ar_gen','_test',"0");
+    }
+
+    #[Route('/ra/test1', name: 'ar_test1')]
+    public function test1(): Response
+    {
+        return $this->renderAr('ar_gen','_test',"1");
+    }
+
+    #[Route('/ra/test2', name: 'ar_test2')]
+    public function test2(): Response
+    {
+        return $this->renderAr('ar_gen','_test',"2");
+    }
+
+    #[Route('/ra/test3', name: 'ar_test3')]
+    public function test3(): Response
+    {
+        return $this->renderAr('ar_gen','_test',"3");
+    }
+
+    #[Route('/ra/test4', name: 'ar_test4')]
+    public function test4(): Response
+    {
+        return $this->renderAr('ar_gen','_test',"4");
+    }
+
     #[Route('/ra/intro', name: 'ar_intro')]
     public function intro(): Response
     {
-
-        $vartwig=$this->menuNav->templatepotins(
-            '_intro',
-            Links::ACCUEIL);
-
-
-        return $this->render('pwa/ar/home.html.twig', [
-            'replacejs'=>false,
-            'customer'=>$this->customer,
-            'vartwig'=>$vartwig,
-            'directory'=>'ar',
-        ]);
+        return $this->renderAr('ar_gen','_intro',"");
     }
-
 
     #[Route('/ra/mindar/demo', name: 'ar_mindar_demo')]
     public function demo(): Response
     {
-
-        $vartwig=$this->menuNav->templatepotins(
-            '_mindar_demo',
-            Links::ACCUEIL);
-
-        return $this->render('pwa/ar/home.html.twig', [
-            'replacejs'=>false,
-            'customer'=>$this->customer,
-            'vartwig'=>$vartwig,
-            'directory'=>'ar',
-        ]);
+        return $this->renderAr('ar_mindar','_demo',"");
     }
 
-
     #[Route('/ra/mindar/create', name: 'ar_mindar_create')]
-    public function create(\App\Service\MindArPackLocator $locator): Response
+    public function create(MindArPackLocator $locator): Response
     {
-        $vartwig=$this->menuNav->templatepotins(
-            '_mindar_create',
-            Links::ACCUEIL);
+        return $this->renderAr('ar_mindar','_create',"");
+    }
 
-        return $this->render('pwa/ar/home.html.twig', [
-            'replacejs'=>false,
-            'customer'=>$this->customer,
-            'vartwig'=>$vartwig,
-            'directory'=>'ar',
-            'packs' => $locator->listPacks(),
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function renderAr(string $directory, string $twig, string $test): Response
+    {
+
+        $menuNav = $this->requireMenuNav();
+
+        $vartwig = $menuNav->templatepotins( $twig,Links::ACCUEIL);
+
+        return $this->render( 'pwa/ar/home.html.twig',[
+            'directory' => $directory,
+            'replacejs' => false,
+            'vartwig' => $vartwig,
+            'member' => $this->currentMember,
+            'customer' => $this->currentCustomer,
+            'test'=>$test,
         ]);
     }
 

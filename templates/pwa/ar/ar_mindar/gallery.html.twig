@@ -1,0 +1,18 @@
+
+{% block body %}
+    <section class="container mx-auto p-6">
+        <h1>Galerie des scènes RA</h1>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {% for s in scenes %}
+                <a href="{{ path('ar_view', {id: s.id}) }}" class="block border rounded p-3 hover:shadow">
+                    <div class="text-sm text-gray-600 mb-1">{{ s.createdAt|date('d/m/Y H:i') }}</div>
+                    <div class="font-semibold">{{ s.title }}</div>
+                    <div class="text-xs text-gray-500 truncate">Target: {{ s.mindTargetPath }} [{{ s.targetIndex }}]</div>
+                    <div class="text-xs text-gray-500 truncate">Model: {{ s.modelUrl }}</div>
+                </a>
+            {% else %}
+                <p>Aucune scène pour le moment.</p>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

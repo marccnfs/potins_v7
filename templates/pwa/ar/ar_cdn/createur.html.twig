@@ -1,0 +1,52 @@
+{# templates/ar/createur.html.twig #}
+{% extends 'base.html.twig' %}
+{% block body %}
+<section class="container mx-auto p-4">
+    <h1>Créateur Jardin Zen — Version CDN</h1>
+
+    <form class="space-y-4" data-controller="ar-create">
+        <label>Choisis un objet apaisant :</label>
+        <select name="model" data-ar-create-target="model">
+            <option value="/models/lotus.glb">Lotus</option>
+            <option value="/models/rock.glb">Pierre</option>
+            <option value="/models/bamboo.glb">Bambou</option>
+        </select>
+
+        <label>Choisis un marqueur :</label>
+        <select name="marker" data-ar-create-target="marker">
+            <option value="hiro">Hiro (classique)</option>
+            <option value="kanji">Kanji</option>
+        </select>
+
+        <button type="button" data-action="ar-create#apply">Appliquer</button>
+        {# <p><a href="{{ asset('markers/pack-marqueurs.pdf') }}" download>Télécharger les marqueurs</a></p>  #}
+    </form>
+</section>
+
+    <hr class="my-4"/>
+
+    <!-- Scène AR réutilisable -->
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
+
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false">
+        <a-entity light="type: ambient; intensity: 0.8"></a-entity>
+        <a-entity light="type: directional; intensity: 0.7" position="1 1 0"></a-entity>
+
+        <a-marker id="marker-dyn" preset="hiro">
+            <a-entity id="model-dyn" gltf-model="url(/models/lotus.glb)" scale="0.5 0.5 0.5"
+                      animation="property=rotation; to=0 360 0; loop=true; dur=12000; easing=linear"></a-entity>
+            <a-sound src="url(/audio/water.mp3)" autoplay="false" loop="true" id="ambience2"></a-sound>
+        </a-marker>
+
+        <a-entity camera></a-entity>
+    </a-scene>
+    <script>
+        document.getElementById('apply').addEventListener('click', () => {
+            const model = document.getElementById('model').value;
+            const marker = document.getElementById('marker').value;
+            document.getElementById('obj').setAttribute('gltf-model', `url(${model})`);
+            document.getElementById('m').setAttribute('preset', marker);
+        });
+    </script>
+    {% endblock %}

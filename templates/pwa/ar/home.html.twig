@@ -1,6 +1,6 @@
 {# version mobile #}
-{% extends 'pwa/ar/basepublic.html.twig' %}
-{% use 'pwa/ar/_menu.html.twig' %}
+{% extends 'pwa/ar/base.html.twig' %}
+{% use 'pwa/ar/menu.html.twig' %}
 {% block core %}
-    {{ include('pwa/'~directory~'/'~vartwig.maintwig~'.html.twig') }}
+    {{ include('pwa/ar/'~vartwig.maintwig~'.html.twig') }}
 {% endblock core%}

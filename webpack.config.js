@@ -60,6 +60,8 @@ Encore
     .addEntry('chatbotfull', './assets/js/chatbotfull.js')
     .addEntry('ia-animations', './assets/js/ia-animations.js')
     .addEntry('escape-garden', './assets/js/escape-garden.js')
+    .addEntry('mindar_demo', './assets/mindar/mindar_demo.js')     // fichiers JS *dédiés* MindAR
+    .addEntry('mindar_create', './assets/mindar/mindar_create.js')
 
 
     // Runtime séparé (recommandé)

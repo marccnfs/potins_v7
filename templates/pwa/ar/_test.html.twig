@@ -1,0 +1,17 @@
+{% block title %}test - ar{% endblock %}
+{% block body %}
+    {% set value = test %}
+        {% if value == '0' %}
+            <div class="_wb">{{ include('pwa/ar/'~directory~'/test0.html.twig') }}</div>
+        {% elseif value == '1' %}
+            <div class="_wb">{{ include('pwa/ar/'~directory~'/test1.html.twig') }}</div>
+        {% elseif value == '2' %}
+            <div class="_wb">{{ include('pwa/ar/'~directory~'/test2.html.twig') }}</div>
+        {% else %}
+            <p>value is something else</p>
+        {% endif %}
+{% endblock %}
+{% use "js/js_escape.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

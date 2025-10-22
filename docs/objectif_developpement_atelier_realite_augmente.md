@@ -159,13 +159,13 @@ class ArController extends AbstractController
     #[Route('/ra/mindar/demo', name: 'ar_mindar_demo')]
     public function demo(): Response
     {
-        return $this->render('ar/mindar_demo.html.twig');
+        return $this->render('ar/demo.html.twig');
     }
 
     #[Route('/ra/mindar/create', name: 'ar_mindar_create')]
     public function create(): Response
     {
-        return $this->render('ar/mindar_create.html.twig');
+        return $this->render('ar/create.html.twig');
     }
 }
 ```

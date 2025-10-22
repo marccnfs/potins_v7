@@ -1,0 +1,21 @@
+
+{% block body %}
+    <section class="container mx-auto p-4">
+        <h1>{{ scene.title }}</h1>
+        <p class="text-sm text-gray-600">Cible: {{ scene.mindTargetPath }} — index {{ scene.targetIndex }}</p>
+    </section>
+
+    <script src="/build/mindar/mindar-image-aframe.prod.js"></script>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <a-scene mindar-image="imageTargetSrc: {{ scene.mindTargetPath }};" vr-mode-ui="enabled:false" renderer="colorManagement:true">
+        <a-assets>
+            <a-asset-item id="mdl" src="{{ scene.modelUrl }}"></a-asset-item>
+            {% if scene.soundUrl %}<audio id="sfx" src="{{ scene.soundUrl }}"></audio>{% endif %}
+        </a-assets>
+        <a-camera look-controls="enabled:false"></a-camera>
+        <a-entity mindar-image-target="targetIndex: {{ scene.targetIndex }}">
+            <a-gltf-model src="#mdl" scale="0.5 0.5 0.5"></a-gltf-model>
+            {% if scene.soundUrl %}<a-entity sound="src:#sfx; autoplay:false; loop:true"></a-entity>{% endif %}
+        </a-entity>
+    </a-scene>
+{% endblock %}

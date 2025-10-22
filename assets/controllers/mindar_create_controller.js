@@ -1,76 +1,56 @@
-// assets/controllers/mindar_create_controller.js
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
-    static targets = ['model', 'sound', 'mindfile', 'preview'];
+    static targets = ['pack','thumbs','targetIndex','model'];
 
-    connect() {
-        this.previewObjectUrl = null;
+    connect(){ this.packChanged(); }
+
+    packChanged(){
+        const opt = this.packTarget.selectedOptions[0];
+        const items = JSON.parse(opt.getAttribute('data-items') || '[]');
+        const packName = opt.getAttribute('data-packname') || 'pack';
+
+        this.thumbsTarget.innerHTML = '';
+        items.forEach(item => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'border rounded p-1 hover:ring';
+            btn.innerHTML = `<img src="${item.thumb}" alt="${item.label}" class="w-full h-auto"/><div class="text-xs text-center">${item.label}</div>`;
+            btn.addEventListener('click', () => { this.targetIndexTarget.value = item.index; this._highlight(btn); });
+            this.thumbsTarget.appendChild(btn);
+        });
+        const firstBtn = this.thumbsTarget.querySelector('button');
+        if (firstBtn) firstBtn.click();
+
+        const one = document.getElementById('btn-print-one');
+        const sheet = document.getElementById('btn-print-sheet');
+        if (one) one.href  = `/ra/markers/print/${encodeURIComponent(packName)}`;
+        if (sheet) sheet.href = `/ra/markers/sheet/${encodeURIComponent(packName)}`;
     }
 
-    disconnect() {
-        this.revokePreviewUrl();
+    _highlight(active){
+        this.thumbsTarget.querySelectorAll('button').forEach(b => b.classList.remove('ring','ring-blue-500'));
+        active.classList.add('ring','ring-blue-500');
     }
 
-    preview() {
-        const container = this.previewTarget;
+    preview(){
+        const container = document.getElementById('preview');
         container.innerHTML = '';
-        this.revokePreviewUrl();
+        const mindPath = this.packTarget.value;
+        const idx = parseInt(this.targetIndexTarget.value, 10);
         const model = this.modelTarget.value;
-        const sound = this.soundTarget.value;
-
-        const file = this.mindfileTarget.files?.[0];
-        if (!file) { alert('Importe un fichier .mind'); return; }
-        const url = URL.createObjectURL(file);
-        this.previewObjectUrl = url;
 
         container.insertAdjacentHTML('beforeend', `
-<script src="/build/mindar/mindar-image-aframe.prod.js"></script>
-<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-<a-scene mindar-image="imageTargetSrc: ${url};" vr-mode-ui="enabled:false" renderer="colorManagement:true">
-<a-assets>
-<a-asset-item id="model" src="${model}"></a-asset-item>
-${sound ? `<audio id="sfx" src="${sound}"></audio>` : ''}
-</a-assets>
-<a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
-<a-entity mindar-image-target="targetIndex: 0">
-<a-gltf-model src="#model" scale="0.5 0.5 0.5"
-animation__spin="property=rotation; to=0 360 0; loop:true; dur:12000"></a-gltf-model>
-${sound ? `<a-entity sound="src:#sfx; autoplay:false; loop:true"></a-entity>` : ''}
-</a-entity>
-</a-scene>
-`);
-    }
-
-    async save(){
-        const file = this.mindfileTarget.files?.[0];
-        if (!file) { alert('Ajoute un .mind pour sauvegarder'); return; }
-
-        const payload = {
-            title: 'Scène zen',
-            mindTargetPath: '/uploads/mind/' + file.name, // à adapter si tu fais l’upload réel
-            targetIndex: 0,
-            modelUrl: this.modelTarget.value,
-            soundUrl: this.soundTarget.value || null,
-        };
-
-        const res = await fetch('/api/ar/scenes', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        if (res.ok) {
-            const data = await res.json();
-            alert('Scène sauvegardée (id ' + data.id + ')');
-        } else {
-            alert('Erreur de sauvegarde');
-        }
-    }
-    revokePreviewUrl() {
-        if (this.previewObjectUrl) {
-            URL.revokeObjectURL(this.previewObjectUrl);
-            this.previewObjectUrl = null;
-        }
+      <a-scene mindar-image="imageTargetSrc: ${mindPath};" vr-mode-ui="enabled:false" renderer="colorManagement:true">
+        <a-assets>
+          <a-asset-item id="mdl" src="${model}"></a-asset-item>
+        </a-assets>
+        <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
+        <a-entity mindar-image-target="targetIndex: ${idx}">
+          <a-gltf-model src="#mdl" scale="0.5 0.5 0.5"
+            animation__spin="property=rotation; to=0 360 0; loop:true; dur:12000"></a-gltf-model>
+        </a-entity>
+      </a-scene>
+    `);
     }
 }
