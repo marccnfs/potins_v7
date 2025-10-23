@@ -39,10 +39,10 @@ class ArController extends AbstractController
         return $this->renderAr('ar_gen','_test',"3");
     }
 
-    #[Route('/ra/test4', name: 'ar_test4')]
-    public function test4(): Response
+    #[Route('/ra/brut', name: 'ar_brut')]
+    public function brut(): Response
     {
-        return $this->renderAr('ar_gen','_test',"4");
+        return $this->render( 'pwa/ar/ar_gen/brut.html');
     }
 
     #[Route('/ra/intro', name: 'ar_intro')]

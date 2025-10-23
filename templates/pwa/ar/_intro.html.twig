@@ -1,16 +1,14 @@
-{# templates/escape/garden.html.twig #}
-{% block title %}Agenda — Planning des événements{% endblock %}
+{% block title %}AR - INTRO{% endblock %}
 {% block body %}
     <div class="_wb">
         <div class="container_bo_member">
-           {#  {{ include('pwa/escape/landing/slideleft.html.twig') }} #}
             <div class="bo_content">
-                {{ include('pwa/ar/intro.html.twig') }}
+                {{ include('pwa/ar/'~directory~'/intro.html.twig') }}
             </div>
         </div>
     </div>
 {% endblock %}
-{% use "js/js_agenda.html.twig" %}
+{% use "js/js_escape.html.twig" %}
 {% block javascripts %}
     {{ parent() }}
 {% endblock %}

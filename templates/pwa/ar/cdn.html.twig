@@ -1,0 +1,21 @@
+{% block title %}ar - lotus{% endblock %}
+{% block body %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            <div class="bo_content">
+                {% set value = switch %}
+                {% if value == 'lotus' %}
+                    {{ include('pwa/ar/'~directory~'/lotus.html.twig') }}
+                {% elseif value == 'createur' %}
+                    {{ include('pwa/ar/'~directory~'/createur.html.twig') }}
+                {% else %}
+                    <p>value is something else</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% use "js/js_escape.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
