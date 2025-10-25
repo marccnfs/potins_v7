@@ -15,34 +15,28 @@ class ArController extends AbstractController
 {
     use UserSessionTrait;
 
-    #[Route('/ra/test0', name: 'ar_test0')]
+    #[Route('/ra/minimal', name: 'ar_minimal')]
+    public function testMinimal(): Response
+    {
+        return $this->renderAr('ar_gen','_test',"3");
+    }
+
+    #[Route('/ra/test0', name: 'ar_test0')] // card simple avec gld
     public function test0(): Response
     {
         return $this->renderAr('ar_gen','_test',"0");
     }
 
-    #[Route('/ra/test1', name: 'ar_test1')]
+    #[Route('/ra/test1', name: 'ar_test1')] // multi scene (ours et panda)
     public function test1(): Response
     {
         return $this->renderAr('ar_gen','_test',"1");
     }
 
-    #[Route('/ra/test2', name: 'ar_test2')]
-    public function test2(): Response
-    {
-        return $this->renderAr('ar_gen','_test',"2");
-    }
-
-    #[Route('/ra/test3', name: 'ar_test3')]
-    public function test3(): Response
-    {
-        return $this->renderAr('ar_gen','_test',"3");
-    }
-
     #[Route('/ra/brut', name: 'ar_brut')]
     public function brut(): Response
     {
-        return $this->render( 'pwa/ar/ar_gen/brut.html');
+        return $this->render( 'pwa/ar/brut.html.twig');
     }
 
     #[Route('/ra/intro', name: 'ar_intro')]

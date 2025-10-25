@@ -1,17 +1,17 @@
-{% block title %}test - ar{% endblock %}
 {% block body %}
+    <div class="ar-wrapper">
     {% set value = test %}
         {% if value == '0' %}
-            <div class="_wb">{{ include('pwa/ar/'~directory~'/test0.html.twig') }}</div>
+           {{ include('pwa/ar/'~directory~'/test0.html.twig') }}
         {% elseif value == '1' %}
-            <div class="_wb">{{ include('pwa/ar/'~directory~'/test1.html.twig') }}</div>
+            {{ include('pwa/ar/'~directory~'/test1.html.twig') }}
         {% elseif value == '2' %}
             <div class="_wb">{{ include('pwa/ar/'~directory~'/test2.html.twig') }}</div>
+        {% elseif value == '3' %}
+            {{ include('pwa/ar/'~directory~'/minimal.html.twig') }}
         {% else %}
             <p>value is something else</p>
         {% endif %}
+        </div>
 {% endblock %}
-{% use "js/js_escape.html.twig" %}
-{% block javascripts %}
-    {{ parent() }}
-{% endblock %}
+

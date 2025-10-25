@@ -64,7 +64,7 @@
                                 </div>
                                 <div>
                                     <h3>Titres des 6 étapes</h3>
-                                    <div class="steps-grid">
+                                    <div class="steps-grid" style="grid-template-columns: 1fr;">
                                         {% for i, field in form.stepTitles %}
                                             <label>Étape {{ i }}</label>
                                             {{ form_widget(field, {'attr': {'placeholder': steps[i] }}) }}

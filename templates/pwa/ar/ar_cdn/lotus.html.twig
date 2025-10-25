@@ -1,17 +1,5 @@
-{% extends '../ar/base.html.twig' %}
-
 {% block body %}
-    <section class="container mx-auto p-4">
-        <h1>Lotus Respire — Version CDN (AR.js)</h1>
-        <p>1) Autorise la caméra • 2) Pointe le <a href="https://raw.githubusercontent.com/AR-js-org/AR.js/master/three.js/examples/marker-training/examples/pattern-files/hiro.png" target="_blank" rel="noopener">marqueur hiro</a>.</p>
-        {#  <a href="{{ asset('markers/hiro-marker.png') }}" download>Imprimer le marqueur</a> #}
-    </section>
-
-    <!-- A-Frame + AR.js (CDN pour l’atelier) -->
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
-
-    <a-scene
+      <a-scene
         embedded
         arjs="sourceType: webcam; debugUIEnabled: false;"
         renderer="antialias: true"

@@ -16,18 +16,7 @@ class ArCdnController extends AbstractController
 
     #[Route('/ra/lotus', name: 'ar_lotus')]
     public function lotus() {
-
-        $vartwig=$this->menuNav->templatepotins(
-            '_lotus',
-            Links::ACCUEIL);
-
-        return $this->render('pwa/ar_cdn/home.html.twig', [
-            'replacejs'=>false,
-            'customer'=>$this->customer,
-            'vartwig'=>$vartwig,
-            'directory'=>'ar_cdn',
-        ]);
-
+        return $this->renderAr('ar_cdn','cdn',"lotus");
     }
 
     #[Route('/ra/createur', name: 'ar_createur')]
@@ -44,6 +33,20 @@ class ArCdnController extends AbstractController
             'directory'=>'ar_cdn',
         ]);
 
+    }
+
+    private function renderAr(string $directory, string $twig, string $switch): Response
+    {
+
+        $menuNav = $this->requireMenuNav();
+
+        $vartwig = $menuNav->templatepotins( $twig,Links::ACCUEIL);
+
+        return $this->render( 'pwa/ar/home.html.twig',[
+            'directory' => $directory,
+            'vartwig' => $vartwig,
+            'switch'=>$switch,
+        ]);
     }
 
 }

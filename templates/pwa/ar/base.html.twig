@@ -1,41 +1,35 @@
-{# version mobile #}
 <!DOCTYPE html>
 <html lang="FR">
 <head>
     {% block head %}
         <title>{% block title %}{{vartwig.title}}{% endblock %}</title>
-        {{ include('head/head.html.twig') }}
-
-        {% set value = test %}
-        {% if value == '0' %}
-        <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.5/dist/mindar-image.prod.js"></script>
-        <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.5/dist/mindar-image-aframe.prod.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.5/dist/mindar-image-three.prod.js"></script>
-        {% elseif value == '1' %}
-        <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-        {% elseif value == '2' %}
-        <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-        {% else %}
-        <p>value is something else</p>
-        {% endif %}
-
+        {{ include('head/head_ra.html.twig') }}
     {% endblock head %}
-    {{ encore_entry_link_tags('app') }}
+    <style>
+        .ar-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            max-height: 100vh;
+        }
+
+        .ar-wrapper a-scene,
+        .ar-wrapper .a-canvas,
+        .ar-wrapper video {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .ar-wrapper video {
+            inset: 0 !important;
+        }
+    </style>
 </head>
-{% block menu %}
-{% endblock menu %}
-<body class="wbesitemob">
-<main class="content-constrain2" id="page">
+<body>
     {% block core %}
         {% block body %}
         {% endblock body %}
-        {% block footer %}
-        {% endblock footer %}
     {% endblock core %}
-</main>
 {% block javascripts %}
 {% endblock %}
 </body>
