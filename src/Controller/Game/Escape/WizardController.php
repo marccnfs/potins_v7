@@ -169,32 +169,7 @@ class WizardController extends AbstractController
             'step'    => $step,
         ]);
     }
-/*
-    #[Route('/{id}/etape/{step}/qr-answer/{code}', name:'wizard_step_qr_answer', methods:['GET'])]
-    public function stepQrAnswer(EscapeGame $eg, int $step, string $code): Response
-    {
-        $puzzle = $eg->getPuzzleByStep($step) ?? throw $this->createNotFoundException();
-        if ($puzzle->getType() !== 'qr_geo') {
-            throw $this->createNotFoundException();
-        }
 
-        $cfg = $puzzle->getConfig() ?? [];
-        $mode = is_string($cfg['mode'] ?? null) ? $cfg['mode'] : 'geo';
-        $qrOnly = is_array($cfg['qrOnly'] ?? null) ? $cfg['qrOnly'] : [];
-
-        if ($mode !== 'qr_only' || ($qrOnly['answerSlug'] ?? null) !== $code) {
-            throw $this->createNotFoundException();
-        }
-
-        return $this->render('mobile/qr_simple.html.twig', [
-            'title'    => $qrOnly['answerTitle'] ?? 'Réponse de l’étape',
-            'message'  => $qrOnly['answerBody'] ?? '',
-            'subtitle' => $cfg['title'] ?? $puzzle->getTitle(),
-            'variant'  => 'answer',
-        ]);
-    }
-
-*/
     #[Route('/wizard/{id}/universe', name: 'wizard_universe', methods: ['GET','POST'])]
     #[RequireParticipant]
     public function universe(EscapeGame $eg, Request $req, SluggerInterface $slugger): Response
@@ -522,13 +497,6 @@ class WizardController extends AbstractController
                     if (!is_array($cfg)) { $cfg = []; }
 
                     if ($mode === 'qr_only') {
-                      /*  $qrOnly = is_array($cfg['qrOnly'] ?? null) ? $cfg['qrOnly'] : [];
-                        if (!isset($qrOnly['answerSlug']) || !is_string($qrOnly['answerSlug']) || $qrOnly['answerSlug'] === '') {
-                            $qrOnly['answerSlug'] = bin2hex(random_bytes(5));
-                        }
-                        $qrOnly['validateMessage'] = $qrValidateMessage !== '' ? $qrValidateMessage : 'Bravo !';
-                        $qrOnly['answerTitle'] = $qrAnswerTitle !== '' ? $qrAnswerTitle : 'Réponse de l’étape';
-                        $qrOnly['answerBody'] = $qrAnswerBody;*/
                         $qrOnly = [
                             'validateMessage' => $qrValidateMessage !== '' ? $qrValidateMessage : 'Bravo !',
                             'noExpiry' => $qrNoExpiry,

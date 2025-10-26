@@ -37,29 +37,4 @@ class PlayQrGeoController extends AbstractController
         ]);
     }
 
-    /*
-    #[Route('/play/{slug}/step/{step}/qr-answer/{code}', name: 'play_qr_geo_answer', methods: ['GET'])]
-    public function answer(EscapeGame $eg, int $step, string $code): Response
-    {
-        $puzzle = $eg->getPuzzleByStep($step) ?? throw $this->createNotFoundException();
-        if ($puzzle->getType() !== 'qr_geo') {
-            throw $this->createNotFoundException();
-        }
-
-        $cfg = $puzzle->getConfig() ?? [];
-        $mode = is_string($cfg['mode'] ?? null) ? $cfg['mode'] : 'geo';
-        $qrOnly = is_array($cfg['qrOnly'] ?? null) ? $cfg['qrOnly'] : [];
-
-        if ($mode !== 'qr_only' || ($qrOnly['answerSlug'] ?? null) !== $code) {
-            throw $this->createNotFoundException();
-        }
-
-        return $this->render('mobile/qr_simple.html.twig', [
-            'title'    => $qrOnly['answerTitle'] ?? 'Réponse de l’étape',
-            'message'  => $qrOnly['answerBody'] ?? '',
-            'subtitle' => $cfg['title'] ?? $eg->getTitresEtapes()[$step] ?? 'Étape',
-            'variant'  => 'answer',
-        ]);
-    }
-    */
 }

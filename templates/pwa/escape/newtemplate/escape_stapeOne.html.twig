@@ -19,17 +19,37 @@
     </section>
 
     {% if participant is defined %}
+        <section class="progression">
+            <h2>🧩 Ta progression</h2>
+            <ul class="escape-progress">
+                {% for i in 1..6 %}
+                    {% set state = stepStates[i]|default('locked') %}
+                    <li class="escape-progress__step escape-progress__step--{{ state }}">
+                        <span class="escape-progress__index">Étape {{ i }}</span>
+                        {% if state == 'completed' %}
+                            <span class="escape-progress__status">✅ Validée</span>
+                        {% elseif state == 'current' %}
+                            <span class="escape-progress__status">✨ En cours</span>
+                        {% else %}
+                            <span class="escape-progress__status">🔒 Verrouillée</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
 
         <section class="etapes">
 
-                {% set unlocked = currentStep == 1 or (currentStep - 1) in progression %}
-                {% if unlocked %}
+            {% set state = stepStates[currentStep]|default('locked') %}
+            {% if state != 'locked' %}
                     <div class="etape-block">
                         <h3>🔧 Étape {{ currentStep }}</h3>
                         {% include 'pwa/escape/etape_template.html.twig' with {
                             'etape': currentStep,
                             'participant': participant,
-                            'enigmes': enigmes
+                            'enigmes': enigmes,
+                            'state': state,
+                            'isCurrent': true
                         } %}
                     </div>
                 {% else %}

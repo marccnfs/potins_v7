@@ -8388,9 +8388,93 @@ fr-mediation-numerique-cartographie {
     padding: 1rem;
     font-family: sans-serif;
 }
+.escape-progress {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.escape-progress__step {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    background: #f1f5f9;
+    border-left: 4px solid #94a3b8;
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.escape-progress__step--completed {
+    background: #e8f5e9;
+    border-left-color: #2e7d32;
+    color: #1b5e20;
+}
+
+.escape-progress__step--current {
+    background: #fff3e0;
+    border-left-color: #fb8c00;
+    color: #e65100;
+}
+
+.escape-progress__step--locked {
+    background: #f8fafc;
+    border-left-color: #cbd5f5;
+    color: #64748b;
+}
+
+.escape-progress__index {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.85rem;
+}
+
+.escape-progress__status {
+    font-size: 0.85rem;
+}
 
 .hidden {
     display: none;
+}
+
+.etape-template {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.etape-template--current {
+    border-color: #fb8c00;
+    box-shadow: 0 4px 12px rgba(251, 140, 0, 0.25);
+}
+
+.etape-template--completed {
+    border-color: #2e7d32;
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
+}
+
+.etape-template__locked {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #f1f5f9;
+    border: 1px dashed #94a3b8;
+    border-radius: 0.5rem;
+    color: #475569;
+}
+
+.etape-template__hint {
+    margin: 0.5rem 0 1rem;
+    padding: 0.75rem;
+    background: #fff8e1;
+    border-radius: 0.5rem;
+    color: #e65100;
+    font-weight: 500;
 }
 
 .step {

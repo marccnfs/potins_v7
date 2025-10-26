@@ -46,19 +46,26 @@
 {% endif %}
 
 
-<div class="etape-template">
+{% set state = state|default('locked') %}
+<div class="etape-template etape-template--{{ state }}">
     <h4>{{ participant.titresEtapes[etape]|default('Étape ' ~ etape) }}</h4>
     <p><strong>Objectif :</strong> {{ instructions[etape] }}</p>
     <p><strong>Outil recommandé :</strong> <a href="{{ outils[etape] }}" target="_blank">{{ outils[etape] }}</a>
         <a href="{{ path(outils[etape]) }}" target="_blank">{{ link[etape] }}</a></p>
 
-    <form method="POST" action="{{ path('escape_save_step', { 'step': etape }) }}">
-        <label>Colle ici ton lien ou ton code d'intégration (iframe, etc) :</label><br>
-        <textarea name="contenu" rows="4" cols="80" required>{{ enigmes[etape]|default('') }}</textarea><br>
-        <button type="submit">Enregistrer cette énigme</button>
-    </form>
-
-    {% if enigmes[etape] is defined %}
+    {% if state == 'locked' %}
+        <p class="etape-template__locked">🔒 Cette étape sera disponible après avoir validé l'étape {{ etape - 1 }}.</p>
+    {% else %}
+        {% if state == 'current' %}
+            <p class="etape-template__hint">✨ Tu es sur l'étape en cours. Ajoute ton contenu pour débloquer la suivante.</p>
+        {% endif %}
+        <form method="POST" action="{{ path('escape_save_step', { 'step': etape }) }}">
+            <label>Colle ici ton lien ou ton code d'intégration (iframe, etc) :</label><br>
+            <textarea name="contenu" rows="4" cols="80" required>{{ enigmes[etape]|default('') }}</textarea><br>
+            <button type="submit">{{ state == 'completed' ? 'Mettre à jour cette énigme' : 'Enregistrer cette énigme' }}</button>
+        </form>
+    {% endif %}
+    {% if enigmes[etape] is defined and enigmes[etape] is not empty %}
         <div class="test-preview">
             <h5>Aperçu de ton énigme :</h5>
             <div class="preview-box">
