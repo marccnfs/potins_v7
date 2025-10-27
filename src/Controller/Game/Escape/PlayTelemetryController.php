@@ -47,30 +47,40 @@ class PlayTelemetryController extends AbstractController
 
         $participant = $this->currentParticipant($req);
         $eg = $this->resolveGame($repo, $slug, $participant);
+        /** @var PlaySessionRepository $sessionRepo */
         $sessionRepo = $this->em->getRepository(PlaySession::class);
 
         $forceRestart = filter_var($req->request->get('restart', false), FILTER_VALIDATE_BOOLEAN);
 
-        if ($forceRestart && $req->hasSession()) {
-            $req->getSession()->remove('play_session_id_'.$eg->getId());
-            $req->getSession()->remove('play_progress_'.$eg->getId());
-        }
+        $session = $this->sessionFromRequest($req, $eg, $participant);
+        $created = false;
+        $toFlush = [];
 
-        $session = null;
-        if (!$forceRestart) {
-            $session = $this->sessionFromRequest($req, $eg, $participant);
+        if ($forceRestart) {
+            $existing = null;
             if (!$session) {
-                $session = $sessionRepo->findLatestActiveForParticipant($eg, $participant);
+                $existing = $sessionRepo->findLatestActiveForParticipant($eg, $participant);
             }
-        } else {
-            $existing = $sessionRepo->findLatestActiveForParticipant($eg, $participant);
+
             if ($existing) {
                 $existing->setEndedAt(new DateTimeImmutable());
                 $existing->touch();
+                $this->em->persist($existing);
+                $toFlush[] = $existing;
+            }
+
+        if ($req->hasSession()) {
+            if (!$session) {
+                $req->getSession()->remove('play_session_id_'.$eg->getId());
+            }
+            $req->getSession()->remove('play_progress_'.$eg->getId());
             }
         }
 
-        $created = false;
+        if (!$session) {
+        $session = $sessionRepo->findLatestActiveForParticipant($eg, $participant);
+        }
+
         if (!$session) {
             $session = new PlaySession();
             $session->setEscapeGame($eg);
@@ -85,7 +95,10 @@ class PlayTelemetryController extends AbstractController
         }
         $session->touch();
         $this->em->persist($session);
-        $this->em->flush();
+        $toFlush[] = $session;
+        if (!empty($toFlush)) {
+            $this->em->flush();
+        }
 
         if ($req->hasSession()) {
             $store = $req->getSession();
