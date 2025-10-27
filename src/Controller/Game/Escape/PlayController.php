@@ -105,8 +105,19 @@ class PlayController extends AbstractController
         $puzzle = $eg->getPuzzleByStep($step) ?? throw $this->createNotFoundException();
         $totalSteps = max(1, $eg->getPuzzles()->count() ?: 6);
         $forceRestart = $req->query->getBoolean('restart', false);
+        $restartFlagKey = 'play_restart_processed_'.$eg->getId();
+        $restartHandled = false;
+        if ($req->hasSession()) {
+            $sessionStore = $req->getSession();
+            if ($sessionStore->has($restartFlagKey)) {
+                $restartHandled = (bool) $sessionStore->get($restartFlagKey);
+                $sessionStore->remove($restartFlagKey);
+            }
+        }
 
-        if ($forceRestart) {
+        if ($restartHandled) {
+            $forceRestart = false;
+        } elseif ($forceRestart) {
             $this->resetHttpSessionState($req, $eg);
         }
         $activeSession = $playSessionRepo->findLatestActiveForParticipant($eg, $participant);
@@ -146,7 +157,7 @@ class PlayController extends AbstractController
 // --- AJOUT SPÉCIFIQUE QR GEO ---
         $cfg = $puzzle->getConfig() ?? [];
         $extras = [];
-dump($puzzle);
+
         if ($puzzle->getType() === 'qr_geo') {
 
             $mode = is_string($cfg['mode'] ?? null) ? $cfg['mode'] : 'geo';

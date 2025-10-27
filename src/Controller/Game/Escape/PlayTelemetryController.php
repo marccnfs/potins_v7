@@ -22,7 +22,7 @@ use Symfony\Contracts\Service\Attribute\Required;
 class PlayTelemetryController extends AbstractController
 {
     use UserSessionTrait;
-
+    private const HTTP_PROGRESS_TTL = 604800; // 7 days
     private CsrfTokenManagerInterface $csrfTokenManager;
 
     #[Required]
@@ -56,29 +56,48 @@ class PlayTelemetryController extends AbstractController
         $created = false;
         $toFlush = [];
 
+        $sessionKey = 'play_session_id_'.$eg->getId();
+        $progressKey = 'play_progress_'.$eg->getId();
+        $restartFlagKey = 'play_restart_processed_'.$eg->getId();
+
         if ($forceRestart) {
-            $existing = null;
-            if (!$session) {
-                $existing = $sessionRepo->findLatestActiveForParticipant($eg, $participant);
-            }
+            $existing = $session ?? $sessionRepo->findLatestActiveForParticipant($eg, $participant);
 
             if ($existing) {
                 $existing->setEndedAt(new DateTimeImmutable());
                 $existing->touch();
                 $this->em->persist($existing);
                 $toFlush[] = $existing;
+                if ($session && $session->getId() === $existing->getId()) {
+                    $session = null;
+                }
             }
 
-        if ($req->hasSession()) {
-            if (!$session) {
-                $req->getSession()->remove('play_session_id_'.$eg->getId());
+            $session = null;
+
+            if ($req->hasSession()) {
+                $store = $req->getSession();
+                $store->remove($sessionKey);
+                $store->remove($progressKey);
             }
-            $req->getSession()->remove('play_progress_'.$eg->getId());
-            }
+        }
+        if ($session && $this->isSessionStale($session)) {
+            $session->setEndedAt(new DateTimeImmutable());
+            $session->touch();
+            $this->em->persist($session);
+            $toFlush[] = $session;
+            $session = null;
         }
 
         if (!$session) {
-        $session = $sessionRepo->findLatestActiveForParticipant($eg, $participant);
+            $session = $sessionRepo->findLatestActiveForParticipant($eg, $participant);
+            if ($session && $this->isSessionStale($session)) {
+                $session->setEndedAt(new DateTimeImmutable());
+                $session->touch();
+                $this->em->persist($session);
+                $toFlush[] = $session;
+                $session = null;
+            }
         }
 
         if (!$session) {
@@ -102,13 +121,14 @@ class PlayTelemetryController extends AbstractController
 
         if ($req->hasSession()) {
             $store = $req->getSession();
-            $sessionKey = 'play_session_id_'.$eg->getId();
-            $progressKey = 'play_progress_'.$eg->getId();
 
             $store->set($sessionKey, $session->getId());
 
             if ($forceRestart) {
                 $store->remove($progressKey);
+                $store->set($restartFlagKey, true);
+            } else {
+                $store->remove($restartFlagKey);
             }
 
             $progress = $store->get($progressKey, []);
@@ -257,7 +277,8 @@ class PlayTelemetryController extends AbstractController
             return null;
         }
 
-        $sid = $req->getSession()->get('play_session_id_'.$eg->getId());
+        $store = $req->getSession();
+        $sid = $store->get('play_session_id_'.$eg->getId());
         $sessionRepo = $this->em->getRepository(PlaySession::class);
         $session = null;
 
@@ -265,7 +286,7 @@ class PlayTelemetryController extends AbstractController
             $session = $sessionRepo->findLatestActiveForParticipant($eg, $participant);
             if ($session) {
                 $sid = $session->getId();
-                $req->getSession()->set('play_session_id_'.$eg->getId(), $sid);
+                $store->set('play_session_id_'.$eg->getId(), $sid);
             }
         }
         if (!$sid) {
@@ -275,15 +296,30 @@ class PlayTelemetryController extends AbstractController
         $session ??= $sessionRepo->find($sid);
 
         if (!$session || !$session->getParticipant() || $session->getParticipant()->getId() !== $participant->getId()) {
-            $req->getSession()->remove('play_session_id_'.$eg->getId());
+            $store->remove('play_session_id_'.$eg->getId());
+            return null;
+        }
+
+        if ($this->isSessionStale($session)) {
+            $store->remove('play_session_id_'.$eg->getId());
             return null;
         }
 
         if ($session->isCompleted()) {
-            $req->getSession()->remove('play_session_id_'.$eg->getId());
+            $store->remove('play_session_id_'.$eg->getId());
             return null;
         }
         return $session;
+    }
+
+    private function isSessionStale(PlaySession $session): bool
+    {
+        $updatedAt = $session->getUpdatedAt() ?? $session->getCreatedAt();
+        if (!$updatedAt) {
+            return false;
+        }
+
+        return $updatedAt->getTimestamp() <= time() - self::HTTP_PROGRESS_TTL;
     }
 
     private function resolveGame(EscapeGameRepository $repo, string $slug, Participant $participant): EscapeGame
