@@ -44,25 +44,18 @@ export default class extends Controller {
             if (Number.isNaN(step)) {
                 return;
             }
+            const isCurrent = current !== null && step === current;
             const isComplete = completed.has(step);
-            dot.classList.toggle("is-complete", isComplete);
+            const shouldLock = !isComplete && !isCurrent && (current === null || step > current);
 
-            if (current !== null) {
-                const isCurrent = step === current;
-                dot.classList.toggle("is-current", isCurrent);
-                if (!isComplete && !isCurrent && step > current) {
-                    dot.dataset.status = "upcoming";
-                } else if (isComplete) {
-                    dot.dataset.status = "complete";
-                } else if (isCurrent) {
-                    dot.dataset.status = "current";
-                } else {
-                    dot.removeAttribute("data-status");
-                }
-            } else if (isComplete) {
-                dot.dataset.status = "complete";
+            dot.classList.toggle("is-current", isCurrent);
+            dot.classList.toggle("is-complete", isComplete);
+            dot.classList.toggle("is-locked", shouldLock);
+
+            if (shouldLock) {
+                dot.setAttribute("aria-disabled", "true");
             } else {
-                dot.removeAttribute("data-status");
+                dot.removeAttribute("aria-disabled");
             }
         });
         this.refreshProgressHeader();
@@ -90,30 +83,28 @@ export default class extends Controller {
         }
 
 
-    const shouldAutoAdvance = this.hasSlugValue && this.hasStepValue && this.hasTotalValue && (!this.hasNextBtnTarget || this.nextBtnTarget.hidden === true);
-    if (shouldAutoAdvance) {
-        const nextStep = this.stepValue + 1;
-        const targetUrl = nextStep <= this.totalValue
-            ? `/play/${this.slugValue}/step/${nextStep}`
-            : `/play/${this.slugValue}/the-end`;
+        const shouldAutoAdvance = this.hasSlugValue && this.hasStepValue && this.hasTotalValue && (!this.hasNextBtnTarget || this.nextBtnTarget.hidden === true);
+        if (shouldAutoAdvance) {
+            const nextStep = this.stepValue + 1;
+            const targetUrl = nextStep <= this.totalValue
+                ? `/play/${this.slugValue}/step/${nextStep}`
+                : `/play/${this.slugValue}/the-end`;
 
-        const currentDot = this.progressPanelTarget?.querySelector(`.step-dot[data-step="${this.stepValue}"]`);
-        if (currentDot) {
-            currentDot.classList.remove("is-current");
-            if (currentDot.classList.contains("is-complete")) {
-                currentDot.dataset.status = "complete";
-            } else {
-                currentDot.removeAttribute("data-status");
+            const currentDot = this.progressPanelTarget?.querySelector(`.step-dot[data-step="${this.stepValue}"]`);
+            if (currentDot) {
+                currentDot.classList.remove("is-current");
+                currentDot.classList.remove("is-locked");
+                currentDot.classList.add("is-complete");
+                currentDot.removeAttribute("aria-disabled");
             }
+            const nextDot = this.progressPanelTarget?.querySelector(`.step-dot[data-step="${nextStep}"]`);
+            if (nextDot) {
+                nextDot.classList.remove("is-locked");
+                nextDot.classList.add("is-current");
+                nextDot.removeAttribute("aria-disabled");
+            }
+            window.setTimeout(() => { window.location.assign(targetUrl); }, 2200);
         }
-        const nextDot = this.progressPanelTarget?.querySelector(`.step-dot[data-step="${nextStep}"]`);
-        if (nextDot) {
-            nextDot.classList.add("is-current");
-            nextDot.dataset.status = "current";
-        }
-
-        window.setTimeout(() => { window.location.assign(targetUrl); }, 2200);
-    }
 
 
     }

@@ -41,15 +41,21 @@
                                 </div>
                                 <nav class="steps-grid">
                                     {% for i in 1..total %}
-                                        {% set isDone = i in completed %}
-                                        {% set isUnlocked = isDone or i <= unlocked %}
-                                        {% if isUnlocked %}
-                                            <a class="step-dot {{ i == step ? 'is-current' : '' }} {{ isDone ? 'is-complete' : '' }}"
+                                        {% set isCurrent = i == step %}
+                                        {% set isDone = i in completed and i != step %}
+                                        {% if isDone %}
+                                            <a class="step-dot is-complete"
                                                data-step="{{ i }}"
                                                href="{{ path('play_step', { slug: eg.shareSlug, step: i }) }}"
-                                               title="Aller à l’étape {{ i }}">{{ i }}</a>
+                                               title="Rejouer l’étape {{ i }}">{{ i }}</a>
+                                        {% elseif isCurrent %}
+                                            <span class="step-dot is-current"
+                                                  data-step="{{ i }}"
+                                                  title="Étape {{ i }} en cours">{{ i }}</span>
                                         {% else %}
-                                            <span class="step-dot is-locked" title="Étape verrouillée">{{ i }}</span>
+                                            <span class="step-dot is-locked"
+                                                  data-step="{{ i }}"
+                                                  title="Étape verrouillée">{{ i }}</span>
                                         {% endif %}
                                     {% endfor %}
                                 </nav>

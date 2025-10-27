@@ -9509,28 +9509,23 @@ pre.code {
     display: grid;
     place-items: center;
     height: 34px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #e2e8f0;
     border-radius: .6rem;
-    background: #e20814;
+    background: #f1f5f9;
     text-decoration: none;
-    color: inherit;
-    transition: background .2s ease, border-color .2s ease, color .2s ease;
+    color: #94a3b8;
+    transition: background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
+}
+
+.step-dot.is-locked {
+    cursor: not-allowed;
 }
 
 .step-dot.is-current {
     background: #dbeafe;
-    border-color: #93c5fd;
+    border-color: #60a5fa;
     color: #1d4ed8;
-    font-weight: 600
-}
-
-.step-dot[data-status="upcoming"] {
-    background: #f1f5f9;
-    border-color: #e2e8f0;
-    color: #94a3b8;
-}
-
-.step-dot[data-status="current"] {
+    font-weight: 600;
     box-shadow: 0 0 0 2px rgba(59, 130, 246, .15);
 }
 
@@ -9539,7 +9534,7 @@ pre.code {
     border-color: #86efac;
     color: #166534;
     font-weight: 600;
-    box-shadow: inset 0 0 0 1px rgba(22, 101, 52, .2)
+    box-shadow: inset 0 0 0 1px rgba(22, 101, 52, .2);
 }
 
 .step-dot.is-complete::after {
@@ -9548,13 +9543,7 @@ pre.code {
     top: 4px;
     right: 6px;
     font-size: .75rem;
-    color: #15803d
-}
-
-.step-dot.is-current.is-complete {
-    background: #bbf7d0;
-    border-color: #4ade80;
-    color: #166534
+    color: #15803d;
 }
 
 /* Modale */
