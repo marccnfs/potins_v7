@@ -60,9 +60,9 @@ class PlayController extends AbstractController
 
         $doneCount = min(\count($progressSteps), $totalSteps);
         $firstIncomplete = $this->firstIncompleteStep($progressSteps, $totalSteps);
-        $resumeStep = $activeSession
-            ? $activeSession->getResumeStep($totalSteps)
-            : ($firstIncomplete ?? $totalSteps);
+        $resumeStep = $firstIncomplete ?? $totalSteps;
+        $maxCompleted = $this->maxProgressStep($progressSteps);
+        $unlockedStep = max(1, max($resumeStep, $maxCompleted));
 
         $bestSession = null;
         foreach ($recentSessions as $session) {
@@ -89,6 +89,7 @@ class PlayController extends AbstractController
             'activeSession' => $activeSession,
             'recentSessions'=> $recentSessions,
             'bestSession'   => $bestSession,
+            'unlockedStep'  => $unlockedStep,
         ]);
     }
 
@@ -126,11 +127,26 @@ class PlayController extends AbstractController
             $this->synchronizeSessionProgress($activeSession, $progressSteps, $totalSteps);
         }
 
+        $completedCount = \count($progressSteps);
+        $firstIncomplete = $this->firstIncompleteStep($progressSteps, $totalSteps);
+        $resumeStep = $firstIncomplete ?? $totalSteps;
+        $maxCompleted = $this->maxProgressStep($progressSteps);
+        $unlockedStep = max(1, max($resumeStep, $maxCompleted));
+
+        if ($step > $unlockedStep) {
+            return $this->redirectToRoute('play_step', [
+                'slug' => $eg->getShareSlug(),
+                'step' => $resumeStep,
+            ]);
+        }
+
+        $this->updateHttpProgressStore($req, $eg, $progressSteps, $resumeStep);
+
 
 // --- AJOUT SPÉCIFIQUE QR GEO ---
         $cfg = $puzzle->getConfig() ?? [];
         $extras = [];
-
+dump($puzzle);
         if ($puzzle->getType() === 'qr_geo') {
 
             $mode = is_string($cfg['mode'] ?? null) ? $cfg['mode'] : 'geo';
@@ -177,6 +193,9 @@ class PlayController extends AbstractController
             'totalSteps' => $totalSteps,
             'forceRestart' => $forceRestart,
             'progressSteps' => $progressSteps,
+            'resumeStep' => $resumeStep,
+            'completedCount' => $completedCount,
+            'unlockedStep' => $unlockedStep,
         ]);
 
     }
@@ -347,13 +366,15 @@ class PlayController extends AbstractController
                 }
             }
         }
+        $resumeStep = $this->firstIncompleteStep($progressSteps, $total) ?? $total;
+        $this->updateHttpProgressStore($req, $eg, $progressSteps, $resumeStep);
 
         if (\count($progressSteps) < $total) {
-            $redirectStep = $this->firstIncompleteStep($progressSteps, $total) ?? 1;
+
 
             return $this->redirectToRoute('play_step', [
                 'slug' => $eg->getShareSlug(),
-                'step' => $redirectStep,
+                'step' => max(1, $resumeStep),
             ]);
         }
         $fragments = [];
@@ -603,12 +624,12 @@ class PlayController extends AbstractController
         $result = array_keys($merged);
         sort($result);
 
-        return $result;
+        return $this->sequentializeProgress($result, $totalSteps);
     }
 
     private function synchronizeSessionProgress(PlaySession $session, array $progressSteps, int $totalSteps): void
     {
-        $normalized = $this->normalizeProgressSteps($progressSteps, $totalSteps);
+        $normalized = $this->sequentializeProgress($progressSteps, $totalSteps);
         $needsFlush = false;
 
         if ($session->getProgressSteps() !== $normalized) {
@@ -631,6 +652,64 @@ class PlayController extends AbstractController
             $this->em?->persist($session);
             $this->em?->flush();
         }
+    }
+    /**
+     * @param array<int|string> $steps
+     *
+     * @return int[]
+     */
+    private function sequentializeProgress(array $steps, int $totalSteps): array
+    {
+        $normalized = $this->normalizeProgressSteps($steps, $totalSteps);
+        $expected = 1;
+        $sequential = [];
+
+        foreach ($normalized as $step) {
+            if ($step === $expected) {
+                $sequential[] = $step;
+                ++$expected;
+            } elseif ($step < $expected) {
+                continue;
+            } else {
+                break;
+            }
+        }
+
+        return $sequential;
+    }
+
+    private function updateHttpProgressStore(Request $req, EscapeGame $game, array $progressSteps, int $resumeStep): void
+    {
+        if (!$req->hasSession()) {
+            return;
+        }
+
+        $session = $req->getSession();
+        $key = 'play_progress_'.$game->getId();
+
+        $totalSteps = max(1, ($game->getPuzzles()->count() ?: 6));
+
+        $payload = [];
+        foreach ($progressSteps as $step) {
+            if (\is_int($step)) {
+                $normalized = $step;
+            } elseif (\is_string($step) && ctype_digit($step)) {
+                $normalized = (int) $step;
+            } else {
+                continue;
+            }
+
+            if ($normalized < 1 || $normalized > $totalSteps) {
+                continue;
+            }
+
+            $payload[$normalized] = true;
+        }
+
+        $payload['_current'] = max(1, min($resumeStep, $totalSteps));
+        $payload['_ts'] = time();
+
+        $session->set($key, $payload);
     }
 
 
