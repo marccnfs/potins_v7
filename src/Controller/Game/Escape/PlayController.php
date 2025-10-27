@@ -492,6 +492,9 @@ class PlayController extends AbstractController
 
         $progressMap = [];
         foreach ($stored as $key => $value) {
+            if (\is_string($key) && \str_starts_with($key, '_')) {
+                continue;
+            }
             if (\is_int($key) || ctype_digit((string) $key)) {
                 $step = (int) $key;
                 $flag = \is_bool($value) ? $value : (bool) $value;
