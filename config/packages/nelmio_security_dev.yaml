@@ -1,0 +1,85 @@
+nelmio_security:
+    # --- Mode développement ---
+    # Large tolérance pour permettre les tests RA (WebGL, WebWorker, inline scripts, etc.)
+    csp:
+        enabled: true
+
+        hosts: []
+        content_types: []
+
+        enforce:
+            default-src:
+                - "'self'"
+                - "data:"
+                - "blob:"
+
+            script-src:
+                - "'self'"
+                - "'unsafe-inline'"
+                - "'unsafe-eval'"
+                - "https://aframe.io"
+                - "https://cdn.jsdelivr.net"
+                - "https://unpkg.com"
+                - "https://cdnjs.cloudflare.com"
+
+            worker-src:
+                - "'self'"
+                - "blob:"
+
+            style-src:
+                - "'self'"
+                - "'unsafe-inline'"
+                - "https://fonts.googleapis.com"
+
+            font-src:
+                - "'self'"
+                - "data:"
+                - "https://fonts.gstatic.com"
+
+            img-src:
+                - "'self'"
+                - "data:"
+                - "blob:"
+                - "https://aframe.io"
+
+            connect-src:
+                - "'self'"
+                - "blob:"
+                - "data:"
+                - "http://127.0.0.1:*"
+                - "http://localhost:*"
+                - "ws://127.0.0.1:*"
+                - "https://aframe.io"
+
+            media-src:
+                - "'self'"
+                - "data:"
+                - "blob:"
+
+            frame-src:
+                - "'self'"
+                - "https://aframe.io"
+
+            report-uri: []
+
+    # --- Permissions Policy ---
+    permissions_policy:
+        enabled: true
+        policies:
+            camera:
+                - self
+            microphone:
+                - self
+            geolocation:
+                - self
+            fullscreen:
+                - self
+
+    # --- XSS / clickjacking (on garde actives même en dev) ---
+    clickjacking:
+        paths:
+            '^/': SAMEORIGIN
+
+    xss_protection:
+        enabled: true
+        mode_block: false  # on évite le blocage dur pendant dev

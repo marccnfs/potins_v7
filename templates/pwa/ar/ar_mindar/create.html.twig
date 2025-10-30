@@ -1,7 +1,20 @@
-<div class="container" data-controller="mindar-create">
+<div class="container"
+     data-controller="mindar-create"
+     data-mindar-create-scenes-endpoint-value="{{ path('api_ar_scene_create') }}"
+     data-mindar-create-upload-endpoint-value="{{ path('api_upload_mind') }}">
     <h1>Créateur de scène RA (MindAR)</h1>
 
     <form id="form-create">
+        <div class="form-group">
+            <label for="title">Titre de la scène</label>
+            <input type="text"
+                   id="title"
+                   name="title"
+                   data-mindar-create-target="title"
+                   placeholder="Ma scène RA"
+                   value="">
+        </div>
+
         <!-- Sélecteur de pack -->
         <div class="form-group">
             <label for="pack">Pack d'images cible</label>
@@ -51,7 +64,7 @@
 
     <div class="divider"></div>
 
-    <div id="preview" class="preview">
+    <div id="preview" class="preview" data-mindar-create-target="preview">
         <p><em>La scène apparaîtra ici après la prévisualisation.</em></p>
     </div>
 </div>

@@ -1,0 +1,83 @@
+nelmio_security:
+    # --- Mode production ---
+    # Politique CSP stricte mais compatible RA
+    csp:
+        enabled: true
+
+        enforce:
+            default-src:
+                - "'self'"
+
+            script-src:
+                - "'self'"
+                - "https://aframe.io"
+                - "https://cdn.jsdelivr.net"
+                - "https://unpkg.com"
+                - "https://cdnjs.cloudflare.com"
+
+            worker-src:
+                - "'self'"
+                - "blob:"  # nécessaire à MindAR même en production
+
+            style-src:
+                - "'self'"
+                - "https://fonts.googleapis.com"
+
+            font-src:
+                - "'self'"
+                - "https://fonts.gstatic.com"
+                - "data:"
+
+            img-src:
+                - "'self'"
+                - "data:"
+                - "blob:"
+                - "https://aframe.io"
+
+            connect-src:
+                - "'self'"
+                - "blob:"
+                - "https://aframe.io"
+
+            media-src:
+                - "'self'"
+                - "data:"
+                - "blob:"
+
+            frame-src:
+                - "'self'"
+
+            object-src:
+                - "'none'"
+
+            # Si tu veux journaliser les violations CSP :
+            report-uri:
+                - "/csp-report"
+
+    # --- Permissions Policy ---
+    permissions_policy:
+        enabled: true
+        policies:
+            camera:
+                - self
+            microphone:
+                - self
+            geolocation:
+                - self
+            fullscreen:
+                - self
+            payment: [ ]
+            usb: [ ]
+
+    # --- Sécurités complémentaires ---
+    clickjacking:
+        paths:
+            '^/': SAMEORIGIN
+
+    xss_protection:
+        enabled: true
+        mode_block: true
+
+    referrer_policy:
+        enabled: true
+        #policy: 'strict-origin-when-cross-origin'
