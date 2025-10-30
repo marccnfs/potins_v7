@@ -1,11 +1,11 @@
-{% block title %}gallery{% endblock %}
+{% block title %}ra - lotus{% endblock %}
 {% use "js/js_escape.html.twig" %}
 {% block javascripts %}
     {{ parent() }}
 {% endblock %}
 {% block body %}
-    <div class="wrapper">
-            {{ include('pwa/ar/ar_mindar/gallery.html.twig') }}
+    <div class="ar-wrapper">
+        {{ include('pwa/ar/'~directory~'/prepareur.html.twig') }}
     </div>
 {% endblock %}
 

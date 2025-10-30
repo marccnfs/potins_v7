@@ -1,20 +1,55 @@
 {% block body %}
-      <a-scene
+    {% set model = app.request.query.get('model', 'lotus') %}
+    {% set marker = app.request.query.get('marker', 'hiro') %}
+    {% set sound = app.request.query.get('sound', '') %}
+
+    <section style="
+    height: 233px;
+    display: flex;
+    z-index: 100;
+    position: relative;
+    background-color: beige;
+    flex-direction: column;
+    width: 100%;
+    justify-content: end;
+    align-items: center;
+    padding-top: 35px;
+">
+        <h1>Scène AR — Lotus Respire</h1>
+        <p>Marqueur : {{ marker }} — Modèle : {{ model }}{% if sound %} — Son : {{ sound }}{% endif %}</p>
+    </section>
+
+    <!-- Bouton sonore -->
+    <button id="toggleSound"
+            style="position: fixed; bottom: 1rem; right: 1rem; z-index: 10;
+               background: #334155; color: #fff; padding: .6rem 1rem;
+               border: none; border-radius: .5rem; font-size: .9rem;
+               opacity: 0.85;">
+        🔈 Activer le son
+    </button>
+
+    <a-scene
         embedded
         arjs="sourceType: webcam; debugUIEnabled: false;"
         renderer="antialias: true"
         vr-mode-ui="enabled: false"
     >
+          <a-assets timeout="10000">
+              <a-asset-item id="lotus"  src="/models/lotus.glb"></a-asset-item>
+              <a-asset-item id="rock"   src="/models/rock.glb"></a-asset-item>
+              <a-asset-item id="bamboo" src="/models/bamboo.glb"></a-asset-item>
+              <audio id="forest" src="/audio/forest.mp3"></audio>
+              <audio id="water"  src="/audio/water.mp3"></audio>
+          </a-assets>
+
         <!-- Lumière douce -->
         <a-entity light="type: ambient; intensity: 0.8"></a-entity>
         <a-entity light="type: directional; intensity: 0.6" position="1 1 0"></a-entity>
 
         <!-- Marqueur hiro -->
-        <a-marker preset="hiro" id="marker-lotus">
-            <!-- Lotus 3D (place ton .glb en assets/build ou public/models) -->
+        <a-marker preset="{{ marker }}">
             <a-entity
-                id="lotus"
-                gltf-model="url(/models/lotus.glb)"
+                gltf-model="#{{ model }}"
                 position="0 0 0"
                 rotation="0 0 0"
                 scale="0.5 0.5 0.5"
@@ -32,19 +67,40 @@
             <a-ring color="#ffffff" radius-inner="0.45" radius-outer="0.5"
                     animation__pulse="property=scale; dir=alternate; dur=4000; loop=true; to=1.1 1.1 1.1">
             </a-ring>
-
-            <!-- Son d’ambiance (optionnel) -->
-            <a-sound src="url(/audio/forest.mp3)" autoplay="false" loop="true" id="ambience"></a-sound>
+            {% if sound %}
+                <a-entity id="soundEntity" sound="src:#{{ sound }}; autoplay: false; loop: true; volume: 0.6"></a-entity>
+            {% endif %}
         </a-marker>
 
         <a-entity camera></a-entity>
     </a-scene>
 
-    <!-- Bouton son via Stimulus (facultatif) -->
- {#    <div data-controller="ar-audio" class="fixed bottom-4 right-4">
-        <button data-action="click->ar-audio#toggle" class="px-3 py-2 rounded bg-green-600 text-white">
-            Son ON/OFF
-        </button>
-    </div>
- #}
+    <script>
+        const toggleBtn = document.getElementById('toggleSound');
+        const scene = document.getElementById('scene');
+
+        scene.addEventListener('loaded', () => {
+            const soundEntity = document.querySelector('#soundEntity');
+            if (!soundEntity) {
+                toggleBtn.style.display = 'none';
+                return;
+            }
+
+            let playing = false;
+            toggleBtn.addEventListener('click', () => {
+                const sound = soundEntity.components.sound;
+                if (!sound) return;
+
+                if (playing) {
+                    sound.stopSound();
+                    toggleBtn.textContent = '🔈 Activer le son';
+                    playing = false;
+                } else {
+                    sound.playSound();
+                    toggleBtn.textContent = '🔇 Couper le son';
+                    playing = true;
+                }
+            });
+        });
+    </script>
 {% endblock %}

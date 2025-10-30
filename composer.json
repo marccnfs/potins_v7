@@ -15,6 +15,7 @@
         "dompdf/dompdf": "^3.1",
         "endroid/qr-code": "4.8",
         "nelmio/cors-bundle": "^2.5",
+        "nelmio/security-bundle": "^3.6",
         "stof/doctrine-extensions-bundle": "^1.14",
         "symfony/config": "7.3.*",
         "symfony/console": "7.3.*",

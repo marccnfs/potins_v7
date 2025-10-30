@@ -1,0 +1,36 @@
+    <section class="container mx-auto p-4">
+        <h1>Créateur MindAR</h1>
+
+        <form class="space-y-3" data-controller="mindar-create">
+            <label>Pack</label>
+            <select data-mindar-create-target="pack" data-action="change->mindar-create#packChanged">
+                {% for pack in packs %}
+                    <option value="{{ pack.pathMind }}"
+                            data-packname="{{ pack.name }}"
+                            data-items='{{ pack.items|json_encode|e('html_attr') }}'>{{ pack.name }}</option>
+                {% endfor %}
+            </select>
+
+            <div class="flex items-center gap-3 mt-2">
+                <a class="btn" id="btn-print-one"  target="_blank" rel="noopener">Imprimer — 1/page</a>
+                <a class="btn" id="btn-print-sheet" target="_blank" rel="noopener">Imprimer — 4/page</a>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3 mt-3" data-mindar-create-target="thumbs"></div>
+            <input type="hidden" value="0" data-mindar-create-target="targetIndex">
+
+            <label>Modèle</label>
+            <select data-mindar-create-target="model">
+                <option value="/build/models/lotus.glb">Lotus</option>
+                <option value="/build/models/rock.glb">Pierre</option>
+                <option value="/build/models/bamboo.glb">Bambou</option>
+            </select>
+
+            <button type="button" class="btn" data-action="mindar-create#preview">Prévisualiser</button>
+        </form>
+
+        <hr class="my-6"/>
+        <div id="preview" class="border rounded p-2"></div>
+    </section>
+
+

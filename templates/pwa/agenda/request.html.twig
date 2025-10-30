@@ -1,0 +1,28 @@
+<section class="container">
+    <article class="card" style="max-width: 720px; margin: 0 auto;">
+        <header>
+            <span class="muted">Demande de rendez-vous</span>
+            <h1>{{ event.title }}</h1>
+            <p class="muted">
+                {{ event.startsAt|date('d F Y H:i', event.timezone) }}
+                {% if not event.isAllDay %}
+                    → {{ event.endsAt|date('H:i', event.timezone) }}
+                {% endif %}
+                • {{ event.categoryLabel }}
+                • {{ event.locationName ?? 'Lieu à confirmer' }}
+            </p>
+        </header>
+
+        <p>Renseignez vos coordonnées pour être recontacté(e) par l’équipe CNFS à propos de cet atelier.</p>
+
+        {{ form_start(form) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.phone) }}
+        {{ form_row(form.message) }}
+        <div class="actions" style="margin-top: 1rem; display:flex; gap:.5rem;">
+            {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+            <a class="btn btn-light" href="{{ path('event_show', {slug: event.slug}) }}">Annuler</a>
+        </div>
+        {{ form_end(form) }}
+    </article>
+</section>

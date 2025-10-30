@@ -1,0 +1,101 @@
+nelmio_security:
+    # prevents framing of the entire site
+    clickjacking:
+        paths:
+            '^/.*': DENY
+
+    # prevents redirections outside the website's domain
+    external_redirects:
+        abort: true
+        log: true
+
+    csp:
+        enabled: true
+
+
+        # Pour le développement local : autorisations étendues
+        hosts: [ ]
+        content_types: [ ]
+
+        enforce:
+            default-src:
+                - "'self'"
+                - "data:"
+                - "blob:"
+            script-src:
+                - "'self'"
+                - "'unsafe-inline'"
+                - "'unsafe-eval'"
+                - "https://aframe.io"
+                - "https://cdn.jsdelivr.net"
+                - "https://unpkg.com"
+                - "https://cdnjs.cloudflare.com"
+            worker-src:
+                - "'self'"
+                - "blob:"
+            style-src:
+                - "'self'"
+                - "'unsafe-inline'"
+                - "https://fonts.googleapis.com"
+            font-src:
+                - "'self'"
+                - "data:"
+                - "https://fonts.gstatic.com"
+            img-src:
+                - "'self'"
+                - "data:"
+                - "blob:"
+                - "https://aframe.io"
+            connect-src:
+                - "'self'"
+                - "blob:"
+                - "data:"
+                - "http://127.0.0.1:*"
+                - "ws://127.0.0.1:*"
+                - "https://aframe.io"
+            media-src:
+                - "'self'"
+                - "data:"
+                - "blob:"
+            frame-src:
+                - "'self'"
+                - "https://aframe.io"
+            report-uri: [ ]
+
+    # disables content type sniffing for script resources
+    content_type:
+        nosniff: true
+
+    # Send a full URL in the `Referer` header when performing a same-origin request,
+    # only send the origin of the document to secure destination (HTTPS->HTTPS),
+    # and send no header to a less secure destination (HTTPS->HTTP).
+    # If `strict-origin-when-cross-origin` is not supported, use `no-referrer` policy,
+    # no referrer information is sent along with requests.
+    referrer_policy:
+        enabled: true
+        policies:
+            - 'no-referrer'
+            - 'strict-origin-when-cross-origin'
+
+    permissions_policy:
+        enabled: true
+        policies:
+            # Media permissions
+            camera: [ self ]
+            microphone: [ self ]
+            geolocation: [ self ]
+            accelerometer: [ ]
+            gyroscope: [ ]
+            magnetometer: [ ]
+
+            # Privacy features
+            interest_cohort: [ ]           # Disable FLoC tracking
+
+            # Payment and authentication
+            payment: [ ]
+            publickey_credentials_get: [ ]
+
+            # Display and interaction
+            fullscreen: [ 'self' ]
+            picture_in_picture: [ 'self' ]
+            autoplay: [ ]

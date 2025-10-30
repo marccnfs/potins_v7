@@ -1,36 +1,57 @@
-    <section class="container mx-auto p-4">
-        <h1>Créateur MindAR</h1>
+<div class="container" data-controller="mindar-create">
+    <h1>Créateur de scène RA (MindAR)</h1>
 
-        <form class="space-y-3" data-controller="mindar-create">
-            <label>Pack</label>
-            <select data-mindar-create-target="pack" data-action="change->mindar-create#packChanged">
+    <form id="form-create">
+        <!-- Sélecteur de pack -->
+        <div class="form-group">
+            <label for="pack">Pack d'images cible</label>
+            <select id="pack" name="pack" data-mindar-create-target="pack" data-action="change->mindar-create#packChanged">
                 {% for pack in packs %}
                     <option value="{{ pack.pathMind }}"
                             data-packname="{{ pack.name }}"
-                            data-items='{{ pack.items|json_encode|e('html_attr') }}'>{{ pack.name }}</option>
+                            data-items='{{ pack.items|json_encode|e('html_attr') }}'>
+                        {{ pack.name }}
+                    </option>
                 {% endfor %}
             </select>
+        </div>
 
-            <div class="flex items-center gap-3 mt-2">
-                <a class="btn" id="btn-print-one"  target="_blank" rel="noopener">Imprimer — 1/page</a>
-                <a class="btn" id="btn-print-sheet" target="_blank" rel="noopener">Imprimer — 4/page</a>
-            </div>
+        <!-- Galerie de miniatures -->
+        <div id="thumbs" class="thumbs" data-mindar-create-target="thumbs"></div>
+        <input type="hidden" data-mindar-create-target="targetIndex" value="0" />
 
-            <div class="grid grid-cols-3 gap-3 mt-3" data-mindar-create-target="thumbs"></div>
-            <input type="hidden" value="0" data-mindar-create-target="targetIndex">
-
-            <label>Modèle</label>
-            <select data-mindar-create-target="model">
+        <div class="form-group">
+            <label for="model">Modèle 3D</label>
+            <select id="model" name="model" data-mindar-create-target="model">
                 <option value="/build/models/lotus.glb">Lotus</option>
                 <option value="/build/models/rock.glb">Pierre</option>
                 <option value="/build/models/bamboo.glb">Bambou</option>
             </select>
+        </div>
 
+        <div class="form-group">
+            <label for="sound">Ambiance sonore</label>
+            <select id="sound" name="sound" data-mindar-create-target="sound">
+                <option value="">Aucune</option>
+                <option value="/build/audio/forest.mp3">Forêt</option>
+                <option value="/build/audio/water.mp3">Eau</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="mindfile">Fichier cible (.mind)</label>
+            <input type="file" id="mindfile" accept=".mind" data-mindar-create-target="mindfile" />
+        </div>
+
+        <div class="form-group">
             <button type="button" class="btn" data-action="mindar-create#preview">Prévisualiser</button>
-        </form>
+            <button type="button" class="btn btn-secondary" data-action="mindar-create#save">Enregistrer la scène</button>
+        </div>
+    </form>
 
-        <hr class="my-6"/>
-        <div id="preview" class="border rounded p-2"></div>
-    </section>
+    <div class="divider"></div>
 
-
+    <div id="preview" class="preview">
+        <p><em>La scène apparaîtra ici après la prévisualisation.</em></p>
+    </div>
+</div>

@@ -3,30 +3,33 @@
 namespace App\Controller\Game\Ar;
 
 use App\Classe\UserSessionTrait;
-use App\Entity\Games\ArScene;
 use App\Lib\Links;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\MindArPackLocator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
-class ArSceneUiController extends AbstractController
+class ArNpmController extends AbstractController
 {
     use UserSessionTrait;
 
-    #[Route('/ra/gallery', name: 'ar_gallery')]
-    public function gallery(EntityManagerInterface $em): Response
+    #[Route('/ra/mindar/demo', name: 'ar_mindar_demo')]
+    public function demo(): Response
     {
-        $scenes = $em->getRepository(ArScene::class)->findBy([], ['createdAt' => 'DESC'], 100);
-        return $this->renderAr('ar_mindar','_gallery', ['scenes' => $scenes]);
+        return $this->renderAr('ar_mindar','_demo',[]);
     }
 
-    #[Route('/ra/view/{id}', name: 'ar_view')]
-    public function view(ArScene $scene): Response
+    #[Route('/ra/mindar/create', name: 'ar_mindar_create')]
+    public function create(MindArPackLocator $locator): Response
     {
-        return $this->renderAr('ar_mindar','_view', ['scenes' => $scene]);
+        return $this->renderAr('ar_mindar','_create', [
+            'packs' => $locator->listPacks(), // packs .mind pré-générés
+        ]);
     }
 
+    /**
+     * @param array<string, mixed> $payload
+     */
     private function renderAr(string $directory, string $twig, array $payload = []): Response
     {
 
@@ -37,5 +40,7 @@ class ArSceneUiController extends AbstractController
             'directory' => $directory,
             'vartwig' => $vartwig,
         ], $payload));
+
     }
+
 }

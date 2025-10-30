@@ -1,0 +1,11 @@
+{% block title %}ra - lotus{% endblock %}
+{% use "js/js_escape.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+{% block body %}
+        <div class="ar-wrapper">
+            {{ include('pwa/ar/'~directory~'/lotus.html.twig') }}
+        </div>
+{% endblock %}
+

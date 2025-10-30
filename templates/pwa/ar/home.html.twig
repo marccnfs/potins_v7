@@ -1,4 +1,7 @@
 {% extends 'pwa/ar/base.html.twig' %}
+{% use 'pwa/ar/menu.html.twig' %}
 {% block core %}
-    {{ include('pwa/ar/'~vartwig.maintwig~'.html.twig') }}
+    {{ include('pwa/ar/'~directory~'/'~vartwig.maintwig~'.html.twig') }}
 {% endblock core%}
+
+

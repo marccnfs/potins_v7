@@ -14,28 +14,37 @@ class ArCdnController extends AbstractController
 {
     use UserSessionTrait;
 
+    #[Route('/ra/test0', name: 'ar_test0')] // card simple avec gld
+    public function test0(): Response
+    {
+        return $this->renderAr('ar_gen','_test0');
+    }
+
+    #[Route('/ra/test1', name: 'ar_test1')] // multi scene (ours et panda)
+    public function test1(): Response
+    {
+        return $this->renderAr('ar_gen','_test1');
+    }
+
+    #[Route('/ra/minimal', name: 'ar_minimal')]
+    public function testMinimal(): Response
+    {
+        return $this->renderAr('ar_gen','_minimal');
+    }
+
+
     #[Route('/ra/lotus', name: 'ar_lotus')]
     public function lotus() {
-        return $this->renderAr('ar_cdn','cdn',"lotus");
+        return $this->renderAr('ar_cdn','_lotus');
     }
 
-    #[Route('/ra/createur', name: 'ar_createur')]
-    public function createur() {
-
-        $vartwig=$this->menuNav->templatepotins(
-            '_createur',
-            Links::ACCUEIL);
-
-        return $this->render('pwa/ar_cdn/home.html.twig', [
-            'replacejs'=>false,
-            'customer'=>$this->customer,
-            'vartwig'=>$vartwig,
-            'directory'=>'ar_cdn',
-        ]);
-
+    #[Route('/ra/prepareur', name: 'ar_prepareur')]
+    public function prepareur(): Response
+    {
+        return $this->renderAr('ar_cdn','_prepareur');
     }
 
-    private function renderAr(string $directory, string $twig, string $switch): Response
+    private function renderAr(string $directory, string $twig): Response
     {
 
         $menuNav = $this->requireMenuNav();
@@ -45,7 +54,6 @@ class ArCdnController extends AbstractController
         return $this->render( 'pwa/ar/home.html.twig',[
             'directory' => $directory,
             'vartwig' => $vartwig,
-            'switch'=>$switch,
         ]);
     }
 

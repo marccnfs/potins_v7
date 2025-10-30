@@ -1,15 +1,11 @@
-{% block title %}ra - demo{% endblock %}
+{% block title %}demo npm{% endblock %}
 {% use "js/js_mindar_demo.html.twig" %}
 {% block javascripts %}
     {{ parent() }}
 {% endblock %}
 {% block body %}
-    <div class="_wb">
-        <div class="container_bo_member">
-            <div class="bo_content">
-                {{ include('pwa/ar_mindar/demo.html.twig') }}
-            </div>
-        </div>
+    <div class="wrapper">
+        {{ include('pwa/ar/'~directory~'/demo.html.twig') }}
     </div>
 {% endblock %}
 

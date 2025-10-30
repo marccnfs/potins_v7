@@ -119,6 +119,7 @@ services:
         tags:
             - { name: controller.argument_value_resolver, priority: 200 }
 
+
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
@@ -135,3 +136,11 @@ services:
             - { event: kernel.exception, name: kernel.event_listener }
 
     Symfony\Component\Security\Http\Logout\LogoutUrlGenerator: '@security.logout_url_generator'
+
+    App\CustomService:
+        arguments:
+            - '@nelmio_security.csp_listener'
+
+    App\Service\MindArPackLocator:
+        arguments:
+            $projectDir: '%kernel.project_dir%'

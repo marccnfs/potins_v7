@@ -13,8 +13,12 @@
     </a-assets>
     <a-camera look-controls="enabled:false"></a-camera>
     <a-entity mindar-image-target="targetIndex: 0">
-        <a-gltf-model src="#lotus" scale="0.5 0.5 0.5"
-                      animation__breath="property=scale; dir=alternate; dur=4000; loop:true; to=0.6 0.6 0.6"></a-gltf-model>
+        <a-gltf-model
+            src="#lotus"
+            position="0 0 0"
+            rotation="0 0 0"
+            scale="0.5 0.5 0.5"
+            animation__breath="property=scale; dir=alternate; dur=4000; loop:true; to=0.6 0.6 0.6"></a-gltf-model>
     </a-entity>
 </a-scene>
-{% endblock %}
+

@@ -5,31 +5,17 @@
         <title>{% block title %}{{vartwig.title}}{% endblock %}</title>
         {{ include('head/head_ra.html.twig') }}
     {% endblock head %}
-    <style>
-        .ar-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            max-height: 100vh;
-        }
-
-        .ar-wrapper a-scene,
-        .ar-wrapper .a-canvas,
-        .ar-wrapper video {
-            width: 100% !important;
-            height: 100% !important;
-        }
-
-        .ar-wrapper video {
-            inset: 0 !important;
-        }
-    </style>
+        {{ encore_entry_link_tags('app') }}
 </head>
 <body>
-    {% block core %}
-        {% block body %}
-        {% endblock body %}
-    {% endblock core %}
+{% block menu %}
+{% endblock menu %}
+{% block core %}
+    {% block body %}
+    {% endblock body %}
+    {% block footer %}
+    {% endblock footer %}
+{% endblock core %}
 {% block javascripts %}
 {% endblock %}
 </body>

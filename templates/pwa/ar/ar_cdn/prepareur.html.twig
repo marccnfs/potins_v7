@@ -1,0 +1,36 @@
+{% block body %}
+    <section class="container mx-auto p-4">
+        <h1>Préparation de l’expérience Zen</h1>
+        <form id="form" class="space-y-4">
+            <label>Modèle 3D</label>
+            <select name="model" class="block border p-1">
+                <option value="lotus">Lotus</option>
+                <option value="rock">Pierre</option>
+                <option value="bamboo">Bambou</option>
+            </select>
+
+            <label>Marqueur</label>
+            <select name="marker" class="block border p-1">
+                <option value="hiro">hiro</option>
+                <option value="kanji">kanji</option>
+            </select>
+
+            <label>Ambiance sonore</label>
+            <select name="sound" class="block border p-1">
+                <option value="">Silence</option>
+                <option value="forest">Forêt apaisante</option>
+                <option value="water">Eau qui coule</option>
+            </select>
+
+            <button type="submit" class="btn btn-primary">Lancer la scène</button>
+        </form>
+    </section>
+
+    <script>
+        document.getElementById('form').addEventListener('submit', e => {
+            e.preventDefault();
+            const params = new URLSearchParams(new FormData(e.target));
+            window.location.href = `/ra/lotus?${params.toString()}`;
+        });
+    </script>
+{% endblock %}

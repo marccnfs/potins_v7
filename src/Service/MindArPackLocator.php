@@ -2,27 +2,97 @@
 
 namespace App\Service;
 
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+/**
+ * Localise et décrit les packs MindAR (.mind + targets.json + thumbs)
+ * situés dans public/mindar/packs/
+ */
 class MindArPackLocator
 {
-    public function __construct(private string $projectDir) {}
+    private string $packsDir;
+    public function __construct(private string $projectDir)
+    {
+        $this->packsDir = $this->projectDir . '/public/mindar/packs';
+    }
 
+    /**
+     * Liste tous les packs MindAR disponibles.
+     *
+     * @return array<int, array{name: string, pathMind: string, items: array}>
+     */
     public function listPacks(): array
     {
-        $base = $this->projectDir.'/public/mindar/packs';
-        if (!is_dir($base)) return [];
+        if (!is_dir($this->packsDir)) {
+            return [];
+        }
+
+        $finder = new Finder();
+        $finder->directories()->in($this->packsDir)->depth('== 0');
+
         $packs = [];
-        foreach (scandir($base) as $dir) {
-            if ($dir === '.' || $dir === '..') continue;
-            $json = $base."/$dir/targets.json";
-            if (is_file($json)) {
-                $data = json_decode(file_get_contents($json), true) ?: [];
-                $packs[] = [
-                    'name' => $data['name'] ?? $dir,
-                    'pathMind' => "/mindar/packs/$dir/targets.mind",
-                    'items' => $data['items'] ?? [],
-                ];
+        foreach ($finder as $dir) {
+            $path = $dir->getRealPath();
+            $jsonPath = "$path/targets.json";
+            $mindPath = "$path/targets.mind";
+            if (!is_file($mindPath)) {
+                continue; // pas de .mind -> pas un vrai pack
             }
+
+            $data = [];
+            if (is_file($jsonPath)) {
+                $data = json_decode(file_get_contents($jsonPath), true) ?: [];
+            }
+
+            $packs[] = [
+                'name'      => $data['name'] ?? $dir->getBasename(),
+                'pathMind'  => str_replace($this->projectDir . '/public', '', $mindPath),
+                'items'     => $data['items'] ?? [],
+                'dir'       => $dir->getBasename(),
+                'json'      => $jsonPath,
+            ];
+
         }
         return $packs;
+    }
+
+    /**
+     * Récupère un pack spécifique par nom ou dossier.
+     *
+     * @param string $name Nom du pack (ex: "zen-demo")
+     * @return array{name: string, pathMind: string, items: array, dir: string}
+     */
+    public function getPack(string $name): array
+    {
+        foreach ($this->listPacks() as $pack) {
+            if ($pack['name'] === $name || $pack['dir'] === $name) {
+                return $pack;
+            }
+        }
+
+        // Si aucun pack trouvé : on jette une exception HTTP lisible
+        throw new NotFoundHttpException(sprintf('Pack MindAR "%s" introuvable dans %s', $name, $this->packsDir));
+    }
+
+    /**
+     * Vérifie l'existence d'un pack (utile pour debug ou pré-check)
+     */
+    public function hasPack(string $name): bool
+    {
+        try {
+            $this->getPack($name);
+            return true;
+        } catch (NotFoundHttpException) {
+            return false;
+        }
+    }
+
+    /**
+     * Retourne le chemin absolu du dossier des packs
+     */
+    public function getBaseDir(): string
+    {
+        return $this->packsDir;
     }
 }

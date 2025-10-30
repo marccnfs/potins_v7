@@ -1,0 +1,66 @@
+<section class="wizard-layout"
+     data-controller="agenda-nav agenda-calendar"
+     data-agenda-nav-view-value="{{ view }}"
+     data-agenda-nav-date-value="{{ date|date('Y-m-d') }}"
+     data-agenda-calendar-fetch-url-value="{{ path('agenda_feed') }}"
+     data-agenda-calendar-view-value="{{ view }}"
+     data-agenda-calendar-date-value="{{ date|date('Y-m-d') }}">
+
+    <aside class="wizard-aside">
+        <nav class="card" aria-label="Changer de vue">
+            <h2 class="aside-title">🗓️ Agenda</h2>
+            <ol class="aside-steps">
+                <li class="{{ view == 'month' ? 'is-current' : '' }}">
+                    <a class="label" data-action="agenda-nav#setView"
+                       data-view-param="month" href="#" role="button"
+                    >Vue mois</a>
+                </li>
+                <li class="{{ view == 'week' ? 'is-current' : '' }}">
+                    <a class="label" data-action="agenda-nav#setView"
+                       data-view-param="week" href="#" role="button"
+                    >Vue semaine</a>
+                </li>
+                <li class="{{ view == 'day' ? 'is-current' : '' }}">
+                    <a class="label" data-action="agenda-nav#setView"
+                       data-view-param="day" href="#" role="button"
+                    >Vue jour</a>
+                </li>
+            </ol>
+        </nav>
+
+        <section class="card tip">
+            <h3>Filtres</h3>
+            <form data-controller="agenda-filters">
+                <label>Type d’activité</label>
+                <select data-agenda-filters-target="category">
+                    <option value="rdv">RDV publics</option>
+                    <option value="atelier">Ateliers collectifs</option>
+                    <option value="permanence">Permanences</option>
+                    <option value="formation">Formations</option>
+                    <option value="indispo">Indisponibilités</option>
+                    <option value="rdv">RDV</option>
+                    <option value="externe">Événements externes</option>
+                    <option value="autre">Autres activités</option>
+                </select>
+            </form>
+        </section>
+    </aside>
+
+    <main class="wizard-main">
+        <section class="card">
+            <header class="agenda-header">
+                <nav class="controls" aria-label="Navigation du calendrier">
+                    <button class="btn" data-action="agenda-nav#prev" aria-label="Précédent">‹</button>
+
+                    <input type="date" data-agenda-nav-target="datePicker">
+                    <button class="btn" data-action="agenda-nav#next" aria-label="Suivant">›</button>
+                    <button class="btn btn-light" data-action="agenda-nav#today">Aujourd’hui</button>
+                </nav>
+                <h1 data-agenda-nav-target="headline"></h1>
+                <p class="muted agenda-weekly-note">Affichage des créneaux d’accompagnement du mardi au samedi : 9h00–12h30 et 14h00–18h30 du mardi au vendredi, et 10h00–12h00 pour les événements Potins numériques du samedi.</p>
+            </header>
+            <div data-agenda-calendar-target="grid" class="event-list"></div>
+        </section>
+    </main>
+
+</section>
