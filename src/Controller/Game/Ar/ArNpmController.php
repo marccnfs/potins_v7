@@ -23,7 +23,7 @@ class ArNpmController extends AbstractController
     public function create(MindArPackLocator $locator): Response
     {
         return $this->renderAr('ar_mindar','_create', [
-            'packs' => $locator->listPacks(), // packs .mind pré-générés
+            'packs' => $locator->getPacks(), // packs .mind pré-générés
         ]);
     }
 

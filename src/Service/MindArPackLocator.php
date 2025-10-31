@@ -20,7 +20,7 @@ class MindArPackLocator
         return array_map(fn(ArPack $p) => [
             'name' => $p->getName(),
             'mindPath' => $p->getMindPath(),
-            'jsonPath' => $p->getJsonPath(),
+            'jsonPath' => $p->getPathJson(),
             'thumbnail' => $p->getThumbnail(),
         ], $packs);
     }

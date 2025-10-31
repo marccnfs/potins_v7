@@ -16,22 +16,43 @@
         </div>
 
         <!-- Sélecteur de pack -->
-        <div class="form-group">
-            <label for="pack">Pack d'images cible</label>
-            <select id="pack" name="pack" data-mindar-create-target="pack" data-action="change->mindar-create#packChanged">
+        <div class="form-group mb-4">
+            <label for="pack" class="block text-sm font-medium text-gray-700 mb-1">
+                Pack d'images cibles
+            </label>
+
+            <select id="pack"
+                    name="pack"
+                    class="form-select w-full rounded border border-gray-300 p-2"
+                    data-mindar-create-target="pack"
+                    data-action="change->mindar-create#packChanged">
+
                 {% for pack in packs %}
-                    <option value="{{ pack.pathMind }}"
+                    <option value="{{ pack.mindPath }}"
                             data-packname="{{ pack.name }}"
-                            data-items='{{ pack.items|json_encode|e('html_attr') }}'>
+                        {% if pack.jsonPath is defined and pack.jsonPath %}
+                            data-json="{{ pack.jsonPath }}"
+                        {% endif %}
+                        {% if pack.thumbnail is defined and pack.thumbnail %}
+                            data-thumbnail="{{ pack.thumbnail }}"
+                        {% endif %}
+                        {% if pack.metadata is defined and pack.metadata %}
+                        data-items='{{ pack.metadata|json_encode|e('html_attr') }}'
+                        {% endif %}>
                         {{ pack.name }}
                     </option>
+                {% else %}
+                    <option disabled selected>Aucun pack disponible</option>
                 {% endfor %}
             </select>
-        </div>
 
-        <!-- Galerie de miniatures -->
-        <div id="thumbs" class="thumbs" data-mindar-create-target="thumbs"></div>
-        <input type="hidden" data-mindar-create-target="targetIndex" value="0" />
+            <!-- Aperçu miniature -->
+            <div id="pack-preview" class="mt-2">
+                {% if packs|length > 0 and packs[0].thumbnail %}
+                    <img src="{{ packs[0].thumbnail }}" alt="{{ packs[0].name }}" class="w-32 h-auto rounded shadow">
+                {% endif %}
+            </div>
+        </div>
 
         <div class="form-group">
             <label for="model">Modèle 3D</label>
