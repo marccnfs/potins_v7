@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
 
-#[Route('/tools/jxrq')]
+#[Route('/toolsOld/jxrq')]
 
 
 class ToolsController extends AbstractController

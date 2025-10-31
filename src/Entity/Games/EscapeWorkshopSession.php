@@ -186,4 +186,11 @@ class EscapeWorkshopSession
 
         return $this->event?->getTitre() ?? 'Session escape game';
     }
+
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
 }

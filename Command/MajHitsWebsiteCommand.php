@@ -48,7 +48,7 @@ class MajHitsWebsiteCommand extends Command
         /*
         $tagitems = $this->tagueryRepository->findAll();
         foreach ($tagitems as $itemtag) {
-            $itemtag->setName(tools::clean($itemtag->getName()));
+            $itemtag->setName(toolsOld::clean($itemtag->getName()));
             $this->em->persist($itemtag);
         }
         $this->em->flush();

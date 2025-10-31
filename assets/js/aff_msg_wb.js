@@ -52,8 +52,8 @@ $("document").ready(function() {
 
  /*-------------------------------------------------- conversation et register member conversation ---------------*/
 
-    let routeconvers="/tools/jxrq/add-member-contactmail";
-    let routetestmail= "/tools/jxrq/test-visitor-mail";
+    let routeconvers="/toolsOld/jxrq/add-member-contactmail";
+    let routetestmail= "/toolsOld/jxrq/test-visitor-mail";
     let gocontact=$('#contact-go'),
         goregister=$('#register-go'),
         postor=$('#postform'),

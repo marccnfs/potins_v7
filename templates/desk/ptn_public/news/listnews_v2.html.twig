@@ -31,7 +31,7 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    let toolsContainer = document.getElementById("ai-tools-container");
+                    let toolsContainer = document.getElementById("ai-toolsOld-container");
                     toolsContainer.innerHTML = "";
 
                     data.forEach(tool => {

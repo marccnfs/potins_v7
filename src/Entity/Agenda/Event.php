@@ -6,6 +6,7 @@ use App\Enum\EventCategory;
 use App\Enum\EventStatus;
 use App\Enum\EventVisibility;
 use App\Repository\EventRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;

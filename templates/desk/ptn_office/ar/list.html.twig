@@ -1,0 +1,50 @@
+{% block body %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
+            <div class="bo_content">
+                <header class="dashboard-header">
+                    <span class="dashboard-kicker">PAck Ar</span>
+                    <h1 class="dashboard-title">Liste des packs AR</h1>
+                    <a class="btn btn-success mb-3" href="{{ path('admin_ar_pack_new') }}">+ Nouveau pack</a>
+                </header>
+
+                {{ include('desk/ptn_office/partials/_alerts.html.twig') }}
+
+                <section class="dashboard-card">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Date</th>
+                                <th>Miniature</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for pack in packs %}
+                            <tr>
+                                <td>{{ pack.name }}</td>
+                                <td>{{ pack.createdAt|date('d/m/Y H:i') }}</td>
+                                <td>{% if pack.thumbnail %}<img src="{{ pack.thumbnail }}" width="64">{% endif %}</td>
+                                <td>
+                                    <a href="{{ pack.mindPath }}" target="_blank" class="btn btn-sm btn-outline-primary">Voir</a>
+                                    <form method="post" action="{{ path('admin_ar_pack_delete', {id: pack.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer ce pack ?')">
+                                        <button class="btn btn-sm btn-danger">🗑 Supprimer</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="4" class="text-center text-muted">Aucun pack enregistré.</td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+{% use "js/js_customer.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

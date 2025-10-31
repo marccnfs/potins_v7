@@ -2,16 +2,37 @@
 
 namespace App\Service;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 class MindArTargetBuilder
 {
-    public function build(string $imagePath, string $destMindPath): bool
+    public function __construct(private string $projectDir) {}
+
+    public function build(string $imagesDir, string $outputDir): bool
     {
-        // Exemple d’appel d’un script Node qui encapsule la lib MindAR
-        $cmd = ['node', __DIR__.'/../../tools/mindar/build-mind.js', $imagePath, $destMindPath];
-        $process = new Process($cmd, timeout: 60);
+        $fs = new Filesystem();
+        if (!$fs->exists($imagesDir)) {
+            throw new \RuntimeException("Dossier d’images introuvable : $imagesDir");
+        }
+
+        $fs->mkdir($outputDir);
+
+        $cmd = [
+            'npx', 'mindar-image-cli',
+            '-i', $imagesDir,
+            '-o', "$outputDir/targets.mind",
+            '--json'
+        ];
+
+        $process = new Process($cmd, $this->projectDir);
+        $process->setTimeout(120);
         $process->run();
-        return $process->isSuccessful();
+
+        if (!$process->isSuccessful()) {
+            throw new \RuntimeException("Erreur MindAR : ".$process->getErrorOutput());
+        }
+
+        return file_exists("$outputDir/targets.mind");
     }
 }

@@ -14,7 +14,7 @@ class PublicAiToolController extends AbstractController
 
     use PublicSession;
 
-    #[Route('/ai-tools', name:"ai_tools_liste")]
+    #[Route('/ai-toolsOld', name:"ai_tools_liste")]
     public function listeAiTools(ClientApiIaTools $clientApi): Response
     {
         $aiTools = $clientApi->getAiTools();

@@ -1,0 +1,31 @@
+{% block body %}
+    <div class="_wb">
+        <div class="container_bo_member">
+            {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
+            <div class="bo_content">
+                <header class="dashboard-header">
+                    <span class="dashboard-kicker">Modération</span>
+                    <h1 class="dashboard-title">Créer un pack MindAR</h1>
+                    <p class="dashboard-subtitle">génération de pack mindar</p>
+                </header>
+
+                {{ include('desk/ptn_office/partials/_alerts.html.twig') }}
+
+                <section class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <h2 class="dashboard-card__title">creation</h2>
+                    </div>
+                    {{ form_start(form) }}
+                    {{ form_row(form.name) }}
+                    {{ form_row(form.images) }}
+                    <button class="btn btn-primary">Générer le pack</button>
+                    {{ form_end(form) }}
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+{% use "js/js_customer.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

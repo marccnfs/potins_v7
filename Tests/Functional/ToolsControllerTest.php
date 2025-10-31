@@ -37,12 +37,12 @@ final class ToolsControllerTest extends WebTestCase
         $knownEmail = 'existing'.uniqid('', true).'@example.test';
         $this->createUserAndContact($knownEmail);
 
-        $this->client->jsonRequest('POST', '/tools/jxrq/testContactMail', ['email' => $knownEmail]);
+        $this->client->jsonRequest('POST', '/toolsOld/jxrq/testContactMail', ['email' => $knownEmail]);
         self::assertResponseIsSuccessful();
         $knownResponse = json_decode($this->client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         $unknownEmail = 'unknown'.uniqid('', true).'@example.test';
-        $this->client->jsonRequest('POST', '/tools/jxrq/testContactMail', ['email' => $unknownEmail]);
+        $this->client->jsonRequest('POST', '/toolsOld/jxrq/testContactMail', ['email' => $unknownEmail]);
         self::assertResponseIsSuccessful();
         $unknownResponse = json_decode($this->client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
@@ -56,7 +56,7 @@ final class ToolsControllerTest extends WebTestCase
             self::assertArrayNotHasKey('contact', $payload);
         }
 
-        $this->client->jsonRequest('POST', '/tools/jxrq/test-visitor-mail', ['email' => $knownEmail]);
+        $this->client->jsonRequest('POST', '/toolsOld/jxrq/test-visitor-mail', ['email' => $knownEmail]);
         self::assertResponseIsSuccessful();
         $visitorResponse = json_decode($this->client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
         self::assertSame($unknownResponse, $visitorResponse);
@@ -64,7 +64,7 @@ final class ToolsControllerTest extends WebTestCase
 
     public function testInvalidEmailReturnsBadRequest(): void
     {
-        $this->client->jsonRequest('POST', '/tools/jxrq/testContactMail', ['email' => 'not-an-email']);
+        $this->client->jsonRequest('POST', '/toolsOld/jxrq/testContactMail', ['email' => 'not-an-email']);
         self::assertResponseStatusCodeSame(400);
         $payload = json_decode($this->client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
         self::assertFalse($payload['ok']);

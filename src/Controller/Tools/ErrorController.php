@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-#[Route('/tools/error')]
+#[Route('/toolsOld/error')]
 class ErrorController extends AbstractController
 {
     use UserSessionTrait;

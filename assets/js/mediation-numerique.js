@@ -56931,7 +56931,7 @@
                 description: "une personne fait les d\xe9marches \xe0 ma place"
             }], [l.xG.DansUnAtelier, {
                 label: "Dans un atelier",
-                icon: "ri-tools-line",
+                icon: "ri-toolsOld-line",
                 description: "j'apprends \xe0 utiliser le num\xe9rique"
             }]]), at = i => null != i, st = ([i, o]) => i.find(t => t.id === o.get("id")), ct = i => null != i,
             pt = i => rt.get(i), dt = i => i.length > 0 ? i : void 0;
