@@ -64,16 +64,50 @@
             <div class="target-grid" data-mindar-create-target="thumbs">
                 <p class="text-sm text-gray-500">Aucun pack MindAR détecté pour le moment.</p>
             </div>
+            <p class="text-xs text-blue-700 mt-2" data-mindar-create-target="targetInfo">
+                Sélectionnez une image pour confirmer la détection MindAR.
+            </p>
             <input type="hidden" id="targetIndex" name="targetIndex" value="0" data-mindar-create-target="targetIndex">
         </div>
 
+        {% set hasModels = models is defined and models|length > 0 %}
+
         <div class="form-group">
-            <label for="model">Modèle 3D</label>
-            <select id="model" name="model" data-mindar-create-target="model">
-                <option value="/build/models/lotus.glb">Lotus</option>
-                <option value="/build/models/rock.glb">Pierre</option>
-                <option value="/build/models/bamboo.glb">Bambou</option>
-            </select>
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="model">
+                Modèle 3D
+            </label>
+            <p class="text-xs text-gray-500 mb-3">Choisissez l'animation 3D affichée lorsque l'image déclencheur est détectée.</p>
+
+            <input type="hidden" id="model" name="model" data-mindar-create-target="model" value="{{ hasModels ? models|first.path : '' }}">
+
+            {% if hasModels %}
+                <div class="model-grid" data-mindar-create-target="modelChoices">
+                    {% for model in models %}
+                        <button type="button"
+                                class="model-card"
+                                data-mindar-create-target="modelChoice"
+                                data-action="mindar-create#selectModel"
+                                data-model-path="{{ model.path }}"
+                                data-model-name="{{ model.name }}"
+                                data-model-description="{{ model.description|default('') }}"
+                                data-model-emoji="{{ model.emoji|default('') }}"
+                                {% if loop.first %}data-model-default="1"{% endif %}>
+                            <span class="model-card__icon" aria-hidden="true">{{ model.emoji|default('🧊') }}</span>
+                            <span class="model-card__title">{{ model.name }}</span>
+                            {% if model.description is defined and model.description %}
+                                <span class="model-card__description">{{ model.description }}</span>
+                            {% endif %}
+                        </button>
+                    {% endfor %}
+                </div>
+                <div class="model-info" data-mindar-create-target="modelInfo">
+                    <p class="text-xs text-gray-500">Sélectionnez un modèle pour afficher ses détails.</p>
+                </div>
+            {% else %}
+                <div class="alert alert-warning">
+                    Aucun modèle 3D n'est disponible pour le moment.
+                </div>
+            {% endif %}
         </div>
 
         <div class="form-group">

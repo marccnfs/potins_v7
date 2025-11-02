@@ -4,6 +4,7 @@ namespace App\Controller\Game\Ar;
 
 use App\Classe\UserSessionTrait;
 use App\Lib\Links;
+use App\Service\MindArModelLibrary;
 use App\Service\MindArPackLocator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,10 +21,11 @@ class ArNpmController extends AbstractController
     }
 
     #[Route('/ra/mindar/create', name: 'ar_mindar_create')]
-    public function create(MindArPackLocator $locator): Response
+    public function create(MindArPackLocator $locator, MindArModelLibrary $modelLibrary): Response
     {
         return $this->renderAr('ar_mindar','_create', [
             'packs' => $locator->getPacks(), // packs .mind pré-générés
+            'models' => $modelLibrary->getModels(),
         ]);
     }
 

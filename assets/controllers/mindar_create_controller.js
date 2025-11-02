@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
-    static targets = ['title', 'pack', 'thumbs', 'targetIndex', 'model', 'sound', 'mindfile', 'preview', 'packPreview'];
+    static targets = ['title', 'pack', 'thumbs', 'targetIndex', 'targetInfo', 'model', 'modelChoices', 'modelChoice', 'modelInfo', 'sound', 'mindfile', 'preview', 'packPreview'];
     static values = {
         scenesEndpoint: String,
         uploadEndpoint: String,
@@ -23,6 +23,8 @@ export default class extends Controller {
         if (this.hasTitleTarget && !this.titleTarget.placeholder) {
             this.titleTarget.placeholder = this._defaultTitle();
         }
+
+        this._initModelSelection();
     }
 
     disconnect() {
@@ -41,6 +43,7 @@ export default class extends Controller {
         const items = option ? this._parseItems(option) : [];
         this.selectedPackName = option?.getAttribute('data-packname')?.trim() || option?.textContent?.trim() || null;
         this._resetPackPreview();
+        this._setTargetInfo('Sélectionnez une image pour confirmer la détection MindAR.');
         const hasItems = this._populateThumbs(items);
         if (!hasItems) {
             this._showPackThumbnail(option);
@@ -187,6 +190,7 @@ export default class extends Controller {
             }
             this.thumbsTarget.insertAdjacentHTML('beforeend', '<p class="text-sm text-gray-500">Aucune miniature pour ce pack.</p>');
             this._resetPackPreview();
+            this._setTargetInfo('Sélectionnez une image pour confirmer la détection MindAR.');
             return false;
         }
 
@@ -194,6 +198,11 @@ export default class extends Controller {
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'target-thumb border rounded p-1 hover:ring focus:ring';
+            btn.dataset.targetIndex = `${item.index ?? 0}`;
+            btn.setAttribute('aria-pressed', 'false');
+            const indexValue = Number.isFinite(item.index) ? item.index : Number.parseInt(item.index ?? '0', 10);
+            const displayIndex = Number.isFinite(indexValue) ? indexValue + 1 : 1;
+            btn.setAttribute('aria-label', `Cible ${displayIndex}${item.label ? ` – ${item.label}` : ''}`);
             btn.innerHTML = `
                 <img src="${item.thumb}" alt="${item.label ?? ''}" class="w-full h-auto" />
                 <div class="text-xs text-center">${item.label ?? 'Cible'}</div>
@@ -225,6 +234,7 @@ export default class extends Controller {
             this.targetIndexTarget.value = '0';
         }
         this._resetPackPreview();
+        this._setTargetInfo('Sélectionnez une image pour confirmer la détection MindAR.');
     }
 
     _highlight(active) {
@@ -234,8 +244,10 @@ export default class extends Controller {
 
         this.thumbsTarget.querySelectorAll('button').forEach((button) => {
             button.classList.remove('ring', 'ring-blue-500');
+            button.setAttribute('aria-pressed', 'false');
         });
         active.classList.add('ring', 'ring-blue-500');
+        active.setAttribute('aria-pressed', 'true');
     }
 
     _normalizeThumbItem(item, fallbackIndex) {
@@ -266,22 +278,27 @@ export default class extends Controller {
 
         if (!item) {
             this._resetPackPreview();
+            this._setTargetInfo('Sélectionnez une image pour confirmer la détection MindAR.');
             return;
         }
 
         const source = item.image || item.thumb;
         if (!source) {
             this._resetPackPreview();
+            this._setTargetInfo('Sélectionnez une image pour confirmer la détection MindAR.');
             return;
         }
 
         const label = item.label || '';
+        const indexValue = Number.isFinite(item.index) ? item.index : Number.parseInt(item.index ?? '0', 10);
+        const index = Number.isFinite(indexValue) ? indexValue : 0;
         this.packPreviewTarget.innerHTML = `
             <figure class="pack-preview">
                 <img src="${source}" alt="${label}" class="pack-preview__image" />
                 ${label ? `<figcaption class="pack-preview__caption">${label}</figcaption>` : ''}
             </figure>
         `;
+        this._setTargetInfo(`Image détectée : ${label || 'Cible'} (index MindAR ${index})`);
     }
 
     _showPackThumbnail(option) {
@@ -297,6 +314,7 @@ export default class extends Controller {
                     ${this.selectedPackName ? `<figcaption class="pack-preview__caption">${this.selectedPackName}</figcaption>` : ''}
                 </figure>
             `;
+            this._setTargetInfo(`Motif par défaut sélectionné pour ${this.selectedPackName ?? 'ce pack'}.`);
         } else {
             this._resetPackPreview();
         }
@@ -308,6 +326,109 @@ export default class extends Controller {
         }
 
         this.packPreviewTarget.innerHTML = '<p class="text-sm text-gray-500">Sélectionnez un pack pour afficher un aperçu du motif.</p>';
+        this._setTargetInfo('Sélectionnez une image pour confirmer la détection MindAR.');
+    }
+
+    selectModel(event) {
+        event?.preventDefault?.();
+        const button = event?.currentTarget;
+        if (!button) {
+            return;
+        }
+
+        this._selectModelButton(button);
+    }
+
+    _initModelSelection() {
+        if (!this.hasModelTarget || !this.hasModelChoiceTarget) {
+            return;
+        }
+
+        const currentValue = this.modelTarget.value?.trim();
+        let candidate = null;
+
+        if (currentValue) {
+            candidate = this.modelChoiceTargets.find((button) => button.getAttribute('data-model-path') === currentValue) ?? null;
+        }
+
+        if (!candidate) {
+            candidate = this.modelChoiceTargets.find((button) => button.hasAttribute('data-model-default')) ?? null;
+        }
+
+        if (!candidate) {
+            candidate = this.modelChoiceTargets[0] ?? null;
+        }
+
+        if (candidate) {
+            this._selectModelButton(candidate, { focus: false });
+        } else {
+            this._updateModelInfo();
+        }
+    }
+
+    _selectModelButton(button, options = { focus: true }) {
+        if (!button || !this.hasModelTarget) {
+            return;
+        }
+
+        const path = button.getAttribute('data-model-path');
+        if (path) {
+            this.modelTarget.value = path;
+        }
+
+        this._highlightModel(button);
+        this._updateModelInfo(button);
+
+        if (options.focus) {
+            button.focus?.();
+        }
+    }
+
+    _highlightModel(active) {
+        if (!this.hasModelChoiceTarget) {
+            return;
+        }
+
+        this.modelChoiceTargets.forEach((button) => {
+            button.classList.remove('model-card--active');
+            button.setAttribute('aria-pressed', 'false');
+        });
+
+        active.classList.add('model-card--active');
+        active.setAttribute('aria-pressed', 'true');
+    }
+
+    _updateModelInfo(button = null) {
+        if (!this.hasModelInfoTarget) {
+            return;
+        }
+
+        if (!button) {
+            this.modelInfoTarget.innerHTML = '<p class="text-xs text-gray-500">Sélectionnez un modèle pour afficher ses détails.</p>';
+            return;
+        }
+
+        const name = button.getAttribute('data-model-name') || 'Modèle 3D';
+        const description = button.getAttribute('data-model-description') || '';
+        const emoji = button.getAttribute('data-model-emoji') || '🧊';
+
+        this.modelInfoTarget.innerHTML = `
+            <div class="model-info__content">
+                <span class="model-info__emoji" aria-hidden="true">${emoji}</span>
+                <div>
+                    <p class="model-info__title">${name}</p>
+                    ${description ? `<p class="model-info__description">${description}</p>` : ''}
+                </div>
+            </div>
+        `;
+    }
+
+    _setTargetInfo(message) {
+        if (!this.hasTargetInfoTarget) {
+            return;
+        }
+
+        this.targetInfoTarget.textContent = message;
     }
 
 
