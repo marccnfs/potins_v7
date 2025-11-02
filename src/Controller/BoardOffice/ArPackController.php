@@ -5,13 +5,16 @@ namespace App\Controller\BoardOffice;
 use App\Classe\UserSessionTrait;
 use App\Entity\Games\ArPack;
 use App\Form\ArPackImportType;
-use App\Service\MindArTargetBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\AsciiSlugger;
+
 
 #[Route('/boardoffice/ar/arpack')]
 class ArPackController extends AbstractController
@@ -19,7 +22,7 @@ class ArPackController extends AbstractController
     use UserSessionTrait;
 
     #[Route('/new', name: 'admin_ar_pack_new')]
-    public function new(Request $request, EntityManagerInterface $em, MindArTargetBuilder $builder): Response
+    public function new(Request $request, EntityManagerInterface $em): Response
     {
         $board = $this->requireBoard();
         $pack = new ArPack();
@@ -27,36 +30,63 @@ class ArPackController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $fs = new Filesystem();
-            $publicDir = $this->getParameter('kernel.project_dir') . '/public/mindar/packs';
-            $packDir = $publicDir . '/' . $pack->getName();
-            $fs->mkdir($packDir);
-
-            // Upload du fichier .mind
             $mindFile = $form->get('mindFile')->getData();
-            $mindName = 'targets.mind';
-            $mindFile->move($packDir, $mindName);
-            $pack->setMindPath("/mindar/packs/{$pack->getName()}/{$mindName}");
 
-            // Upload optionnel JSON
-            if ($jsonFile = $form->get('jsonFile')->getData()) {
-                $jsonName = 'targets.json';
-                $jsonFile->move($packDir, $jsonName);
-                $pack->setPathJson("/mindar/packs/{$pack->getName()}/{$jsonName}");
+            if (!$mindFile instanceof UploadedFile) {
+                $form->get('mindFile')->addError(new FormError('Sélectionnez un fichier MindAR (.mind).'));
+            } else {
+                $slugger = new AsciiSlugger();
+                $safeDir = strtolower($slugger->slug($pack->getName() ?? ''));
+
+                if ($safeDir === '') {
+                    $form->get('name')->addError(new FormError('Nom de pack invalide.'));
+                } elseif ($em->getRepository(ArPack::class)->findOneBy(['name' => $pack->getName()])) {
+                    $form->get('name')->addError(new FormError('Un pack avec ce nom existe déjà.'));
+                } else {
+                    $fs = new Filesystem();
+                    $projectDir = $this->getParameter('kernel.project_dir');
+                    $publicDir = $projectDir . '/public/mindar/packs';
+                    $packDir = $publicDir . '/' . $safeDir;
+
+                    if ($fs->exists($packDir)) {
+                        $form->get('name')->addError(new FormError('Un dossier MindAR existe déjà pour ce nom. Choisissez un autre nom.'));
+                    } else {
+                        try {
+                            $fs->mkdir($packDir);
+
+                            $mindFile->move($packDir, 'targets.mind');
+                            $pack->setMindPath(sprintf('/mindar/packs/%s/targets.mind', $safeDir));
+
+                            $jsonFile = $form->get('jsonFile')->getData();
+                            if ($jsonFile instanceof UploadedFile) {
+                                $jsonFile->move($packDir, 'targets.json');
+                                $pack->setPathJson(sprintf('/mindar/packs/%s/targets.json', $safeDir));
+                            }
+
+                            $thumbnailFile = $form->get('thumbnail')->getData();
+                            if ($thumbnailFile instanceof UploadedFile) {
+                                $extension = $thumbnailFile->guessExtension() ?: pathinfo($thumbnailFile->getClientOriginalName(), PATHINFO_EXTENSION) ?: 'jpg';
+                                $thumbName = 'thumb.' . $extension;
+                                $thumbnailFile->move($packDir, $thumbName);
+                                $pack->setThumbnail(sprintf('/mindar/packs/%s/%s', $safeDir, $thumbName));
+                            }
+
+                            $em->persist($pack);
+                            $em->flush();
+
+                            $this->addFlash('success', 'Pack MindAR importé avec succès !');
+
+                            return $this->redirectToRoute('admin_ar_pack_list');
+                        } catch (\Throwable $exception) {
+                            if ($fs->exists($packDir)) {
+                                $fs->remove($packDir);
+                            }
+
+                            $form->addError(new FormError('Erreur lors de l\'import du pack : ' . $exception->getMessage()));
+                        }
+                    }
+                }
             }
-
-            // Upload miniature
-            if ($thumb = $form->get('thumbnail')->getData()) {
-                $thumbName = 'thumb.' . $thumb->guessExtension();
-                $thumb->move($packDir, $thumbName);
-                $pack->setThumbnail("/mindar/packs/{$pack->getName()}/{$thumbName}");
-            }
-
-            $em->persist($pack);
-            $em->flush();
-
-            $this->addFlash('success', 'Pack AR importé avec succès !');
-            return $this->redirectToRoute('admin_ar_pack_list');
         }
 
         return $this->renderDashboard('ar', 'new', 7, [
@@ -78,10 +108,14 @@ class ArPackController extends AbstractController
     {
         $fs = new Filesystem();
         $projectDir = $this->getParameter('kernel.project_dir');
-        $packDir = $projectDir . '/public/mindar/packs/' . $pack->getName();
+        $relativeDir = $pack->getMindPath() ? dirname($pack->getMindPath()) : null;
 
-        if ($fs->exists($packDir)) {
-            $fs->remove($packDir);
+        if ($relativeDir) {
+            $packDir = rtrim($projectDir . '/public' . $relativeDir, '/');
+
+            if ($fs->exists($packDir)) {
+                $fs->remove($packDir);
+            }
         }
 
         $em->remove($pack);

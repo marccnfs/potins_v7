@@ -49,6 +49,23 @@
 .ui-tooltip {
     display: none;
 }
+
+.thumbnail-preview__image-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 260px;
+    min-height: 140px;
+    padding: 0.75rem;
+    border: 1px dashed #ced4da;
+    border-radius: 0.5rem;
+    background-color: #f8f9fa;
+}
+
+.thumbnail-preview__image {
+    max-width: 100%;
+    height: auto;
+}
 /*======================================================================== Glob ========*/
 
 .bdy_ground_clair{
@@ -12777,4 +12794,36 @@ div[role='menu'].visible {
 }
 .tt-coach {
     color: orange;
+}
+
+.targets-preview {
+    border: 1px dashed #ced4da;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    padding: 1rem;
+    min-height: 140px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.75rem;
+    align-items: start;
+}
+
+.targets-preview__item {
+    margin: 0;
+    text-align: center;
+}
+
+.targets-preview__image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.targets-preview__caption {
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: #6c757d;
+    word-break: break-word;
 }

@@ -145,6 +145,3 @@ services:
         arguments:
             $publicDir: '%kernel.project_dir%/public'
 
-    App\Service\MindArTargetBuilder:
-        arguments:
-            $projectDir: '%kernel.project_dir%'

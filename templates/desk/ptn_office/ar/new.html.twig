@@ -13,14 +13,23 @@
 
                 <section class="dashboard-card">
                     <div class="dashboard-card__header">
-                        <h2 class="dashboard-card__title">creation</h2>
+                        <h2 class="dashboard-card__title">Import</h2>
                     </div>
                     {{ form_start(form) }}
                     {{ form_row(form.name) }}
                     {{ form_row(form.mindFile) }}
                     {{ form_row(form.jsonFile) }}
                     {{ form_row(form.thumbnail) }}
-                    <button class="btn btn-primary">Enregistrer le pack</button>
+
+                    <div class="mt-3" id="thumbnail-preview" hidden>
+                        <p class="text-muted mb-2">Prévisualisation de la miniature :</p>
+                        <div class="thumbnail-preview__image-wrapper">
+                            <img src="" alt="Prévisualisation de la miniature" class="thumbnail-preview__image" />
+                        </div>
+                        <button type="button" class="btn btn-outline-secondary btn-sm mt-2" id="thumbnail-preview-reset">Retirer la miniature</button>
+                    </div>
+
+                    <button class="btn btn-primary mt-4">Enregistrer le pack</button>
                     {{ form_end(form) }}
                 </section>
             </div>
@@ -30,4 +39,44 @@
 {% use "js/js_customer.html.twig" %}
 {% block javascripts %}
     {{ parent() }}
+    <script>
+        (function () {
+            const fileInput = document.querySelector('#{{ form.thumbnail.vars.id }}');
+            const preview = document.getElementById('thumbnail-preview');
+            const image = preview ? preview.querySelector('img') : null;
+            const resetButton = document.getElementById('thumbnail-preview-reset');
+
+            if (!fileInput || !preview || !image || !resetButton) {
+                return;
+            }
+
+            const clearPreview = () => {
+                preview.hidden = true;
+                image.removeAttribute('src');
+                image.removeAttribute('data-filename');
+                fileInput.value = '';
+            };
+
+            fileInput.addEventListener('change', (event) => {
+                const [file] = event.target.files ?? [];
+                if (!file) {
+                    clearPreview();
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = () => {
+                    image.src = reader.result;
+                    image.dataset.filename = file.name;
+                    preview.hidden = false;
+                };
+                reader.readAsDataURL(file);
+            });
+
+            resetButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                clearPreview();
+            });
+        })();
+    </script>
 {% endblock %}
