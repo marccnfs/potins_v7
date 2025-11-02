@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
-    static targets = ['title', 'pack', 'thumbs', 'targetIndex', 'model', 'sound', 'mindfile', 'preview'];
+    static targets = ['title', 'pack', 'thumbs', 'targetIndex', 'model', 'sound', 'mindfile', 'preview', 'packPreview'];
     static values = {
         scenesEndpoint: String,
         uploadEndpoint: String,
@@ -40,7 +40,11 @@ export default class extends Controller {
         const option = this.packTarget.selectedOptions?.[0] ?? null;
         const items = option ? this._parseItems(option) : [];
         this.selectedPackName = option?.getAttribute('data-packname')?.trim() || option?.textContent?.trim() || null;
-        this._populateThumbs(items);
+        this._resetPackPreview();
+        const hasItems = this._populateThumbs(items);
+        if (!hasItems) {
+            this._showPackThumbnail(option);
+        }
         this._updatePrintLinks(this.selectedPackName);
 
         if (this.hasTitleTarget && !this.titleTarget.value) {
@@ -80,17 +84,19 @@ export default class extends Controller {
         const audioAsset = sound ? `<audio id="sfx" src="${sound}" crossorigin="anonymous"></audio>` : '';
 
         container.insertAdjacentHTML('beforeend', `
-      <a-scene mindar-image="imageTargetSrc: ${mindPath};" vr-mode-ui="enabled:false" renderer="colorManagement:true" device-orientation-permission-ui="enabled:true">
-        <a-assets>
-          <a-asset-item id="mdl" src="${model}"></a-asset-item>
-           ${audioAsset}
-        </a-assets>
-        <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
-        <a-entity mindar-image-target="targetIndex: ${idx}">
-          <a-gltf-model src="#mdl" scale="0.3 0.3 0.3" animation__spin="property=rotation; to=0 360 0; loop:true; dur:12000"></a-gltf-model>
-          ${sound ? `<a-entity sound="src:#sfx; autoplay:false; loop:true"></a-entity>` : ''}
-        </a-entity>
-      </a-scene>
+       <div class="preview-stage">
+        <a-scene embedded mindar-image="imageTargetSrc: ${mindPath};" vr-mode-ui="enabled:false" renderer="colorManagement:true" device-orientation-permission-ui="enabled:true" style="width:100%;height:100%;">
+          <a-assets>
+            <a-asset-item id="mdl" src="${model}"></a-asset-item>
+            ${audioAsset}
+          </a-assets>
+          <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
+          <a-entity mindar-image-target="targetIndex: ${idx}">
+            <a-gltf-model src="#mdl" position="0 0 0" scale="0.6 0.6 0.6" animation__spin="property=rotation; to=0 360 0; loop:true; dur:12000"></a-gltf-model>
+            ${sound ? `<a-entity sound="src:#sfx; autoplay:false; loop:true"></a-entity>` : ''}
+          </a-entity>
+        </a-scene>
+      </div>
     `);
     }
 
@@ -147,7 +153,17 @@ export default class extends Controller {
 
     _parseItems(option) {
         try {
-            return JSON.parse(option.getAttribute('data-items') || '[]') || [];
+            const raw = JSON.parse(option.getAttribute('data-items') || '[]');
+            if (Array.isArray(raw)) {
+                return raw;
+            }
+            if (raw && Array.isArray(raw.items)) {
+                return raw.items;
+            }
+            if (raw && Array.isArray(raw.targets)) {
+                return raw.targets;
+            }
+            return [];
         } catch (error) {
             console.warn('Impossible de décoder les items du pack MindAR.', error);
             return [];
@@ -156,23 +172,28 @@ export default class extends Controller {
 
     _populateThumbs(items) {
         if (!this.hasThumbsTarget) {
-            return;
+            return false;
         }
 
         this.thumbsTarget.innerHTML = '';
 
-        if (!items.length) {
+        const normalized = items
+            .map((item, index) => this._normalizeThumbItem(item, index))
+            .filter(Boolean);
+
+        if (!normalized.length) {
             if (this.hasTargetIndexTarget) {
                 this.targetIndexTarget.value = '0';
             }
             this.thumbsTarget.insertAdjacentHTML('beforeend', '<p class="text-sm text-gray-500">Aucune miniature pour ce pack.</p>');
-            return;
+            this._resetPackPreview();
+            return false;
         }
 
-        items.forEach((item) => {
+        normalized.forEach((item) => {
             const btn = document.createElement('button');
             btn.type = 'button';
-            btn.className = 'border rounded p-1 hover:ring focus:ring';
+            btn.className = 'target-thumb border rounded p-1 hover:ring focus:ring';
             btn.innerHTML = `
                 <img src="${item.thumb}" alt="${item.label ?? ''}" class="w-full h-auto" />
                 <div class="text-xs text-center">${item.label ?? 'Cible'}</div>
@@ -182,6 +203,7 @@ export default class extends Controller {
                     this.targetIndexTarget.value = item.index ?? 0;
                 }
                 this._highlight(btn);
+                this._showSelectedThumb(item);
             });
             this.thumbsTarget.appendChild(btn);
         });
@@ -190,6 +212,7 @@ export default class extends Controller {
         if (firstBtn) {
             firstBtn.click();
         }
+        return true;
     }
 
     _resetThumbs() {
@@ -201,6 +224,7 @@ export default class extends Controller {
         if (this.hasTargetIndexTarget) {
             this.targetIndexTarget.value = '0';
         }
+        this._resetPackPreview();
     }
 
     _highlight(active) {
@@ -213,6 +237,79 @@ export default class extends Controller {
         });
         active.classList.add('ring', 'ring-blue-500');
     }
+
+    _normalizeThumbItem(item, fallbackIndex) {
+        if (!item || typeof item !== 'object') {
+            return null;
+        }
+
+        const candidate = Number.parseInt(item.index, 10);
+        const index = Number.isNaN(candidate) ? fallbackIndex : candidate;
+        const thumb = item.thumb || item.thumbnail || item.image || item.url || null;
+        const image = item.image || item.source || thumb;
+        if (!thumb && !image) {
+            return null;
+        }
+
+        return {
+            index,
+            label: item.label || item.name || item.id || `Cible ${index + 1}`,
+            thumb: thumb || image,
+            image: image,
+        };
+    }
+
+    _showSelectedThumb(item) {
+        if (!this.hasPackPreviewTarget) {
+            return;
+        }
+
+        if (!item) {
+            this._resetPackPreview();
+            return;
+        }
+
+        const source = item.image || item.thumb;
+        if (!source) {
+            this._resetPackPreview();
+            return;
+        }
+
+        const label = item.label || '';
+        this.packPreviewTarget.innerHTML = `
+            <figure class="pack-preview">
+                <img src="${source}" alt="${label}" class="pack-preview__image" />
+                ${label ? `<figcaption class="pack-preview__caption">${label}</figcaption>` : ''}
+            </figure>
+        `;
+    }
+
+    _showPackThumbnail(option) {
+        if (!this.hasPackPreviewTarget) {
+            return;
+        }
+
+        const thumbnail = option?.getAttribute('data-thumbnail');
+        if (thumbnail) {
+            this.packPreviewTarget.innerHTML = `
+                <figure class="pack-preview">
+                    <img src="${thumbnail}" alt="${this.selectedPackName ?? ''}" class="pack-preview__image" />
+                    ${this.selectedPackName ? `<figcaption class="pack-preview__caption">${this.selectedPackName}</figcaption>` : ''}
+                </figure>
+            `;
+        } else {
+            this._resetPackPreview();
+        }
+    }
+
+    _resetPackPreview() {
+        if (!this.hasPackPreviewTarget) {
+            return;
+        }
+
+        this.packPreviewTarget.innerHTML = '<p class="text-sm text-gray-500">Sélectionnez un pack pour afficher un aperçu du motif.</p>';
+    }
+
 
     _resolveMindAsset() {
         const file = this.hasMindfileTarget ? this.mindfileTarget.files?.[0] ?? null : null;
