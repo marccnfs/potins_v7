@@ -158,7 +158,7 @@ export default class extends Controller {
         const originalLabel = trigger?.textContent;
         if (trigger) {
             trigger.disabled = true;
-            trigger.classList.add('opacity-60', 'cursor-not-allowed');
+            trigger.classList.add('is-busy');
             trigger.textContent = 'Sauvegarde…';
         }
 
@@ -316,7 +316,7 @@ export default class extends Controller {
             if (this.hasTargetIndexTarget) {
                 this.targetIndexTarget.value = '';
             }
-            this.thumbsTarget.insertAdjacentHTML('beforeend', '<p class="text-sm text-gray-500">Aucune miniature pour ce pack.</p>');
+            this.thumbsTarget.insertAdjacentHTML('beforeend', '<p class="ar-form__placeholder">Aucune miniature pour ce pack.</p>');
             this._resetPackPreview();
             this._setTargetInfo('Sélectionnez une image pour confirmer la détection MindAR.');
             return false;
@@ -325,15 +325,15 @@ export default class extends Controller {
         normalized.forEach((item) => {
             const btn = document.createElement('button');
             btn.type = 'button';
-            btn.className = 'target-thumb border rounded p-1 hover:ring focus:ring';
+            btn.className = 'target-thumb';
             btn.dataset.targetIndex = `${item.index ?? 0}`;
             btn.setAttribute('aria-pressed', 'false');
             const indexValue = Number.isFinite(item.index) ? item.index : Number.parseInt(item.index ?? '0', 10);
             const displayIndex = Number.isFinite(indexValue) ? indexValue + 1 : 1;
             btn.setAttribute('aria-label', `Cible ${displayIndex}${item.label ? ` – ${item.label}` : ''}`);
             btn.innerHTML = `
-                <img src="${item.thumb}" alt="${item.label ?? ''}" class="w-full h-auto" />
-                <div class="text-xs text-center">${item.label ?? 'Cible'}</div>
+                 <img src="${item.thumb}" alt="${item.label ?? ''}" class="target-thumb__image" />
+                <div class="target-thumb__caption">${item.label ?? 'Cible'}</div>
             `;
             btn.addEventListener('click', () => {
                 if (this.hasTargetIndexTarget) {
@@ -353,7 +353,7 @@ export default class extends Controller {
             return;
         }
 
-        this.thumbsTarget.innerHTML = '<p class="text-sm text-gray-500">Aucun pack MindAR détecté pour le moment.</p>';
+        this.thumbsTarget.innerHTML = '<p class="ar-form__placeholder">Aucun pack MindAR détecté pour le moment.</p>';
         if (this.hasTargetIndexTarget) {
             this.targetIndexTarget.value = '';
         }
@@ -367,10 +367,10 @@ export default class extends Controller {
         }
 
         this.thumbsTarget.querySelectorAll('button').forEach((button) => {
-            button.classList.remove('ring', 'ring-blue-500');
+            button.classList.remove('target-thumb--active');
             button.setAttribute('aria-pressed', 'false');
         });
-        active.classList.add('ring', 'ring-blue-500');
+        active.classList.add('target-thumb--active');
         active.setAttribute('aria-pressed', 'true');
     }
 
@@ -437,7 +437,7 @@ export default class extends Controller {
             this.packPreviewTarget.innerHTML = `
                 <figure class="pack-preview">
                     <img src="${thumbnail}" alt="${this.selectedPackName ?? ''}" class="pack-preview__image" />
-                    <figcaption class="pack-preview__caption">${caption}<br><span class="text-xs">Choisissez une cible ci-dessous.</span></figcaption>
+                        <figcaption class="pack-preview__caption">${caption}<br><span class="pack-preview__hint">Choisissez une cible ci-dessous.</span></figcaption>
                 </figure>
             `;
             this._setTargetInfo('Sélectionnez une image pour confirmer la détection MindAR.');
@@ -452,7 +452,7 @@ export default class extends Controller {
             return;
         }
 
-        this.packPreviewTarget.innerHTML = '<p class="text-sm text-gray-500">Sélectionnez un pack pour afficher un aperçu du motif.</p>';
+        this.packPreviewTarget.innerHTML = '<p class="ar-form__hint">Sélectionnez un pack pour afficher un aperçu du motif.</p>';
         this._setTargetInfo('Sélectionnez une image pour confirmer la détection MindAR.');
         this._updatePreviewBackground(null);
     }
@@ -519,7 +519,7 @@ export default class extends Controller {
         }
 
         if (!button) {
-            this.modelInfoTarget.innerHTML = '<p class="text-xs text-gray-500">Sélectionnez un modèle pour afficher ses détails.</p>';
+            this.modelInfoTarget.innerHTML = '<p class="ar-form__hint ar-form__hint--small">Sélectionnez un modèle pour afficher ses détails.</p>';
             return;
         }
 
@@ -767,7 +767,7 @@ export default class extends Controller {
             return;
         }
         trigger.disabled = false;
-        trigger.classList.remove('opacity-60', 'cursor-not-allowed');
+        trigger.classList.remove('is-busy');
         if (originalLabel !== undefined && originalLabel !== null) {
             trigger.textContent = originalLabel;
         }
@@ -780,12 +780,12 @@ export default class extends Controller {
 
         const element = this.statusTarget;
         element.textContent = message;
-        element.classList.remove('hidden', 'text-green-600', 'text-red-600');
+        element.classList.remove('hidden', 'ar-form__status--success', 'ar-form__status--error');
 
         if (tone === 'error') {
-            element.classList.add('text-red-600');
+            element.classList.add('ar-form__status--error');
         } else {
-            element.classList.add('text-green-600');
+            element.classList.add('ar-form__status--success');
         }
     }
 
@@ -797,7 +797,7 @@ export default class extends Controller {
         const element = this.statusTarget;
         element.textContent = '';
         element.classList.add('hidden');
-        element.classList.remove('text-green-600', 'text-red-600');
+        element.classList.remove('ar-form__status--success', 'ar-form__status--error');
     }
 
 

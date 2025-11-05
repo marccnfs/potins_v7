@@ -24,3 +24,415 @@
 .thumbs button img { width: 80px; height: auto; display: block; }
 .thumbs button.active { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,.4); }
 
+/* --- AR section layouts -------------------------------------------------- */
+
+.ar-section {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+.ar-section--compact {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.ar-section--wide {
+    max-width: 1120px;
+}
+
+.ar-section--rich-text {
+    font-family: var(--fontMedium);
+    line-height: 1.65;
+    color: var(--gray-700, #374151);
+}
+
+.ar-section--rich-text h1,
+.ar-section--rich-text h2,
+.ar-section--rich-text h3 {
+    color: var(--potins-blk, #111148);
+    font-family: var(--fontMedium);
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.ar-section--rich-text h1 { font-size: 2.2rem; }
+.ar-section--rich-text h2 { font-size: 1.6rem; }
+.ar-section--rich-text h3 { font-size: 1.25rem; }
+
+.ar-section--rich-text p,
+.ar-section--rich-text li {
+    font-size: 1rem;
+    margin-bottom: 0.9rem;
+}
+
+.ar-section--rich-text ol,
+.ar-section--rich-text ul {
+    padding-left: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.ar-section__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.ar-section__header--top {
+    align-items: flex-start;
+}
+
+.ar-section__intro {
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.ar-section__eyebrow {
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-500, #6b7280);
+    margin: 0;
+}
+
+.ar-section__title {
+    margin: 0;
+    font-size: 2rem;
+    font-family: var(--fontMedium);
+    color: var(--potins-blk, #111148);
+}
+
+.ar-section__title--xl {
+    font-size: 2.4rem;
+}
+
+.ar-section__meta,
+.ar-section__lead {
+    margin: 0.25rem 0 0;
+    font-size: 0.95rem;
+    color: var(--gray-600, #4b5563);
+}
+
+.ar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.ar-actions__group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* --- Gallery ------------------------------------------------------------- */
+
+.ar-gallery__grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.ar-gallery__lead {
+    margin-top: 0.4rem;
+    font-size: 0.95rem;
+    color: var(--gray-600, #4b5563);
+}
+
+.ar-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #d9dbe9;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 12px 28px rgba(17, 17, 72, 0.08);
+    overflow: hidden;
+    min-height: 100%;
+}
+
+.ar-card__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+}
+
+.ar-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.ar-card__title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--potins-blk, #111148);
+}
+
+.ar-card__meta {
+    margin-top: 0.35rem;
+    font-size: 0.8rem;
+    color: var(--gray-500, #6b7280);
+}
+
+.ar-card__qr {
+    width: 88px;
+    min-width: 88px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #ffffff;
+    padding: 0.5rem;
+    box-shadow: 0 8px 18px rgba(17, 17, 72, 0.08);
+}
+
+.ar-card__qr img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.ar-card__list {
+    display: grid;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--gray-700, #374151);
+}
+
+.ar-card__list-group {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+.ar-card__list dt {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--gray-500, #6b7280);
+    margin-bottom: 0.2rem;
+}
+
+.ar-card__list dd {
+    margin: 0;
+    word-break: break-word;
+}
+
+.ar-card__footer {
+    border-top: 1px solid #e5e7eb;
+    background: #f7f8fc;
+    padding: 1rem 1.25rem;
+}
+
+.ar-card__footer .ar-actions__group {
+    justify-content: flex-start;
+}
+
+.ar-empty-state {
+    border: 1px dashed #cbd5f5;
+    border-radius: 16px;
+    background: #f5f7ff;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    color: var(--gray-600, #4b5563);
+    box-shadow: inset 0 0 0 1px rgba(17, 17, 72, 0.08);
+}
+
+.ar-empty-state__title {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--potins-blk, #111148);
+    margin-bottom: 0.75rem;
+}
+
+.ar-empty-state__text {
+    font-size: 0.95rem;
+    margin: 0 auto 1.5rem;
+    max-width: 520px;
+}
+
+.ar-empty-state__actions {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- Viewer & panels ----------------------------------------------------- */
+
+.ar-layout {
+    display: grid;
+    gap: 2rem;
+}
+
+.ar-layout--with-aside {
+    align-items: start;
+}
+
+.ar-layout__main,
+.ar-layout__aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.ar-viewer {
+    position: relative;
+    border: 1px solid #d1d5db;
+    border-radius: 20px;
+    background: #000000;
+    box-shadow: 0 18px 36px rgba(17, 17, 72, 0.2);
+    overflow: hidden;
+}
+
+.ar-viewer__hint {
+    position: absolute;
+    inset: 0 0 auto 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.9rem 1.25rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.82);
+    pointer-events: none;
+}
+
+.ar-viewer__canvas {
+    width: 100%;
+    min-height: 520px;
+    background: #000000;
+}
+
+.ar-viewer__scene {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}
+
+.ar-panel {
+    border: 1px solid #d9dbe9;
+    border-radius: 16px;
+    background: #ffffff;
+    padding: 1.5rem;
+    box-shadow: 0 12px 28px rgba(17, 17, 72, 0.08);
+}
+
+.ar-panel--center {
+    text-align: center;
+}
+
+.ar-panel__title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--potins-blk, #111148);
+}
+
+.ar-panel__text {
+    margin-top: 0.65rem;
+    font-size: 0.95rem;
+    color: var(--gray-600, #4b5563);
+}
+
+.ar-panel__list {
+    margin-top: 1.25rem;
+    display: grid;
+    gap: 1rem;
+    font-size: 0.95rem;
+    color: var(--gray-700, #374151);
+}
+
+.ar-panel__list dt {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--gray-500, #6b7280);
+    margin-bottom: 0.25rem;
+}
+
+.ar-panel__list dd {
+    margin: 0;
+    word-break: break-word;
+}
+
+.ar-panel__qr {
+    margin-top: 1.25rem;
+    display: flex;
+    justify-content: center;
+}
+
+.ar-panel__qr img {
+    display: block;
+    width: 160px;
+    height: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #ffffff;
+    padding: 0.75rem;
+    box-shadow: 0 12px 24px rgba(17, 17, 72, 0.12);
+}
+
+.ar-panel__note {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--gray-500, #6b7280);
+}
+
+.ar-panel__tips {
+    margin-top: 1rem;
+    padding-left: 1.25rem;
+    font-size: 0.95rem;
+    color: var(--gray-600, #4b5563);
+}
+
+.ar-panel__tips li {
+    margin-bottom: 0.5rem;
+}
+
+.btn.is-busy {
+    opacity: 0.6;
+    cursor: wait;
+    pointer-events: none;
+}
+
+.ar-notice {
+    border: 1px solid #f4d27c;
+    border-radius: 14px;
+    background: #fff9e6;
+    padding: 1rem 1.25rem;
+    font-size: 0.95rem;
+    color: #6b4f1d;
+}
+
+.ar-notice strong {
+    font-weight: 700;
+}
+
+@media (min-width: 768px) {
+    .ar-gallery__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1100px) {
+    .ar-gallery__grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .ar-layout--with-aside {
+        grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    }
+}

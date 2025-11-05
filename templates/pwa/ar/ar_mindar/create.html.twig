@@ -1,11 +1,11 @@
-<div class="container"
+<div class="ar-section ar-section--wide"
      data-controller="mindar-create"
      data-mindar-create-scenes-endpoint-value="{{ path('api_ar_scene_create') }}"
      data-mindar-create-upload-endpoint-value="{{ path('api_upload_mind') }}"
      data-mindar-create-cancel-url-value="{{ path('ar_gallery') }}">
-    <h1>Créateur de scène RA (MindAR)</h1>
+    <h1 class="ar-section__title">Créateur de scène RA (MindAR)</h1>
 
-    <form id="form-create" data-mindar-create-target="form">
+    <form id="form-create" class="ar-form" data-mindar-create-target="form">
         <div class="form-group">
             <label for="title">Titre de la scène</label>
             <input type="text"
@@ -17,15 +17,13 @@
         </div>
 
         <!-- Sélecteur de pack -->
-        <div class="form-group mb-4">
-            <label for="pack" class="block text-sm font-medium text-gray-700 mb-1">
-                Pack d'images cibles
-            </label>
-            <p class="text-xs text-gray-500 mb-2">Choisissez le pack contenant les images de suivi MindAR.</p>
+        <div class="form-group">
+            <label for="pack">Pack d'images cibles</label>
+            <p class="ar-form__hint ar-form__hint--small">Choisissez le pack contenant les images de suivi MindAR.</p>
 
             <select id="pack"
                     name="pack"
-                    class="form-select w-full rounded border border-gray-300 p-2"
+                    class="form-control ar-form__select"
                     data-mindar-create-target="pack"
                     data-action="change->mindar-create#packChanged">
 
@@ -53,22 +51,20 @@
             </select>
 
             <div id="pack-preview"
-                 class="pack-preview-wrapper mt-3"
+                 class="pack-preview-wrapper ar-form__preview"
                  data-mindar-create-target="packPreview">
-                <p class="text-sm text-gray-500">Sélectionnez un motif pour afficher un aperçu.</p>
+                <p class="ar-form__hint">Sélectionnez un motif pour afficher un aperçu.</p>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="block text-sm font-medium text-gray-700 mb-1" for="targetIndex">
-                Motif de reconnaissance
-            </label>
-            <p class="text-xs text-gray-500 mb-2">Cliquez sur l'une des images du pack pour définir la cible MindAR utilisée pour l'ancrage 3D.</p>
+            <label for="targetIndex">Motif de reconnaissance</label>
+            <p class="ar-form__hint ar-form__hint--small">Cliquez sur l'une des images du pack pour définir la cible MindAR utilisée pour l'ancrage 3D.</p>
 
             <div class="target-grid" data-mindar-create-target="thumbs">
-                <p class="text-sm text-gray-500">Aucun pack MindAR détecté pour le moment.</p>
+                <p class="ar-form__placeholder">Aucun pack MindAR détecté pour le moment.</p>
             </div>
-            <p class="text-xs text-blue-700 mt-2" data-mindar-create-target="targetInfo">
+            <p class="ar-form__info" data-mindar-create-target="targetInfo">
                 Sélectionnez une image pour confirmer la détection MindAR.
             </p>
             <input type="hidden" id="targetIndex" name="targetIndex" value="" data-mindar-create-target="targetIndex">
@@ -77,12 +73,12 @@
         {% set hasModels = models is defined and models|length > 0 %}
 
         <fieldset class="form-group">
-            <legend class="block text-sm font-medium text-gray-700 mb-2">
+            <legend class="ar-form__legend">
                 Type de contenu
             </legend>
-            <p class="text-xs text-gray-500 mb-3">Sélectionnez le type d'élément virtuel à afficher sur la cible.</p>
-            <div class="flex flex-wrap gap-4" role="radiogroup">
-                <label class="inline-flex items-center gap-2 text-sm">
+            <p class="ar-form__hint ar-form__hint--small">Sélectionnez le type d'élément virtuel à afficher sur la cible.</p>
+            <div class="ar-form__options" role="radiogroup">
+                <label class="ar-form__option">
                     <input type="radio"
                            name="assetType"
                            value="model"
@@ -92,7 +88,7 @@
                            checked>
                     <span>Modèle 3D (.glb)</span>
                 </label>
-                <label class="inline-flex items-center gap-2 text-sm">
+                <label class="ar-form__option">
                     <input type="radio"
                            name="assetType"
                            value="video"
@@ -101,7 +97,7 @@
                            data-action="mindar-create#assetTypeChanged">
                     <span>Vidéo (mp4/webm)</span>
                 </label>
-                <label class="inline-flex items-center gap-2 text-sm">
+                <label class="ar-form__option">
                     <input type="radio"
                            name="assetType"
                            value="image"
@@ -119,7 +115,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1" for="asset">
                 Bibliothèque de modèles 3D
             </label>
-            <p class="text-xs text-gray-500 mb-3">Choisissez l'animation 3D affichée lorsque l'image déclencheur est détectée.</p>
+            <p class="ar-form__hint ar-form__hint--small">Choisissez l'animation 3D affichée lorsque l'image déclencheur est détectée.</p>
 
             {% if hasModels %}
                 <div class="model-grid" data-mindar-create-target="modelChoices">
@@ -142,7 +138,7 @@
                     {% endfor %}
                 </div>
                 <div class="model-info" data-mindar-create-target="modelInfo">
-                    <p class="text-xs text-gray-500">Sélectionnez un modèle pour afficher ses détails.</p>
+                    <p class="ar-form__hint ar-form__hint--small">Sélectionnez un modèle pour afficher ses détails.</p>
                 </div>
             {% else %}
                 <div class="alert alert-warning">
@@ -152,26 +148,26 @@
         </div>
 
         <div class="form-group hidden" data-mindar-create-target="videoSection">
-            <label class="block text-sm font-medium text-gray-700 mb-1" for="videoUrl">
+            <label for="videoUrl">
                 URL de la vidéo
             </label>
-            <p class="text-xs text-gray-500 mb-2">Fichier mp4/webm compatible streaming. Activez la lecture automatique en préparant la vidéo sans son ou en mode silencieux.</p>
+            <p class="ar-form__hint ar-form__hint--small">Fichier mp4/webm compatible streaming. Activez la lecture automatique en préparant la vidéo sans son ou en mode silencieux.</p>
             <input type="url"
                    id="videoUrl"
-                   class="form-input"
+                   class="form-control"
                    placeholder="https://cdn.example.com/videos/ar.mp4"
                    data-mindar-create-target="videoInput"
                    data-action="input->mindar-create#updateAssetFromInput change->mindar-create#updateAssetFromInput">
         </div>
 
         <div class="form-group hidden" data-mindar-create-target="imageSection">
-            <label class="block text-sm font-medium text-gray-700 mb-1" for="imageUrl">
+            <label for="imageUrl">
                 URL de l'image
             </label>
-            <p class="text-xs text-gray-500 mb-2">PNG/JPG avec transparence optionnelle. L'image est affichée sur un plan 2D.</p>
+            <p class="ar-form__hint ar-form__hint--small">PNG/JPG avec transparence optionnelle. L'image est affichée sur un plan 2D.</p>
             <input type="url"
                    id="imageUrl"
-                   class="form-input"
+                   class="form-control"
                    placeholder="https://cdn.example.com/images/overlay.png"
                    data-mindar-create-target="imageInput"
                    data-action="input->mindar-create#updateAssetFromInput change->mindar-create#updateAssetFromInput">
@@ -179,7 +175,7 @@
 
         <div class="form-group">
             <label for="sound">Ambiance sonore</label>
-            <select id="sound" name="sound" data-mindar-create-target="sound">
+            <select id="sound" name="sound" class="form-control ar-form__select" data-mindar-create-target="sound">
                 <option value="">Aucune</option>
                 <option value="/build/audio/forest.mp3">Forêt</option>
                 <option value="/build/audio/water.mp3">Eau</option>
@@ -187,10 +183,9 @@
         </div>
 
         <fieldset class="form-group">
-            <legend class="block text-sm font-medium text-gray-700 mb-2">Placement de l'élément</legend>
-            <p class="text-xs text-gray-500 mb-3">Utilisez les valeurs numériques pour positionner précisément le contenu virtuel sur la cible MindAR.</p>
-
-            <div class="grid placement-grid">
+            <legend class="ar-form__legend">Placement de l'élément</legend>
+            <p class="ar-form__hint ar-form__hint--small">Utilisez les valeurs numériques pour positionner précisément le contenu virtuel sur la cible MindAR.</p>
+            <div class="placement-grid">
                 <div>
                     <h3 class="placement-grid__title">Position</h3>
                     <div class="placement-grid__row">
@@ -244,18 +239,18 @@
             <input type="file" id="mindfile" accept=".mind" data-mindar-create-target="mindfile" />
         </div>
 
-        <div class="form-group flex flex-wrap gap-3 items-center justify-between">
-            <div class="flex flex-wrap gap-2">
+        <div class="form-group ar-form__actions">
+            <div class="ar-form__actions-primary">
                 <button type="button" class="btn" data-action="mindar-create#preview">Prévisualiser</button>
                 <button type="button" class="btn btn-secondary" data-action="mindar-create#save">Enregistrer la scène</button>
             </div>
-            <div class="flex flex-wrap gap-2 text-sm">
+            <div class="ar-form__actions-secondary">
                 <button type="button" class="btn btn-light" data-action="mindar-create#newScene">Nouvelle scène</button>
                 <button type="button" class="btn btn-light" data-action="mindar-create#resetForm">Réinitialiser</button>
                 <button type="button" class="btn btn-tertiary" data-action="mindar-create#cancel">Annuler</button>
             </div>
         </div>
-        <div class="mt-2 text-sm font-medium hidden" data-mindar-create-target="status" role="status" aria-live="polite"></div>
+        <div class="ar-form__status hidden" data-mindar-create-target="status" role="status" aria-live="polite"></div>
     </form>
 
     <div class="divider"></div>
@@ -268,8 +263,8 @@
 
     <div class="share-panel hidden" data-mindar-create-target="sharePanel">
         <h2 class="share-panel__title">Expérience publiée</h2>
-        <p class="text-sm text-gray-600">Partagez ce lien ou le QR code pour lancer la scène RA sur mobile ou ordinateur.</p>
-        <p class="mt-2">
+        <p class="ar-form__hint">Partagez ce lien ou le QR code pour lancer la scène RA sur mobile ou ordinateur.</p>
+        <p class="ar-form__hint">
             <a href="#" class="link" data-mindar-create-target="shareLink" target="_blank" rel="noopener">Voir la page de partage</a>
             ·
             <a href="#" class="link" data-mindar-create-target="experienceLink" target="_blank" rel="noopener">Ouvrir directement l'expérience</a>
