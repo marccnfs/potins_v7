@@ -1,8 +1,4 @@
 {% block title %}demo npm{% endblock %}
-{% use "js/js_mindar_demo.html.twig" %}
-{% block javascripts %}
-    {{ parent() }}
-{% endblock %}
 {% block body %}
     <div class="wrapper">
         {{ include('pwa/ar/'~directory~'/demo.html.twig') }}

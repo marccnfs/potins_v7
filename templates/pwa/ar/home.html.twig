@@ -4,4 +4,14 @@
     {{ include('pwa/ar/'~directory~'/'~vartwig.maintwig~'.html.twig') }}
 {% endblock core%}
 
-
+{% block javascripts %}
+    {{ parent() }}
+    {% if directory starts with 'ar_mindar' %}
+        {% set mindarTwig = vartwig.maintwig %}
+        {% if mindarTwig in ['_demo', '_view'] %}
+            {{ include('js/js_mindar_demo.html.twig') }}
+        {% elseif mindarTwig == '_create' %}
+            {{ include('js/js_mindar_create.html.twig') }}
+        {% endif %}
+    {% endif %}
+{% endblock %}
