@@ -34,22 +34,26 @@ export default class extends Controller {
         'shareLink',
         'experienceLink',
         'shareQr',
+        'form',
     ];
 
     static values = {
         scenesEndpoint: String,
         uploadEndpoint: String,
+        cancelUrl: String,
     };
 
     connect() {
         this.previewBlobUrl = null;
         this.selectedPackName = null;
+        this.previewBackground = null;
 
-        if (this.hasPackTarget && this.packTarget.options.length > 0) {
-            if (this.packTarget.selectedIndex < 0) {
-                this.packTarget.selectedIndex = 0;
+        if (this.hasPackTarget) {
+            if (this.packTarget.value) {
+                this.packChanged();
+            } else {
+                this._resetThumbs();
             }
-            this.packChanged();
         } else {
             this._resetThumbs();
         }
@@ -59,6 +63,7 @@ export default class extends Controller {
         }
 
         this._toggleAssetSections(this._currentAssetType());
+        this._initModelSelection();
         this.renderPlacementPreview();
     }
 
@@ -75,14 +80,19 @@ export default class extends Controller {
         }
 
         const option = this.packTarget.selectedOptions?.[0] ?? null;
+        if (!option || !option.value) {
+            this.selectedPackName = null;
+            this._resetThumbs();
+            this._resetPackPreview();
+            this._updatePrintLinks(null);
+            return;
+        }
         const items = option ? this._parseItems(option) : [];
         this.selectedPackName = option?.getAttribute('data-packname')?.trim() || option?.textContent?.trim() || null;
         this._resetPackPreview();
         this._setTargetInfo('Sélectionnez une image pour confirmer la détection MindAR.');
-        const hasItems = this._populateThumbs(items);
-        if (!hasItems) {
-            this._showPackThumbnail(option);
-        }
+        this._populateThumbs(items);
+        this._showPackThumbnail(option);
         this._updatePrintLinks(this.selectedPackName);
 
         if (this.hasTitleTarget && !this.titleTarget.value) {
@@ -110,11 +120,7 @@ export default class extends Controller {
         const assetUrl = this._currentAssetUrl();
 
         if (!assetUrl) {
-            container.innerHTML = `
-                <div class="preview-placeholder">
-                    <p><em>Sélectionnez un média (modèle 3D, vidéo ou image) pour visualiser son placement.</em></p>
-                </div>
-            `;
+            this._renderPreviewPlaceholder();
             return;
         }
 
@@ -123,6 +129,7 @@ export default class extends Controller {
         const scale = this._formatVector(this._collectVector('scale'));
 
         container.innerHTML = this._buildPlacementPreview(assetType, assetUrl, position, rotation, scale);
+        this._applyPreviewBackground();
     }
 
     async save(event) {
@@ -185,6 +192,26 @@ export default class extends Controller {
         } catch (error) {
             console.error(error);
             alert(error.message || 'Erreur lors de la sauvegarde de la scène.');
+        }
+    }
+
+    resetForm(event) {
+        event?.preventDefault?.();
+        this._resetFormState({ clearShare: true });
+    }
+
+    newScene(event) {
+        event?.preventDefault?.();
+        this._resetFormState({ focusTop: true, clearShare: true });
+    }
+
+    cancel(event) {
+        event?.preventDefault?.();
+        const url = this.hasCancelUrlValue ? this.cancelUrlValue : null;
+        if (url) {
+            window.location.href = url;
+        } else {
+            window.history.back();
         }
     }
 
@@ -263,7 +290,7 @@ export default class extends Controller {
 
         if (!normalized.length) {
             if (this.hasTargetIndexTarget) {
-                this.targetIndexTarget.value = '0';
+                this.targetIndexTarget.value = '';
             }
             this.thumbsTarget.insertAdjacentHTML('beforeend', '<p class="text-sm text-gray-500">Aucune miniature pour ce pack.</p>');
             this._resetPackPreview();
@@ -294,10 +321,6 @@ export default class extends Controller {
             this.thumbsTarget.appendChild(btn);
         });
 
-        const firstBtn = this.thumbsTarget.querySelector('button');
-        if (firstBtn) {
-            firstBtn.click();
-        }
         return true;
     }
 
@@ -308,7 +331,7 @@ export default class extends Controller {
 
         this.thumbsTarget.innerHTML = '<p class="text-sm text-gray-500">Aucun pack MindAR détecté pour le moment.</p>';
         if (this.hasTargetIndexTarget) {
-            this.targetIndexTarget.value = '0';
+            this.targetIndexTarget.value = '';
         }
         this._resetPackPreview();
         this._setTargetInfo('Sélectionnez une image pour confirmer la détection MindAR.');
@@ -376,6 +399,7 @@ export default class extends Controller {
             </figure>
         `;
         this._setTargetInfo(`Image détectée : ${label || 'Cible'} (index MindAR ${index})`);
+        this._updatePreviewBackground(source);
     }
 
     _showPackThumbnail(option) {
@@ -385,13 +409,15 @@ export default class extends Controller {
 
         const thumbnail = option?.getAttribute('data-thumbnail');
         if (thumbnail) {
+            const caption = this.selectedPackName ? `Pack « ${this.selectedPackName} » sélectionné` : 'Pack MindAR sélectionné';
             this.packPreviewTarget.innerHTML = `
                 <figure class="pack-preview">
                     <img src="${thumbnail}" alt="${this.selectedPackName ?? ''}" class="pack-preview__image" />
-                    ${this.selectedPackName ? `<figcaption class="pack-preview__caption">${this.selectedPackName}</figcaption>` : ''}
+                    <figcaption class="pack-preview__caption">${caption}<br><span class="text-xs">Choisissez une cible ci-dessous.</span></figcaption>
                 </figure>
             `;
-            this._setTargetInfo(`Motif par défaut sélectionné pour ${this.selectedPackName ?? 'ce pack'}.`);
+            this._setTargetInfo('Sélectionnez une image pour confirmer la détection MindAR.');
+            this._updatePreviewBackground(thumbnail);
         } else {
             this._resetPackPreview();
         }
@@ -404,6 +430,7 @@ export default class extends Controller {
 
         this.packPreviewTarget.innerHTML = '<p class="text-sm text-gray-500">Sélectionnez un pack pour afficher un aperçu du motif.</p>';
         this._setTargetInfo('Sélectionnez une image pour confirmer la détection MindAR.');
+        this._updatePreviewBackground(null);
     }
 
     _initModelSelection() {
@@ -418,17 +445,10 @@ export default class extends Controller {
             candidate = this.modelChoiceTargets.find((button) => button.getAttribute('data-model-path') === currentValue) ?? null;
         }
 
-        if (!candidate) {
-            candidate = this.modelChoiceTargets.find((button) => button.hasAttribute('data-model-default')) ?? null;
-        }
-
-        if (!candidate) {
-            candidate = this.modelChoiceTargets[0] ?? null;
-        }
-
         if (candidate) {
             this._selectModelButton(candidate, { focus: false });
         } else {
+            this._highlightModel(null);
             this._updateModelInfo();
         }
     }
@@ -460,6 +480,10 @@ export default class extends Controller {
             button.classList.remove('model-card--active');
             button.setAttribute('aria-pressed', 'false');
         });
+
+        if (!active) {
+            return;
+        }
 
         active.classList.add('model-card--active');
         active.setAttribute('aria-pressed', 'true');
@@ -550,6 +574,66 @@ export default class extends Controller {
             return;
         }
         element.classList.toggle('hidden', !visible);
+    }
+
+    _resetFormState(options = {}) {
+        const { focusTop = false, clearShare = false } = {
+            focusTop: false,
+            clearShare: false,
+            ...options,
+        };
+
+        if (this.hasFormTarget) {
+            this.formTarget.reset();
+        }
+
+        this.selectedPackName = null;
+
+        if (this.hasTitleTarget) {
+            this.titleTarget.value = '';
+            this.titleTarget.placeholder = this._defaultTitle();
+        }
+        if (this.hasPackTarget) {
+            if (this.packTarget.options.length > 0) {
+                this.packTarget.selectedIndex = 0;
+            } else {
+                this.packTarget.value = '';
+            }
+        }
+        if (this.hasAssetTarget) {
+            this.assetTarget.value = '';
+        }
+        if (this.hasVideoInputTarget) {
+            this.videoInputTarget.value = '';
+        }
+        if (this.hasImageInputTarget) {
+            this.imageInputTarget.value = '';
+        }
+        if (this.hasMindfileTarget) {
+            this.mindfileTarget.value = '';
+        }
+        if (this.hasSoundTarget) {
+            this.soundTarget.value = '';
+        }
+        if (this.hasTargetIndexTarget) {
+            this.targetIndexTarget.value = '';
+        }
+
+        this._resetThumbs();
+        this._highlightModel(null);
+        this._updateModelInfo();
+        this._toggleAssetSections(this._currentAssetType());
+        this._renderPreviewPlaceholder();
+
+        if (clearShare) {
+            this._hideSharePanel();
+        }
+
+        if (focusTop) {
+            window.requestAnimationFrame(() => {
+                this.element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
     }
 
     _collectVector(kind) {
@@ -652,6 +736,21 @@ export default class extends Controller {
         }
     }
 
+    _hideSharePanel() {
+        if (this.hasSharePanelTarget) {
+            this.sharePanelTarget.classList.add('hidden');
+        }
+        if (this.hasShareLinkTarget) {
+            this.shareLinkTarget.removeAttribute('href');
+        }
+        if (this.hasExperienceLinkTarget) {
+            this.experienceLinkTarget.removeAttribute('href');
+        }
+        if (this.hasShareQrTarget) {
+            this.shareQrTarget.innerHTML = '';
+        }
+    }
+
     _ensureAssetSelected() {
         const assetUrl = this._currentAssetUrl();
         if (assetUrl) {
@@ -668,7 +767,40 @@ export default class extends Controller {
         return false;
     }
 
+    _renderPreviewPlaceholder() {
+        if (!this.hasPreviewTarget) {
+            return;
+        }
+        this.previewTarget.innerHTML = `
+            <div class="preview-placeholder">
+                <p><em>Sélectionnez un média (modèle 3D, vidéo ou image) pour visualiser son placement.</em></p>
+            </div>
+        `;
+        this._applyPreviewBackground();
+    }
 
+    _updatePreviewBackground(source) {
+        this.previewBackground = source || null;
+        this._applyPreviewBackground();
+    }
+
+    _applyPreviewBackground() {
+        if (!this.hasPreviewTarget) {
+            return;
+        }
+        const container = this.previewTarget;
+        if (this.previewBackground) {
+            container.style.backgroundImage = `url('${this.previewBackground}')`;
+            container.style.backgroundSize = 'cover';
+            container.style.backgroundPosition = 'center';
+            container.style.backgroundRepeat = 'no-repeat';
+        } else {
+            container.style.backgroundImage = '';
+            container.style.backgroundSize = '';
+            container.style.backgroundPosition = '';
+            container.style.backgroundRepeat = '';
+        }
+    }
 
     _resolveMindAsset() {
         const file = this.hasMindfileTarget ? this.mindfileTarget.files?.[0] ?? null : null;

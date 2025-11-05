@@ -14,6 +14,7 @@ Attentes:
     lotus:       'ar_lotus',
     prepareur:   'ar_prepareur',
     create:      'ar_mindar_create',
+    gallery:     'ar_gallery',
     sessions:    'dashboard_my_sessions',
     mine:        'dashboard_my_escapes',
     docs:        'docs_workshop',
@@ -34,8 +35,9 @@ Attentes:
             <!-- centre: navigation principale -->
             <nav class="xnav__links" aria-label="Navigation principale">
               {# <a class="xnav__link {{ active=='play' ? 'is-active' }}" href="{{ path(nav.lotus) }}">lotus</a>  #}
-                <a class="xnav__link {{ active=='docs' ? 'is-active' }}" href="{{ path(nav.prepareur) }}">exemples</a>
-                <a class="xnav__link {{ active=='docs' ? 'is-active' }}" href="{{ path(nav.create) }}">Création de scène</a>
+                <a class="xnav__link {{ active=='prepareur' ? 'is-active' }}" href="{{ path(nav.prepareur) }}">exemples</a>
+                <a class="xnav__link {{ active=='gallery' ? 'is-active' }}" href="{{ path(nav.gallery) }}">liste des scènes</a>
+                <a class="xnav__link {{ active=='create' ? 'is-active' }}" href="{{ path(nav.create) }}">Création de scène</a>
             </nav>
         </div>
     </header>

@@ -47,7 +47,7 @@
         <div class="article-block">
             <h2>{{ article.titre }}</h2>
             <div class="article-content">
-                {{ article.contenu|raw }}
+                {{ article.contenu }}
             </div>
 
             {% if article.mediaName is not null %}
@@ -70,7 +70,7 @@
     {% if content is not same as ("") %}
         <div class="_post_content">
             <div class="article_content">
-                {{ content|raw }}
+                {{ content }}
             </div>
         </div>
     {% endif %}
