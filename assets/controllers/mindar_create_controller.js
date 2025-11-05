@@ -34,6 +34,7 @@ export default class extends Controller {
         'shareLink',
         'experienceLink',
         'shareQr',
+        'status',
         'form',
     ];
 
@@ -47,6 +48,8 @@ export default class extends Controller {
         this.previewBlobUrl = null;
         this.selectedPackName = null;
         this.previewBackground = null;
+        this.isSaving = false;
+        this._clearStatus();
 
         if (this.hasPackTarget) {
             if (this.packTarget.value) {
@@ -135,6 +138,10 @@ export default class extends Controller {
     async save(event) {
         event?.preventDefault?.();
 
+        if (this.isSaving) {
+            return;
+        }
+
         const asset = this._resolveMindAsset();
         if (asset.type === 'none') {
             alert('Sélectionne un pack MindAR ou importe un fichier .mind avant d’enregistrer.');
@@ -145,6 +152,18 @@ export default class extends Controller {
             return;
         }
 
+        this._clearStatus();
+
+        const trigger = event?.currentTarget instanceof HTMLElement ? event.currentTarget : null;
+        const originalLabel = trigger?.textContent;
+        if (trigger) {
+            trigger.disabled = true;
+            trigger.classList.add('opacity-60', 'cursor-not-allowed');
+            trigger.textContent = 'Sauvegarde…';
+        }
+
+        this.isSaving = true;
+
 
         let mindTargetPath = asset.path;
         if (asset.type === 'file') {
@@ -152,7 +171,9 @@ export default class extends Controller {
                 mindTargetPath = await this._uploadMindFile(asset.file);
             } catch (error) {
                 console.error(error);
-                alert(error.message || "Erreur lors de l'upload du fichier .mind.");
+                this._setStatus(error.message || "Erreur lors de l'upload du fichier .mind.", 'error');
+                this._unlockTrigger(trigger, originalLabel);
+                this.isSaving = false;
                 return;
             }
         }
@@ -188,10 +209,13 @@ export default class extends Controller {
 
             const data = await response.json();
             this._displayShare(data);
-            alert(`Scène sauvegardée (id ${data.id}).`);
+            this._setStatus(`Scène sauvegardée (id ${data.id}).`, 'success');
         } catch (error) {
             console.error(error);
-            alert(error.message || 'Erreur lors de la sauvegarde de la scène.');
+            this._setStatus(error.message || 'Erreur lors de la sauvegarde de la scène.', 'error');
+        } finally {
+            this._unlockTrigger(trigger, originalLabel);
+            this.isSaving = false;
         }
     }
 
@@ -629,6 +653,8 @@ export default class extends Controller {
             this._hideSharePanel();
         }
 
+        this._clearStatus();
+
         if (focusTop) {
             window.requestAnimationFrame(() => {
                 this.element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -735,6 +761,45 @@ export default class extends Controller {
             this.sharePanelTarget.classList.remove('hidden');
         }
     }
+
+    _unlockTrigger(trigger, originalLabel) {
+        if (!trigger) {
+            return;
+        }
+        trigger.disabled = false;
+        trigger.classList.remove('opacity-60', 'cursor-not-allowed');
+        if (originalLabel !== undefined && originalLabel !== null) {
+            trigger.textContent = originalLabel;
+        }
+    }
+
+    _setStatus(message, tone = 'info') {
+        if (!this.hasStatusTarget) {
+            return;
+        }
+
+        const element = this.statusTarget;
+        element.textContent = message;
+        element.classList.remove('hidden', 'text-green-600', 'text-red-600');
+
+        if (tone === 'error') {
+            element.classList.add('text-red-600');
+        } else {
+            element.classList.add('text-green-600');
+        }
+    }
+
+    _clearStatus() {
+        if (!this.hasStatusTarget) {
+            return;
+        }
+
+        const element = this.statusTarget;
+        element.textContent = '';
+        element.classList.add('hidden');
+        element.classList.remove('text-green-600', 'text-red-600');
+    }
+
 
     _hideSharePanel() {
         if (this.hasSharePanelTarget) {

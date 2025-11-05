@@ -1,38 +1,135 @@
-
 {% block body %}
-    <section class="container mx-auto p-4">
-        <h1>{{ scene.title }}</h1>
-        <p class="text-sm text-gray-600">Cible: {{ scene.mindTargetPath }} — index {{ scene.targetIndex }}</p>
-    </section>
-
     {% set assetType = scene.contentType|default('model') %}
     {% set position = [scene.positionX|default(0), scene.positionY|default(0), scene.positionZ|default(0)] %}
     {% set rotation = [scene.rotationX|default(0), scene.rotationY|default(0), scene.rotationZ|default(0)] %}
     {% set scale = [scene.scaleX|default(1), scene.scaleY|default(1), scene.scaleZ|default(1)] %}
 
-    <a-scene mindar-image="imageTargetSrc: {{ scene.mindTargetPath }};" vr-mode-ui="enabled:false" renderer="colorManagement:true">
-        <a-assets>
-            {% if assetType == 'video' %}
-                <video id="asset" src="{{ scene.modelUrl }}" loop muted playsinline crossorigin="anonymous"></video>
-            {% elseif assetType == 'image' %}
-                <img id="asset" src="{{ scene.modelUrl }}" crossorigin="anonymous" alt="Média 2D" />
-            {% else %}
-                <a-asset-item id="asset" src="{{ scene.modelUrl }}" crossorigin="anonymous"></a-asset-item>
+<section class="container mx-auto px-4 py-8 space-y-8">
+    <header class="flex flex-wrap items-start justify-between gap-4">
+        <div class="max-w-2xl space-y-2">
+            <p class="text-sm font-medium uppercase tracking-wide text-gray-500">Scène RA</p>
+            <h1 class="text-3xl font-semibold text-gray-900">{{ scene.title }}</h1>
+            <p class="text-sm text-gray-600">Cible : {{ scene.mindTargetPath }} — index {{ scene.targetIndex }}</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+            <a href="{{ path('ar_gallery') }}" class="btn btn-tertiary">Retour à la galerie</a>
+            {% if shareUrl %}
+                <a href="{{ shareUrl }}" target="_blank" rel="noopener" class="btn btn-secondary">Page de partage</a>
             {% endif %}
-            {% if scene.soundUrl %}<audio id="sfx" src="{{ scene.soundUrl }}" crossorigin="anonymous"></audio>{% endif %}
-        </a-assets>
-        <a-camera look-controls="enabled:false"></a-camera>
-        <a-entity mindar-image-target="targetIndex: {{ scene.targetIndex }}">
-            <a-entity position="{{ position|join(' ') }}" rotation="{{ rotation|join(' ') }}" scale="{{ scale|join(' ') }}">
-                {% if assetType == 'video' %}
-                    <a-video src="#asset" width="1" height="0.56" autoplay="true"></a-video>
-                {% elseif assetType == 'image' %}
-                    <a-image src="#asset" width="1" height="1"></a-image>
-                {% else %}
-                    <a-gltf-model src="#asset"></a-gltf-model>
+            {% if experienceUrl %}
+                <a href="{{ experienceUrl }}" target="_blank" rel="noopener" class="btn">Lancer l'expérience</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <div class="space-y-5">
+            <div class="relative overflow-hidden rounded-xl border border-gray-200 bg-black shadow-md">
+                <div class="pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-between px-4 py-3 text-xs font-medium uppercase tracking-wide text-white/80">
+                    <span>Cadrez le motif sélectionné</span>
+                    <span>Autorisez la caméra si besoin</span>
+                </div>
+                <div class="h-[520px] w-full bg-black">
+                    <a-scene
+                        mindar-image="imageTargetSrc: {{ scene.mindTargetPath }};"
+                        color-space="sRGB"
+                        renderer="colorManagement:true; physicallyCorrectLights:true"
+                        device-orientation-permission-ui="enabled:false"
+                        vr-mode-ui="enabled:false"
+                        embedded
+                        class="h-full w-full">
+                        <a-assets>
+                            {% if assetType == 'video' %}
+                                <video id="asset" src="{{ scene.modelUrl }}" loop muted playsinline crossorigin="anonymous"></video>
+                            {% elseif assetType == 'image' %}
+                                <img id="asset" src="{{ scene.modelUrl }}" crossorigin="anonymous" alt="Média 2D" />
+                            {% else %}
+                                <a-asset-item id="asset" src="{{ scene.modelUrl }}" crossorigin="anonymous"></a-asset-item>
+                            {% endif %}
+                            {% if scene.soundUrl %}
+                                <audio id="sfx" src="{{ scene.soundUrl }}" crossorigin="anonymous"></audio>
+                            {% endif %}
+                        </a-assets>
+
+                        <a-entity light="type: ambient; intensity: 0.7"></a-entity>
+                        <a-entity light="type: directional; intensity: 0.9" position="0 1 0"></a-entity>
+                        <a-camera look-controls="enabled:false" position="0 0 0"></a-camera>
+
+                        <a-entity mindar-image-target="targetIndex: {{ scene.targetIndex }}">
+                            <a-entity position="{{ position|join(' ') }}" rotation="{{ rotation|join(' ') }}" scale="{{ scale|join(' ') }}">
+                                {% if assetType == 'video' %}
+                                    <a-video src="#asset" width="1" height="0.56" autoplay="true" loop="true"></a-video>
+                                {% elseif assetType == 'image' %}
+                                    <a-image src="#asset" width="1" height="1"></a-image>
+                                {% else %}
+                                    <a-gltf-model src="#asset" animation-mixer></a-gltf-model>
+                                {% endif %}
+                            </a-entity>
+                            {% if scene.soundUrl %}
+                                <a-entity sound="src:#sfx; autoplay:false; loop:true"></a-entity>
+                            {% endif %}
+                        </a-entity>
+                    </a-scene>
+                </div>
+            </div>
+
+            <section class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
+                <h2 class="text-lg font-semibold text-gray-900">Détails techniques</h2>
+                <dl class="mt-4 grid grid-cols-1 gap-3 text-sm text-gray-700 sm:grid-cols-2">
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-wide text-gray-500">Type de contenu</dt>
+                        <dd>{{ assetType|capitalize }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-wide text-gray-500">Média</dt>
+                        <dd class="break-all">{{ scene.modelUrl }}</dd>
+                    </div>
+                    {% if scene.soundUrl %}
+                        <div>
+                            <dt class="text-xs font-semibold uppercase tracking-wide text-gray-500">Ambiance sonore</dt>
+                            <dd class="break-all">{{ scene.soundUrl }}</dd>
+                        </div>
+                    {% endif %}
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-wide text-gray-500">Position XYZ</dt>
+                        <dd>{{ position|join(', ') }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-wide text-gray-500">Rotation XYZ (°)</dt>
+                        <dd>{{ rotation|join(', ') }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-wide text-gray-500">Échelle XYZ</dt>
+                        <dd>{{ scale|join(', ') }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-wide text-gray-500">Créée le</dt>
+                        <dd>{{ scene.createdAt|date('d/m/Y H:i') }}</dd>
+                    </div>
+                </dl>
+            </section>
+        </div>
+
+        <aside class="space-y-5">
+            {% if shareQr %}
+                <section class="rounded-lg border border-gray-200 bg-white p-5 text-center shadow-sm">
+                    <h2 class="text-base font-semibold text-gray-900">Tester sur mobile</h2>
+                    <p class="mt-1 text-sm text-gray-600">Scannez ce QR code pour ouvrir l'expérience instantanément.</p>
+                    <img src="{{ shareQr }}" alt="QR code de l'expérience {{ scene.title }}" class="mx-auto mt-4 h-40 w-40 rounded-lg border border-gray-100 bg-white p-2 shadow" />
+                    {% if experienceUrl %}
+                        <p class="mt-3 break-all text-xs text-gray-500">{{ experienceUrl }}</p>
+                    {% endif %}
+                </section>
                 {% endif %}
-            </a-entity>
-            {% if scene.soundUrl %}<a-entity sound="src:#sfx; autoplay:false; loop:true"></a-entity>{% endif %}
-        </a-entity>
-    </a-scene>
+            <section class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
+                <h2 class="text-base font-semibold text-gray-900">Conseils d'utilisation</h2>
+                <ul class="mt-3 list-inside list-disc space-y-2 text-sm text-gray-600">
+                    <li>Présentez l'image cible bien éclairée pour déclencher la scène.</li>
+                    <li>Stabilisez l'appareil pour une détection plus rapide.</li>
+                    <li>Évitez les surfaces réfléchissantes ou transparentes derrière le motif.</li>
+                </ul>
+            </section>
+        </aside>
+    </div>
+</section>
 {% endblock %}
