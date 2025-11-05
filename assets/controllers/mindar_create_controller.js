@@ -1,7 +1,41 @@
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
-    static targets = ['title', 'pack', 'thumbs', 'targetIndex', 'targetInfo', 'model', 'modelChoices', 'modelChoice', 'modelInfo', 'sound', 'mindfile', 'preview', 'packPreview'];
+    static targets = [
+        'title',
+        'pack',
+        'thumbs',
+        'targetIndex',
+        'targetInfo',
+        'asset',
+        'assetType',
+        'modelSection',
+        'modelChoices',
+        'modelChoice',
+        'modelInfo',
+        'videoSection',
+        'videoInput',
+        'imageSection',
+        'imageInput',
+        'sound',
+        'mindfile',
+        'preview',
+        'packPreview',
+        'positionX',
+        'positionY',
+        'positionZ',
+        'rotationX',
+        'rotationY',
+        'rotationZ',
+        'scaleX',
+        'scaleY',
+        'scaleZ',
+        'sharePanel',
+        'shareLink',
+        'experienceLink',
+        'shareQr',
+    ];
+
     static values = {
         scenesEndpoint: String,
         uploadEndpoint: String,
@@ -24,7 +58,8 @@ export default class extends Controller {
             this.titleTarget.placeholder = this._defaultTitle();
         }
 
-        this._initModelSelection();
+        this._toggleAssetSections(this._currentAssetType());
+        this.renderPlacementPreview();
     }
 
     disconnect() {
@@ -58,49 +93,36 @@ export default class extends Controller {
     preview(event) {
         event?.preventDefault?.();
 
-        const container = this.hasPreviewTarget ? this.previewTarget : document.getElementById('preview');
-        if (!container) {
+        if (!this._ensureAssetSelected()) {
             return;
         }
 
-        container.innerHTML = '';
-        if (this.previewBlobUrl) {
-            URL.revokeObjectURL(this.previewBlobUrl);
-            this.previewBlobUrl = null;
-        }
+        this.renderPlacementPreview();
+    }
 
-        const asset = this._resolveMindAsset();
-        if (asset.type === 'none') {
-            alert('Aucun pack MindAR ou fichier .mind sélectionné.');
+    renderPlacementPreview() {
+        if (!this.hasPreviewTarget) {
             return;
         }
 
-        let mindPath = asset.path;
-        if (asset.type === 'file') {
-            mindPath = URL.createObjectURL(asset.file);
-            this.previewBlobUrl = mindPath;
+        const container = this.previewTarget;
+        const assetType = this._currentAssetType();
+        const assetUrl = this._currentAssetUrl();
+
+        if (!assetUrl) {
+            container.innerHTML = `
+                <div class="preview-placeholder">
+                    <p><em>Sélectionnez un média (modèle 3D, vidéo ou image) pour visualiser son placement.</em></p>
+                </div>
+            `;
+            return;
         }
 
-        const idx = this.hasTargetIndexTarget ? parseInt(this.targetIndexTarget.value, 10) || 0 : 0;
-        const model = this.hasModelTarget ? this.modelTarget.value : '';
-        const sound = this.hasSoundTarget ? this.soundTarget.value : '';
-        const audioAsset = sound ? `<audio id="sfx" src="${sound}" crossorigin="anonymous"></audio>` : '';
+        const position = this._formatVector(this._collectVector('position'));
+        const rotation = this._formatVector(this._collectVector('rotation'));
+        const scale = this._formatVector(this._collectVector('scale'));
 
-        container.insertAdjacentHTML('beforeend', `
-       <div class="preview-stage">
-        <a-scene embedded mindar-image="imageTargetSrc: ${mindPath};" vr-mode-ui="enabled:false" renderer="colorManagement:true" device-orientation-permission-ui="enabled:true" style="width:100%;height:100%;">
-          <a-assets>
-            <a-asset-item id="mdl" src="${model}"></a-asset-item>
-            ${audioAsset}
-          </a-assets>
-          <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
-          <a-entity mindar-image-target="targetIndex: ${idx}">
-            <a-gltf-model src="#mdl" position="0 0 0" scale="0.6 0.6 0.6" animation__spin="property=rotation; to=0 360 0; loop:true; dur:12000"></a-gltf-model>
-            ${sound ? `<a-entity sound="src:#sfx; autoplay:false; loop:true"></a-entity>` : ''}
-          </a-entity>
-        </a-scene>
-      </div>
-    `);
+        container.innerHTML = this._buildPlacementPreview(assetType, assetUrl, position, rotation, scale);
     }
 
     async save(event) {
@@ -112,13 +134,18 @@ export default class extends Controller {
             return;
         }
 
+        if (!this._ensureAssetSelected()) {
+            return;
+        }
+
+
         let mindTargetPath = asset.path;
         if (asset.type === 'file') {
             try {
                 mindTargetPath = await this._uploadMindFile(asset.file);
             } catch (error) {
                 console.error(error);
-                alert(error.message || 'Erreur lors de l\'upload du fichier .mind.');
+                alert(error.message || "Erreur lors de l'upload du fichier .mind.");
                 return;
             }
         }
@@ -127,8 +154,14 @@ export default class extends Controller {
             title: this._resolveTitle(asset.packName),
             mindTargetPath,
             targetIndex: this.hasTargetIndexTarget ? parseInt(this.targetIndexTarget.value, 10) || 0 : 0,
-            modelUrl: this.hasModelTarget ? this.modelTarget.value : '',
+            assetUrl: this._currentAssetUrl(),
+            contentType: this._currentAssetType(),
             soundUrl: this.hasSoundTarget && this.soundTarget.value ? this.soundTarget.value : null,
+            transform: {
+                position: this._collectVector('position'),
+                rotation: this._collectVector('rotation'),
+                scale: this._collectVector('scale'),
+            },
         };
 
         const endpoint = this.hasScenesEndpointValue ? this.scenesEndpointValue : '/api/ar/scenes';
@@ -147,11 +180,55 @@ export default class extends Controller {
             }
 
             const data = await response.json();
+            this._displayShare(data);
             alert(`Scène sauvegardée (id ${data.id}).`);
         } catch (error) {
             console.error(error);
             alert(error.message || 'Erreur lors de la sauvegarde de la scène.');
         }
+    }
+
+    assetTypeChanged() {
+        const type = this._currentAssetType();
+        this._toggleAssetSections(type);
+        if (type === 'model') {
+            this._initModelSelection();
+        } else {
+            this.updateAssetFromInput();
+        }
+        this.renderPlacementPreview();
+    }
+
+    updateAssetFromInput() {
+        if (!this.hasAssetTarget) {
+            return;
+        }
+        const type = this._currentAssetType();
+        let value = '';
+        if (type === 'video' && this.hasVideoInputTarget) {
+            value = this.videoInputTarget.value.trim();
+        } else if (type === 'image' && this.hasImageInputTarget) {
+            value = this.imageInputTarget.value.trim();
+        }
+        this.assetTarget.value = value;
+        if (type !== 'model') {
+            this.renderPlacementPreview();
+        }
+    }
+
+    transformChanged() {
+        window.requestAnimationFrame(() => this.renderPlacementPreview());
+    }
+
+    selectModel(event) {
+        event?.preventDefault?.();
+        const button = event?.currentTarget;
+        if (!button) {
+            return;
+        }
+        this._setAssetType('model');
+        this._selectModelButton(button);
+        this.renderPlacementPreview();
     }
 
     _parseItems(option) {
@@ -267,7 +344,7 @@ export default class extends Controller {
             index,
             label: item.label || item.name || item.id || `Cible ${index + 1}`,
             thumb: thumb || image,
-            image: image,
+            image,
         };
     }
 
@@ -329,22 +406,12 @@ export default class extends Controller {
         this._setTargetInfo('Sélectionnez une image pour confirmer la détection MindAR.');
     }
 
-    selectModel(event) {
-        event?.preventDefault?.();
-        const button = event?.currentTarget;
-        if (!button) {
-            return;
-        }
-
-        this._selectModelButton(button);
-    }
-
     _initModelSelection() {
-        if (!this.hasModelTarget || !this.hasModelChoiceTarget) {
+        if (!this.hasAssetTarget || !this.hasModelChoiceTarget) {
             return;
         }
 
-        const currentValue = this.modelTarget.value?.trim();
+        const currentValue = this.assetTarget.value?.trim();
         let candidate = null;
 
         if (currentValue) {
@@ -367,13 +434,13 @@ export default class extends Controller {
     }
 
     _selectModelButton(button, options = { focus: true }) {
-        if (!button || !this.hasModelTarget) {
+        if (!button || !this.hasAssetTarget) {
             return;
         }
 
         const path = button.getAttribute('data-model-path');
         if (path) {
-            this.modelTarget.value = path;
+            this.assetTarget.value = path;
         }
 
         this._highlightModel(button);
@@ -431,6 +498,177 @@ export default class extends Controller {
         this.targetInfoTarget.textContent = message;
     }
 
+    _currentAssetType() {
+        if (!this.hasAssetTypeTarget) {
+            return 'model';
+        }
+        const selected = this.assetTypeTargets.find((input) => input.checked);
+        return selected ? selected.value : 'model';
+    }
+
+    _setAssetType(type) {
+        if (!this.hasAssetTypeTarget) {
+            return;
+        }
+        let changed = false;
+        this.assetTypeTargets.forEach((input) => {
+            if (input.value === type) {
+                if (!input.checked) {
+                    input.checked = true;
+                    changed = true;
+                }
+            } else {
+                input.checked = false;
+            }
+        });
+        if (changed) {
+            this._toggleAssetSections(type);
+        }
+    }
+
+    _currentAssetUrl() {
+        if (!this.hasAssetTarget) {
+            return '';
+        }
+        return this.assetTarget.value?.trim() ?? '';
+    }
+
+    _toggleAssetSections(type) {
+        if (this.hasModelSectionTarget) {
+            this._setVisibility(this.modelSectionTarget, type === 'model');
+        }
+        if (this.hasVideoSectionTarget) {
+            this._setVisibility(this.videoSectionTarget, type === 'video');
+        }
+        if (this.hasImageSectionTarget) {
+            this._setVisibility(this.imageSectionTarget, type === 'image');
+        }
+    }
+
+    _setVisibility(element, visible) {
+        if (!element) {
+            return;
+        }
+        element.classList.toggle('hidden', !visible);
+    }
+
+    _collectVector(kind) {
+        const vector = { x: 0, y: 0, z: 0 };
+        if (kind === 'position') {
+            if (this.hasPositionXTarget) vector.x = this._readFloat(this.positionXTarget.value, 0);
+            if (this.hasPositionYTarget) vector.y = this._readFloat(this.positionYTarget.value, 0);
+            if (this.hasPositionZTarget) vector.z = this._readFloat(this.positionZTarget.value, 0);
+        } else if (kind === 'rotation') {
+            if (this.hasRotationXTarget) vector.x = this._readFloat(this.rotationXTarget.value, 0);
+            if (this.hasRotationYTarget) vector.y = this._readFloat(this.rotationYTarget.value, 0);
+            if (this.hasRotationZTarget) vector.z = this._readFloat(this.rotationZTarget.value, 0);
+        } else if (kind === 'scale') {
+            if (this.hasScaleXTarget) vector.x = this._readFloat(this.scaleXTarget.value, 1);
+            if (this.hasScaleYTarget) vector.y = this._readFloat(this.scaleYTarget.value, 1);
+            if (this.hasScaleZTarget) vector.z = this._readFloat(this.scaleZTarget.value, 1);
+        }
+        return vector;
+    }
+
+    _readFloat(value, fallback) {
+        const parsed = Number.parseFloat(value);
+        return Number.isFinite(parsed) ? parsed : fallback;
+    }
+
+    _formatVector(vector) {
+        return `${vector.x} ${vector.y} ${vector.z}`;
+    }
+
+    _buildPlacementPreview(assetType, assetUrl, position, rotation, scale) {
+        const assetDeclaration = this._buildAssetDeclaration(assetType, assetUrl);
+        const assetEntity = this._buildAssetEntity(assetType);
+
+        return `
+            <div class="preview-stage">
+                <a-scene embedded renderer="colorManagement:true" background="color: #f0f0f0" vr-mode-ui="enabled:false" style="width:100%;height:100%;">
+                    <a-assets>
+                        ${assetDeclaration}
+                    </a-assets>
+                    <a-entity position="0 1.6 3">
+                        <a-camera wasd-controls-enabled="false" look-controls="enabled:false"></a-camera>
+                    </a-entity>
+                    <a-entity rotation="-90 0 0">
+                        <a-plane color="#ffffff" height="2" width="2" material="opacity:0.8; transparent:true"></a-plane>
+                        <a-ring color="#a0aec0" radius-inner="0.02" radius-outer="0.04" position="0 0.01 0"></a-ring>
+                    </a-entity>
+                    <a-entity position="${position}" rotation="${rotation}" scale="${scale}">
+                        ${assetEntity}
+                    </a-entity>
+                </a-scene>
+            </div>
+        `;
+    }
+
+    _buildAssetDeclaration(assetType, assetUrl) {
+        const safeUrl = assetUrl.replace(/"/g, '&quot;');
+        switch (assetType) {
+            case 'video':
+                return `<video id="previewAsset" src="${safeUrl}" preload="auto" loop muted playsinline crossorigin="anonymous"></video>`;
+            case 'image':
+                return `<img id="previewAsset" src="${safeUrl}" crossorigin="anonymous" alt="Aperçu 2D" />`;
+            case 'model':
+            default:
+                return `<a-asset-item id="previewAsset" src="${safeUrl}" crossorigin="anonymous"></a-asset-item>`;
+        }
+    }
+
+    _buildAssetEntity(assetType) {
+        switch (assetType) {
+            case 'video':
+                return '<a-video src="#previewAsset" width="1" height="0.56" autoplay="true"></a-video>';
+            case 'image':
+                return '<a-image src="#previewAsset" width="1" height="1"></a-image>';
+            case 'model':
+            default:
+                return '<a-gltf-model src="#previewAsset"></a-gltf-model>';
+        }
+    }
+
+    _displayShare(data) {
+        if (!data) {
+            return;
+        }
+
+        if (this.hasShareLinkTarget && data.shareUrl) {
+            this.shareLinkTarget.href = data.shareUrl;
+        }
+        if (this.hasExperienceLinkTarget && data.experienceUrl) {
+            this.experienceLinkTarget.href = data.experienceUrl;
+        }
+        if (this.hasShareQrTarget) {
+            if (data.qr) {
+                this.shareQrTarget.innerHTML = `<img src="${data.qr}" alt="QR code de l'expérience" class="share-panel__qr-image"/>`;
+            } else {
+                this.shareQrTarget.innerHTML = '';
+            }
+        }
+        if (this.hasSharePanelTarget) {
+            this.sharePanelTarget.classList.remove('hidden');
+        }
+    }
+
+    _ensureAssetSelected() {
+        const assetUrl = this._currentAssetUrl();
+        if (assetUrl) {
+            return true;
+        }
+        const type = this._currentAssetType();
+        if (type === 'model') {
+            alert('Sélectionne un modèle 3D dans la bibliothèque.');
+        } else if (type === 'video') {
+            alert('Renseigne une URL de vidéo (mp4/webm) pour la scène.');
+        } else {
+            alert('Renseigne une URL d\'image (png/jpg) pour la scène.');
+        }
+        return false;
+    }
+
+
 
     _resolveMindAsset() {
         const file = this.hasMindfileTarget ? this.mindfileTarget.files?.[0] ?? null : null;
@@ -458,7 +696,7 @@ export default class extends Controller {
         if (path.startsWith('file:///')) {
             try {
                 const url = new URL(path);
-                let normalizedPath = url.pathname.replace(/\\/g, '/');
+                let normalizedPath = url.pathname.replace(/\\\\/g, '/');
                 const idx = normalizedPath.toLowerCase().indexOf('/public/');
                 if (idx !== -1) {
                     const relative = normalizedPath.substring(idx + '/public'.length);
@@ -467,7 +705,7 @@ export default class extends Controller {
                 return normalizedPath.startsWith('/') ? normalizedPath : `/${normalizedPath}`;
             } catch (error) {
                 console.warn('Impossible de normaliser le chemin MindAR', error);
-                const fallback = path.replace(/^file:\/\//, '').replace(/\\/g, '/');
+                const fallback = path.replace(/^file:\/\//, '').replace(/\\\\/g, '/');
                 const parts = fallback.split('/public/');
                 if (parts.length > 1) {
                     const relative = parts[1];
@@ -488,12 +726,12 @@ export default class extends Controller {
         const response = await fetch(endpoint, { method: 'POST', body: formData, credentials: 'same-origin' });
         if (!response.ok) {
             const error = await this._extractError(response);
-            throw new Error(error || 'Upload du fichier .mind impossible.');
+            throw new Error(error || "Upload du fichier .mind impossible.");
         }
 
         const data = await response.json();
         if (!data?.path) {
-            throw new Error('Réponse inattendue de l\'upload MindAR.');
+            throw new Error("Réponse inattendue de l'upload MindAR.");
         }
 
         return data.path;

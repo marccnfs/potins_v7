@@ -72,13 +72,50 @@
 
         {% set hasModels = models is defined and models|length > 0 %}
 
-        <div class="form-group">
-            <label class="block text-sm font-medium text-gray-700 mb-1" for="model">
-                Modèle 3D
+        <fieldset class="form-group">
+            <legend class="block text-sm font-medium text-gray-700 mb-2">
+                Type de contenu
+            </legend>
+            <p class="text-xs text-gray-500 mb-3">Sélectionnez le type d'élément virtuel à afficher sur la cible.</p>
+            <div class="flex flex-wrap gap-4" role="radiogroup">
+                <label class="inline-flex items-center gap-2 text-sm">
+                    <input type="radio"
+                           name="assetType"
+                           value="model"
+                           class="radio"
+                           data-mindar-create-target="assetType"
+                           data-action="mindar-create#assetTypeChanged"
+                           checked>
+                    <span>Modèle 3D (.glb)</span>
+                </label>
+                <label class="inline-flex items-center gap-2 text-sm">
+                    <input type="radio"
+                           name="assetType"
+                           value="video"
+                           class="radio"
+                           data-mindar-create-target="assetType"
+                           data-action="mindar-create#assetTypeChanged">
+                    <span>Vidéo (mp4/webm)</span>
+                </label>
+                <label class="inline-flex items-center gap-2 text-sm">
+                    <input type="radio"
+                           name="assetType"
+                           value="image"
+                           class="radio"
+                           data-mindar-create-target="assetType"
+                           data-action="mindar-create#assetTypeChanged">
+                    <span>Image 2D (png/jpg)</span>
+                </label>
+            </div>
+        </fieldset>
+
+        <input type="hidden" id="asset" name="asset" data-mindar-create-target="asset" value="{{ hasModels ? models|first.path : '' }}">
+
+        <div class="form-group" data-mindar-create-target="modelSection">
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="asset">
+                Bibliothèque de modèles 3D
             </label>
             <p class="text-xs text-gray-500 mb-3">Choisissez l'animation 3D affichée lorsque l'image déclencheur est détectée.</p>
-
-            <input type="hidden" id="model" name="model" data-mindar-create-target="model" value="{{ hasModels ? models|first.path : '' }}">
 
             {% if hasModels %}
                 <div class="model-grid" data-mindar-create-target="modelChoices">
@@ -110,6 +147,32 @@
             {% endif %}
         </div>
 
+        <div class="form-group hidden" data-mindar-create-target="videoSection">
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="videoUrl">
+                URL de la vidéo
+            </label>
+            <p class="text-xs text-gray-500 mb-2">Fichier mp4/webm compatible streaming. Activez la lecture automatique en préparant la vidéo sans son ou en mode silencieux.</p>
+            <input type="url"
+                   id="videoUrl"
+                   class="form-input"
+                   placeholder="https://cdn.example.com/videos/ar.mp4"
+                   data-mindar-create-target="videoInput"
+                   data-action="input->mindar-create#updateAssetFromInput change->mindar-create#updateAssetFromInput">
+        </div>
+
+        <div class="form-group hidden" data-mindar-create-target="imageSection">
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="imageUrl">
+                URL de l'image
+            </label>
+            <p class="text-xs text-gray-500 mb-2">PNG/JPG avec transparence optionnelle. L'image est affichée sur un plan 2D.</p>
+            <input type="url"
+                   id="imageUrl"
+                   class="form-input"
+                   placeholder="https://cdn.example.com/images/overlay.png"
+                   data-mindar-create-target="imageInput"
+                   data-action="input->mindar-create#updateAssetFromInput change->mindar-create#updateAssetFromInput">
+        </div>
+
         <div class="form-group">
             <label for="sound">Ambiance sonore</label>
             <select id="sound" name="sound" data-mindar-create-target="sound">
@@ -118,6 +181,59 @@
                 <option value="/build/audio/water.mp3">Eau</option>
             </select>
         </div>
+
+        <fieldset class="form-group">
+            <legend class="block text-sm font-medium text-gray-700 mb-2">Placement de l'élément</legend>
+            <p class="text-xs text-gray-500 mb-3">Utilisez les valeurs numériques pour positionner précisément le contenu virtuel sur la cible MindAR.</p>
+
+            <div class="grid placement-grid">
+                <div>
+                    <h3 class="placement-grid__title">Position</h3>
+                    <div class="placement-grid__row">
+                        <label for="positionX">X</label>
+                        <input type="number" step="0.01" id="positionX" value="0" data-mindar-create-target="positionX" data-action="input->mindar-create#transformChanged">
+                    </div>
+                    <div class="placement-grid__row">
+                        <label for="positionY">Y</label>
+                        <input type="number" step="0.01" id="positionY" value="0" data-mindar-create-target="positionY" data-action="input->mindar-create#transformChanged">
+                    </div>
+                    <div class="placement-grid__row">
+                        <label for="positionZ">Z</label>
+                        <input type="number" step="0.01" id="positionZ" value="0" data-mindar-create-target="positionZ" data-action="input->mindar-create#transformChanged">
+                    </div>
+                </div>
+                <div>
+                    <h3 class="placement-grid__title">Rotation (°)</h3>
+                    <div class="placement-grid__row">
+                        <label for="rotationX">X</label>
+                        <input type="number" step="1" id="rotationX" value="0" data-mindar-create-target="rotationX" data-action="input->mindar-create#transformChanged">
+                    </div>
+                    <div class="placement-grid__row">
+                        <label for="rotationY">Y</label>
+                        <input type="number" step="1" id="rotationY" value="0" data-mindar-create-target="rotationY" data-action="input->mindar-create#transformChanged">
+                    </div>
+                    <div class="placement-grid__row">
+                        <label for="rotationZ">Z</label>
+                        <input type="number" step="1" id="rotationZ" value="0" data-mindar-create-target="rotationZ" data-action="input->mindar-create#transformChanged">
+                    </div>
+                </div>
+                <div>
+                    <h3 class="placement-grid__title">Échelle</h3>
+                    <div class="placement-grid__row">
+                        <label for="scaleX">X</label>
+                        <input type="number" step="0.01" id="scaleX" value="1" data-mindar-create-target="scaleX" data-action="input->mindar-create#transformChanged">
+                    </div>
+                    <div class="placement-grid__row">
+                        <label for="scaleY">Y</label>
+                        <input type="number" step="0.01" id="scaleY" value="1" data-mindar-create-target="scaleY" data-action="input->mindar-create#transformChanged">
+                    </div>
+                    <div class="placement-grid__row">
+                        <label for="scaleZ">Z</label>
+                        <input type="number" step="0.01" id="scaleZ" value="1" data-mindar-create-target="scaleZ" data-action="input->mindar-create#transformChanged">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
 
         <div class="form-group">
             <label for="mindfile">Fichier cible (.mind)</label>
@@ -134,7 +250,18 @@
 
     <div id="preview" class="preview" data-mindar-create-target="preview">
         <div class="preview-placeholder">
-            <p><em>La scène apparaîtra ici après la prévisualisation.</em></p>
+            <p><em>Utilisez le bouton de prévisualisation pour ajuster le placement sans lancer la détection.</em></p>
         </div>
+    </div>
+
+    <div class="share-panel hidden" data-mindar-create-target="sharePanel">
+        <h2 class="share-panel__title">Expérience publiée</h2>
+        <p class="text-sm text-gray-600">Partagez ce lien ou le QR code pour lancer la scène RA sur mobile ou ordinateur.</p>
+        <p class="mt-2">
+            <a href="#" class="link" data-mindar-create-target="shareLink" target="_blank" rel="noopener">Voir la page de partage</a>
+            ·
+            <a href="#" class="link" data-mindar-create-target="experienceLink" target="_blank" rel="noopener">Ouvrir directement l'expérience</a>
+        </p>
+        <div class="share-panel__qr" data-mindar-create-target="shareQr"></div>
     </div>
 </div>

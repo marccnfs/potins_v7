@@ -1,0 +1,56 @@
+<div class="share-experience" data-share-root>
+    <header class="share-experience__header">
+        <p class="share-experience__subtitle">Expérience RA publiée</p>
+        <h1 class="share-experience__title">{{ scene.title }}</h1>
+        <p class="share-experience__target">Cible : {{ scene.mindTargetPath }} — index {{ scene.targetIndex }}</p>
+    </header>
+    <div class="share-experience__body">
+        <div class="share-experience__qr">
+            <div class="share-experience__qr-frame">
+                <img src="{{ shareQr }}" alt="QR code de l'expérience" />
+            </div>
+            <p class="share-experience__qr-help">
+                Scannez ce QR code avec un smartphone pour lancer immédiatement l'expérience RA.
+            </p>
+        </div>
+        <div class="share-experience__content">
+            <section class="share-experience__section">
+                <h2 class="share-experience__section-title">Ouvrir l'expérience</h2>
+                <p class="share-experience__section-text">Choisissez le support souhaité et suivez les instructions.</p>
+                <div class="share-experience__actions">
+                    <a href="{{ experienceUrl }}" target="_blank" rel="noopener" class="btn">Ouvrir sur mobile</a>
+                    <a href="{{ experienceUrl }}" target="_blank" rel="noopener" class="btn btn-secondary">Prévisualiser sur ordinateur</a>
+                </div>
+            </section>
+            <section class="share-experience__section share-experience__section--light">
+                <h3 class="share-experience__section-title">Détails du média</h3>
+                <dl class="share-experience__list">
+                    <div class="share-experience__list-row">
+                        <dt>Type</dt>
+                        <dd>{{ scene.contentType|default('model')|capitalize }}</dd>
+                    </div>
+                    <div class="share-experience__list-row">
+                        <dt>Position XYZ</dt>
+                        <dd>{{ scene.positionX|default(0) }}, {{ scene.positionY|default(0) }}, {{ scene.positionZ|default(0) }}</dd>
+                    </div>
+                    <div class="share-experience__list-row">
+                        <dt>Rotation XYZ</dt>
+                        <dd>{{ scene.rotationX|default(0) }}°, {{ scene.rotationY|default(0) }}°, {{ scene.rotationZ|default(0) }}°</dd>
+                    </div>
+                    <div class="share-experience__list-row">
+                        <dt>Échelle XYZ</dt>
+                        <dd>{{ scene.scaleX|default(1) }}, {{ scene.scaleY|default(1) }}, {{ scene.scaleZ|default(1) }}</dd>
+                    </div>
+                </dl>
+            </section>
+            <section class="share-experience__section share-experience__section--tips">
+                <h3 class="share-experience__section-title">Conseils d'utilisation</h3>
+                <ul class="share-experience__tips">
+                    <li>Assurez-vous que la scène est bien éclairée pour faciliter la détection.</li>
+                    <li>Présentez le motif MindAR correspondant pour déclencher l'élément virtuel.</li>
+                    <li>Sur ordinateur, autorisez l'accès à la caméra lorsque le navigateur vous le demande.</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+</div>

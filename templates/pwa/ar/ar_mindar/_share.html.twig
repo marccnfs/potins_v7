@@ -1,0 +1,10 @@
+{% block title %}Partage{% endblock %}
+{% use "js/js_escape.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+{% block body %}
+    <div class="wrapper">
+        {{ include('pwa/ar/ar_mindar/share.html.twig') }}
+    </div>
+{% endblock %}

@@ -7,14 +7,34 @@
 
     <script src="/build/mindar/mindar-image-aframe.prod.js"></script>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+
+    {% set assetType = scene.contentType|default('model') %}
+    {% set position = [scene.positionX|default(0), scene.positionY|default(0), scene.positionZ|default(0)] %}
+    {% set rotation = [scene.rotationX|default(0), scene.rotationY|default(0), scene.rotationZ|default(0)] %}
+    {% set scale = [scene.scaleX|default(1), scene.scaleY|default(1), scene.scaleZ|default(1)] %}
+
     <a-scene mindar-image="imageTargetSrc: {{ scene.mindTargetPath }};" vr-mode-ui="enabled:false" renderer="colorManagement:true">
         <a-assets>
-            <a-asset-item id="mdl" src="{{ scene.modelUrl }}"></a-asset-item>
-            {% if scene.soundUrl %}<audio id="sfx" src="{{ scene.soundUrl }}"></audio>{% endif %}
+            {% if assetType == 'video' %}
+                <video id="asset" src="{{ scene.modelUrl }}" loop muted playsinline crossorigin="anonymous"></video>
+            {% elseif assetType == 'image' %}
+                <img id="asset" src="{{ scene.modelUrl }}" crossorigin="anonymous" alt="Média 2D" />
+            {% else %}
+                <a-asset-item id="asset" src="{{ scene.modelUrl }}" crossorigin="anonymous"></a-asset-item>
+            {% endif %}
+            {% if scene.soundUrl %}<audio id="sfx" src="{{ scene.soundUrl }}" crossorigin="anonymous"></audio>{% endif %}
         </a-assets>
         <a-camera look-controls="enabled:false"></a-camera>
         <a-entity mindar-image-target="targetIndex: {{ scene.targetIndex }}">
-            <a-gltf-model src="#mdl" scale="0.5 0.5 0.5"></a-gltf-model>
+            <a-entity position="{{ position|join(' ') }}" rotation="{{ rotation|join(' ') }}" scale="{{ scale|join(' ') }}">
+                {% if assetType == 'video' %}
+                    <a-video src="#asset" width="1" height="0.56" autoplay="true"></a-video>
+                {% elseif assetType == 'image' %}
+                    <a-image src="#asset" width="1" height="1"></a-image>
+                {% else %}
+                    <a-gltf-model src="#asset"></a-gltf-model>
+                {% endif %}
+            </a-entity>
             {% if scene.soundUrl %}<a-entity sound="src:#sfx; autoplay:false; loop:true"></a-entity>{% endif %}
         </a-entity>
     </a-scene>

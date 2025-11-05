@@ -1032,6 +1032,231 @@ span[data-descr]:hover::after {
     height: 100% !important;
 }
 
+.placement-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    margin-top: 0.75rem;
+}
+
+.placement-grid__title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--gray-700);
+}
+
+.placement-grid__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.placement-grid__row label {
+    font-size: 0.8rem;
+    color: var(--gray-600);
+}
+
+.placement-grid__row input {
+    width: 96px;
+    padding: 0.35rem 0.5rem;
+    border: 1px solid var(--gray-300);
+    border-radius: 6px;
+    background: #fff;
+    text-align: right;
+}
+
+.share-panel {
+    margin-top: 2rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 16px;
+    padding: 1.75rem;
+    background: #ffffff;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.share-panel__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.share-panel .link {
+    color: var(--blue-600);
+    text-decoration: underline;
+}
+
+.share-panel__qr {
+    margin-top: 1.25rem;
+    display: flex;
+    justify-content: center;
+}
+
+.share-panel__qr-image {
+    max-width: 220px;
+    width: 100%;
+    border: 8px solid #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.12);
+}
+
+.share-experience {
+    max-width: 960px;
+    margin: 2rem auto;
+    background: #ffffff;
+    border-radius: 28px;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+}
+
+.share-experience__header {
+    padding: 2.5rem 3rem;
+    background: linear-gradient(120deg, #2563eb, #6366f1);
+    color: #ffffff;
+}
+
+.share-experience__subtitle {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin: 0;
+}
+
+.share-experience__title {
+    font-size: 2.25rem;
+    margin: 0.75rem 0 0.5rem;
+}
+
+.share-experience__target {
+    margin: 0;
+    font-size: 0.95rem;
+    opacity: 0.85;
+}
+
+.share-experience__body {
+    display: grid;
+    gap: 2rem;
+    padding: 2.5rem 3rem;
+}
+
+@media (min-width: 768px) {
+    .share-experience__body {
+        grid-template-columns: 1fr 1.2fr;
+        align-items: start;
+    }
+}
+
+.share-experience__qr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.share-experience__qr-frame {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 1.5rem;
+    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.05), 0 12px 30px rgba(15, 23, 42, 0.12);
+}
+
+.share-experience__qr-frame img {
+    width: 220px;
+    height: 220px;
+    display: block;
+}
+
+.share-experience__qr-help {
+    font-size: 0.9rem;
+    color: var(--gray-600);
+    text-align: center;
+    max-width: 240px;
+    margin: 0;
+}
+
+.share-experience__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.share-experience__section {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 1.75rem;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.share-experience__section--light {
+    background: #f8fafc;
+    box-shadow: none;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.share-experience__section--tips {
+    background: #eef2ff;
+    box-shadow: none;
+}
+
+.share-experience__section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.75rem;
+}
+
+.share-experience__section-text {
+    font-size: 0.95rem;
+    margin: 0;
+    color: var(--gray-600);
+}
+
+.share-experience__actions {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.share-experience__list {
+    margin: 0;
+    padding: 0;
+}
+
+.share-experience__list-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--gray-700);
+}
+
+.share-experience__list-row + .share-experience__list-row {
+    margin-top: 0.5rem;
+}
+
+.share-experience__list-row dt {
+    font-weight: 500;
+}
+
+.share-experience__list-row dd {
+    margin: 0;
+    font-family: monospace;
+}
+
+.share-experience__tips {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: var(--gray-700);
+    font-size: 0.9rem;
+}
+
+.share-experience__tips li + li {
+    margin-top: 0.4rem;
+}
+
+
 .becarf {
 
 }
