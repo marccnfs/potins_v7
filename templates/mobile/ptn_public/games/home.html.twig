@@ -1,0 +1,44 @@
+{% block body %}
+    <div class="games-page games-page--mobile" data-agent="{{ agent }}">
+        <section class="games-hero">
+            <div class="games-hero__content">
+                <h1>Jeux numériques</h1>
+                <p>Choisissez l'univers qui correspond à votre atelier : escape games prêts à jouer ou expériences en réalité augmentée.</p>
+            </div>
+            <div class="games-hero__meta">
+                <span class="games-count">{{ cards|length }} univers</span>
+            </div>
+        </section>
+
+        <section class="games-grid" aria-label="Univers de jeu disponibles">
+            {% for card in cards %}
+                <article class="game-card">
+                    <div class="game-card__icon" aria-hidden="true">
+                        <i class="{{ card.icon }}"></i>
+                    </div>
+                    <div class="game-card__content">
+                        <h2>{{ card.title }}</h2>
+                        <p>{{ card.description }}</p>
+                        {% if card.highlights is not empty %}
+                            <ul class="game-card__highlights">
+                                {% for highlight in card.highlights %}
+                                    <li>{{ highlight }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="game-card__actions">
+                        <a class="btn btn-primary" href="{{ path(card.route, card.routeParameters ?? {}) }}">
+                            {{ card.cta }}
+                        </a>
+                    </div>
+                </article>
+            {% endfor %}
+        </section>
+
+        <section class="games-more">
+            <h2>Bientôt de nouveaux jeux</h2>
+            <p>Nous préparons d'autres expériences pour vos animations numériques. N'hésitez pas à revenir explorer les nouveautés.</p>
+        </section>
+    </div>
+{% endblock %}

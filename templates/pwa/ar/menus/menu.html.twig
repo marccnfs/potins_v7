@@ -8,11 +8,12 @@ Attentes:
 #}
 
 
-{% set brand_route = brand_route|default('home') %}
+{% set brand_route = brand_route|default('potins_index') %}
 {% set active = active|default('') %}
 {% set nav = nav|default({
     lotus:       'ar_lotus',
-    prepareur:      'ar_prepareur',
+    prepareur:   'ar_prepareur',
+    create:      'ar_mindar_create',
     sessions:    'dashboard_my_sessions',
     mine:        'dashboard_my_escapes',
     docs:        'docs_workshop',
@@ -32,8 +33,9 @@ Attentes:
 
             <!-- centre: navigation principale -->
             <nav class="xnav__links" aria-label="Navigation principale">
-              <a class="xnav__link {{ active=='play' ? 'is-active' }}" href="{{ path(nav.lotus) }}">CDN</a>
-              <a class="xnav__link {{ active=='docs' ? 'is-active' }}" href="{{ path(nav.prepareur) }}">Creation</a>
+              {# <a class="xnav__link {{ active=='play' ? 'is-active' }}" href="{{ path(nav.lotus) }}">lotus</a>  #}
+                <a class="xnav__link {{ active=='docs' ? 'is-active' }}" href="{{ path(nav.prepareur) }}">exemples</a>
+                <a class="xnav__link {{ active=='docs' ? 'is-active' }}" href="{{ path(nav.create) }}">Création de scène</a>
             </nav>
         </div>
     </header>

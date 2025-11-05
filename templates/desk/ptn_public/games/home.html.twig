@@ -1,0 +1,50 @@
+{% block body %}
+    <div class="games-page" data-agent="{{ agent }}">
+        <section class="games-hero">
+            <div class="games-hero__content">
+                <h1>Jouer avec les Potins</h1>
+                <p>Retrouvez en un clin d'œil toutes nos expériences ludiques pour animer vos ateliers : escape games collaboratifs et parcours en réalité augmentée.</p>
+            </div>
+            <div class="games-hero__meta">
+                <span class="games-count">{{ cards|length }} univers disponibles</span>
+                <span class="games-badge">Nouveautés ajoutées régulièrement</span>
+            </div>
+        </section>
+
+        <section class="games-grid" aria-label="Univers de jeu disponibles">
+            {% for card in cards %}
+                <article class="game-card">
+                    <div class="game-card__icon" aria-hidden="true">
+                        <i class="{{ card.icon }}"></i>
+                    </div>
+                    <div class="game-card__content">
+                        <h2>{{ card.title }}</h2>
+                        <p>{{ card.description }}</p>
+                        {% if card.highlights is not empty %}
+                            <ul class="game-card__highlights">
+                                {% for highlight in card.highlights %}
+                                    <li>{{ highlight }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="game-card__actions">
+                        <a class="btn btn-primary" href="{{ path(card.route, card.routeParameters ?? {}) }}">
+                            {{ card.cta }}
+                        </a>
+                    </div>
+                </article>
+            {% endfor %}
+        </section>
+
+        <section class="games-more">
+            <h2>Envie d'aller plus loin&nbsp;?</h2>
+            <p>Nous construisons de nouveaux ateliers ludiques avec les médiathèques partenaires. Revenez régulièrement pour découvrir les prochaines expériences.</p>
+        </section>
+    </div>
+    {{ include('footer/'~agent~'/affichange_footer_rel.html.twig') }}
+{%  endblock body %}
+{% use "js/js_public.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
