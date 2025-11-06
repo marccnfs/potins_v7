@@ -21,7 +21,7 @@
                             {% elseif assetType == 'image' %}
                                 <img id="asset" src="{{ modelSrc }}" crossorigin="anonymous" alt="Média 2D" />
                             {% else %}
-                                <a-asset-item id="asset" src="{{ modelSrc }}" crossorigin="anonymous"></a-asset-item>
+                                <a-entity gltf-model="#asset" animation-mixer></a-entity>
                             {% endif %}
                             {% if soundSrc %}
                                 <audio id="sfx" src="{{ soundSrc }}" crossorigin="anonymous"></audio>

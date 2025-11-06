@@ -65,7 +65,7 @@
                                 {% elseif assetType == 'image' %}
                                     <a-image src="#asset" width="1" height="1"></a-image>
                                 {% else %}
-                                    <a-gltf-model src="#asset" animation-mixer></a-gltf-model>
+                                    <a-entity gltf-model="#asset" animation-mixer></a-entity>
                                 {% endif %}
                             </a-entity>
                             {% if soundSrc %}
