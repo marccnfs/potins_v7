@@ -1,8 +1,4 @@
 {% extends 'pwa/ar/base.html.twig' %}
-{% block core %}
-    {{ include('pwa/ar/'~directory~'/'~vartwig.maintwig~'.html.twig') }}
-{% endblock core%}
-
 {% block javascripts %}
     {{ parent() }}
     {% if directory starts with 'ar_mindar' %}
@@ -14,3 +10,8 @@
         {% endif %}
     {% endif %}
 {% endblock %}
+{% block core %}
+    {{ include('pwa/ar/'~directory~'/'~vartwig.maintwig~'.html.twig') }}
+{% endblock core%}
+
+

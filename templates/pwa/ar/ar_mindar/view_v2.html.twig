@@ -6,48 +6,46 @@
     {% set mindTargetSrc = scene.mindTargetPath ? (scene.mindTargetPath matches '/^https?:/i' ? scene.mindTargetPath : asset(scene.mindTargetPath)) : null %}
     {% set modelSrc = scene.modelUrl ? (scene.modelUrl matches '/^https?:/i' ? scene.modelUrl : asset(scene.modelUrl)) : null %}
     {% set soundSrc = scene.soundUrl ? (scene.soundUrl matches '/^https?:/i' ? scene.soundUrl : asset(scene.soundUrl)) : null %}
+    {% set targetIndex = scene.targetIndex is not same as(null) ? scene.targetIndex : 0 %}
+<a-scene
+    {% if mindTargetSrc %}mindar-image="imageTargetSrc: {{ mindTargetSrc }};"{% endif %}
+    color-space="sRGB"
+    renderer="colorManagement:true; physicallyCorrectLights:true"
+    device-orientation-permission-ui="enabled:false"
+    vr-mode-ui="enabled:false"
+    embedded>
+    <a-assets>
+        {% if assetType == 'video' %}
+            <video id="asset" src="{{ modelSrc }}" loop muted playsinline crossorigin="anonymous"></video>
+        {% elseif assetType == 'image' %}
+            <img id="asset" src="{{ modelSrc }}" crossorigin="anonymous" alt="Média 2D" />
+        {% elseif modelSrc %}
+            <a-asset-item id="asset" src="{{ modelSrc }}" crossorigin="anonymous"></a-asset-item>
+        {% endif %}
+        {% if soundSrc %}
+            <audio id="sfx" src="{{ soundSrc }}" crossorigin="anonymous"></audio>
+        {% endif %}
+    </a-assets>
 
-                    <a-scene
-                        {% if mindTargetSrc %}mindar-image="imageTargetSrc: {{ mindTargetSrc }};"{% endif %}
-                        color-space="sRGB"
-                        renderer="colorManagement:true; physicallyCorrectLights:true"
-                        device-orientation-permission-ui="enabled:false"
-                        vr-mode-ui="enabled:false"
-                        embedded
-                        class="ar-viewer__scene">
-                        {% if assetType in ['video', 'image'] or soundSrc %}
-                            <a-assets>
-                                {% if assetType == 'video' %}
-                                    <video id="asset" src="{{ modelSrc }}" loop muted playsinline crossorigin="anonymous"></video>
-                                {% elseif assetType == 'image' %}
-                                    <img id="asset" src="{{ modelSrc }}" crossorigin="anonymous" alt="Média 2D" />
-                                {% endif %}
-                                {% if soundSrc %}
-                                    <audio id="sfx" src="{{ soundSrc }}" crossorigin="anonymous"></audio>
-                                {% endif %}
-                            </a-assets>
-                        {% endif %}
+    <a-entity light="type: ambient; intensity: 0.7"></a-entity>
+    <a-entity light="type: directional; intensity: 0.9" position="0 1 0"></a-entity>
 
-                        <a-entity light="type: ambient; intensity: 0.7"></a-entity>
-                        <a-entity light="type: directional; intensity: 0.9" position="0 1 0"></a-entity>
-                        <a-camera look-controls="enabled:false" position="0 0 0"></a-camera>
+    <a-camera look-controls="enabled:false" position="0 0 0"></a-camera>
 
-                        <a-entity mindar-image-target="targetIndex: {{ scene.targetIndex }}">
-                            <a-entity position="{{ position|join(' ') }}" rotation="{{ rotation|join(' ') }}" scale="{{ scale|join(' ') }}">
-                                {% if assetType == 'video' %}
-                                    <a-video src="#asset" width="1" height="0.56" autoplay="true" loop="true"></a-video>
-                                {% elseif assetType == 'image' %}
-                                    <a-image src="#asset" width="1" height="1"></a-image>
-                                {% elseif modelSrc %}
-                                    <a-gltf-model src="{{ modelSrc }}" animation-mixer crossorigin="anonymous"></a-gltf-model>
-                                {% else %}
-                                    <a-entity text="value: Modèle introuvable; align: center; color: #ff4444;" position="0 0 0"></a-entity>
-                                {% endif %}
-                            </a-entity>
-                            {% if soundSrc %}
-                                <a-entity sound="src:#sfx; autoplay:false; loop:true"></a-entity>
-                            {% endif %}
-                        </a-entity>
-                    </a-scene>
+    <a-entity mindar-image-target="targetIndex: {{ targetIndex }}">
 
+            {% if assetType == 'video' %}
+                <a-video src="#asset" width="1" height="0.56" autoplay="true" loop="true"></a-video>
+            {% elseif assetType == 'image' %}
+                <a-image src="#asset" width="1" height="1"></a-image>
+            {% elseif modelSrc %}
+                <a-gltf-model gltf-model="#asset" position="{{ position|join(' ') }}" rotation="{{ rotation|join(' ') }}" scale="{{ scale|join(' ') }}" animation-mixer>
+            {% else %}
+                <a-entity text="value: Modèle introuvable; align: center; color: #ff4444;" position="0 0 0"></a-entity>
+            {% endif %}
+        {% if soundSrc %}
+            <a-entity sound="src:#sfx; autoplay:false; loop:true"></a-entity>
+        {% endif %}
+    </a-entity>
+</a-scene>
 {% endblock %}

@@ -1,0 +1,146 @@
+{% block body %}
+    {% set assetType = scene.contentType|default('model') %}
+    {% set position = [scene.positionX|default(0), scene.positionY|default(0), scene.positionZ|default(0)] %}
+    {% set rotation = [scene.rotationX|default(0), scene.rotationY|default(0), scene.rotationZ|default(0)] %}
+    {% set scale = [scene.scaleX|default(1), scene.scaleY|default(1), scene.scaleZ|default(1)] %}
+    {% set mindTargetSrc = scene.mindTargetPath ? (scene.mindTargetPath matches '/^https?:/i' ? scene.mindTargetPath : asset(scene.mindTargetPath)) : null %}
+    {% set modelSrc = scene.modelUrl ? (scene.modelUrl matches '/^https?:/i' ? scene.modelUrl : asset(scene.modelUrl)) : null %}
+    {% set soundSrc = scene.soundUrl ? (scene.soundUrl matches '/^https?:/i' ? scene.soundUrl : asset(scene.soundUrl)) : null %}
+    {% set targetIndex = scene.targetIndex is not same as(null) ? scene.targetIndex : 0 %}
+
+<section class="ar-section ar-section--wide">
+    <header class="ar-section__header ar-section__header--top">
+        <div class="ar-section__intro">
+            <p class="ar-section__eyebrow">Scène RA</p>
+            <h1 class="ar-section__title ar-section__title--xl">{{ scene.title }}</h1>
+            <p class="ar-section__meta">Cible : {{ scene.mindTargetPath }} — index {{ targetIndex }}</p>
+        </div>
+        <div class="ar-actions">
+            <a href="{{ path('ar_gallery') }}" class="btn btn-tertiary">Retour à la galerie</a>
+            {% if shareUrl %}
+                <a href="{{ shareUrl }}" target="_blank" rel="noopener" class="btn btn-secondary">Page de partage</a>
+            {% endif %}
+            {% if experienceUrl %}
+                <a href="{{ experienceUrl }}" target="_blank" rel="noopener" class="btn">Lancer l'expérience</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="ar-layout ar-layout--with-aside">
+        <div class="ar-layout__main">
+            <div class="ar-viewer">
+                <div class="ar-viewer__hint">
+                    <span>Cadrez le motif sélectionné</span>
+                    <span>Autorisez la caméra si besoin</span>
+                </div>
+                <div class="ar-viewer__canvas">
+                    <a-scene
+                        {% if mindTargetSrc %}mindar-image="imageTargetSrc: {{ mindTargetSrc }};"{% endif %}
+                        color-space="sRGB"
+                        renderer="colorManagement:true; physicallyCorrectLights:true"
+                        device-orientation-permission-ui="enabled:false"
+                        vr-mode-ui="enabled:false"
+                        embedded
+                        class="ar-viewer__scene">
+                            <a-assets>
+                                {% if assetType == 'video' %}
+                                    <video id="asset" src="{{ modelSrc }}" loop muted playsinline crossorigin="anonymous"></video>
+                                {% elseif assetType == 'image' %}
+                                    <img id="asset" src="{{ modelSrc }}" crossorigin="anonymous" alt="Média 2D" />
+                                {% endif %}
+                                {% if soundSrc %}
+                                    <audio id="sfx" src="{{ soundSrc }}" crossorigin="anonymous"></audio>
+                                {% endif %}
+                            </a-assets>
+                        <a-entity light="type: ambient; intensity: 0.7"></a-entity>
+                        <a-entity light="type: directional; intensity: 0.9" position="0 1 0"></a-entity>
+                        <a-camera look-controls="enabled:false" position="0 0 0"></a-camera>
+
+                        <a-entity mindar-image-target="targetIndex: {{ targetIndex }}">
+                            <a-entity position="{{ position|join(' ') }}" rotation="{{ rotation|join(' ') }}" scale="{{ scale|join(' ') }}">
+                                {% if assetType == 'video' %}
+                                    <a-video src="#asset" width="1" height="0.56" autoplay="true" loop="true"></a-video>
+                                {% elseif assetType == 'image' %}
+                                    <a-image src="#asset" width="1" height="1"></a-image>
+                                {% elseif modelSrc %}
+                                    <a-entity gltf-model="#asset" animation-mixer></a-entity>
+                                {% else %}
+                                    <a-entity text="value: Modèle introuvable; align: center; color: #ff4444;" position="0 0 0"></a-entity>
+                                {% endif %}
+                            </a-entity>
+                            {% if soundSrc %}
+                                <a-entity sound="src:#sfx; autoplay:false; loop:true"></a-entity>
+                                {% endif %}
+                            </a-entity>
+                            {% if soundSrc %}
+                                <a-entity sound="src:#sfx; autoplay:false; loop:true"></a-entity>
+                            {% endif %}
+                        </a-entity>
+                    </a-scene>
+                    </a-scene>
+                </div>
+            </div>
+        </div>
+
+        <section class="ar-panel">
+            <h2 class="ar-panel__title">Détails techniques</h2>
+            <dl class="ar-panel__list">
+                <div>
+                    <dt>Type de contenu</dt>
+                    <dd>{{ assetType|capitalize }}</dd>
+                </div>
+                <div>
+                    <dt>Média</dt>
+                    <dd>{{ scene.modelUrl }}</dd>
+                </div>
+                {% if scene.soundUrl %}
+                    <div>
+                        <dt>Ambiance sonore</dt>
+                        <dd>{{ scene.soundUrl }}</dd>
+                    </div>
+                {% endif %}
+                <div>
+                    <dt>Position XYZ</dt>
+                    <dd>{{ position|join(', ') }}</dd>
+                </div>
+                <div>
+                    <dt>Rotation XYZ (°)</dt>
+                    <dd>{{ rotation|join(', ') }}</dd>
+                </div>
+                <div>
+                    <dt>Échelle XYZ</dt>
+                    <dd>{{ scale|join(', ') }}</dd>
+                </div>
+                <div>
+                    <dt>Créée le</dt>
+                    <dd>{{ scene.createdAt|date('d/m/Y H:i') }}</dd>
+                </div>
+            </dl>
+        </section>
+
+        <aside class="ar-layout__aside">
+            {% if shareQr %}
+                <section class="ar-panel ar-panel--center">
+                    <h2 class="ar-panel__title">Tester sur mobile</h2>
+                    <p class="ar-panel__text">Scannez ce QR code pour ouvrir l'expérience instantanément.</p>
+                    <div class="ar-panel__qr">
+                        <img src="{{ shareQr }}" alt="QR code de l'expérience {{ scene.title }}" />
+                    </div>
+                    {% if experienceUrl %}
+                        <p class="ar-panel__note">{{ experienceUrl }}</p>
+                    {% endif %}
+                </section>
+            {% endif %}
+
+            <section class="ar-panel">
+                <h2 class="ar-panel__title">Conseils d'utilisation</h2>
+                <ul class="ar-panel__tips">
+                    <li>Présentez l'image cible bien éclairée pour déclencher la scène.</li>
+                    <li>Stabilisez l'appareil pour une détection plus rapide.</li>
+                    <li>Évitez les surfaces réfléchissantes ou transparentes derrière le motif.</li>
+                </ul>
+            </section>
+        </aside>
+    </div>
+</section>
+{% endblock %}
