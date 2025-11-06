@@ -1,8 +1,8 @@
 {% extends 'pwa/ar/base.html.twig' %}
-{% use 'pwa/ar/menu.html.twig' %}
 {% block core %}
     {{ include('pwa/ar/'~directory~'/'~vartwig.maintwig~'.html.twig') }}
 {% endblock core%}
+
 {% block javascripts %}
     {{ parent() }}
     {% if directory starts with 'ar_mindar' %}

@@ -27,7 +27,7 @@ class ArSceneUiController extends AbstractController
             );
         }, $scenes);
 
-        return $this->renderAr('ar_mindar','_gallery', [
+        return $this->renderAr('ar_mindar','_gallery', 1,[
             'sceneCards' => $sceneCards,
         ]);
     }
@@ -35,7 +35,7 @@ class ArSceneUiController extends AbstractController
     #[Route('/ra/view/{id}', name: 'ar_view')]
     public function view(ArScene $scene, MobileLinkManager $qrBuilder): Response
     {
-        return $this->renderAr('ar_mindar','_view', array_merge(
+        return $this->renderAr('ar_mindar','_view',2, array_merge(
             ['scene' => $scene],
             $this->buildSharePayload($scene, $qrBuilder)
         ));
@@ -49,7 +49,7 @@ class ArSceneUiController extends AbstractController
             throw $this->createNotFoundException('Scène RA introuvable.');
         }
 
-        return $this->renderAr('ar_mindar', '_view', array_merge(
+        return $this->renderAr('ar_mindar', '_view', 2,array_merge(
             ['scene' => $scene],
             $this->buildSharePayload($scene, $qrBuilder)
         ));
@@ -63,7 +63,7 @@ class ArSceneUiController extends AbstractController
             throw $this->createNotFoundException('Scène RA introuvable.');
         }
 
-        return $this->renderAr('ar_mindar', '_share', array_merge(
+        return $this->renderAr('ar_mindar', '_share',2, array_merge(
             ['scene' => $scene],
             $this->buildSharePayload($scene, $qrBuilder)
         ));
@@ -94,15 +94,21 @@ class ArSceneUiController extends AbstractController
         ];
     }
 
-    private function renderAr(string $directory, string $twig, array $payload = []): Response
+    private function renderAr(string $directory, string $twig, int $h, array $payload = []): Response
     {
 
         $menuNav = $this->requireMenuNav();
-        $vartwig = $menuNav->templatepotins( $twig,Links::ACCUEIL);
-
-        return $this->render( 'pwa/ar/home.html.twig',array_merge([
-            'directory' => $directory,
-            'vartwig' => $vartwig,
-        ], $payload));
+        $vartwig = $menuNav->templatepotins($twig, Links::ACCUEIL);
+        if ($h == 2) {
+            return $this->render('pwa/ar/homeview.html.twig', array_merge([
+                'directory' => $directory,
+                'vartwig' => $vartwig,
+            ], $payload));
+        } else {
+            return $this->render('pwa/ar/home.html.twig', array_merge([
+                'directory' => $directory,
+                'vartwig' => $vartwig,
+            ], $payload));
+        }
     }
 }

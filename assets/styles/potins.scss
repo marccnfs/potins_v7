@@ -6597,6 +6597,22 @@ img {
     margin: 0;
     padding: 0;
     line-height: 0;
+    height: 50px;
+}
+
+.navlogo-game {
+    box-sizing: content-box;
+}
+
+.navlogo-game svg {
+    display: inline-block;
+    vertical-align: baseline;
+    position: relative;
+    font-size: 3rem;
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+    height: 50px;
 }
 
 .head-bull_admin {

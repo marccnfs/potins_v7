@@ -3,6 +3,9 @@
     {% set position = [scene.positionX|default(0), scene.positionY|default(0), scene.positionZ|default(0)] %}
     {% set rotation = [scene.rotationX|default(0), scene.rotationY|default(0), scene.rotationZ|default(0)] %}
     {% set scale = [scene.scaleX|default(1), scene.scaleY|default(1), scene.scaleZ|default(1)] %}
+    {% set mindTargetSrc = scene.mindTargetPath ? (scene.mindTargetPath matches '/^https?:/i' ? scene.mindTargetPath : asset(scene.mindTargetPath)) : null %}
+    {% set modelSrc = scene.modelUrl ? (scene.modelUrl matches '/^https?:/i' ? scene.modelUrl : asset(scene.modelUrl)) : null %}
+    {% set soundSrc = scene.soundUrl ? (scene.soundUrl matches '/^https?:/i' ? scene.soundUrl : asset(scene.soundUrl)) : null %}
 
     <section class="ar-section ar-section--wide">
         <header class="ar-section__header ar-section__header--top">
@@ -31,7 +34,7 @@
                     </div>
                     <div class="ar-viewer__canvas">
                     <a-scene
-                        mindar-image="imageTargetSrc: {{ scene.mindTargetPath }};"
+                        {% if mindTargetSrc %}mindar-image="imageTargetSrc: {{ mindTargetSrc }};"{% endif %}
                         color-space="sRGB"
                         renderer="colorManagement:true; physicallyCorrectLights:true"
                         device-orientation-permission-ui="enabled:false"
@@ -40,14 +43,14 @@
                         class="ar-viewer__scene">
                         <a-assets>
                             {% if assetType == 'video' %}
-                                <video id="asset" src="{{ scene.modelUrl }}" loop muted playsinline crossorigin="anonymous"></video>
+                                <video id="asset" src="{{ modelSrc }}" loop muted playsinline crossorigin="anonymous"></video>
                             {% elseif assetType == 'image' %}
-                                <img id="asset" src="{{ scene.modelUrl }}" crossorigin="anonymous" alt="Média 2D" />
+                                <img id="asset" src="{{ modelSrc }}" crossorigin="anonymous" alt="Média 2D" />
                             {% else %}
-                                <a-asset-item id="asset" src="{{ scene.modelUrl }}" crossorigin="anonymous"></a-asset-item>
+                                <a-asset-item id="asset" src="{{ modelSrc }}" crossorigin="anonymous"></a-asset-item>
                             {% endif %}
-                            {% if scene.soundUrl %}
-                                <audio id="sfx" src="{{ scene.soundUrl }}" crossorigin="anonymous"></audio>
+                            {% if soundSrc %}
+                                <audio id="sfx" src="{{ soundSrc }}" crossorigin="anonymous"></audio>
                             {% endif %}
                         </a-assets>
 
@@ -65,7 +68,7 @@
                                     <a-gltf-model src="#asset" animation-mixer></a-gltf-model>
                                 {% endif %}
                             </a-entity>
-                            {% if scene.soundUrl %}
+                            {% if soundSrc %}
                                 <a-entity sound="src:#sfx; autoplay:false; loop:true"></a-entity>
                             {% endif %}
                         </a-entity>

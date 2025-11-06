@@ -311,16 +311,38 @@
 
 .ar-viewer__canvas {
     width: 100%;
-    min-height: 520px;
+    min-height: 320px;
     background: #000000;
+    aspect-ratio: 3 / 4;
+}
+
+@media (min-width: 768px) {
+    .ar-viewer__canvas {
+        min-height: 520px;
+        aspect-ratio: 16 / 9;
+    }
 }
 
 .ar-viewer__scene {
+    position: absolute !important;
+    inset: 0;
     width: 100% !important;
     height: 100% !important;
     display: block;
 }
+.ar-viewer__scene .a-canvas,
+.ar-viewer__scene canvas,
+.ar-viewer__scene video,
+.ar-viewer__scene .mindar-ui-overlay {
+    position: absolute !important;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
 
+.ar-viewer__scene video {
+    object-fit: cover;
+}
 .ar-panel {
     border: 1px solid #d9dbe9;
     border-radius: 16px;
