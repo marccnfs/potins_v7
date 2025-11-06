@@ -15,18 +15,18 @@
                         vr-mode-ui="enabled:false"
                         embedded
                         class="ar-viewer__scene">
-                        <a-assets>
-                            {% if assetType == 'video' %}
-                                <video id="asset" src="{{ modelSrc }}" loop muted playsinline crossorigin="anonymous"></video>
-                            {% elseif assetType == 'image' %}
-                                <img id="asset" src="{{ modelSrc }}" crossorigin="anonymous" alt="Média 2D" />
-                            {% else %}
-                                <a-entity gltf-model="#asset" animation-mixer></a-entity>
-                            {% endif %}
-                            {% if soundSrc %}
-                                <audio id="sfx" src="{{ soundSrc }}" crossorigin="anonymous"></audio>
-                            {% endif %}
-                        </a-assets>
+                        {% if assetType in ['video', 'image'] or soundSrc %}
+                            <a-assets>
+                                {% if assetType == 'video' %}
+                                    <video id="asset" src="{{ modelSrc }}" loop muted playsinline crossorigin="anonymous"></video>
+                                {% elseif assetType == 'image' %}
+                                    <img id="asset" src="{{ modelSrc }}" crossorigin="anonymous" alt="Média 2D" />
+                                {% endif %}
+                                {% if soundSrc %}
+                                    <audio id="sfx" src="{{ soundSrc }}" crossorigin="anonymous"></audio>
+                                {% endif %}
+                            </a-assets>
+                        {% endif %}
 
                         <a-entity light="type: ambient; intensity: 0.7"></a-entity>
                         <a-entity light="type: directional; intensity: 0.9" position="0 1 0"></a-entity>
@@ -38,8 +38,10 @@
                                     <a-video src="#asset" width="1" height="0.56" autoplay="true" loop="true"></a-video>
                                 {% elseif assetType == 'image' %}
                                     <a-image src="#asset" width="1" height="1"></a-image>
+                                {% elseif modelSrc %}
+                                    <a-gltf-model src="{{ modelSrc }}" animation-mixer crossorigin="anonymous"></a-gltf-model>
                                 {% else %}
-                                    <a-gltf-model src="#asset" animation-mixer></a-gltf-model>
+                                    <a-entity text="value: Modèle introuvable; align: center; color: #ff4444;" position="0 0 0"></a-entity>
                                 {% endif %}
                             </a-entity>
                             {% if soundSrc %}
