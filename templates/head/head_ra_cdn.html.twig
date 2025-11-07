@@ -19,7 +19,16 @@
 <meta property="og:image" content="https://potinsnumeriques.fr/imgdoc/potins/logopotins.png">
 <meta property="og:image:secure_url" content="https://potinsnumeriques.fr/imgdoc/potins/logopotins.png">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-
+{%  if switch is defined %}
+    {% if switch == 0 %}
+        <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
+    {% elseif switch == 1 %}
+        <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/dist/mindar-image.prod.js"></script>
+        <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    {% endif %}
+{% endif %}
 
 
 

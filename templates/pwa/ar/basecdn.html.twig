@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="FR">
+<head>
+    {% block head %}
+        <title>{% block title %}{{vartwig.title}}{% endblock %}</title>
+        {{ include('head/head_ra_cdn.html.twig') }}
+    {% endblock head %}
+        {{ encore_entry_link_tags('app') }}
+</head>
+<body>
+{% block core %}
+    {% block body %}
+    {% endblock body %}
+{% endblock core %}
+{% block javascripts %}
+{% endblock %}
+</body>
+</html>

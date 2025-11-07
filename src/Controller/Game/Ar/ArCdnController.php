@@ -17,44 +17,52 @@ class ArCdnController extends AbstractController
     #[Route('/ra/test0', name: 'ar_test0')] // card simple avec gld
     public function test0(): Response
     {
-        return $this->renderAr('ar_gen','_test0');
+        return $this->renderAr('ar_gen','_test0',0);
     }
 
     #[Route('/ra/test1', name: 'ar_test1')] // multi scene (ours et panda)
     public function test1(): Response
     {
-        return $this->renderAr('ar_gen','_test1');
+        return $this->renderAr('ar_gen','_test1',0);
     }
 
-    #[Route('/ra/minimal', name: 'ar_minimal')]
+    #[Route('/ra/minimal', name: 'ar_test2')]
     public function testMinimal(): Response
     {
-        return $this->renderAr('ar_gen','_minimal');
+        return $this->renderAr('ar_gen','_minimal',0);
     }
 
+    #[Route('/ra/test3', name: 'ar_test3')]
+    public function test3(): Response
+    {
+        return $this->renderAr('ar_gen','_test3',0);
+    }
 
-    #[Route('/ra/lotus', name: 'ar_lotus')]
-    public function lotus() {
-        return $this->renderAr('ar_cdn','_lotus');
+    #[Route('/ra/choice', name: 'ar_choice')]
+    public function choice() {
+        return $this->renderAr('ar_cdn','_choice',1);
     }
 
     #[Route('/ra/prepareur', name: 'ar_prepareur')]
     public function prepareur(): Response
     {
-        return $this->renderAr('ar_cdn','_prepareur');
+        return $this->renderAr('ar_cdn','_prepareur',0);
     }
 
-    private function renderAr(string $directory, string $twig): Response
+    private function renderAr(string $directory, string $twig,int $switch): Response
     {
-
         $menuNav = $this->requireMenuNav();
-
-        $vartwig = $menuNav->templatepotins( $twig,Links::ACCUEIL);
-
-        return $this->render( 'pwa/ar/home.html.twig',[
-            'directory' => $directory,
-            'vartwig' => $vartwig,
-        ]);
+        if($switch==0){
+            return $this->render( "pwa/ar/ar_gen/".$twig.".html.twig");
+        }
+        else {
+            $vartwig = $menuNav->templatepotins( $twig,Links::ACCUEIL);
+            return $this->render( 'pwa/ar/homecdn.html.twig',[
+                'directory' => $directory,
+                'vartwig' => $vartwig,
+                'switch' => $switch,
+            ]);
+        }
     }
 
 }
