@@ -19,7 +19,7 @@ class ArPack
     private string $name;
 
     #[ORM\Column(length: 255)]
-    private string $mindPath;
+    private string $mindPath = '';
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $pathJson = null;
