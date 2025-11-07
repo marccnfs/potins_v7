@@ -189,12 +189,24 @@ class ArPackController extends AbstractController
 
                 $modelFiles = $form->get('modelFiles')->getData();
                 if (is_array($modelFiles) && !empty($modelFiles)) {
-                    $modelsDir = $packDir . '/models';
-                    if ($fs->exists($modelsDir)) {
-                        $fs->remove($modelsDir);
-                    }
+
                     $storedModels = $this->storeModelFiles($modelFiles, $packDir, $currentSafeDir, $fs, $slugger);
-                    $pack->setModels($storedModels !== [] ? $storedModels : null);
+                    if ($storedModels !== []) {
+                        $existingModels = $pack->getModels();
+                        $combined = array_merge($existingModels, $storedModels);
+                        $deduplicated = [];
+
+                        foreach ($combined as $asset) {
+                            if (!is_array($asset)) {
+                                continue;
+                            }
+
+                            $key = isset($asset['path']) ? (string) $asset['path'] : spl_object_hash((object) $asset);
+                            $deduplicated[$key] = $asset;
+                        }
+
+                        $pack->setModels($deduplicated !== [] ? array_values($deduplicated) : null);
+                    }
                 }
 
                 $targetImages = $form->get('targetImages')->getData();
