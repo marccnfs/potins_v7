@@ -71,7 +71,7 @@ class ArPackImportType extends AbstractType
                 'multiple' => true,
                 'help' => 'Ajoutez des fichiers .glb, .mp4/.webm ou des images complémentaires.',
                 'attr' => [
-                    'accept' => '.glb,model/gltf-binary,video/mp4,video/webm,image/jpeg,image/png,image/gif',
+                    'accept' => '.glb,.gltf,.json,model/gltf-binary,model/gltf+json,application/json,video/mp4,video/webm,image/jpeg,image/png,image/gif',
                 ],
                 'constraints' => [
                     new All([
@@ -82,6 +82,8 @@ class ArPackImportType extends AbstractType
                                     'model/gltf-binary',
                                     'model/gltf+json',
                                     'application/octet-stream',
+                                    'application/json',
+                                    'text/json',
                                     'video/mp4',
                                     'video/webm',
                                     'video/ogg',
@@ -90,7 +92,7 @@ class ArPackImportType extends AbstractType
                                     'image/png',
                                     'image/gif',
                                 ],
-                                'mimeTypesMessage' => 'Formats autorisés : .glb, .mp4, .webm, .jpg, .png, .gif',
+                                'mimeTypesMessage' => 'Formats autorisés : .glb, .gltf, .json, .mp4, .webm, .jpg, .png, .gif',
                             ]),
                         ],
                     ]),

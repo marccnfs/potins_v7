@@ -134,6 +134,7 @@
                                 data-model-name="{{ model.name }}"
                                 data-model-description="{{ model.description|default('') }}"
                                 data-model-emoji="{{ model.emoji|default('') }}"
+                                data-model-type="{{ model.type|default('model') }}"
                                 {% if loop.first %}data-model-default="1"{% endif %}>
                             <span class="model-card__icon" aria-hidden="true">{{ model.emoji|default('🧊') }}</span>
                             <span class="model-card__title">{{ model.name }}</span>

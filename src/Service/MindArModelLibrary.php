@@ -27,6 +27,7 @@ class MindArModelLibrary
                 'path' => '/build/models/lotus.glb',
                 'description' => 'Un lotus flottant, idéal pour les scènes calmes ou méditatives.',
                 'emoji' => '🪷',
+                'type' => 'model',
             ],
             [
                 'id' => 'rock',
@@ -34,6 +35,7 @@ class MindArModelLibrary
                 'path' => '/build/models/rock.glb',
                 'description' => 'Un rocher texturé pour ancrer vos éléments dans un décor naturel.',
                 'emoji' => '🪨',
+                'type' => 'model',
             ],
             [
                 'id' => 'bamboo',
@@ -41,6 +43,7 @@ class MindArModelLibrary
                 'path' => '/build/models/bamboo.glb',
                 'description' => 'Un bosquet de bambous pour ajouter une ambiance végétale et zen.',
                 'emoji' => '🎋',
+                'type' => 'model',
             ],
         ];
     }

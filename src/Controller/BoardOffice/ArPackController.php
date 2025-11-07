@@ -271,6 +271,8 @@ class ArPackController extends AbstractController
             $fs->mkdir($targetDir);
         }
 
+        $metadataCatalog = $this->collectModelMetadata($files);
+
         $stored = [];
         foreach ($files as $file) {
             if (!$file instanceof UploadedFile) {
@@ -278,28 +280,188 @@ class ArPackController extends AbstractController
             }
 
             $extension = $file->guessExtension() ?: pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION) ?: 'bin';
-            $baseName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-            $safeName = strtolower((string) $slugger->slug($baseName ?: 'asset'));
+            $baseName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) ?: '';
+            $safeName = strtolower((string) $slugger->slug($baseName !== '' ? $baseName : 'asset'));
             $unique = str_replace('.', '', uniqid('', true));
-            $finalName = sprintf('%s-%s.%s', $safeName, $unique, $extension);
+            $finalName = sprintf('%s-%s.%s', $safeName !== '' ? $safeName : 'asset', $unique, $extension);
 
             $originalName = $file->getClientOriginalName();
             $mimeType = $file->getMimeType() ?: '';
 
             $file->move($targetDir, $finalName);
 
-            $type = $this->guessAssetType($mimeType, $extension);
+            if ($extension === 'json') {
+                // Les fichiers JSON servent de manifeste descriptif.
+                continue;
+            }
 
-            $stored[] = [
+            $type = $this->guessAssetType($mimeType, $extension);
+            $metadata = $this->matchModelMetadata($metadataCatalog, $originalName, $baseName, $safeName);
+
+            $name = $metadata['name'] ?? $this->humanizeModelName($baseName ?: $originalName);
+            $modelId = $metadata['id'] ?? $safeName;
+            $emoji = $metadata['emoji'] ?? null;
+            $description = $metadata['description'] ?? null;
+            $explicitType = $metadata['type'] ?? null;
+            $poster = $metadata['poster'] ?? null;
+
+            $stored[] = array_filter([
+                'id' => $modelId,
                 'filename' => $originalName,
                 'path' => sprintf('/mindar/packs/%s/models/%s', $safeDir, $finalName),
-                'type' => $type,
+                'type' => $explicitType ?? $type,
                 'mime' => $mimeType,
-            ];
+                'name' => $name,
+                'description' => $description,
+                'emoji' => $emoji,
+                'poster' => $poster,
+            ], static fn ($value) => $value !== null && $value !== '');
         }
 
         return $stored;
     }
+
+    /**
+     * @param array<int, UploadedFile> $files
+     * @return array<string, array<string, mixed>>
+     */
+    private function collectModelMetadata(array $files): array
+    {
+        $catalog = [];
+
+        foreach ($files as $file) {
+            if (!$file instanceof UploadedFile) {
+                continue;
+            }
+
+            $extension = $file->guessExtension() ?: pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION) ?: '';
+            if (strtolower((string) $extension) !== 'json') {
+                continue;
+            }
+
+            $contents = @file_get_contents($file->getPathname());
+            if ($contents === false) {
+                continue;
+            }
+
+            $decoded = json_decode($contents, true);
+            if (!is_array($decoded)) {
+                continue;
+            }
+
+            $entries = [];
+            if (isset($decoded['models']) && is_array($decoded['models'])) {
+                $entries = $decoded['models'];
+            } elseif (isset($decoded['items']) && is_array($decoded['items'])) {
+                $entries = $decoded['items'];
+            } else {
+                $entries = $decoded;
+            }
+
+            foreach ($entries as $item) {
+                if (!is_array($item)) {
+                    continue;
+                }
+
+                $keys = [];
+                foreach (['file', 'filename', 'path', 'id', 'name'] as $candidate) {
+                    if (!isset($item[$candidate])) {
+                        continue;
+                    }
+                    $normalized = $this->normalizeModelKey((string) $item[$candidate]);
+                    if ($normalized !== '') {
+                        $keys[] = $normalized;
+                    }
+                    $basenameKey = $this->normalizeModelKey((string) $item[$candidate], true);
+                    if ($basenameKey !== '' && $basenameKey !== $normalized) {
+                        $keys[] = $basenameKey;
+                    }
+                }
+
+                if ($keys === []) {
+                    continue;
+                }
+
+                $metadata = [
+                    'id' => isset($item['id']) ? (string) $item['id'] : null,
+                    'name' => isset($item['name']) ? (string) $item['name'] : null,
+                    'description' => isset($item['description']) ? (string) $item['description'] : null,
+                    'emoji' => isset($item['emoji']) ? (string) $item['emoji'] : null,
+                    'type' => isset($item['type']) ? (string) $item['type'] : null,
+                    'poster' => isset($item['poster']) ? (string) $item['poster'] : ($item['thumbnail'] ?? null),
+                ];
+
+                foreach ($keys as $key) {
+                    $catalog[$key] = $metadata;
+                }
+            }
+        }
+
+        return $catalog;
+    }
+
+    /**
+     * @param array<string, array<string, mixed>> $catalog
+     * @return array<string, mixed>
+     */
+    private function matchModelMetadata(array $catalog, string $originalName, string $baseName, string $safeName): array
+    {
+        $candidates = [
+            $this->normalizeModelKey($originalName),
+            $this->normalizeModelKey($originalName, true),
+            $this->normalizeModelKey($baseName),
+            $this->normalizeModelKey($baseName, true),
+            $this->normalizeModelKey($safeName),
+            $this->normalizeModelKey($safeName, true),
+        ];
+
+        foreach ($candidates as $candidate) {
+            if ($candidate !== '' && isset($catalog[$candidate])) {
+                return $catalog[$candidate];
+            }
+        }
+
+        return [];
+    }
+
+    private function normalizeModelKey(string $value, bool $dropExtension = false): string
+    {
+        $value = trim($value);
+        if ($value === '') {
+            return '';
+        }
+
+        $value = str_replace('\\', '/', $value);
+        $value = basename($value);
+
+        if ($dropExtension) {
+            $value = pathinfo($value, PATHINFO_FILENAME) ?: '';
+        }
+
+        $value = strtolower($value);
+
+        return $value;
+    }
+
+    private function humanizeModelName(string $name): string
+    {
+        $clean = preg_replace('/[-_]+/', ' ', $name) ?? '';
+        $clean = preg_replace('/\s+/', ' ', $clean) ?? '';
+        $clean = trim($clean);
+
+        if ($clean === '') {
+            return 'Modèle MindAR';
+        }
+
+        $lower = function_exists('mb_strtolower') ? mb_strtolower($clean, 'UTF-8') : strtolower($clean);
+
+        if (function_exists('mb_convert_case')) {
+            return mb_convert_case($lower, MB_CASE_TITLE, 'UTF-8');
+        }
+
+        return ucwords($lower);
+    }
+
 
     /**
      * @param array<int, UploadedFile> $files

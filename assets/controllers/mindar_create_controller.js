@@ -51,6 +51,8 @@ export default class extends Controller {
         this.isSaving = false;
         this._clearStatus();
 
+        this.defaultModelLibrary = this._snapshotModelLibrary();
+
         if (this.hasPackTarget) {
             if (this.packTarget.value) {
                 this.packChanged();
@@ -88,15 +90,18 @@ export default class extends Controller {
             this._resetThumbs();
             this._resetPackPreview();
             this._updatePrintLinks(null);
+            this._updateModelLibrary([]);
             return;
         }
         const items = option ? this._parseItems(option) : [];
+        const models = option ? this._parseModels(option) : [];
         this.selectedPackName = option?.getAttribute('data-packname')?.trim() || option?.textContent?.trim() || null;
         this._resetPackPreview();
         this._setTargetInfo('Sélectionnez une image pour confirmer la détection MindAR.');
         this._populateThumbs(items);
         this._showPackThumbnail(option);
         this._updatePrintLinks(this.selectedPackName);
+        this._updateModelLibrary(models);
 
         if (this.hasTitleTarget && !this.titleTarget.value) {
             this.titleTarget.placeholder = this._defaultTitle();
@@ -273,11 +278,10 @@ export default class extends Controller {
 
     selectModel(event) {
         event?.preventDefault?.();
-        const button = event?.currentTarget;
+        const button = event?.currentTarget instanceof HTMLElement ? event.currentTarget : null;
         if (!button) {
             return;
         }
-        this._setAssetType('model');
         this._selectModelButton(button);
         this.renderPlacementPreview();
     }
@@ -299,6 +303,233 @@ export default class extends Controller {
             console.warn('Impossible de décoder les items du pack MindAR.', error);
             return [];
         }
+    }
+
+    _parseModels(option) {
+        if (!option) {
+            return [];
+        }
+
+        try {
+            const raw = option.getAttribute('data-models') || '';
+            if (!raw) {
+                return [];
+            }
+
+            const decoded = JSON.parse(raw);
+            let models = [];
+            if (Array.isArray(decoded)) {
+                models = decoded;
+            } else if (decoded && Array.isArray(decoded.models)) {
+                models = decoded.models;
+            } else if (decoded && Array.isArray(decoded.items)) {
+                models = decoded.items;
+            } else {
+                return [];
+            }
+
+            return models
+                .map((item) => this._normalizeModelFromPack(item))
+                .filter(Boolean);
+        } catch (error) {
+            console.warn('Impossible de décoder les modèles du pack MindAR.', error);
+            return [];
+        }
+    }
+
+    _updateModelLibrary(models) {
+        if (!this.hasModelChoicesTarget) {
+            return;
+        }
+
+        const fallback = Array.isArray(this.defaultModelLibrary) ? this.defaultModelLibrary : [];
+        const library = Array.isArray(models) && models.length ? models : fallback;
+
+        if (!library.length) {
+            this.modelChoicesTarget.innerHTML = '<p class="ar-form__placeholder">Aucun modèle n\'est disponible pour ce pack.</p>';
+            if (this.hasAssetTarget) {
+                this.assetTarget.value = '';
+            }
+            if (this.hasVideoInputTarget) {
+                this.videoInputTarget.value = '';
+            }
+            if (this.hasImageInputTarget) {
+                this.imageInputTarget.value = '';
+            }
+            this._highlightModel(null);
+            this._updateModelInfo();
+            return;
+        }
+
+        const hasExplicitDefault = library.some((model) => model && model.default);
+        this._renderModelChoices(library, hasExplicitDefault);
+        this._highlightModel(null);
+        this._updateModelInfo();
+
+        let defaultButton = null;
+        if (hasExplicitDefault) {
+            defaultButton = this.modelChoiceTargets.find((button) => button.hasAttribute('data-model-default')) ?? null;
+        }
+        if (!defaultButton) {
+            defaultButton = this.modelChoiceTargets[0] ?? null;
+        }
+
+        if (defaultButton) {
+            this._selectModelButton(defaultButton, { focus: false });
+        }
+    }
+
+    _renderModelChoices(models, hasExplicitDefault) {
+        if (!this.hasModelChoicesTarget) {
+            return;
+        }
+
+        const html = models
+            .map((model, index) => this._buildModelChoice(model, index, hasExplicitDefault))
+            .filter(Boolean)
+            .join('');
+
+        this.modelChoicesTarget.innerHTML = html;
+    }
+
+    _buildModelChoice(model, index, hasExplicitDefault) {
+        if (!model || !model.path) {
+            return '';
+        }
+
+        const name = model.name || this._nameFromPath(model.path);
+        const description = model.description || '';
+        const emoji = model.emoji || '🧊';
+        const type = model.type || 'model';
+        const isDefault = Boolean(model.default) || (!hasExplicitDefault && index === 0);
+
+        const attributes = [
+            'type="button"',
+            'class="model-card"',
+            'data-mindar-create-target="modelChoice"',
+            'data-action="mindar-create#selectModel"',
+            `data-model-path="${this._escapeAttr(model.path)}"`,
+            `data-model-name="${this._escapeAttr(name)}"`,
+            `data-model-description="${this._escapeAttr(description)}"`,
+            `data-model-emoji="${this._escapeAttr(emoji)}"`,
+            `data-model-type="${this._escapeAttr(type)}"`,
+        ];
+
+        if (model.id) {
+            attributes.push(`data-model-id="${this._escapeAttr(model.id)}"`);
+        }
+
+        if (model.poster) {
+            attributes.push(`data-model-poster="${this._escapeAttr(model.poster)}"`);
+        }
+
+        if (isDefault) {
+            attributes.push('data-model-default="1"');
+        }
+
+        const descriptionHtml = description
+            ? `<span class="model-card__description">${this._escapeHtml(description)}</span>`
+            : '';
+
+        return `
+            <button ${attributes.join(' ')}>
+                <span class="model-card__icon" aria-hidden="true">${this._escapeHtml(emoji || '🧊')}</span>
+                <span class="model-card__title">${this._escapeHtml(name)}</span>
+                ${descriptionHtml}
+            </button>
+        `;
+    }
+
+    _snapshotModelLibrary() {
+        if (!this.hasModelChoiceTarget) {
+            return [];
+        }
+
+        return this.modelChoiceTargets
+            .map((button) => ({
+                id: button.getAttribute('data-model-id') || '',
+                path: button.getAttribute('data-model-path') || '',
+                name: button.getAttribute('data-model-name') || '',
+                description: button.getAttribute('data-model-description') || '',
+                emoji: button.getAttribute('data-model-emoji') || '',
+                type: button.getAttribute('data-model-type') || 'model',
+                poster: button.getAttribute('data-model-poster') || '',
+                default: button.hasAttribute('data-model-default'),
+            }))
+            .filter((model) => model.path);
+    }
+
+    _normalizeModelFromPack(item) {
+        if (!item || typeof item !== 'object') {
+            return null;
+        }
+
+        const path = item.path || item.url || item.source;
+        if (!path) {
+            return null;
+        }
+
+        const mime = item.mime || item.mimetype || '';
+        let type = item.type || '';
+        if (!type && typeof mime === 'string') {
+            if (mime.startsWith('video/')) {
+                type = 'video';
+            } else if (mime.startsWith('image/')) {
+                type = 'image';
+            } else if (mime.startsWith('model/')) {
+                type = 'model';
+            }
+        }
+        if (!type) {
+            type = 'model';
+        }
+
+        return {
+            id: item.id || item.slug || '',
+            path,
+            name: item.name || this._nameFromPath(path),
+            description: item.description || '',
+            emoji: item.emoji || '',
+            type,
+            poster: item.poster || item.thumbnail || '',
+            default: Boolean(item.default || item.isDefault),
+        };
+    }
+
+    _nameFromPath(path) {
+        if (!path) {
+            return 'Modèle 3D';
+        }
+        const segments = path.split(/[\\/]/);
+        const last = segments.pop() || path;
+        const base = last.split('.')[0] || last;
+        const cleaned = base.replace(/[-_]+/g, ' ').trim();
+        if (!cleaned) {
+            return 'Modèle 3D';
+        }
+        return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+    }
+
+    _escapeAttr(value) {
+        if (value === null || value === undefined) {
+            return '';
+        }
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    }
+
+    _escapeHtml(value) {
+        if (value === null || value === undefined) {
+            return '';
+        }
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
     }
 
     _populateThumbs(items) {
@@ -483,9 +714,24 @@ export default class extends Controller {
         }
 
         const path = button.getAttribute('data-model-path');
-        if (path) {
-            this.assetTarget.value = path;
+        const type = button.getAttribute('data-model-type') || 'model';
+
+        this._setAssetType(type);
+
+        if (type === 'video' && this.hasVideoInputTarget) {
+            this.videoInputTarget.value = path || '';
+        } else if (type === 'image' && this.hasImageInputTarget) {
+            this.imageInputTarget.value = path || '';
+        } else {
+            if (this.hasVideoInputTarget) {
+                this.videoInputTarget.value = '';
+            }
+            if (this.hasImageInputTarget) {
+                this.imageInputTarget.value = '';
+            }
         }
+
+        this.assetTarget.value = path || '';
 
         this._highlightModel(button);
         this._updateModelInfo(button);
