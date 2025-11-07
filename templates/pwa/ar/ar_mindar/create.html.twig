@@ -38,6 +38,12 @@
                             {% if pack.thumbnail is defined and pack.thumbnail %}
                                 data-thumbnail="{{ pack.thumbnail }}"
                             {% endif %}
+                            {% if pack.targetImages is defined and pack.targetImages %}
+                                data-targets='{{ pack.targetImages|json_encode|e('html_attr') }}'
+                            {% endif %}
+                            {% if pack.models is defined and pack.models %}
+                                data-models='{{ pack.models|json_encode|e('html_attr') }}'
+                            {% endif %}
                             {% set items = pack.metadata.items ?? [] %}
                             {% if items is not empty %}
                             data-items='{{ items|json_encode|e('html_attr') }}'

@@ -4,17 +4,17 @@
             {{ include('desk/ptn_office/menu/websitemenu.html.twig') }}
             <div class="bo_content">
                 <header class="dashboard-header">
-                    <span class="dashboard-kicker">Importer un pack MindAR</span>
-                    <h1 class="dashboard-title">Importer un pack MindAR</h1>
-                    <p>Importez ici un fichier <code>.mind</code> généré depuis le site officiel MindAR.</p>
+                    <span class="dashboard-kicker">Pack MindAR</span>
+                    <h1 class="dashboard-title">Modifier le pack {{ pack.name }}</h1>
+                    <p>Mettre à jour les fichiers MindAR, médias associés et images cibles.</p>
                 </header>
 
                 {{ include('desk/ptn_office/partials/_alerts.html.twig') }}
 
                 {{ include('desk/ptn_office/ar/_form.html.twig', {
                     form: form,
-                    submit_label: 'Enregistrer le pack',
-                    title: 'Import',
+                    submit_label: 'Mettre à jour',
+                    title: 'Edition du pack',
                     pack: pack,
                     existingModels: existingModels|default([]),
                     existingTargets: existingTargets|default([])

@@ -3,6 +3,7 @@
 namespace App\Entity\Games;
 
 use App\Repository\ArPackRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ArPackRepository::class)]
@@ -25,6 +26,12 @@ class ArPack
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $thumbnail = null;
+
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $models = null;
+
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $targetImages = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
@@ -98,6 +105,42 @@ class ArPack
     public function setThumbnail(?string $thumbnail): static
     {
         $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function getModels(): array
+    {
+        return $this->models ?? [];
+    }
+
+    /**
+     * @param array<int, array<string, mixed>>|null $models
+     */
+    public function setModels(?array $models): static
+    {
+        $this->models = $models;
+
+        return $this;
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function getTargetImages(): array
+    {
+        return $this->targetImages ?? [];
+    }
+
+    /**
+     * @param array<int, array<string, mixed>>|null $targetImages
+     */
+    public function setTargetImages(?array $targetImages): static
+    {
+        $this->targetImages = $targetImages;
 
         return $this;
     }

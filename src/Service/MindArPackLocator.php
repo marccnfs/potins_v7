@@ -55,6 +55,15 @@ class MindArPackLocator
             'jsonPath' => $pack->getPathJson(),
             'thumbnail' => $pack->getThumbnail(),
         ];
+        $models = $pack->getModels();
+        if (!empty($models)) {
+            $data['models'] = $models;
+        }
+
+        $targets = $pack->getTargetImages();
+        if (!empty($targets)) {
+            $data['targetImages'] = $targets;
+        }
 
         $metadata = $this->extractMetadata($pack);
         if (!empty($metadata)) {
@@ -67,26 +76,38 @@ class MindArPackLocator
     private function extractMetadata(ArPack $pack): ?array
     {
         $jsonPath = $pack->getPathJson();
-        if (!$jsonPath) {
-            return null;
+        if ($jsonPath) {
+            $fullPath = $this->publicDir . $jsonPath;
+            if (is_file($fullPath)) {
+                $content = @file_get_contents($fullPath);
+                if ($content !== false) {
+                    $decoded = json_decode($content, true);
+                    if (is_array($decoded)) {
+                        $normalized = $this->normalizeMetadata($decoded);
+                        if (!empty($normalized)) {
+                            return $normalized;
+                        }
+                    }
+                }
+            }
         }
 
-        $fullPath = $this->publicDir . $jsonPath;
-        if (!is_file($fullPath)) {
-            return null;
+        $targets = $pack->getTargetImages();
+        if (!empty($targets)) {
+            $items = [];
+            foreach (array_values($targets) as $index => $target) {
+                $items[] = [
+                    'index' => $index,
+                    'label' => $target['label'] ?? ($target['filename'] ?? sprintf('Cible %d', $index + 1)),
+                    'thumb' => $target['path'] ?? null,
+                    'image' => $target['path'] ?? null,
+                ];
+            }
+
+            return ['items' => $items];
         }
 
-        $content = @file_get_contents($fullPath);
-        if ($content === false) {
             return null;
-        }
-
-        $decoded = json_decode($content, true);
-        if (!is_array($decoded)) {
-            return null;
-        }
-
-        return $this->normalizeMetadata($decoded);
     }
 
     private function normalizeMetadata(array $data): ?array

@@ -1,8 +1,10 @@
 nelmio_security:
-    # --- Mode production ---
-    # Politique CSP stricte mais compatible RA
+    # --- Mode production compatible RA / Webpack / Tailwind ---
     csp:
         enabled: true
+
+        hosts: [ ]
+        content_types: [ ]
 
         enforce:
             default-src:
@@ -10,6 +12,8 @@ nelmio_security:
 
             script-src:
                 - "'self'"
+                - "'unsafe-inline'"       # nécessaire à Stimulus/Twig inline event
+                - "'unsafe-eval'"         # nécessaire à A-Frame et MindAR
                 - "https://aframe.io"
                 - "https://cdn.jsdelivr.net"
                 - "https://unpkg.com"
@@ -21,6 +25,7 @@ nelmio_security:
 
             style-src:
                 - "'self'"
+                - "'unsafe-inline'"       # pour les styles inline de Tailwind ou Stimulus
                 - "https://fonts.googleapis.com"
 
             font-src:
@@ -33,11 +38,18 @@ nelmio_security:
                 - "data:"
                 - "blob:"
                 - "https://aframe.io"
+                - "https://cdn.jsdelivr.net"
+                - "https://unpkg.com"
+                - "https://cdnjs.cloudflare.com"
+                - "https://*"             # pour les images hébergées externes ou sous-domaines
+                - "http://127.0.0.1:*"    # utile en dev / preview locale
 
             connect-src:
                 - "'self'"
                 - "blob:"
                 - "https://aframe.io"
+                - "https://cdn.jsdelivr.net"
+                - "https://unpkg.com"
 
             media-src:
                 - "'self'"
@@ -46,11 +58,12 @@ nelmio_security:
 
             frame-src:
                 - "'self'"
+                - "https://*"  # autorise intégrations iframe externes (YouTube, etc.)
 
             object-src:
                 - "'none'"
 
-            # Si tu veux journaliser les violations CSP :
+            # Journaliser les violations CSP :
             report-uri:
                 - "/csp-report"
 
@@ -58,14 +71,10 @@ nelmio_security:
     permissions_policy:
         enabled: true
         policies:
-            camera:
-                - self
-            microphone:
-                - self
-            geolocation:
-                - self
-            fullscreen:
-                - self
+            camera: ['self']
+            microphone: ['self']
+            geolocation: ['self']
+            fullscreen: ['self']
             payment: [ ]
             usb: [ ]
 
@@ -80,4 +89,5 @@ nelmio_security:
 
     referrer_policy:
         enabled: true
-        #policy: 'strict-origin-when-cross-origin'
+        policies:
+            - 'strict-origin-when-cross-origin'

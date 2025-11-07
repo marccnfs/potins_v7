@@ -1,0 +1,61 @@
+<section class="dashboard-card">
+    <div class="dashboard-card__header">
+        <h2 class="dashboard-card__title">{{ title|default('Pack MindAR') }}</h2>
+        {% if subtitle is defined and subtitle %}
+            <p class="text-muted mb-0">{{ subtitle }}</p>
+        {% endif %}
+    </div>
+
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.mindFile) }}
+    {{ form_row(form.jsonFile) }}
+    {{ form_row(form.thumbnail) }}
+    <div class="mt-3" id="thumbnail-preview" hidden>
+        <p class="text-muted mb-2">Prévisualisation de la miniature :</p>
+        <div class="thumbnail-preview__image-wrapper">
+            <img src="" alt="Prévisualisation de la miniature" class="thumbnail-preview__image" />
+        </div>
+        <button type="button" class="btn btn-outline-secondary btn-sm mt-2" id="thumbnail-preview-reset">Retirer la miniature</button>
+    </div>
+    {{ form_row(form.modelFiles) }}
+    {{ form_row(form.targetImages) }}
+
+    {% if pack is defined and pack.thumbnail %}
+        <div class="mt-3">
+            <p class="text-muted mb-2">Miniature actuelle :</p>
+            <img src="{{ pack.thumbnail }}" alt="Miniature du pack" class="thumbnail-preview__image" style="max-width: 180px; border-radius: 8px;">
+        </div>
+    {% endif %}
+
+    {% if existingModels is defined and existingModels|length > 0 %}
+        <div class="mt-4">
+            <h3 class="h6 mb-2">Ressources enregistrées</h3>
+            <ul class="list-unstyled small">
+                {% for asset in existingModels %}
+                    <li class="mb-1">
+                        <span class="badge bg-secondary me-2">{{ asset.type|default('fichier') }}</span>
+                        <a href="{{ asset.path }}" target="_blank" rel="noopener">{{ asset.filename|default(asset.path) }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {% if existingTargets is defined and existingTargets|length > 0 %}
+        <div class="mt-4">
+            <h3 class="h6 mb-2">Images cibles disponibles</h3>
+            <div class="target-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;">
+                {% for target in existingTargets %}
+                    <figure class="text-center">
+                        <img src="{{ target.path }}" alt="{{ target.label|default('Image cible') }}" style="max-width: 100%; border-radius: 6px;">
+                        <figcaption class="small mt-1 text-muted">{{ target.label|default(target.filename|default('Image cible')) }}</figcaption>
+                    </figure>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    <button class="btn btn-primary mt-4">{{ submit_label|default('Enregistrer') }}</button>
+    {{ form_end(form) }}
+</section>

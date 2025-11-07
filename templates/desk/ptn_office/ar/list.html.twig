@@ -29,7 +29,9 @@
                                 <td>{% if pack.thumbnail %}<img src="{{ pack.thumbnail }}" width="64">{% endif %}</td>
                                 <td>
                                     <a href="{{ pack.mindPath }}" target="_blank" class="btn btn-sm btn-outline-primary">Voir</a>
+                                    <a href="{{ path('admin_ar_pack_edit', {id: pack.id}) }}" class="btn btn-sm btn-outline-secondary">✏️ Modifier</a>
                                     <form method="post" action="{{ path('admin_ar_pack_delete', {id: pack.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer ce pack ?')">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ pack.id) }}">
                                         <button class="btn btn-sm btn-danger">🗑 Supprimer</button>
                                     </form>
                                 </td>
