@@ -79,7 +79,7 @@ class ArSceneController extends AbstractController
             return $this->json(['error' => 'Payload JSON invalide.'], 400);
         }
 
-        $assetUrl = $data['assetUrl'] ?? $data['modelUrl'] ?? null;
+        $assetUrl = $data['assetUrl'] ?? $data['modelUrl'] ?? $scene->getModelUrl();
         if (!$assetUrl) {
             return $this->json(['error' => 'Aucun média sélectionné pour la scène.'], 400);
         }
