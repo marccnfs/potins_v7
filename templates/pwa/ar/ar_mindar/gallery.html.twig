@@ -65,6 +65,10 @@
                                 {% if card.shareUrl %}
                                     <a href="{{ card.shareUrl }}" target="_blank" rel="noopener" class="btn btn-tertiary">Partager</a>
                                 {% endif %}
+                                <form method="post" action="{{ path('ar_scene_delete', {id: scene.id}) }}" onsubmit="return confirm('Supprimer définitivement cette scène ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete_scene_' ~ scene.id) }}">
+                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                </form>
                             </div>
                         </footer>
                     </article>

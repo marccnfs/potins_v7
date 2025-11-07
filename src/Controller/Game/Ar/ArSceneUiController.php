@@ -7,6 +7,7 @@ use App\Entity\Games\ArScene;
 use App\Lib\Links;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -30,6 +31,23 @@ class ArSceneUiController extends AbstractController
         return $this->renderAr('ar_mindar','_gallery', 1,[
             'sceneCards' => $sceneCards,
         ]);
+    }
+
+    #[Route('/ra/gallery/{id}', name: 'ar_scene_delete', methods: ['POST'])]
+    public function delete(Request $request, ArScene $scene, EntityManagerInterface $em): Response
+    {
+        if (!$this->isCsrfTokenValid('delete_scene_' . $scene->getId(), $request->request->get('_token'))) {
+            $this->addFlash('error', "La suppression de la scène a échoué.");
+
+            return $this->redirectToRoute('ar_gallery');
+        }
+
+        $em->remove($scene);
+        $em->flush();
+
+        $this->addFlash('success', 'La scène a bien été supprimée.');
+
+        return $this->redirectToRoute('ar_gallery');
     }
 
     #[Route('/ra/view/{id}', name: 'ar_view')]
