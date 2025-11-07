@@ -279,7 +279,9 @@ class ArPackController extends AbstractController
                 continue;
             }
 
-            $extension = $file->guessExtension() ?: pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION) ?: 'bin';
+            $originalExtension = (string) pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+            $guessedExtension = $file->guessExtension() ?: '';
+            $extension = strtolower($originalExtension !== '' ? $originalExtension : ($guessedExtension !== '' ? $guessedExtension : 'bin'));
             $baseName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) ?: '';
             $safeName = strtolower((string) $slugger->slug($baseName !== '' ? $baseName : 'asset'));
             $unique = str_replace('.', '', uniqid('', true));
