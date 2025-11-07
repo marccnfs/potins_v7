@@ -1,9 +1,24 @@
+{% set initial = initialScene|default({}) %}
+{% set formMode = mode|default('create') %}
+{% set isEdit = formMode == 'edit' %}
+{% set transform = initial.transform|default({}) %}
+{% set position = transform.position|default({}) %}
+{% set rotation = transform.rotation|default({}) %}
+{% set scale = transform.scale|default({}) %}
+
 <div class="ar-section ar-section--wide"
      data-controller="mindar-create"
      data-mindar-create-scenes-endpoint-value="{{ path('api_ar_scene_create') }}"
      data-mindar-create-upload-endpoint-value="{{ path('api_upload_mind') }}"
-     data-mindar-create-cancel-url-value="{{ path('ar_gallery') }}">
-    <h1 class="ar-section__title">Créateur de scène RA (MindAR)</h1>
+     data-mindar-create-cancel-url-value="{{ path('ar_gallery') }}"
+     data-mindar-create-mode-value="{{ isEdit ? 'edit' : 'create' }}"
+    {% if isEdit and initial.id is defined %}
+        data-mindar-create-update-endpoint-value="{{ path('api_ar_scene_update', {id: initial.id}) }}"
+    {% endif %}
+    {% if initial is not empty %}
+    data-mindar-create-initial-scene-value="{{ initial|json_encode|e('html_attr') }}"
+    {% endif %}>
+    <h1 class="ar-section__title">{{ isEdit ? 'Modifier la scène RA' : 'Créateur de scène RA (MindAR)' }}</h1>
 
     <form id="form-create" class="ar-form" data-mindar-create-target="form">
         <div class="form-group">
@@ -13,7 +28,7 @@
                    name="title"
                    data-mindar-create-target="title"
                    placeholder="Ma scène RA"
-                   value="">
+                   value="{{ initial.title|default('') }}">
         </div>
 
         <!-- Sélecteur de pack -->
@@ -28,7 +43,7 @@
                     data-action="change->mindar-create#packChanged">
 
                 {% if packs|length > 0 %}
-                <option value="" selected disabled>Choisissez un pack MindAR…</option>
+                    <option value="" {% if not isEdit %}selected{% endif %} disabled>Choisissez un pack MindAR…</option>
                     {% for pack in packs %}
                         <option value="{{ pack.mindPath }}"
                                 data-packname="{{ pack.name }}"
@@ -47,12 +62,25 @@
                             {% set items = pack.metadata.items ?? [] %}
                             {% if items is not empty %}
                             data-items='{{ items|json_encode|e('html_attr') }}'
-                            {% endif %}>
+                            {% endif %}
+                            {% set selectedMindPath = initial.mindTargetPath|default(null) %}
+                            {% if selectedMindPath and pack.mindPath == selectedMindPath %}selected{% endif %}>
                             {{ pack.name }}
                         </option>
                     {% endfor %}
                 {% else %}
                     <option value="" selected disabled>Aucun pack disponible </option>
+                {% endif %}
+                {% if isEdit and initial.mindTargetPath is defined and initial.mindTargetPath %}
+                    {% set hasExistingPath = false %}
+                    {% for pack in packs %}
+                        {% if pack.mindPath == initial.mindTargetPath %}
+                            {% set hasExistingPath = true %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if not hasExistingPath %}
+                        <option value="{{ initial.mindTargetPath }}" data-packname="Pack existant" selected>Pack existant</option>
+                    {% endif %}
                 {% endif %}
             </select>
 
@@ -73,7 +101,7 @@
             <p class="ar-form__info" data-mindar-create-target="targetInfo">
                 Sélectionnez une image pour confirmer la détection MindAR.
             </p>
-            <input type="hidden" id="targetIndex" name="targetIndex" value="" data-mindar-create-target="targetIndex">
+            <input type="hidden" id="targetIndex" name="targetIndex" value="{{ initial.targetIndex|default('') }}" data-mindar-create-target="targetIndex">
         </div>
 
         {% set hasModels = models is defined and models|length > 0 %}
@@ -91,7 +119,7 @@
                            class="radio"
                            data-mindar-create-target="assetType"
                            data-action="mindar-create#assetTypeChanged"
-                           checked>
+                           {% if initial.contentType|default('model') == 'model' %}checked{% endif %}>
                     <span>Modèle 3D (.glb)</span>
                 </label>
                 <label class="ar-form__option">
@@ -100,7 +128,8 @@
                            value="video"
                            class="radio"
                            data-mindar-create-target="assetType"
-                           data-action="mindar-create#assetTypeChanged">
+                           data-action="mindar-create#assetTypeChanged"
+                           {% if initial.contentType|default('model') == 'video' %}checked{% endif %}>
                     <span>Vidéo (mp4/webm)</span>
                 </label>
                 <label class="ar-form__option">
@@ -109,13 +138,14 @@
                            value="image"
                            class="radio"
                            data-mindar-create-target="assetType"
-                           data-action="mindar-create#assetTypeChanged">
+                           data-action="mindar-create#assetTypeChanged"
+                           {% if initial.contentType|default('model') == 'image' %}checked{% endif %}>
                     <span>Image 2D (png/jpg)</span>
                 </label>
             </div>
         </fieldset>
 
-        <input type="hidden" id="asset" name="asset" data-mindar-create-target="asset" value="">
+        <input type="hidden" id="asset" name="asset" data-mindar-create-target="asset" value="{{ initial.assetUrl|default('') }}">
 
         <div class="form-group" data-mindar-create-target="modelSection">
             <label class="block text-sm font-medium text-gray-700 mb-1" for="asset">
@@ -164,7 +194,8 @@
                    class="form-control"
                    placeholder="https://cdn.example.com/videos/ar.mp4"
                    data-mindar-create-target="videoInput"
-                   data-action="input->mindar-create#updateAssetFromInput change->mindar-create#updateAssetFromInput">
+                   data-action="input->mindar-create#updateAssetFromInput change->mindar-create#updateAssetFromInput"
+                   value="{{ initial.contentType|default('model') == 'video' ? initial.assetUrl|default('') : '' }}">
         </div>
 
         <div class="form-group hidden" data-mindar-create-target="imageSection">
@@ -177,15 +208,19 @@
                    class="form-control"
                    placeholder="https://cdn.example.com/images/overlay.png"
                    data-mindar-create-target="imageInput"
-                   data-action="input->mindar-create#updateAssetFromInput change->mindar-create#updateAssetFromInput">
+                   data-action="input->mindar-create#updateAssetFromInput change->mindar-create#updateAssetFromInput"
+                   value="{{ initial.contentType|default('model') == 'image' ? initial.assetUrl|default('') : '' }}">
         </div>
 
         <div class="form-group">
             <label for="sound">Ambiance sonore</label>
             <select id="sound" name="sound" class="form-control ar-form__select" data-mindar-create-target="sound">
-                <option value="">Aucune</option>
-                <option value="/build/audio/forest.mp3">Forêt</option>
-                <option value="/build/audio/water.mp3">Eau</option>
+                <option value="" {% if initial.soundUrl is not defined or not initial.soundUrl %}selected{% endif %}>Aucune</option>
+                <option value="/build/audio/forest.mp3" {% if initial.soundUrl|default('') == '/build/audio/forest.mp3' %}selected{% endif %}>Forêt</option>
+                <option value="/build/audio/water.mp3" {% if initial.soundUrl|default('') == '/build/audio/water.mp3' %}selected{% endif %}>Eau</option>
+                {% if initial.soundUrl is defined and initial.soundUrl and initial.soundUrl not in ['/build/audio/forest.mp3', '/build/audio/water.mp3'] %}
+                    <option value="{{ initial.soundUrl }}" selected>{{ initial.soundUrl }}</option>
+                {% endif %}
             </select>
         </div>
 
@@ -197,45 +232,45 @@
                     <h3 class="placement-grid__title">Position</h3>
                     <div class="placement-grid__row">
                         <label for="positionX">X</label>
-                        <input type="number" step="0.01" id="positionX" value="0" data-mindar-create-target="positionX" data-action="input->mindar-create#transformChanged">
+                        <input type="number" step="0.01" id="positionX" value="{{ position.x|default(0) }}" data-mindar-create-target="positionX" data-action="input->mindar-create#transformChanged">
                     </div>
                     <div class="placement-grid__row">
                         <label for="positionY">Y</label>
-                        <input type="number" step="0.01" id="positionY" value="0" data-mindar-create-target="positionY" data-action="input->mindar-create#transformChanged">
+                        <input type="number" step="0.01" id="positionY" value="{{ position.y|default(0) }}" data-mindar-create-target="positionY" data-action="input->mindar-create#transformChanged">
                     </div>
                     <div class="placement-grid__row">
                         <label for="positionZ">Z</label>
-                        <input type="number" step="0.01" id="positionZ" value="0" data-mindar-create-target="positionZ" data-action="input->mindar-create#transformChanged">
+                        <input type="number" step="0.01" id="positionZ" value="{{ position.z|default(0) }}" data-mindar-create-target="positionZ" data-action="input->mindar-create#transformChanged">
                     </div>
                 </div>
                 <div>
                     <h3 class="placement-grid__title">Rotation (°)</h3>
                     <div class="placement-grid__row">
                         <label for="rotationX">X</label>
-                        <input type="number" step="1" id="rotationX" value="0" data-mindar-create-target="rotationX" data-action="input->mindar-create#transformChanged">
+                        <input type="number" step="1" id="rotationX" value="{{ rotation.x|default(0) }}" data-mindar-create-target="rotationX" data-action="input->mindar-create#transformChanged">
                     </div>
                     <div class="placement-grid__row">
                         <label for="rotationY">Y</label>
-                        <input type="number" step="1" id="rotationY" value="0" data-mindar-create-target="rotationY" data-action="input->mindar-create#transformChanged">
+                        <input type="number" step="1" id="rotationY" value="{{ rotation.y|default(0) }}" data-mindar-create-target="rotationY" data-action="input->mindar-create#transformChanged">
                     </div>
                     <div class="placement-grid__row">
                         <label for="rotationZ">Z</label>
-                        <input type="number" step="1" id="rotationZ" value="0" data-mindar-create-target="rotationZ" data-action="input->mindar-create#transformChanged">
+                        <input type="number" step="1" id="rotationZ" value="{{ rotation.z|default(0) }}" data-mindar-create-target="rotationZ" data-action="input->mindar-create#transformChanged">
                     </div>
                 </div>
                 <div>
                     <h3 class="placement-grid__title">Échelle</h3>
                     <div class="placement-grid__row">
                         <label for="scaleX">X</label>
-                        <input type="number" step="0.01" id="scaleX" value="1" data-mindar-create-target="scaleX" data-action="input->mindar-create#transformChanged">
+                        <input type="number" step="0.01" id="scaleX" value="{{ scale.x|default(1) }}" data-mindar-create-target="scaleX" data-action="input->mindar-create#transformChanged">
                     </div>
                     <div class="placement-grid__row">
                         <label for="scaleY">Y</label>
-                        <input type="number" step="0.01" id="scaleY" value="1" data-mindar-create-target="scaleY" data-action="input->mindar-create#transformChanged">
+                        <input type="number" step="0.01" id="scaleY" value="{{ scale.y|default(1) }}" data-mindar-create-target="scaleY" data-action="input->mindar-create#transformChanged">
                     </div>
                     <div class="placement-grid__row">
                         <label for="scaleZ">Z</label>
-                        <input type="number" step="0.01" id="scaleZ" value="1" data-mindar-create-target="scaleZ" data-action="input->mindar-create#transformChanged">
+                        <input type="number" step="0.01" id="scaleZ" value="{{ scale.z|default(1) }}" data-mindar-create-target="scaleZ" data-action="input->mindar-create#transformChanged">
                     </div>
                 </div>
             </div>
@@ -249,10 +284,12 @@
         <div class="form-group ar-form__actions">
             <div class="ar-form__actions-primary">
                 <button type="button" class="btn" data-action="mindar-create#preview">Prévisualiser</button>
-                <button type="button" class="btn btn-secondary" data-action="mindar-create#save">Enregistrer la scène</button>
+                <button type="button" class="btn btn-secondary" data-action="mindar-create#save">{{ isEdit ? 'Mettre à jour la scène' : 'Enregistrer la scène' }}</button>
             </div>
             <div class="ar-form__actions-secondary">
-                <button type="button" class="btn btn-light" data-action="mindar-create#newScene">Nouvelle scène</button>
+                {% if not isEdit %}
+                    <button type="button" class="btn btn-light" data-action="mindar-create#newScene">Nouvelle scène</button>
+                {% endif %}
                 <button type="button" class="btn btn-light" data-action="mindar-create#resetForm">Réinitialiser</button>
                 <button type="button" class="btn btn-tertiary" data-action="mindar-create#cancel">Annuler</button>
             </div>

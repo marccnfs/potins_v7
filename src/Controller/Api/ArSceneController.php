@@ -71,6 +71,63 @@ class ArSceneController extends AbstractController
         ], 201);
     }
 
+    #[Route('/{id}', name: 'api_ar_scene_update', methods: ['PUT', 'PATCH'])]
+    public function update(ArScene $scene, Request $request, EntityManagerInterface $em, MobileLinkManager $qrBuilder): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        if (!is_array($data)) {
+            return $this->json(['error' => 'Payload JSON invalide.'], 400);
+        }
+
+        $assetUrl = $data['assetUrl'] ?? $data['modelUrl'] ?? null;
+        if (!$assetUrl) {
+            return $this->json(['error' => 'Aucun média sélectionné pour la scène.'], 400);
+        }
+
+        $contentType = $data['contentType'] ?? $scene->getContentType();
+        if (!in_array($contentType, ['model', 'video', 'image'], true)) {
+            $contentType = 'model';
+        }
+
+        $transform = is_array($data['transform'] ?? null) ? $data['transform'] : [];
+        $position = is_array($transform['position'] ?? null) ? $transform['position'] : [];
+        $rotation = is_array($transform['rotation'] ?? null) ? $transform['rotation'] : [];
+        $scale = is_array($transform['scale'] ?? null) ? $transform['scale'] : [];
+
+        $scene->setTitle($data['title'] ?? $scene->getTitle());
+        $scene->setMindTargetPath($data['mindTargetPath'] ?? $scene->getMindTargetPath());
+        $scene->setTargetIndex((int) ($data['targetIndex'] ?? $scene->getTargetIndex()));
+        $scene->setModelUrl($assetUrl);
+        $scene->setContentType($contentType);
+        $scene->setPositionX((float) ($position['x'] ?? $scene->getPositionX()));
+        $scene->setPositionY((float) ($position['y'] ?? $scene->getPositionY()));
+        $scene->setPositionZ((float) ($position['z'] ?? $scene->getPositionZ()));
+        $scene->setRotationX((float) ($rotation['x'] ?? $scene->getRotationX()));
+        $scene->setRotationY((float) ($rotation['y'] ?? $scene->getRotationY()));
+        $scene->setRotationZ((float) ($rotation['z'] ?? $scene->getRotationZ()));
+        $scene->setScaleX((float) ($scale['x'] ?? $scene->getScaleX()));
+        $scene->setScaleY((float) ($scale['y'] ?? $scene->getScaleY()));
+        $scene->setScaleZ((float) ($scale['z'] ?? $scene->getScaleZ()));
+        $scene->setSoundUrl($data['soundUrl'] ?? $scene->getSoundUrl());
+
+        $em->flush();
+
+        $shareUrl = $scene->getShareToken()
+            ? $this->generateUrl('ar_scene_share', ['token' => $scene->getShareToken()], UrlGeneratorInterface::ABSOLUTE_URL)
+            : null;
+        $experienceUrl = $scene->getShareToken()
+            ? $this->generateUrl('ar_scene_experience', ['token' => $scene->getShareToken()], UrlGeneratorInterface::ABSOLUTE_URL)
+            : null;
+        $qr = $experienceUrl ? $qrBuilder->buildQrForUrl($experienceUrl) : null;
+
+        return $this->json([
+            'id' => $scene->getId(),
+            'shareUrl' => $shareUrl,
+            'experienceUrl' => $experienceUrl,
+            'qr' => $qr,
+        ]);
+    }
+
 
     #[Route('', name: 'api_ar_scene_list', methods: ['GET'])]
     public function list(EntityManagerInterface $em): JsonResponse

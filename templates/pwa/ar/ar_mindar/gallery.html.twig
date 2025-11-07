@@ -58,6 +58,7 @@
                         <footer class="ar-card__footer">
                             <div class="ar-actions__group">
                                 <a href="{{ path('ar_view', {id: scene.id}) }}" class="btn btn-secondary">Ouvrir</a>
+                                <a href="{{ path('ar_mindar_edit', {id: scene.id}) }}" class="btn btn-light">Modifier</a>
                                 {% if card.experienceUrl %}
                                     <a href="{{ card.experienceUrl }}" target="_blank" rel="noopener" class="btn">Lancer</a>
                                 {% endif %}

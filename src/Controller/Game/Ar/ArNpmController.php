@@ -4,6 +4,7 @@ namespace App\Controller\Game\Ar;
 
 use App\Classe\UserSessionTrait;
 use App\Lib\Links;
+use App\Entity\Games\ArScene;
 use App\Service\MindArModelLibrary;
 use App\Service\MindArPackLocator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,10 +24,72 @@ class ArNpmController extends AbstractController
     #[Route('/ra/mindar/create', name: 'ar_mindar_create')]
     public function create(MindArPackLocator $locator, MindArModelLibrary $modelLibrary): Response
     {
-        return $this->renderAr('ar_mindar','_create', [
+        return $this->renderAr('ar_mindar', '_create', [
             'packs' => $locator->getPacks(), // packs .mind pré-générés
             'models' => $modelLibrary->getModels(),
+            'mode' => 'create',
         ]);
+    }
+
+    #[Route('/ra/mindar/edit/{id}', name: 'ar_mindar_edit')]
+    public function edit(
+        ArScene $scene,
+        MindArPackLocator $locator,
+        MindArModelLibrary $modelLibrary
+    ): Response {
+        $packs = $locator->getPacks();
+        $initialScene = $this->normalizeScene($scene);
+        $mindPath = $initialScene['mindTargetPath'] ?? null;
+        if ($mindPath) {
+            foreach ($packs as $pack) {
+                if (($pack['mindPath'] ?? null) === $mindPath) {
+                    $initialScene['packName'] = $pack['name'] ?? null;
+                    break;
+                }
+            }
+        }
+
+        return $this->renderAr('ar_mindar', '_create', [
+            'packs' => $packs,
+            'models' => $modelLibrary->getModels(),
+            'mode' => 'edit',
+            'initialScene' => $initialScene,
+        ]);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function normalizeScene(ArScene $scene): array
+    {
+        return [
+            'id' => $scene->getId(),
+            'title' => $scene->getTitle(),
+            'mindTargetPath' => $scene->getMindTargetPath(),
+            'packName' => null,
+            'targetIndex' => $scene->getTargetIndex(),
+            'assetUrl' => $scene->getModelUrl(),
+            'contentType' => $scene->getContentType(),
+            'soundUrl' => $scene->getSoundUrl(),
+            'transform' => [
+                'position' => [
+                    'x' => $scene->getPositionX(),
+                    'y' => $scene->getPositionY(),
+                    'z' => $scene->getPositionZ(),
+                ],
+                'rotation' => [
+                    'x' => $scene->getRotationX(),
+                    'y' => $scene->getRotationY(),
+                    'z' => $scene->getRotationZ(),
+                ],
+                'scale' => [
+                    'x' => $scene->getScaleX(),
+                    'y' => $scene->getScaleY(),
+                    'z' => $scene->getScaleZ(),
+                ],
+            ],
+            'shareToken' => $scene->getShareToken(),
+        ];
     }
 
     /**

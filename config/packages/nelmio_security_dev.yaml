@@ -41,6 +41,11 @@ nelmio_security:
                 - "data:"
                 - "blob:"
                 - "https://aframe.io"
+                - "https://cdn.jsdelivr.net"
+                - "https://unpkg.com"
+                - "https://cdnjs.cloudflare.com"
+                - "https://*"             # pour les images hébergées externes ou sous-domaines
+                - "http://127.0.0.1:*"    # utile en dev / preview locale
 
             connect-src:
                 - "'self'"
@@ -50,6 +55,11 @@ nelmio_security:
                 - "http://localhost:*"
                 - "ws://127.0.0.1:*"
                 - "https://aframe.io"
+                - "https://cdn.jsdelivr.net"
+                - "https://unpkg.com"
+                - "https://storage.googleapis.com"
+                - "https://mediapipe.dev"
+                - "https://*.googleusercontent.com"
 
             media-src:
                 - "'self'"
@@ -58,7 +68,10 @@ nelmio_security:
 
             frame-src:
                 - "'self'"
-                - "https://aframe.io"
+                - "https://*"  # autorise intégrations iframe externes (YouTube, etc.)
+
+            object-src:
+                - "'none'"
 
             report-uri: []
 
@@ -83,3 +96,8 @@ nelmio_security:
     xss_protection:
         enabled: true
         mode_block: false  # on évite le blocage dur pendant dev
+
+    referrer_policy:
+        enabled: true
+        policies:
+            - 'strict-origin-when-cross-origin'

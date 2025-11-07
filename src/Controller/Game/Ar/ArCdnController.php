@@ -38,6 +38,12 @@ class ArCdnController extends AbstractController
         return $this->renderAr('ar_gen','_test3',0);
     }
 
+    #[Route('/ra/face-tracking-1', name: 'face_tracking_1')]
+    public function faceTracking(): Response
+    {
+        return $this->renderAr('ar_gen','face_tracking_1',0);
+    }
+
     #[Route('/ra/choice', name: 'ar_choice')]
     public function choice() {
         return $this->renderAr('ar_cdn','_choice',1);

@@ -42,11 +42,18 @@ export default class extends Controller {
         scenesEndpoint: String,
         uploadEndpoint: String,
         cancelUrl: String,
+        mode: String,
+        updateEndpoint: String,
+        initialScene: Object,
     };
 
     connect() {
         this.previewBlobUrl = null;
         this.selectedPackName = null;
+        this.persistedMindTargetPath = null;
+        this.thumbItems = [];
+        this.persistedMindTargetPath = null;
+        this.thumbItems = [];
         this.previewBackground = null;
         this.isSaving = false;
         this._clearStatus();
@@ -70,6 +77,10 @@ export default class extends Controller {
         this._toggleAssetSections(this._currentAssetType());
         this._initModelSelection();
         this.renderPlacementPreview();
+
+        if (this._isEditMode() && this.hasInitialSceneValue) {
+            this._applyInitialScene(this.initialSceneValue);
+        }
     }
 
     disconnect() {
@@ -87,6 +98,7 @@ export default class extends Controller {
         const option = this.packTarget.selectedOptions?.[0] ?? null;
         if (!option || !option.value) {
             this.selectedPackName = null;
+            this.persistedMindTargetPath = null;
             this._resetThumbs();
             this._resetPackPreview();
             this._updatePrintLinks(null);
@@ -96,6 +108,7 @@ export default class extends Controller {
         const items = option ? this._parseItems(option) : [];
         const models = option ? this._parseModels(option) : [];
         this.selectedPackName = option?.getAttribute('data-packname')?.trim() || option?.textContent?.trim() || null;
+        this.persistedMindTargetPath = this._normalizeMindPath(option.value);
         this._resetPackPreview();
         this._setTargetInfo('Sélectionnez une image pour confirmer la détection MindAR.');
         this._populateThumbs(items);
@@ -106,6 +119,154 @@ export default class extends Controller {
         if (this.hasTitleTarget && !this.titleTarget.value) {
             this.titleTarget.placeholder = this._defaultTitle();
         }
+    }
+
+    _applyInitialScene(scene) {
+        if (!scene || typeof scene !== 'object') {
+            return;
+        }
+
+        const contentType = scene.contentType || 'model';
+        this.persistedMindTargetPath = scene.mindTargetPath || null;
+
+        if (this.hasTitleTarget && typeof scene.title === 'string') {
+            this.titleTarget.value = scene.title;
+        }
+
+        if (this.hasAssetTarget) {
+            this.assetTarget.value = scene.assetUrl || scene.modelUrl || '';
+        }
+
+        this._setAssetType(contentType);
+
+        if (contentType === 'video' && this.hasVideoInputTarget) {
+            this.videoInputTarget.value = scene.assetUrl || scene.modelUrl || '';
+        } else if (contentType === 'image' && this.hasImageInputTarget) {
+            this.imageInputTarget.value = scene.assetUrl || scene.modelUrl || '';
+        }
+
+        if (this.hasSoundTarget) {
+            this.soundTarget.value = scene.soundUrl || '';
+        }
+
+        const transform = scene.transform || {};
+        this._applyVectorValue('position', transform.position || {});
+        this._applyVectorValue('rotation', transform.rotation || {});
+        this._applyVectorValue('scale', transform.scale || {});
+
+        if (this.hasPackTarget && scene.mindTargetPath) {
+            this._selectPackOptionByPath(scene.mindTargetPath, scene.packName || null);
+        }
+
+        if (this.hasTargetIndexTarget && scene.targetIndex !== undefined && scene.targetIndex !== null) {
+            this.targetIndexTarget.value = scene.targetIndex;
+            this._highlightTargetByIndex(Number.parseInt(scene.targetIndex, 10));
+        }
+
+        this.renderPlacementPreview();
+    }
+
+    _applyVectorValue(kind, values) {
+        if (!values || typeof values !== 'object') {
+            return;
+        }
+
+        if (kind === 'position') {
+            if (this.hasPositionXTarget && values.x !== undefined) this.positionXTarget.value = values.x;
+            if (this.hasPositionYTarget && values.y !== undefined) this.positionYTarget.value = values.y;
+            if (this.hasPositionZTarget && values.z !== undefined) this.positionZTarget.value = values.z;
+        } else if (kind === 'rotation') {
+            if (this.hasRotationXTarget && values.x !== undefined) this.rotationXTarget.value = values.x;
+            if (this.hasRotationYTarget && values.y !== undefined) this.rotationYTarget.value = values.y;
+            if (this.hasRotationZTarget && values.z !== undefined) this.rotationZTarget.value = values.z;
+        } else if (kind === 'scale') {
+            if (this.hasScaleXTarget && values.x !== undefined) this.scaleXTarget.value = values.x;
+            if (this.hasScaleYTarget && values.y !== undefined) this.scaleYTarget.value = values.y;
+            if (this.hasScaleZTarget && values.z !== undefined) this.scaleZTarget.value = values.z;
+        }
+    }
+
+    _selectPackOptionByPath(path, packName = null) {
+        if (!this.hasPackTarget || !path) {
+            return false;
+        }
+
+        const normalized = this._normalizeMindPath(path);
+        const options = Array.from(this.packTarget.options ?? []);
+        let match = options.find((option) => this._normalizeMindPath(option.value) === normalized) ?? null;
+
+        if (!match) {
+            match = document.createElement('option');
+            match.value = normalized;
+            match.textContent = packName || 'Pack existant';
+            match.setAttribute('data-packname', packName || 'Pack existant');
+            match.selected = true;
+            this.packTarget.add(match);
+        } else {
+            match.selected = true;
+        }
+
+        this.persistedMindTargetPath = normalized;
+        this.packChanged();
+        return true;
+    }
+
+    _highlightTargetByIndex(index) {
+        if (!this.hasThumbsTarget || index === undefined || index === null) {
+            return;
+        }
+
+        const numericIndex = Number.parseInt(index, 10);
+        if (Number.isNaN(numericIndex)) {
+            return;
+        }
+
+        const button = this._findThumbButtonByIndex(numericIndex);
+        if (!button) {
+            return;
+        }
+
+        if (this.hasTargetIndexTarget) {
+            this.targetIndexTarget.value = numericIndex;
+        }
+
+        this._highlight(button);
+        const item = this._resolveThumbItem(button, numericIndex);
+        this._showSelectedThumb(item);
+    }
+
+    _findThumbButtonByIndex(index) {
+        if (!this.hasThumbsTarget) {
+            return null;
+        }
+
+        const buttons = Array.from(this.thumbsTarget.querySelectorAll('button[data-target-index]'));
+        return buttons.find((button) => Number.parseInt(button.dataset.targetIndex ?? '', 10) === index) ?? null;
+    }
+
+    _resolveThumbItem(button, index) {
+        if (!button) {
+            return null;
+        }
+
+        const label = button.getAttribute('data-thumb-label') || '';
+        const thumb = button.getAttribute('data-thumb-thumb') || '';
+        const image = button.getAttribute('data-thumb-image') || thumb;
+
+        return {
+            index,
+            label,
+            thumb: thumb || image,
+            image,
+        };
+    }
+
+    _currentMode() {
+        return this.hasModeValue ? this.modeValue : 'create';
+    }
+
+    _isEditMode() {
+        return this._currentMode() === 'edit';
     }
 
     preview(event) {
@@ -183,6 +344,10 @@ export default class extends Controller {
             }
         }
 
+        if (mindTargetPath) {
+            this.persistedMindTargetPath = mindTargetPath;
+        }
+
         const payload = {
             title: this._resolveTitle(asset.packName),
             mindTargetPath,
@@ -197,11 +362,19 @@ export default class extends Controller {
             },
         };
 
-        const endpoint = this.hasScenesEndpointValue ? this.scenesEndpointValue : '/api/ar/scenes';
+        if (this._isEditMode() && this.hasInitialSceneValue && this.initialSceneValue?.id) {
+            payload.id = this.initialSceneValue.id;
+        }
+
+        const isEdit = this._isEditMode();
+        const endpoint = isEdit && this.hasUpdateEndpointValue
+            ? this.updateEndpointValue
+            : (this.hasScenesEndpointValue ? this.scenesEndpointValue : '/api/ar/scenes');
+        const method = isEdit ? 'PUT' : 'POST';
 
         try {
             const response = await fetch(endpoint, {
-                method: 'POST',
+                method,
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'same-origin',
                 body: JSON.stringify(payload),
@@ -214,7 +387,15 @@ export default class extends Controller {
 
             const data = await response.json();
             this._displayShare(data);
-            this._setStatus(`Scène sauvegardée (id ${data.id}).`, 'success');
+            const actionLabel = isEdit ? 'mise à jour' : 'sauvegardée';
+            this._setStatus(`Scène ${actionLabel} (id ${data.id}).`, 'success');
+            if (isEdit && this.hasInitialSceneValue) {
+                this.initialSceneValue = {
+                    ...this.initialSceneValue,
+                    ...payload,
+                    id: data?.id ?? this.initialSceneValue.id,
+                };
+            }
         } catch (error) {
             console.error(error);
             this._setStatus(error.message || 'Erreur lors de la sauvegarde de la scène.', 'error');
@@ -538,6 +719,7 @@ export default class extends Controller {
         }
 
         this.thumbsTarget.innerHTML = '';
+        this.thumbItems = [];
 
         const normalized = items
             .map((item, index) => this._normalizeThumbItem(item, index))
@@ -553,11 +735,16 @@ export default class extends Controller {
             return false;
         }
 
+        this.thumbItems = normalized;
+
         normalized.forEach((item) => {
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'target-thumb';
             btn.dataset.targetIndex = `${item.index ?? 0}`;
+            btn.dataset.thumbLabel = item.label ?? '';
+            btn.dataset.thumbThumb = item.thumb ?? '';
+            btn.dataset.thumbImage = item.image ?? '';
             btn.setAttribute('aria-pressed', 'false');
             const indexValue = Number.isFinite(item.index) ? item.index : Number.parseInt(item.index ?? '0', 10);
             const displayIndex = Number.isFinite(indexValue) ? indexValue + 1 : 1;
@@ -588,6 +775,7 @@ export default class extends Controller {
         if (this.hasTargetIndexTarget) {
             this.targetIndexTarget.value = '';
         }
+        this.thumbItems = [];
         this._resetPackPreview();
         this._setTargetInfo('Sélectionnez une image pour confirmer la détection MindAR.');
     }
@@ -945,11 +1133,13 @@ export default class extends Controller {
                     <a-assets>
                         ${assetDeclaration}
                     </a-assets>
-                    <a-entity position="0 1.6 3">
-                        <a-camera wasd-controls-enabled="false" look-controls="enabled:false"></a-camera>
+                     <a-entity light="type: ambient; color: #ffffff; intensity: 0.6"></a-entity>
+                    <a-entity light="type: directional; color: #ffffff; intensity: 0.7" position="0 1 1"></a-entity>
+                    <a-entity position="0 1.2 2.5">
+                        <a-camera wasd-controls-enabled="false" look-controls="enabled:false" rotation="-18 0 0"></a-camera>
                     </a-entity>
                     <a-entity rotation="-90 0 0">
-                        <a-plane color="#ffffff" height="2" width="2" material="opacity:0.8; transparent:true"></a-plane>
+                       <a-plane color="#ffffff" height="2" width="2" material="opacity:0.85; transparent:true"></a-plane>
                         <a-ring color="#a0aec0" radius-inner="0.02" radius-outer="0.04" position="0 0.01 0"></a-ring>
                     </a-entity>
                     <a-entity position="${position}" rotation="${rotation}" scale="${scale}">
@@ -1126,6 +1316,10 @@ export default class extends Controller {
                 const path = this._normalizeMindPath(option.value);
                 return { type: 'pack', path, packName };
             }
+        }
+
+        if (this.persistedMindTargetPath) {
+            return { type: 'persisted', path: this.persistedMindTargetPath, packName: this.selectedPackName };
         }
 
         return { type: 'none', path: null, packName: null };
