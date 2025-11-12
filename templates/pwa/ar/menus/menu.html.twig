@@ -10,9 +10,12 @@ Attentes :
 {% set brand_route = brand_route|default('potins_index') %}
 {% set active = active|default('') %}
 {% set nav = nav|default({
-    test0:     'ar_test0',
-    test1:     'ar_test1',
-    test2:     'ar_test2',
+    plan:     'plan_bleu',
+    basic:     'basic',
+    eventhanding: 'event_handing',
+    interactive:  'interactive',
+    fcts:     'face_tracking_1',
+    fctc:     'face_tracking_2',
     prepareur: 'ar_prepareur',
     create:    'ar_mindar_create',
     gallery:   'ar_gallery',
@@ -39,9 +42,12 @@ Attentes :
                     Démo <i class="fa fa-chevron-down"></i>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a href="{{ path(nav.test0) }}" class="souslink-bar">Test 0</a></li>
-                    <li><a href="{{ path(nav.test1) }}" class="souslink-bar">Test 1</a></li>
-                    <li><a href="{{ path(nav.test2) }}" class="souslink-bar">Test 2</a></li>
+                    <li><a href="{{ path(nav.plan) }}" class="souslink-bar">plan</a></li>
+                    <li><a href="{{ path(nav.basic) }}" class="souslink-bar">basic</a></li>
+                    <li><a href="{{ path(nav.interactive) }}" class="souslink-bar">interactive</a></li>
+                    <li><a href="{{ path(nav.eventhanding) }}" class="souslink-bar">eventhanding</a></li>
+                    <li><a href="{{ path(nav.fcts) }}" class="souslink-bar">face traking simple</a></li>
+                    <li><a href="{{ path(nav.fctc) }}" class="souslink-bar">face traking complet</a></li>
                     <li><a href="{{ path(nav.prepareur) }}" class="souslink-bar">Préparateur</a></li>
                 </ul>
             </div>

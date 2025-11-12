@@ -1,4 +1,4 @@
-// tools/mindar/build-mind.js
+// toolsOld/mindar/build-mind.js
 // Usage: node build-mind.js /path/image.jpg /path/out.mind
 import fs from 'fs';
 import { createCanvas, loadImage } from 'canvas';  // si besoin
