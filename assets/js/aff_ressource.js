@@ -1,22 +1,13 @@
-import tinymce from 'tinymce/tinymce';
-import 'tinymce/themes/silver/theme';
-import 'tinymce/icons/default/icons';
-
-document.addEventListener("DOMContentLoaded", function () {
-    tinymce.init({
-        selector: 'textarea.editor',
-        plugins: 'lists link image table media',
-        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image media',
-        menubar: false,
-        skin: 'oxide', // Charge le skin TinyMCE
-        content_css: '/build/tinymce/skins/content/default/content.css', // Charge le CSS de TinyMCE
-        base_url: '/build/tinymce/', // Indique où chercher les fichiers JS/CSS
-        license_key: 'gpl' // Évite le message "TinyMCE is running in evaluation mode"
-    });
-});
 document.addEventListener('touchmove', function(event) {
     event.passive = true;
 }, { passive: true });
+
+const MARKDOWN_HINT_CLASS = 'markdown-hint';
+
+function getMarkdownHint() {
+    const container = document.getElementById('articles-container');
+    return container ? container.dataset.markdownHint || '' : '';
+}
 
 window.deleteArticle = function(button) {
     let articleBlock = button.closest(".article-block");
@@ -24,7 +15,7 @@ window.deleteArticle = function(button) {
 
     if (deleteInput) {
         deleteInput.value = "1"; // Marque l'article comme supprimé
-        }
+    }
 
     articleBlock.style.display = "none"; // Cache l'article visuellement
 }
@@ -34,12 +25,14 @@ window.addChapter = function() {
     let container = document.getElementById('articles-container');
     let div = document.createElement('div');
     div.classList.add('article-block');
+    const markdownHint = getMarkdownHint();
     div.innerHTML = `
             <label>Titre du chapitre</label>
             <input type="text" name="articles[${index}][titre]" required>
 
             <label>Contenu</label>
-            <textarea class="editor" id="editor-${index}" name="articles[${index}][contenu]"></textarea>
+             <textarea class="editor" id="editor-${index}" name="articles[${index}][contenu]" rows="10"></textarea>
+            ${markdownHint ? `<p class="${MARKDOWN_HINT_CLASS}">${markdownHint}</p>` : ''}
 
             <label>Média</label>
             <input type="file" name="articles[${index}][media]" accept="image/*,video/*">
@@ -47,78 +40,73 @@ window.addChapter = function() {
             <button type="button" onclick="deleteArticle(this)">Supprimer</button>
         `;
     container.appendChild(div);
-
-    // Vérifie si TinyMCE est déjà appliqué avant d'initialiser
-    if (tinymce.get(`editor-${index}`)) {
-        tinymce.get(`editor-${index}`).remove();
     }
-    // Réappliquer TinyMCE sur le nouveau champ
-    tinymce.init({
-        selector: `#editor-${index}`,
-        plugins: 'lists link image table media',
-        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image media',
-        menubar: false,
-        skin: 'oxide', // Charge le skin TinyMCE
-        content_css: '/build/tinymce/skins/content/default/content.css', // Charge le CSS de TinyMCE
-        base_url: '/build/tinymce/', // Indique où chercher les fichiers JS/CSS
-        license_key: 'gpl' // Évite le message "TinyMCE is running in evaluation mode"
-    });
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('manage-form');
+    if (!form) {
+        return;
+    }
 
-}
+    const submitButton = document.getElementById('submit-button');
+    const spinner = document.getElementById('loading-spinner');
 
-document.getElementById("ressource-form").addEventListener("submit", function (event) {
-    event.preventDefault();
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
 
-    let submitButton = document.getElementById("submit-button");
-    let spinner = document.getElementById("loading-spinner");
-
-    // 🔥 Forcer TinyMCE à sauvegarder les contenus avant envoi
-    tinymce.triggerSave();
-
-    // Désactiver le bouton et afficher le loader
-    submitButton.disabled = true;
-    spinner.style.display = "block";
-
-    let formData = new FormData(this);
-    let articles = document.querySelectorAll(".article-block");
-
-    articles.forEach((article, index) => {
-        let deleteInput = article.querySelector("[name$='[delete]']");
-        let deleteValue = deleteInput ? deleteInput.value : "0"; // Évite l'erreur
-
-        formData.append(`articles[${index}][id]`, article.getAttribute("data-id") || null);
-        formData.append(`articles[${index}][titre]`, article.querySelector("[name$='[titre]']").value);
-        formData.append(`articles[${index}][contenu]`, article.querySelector("[name$='[contenu]']").value);
-        formData.append(`articles[${index}][delete]`, deleteValue);
-
-        let fileInput = article.querySelector("[name$='[media]']");
-        if (fileInput.files.length > 0) {
-            formData.append(`articles[${index}][media]`, fileInput.files[0]);
+        if (submitButton) {
+            submitButton.disabled = true;
         }
-    });
+        if (spinner) {
+            spinner.style.display = 'block';
+        }
 
-    // Déterminer la bonne URL (création ou édition)
-    let actionUrl = document.getElementById("manage-form").getAttribute("action");
+        const formData = new FormData(this);
+        const articles = document.querySelectorAll('.article-block');
 
-    fetch(actionUrl, {
-        method: "POST",
-        body: formData
-    })
-        .then(response => {
-            if (response.redirected) {
-                window.location.href = response.url; // Redirection automatique si Symfony redirige
-            } else {
-                return response.json();
+        articles.forEach((article, index) => {
+            const deleteInput = article.querySelector("[name$='[delete]']");
+            const deleteValue = deleteInput ? deleteInput.value : '0';
+
+            formData.append(`articles[${index}][id]`, article.getAttribute('data-id') || '');
+            const titleField = article.querySelector("[name$='[titre]']");
+            formData.append(`articles[${index}][titre]`, titleField ? titleField.value : '');
+
+            const contentField = article.querySelector("[name$='[contenu]']");
+            formData.append(`articles[${index}][contenu]`, contentField ? contentField.value : '');
+            formData.append(`articles[${index}][delete]`, deleteValue);
+
+            const fileInput = article.querySelector("[name$='[media]']");
+            if (fileInput && fileInput.files.length > 0) {
+                formData.append(`articles[${index}][media]`, fileInput.files[0]);
             }
-        })
-        .then(data => {
-            if (data && data.message) {
-                alert(data.message);
-            }
-        })
-        .catch(error => console.error("Erreur :", error))
-        .finally(() => {
-            submitButton.disabled = false;
-            spinner.style.display = "none";
         });
+
+        const actionUrl = form.getAttribute('action');
+
+        fetch(actionUrl, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                    return null;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data && data.message) {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Erreur :', error))
+            .finally(() => {
+                if (submitButton) {
+                    submitButton.disabled = false;
+                }
+                if (spinner) {
+                    spinner.style.display = 'none';
+                }
+            });
+    });
 });

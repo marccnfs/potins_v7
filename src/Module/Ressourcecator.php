@@ -30,12 +30,18 @@ class Ressourcecator
 
     public function createOrUpdateRessource(Ressources $ressource, array $articlesData): void
     {
+        if (!is_array($articlesData)) {
+            $articlesData = [];
+        }
+
         foreach ($articlesData as $index => $articleData) {
             $article = (!empty($articleData['id']) && is_numeric($articleData['id']))
                 ? $this->em->getRepository(Article::class)->find($articleData['id'])
                 : new Article();
 
-            if ($articleData['delete'] == "1") {
+            $shouldDelete = isset($articleData['delete']) && $articleData['delete'] === "1";
+
+            if ($shouldDelete) {
                 // Suppression de l'article
                 if ($article->getId()) {
                     $this->em->remove($article);
@@ -44,8 +50,12 @@ class Ressourcecator
             }
 
             $article->setDatemodif($this->now);
-            $article->setTitre($articleData['titre']);
-            $article->setContenu($articleData['contenu']);
+            if (!$article->getDatecreat()) {
+                $article->setDatecreat($this->now);
+            }
+
+            $article->setTitre($articleData['titre'] ?? null);
+            $article->setContenu(trim((string) ($articleData['contenu'] ?? '')));
             $article->setRessource($ressource);
 
             // Gestion des médias via VichUploaderBundle

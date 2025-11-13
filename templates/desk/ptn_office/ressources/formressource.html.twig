@@ -70,9 +70,12 @@
                 <span class="error" aria-live="polite"></span>
             </div>
 
+            {% set markdown_hint_text = 'Utilisez la syntaxe Markdown (ex : <code># Titre</code>, <code>**gras**</code>, <code>*italique*</code>, <code>[Lien](https://exemple.fr)</code>). Les sauts de ligne sont conservés.' %}
+
             <!-- Liste des chapitres (Articles) -->
-            <div id="articles-container">
+            <div id="articles-container" data-markdown-hint="{{ markdown_hint_text|e('html_attr') }}">
                 <h3>Chapitres :</h3>
+                <p class="markdown-hint">{{ markdown_hint_text|raw }}</p>
                 <button type="button" onclick="addChapter()">Ajouter un chapitre</button>
 
                 {% if is_edit %}
@@ -84,7 +87,8 @@
                                    value="{{ article.titre }}" required>
 
                             <label>Contenu</label>
-                            <textarea class="editor" name="articles[{{ loop.index }}][contenu]">{{ article.contenu }}</textarea>
+                            <textarea class="editor" name="articles[{{ loop.index }}][contenu]" rows="10">{{ article.contenu }}</textarea>
+                            <p class="markdown-hint">{{ markdown_hint_text|raw }}</p>
 
                             <label>Média</label>
                             <input type="file" name="articles[{{ loop.index }}][media]" accept="image/*,video/*">

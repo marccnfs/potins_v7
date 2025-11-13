@@ -35,19 +35,13 @@
     </div>
 </div>
 
-{#
-<div class="cadre_title">
-    <h2>{{ressource.htmltitre}}</h2>
-</div>
-#}
-
 <!-- Affichage des articles (chapitres) -->
 <div class="articles-container">
     {% for article in ressource.htmlcontent %}
         <div class="article-block">
             <h2>{{ article.titre }}</h2>
             <div class="article-content">
-                {{ article.contenu }}
+                {{ article.contenu|markdown_to_html }}
             </div>
 
             {% if article.mediaName is not null %}
@@ -70,7 +64,7 @@
     {% if content is not same as ("") %}
         <div class="_post_content">
             <div class="article_content">
-                {{ content }}
+                {{ content|markdown_to_html }}
             </div>
         </div>
     {% endif %}
