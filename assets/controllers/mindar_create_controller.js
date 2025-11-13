@@ -367,10 +367,22 @@ export default class extends Controller {
         }
 
         const isEdit = this._isEditMode();
-        const endpoint = isEdit && this.hasUpdateEndpointValue
-            ? this.updateEndpointValue
-            : (this.hasScenesEndpointValue ? this.scenesEndpointValue : '/api/ar/scenes');
-        const method = isEdit ? 'PUT' : 'POST';
+        const defaultEndpoint = this.hasScenesEndpointValue ? this.scenesEndpointValue : '/api/ar/scenes';
+        let endpoint = defaultEndpoint;
+
+        if (isEdit) {
+            if (this.hasUpdateEndpointValue && this.updateEndpointValue) {
+                endpoint = this.updateEndpointValue;
+            } else if (payload?.id) {
+                const base = defaultEndpoint.endsWith('/')
+                    ? defaultEndpoint.slice(0, -1)
+                    : defaultEndpoint;
+                endpoint = `${base}/${encodeURIComponent(payload.id)}`;
+            }
+        }
+
+        const isUpdateRequest = isEdit && endpoint !== defaultEndpoint;
+        const method = isUpdateRequest ? 'PUT' : 'POST';
 
         try {
             const response = await fetch(endpoint, {

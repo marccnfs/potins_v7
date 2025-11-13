@@ -15,12 +15,6 @@ class ArNpmController extends AbstractController
 {
     use UserSessionTrait;
 
-    #[Route('/ra/mindar/demo', name: 'ar_mindar_demo')]
-    public function demo(): Response
-    {
-        return $this->renderAr('ar_mindar','_demo',[]);
-    }
-
     #[Route('/ra/mindar/create', name: 'ar_mindar_create')]
     public function create(MindArPackLocator $locator, MindArModelLibrary $modelLibrary): Response
     {
