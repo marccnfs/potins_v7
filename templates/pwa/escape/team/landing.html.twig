@@ -1,0 +1,49 @@
+{% extends 'pwa/escape/basepublic.html.twig' %}
+
+{% block body %}
+    <section class="escape-team landing">
+        <header class="escape-team__hero">
+            <p class="kicker">Escape game par équipes</p>
+            <h1>{{ run.title }}</h1>
+            {% if run.heroImageUrl %}
+                <img class="escape-team__hero-img" src="{{ run.heroImageUrl }}" alt="Visuel de l'univers">
+            {% endif %}
+            <p class="muted">Projette cette page : le lien et le QR code permettent aux équipes de s'inscrire en direct.</p>
+            <div class="escape-team__share">
+                <code class="escape-team__slug">{{ absolute_url(path('escape_team_register', {slug: run.shareSlug})) }}</code>
+                <a class="btn" href="{{ path('escape_team_register', {slug: run.shareSlug}) }}">Ouvrir la page d'inscription</a>
+            </div>
+        </header>
+
+        <div class="escape-team__grid">
+            <div>
+                <h2>Équipes déjà inscrites</h2>
+                {% if teams is empty %}
+                    <p class="muted">Aucune équipe pour le moment. Les joueurs scannent le QR pour rejoindre.</p>
+                {% else %}
+                    <ul class="escape-team__list">
+                        {% for team in teams %}
+                            <li class="escape-team__card">
+                                <span class="escape-team__avatar">{{ team.avatarKey }}</span>
+                                <div>
+                                    <strong>{{ team.name }}</strong>
+                                    <p class="muted">{{ team.members|length }} joueur(s)</p>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <div>
+                <h2>Infos pratiques</h2>
+                <ul class="escape-team__bullets">
+                    <li>Max équipes : {{ run.maxTeams }}</li>
+                    <li>Temps limite : {{ run.timeLimitSeconds ? (run.timeLimitSeconds/60)|round(0, 'ceil') ~ ' min' : 'aucune limite' }}</li>
+                    <li>Statut : {{ run.status }}</li>
+                </ul>
+                <a class="btn btn-primary" href="{{ path('escape_team_leaderboard', {slug: run.shareSlug}) }}">Voir le classement live</a>
+            </div>
+        </div>
+    </section>
+{% endblock %}

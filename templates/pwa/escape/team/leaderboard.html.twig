@@ -1,0 +1,36 @@
+{% extends 'pwa/escape/basepublic.html.twig' %}
+
+{% block body %}
+    <section class="escape-team leaderboard">
+        <header class="escape-team__hero">
+            <p class="kicker">Classement final</p>
+            <h1>{{ run.title }}</h1>
+            <p class="muted">Temps total, indices consommés et pénalités déterminent la position.</p>
+        </header>
+
+        <div class="escape-team__table">
+            <div class="escape-team__table-row escape-team__table-head">
+                <span>#</span>
+                <span>Équipe</span>
+                <span>Progression</span>
+                <span>Durée</span>
+                <span>Indices</span>
+                <span>Pénalités</span>
+            </div>
+            {% for entry in leaderboard.entries %}
+                <div class="escape-team__table-row">
+                    <span>{{ loop.index }}</span>
+                    <span class="escape-team__team">{{ entry.avatarKey }} {{ entry.teamName }}</span>
+                    <span>
+                    {% if entry.isCompleted %}✅ Terminé{% else %}Étape {{ entry.completedSteps + 1 }} / {{ leaderboard.stepCount }}{% endif %}
+                </span>
+                    <span>{{ (entry.durationMs/1000/60)|number_format(1, ',', ' ') }} min</span>
+                    <span>{{ entry.hintsUsed }}</span>
+                    <span>{{ entry.penalties }}</span>
+                </div>
+            {% else %}
+                <p class="muted">Aucune équipe classée pour le moment.</p>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
