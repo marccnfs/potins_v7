@@ -1,0 +1,84 @@
+# Trop de mails tue le mail : comment faire le ménage dans sa boîte Gmail 🧹
+
+Recevoir des centaines de messages par semaine, c’est devenu la norme. Mais au fil du temps, ces mails s’accumulent, encombrent notre boîte de réception et ralentissent parfois la recherche d’informations importantes.
+Heureusement, il existe un moyen simple — et même automatique — pour faire un grand ménage dans Gmail.
+
+---
+
+## 🔍 Méthode simple : trier et supprimer entre deux dates
+
+Gmail permet d’utiliser des **opérateurs de recherche avancée** pour filtrer les mails selon leur date.
+Dans la barre de recherche, tapez simplement :
+
+before:2024/12/31 after:2024/01/01
+
+
+👉 Cela affichera tous les mails reçus entre le 1er janvier et le 31 décembre 2024.
+
+Ensuite :
+1. Cliquez sur la **case de sélection** en haut à gauche.
+2. Cliquez sur **“Sélectionner tous les messages correspondant à cette recherche”** (si plus de 50).
+3. Puis cliquez sur **🗑️ Supprimer**.
+
+> ⚠️ Les mails vont dans la corbeille et seront supprimés définitivement au bout de **30 jours**.
+
+---
+
+## ⚙️ Méthode avancée : automatiser le nettoyage avec un script Gmail
+
+Pour aller plus loin, il est possible d’utiliser **Google Apps Script**, un petit outil fourni par Google pour automatiser certaines tâches.
+Voici un script prêt à l’emploi qui supprime tous les messages entre deux dates :
+
+```js
+function deleteEmailsBetweenDates() {
+  const startDate = new Date('2024-01-01');
+  const endDate = new Date('2024-12-31');
+
+  const query = 'after:' + formatDate(startDate) + ' before:' + formatDate(endDate);
+  const threads = GmailApp.search(query);
+
+  for (let i = 0; i < threads.length; i++) {
+    threads[i].moveToTrash();
+  }
+
+  Logger.log('Supprimé ' + threads.length + ' conversations.');
+}
+
+function formatDate(date) {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  return yyyy + '/' + mm + '/' + dd;
+}
+
+
+🪄 Étapes à suivre :
+
+Rendez-vous sur https://script.google.com
+ et créez un nouveau projet.
+
+Collez le script ci-dessus dans l’éditeur.
+
+Cliquez sur ▶️ Exécuter.
+
+Lors de la première exécution, autorisez le script à accéder à votre compte Gmail.
+
+Les mails correspondant aux dates indiquées seront déplacés vers la corbeille.
+
+💡 Vous pouvez modifier les dates dans le code pour cibler une autre période, ou même adapter le script pour ne supprimer que certains expéditeurs, par exemple :
+
+const query = 'after:2024/01/01 before:2024/12/31 from:@newsletter.com';
+
+🚀 En résumé
+
+Pour un nettoyage ponctuel : utilisez la recherche before: / after:.
+
+Pour une opération répétée ou ciblée : le script Gmail est idéal.
+
+Et surtout, pensez à vider la corbeille pour libérer de l’espace définitivement.
+
+Faire le ménage numérique, c’est aussi se simplifier la vie.
+Comme pour les dossiers, photos ou fichiers, quelques minutes suffisent pour retrouver une boîte mail plus légère, plus claire et plus sereine 🌿
+
+✍️ Article rédigé avec l’assistance d’Astrid, intelligence artificielle de conversation (OpenAI – GPT-5), pour le site potinsnumeriques.fr
+.
