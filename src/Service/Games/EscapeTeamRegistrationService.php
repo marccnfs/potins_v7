@@ -103,7 +103,7 @@ class EscapeTeamRegistrationService
 
     private function assertRegistrationOpen(EscapeTeamRun $run): void
     {
-        if (!in_array($run->getStatus(), ['draft', 'registration'], true)) {
+        if (!$run->isRegistrationOpen()) {
             throw new RuntimeException('Les inscriptions sont fermées pour ce run.');
         }
 

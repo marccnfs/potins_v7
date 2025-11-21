@@ -14,6 +14,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\UniqueConstraint(name: 'uniq_escape_team_run_slug', columns: ['share_slug'])]
 class EscapeTeamRun
 {
+    public const STATUS_DRAFT = 'draft';
+    public const STATUS_REGISTRATION = 'registration';
+    public const STATUS_RUNNING = 'running';
+    public const STATUS_ENDED = 'ended';
+
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     private ?int $id = null;
 
@@ -133,6 +138,17 @@ class EscapeTeamRun
         return $this;
     }
 
+    /** Génère un slug de partage si absent (ex: page d'accueil projetée). */
+    public function ensureShareSlug(callable $slugger): void
+    {
+        if ($this->shareSlug !== '') {
+            return;
+        }
+
+        $seed = ($this->getTitle() ?: 'escape-team') . '-' . bin2hex(random_bytes(4));
+        $this->shareSlug = $slugger($seed);
+    }
+
     public function getStatus(): string
     {
         return $this->status;
@@ -143,6 +159,11 @@ class EscapeTeamRun
         $this->status = $status;
 
         return $this;
+    }
+
+    public function isRegistrationOpen(): bool
+    {
+        return in_array($this->status, [self::STATUS_DRAFT, self::STATUS_REGISTRATION], true) && $this->startedAt === null;
     }
 
     public function getMaxTeams(): int
