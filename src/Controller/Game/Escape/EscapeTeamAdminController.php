@@ -3,6 +3,7 @@
 namespace App\Controller\Game\Escape;
 
 use App\Attribute\RequireParticipant;
+use App\Classe\UserSessionTrait;
 use App\Entity\Games\EscapeGame;
 use App\Entity\Users\Participant;
 use App\Lib\Links;
@@ -22,6 +23,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/escape-team/admin')]
 class EscapeTeamAdminController extends AbstractController
 {
+    use UserSessionTrait;
+
     #[Route('/new', name: 'escape_team_admin_create', methods: ['GET', 'POST'])]
     #[RequireParticipant]
     public function create(
@@ -114,18 +117,12 @@ class EscapeTeamAdminController extends AbstractController
             'games' => $games,
             'form' => $form->createView(),
             'directory'=>'team',
-            'vartwig'=>$vartwig['title' => 'Créer une session escape par équipes'],
+            'template'=>'team/admin_create.html.twig',
+            'vartwig'=>$vartwig,
+            'title' =>"Créer une session escape par équipes",
             'participant'=>$participant,
         ]);
 
-        return $this->render('pwa/escape/team/admin_create.html.twig', [
-            'workshop' => $workshop,
-            'games' => $games,
-            'form' => $form->createView(),
-            'vartwig' => [
-                'title' => 'Créer une session escape par équipes',
-            ],
-        ]);
     }
 
     #[Route('/{slug}/pilot', name: 'escape_team_admin_pilot', methods: ['GET', 'POST'])]
@@ -162,13 +159,18 @@ class EscapeTeamAdminController extends AbstractController
             }
         }
 
-        return $this->render('pwa/escape/team/admin_pilot.html.twig', [
+        $vartwig=$this->menuNav->templatepotins(
+            '_index',
+            Links::GAMES);
+
+        return $this->render('pwa/escape/home.html.twig',[
             'run' => $run,
             'snapshot' => $progressService->buildLiveProgress($run),
             'teams' => $run->getTeams(),
-            'vartwig' => [
-                'title' => sprintf('Pilotage · %s', $run->getTitle()),
-            ],
+            'directory'=>'team',
+            'template'=>'team/admin_pilot.html.twig',
+            'vartwig'=>$vartwig['title'] = sprintf('Pilotage · %s', $run->getTitle()),
+            'participant'=>$participant,
         ]);
     }
 }

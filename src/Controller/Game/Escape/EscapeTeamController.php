@@ -2,6 +2,8 @@
 
 namespace App\Controller\Game\Escape;
 
+use App\Classe\UserSessionTrait;
+use App\Lib\Links;
 use App\Repository\EscapeTeamRepository;
 use App\Repository\EscapeTeamRunRepository;
 use App\Repository\EscapeTeamSessionRepository;
@@ -18,6 +20,10 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/escape-team')]
 class EscapeTeamController extends AbstractController
 {
+
+    use UserSessionTrait;
+
+
     public function __construct(
         private readonly EscapeTeamRunRepository $runRepository,
         private readonly EscapeTeamRepository $teamRepository,
@@ -34,13 +40,17 @@ class EscapeTeamController extends AbstractController
     {
         $run = $this->runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
 
-        return $this->render('pwa/escape/team/landing.html.twig', [
+        $vartwig=$this->menuNav->templatepotins(
+            '_index',
+            Links::GAMES);
+
+        return $this->render('pwa/escape/home.html.twig',[
             'run' => $run,
             'landing' => $this->runAdminService->buildLandingContext($run),
             'teams' => $this->teamRepository->findForRunOrdered($run),
-            'vartwig' => [
-                'title' => sprintf('Escape par équipes · %s', $run->getTitle()),
-            ],
+            'directory'=>'team',
+            'template'=>'team/landing.html.twig',
+            'vartwig'=>$vartwig['title'] = sprintf('Escape par équipes · %s', $run->getTitle()),
         ]);
     }
 
@@ -73,15 +83,20 @@ class EscapeTeamController extends AbstractController
             }
         }
 
-        return $this->render('pwa/escape/team/register.html.twig', [
+        $vartwig=$this->menuNav->templatepotins(
+            '_index',
+            Links::GAMES);
+
+        return $this->render('pwa/escape/home.html.twig',[
             'run' => $run,
             'teams' => $this->teamRepository->findForRunOrdered($run),
             'avatars' => $this->avatarCatalog->all(),
             'isRegistrationOpen' => $run->isRegistrationOpen(),
-            'vartwig' => [
-                'title' => sprintf('Inscription équipes · %s', $run->getTitle()),
-            ],
+            'directory'=>'team',
+            'template'=>'team/register.html.twig',
+            'vartwig'=>$vartwig['title'] = sprintf('Inscription équipes · %s', $run->getTitle()),
         ]);
+
     }
 
     #[Route('/{slug}/progress', name: 'escape_team_progress', methods: ['GET'])]
@@ -99,12 +114,16 @@ class EscapeTeamController extends AbstractController
 
         $leaderboard = $this->progressService->computeLeaderboard($run);
 
-        return $this->render('pwa/escape/team/leaderboard.html.twig', [
+        $vartwig=$this->menuNav->templatepotins(
+            '_index',
+            Links::GAMES);
+
+        return $this->render('pwa/escape/home.html.twig',[
             'run' => $run,
             'leaderboard' => $leaderboard,
-            'vartwig' => [
-                'title' => sprintf('Classement · %s', $run->getTitle()),
-            ],
+            'directory'=>'team',
+            'template'=>'team/leaderboard.html.twig',
+            'vartwig'=>$vartwig['title'] = sprintf('Classement · %s', $run->getTitle()),
         ]);
     }
 
@@ -113,12 +132,16 @@ class EscapeTeamController extends AbstractController
     {
         $run = $this->runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
 
-        return $this->render('pwa/escape/team/live.html.twig', [
+        $vartwig=$this->menuNav->templatepotins(
+            '_index',
+            Links::GAMES);
+
+        return $this->render('pwa/escape/home.html.twig',[
             'run' => $run,
             'snapshot' => $this->progressService->buildLiveProgress($run),
-            'vartwig' => [
-                'title' => sprintf('Live · %s', $run->getTitle()),
-            ],
+            'directory'=>'team',
+            'template'=>'team/live.html.twig',
+            'vartwig'=>$vartwig['title'] = sprintf('Live · %s', $run->getTitle()),
         ]);
     }
 
@@ -133,13 +156,16 @@ class EscapeTeamController extends AbstractController
 
         $session = $this->sessionRepository->findOneByTeam($team) ?? null;
 
-        return $this->render('pwa/escape/team/play.html.twig', [
+        $vartwig=$this->menuNav->templatepotins(
+            '_index',
+            Links::GAMES);
+
+        return $this->render('pwa/escape/home.html.twig',[
             'run' => $run,
             'team' => $team,
             'session' => $session,
-            'vartwig' => [
-                'title' => sprintf('Équipe %s · %s', $team->getName(), $run->getTitle()),
-            ],
+            'template'=>'team/play.html.twig',
+            'vartwig'=>$vartwig['title'] = sprintf('Équipe %s · %s', $team->getName(), $run->getTitle()),
         ]);
     }
 
