@@ -1,0 +1,59 @@
+{% extends 'pwa/escape/basepublic.html.twig' %}
+
+{% block body %}
+    <section class="escape-team admin">
+        <header class="escape-team__hero">
+            <p class="kicker">Escape game par équipes</p>
+            <h1>Préparer une session « master »</h1>
+            <p class="muted">Choisis l'escape de la session master {{ workshop.code }} et ouvre les inscriptions en une étape.</p>
+        </header>
+
+        {% if games is empty %}
+            <div class="alert alert-warning">
+                Aucun escape n'est attaché à cette session master pour l'instant. Associe un escape depuis le back-office puis reviens ici.
+            </div>
+        {% endif %}
+
+        <div class="escape-team__grid">
+            <div>
+                <h2>Paramétrage du run</h2>
+                {{ form_start(form) }}
+                <div class="form-group">
+                    {{ form_label(form.escapeGame) }}
+                    {{ form_widget(form.escapeGame, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.title) }}
+                    {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.heroImageUrl) }}
+                    {{ form_widget(form.heroImageUrl, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.maxTeams) }}
+                    {{ form_widget(form.maxTeams, {'attr': {'class': 'form-control'}}) }}
+                    <p class="muted">Max 10 équipes, nom unique requis côté inscription.</p>
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.timeLimitMinutes) }}
+                    {{ form_widget(form.timeLimitMinutes, {'attr': {'class': 'form-control'}}) }}
+                    <p class="muted">Laisse vide pour aucune limite.</p>
+                </div>
+                {{ form_widget(form.submit) }}
+                {{ form_end(form) }}
+            </div>
+
+            <div>
+                <h2>Rappel du flux</h2>
+                <ol class="escape-team__bullets">
+                    <li>Créer la session et projeter la landing avec le QR d'inscription.</li>
+                    <li>Les équipes se nomment, choisissent un avatar et rejoignent la liste.</li>
+                    <li>Depuis l'écran maître, lance le jeu : tous les chronos démarrent ensemble.</li>
+                </ol>
+                <p class="muted">Image d'univers et lien unique (slug) sont générés automatiquement.</p>
+                <a class="btn" href="{{ path('escape_team_landing', {slug: 'placeholder'}) }}" onclick="return false;">Aperçu landing</a>
+            </div>
+        </div>
+    </section>
+{% endblock %}
