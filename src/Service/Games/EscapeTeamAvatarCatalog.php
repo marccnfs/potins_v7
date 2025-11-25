@@ -62,4 +62,14 @@ class EscapeTeamAvatarCatalog
     {
         return in_array($avatarKey, self::MEMBER_AVATARS, true);
     }
+    /**
+     * @return array{teams:string[], members:string[]}
+     */
+    public function all(): array
+    {
+        return [
+            'teams' => $this->getTeamAvatars(),
+            'members' => $this->getMemberAvatars(),
+        ];
+    }
 }

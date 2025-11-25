@@ -5,7 +5,10 @@ namespace App\Controller\Game\Escape;
 use App\Attribute\RequireParticipant;
 use App\Entity\Games\EscapeGame;
 use App\Entity\Users\Participant;
+use App\Lib\Links;
 use App\Repository\EscapeWorkshopSessionRepository;
+use App\Repository\EscapeTeamRunRepository;
+use App\Service\Games\EscapeTeamProgressService;
 use App\Service\Games\EscapeTeamRunAdminService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -102,12 +105,69 @@ class EscapeTeamAdminController extends AbstractController
             }
         }
 
+        $vartwig=$this->menuNav->templatepotins(
+            '_index',
+            Links::GAMES);
+
+        return $this->render('pwa/escape/home.html.twig',[
+            'workshop' => $workshop,
+            'games' => $games,
+            'form' => $form->createView(),
+            'directory'=>'team',
+            'vartwig'=>$vartwig['title' => 'Créer une session escape par équipes'],
+            'participant'=>$participant,
+        ]);
+
         return $this->render('pwa/escape/team/admin_create.html.twig', [
             'workshop' => $workshop,
             'games' => $games,
             'form' => $form->createView(),
             'vartwig' => [
                 'title' => 'Créer une session escape par équipes',
+            ],
+        ]);
+    }
+
+    #[Route('/{slug}/pilot', name: 'escape_team_admin_pilot', methods: ['GET', 'POST'])]
+    #[RequireParticipant]
+    public function pilot(
+        Request $request,
+        Participant $participant,
+        EscapeWorkshopSessionRepository $workshopRepository,
+        EscapeTeamRunRepository $runRepository,
+        EscapeTeamRunAdminService $runAdminService,
+        EscapeTeamProgressService $progressService,
+        string $slug,
+    ): Response {
+        $workshop = $workshopRepository->findOneByCode($participant->getCodeAtelier());
+        if (!$workshop || !$workshop->isMaster()) {
+            $this->addFlash('danger', 'Cette page est réservée au maître du jeu (session « master »).');
+
+            return $this->redirectToRoute('dashboard_my_escapes');
+        }
+
+        $run = $runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
+
+        if ($request->isMethod('POST') && $request->request->has('action_launch')) {
+            $timeLimitMinutes = $request->request->get('timeLimitMinutes');
+            $timeLimitSeconds = $timeLimitMinutes !== null && $timeLimitMinutes !== '' ? (int) $timeLimitMinutes * 60 : null;
+
+            try {
+                $runAdminService->launch($run, $timeLimitSeconds);
+                $this->addFlash('success', 'Le jeu est lancé ! Les inscriptions sont verrouillées.');
+
+                return $this->redirectToRoute('escape_team_admin_pilot', ['slug' => $slug]);
+            } catch (\Throwable $e) {
+                $this->addFlash('danger', $e->getMessage());
+            }
+        }
+
+        return $this->render('pwa/escape/team/admin_pilot.html.twig', [
+            'run' => $run,
+            'snapshot' => $progressService->buildLiveProgress($run),
+            'teams' => $run->getTeams(),
+            'vartwig' => [
+                'title' => sprintf('Pilotage · %s', $run->getTitle()),
             ],
         ]);
     }

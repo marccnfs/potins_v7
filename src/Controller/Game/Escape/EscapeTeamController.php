@@ -52,15 +52,16 @@ class EscapeTeamController extends AbstractController
         if ($request->isMethod('POST')) {
             $teamName = trim((string) $request->request->get('teamName', ''));
             $avatarKey = (string) $request->request->get('avatarKey', '');
-            $nickname = trim((string) $request->request->get('nickname', ''));
-
-            $members = [];
-            if ($nickname !== '') {
-                $members[] = [
-                    'nickname' => $nickname,
-                    'avatarKey' => $avatarKey,
+            $membersPayload = $request->request->all('members');
+            $members = array_values(array_filter(array_map(static function ($row): array {
+                return [
+                    'nickname' => trim((string) ($row['nickname'] ?? '')),
+                    'avatarKey' => (string) ($row['avatarKey'] ?? ''),
                 ];
-            }
+
+             }, is_array($membersPayload) ? $membersPayload : []), static function (array $member): bool {
+        return $member['nickname'] !== '';
+    }));
 
             try {
                 $this->registrationService->registerTeam($run, $teamName, $avatarKey, $members);
@@ -76,6 +77,7 @@ class EscapeTeamController extends AbstractController
             'run' => $run,
             'teams' => $this->teamRepository->findForRunOrdered($run),
             'avatars' => $this->avatarCatalog->all(),
+            'isRegistrationOpen' => $run->isRegistrationOpen(),
             'vartwig' => [
                 'title' => sprintf('Inscription équipes · %s', $run->getTitle()),
             ],
@@ -105,6 +107,42 @@ class EscapeTeamController extends AbstractController
             ],
         ]);
     }
+
+    #[Route('/{slug}/live', name: 'escape_team_live', methods: ['GET'])]
+    public function live(string $slug): Response
+    {
+        $run = $this->runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
+
+        return $this->render('pwa/escape/team/live.html.twig', [
+            'run' => $run,
+            'snapshot' => $this->progressService->buildLiveProgress($run),
+            'vartwig' => [
+                'title' => sprintf('Live · %s', $run->getTitle()),
+            ],
+        ]);
+    }
+
+    #[Route('/{slug}/play/{teamId}', name: 'escape_team_play', methods: ['GET'])]
+    public function play(string $slug, int $teamId): Response
+    {
+        $run = $this->runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
+        $team = $this->teamRepository->find($teamId);
+        if (!$team || $team->getRun()?->getId() !== $run->getId()) {
+            throw $this->createNotFoundException();
+        }
+
+        $session = $this->sessionRepository->findOneByTeam($team) ?? null;
+
+        return $this->render('pwa/escape/team/play.html.twig', [
+            'run' => $run,
+            'team' => $team,
+            'session' => $session,
+            'vartwig' => [
+                'title' => sprintf('Équipe %s · %s', $team->getName(), $run->getTitle()),
+            ],
+        ]);
+    }
+
 
     #[Route('/{slug}/team/{teamId}/step/{step}', name: 'escape_team_step_complete', methods: ['POST'])]
     public function completeStep(Request $request, string $slug, int $teamId, int $step): JsonResponse

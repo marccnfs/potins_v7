@@ -1,0 +1,66 @@
+{% extends 'pwa/escape/basepublic.html.twig' %}
+
+{% block body %}
+    <section class="escape-team live">
+        <header class="escape-team__hero">
+            <p class="kicker">Projection en direct</p>
+            <h1>{{ run.title }}</h1>
+            <p class="muted">Actualisation automatique à partir du snapshot live.</p>
+        </header>
+
+        <div class="escape-team__panel">
+            <div class="escape-team__live-meta">
+                <span>Temps restant : <strong id="live-remaining">--</strong></span>
+                <span>Statut : {{ run.status }}</span>
+            </div>
+            <div id="live-board" data-endpoint="{{ path('escape_team_progress', {slug: run.shareSlug}) }}"></div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function () {
+            const board = document.getElementById('live-board');
+            const remaining = document.getElementById('live-remaining');
+            if (!board) return;
+            const endpoint = board.dataset.endpoint;
+
+            const render = (data) => {
+                if (!data) return;
+                if (remaining && data.remainingSeconds !== null) {
+                    const minutes = Math.floor(data.remainingSeconds / 60);
+                    const seconds = data.remainingSeconds % 60;
+                    remaining.textContent = `${minutes}m ${seconds.toString().padStart(2, '0')}s`;
+                }
+                let html = '<div class="escape-team__grid">';
+                data.teams.forEach((team) => {
+                    html += `
+                        <div class="escape-team__card">
+                            <div class="escape-team__card-head">
+                                <span class="escape-team__avatar">${team.avatarKey}</span>
+                                <strong>${team.teamName}</strong>
+                            </div>
+                            <div class="escape-team__progress">
+                                <div class="escape-team__progress-bar" style="width:${team.progressPercent}%"></div>
+                            </div>
+                            <p class="muted">${team.isCompleted ? 'Terminé' : 'Étape ' + (team.currentStep || 1)} · indices ${team.hintsUsed}</p>
+                        </div>`;
+                });
+                html += '</div>';
+                board.innerHTML = html;
+            };
+
+            const poll = () => {
+                fetch(endpoint)
+                    .then((r) => r.json())
+                    .then(render)
+                    .catch(() => {});
+            };
+
+            poll();
+            setInterval(poll, 4000);
+        })();
+    </script>
+{% endblock %}

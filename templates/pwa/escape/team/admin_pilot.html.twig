@@ -1,0 +1,97 @@
+{% extends 'pwa/escape/basepublic.html.twig' %}
+
+{% block body %}
+    <section class="escape-team pilot">
+        <header class="escape-team__hero">
+            <p class="kicker">Pilotage maître de jeu</p>
+            <h1>{{ run.title }}</h1>
+            <p class="muted">Lance la session et suis la progression en direct. Les inscriptions sont verrouillées au départ.</p>
+        </header>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="escape-team__grid">
+            <div class="escape-team__panel">
+                <h2>Réglages</h2>
+                <p>Statut actuel : <strong>{{ run.status }}</strong></p>
+                <p>Inscriptions : {{ run.isRegistrationOpen ? 'ouvertes' : 'fermées' }}</p>
+                <form method="post">
+                    <label>Temps limite commun (minutes)</label>
+                    <input type="number" name="timeLimitMinutes" min="0" value="{{ run.timeLimitSeconds ? (run.timeLimitSeconds/60)|round(0, 'ceil') : '' }}" />
+                    <button class="btn btn-primary" type="submit" name="action_launch" {% if run.status == 'running' %}disabled{% endif %}>Lancer le jeu</button>
+                </form>
+                <p class="muted">Un lancement initialise les chronos d'équipe et ferme l'inscription.</p>
+            </div>
+
+            <div class="escape-team__panel">
+                <h2>Équipes inscrites</h2>
+                {% if teams is empty %}
+                    <p class="muted">Aucune équipe inscrite pour le moment.</p>
+                {% else %}
+                    <ul class="escape-team__list">
+                        {% for team in teams %}
+                            <li class="escape-team__card">
+                                <span class="escape-team__avatar">{{ team.avatarKey }}</span>
+                                <div>
+                                    <strong>{{ team.name }}</strong>
+                                    <p class="muted">{{ team.members|length }} joueur(s)</p>
+                                    {% if team.session %}
+                                        <small>Étape en cours : {{ team.session.currentStep ?? 'terminé' }}</small>
+                                    {% endif %}
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="escape-team__panel">
+            <h2>Live</h2>
+            <div id="pilot-live" data-endpoint="{{ path('escape_team_progress', {slug: run.shareSlug}) }}"></div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function () {
+            const target = document.getElementById('pilot-live');
+            if (!target) return;
+            const endpoint = target.dataset.endpoint;
+
+            const render = (data) => {
+                if (!data) return;
+                let html = '<ul class="escape-team__list">';
+                data.teams.forEach((team) => {
+                    html += `
+                        <li class="escape-team__card">
+                            <span class="escape-team__avatar">${team.avatarKey}</span>
+                            <div>
+                                <strong>${team.teamName}</strong>
+                                <p class="muted">Progression : ${team.completedSteps}/${data.stepCount} · indices ${team.hintsUsed}</p>
+                                <small>${team.isCompleted ? 'Terminé' : 'Étape ' + (team.currentStep || 1)}</small>
+                            </div>
+                        </li>`;
+                });
+                html += '</ul>';
+                target.innerHTML = html;
+            };
+
+            const poll = () => {
+                fetch(endpoint)
+                    .then((r) => r.json())
+                    .then(render)
+                    .catch(() => {});
+            };
+
+            poll();
+            setInterval(poll, 5000);
+        })();
+    </script>
+{% endblock %}

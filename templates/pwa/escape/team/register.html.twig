@@ -1,0 +1,120 @@
+{% extends 'pwa/escape/basepublic.html.twig' %}
+
+{% block body %}
+    <section class="escape-team register">
+        <header class="escape-team__hero">
+            <p class="kicker">Inscription des équipes</p>
+            <h1>{{ run.title }}</h1>
+            <p class="muted">Choisissez un avatar, un nom d'équipe et ajoutez vos membres. Maximum {{ run.maxTeams }} équipes.</p>
+            {% if run.heroImageUrl %}
+                <img class="escape-team__hero-img" src="{{ run.heroImageUrl }}" alt="Visuel de l'univers">
+            {% endif %}
+        </header>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+
+        {% set isFull = teams|length >= run.maxTeams %}
+
+        <div class="escape-team__grid">
+            <div class="escape-team__panel">
+                <h2>Créer une équipe</h2>
+                {% if not isRegistrationOpen %}
+                    <p class="muted">Les inscriptions sont fermées pour ce run.</p>
+                {% elseif isFull %}
+                    <p class="muted">Capacité atteinte ({{ run.maxTeams }} équipes). Demandez au maître du jeu.</p>
+                {% else %}
+                    <form method="post" class="escape-team__form" id="team-register-form">
+                        <label>Nom d'équipe</label>
+                        <input type="text" name="teamName" required maxlength="80" placeholder="Les explorateurs" />
+
+                        <label>Avatar d'équipe</label>
+                        <div class="escape-team__avatars">
+                            {% for key in avatars.teams %}
+                                <label class="escape-team__avatar-tile">
+                                    <input type="radio" name="avatarKey" value="{{ key }}" {% if loop.first %}checked{% endif %}>
+                                    <span class="escape-team__avatar">{{ key }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+
+                        <div class="escape-team__members" data-prototype-index="{{ 0 }}">
+                            <div class="escape-team__member-row">
+                                <div>
+                                    <label>Pseudo</label>
+                                    <input type="text" name="members[0][nickname]" required placeholder="Capitaine" />
+                                </div>
+                                <div>
+                                    <label>Avatar</label>
+                                    <select name="members[0][avatarKey]">
+                                        {% for key in avatars.members %}
+                                            <option value="{{ key }}">{{ key }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn" id="add-member">+ Ajouter un membre</button>
+
+                        <button type="submit" class="btn btn-primary">Valider l'inscription</button>
+                    </form>
+                {% endif %}
+            </div>
+
+            <div class="escape-team__panel">
+                <h2>Équipes inscrites ({{ teams|length }}/{{ run.maxTeams }})</h2>
+                {% if teams is empty %}
+                    <p class="muted">Aucune équipe pour le moment.</p>
+                {% else %}
+                    <ul class="escape-team__list">
+                        {% for team in teams %}
+                            <li class="escape-team__card">
+                                <span class="escape-team__avatar">{{ team.avatarKey }}</span>
+                                <div>
+                                    <strong>{{ team.name }}</strong>
+                                    <p class="muted">{{ team.members|length }} joueur(s)</p>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <p class="muted">Le maître de jeu ferme les inscriptions au lancement.</p>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function () {
+            const container = document.querySelector('.escape-team__members');
+            const addBtn = document.getElementById('add-member');
+            if (!container || !addBtn) return;
+
+            addBtn.addEventListener('click', () => {
+                const nextIndex = container.children.length;
+                const row = document.createElement('div');
+                row.className = 'escape-team__member-row';
+                row.innerHTML = `
+                    <div>
+                        <label>Pseudo</label>
+                        <input type="text" name="members[${nextIndex}][nickname]" required placeholder="Joueur ${nextIndex + 1}" />
+                    </div>
+                    <div>
+                        <label>Avatar</label>
+                        <select name="members[${nextIndex}][avatarKey]">
+                            {% for key in avatars.members %}
+                                <option value="{{ key }}">{{ key }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        })();
+    </script>
+{% endblock %}

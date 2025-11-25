@@ -42,7 +42,10 @@
                     <li>Temps limite : {{ run.timeLimitSeconds ? (run.timeLimitSeconds/60)|round(0, 'ceil') ~ ' min' : 'aucune limite' }}</li>
                     <li>Statut : {{ run.status }}</li>
                 </ul>
-                <a class="btn btn-primary" href="{{ path('escape_team_leaderboard', {slug: run.shareSlug}) }}">Voir le classement live</a>
+                <div class="escape-team__actions">
+                    <a class="btn" href="{{ path('escape_team_live', {slug: run.shareSlug}) }}">Projection live</a>
+                    <a class="btn btn-primary" href="{{ path('escape_team_leaderboard', {slug: run.shareSlug}) }}">Voir le classement</a>
+                </div>
             </div>
         </div>
     </section>
