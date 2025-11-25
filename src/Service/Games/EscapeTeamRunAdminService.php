@@ -33,7 +33,7 @@ class EscapeTeamRunAdminService
             ->setTimeLimitSeconds($timeLimitSeconds)
             ->setStatus(EscapeTeamRun::STATUS_DRAFT);
 
-        $run->ensureShareSlug([$this, 'slugify']);
+        $run->ensureShareSlug(fn (string $seed): string => $this->slugify($seed));
 
         $this->em->persist($run);
         $this->em->flush();
@@ -49,7 +49,7 @@ class EscapeTeamRunAdminService
 
         $now = new DateTimeImmutable();
 
-        $run->ensureShareSlug([$this, 'slugify']);
+        $run->ensureShareSlug(fn (string $seed): string => $this->slugify($seed));
         $run->setStatus(EscapeTeamRun::STATUS_REGISTRATION);
         $run->setRegistrationOpenedAt($run->getRegistrationOpenedAt() ?? $now);
         $run->setUpdatedAt($now);

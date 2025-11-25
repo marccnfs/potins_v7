@@ -50,7 +50,8 @@ class EscapeTeamController extends AbstractController
             'teams' => $this->teamRepository->findForRunOrdered($run),
             'directory'=>'team',
             'template'=>'team/landing.html.twig',
-            'vartwig'=>$vartwig['title'] = sprintf('Escape par équipes · %s', $run->getTitle()),
+            'vartwig'=>$vartwig,
+            'title' => sprintf('Escape par équipes · %s', $run->getTitle()),
         ]);
     }
 
@@ -94,7 +95,8 @@ class EscapeTeamController extends AbstractController
             'isRegistrationOpen' => $run->isRegistrationOpen(),
             'directory'=>'team',
             'template'=>'team/register.html.twig',
-            'vartwig'=>$vartwig['title'] = sprintf('Inscription équipes · %s', $run->getTitle()),
+            'vartwig'=>$vartwig,
+            'title' => sprintf('Inscription équipes · %s', $run->getTitle()),
         ]);
 
     }
@@ -123,7 +125,8 @@ class EscapeTeamController extends AbstractController
             'leaderboard' => $leaderboard,
             'directory'=>'team',
             'template'=>'team/leaderboard.html.twig',
-            'vartwig'=>$vartwig['title'] = sprintf('Classement · %s', $run->getTitle()),
+            'vartwig'=>$vartwig,
+            'title' => sprintf('Classement · %s', $run->getTitle()),
         ]);
     }
 
@@ -141,7 +144,8 @@ class EscapeTeamController extends AbstractController
             'snapshot' => $this->progressService->buildLiveProgress($run),
             'directory'=>'team',
             'template'=>'team/live.html.twig',
-            'vartwig'=>$vartwig['title'] = sprintf('Live · %s', $run->getTitle()),
+            'vartwig'=>$vartwig,
+            'title' => sprintf('Live · %s', $run->getTitle()),
         ]);
     }
 
@@ -165,7 +169,8 @@ class EscapeTeamController extends AbstractController
             'team' => $team,
             'session' => $session,
             'template'=>'team/play.html.twig',
-            'vartwig'=>$vartwig['title'] = sprintf('Équipe %s · %s', $team->getName(), $run->getTitle()),
+            'vartwig'=>$vartwig,
+            'title' => sprintf('Équipe %s · %s', $team->getName(), $run->getTitle()),
         ]);
     }
 
