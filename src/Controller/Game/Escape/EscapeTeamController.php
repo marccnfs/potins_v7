@@ -11,11 +11,13 @@ use App\Service\Games\EscapeTeamAvatarCatalog;
 use App\Service\Games\EscapeTeamProgressService;
 use App\Service\Games\EscapeTeamRegistrationService;
 use App\Service\Games\EscapeTeamRunAdminService;
+use App\Service\MobileLinkManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/escape-team')]
 class EscapeTeamController extends AbstractController
@@ -32,6 +34,7 @@ class EscapeTeamController extends AbstractController
         private readonly EscapeTeamProgressService $progressService,
         private readonly EscapeTeamRunAdminService $runAdminService,
         private readonly EscapeTeamAvatarCatalog $avatarCatalog,
+        private readonly MobileLinkManager $mobileLinkManager,
     ) {
     }
 
@@ -44,10 +47,15 @@ class EscapeTeamController extends AbstractController
             '_index',
             Links::GAMES);
 
+        $registrationUrl = $this->generateUrl('escape_team_register', ['slug' => $run->getShareSlug()], UrlGeneratorInterface::ABSOLUTE_URL);
+
         return $this->render('pwa/escape/home.html.twig',[
             'run' => $run,
             'landing' => $this->runAdminService->buildLandingContext($run),
             'teams' => $this->teamRepository->findForRunOrdered($run),
+            'progress' => $this->progressService->buildLiveProgress($run),
+            'registrationUrl' => $registrationUrl,
+            'registrationQr' => $this->mobileLinkManager->buildQrForUrl($registrationUrl),
             'directory'=>'team',
             'template'=>'team/landing.html.twig',
             'vartwig'=>$vartwig,
@@ -146,6 +154,28 @@ class EscapeTeamController extends AbstractController
             'template'=>'team/live.html.twig',
             'vartwig'=>$vartwig,
             'title' => sprintf('Live · %s', $run->getTitle()),
+        ]);
+    }
+
+    #[Route('/{slug}/winner', name: 'escape_team_winner', methods: ['GET'])]
+    public function winner(string $slug): Response
+    {
+        $run = $this->runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
+
+        $winner = $this->progressService->findWinner($run);
+
+        $vartwig=$this->menuNav->templatepotins(
+            '_index',
+            Links::GAMES);
+
+        return $this->render('pwa/escape/home.html.twig',[
+            'run' => $run,
+            'winner' => $winner,
+            'leaderboard' => $this->progressService->computeLeaderboard($run),
+            'directory'=>'team',
+            'template'=>'team/winner.html.twig',
+            'vartwig'=>$vartwig,
+            'title' => sprintf('Gagnant · %s', $run->getTitle()),
         ]);
     }
 

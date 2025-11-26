@@ -16,6 +16,7 @@ class EscapeTeamRun
 {
     public const STATUS_DRAFT = 'draft';
     public const STATUS_REGISTRATION = 'registration';
+    public const STATUS_LOCKED = 'locked';
     public const STATUS_RUNNING = 'running';
     public const STATUS_ENDED = 'ended';
 
@@ -63,7 +64,7 @@ class EscapeTeamRun
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'run', targetEntity: EscapeTeam::class, cascade: ['remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: EscapeTeam::class, mappedBy: 'run', cascade: ['remove'], orphanRemoval: true)]
     private Collection $teams;
 
     public function __construct()
@@ -163,7 +164,7 @@ class EscapeTeamRun
 
     public function isRegistrationOpen(): bool
     {
-        return in_array($this->status, [self::STATUS_DRAFT, self::STATUS_REGISTRATION], true) && $this->startedAt === null;
+        return $this->status === self::STATUS_REGISTRATION && $this->startedAt === null;
     }
 
     public function getMaxTeams(): int

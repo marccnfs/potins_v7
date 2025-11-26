@@ -60,6 +60,23 @@ class EscapeTeamRunAdminService
         return $run;
     }
 
+    public function closeRegistration(EscapeTeamRun $run): EscapeTeamRun
+    {
+        if ($run->getStatus() === EscapeTeamRun::STATUS_RUNNING) {
+            throw new RuntimeException('Impossible de fermer les inscriptions après le lancement du jeu.');
+        }
+
+        $now = new DateTimeImmutable();
+
+        $run->setStatus(EscapeTeamRun::STATUS_LOCKED);
+        $run->setUpdatedAt($now);
+
+        $this->em->flush();
+
+        return $run;
+    }
+
+
     public function launch(EscapeTeamRun $run, ?int $timeLimitSeconds = null): EscapeTeamRun
     {
         if ($run->getTeams()->count() === 0) {

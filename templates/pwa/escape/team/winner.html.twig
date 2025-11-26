@@ -1,0 +1,57 @@
+{% extends 'pwa/escape/basepublic.html.twig' %}
+
+{% block body %}
+    <section class="escape-team winner">
+        <header class="escape-team__hero">
+            <p class="kicker">Fin du jeu</p>
+            <h1>{{ run.title }}</h1>
+            <p class="muted">La première équipe à terminer est mise à l'honneur ci-dessous.</p>
+        </header>
+
+        {% if winner %}
+            <div class="escape-team__card escape-team__card--winner" style="--team-color: {{ winner.color ?? '#ffd166' }}">
+                <div class="escape-team__card-head">
+                    <span class="escape-team__avatar">{{ winner.avatarKey }}</span>
+                    <div>
+                        <p class="kicker">Gagnant</p>
+                        <h2>{{ winner.teamName }}</h2>
+                        <p class="muted">Durée : {{ (winner.durationMs/1000/60)|number_format(1, ',', ' ') }} min · Indices {{ winner.hintsUsed ?? 0 }}</p>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p class="muted">Aucun gagnant encore détecté. La page se mettra à jour dès qu'une équipe termine.</p>
+        {% endif %}
+
+        <div class="escape-team__panel">
+            <div class="escape-team__panel-head">
+                <h2>Classement</h2>
+                <span class="badge">{{ run.status }}</span>
+            </div>
+            <div class="escape-team__table">
+                <div class="escape-team__table-row escape-team__table-head">
+                    <span>#</span>
+                    <span>Équipe</span>
+                    <span>Progression</span>
+                    <span>Durée</span>
+                    <span>Indices</span>
+                    <span>Pénalités</span>
+                </div>
+                {% for entry in leaderboard.entries %}
+                    <div class="escape-team__table-row">
+                        <span>{{ loop.index }}</span>
+                        <span class="escape-team__team">{{ entry.avatarKey }} {{ entry.teamName }}</span>
+                        <span>
+                            {% if entry.isCompleted %}✅ Terminé{% else %}Étape {{ entry.completedSteps + 1 }} / {{ leaderboard.stepCount }}{% endif %}
+                        </span>
+                        <span>{{ (entry.durationMs/1000/60)|number_format(1, ',', ' ') }} min</span>
+                        <span>{{ entry.hintsUsed }}</span>
+                        <span>{{ entry.penalties }}</span>
+                    </div>
+                {% else %}
+                    <p class="muted">Aucune équipe classée pour le moment.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

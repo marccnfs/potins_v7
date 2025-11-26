@@ -1,19 +1,32 @@
 {% extends 'pwa/escape/basepublic.html.twig' %}
 
+{% set statusLabels = {
+    'draft': 'Préparation',
+    'registration': 'Inscriptions ouvertes',
+    'locked': 'Inscriptions closes',
+    'running': 'Jeu en cours',
+    'ended': 'Partie terminée'
+} %}
+
 {% block body %}
-    <section class="escape-team live">
+    <section class="escape-team live" data-progress-endpoint="{{ path('escape_team_progress', {slug: run.shareSlug}) }}" data-winner-url="{{ path('escape_team_winner', {slug: run.shareSlug}) }}">
         <header class="escape-team__hero">
-            <p class="kicker">Projection en direct</p>
+            <p class="kicker">Déroulement en direct</p>
             <h1>{{ run.title }}</h1>
-            <p class="muted">Actualisation automatique à partir du snapshot live.</p>
+            <p class="muted">Projection des progressions par équipe. La page bascule sur le gagnant dès qu'une équipe termine.</p>
+            {% if run.heroImageUrl %}
+                <img class="escape-team__hero-img" src="{{ run.heroImageUrl }}" alt="Visuel de l'univers">
+            {% endif %}
         </header>
 
         <div class="escape-team__panel">
             <div class="escape-team__live-meta">
-                <span>Temps restant : <strong id="live-remaining">--</strong></span>
-                <span>Statut : {{ run.status }}</span>
+                <span>Temps restant : <strong id="live-remaining">{{ snapshot.remainingSeconds is not null ? (snapshot.remainingSeconds/60)|floor ~ 'm' : '--' }}</strong></span>
+                <span class="badge" id="live-status">{{ statusLabels[run.status]|default(run.status) }}</span>
             </div>
-            <div id="live-board" data-endpoint="{{ path('escape_team_progress', {slug: run.shareSlug}) }}"></div>
+            <div id="live-board" class="escape-team__cards escape-team__cards--live">
+                <p class="muted" data-empty>Chargement des équipes…</p>
+            </div>
         </div>
     </section>
 {% endblock %}
@@ -22,45 +35,74 @@
     {{ parent() }}
     <script>
         (function () {
+            const section = document.querySelector('.escape-team.live');
+            if (!section) return;
+            const endpoint = section.dataset.progressEndpoint;
+            const winnerUrl = section.dataset.winnerUrl;
             const board = document.getElementById('live-board');
             const remaining = document.getElementById('live-remaining');
-            if (!board) return;
-            const endpoint = board.dataset.endpoint;
+            const statusEl = document.getElementById('live-status');
+            const palette = ['#ff6b6b','#4ecdc4','#ffd166','#cdb4db','#6c5ce7','#00a8e8','#f4a261','#2ec4b6','#e76f51','#ff8fa3'];
+            let redirecting = false;
+
+            const formatDuration = (seconds) => {
+                if (seconds === null || seconds === undefined) return '--';
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                return `${mins}m ${secs.toString().padStart(2, '0')}s`;
+            };
 
             const render = (data) => {
-                if (!data) return;
-                if (remaining && data.remainingSeconds !== null) {
-                    const minutes = Math.floor(data.remainingSeconds / 60);
-                    const seconds = data.remainingSeconds % 60;
-                    remaining.textContent = `${minutes}m ${seconds.toString().padStart(2, '0')}s`;
+                if (!data || !board) return;
+                if (remaining && data.remainingSeconds !== undefined) {
+                    remaining.textContent = formatDuration(data.remainingSeconds);
                 }
-                let html = '<div class="escape-team__grid">';
-                data.teams.forEach((team) => {
-                    html += `
-                        <div class="escape-team__card">
+                if (statusEl && data.status) {
+                    statusEl.textContent = data.status === 'running' ? 'Jeu en cours' : data.status;
+                }
+
+                const teams = data.teams || [];
+                if (teams.length === 0) {
+                    board.innerHTML = '<p class="muted" data-empty>Aucune équipe inscrite.</p>';
+                    return;
+                }
+
+                board.innerHTML = teams.map((team, index) => {
+                    const color = team.color || palette[index % palette.length];
+                    const label = team.isCompleted ? 'Terminé' : `Étape ${team.currentStep || 1}/${data.stepCount}`;
+                    return `
+                        <div class="escape-team__card" style="--team-color:${color}">
                             <div class="escape-team__card-head">
                                 <span class="escape-team__avatar">${team.avatarKey}</span>
-                                <strong>${team.teamName}</strong>
+                                <div>
+                                    <strong>${team.teamName}</strong>
+                                    <p class="muted">${label} · indices ${team.hintsUsed}</p>
+                                </div>
                             </div>
                             <div class="escape-team__progress">
                                 <div class="escape-team__progress-bar" style="width:${team.progressPercent}%"></div>
                             </div>
-                            <p class="muted">${team.isCompleted ? 'Terminé' : 'Étape ' + (team.currentStep || 1)} · indices ${team.hintsUsed}</p>
+
                         </div>`;
-                });
-                html += '</div>';
-                board.innerHTML = html;
+                }).join('');
             };
 
             const poll = () => {
                 fetch(endpoint)
                     .then((r) => r.json())
-                    .then(render)
+                    .then((data) => {
+                        render(data);
+                        if (redirecting) return;
+                        if (data.winner || data.status === 'ended') {
+                            redirecting = true;
+                            window.location.href = winnerUrl;
+                        }
+                    })
                     .catch(() => {});
             };
 
             poll();
-            setInterval(poll, 4000);
+            setInterval(poll, 3000);
         })();
     </script>
 {% endblock %}

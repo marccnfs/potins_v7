@@ -19,12 +19,20 @@
                 <h2>Réglages</h2>
                 <p>Statut actuel : <strong>{{ run.status }}</strong></p>
                 <p>Inscriptions : {{ run.isRegistrationOpen ? 'ouvertes' : 'fermées' }}</p>
-                <form method="post">
+                <form method="post" class="escape-team__pilot-form">
                     <label>Temps limite commun (minutes)</label>
                     <input type="number" name="timeLimitMinutes" min="0" value="{{ run.timeLimitSeconds ? (run.timeLimitSeconds/60)|round(0, 'ceil') : '' }}" />
-                    <button class="btn btn-primary" type="submit" name="action_launch" {% if run.status == 'running' %}disabled{% endif %}>Lancer le jeu</button>
+                    <div class="escape-team__pilot-actions">
+                        <button class="btn" type="submit" name="action_open" {% if run.status == 'running' %}disabled{% endif %}>Ouvrir inscriptions</button>
+                        <button class="btn" type="submit" name="action_close" {% if run.status == 'running' %}disabled{% endif %}>Clôturer inscriptions</button>
+                        <button class="btn btn-primary" type="submit" name="action_launch" {% if run.status == 'running' %}disabled{% endif %}>Lancer le jeu</button>
+                    </div>
                 </form>
-                <p class="muted">Un lancement initialise les chronos d'équipe et ferme l'inscription.</p>
+                <p class="muted">Un lancement initialise les chronos d'équipe, ferme les inscriptions et redirige la projection vers le déroulement.</p>
+                <div class="escape-team__actions">
+                    <a class="btn" href="{{ path('escape_team_landing', {slug: run.shareSlug}) }}" target="_blank">Projeter les inscriptions</a>
+                    <a class="btn" href="{{ path('escape_team_live', {slug: run.shareSlug}) }}" target="_blank">Projeter le déroulement</a>
+                </div>
             </div>
 
             <div class="escape-team__panel">

@@ -1,52 +1,144 @@
 {% extends 'pwa/escape/basepublic.html.twig' %}
 
+{% set statusLabels = {
+    'draft': 'Préparation',
+    'registration': 'Inscriptions ouvertes',
+    'locked': 'Inscriptions closes',
+    'running': 'Jeu en cours',
+    'ended': 'Partie terminée'
+} %}
+
 {% block body %}
-    <section class="escape-team landing">
+    <section class="escape-team landing" data-progress-endpoint="{{ path('escape_team_progress', {slug: run.shareSlug}) }}" data-run-url="{{ path('escape_team_live', {slug: run.shareSlug}) }}" data-winner-url="{{ path('escape_team_winner', {slug: run.shareSlug}) }}">
         <header class="escape-team__hero">
             <p class="kicker">Escape game par équipes</p>
             <h1>{{ run.title }}</h1>
+            <p class="muted">Projette cette page : le lien et le QR code permettent aux équipes de s'inscrire en direct.</p>
             {% if run.heroImageUrl %}
                 <img class="escape-team__hero-img" src="{{ run.heroImageUrl }}" alt="Visuel de l'univers">
             {% endif %}
-            <p class="muted">Projette cette page : le lien et le QR code permettent aux équipes de s'inscrire en direct.</p>
+
             <div class="escape-team__share">
-                <code class="escape-team__slug">{{ absolute_url(path('escape_team_register', {slug: run.shareSlug})) }}</code>
-                <a class="btn" href="{{ path('escape_team_register', {slug: run.shareSlug}) }}">Ouvrir la page d'inscription</a>
+                <div class="escape-team__share-link">
+                    <p class="muted">Lien d'inscription</p>
+                    <code class="escape-team__slug" id="escape-team-link">{{ registrationUrl }}</code>
+                    <a class="btn" href="{{ registrationUrl }}" target="_blank">Ouvrir la page d'inscription</a>
+                </div>
+                <div class="escape-team__share-qr">
+                    <img src="{{ registrationQr }}" alt="QR code d'inscription" />
+                    <small>Scannez pour rejoindre</small>
+                </div>
             </div>
         </header>
 
-        <div class="escape-team__grid">
-            <div>
-                <h2>Équipes déjà inscrites</h2>
-                {% if teams is empty %}
-                    <p class="muted">Aucune équipe pour le moment. Les joueurs scannent le QR pour rejoindre.</p>
-                {% else %}
-                    <ul class="escape-team__list">
-                        {% for team in teams %}
-                            <li class="escape-team__card">
-                                <span class="escape-team__avatar">{{ team.avatarKey }}</span>
-                                <div>
-                                    <strong>{{ team.name }}</strong>
-                                    <p class="muted">{{ team.members|length }} joueur(s)</p>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
+        <div class="escape-team__grid escape-team__grid--landing">
+            <div class="escape-team__panel">
+                <div class="escape-team__metrics">
+                    <div class="escape-team__metric">
+                        <span class="escape-team__metric-label">Équipes</span>
+                        <strong><span id="landing-counter">{{ teams|length }}</span> / {{ run.maxTeams }}</strong>
+                    </div>
+                    <div class="escape-team__metric">
+                        <span class="escape-team__metric-label">Statut</span>
+                        <span class="badge">{{ statusLabels[run.status]|default(run.status) }}</span>
+                    </div>
+                    <div class="escape-team__metric">
+                        <span class="escape-team__metric-label">Limite</span>
+                        <strong>{{ run.timeLimitSeconds ? (run.timeLimitSeconds/60)|round(0, 'ceil') ~ ' min' : 'Aucune' }}</strong>
+                    </div>
+                </div>
+                <p class="muted">La liste des équipes se met à jour automatiquement. Au lancement, la projection bascule vers le déroulement.</p>
             </div>
 
-            <div>
-                <h2>Infos pratiques</h2>
-                <ul class="escape-team__bullets">
-                    <li>Max équipes : {{ run.maxTeams }}</li>
-                    <li>Temps limite : {{ run.timeLimitSeconds ? (run.timeLimitSeconds/60)|round(0, 'ceil') ~ ' min' : 'aucune limite' }}</li>
-                    <li>Statut : {{ run.status }}</li>
-                </ul>
-                <div class="escape-team__actions">
-                    <a class="btn" href="{{ path('escape_team_live', {slug: run.shareSlug}) }}">Projection live</a>
-                    <a class="btn btn-primary" href="{{ path('escape_team_leaderboard', {slug: run.shareSlug}) }}">Voir le classement</a>
+            <div class="escape-team__panel">
+                <div class="escape-team__panel-head">
+                    <h2>Équipes inscrites</h2>
+                    <span class="badge badge--ghost">{{ statusLabels[run.status]|default(run.status) }}</span>
+                </div>
+                <div id="landing-teams" class="escape-team__cards">
+                    {% if teams is empty %}
+                        <p class="muted" data-empty>En attente des premières équipes…</p>
+                    {% else %}
+
+                        {% for team in teams %}
+                    <div class="escape-team__card" style="--team-color: {{ team.color ?? '#4ecdc4' }}">
+                        <div class="escape-team__card-head">
+                            <span class="escape-team__avatar">{{ team.avatarKey }}</span>
+                            <div>
+                                <strong>{{ team.name }}</strong>
+                                <p class="muted">{{ team.members|length }} joueur(s)</p>
+                            </div>
+                                </div>
+                    </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </div>
     </section>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function () {
+            const section = document.querySelector('.escape-team.landing');
+            if (!section) return;
+            const endpoint = section.dataset.progressEndpoint;
+            const runUrl = section.dataset.runUrl;
+            const winnerUrl = section.dataset.winnerUrl;
+            const cards = document.getElementById('landing-teams');
+            const counter = document.getElementById('landing-counter');
+            const palette = ['#ff6b6b','#4ecdc4','#ffd166','#cdb4db','#6c5ce7','#00a8e8','#f4a261','#2ec4b6','#e76f51','#ff8fa3'];
+            let redirecting = false;
+
+            const renderTeams = (data) => {
+                if (!cards || !data) return;
+                const teams = data.teams || [];
+                if (counter) {
+                    counter.textContent = teams.length;
+                }
+                if (teams.length === 0) {
+                    cards.innerHTML = '<p class="muted" data-empty>En attente des premières équipes…</p>';
+                    return;
+                }
+
+                cards.innerHTML = teams.map((team, index) => {
+                    const color = team.color || palette[index % palette.length];
+                    const sizeLabel = team.memberCount ? `${team.memberCount} joueur(s)` : 'Équipe prête';
+                    return `
+                        <div class="escape-team__card" style="--team-color:${color}">
+                            <div class="escape-team__card-head">
+                                <span class="escape-team__avatar">${team.avatarKey}</span>
+                                <div>
+                                    <strong>${team.teamName}</strong>
+                                    <p class="muted">${sizeLabel}</p>
+                                </div>
+                            </div>
+                        </div>`;
+                }).join('');
+            };
+
+            const poll = () => {
+                fetch(endpoint)
+                    .then((r) => r.json())
+                    .then((data) => {
+                        renderTeams(data);
+                        if (redirecting) return;
+                        if (data.winner) {
+                            redirecting = true;
+                            window.location.href = winnerUrl;
+                            return;
+                        }
+                        if (data.status === 'running') {
+                            redirecting = true;
+                            window.location.href = runUrl;
+                        }
+                    })
+                    .catch(() => {});
+            };
+
+            poll();
+            setInterval(poll, 4000);
+        })();
+    </script>
 {% endblock %}

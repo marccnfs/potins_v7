@@ -145,18 +145,38 @@ class EscapeTeamAdminController extends AbstractController
 
         $run = $runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
 
-        if ($request->isMethod('POST') && $request->request->has('action_launch')) {
-            $timeLimitMinutes = $request->request->get('timeLimitMinutes');
-            $timeLimitSeconds = $timeLimitMinutes !== null && $timeLimitMinutes !== '' ? (int) $timeLimitMinutes * 60 : null;
-
-            try {
-                $runAdminService->launch($run, $timeLimitSeconds);
-                $this->addFlash('success', 'Le jeu est lancé ! Les inscriptions sont verrouillées.');
-
-                return $this->redirectToRoute('escape_team_admin_pilot', ['slug' => $slug]);
-            } catch (\Throwable $e) {
-                $this->addFlash('danger', $e->getMessage());
+        if ($request->isMethod('POST')) {
+            if ($request->request->has('action_open')) {
+                try {
+                    $runAdminService->openRegistration($run);
+                    $this->addFlash('success', 'Les inscriptions sont de nouveau ouvertes.');
+                } catch (\Throwable $e) {
+                    $this->addFlash('danger', $e->getMessage());
+                }
             }
+
+            if ($request->request->has('action_close')) {
+                try {
+                    $runAdminService->closeRegistration($run);
+                    $this->addFlash('success', 'Inscriptions fermées : les équipes sont figées.');
+                } catch (\Throwable $e) {
+                    $this->addFlash('danger', $e->getMessage());
+                }
+            }
+            if ($request->request->has('action_launch')) {
+                $timeLimitMinutes = $request->request->get('timeLimitMinutes');
+                $timeLimitSeconds = $timeLimitMinutes !== null && $timeLimitMinutes !== '' ? (int) $timeLimitMinutes * 60 : null;
+
+                try {
+                    $runAdminService->launch($run, $timeLimitSeconds);
+                    $this->addFlash('success', 'Le jeu est lancé ! Les inscriptions sont verrouillées.');
+
+                    return $this->redirectToRoute('escape_team_live', ['slug' => $slug]);
+                } catch (\Throwable $e) {
+                    $this->addFlash('danger', $e->getMessage());
+                }
+            }
+            return $this->redirectToRoute('escape_team_admin_pilot', ['slug' => $slug]);
         }
 
         $vartwig=$this->menuNav->templatepotins(
@@ -169,7 +189,7 @@ class EscapeTeamAdminController extends AbstractController
             'teams' => $run->getTeams(),
             'directory'=>'team',
             'template'=>'team/admin_pilot.html.twig',
-            'vartwig'=>$vartwig['title'] = sprintf('Pilotage · %s', $run->getTitle()),
+            'vartwig'=>array_replace($vartwig, ['title' => sprintf('Pilotage · %s', $run->getTitle())]),
             'participant'=>$participant,
         ]);
     }

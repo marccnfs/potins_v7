@@ -14,6 +14,19 @@ use RuntimeException;
 
 class EscapeTeamRegistrationService
 {
+    private const COLOR_PALETTE = [
+        '#ff6b6b',
+        '#4ecdc4',
+        '#ffd166',
+        '#cdb4db',
+        '#6c5ce7',
+        '#00a8e8',
+        '#f4a261',
+        '#2ec4b6',
+        '#e76f51',
+        '#ff8fa3',
+    ];
+
     public function __construct(
         private readonly EscapeTeamRepository $teamRepository,
         private readonly EntityManagerInterface $em,
@@ -36,7 +49,8 @@ class EscapeTeamRegistrationService
         $team = (new EscapeTeam())
             ->setRun($run)
             ->setName($normalizedName)
-            ->setAvatarKey($avatarKey);
+            ->setAvatarKey($avatarKey)
+            ->setColor($this->pickColor($run));
 
         foreach ($members as $payload) {
             $team->addMember($this->buildMember($payload['nickname'], $payload['avatarKey']));
@@ -176,5 +190,13 @@ class EscapeTeamRegistrationService
     private function normalizeName(string $name): string
     {
         return trim(preg_replace('/\s+/', ' ', $name));
+    }
+
+    private function pickColor(EscapeTeamRun $run): string
+    {
+        $index = $this->teamRepository->count(['run' => $run]);
+        $paletteSize = max(1, count(self::COLOR_PALETTE));
+
+        return self::COLOR_PALETTE[$index % $paletteSize];
     }
 }

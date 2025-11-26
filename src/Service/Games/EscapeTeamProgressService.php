@@ -11,6 +11,18 @@ use RuntimeException;
 
 class EscapeTeamProgressService
 {
+    private const COLOR_PALETTE = [
+        '#ff6b6b',
+        '#4ecdc4',
+        '#ffd166',
+        '#cdb4db',
+        '#6c5ce7',
+        '#00a8e8',
+        '#f4a261',
+        '#2ec4b6',
+        '#e76f51',
+        '#ff8fa3',
+    ];
     public function __construct(
         private readonly EscapeTeamSessionRepository $sessionRepository,
         private readonly EntityManagerInterface $em,
@@ -180,10 +192,18 @@ class EscapeTeamProgressService
         $stepCount = max(1, $stepCount);
 
         $teams = [];
+        $needsFlush = false;
+
         foreach ($sessions as $session) {
             $team = $session->getTeam();
             if ($team === null) {
                 continue;
+            }
+            $color = $team->getColor();
+            if ($color === null) {
+                $color = $this->colorFromPalette(count($teams));
+                $team->setColor($color);
+                $needsFlush = true;
             }
 
             $completedSteps = $session->isCompleted() ? $stepCount : max(0, ($session->getCurrentStep() ?? 1) - 1);
@@ -201,7 +221,8 @@ class EscapeTeamProgressService
                 'teamId' => $team->getId(),
                 'teamName' => $team->getName(),
                 'avatarKey' => $team->getAvatarKey(),
-                'color' => $team->getColor(),
+                'color' => $color,
+                'memberCount' => $team->getMembers()->count(),
                 'currentStep' => $session->getCurrentStep(),
                 'completedSteps' => $completedSteps,
                 'isCompleted' => $session->isCompleted(),
@@ -228,6 +249,23 @@ class EscapeTeamProgressService
             return $a['durationMs'] <=> $b['durationMs'];
         });
 
+        if ($needsFlush) {
+            $this->em->flush();
+        }
+
+        $winner = null;
+        if (($teams[0]['isCompleted'] ?? false) === true) {
+            $winner = [
+                'teamId' => $teams[0]['teamId'],
+                'teamName' => $teams[0]['teamName'],
+                'avatarKey' => $teams[0]['avatarKey'],
+                'color' => $teams[0]['color'],
+                'endedAt' => $teams[0]['endedAt'],
+                'durationMs' => $teams[0]['durationMs'],
+                'hintsUsed' => $teams[0]['hintsUsed'],
+            ];
+        }
+
         return [
             'runId' => $run->getId(),
             'status' => $run->getStatus(),
@@ -237,6 +275,7 @@ class EscapeTeamProgressService
             'remainingSeconds' => $remainingSeconds,
             'teams' => $teams,
             'stepCount' => $stepCount,
+            'winner' => $winner,
         ];
     }
 
@@ -246,11 +285,20 @@ class EscapeTeamProgressService
         $sessions = $this->sessionRepository->findForRun($run);
 
         $entries = [];
+        $needsFlush = false;
         foreach ($sessions as $session) {
             $team = $session->getTeam();
             if ($team === null) {
                 continue;
             }
+
+            $color = $team->getColor();
+            if ($color === null) {
+                $color = $this->colorFromPalette(count($entries));
+                $team->setColor($color);
+                $needsFlush = true;
+            }
+
 
             $completedSteps = $session->isCompleted() ? $stepCount : max(0, ($session->getCurrentStep() ?? 1) - 1);
             $durationMs = $session->getDurationMs();
@@ -265,7 +313,7 @@ class EscapeTeamProgressService
                 'teamId' => $team->getId(),
                 'teamName' => $team->getName(),
                 'avatarKey' => $team->getAvatarKey(),
-                'color' => $team->getColor(),
+                'color' => $color,
                 'completedSteps' => $completedSteps,
                 'isCompleted' => $session->isCompleted(),
                 'durationMs' => $durationMs,
@@ -299,6 +347,10 @@ class EscapeTeamProgressService
             return $a['hintsUsed'] <=> $b['hintsUsed'];
         });
 
+        if ($needsFlush) {
+            $this->em->flush();
+        }
+
         return [
             'runId' => $run->getId(),
             'title' => $run->getTitle(),
@@ -307,6 +359,28 @@ class EscapeTeamProgressService
             'stepCount' => $stepCount,
             'entries' => $entries,
         ];
+    }
+
+    public function findWinner(EscapeTeamRun $run, int $stepCount = 5): ?array
+    {
+        $leaderboard = $this->computeLeaderboard($run, $stepCount);
+
+        foreach ($leaderboard['entries'] as $index => $entry) {
+            if ($entry['isCompleted']) {
+                $entry['rank'] = $index + 1;
+
+                return $entry;
+            }
+        }
+
+        return null;
+    }
+
+    private function colorFromPalette(int $index): string
+    {
+        $paletteSize = max(1, count(self::COLOR_PALETTE));
+
+        return self::COLOR_PALETTE[$index % $paletteSize];
     }
 
     private function closeRunIfNeeded(EscapeTeamRun $run): void
