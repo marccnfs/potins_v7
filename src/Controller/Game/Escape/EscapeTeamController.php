@@ -201,6 +201,8 @@ class EscapeTeamController extends AbstractController
             'team' => $team,
             'session' => $session,
             'scenario' => $scenario,
+            'currentStep' => $session?->getCurrentStep() ?? 1,
+            'totalSteps' => max(1, count($scenario['steps'] ?? [])),
             'directory'=>'team',
             'template'=>'team/play.html.twig',
             'vartwig'=>$vartwig,
@@ -244,11 +246,48 @@ class EscapeTeamController extends AbstractController
 
         $session = $this->sessionRepository->findOneByTeam($team) ?? throw $this->createNotFoundException();
 
+        if ($session->isCompleted()) {
+            return $this->json([
+                'error' => 'Le parcours est déjà terminé pour cette équipe.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $scenario = $this->buildScenarioConfig($run);
+        $stepConfigs = $scenario['steps'] ?? [];
+        $stepCount = max(1, count($stepConfigs));
+
+        $currentStep = $session->getCurrentStep() ?? $stepCount;
+        if ($step > $currentStep) {
+            return $this->json([
+                'error' => sprintf('Valide d’abord l’étape %d avant de continuer.', $currentStep),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $stepConfig = $stepConfigs[$step] ?? null;
+        if ($stepConfig === null) {
+            return $this->json([
+                'error' => 'Étape inconnue.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         $durationMs = $request->request->has('durationMs') ? $request->request->getInt('durationMs') : null;
         $hintsDelta = $request->request->getInt('hintsUsedDelta', 0);
         $metadata = (array) $request->request->all('meta');
 
         $partialKey = trim((string) $request->request->get('partialKey', ''));
+        if ($partialKey !== '') {
+            if (($stepConfig['type'] ?? null) !== 'logic') {
+                return $this->json([
+                    'error' => 'Cette étape ne permet pas de sous-validation.',
+                ], Response::HTTP_BAD_REQUEST);
+            }
+        } elseif (!$this->isValidStepAnswer($stepConfig, $metadata)) {
+            return $this->json([
+                'error' => 'Réponse incorrecte pour cette étape.',
+                'warning' => true,
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         if ($partialKey !== '') {
             $expectedParts = max(1, $request->request->getInt('expectedParts', 3));
             $session = $this->progressService->recordLogicPartCompletion(
@@ -256,7 +295,7 @@ class EscapeTeamController extends AbstractController
                 $step,
                 $partialKey,
                 $expectedParts,
-                totalSteps: 5,
+                totalSteps: $stepCount,
                 metadata: $metadata,
                 stepDurationMs: $durationMs,
                 hintsUsedDelta: $hintsDelta,
@@ -265,7 +304,7 @@ class EscapeTeamController extends AbstractController
             $session = $this->progressService->recordStepCompletion(
                 $session,
                 $step,
-                totalSteps: 5,
+                totalSteps: $stepCount,
                 stepDurationMs: $durationMs,
                 hintsUsedDelta: $hintsDelta,
                 metadata: $metadata,
@@ -387,5 +426,34 @@ class EscapeTeamController extends AbstractController
         ksort($steps);
 
         return ['steps' => $steps];
+    }
+    private function isValidStepAnswer(array $stepConfig, array $metadata): bool
+    {
+        $type = $stepConfig['type'] ?? null;
+
+        if (in_array($type, ['qr_print', 'logic'], true)) {
+            return true;
+        }
+
+        $expected = $this->normalizeAnswer($stepConfig['solution'] ?? null);
+
+        if ($type === 'text') {
+            $provided = $this->normalizeAnswer($metadata['answer'] ?? null);
+
+            return $expected !== '' && $provided !== '' && $expected === $provided;
+        }
+
+        if ($type === 'cryptex') {
+            $provided = $this->normalizeAnswer($metadata['solution'] ?? null);
+
+            return $expected !== '' && $provided !== '' && $expected === $provided;
+        }
+
+        return true;
+    }
+
+    private function normalizeAnswer(?string $value): string
+    {
+        return trim(mb_strtolower((string) $value));
     }
 }

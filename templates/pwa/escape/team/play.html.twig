@@ -8,6 +8,8 @@
              data-controller="escape-team-play"
              data-escape-team-play-complete-url-value="{{ path('escape_team_step_complete', {slug: run.shareSlug, teamId: team.id, step: '__STEP__'}) }}"
              data-escape-team-play-hint-url-value="{{ path('escape_team_consume_hint', {slug: run.shareSlug, teamId: team.id}) }}"
+             data-escape-team-play-current-step-value="{{ currentStep }}"
+             data-escape-team-play-total-steps-value="{{ totalSteps }}"
              data-escape-team-play-step-states-value='{{ stepStates|json_encode|e('html_attr') }}'
              data-escape-team-play-expected-parts-value="3">
         <header class="escape-team__hero">
@@ -25,7 +27,8 @@
         <div class="escape-team__grid steps">
             {% for num, step in steps %}
             {% set state = stepStates[num] ?? {} %}
-            <article class="escape-team__panel" data-escape-team-play-target="step" data-step="{{ num }}">
+                {% set unlocked = (stepStates[num] ?? false) and (stepStates[num].completedAt is defined) or num <= currentStep %}
+                <article class="escape-team__panel" data-escape-team-play-target="step" data-step="{{ num }}" {% if not unlocked %}hidden{% endif %}>
                 <header class="escape-team__step-head">
                     <div>
                         <p class="kicker">Étape {{ num }}</p>

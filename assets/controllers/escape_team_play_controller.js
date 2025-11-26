@@ -13,12 +13,16 @@ export default class extends Controller {
         steps: Object,
         stepStates: Object,
         expectedParts: { type: Number, default: 3 },
+        currentStep: { type: Number, default: 1 },
+        totalSteps: { type: Number, default: 5 },
     };
 
     static targets = ["feedback", "step"];
 
     connect() {
         this.state = this.stepStatesValue || {};
+        this.currentStep = this.currentStepValue || 1;
+        this.totalSteps = this.totalStepsValue || this.stepTargets.length || 5;
         this.completedSteps = new Set(
             Object.entries(this.state)
                 .filter(([_, s]) => s && s.completedAt)
@@ -26,6 +30,7 @@ export default class extends Controller {
         );
 
         this._markCompletedSteps();
+        this._updateVisibleSteps();
         this._attachGlobalListeners();
     }
 
@@ -117,18 +122,29 @@ export default class extends Controller {
                 body: params,
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-                throw new Error("Request failed");
+                const message = data?.error || "Request failed";
+                const error = new Error(message);
+                error.warning = data?.warning || false;
+                throw error;
             }
 
-            const data = await response.json();
             if (data?.stepStates) {
                 this.state = data.stepStates;
             }
             this.completedSteps.add(step);
+            if (typeof data?.currentStep === "number") {
+                this.currentStep = data.currentStep || this.totalSteps;
+            }
             this._markCompletedSteps();
         } catch (e) {
-            this._setFeedback(step, "Impossible d’enregistrer l’étape. Vérifie que le jeu est lancé.", false);
+            const message = e?.message || "Impossible d’enregistrer l’étape. Vérifie que le jeu est lancé.";
+            this._setFeedback(step, message, false);
+            if (e?.warning) {
+                this._flagWarning(step);
+            }
         }
     }
 
@@ -137,6 +153,11 @@ export default class extends Controller {
         if (!target) return;
         target.textContent = message;
         target.className = isSuccess ? "feedback ok" : "feedback ko";
+    }
+    _flagWarning(step) {
+        const target = this.stepTargets.find((t) => Number(t.dataset.step) === step);
+        if (!target) return;
+        target.classList.add("has-warning");
     }
 
     _markCompletedSteps() {
@@ -148,6 +169,16 @@ export default class extends Controller {
             el.querySelectorAll("input, textarea, button").forEach((n) => {
                 n.disabled = true;
             });
+        });
+    }
+
+    _updateVisibleSteps() {
+        this.stepTargets.forEach((el) => {
+            const step = Number(el.dataset.step || 0);
+            if (!step) return;
+
+            const shouldShow = this.completedSteps.has(step) || step <= this.currentStep;
+            el.hidden = !shouldShow;
         });
     }
 
