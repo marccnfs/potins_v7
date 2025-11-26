@@ -15,6 +15,7 @@ Attentes:
     create:      'wizard_start',
     sessions:    'dashboard_my_sessions',
     mine:        'dashboard_my_escapes',
+    escapeTeam:  'escape_team_admin_list',
     docs:        'docs_workshop',
     login:       'participant_entry',
     logout:      'participant_logout',
@@ -37,6 +38,9 @@ Attentes:
                   {% if participant %}
                     <a class="xnav__link {{ active=='sessions' ? 'is-active' }}" href="{{ path(nav.sessions) }}">Mes parties</a>
                     <a class="xnav__link {{ active=='mine' ? 'is-active' }}" href="{{ path(nav.mine) }}">Mes escapes</a>
+                      {% if isMasterParticipant %}
+                          <a class="xnav__link {{ active=='escape-team' ? 'is-active' }}" href="{{ path(nav.escapeTeam) }}">Mes escapes-team</a>
+                      {% endif %}
                   {% endif %}
               <a class="xnav__link {{ active=='docs' ? 'is-active' }}" href="{{ path(nav.docs) }}">Atelier/Guide</a>
             </nav>
@@ -61,6 +65,9 @@ Attentes:
                   <a role="menuitem" class="xnav__menuitem" href="{{ path(nav.profile) }}">Mon profil</a>
                     <a role="menuitem" class="xnav__menuitem" href="{{ path(nav.sessions) }}">Mes parties</a>
                   <a role="menuitem" class="xnav__menuitem" href="{{ path(nav.mine) }}">Mes escapes</a>
+                    {% if isMasterParticipant %}
+                        <a role="menuitem" class="xnav__menuitem" href="{{ path(nav.escapeTeam) }}">Mes escapes-team</a>
+                    {% endif %}
                   <hr>
                   <a role="menuitem" class="xnav__menuitem" href="{{ path(nav.logout) }}">Se déconnecter</a>
                 </div>

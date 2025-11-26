@@ -1,0 +1,59 @@
+{% extends 'pwa/escape/basepublic.html.twig' %}
+
+{% block body %}
+    <section class="escape-team admin">
+        <header class="escape-team__hero">
+            <p class="kicker">Escape game par équipes</p>
+            <h1>Modifier la session « {{ run.title }} »</h1>
+            <p class="muted">Met à jour le slug, le visuel et les solutions avant de lancer la partie.</p>
+            <div class="escape-team__actions">
+                <a class="btn btn-light" href="{{ path('escape_team_admin_list') }}">← Retour à mes escapes-team</a>
+            </div>
+        </header>
+
+        <div class="escape-team__grid">
+            <div>
+                <h2>Paramétrage du run</h2>
+                {{ form_start(form) }}
+                <div class="form-group">
+                    {{ form_label(form.escapeGame) }}
+                    {{ form_widget(form.escapeGame, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.title) }}
+                    {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.heroImageUrl) }}
+                    {{ form_widget(form.heroImageUrl, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.maxTeams) }}
+                    {{ form_widget(form.maxTeams, {'attr': {'class': 'form-control'}}) }}
+                    <p class="muted">Max 10 équipes, nom unique requis côté inscription.</p>
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.timeLimitMinutes) }}
+                    {{ form_widget(form.timeLimitMinutes, {'attr': {'class': 'form-control'}}) }}
+                    <p class="muted">Laisse vide pour aucune limite.</p>
+                </div>
+                {{ form_widget(form.submit) }}
+                {{ form_end(form) }}
+            </div>
+
+            <div>
+                <h2>Rappel du flux</h2>
+                <ol class="escape-team__bullets">
+                    <li>Projette la landing pour recueillir les équipes.</li>
+                    <li>Vérifie les solutions et indices avant lancement.</li>
+                    <li>Lance la session depuis le pilotage quand tout le monde est prêt.</li>
+                </ol>
+                <p class="muted">Slug : <code>{{ run.shareSlug }}</code></p>
+                <div class="quick">
+                    <a class="btn" href="{{ path('escape_team_admin_pilot', {slug: run.shareSlug}) }}">Ouvrir le pilotage</a>
+                    <a class="btn btn-light" href="{{ path('escape_team_landing', {slug: run.shareSlug}) }}" target="_blank" rel="noopener">Voir la landing</a>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

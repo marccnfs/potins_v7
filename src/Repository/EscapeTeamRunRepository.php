@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Games\EscapeTeamRun;
+use App\Entity\Users\Participant;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -24,5 +25,18 @@ class EscapeTeamRunRepository extends ServiceEntityRepository
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    /**
+     * @return array<int, EscapeTeamRun>
+     */
+    public function findAllForOwner(Participant $owner): array
+    {
+        return $this->createQueryBuilder('run')
+            ->andWhere('run.owner = :owner')
+            ->setParameter('owner', $owner)
+            ->orderBy('run.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 }

@@ -8,6 +8,7 @@ use App\Entity\Games\EscapeGame;
 use App\Entity\Users\Participant;
 use App\Lib\Links;
 use App\Repository\PlaySessionRepository;
+use App\Repository\EscapeWorkshopSessionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +20,11 @@ class DashboardParticipantController extends AbstractController
 
     #[Route('/escape/mes-parties', name: 'dashboard_my_sessions')]
     #[RequireParticipant]
-    public function listSessions(Participant $participant, PlaySessionRepository $playSessionRepository): Response
+    public function listSessions(
+        Participant                     $participant,
+        PlaySessionRepository           $playSessionRepository,
+        EscapeWorkshopSessionRepository $workshopRepository,
+    ): Response
     {
 
         $sessions = $playSessionRepository->findAllForParticipant($participant);
@@ -79,6 +84,7 @@ class DashboardParticipantController extends AbstractController
             'participant' => $participant,
             'gamesSessions' => $gamesSessions,
             'active' => 'sessions',
+            'isMasterParticipant' => $this->isMasterParticipant($participant, $workshopRepository),
         ]);
 
     }
@@ -86,7 +92,10 @@ class DashboardParticipantController extends AbstractController
 
     #[Route('/escape/mes-escapes', name: 'dashboard_my_escapes')]
     #[RequireParticipant]
-    public function listEscapeGame( Participant $participant): Response
+    public function listEscapeGame(
+        Participant $participant,
+        EscapeWorkshopSessionRepository $workshopRepository,
+    ): Response
     {
 
         $games=$participant->getEscapeGames();
@@ -101,7 +110,8 @@ class DashboardParticipantController extends AbstractController
             'vartwig'=>$vartwig,
             'participant' => $participant,
             'progression'=>0,
-            'games'=>$games
+            'games'=>$games,
+            'isMasterParticipant' => $this->isMasterParticipant($participant, $workshopRepository),
         ]);
 
     }
@@ -144,6 +154,11 @@ class DashboardParticipantController extends AbstractController
     {
         $participantId = $this->requestStack->getSession()->get('participant_id');
         return $participantId ? $this->em->getRepository(Participant::class)->find($participantId) : null;
+    }
+
+    private function isMasterParticipant(Participant $participant, EscapeWorkshopSessionRepository $workshopRepository): bool
+    {
+        return (bool) $workshopRepository->findOneByCode($participant->getCodeAtelier())?->isMaster();
     }
 
 }

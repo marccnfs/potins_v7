@@ -1,0 +1,67 @@
+{% extends 'pwa/escape/basepublic.html.twig' %}
+
+{% block body %}
+    <section class="escape-team admin">
+        <header class="escape-team__hero">
+            <p class="kicker">Escape game par équipes</p>
+            <h1>Mes escapes-team</h1>
+            <p class="muted">Retrouve tes sessions « master », édite-les ou pilote-les en direct.</p>
+            <div class="escape-team__actions">
+                <a class="btn btn-primary" href="{{ path('escape_team_admin_create') }}">+ Nouvelle session</a>
+            </div>
+        </header>
+
+        {% if createdRun %}
+            <div class="alert alert-success">
+                La session <strong>{{ createdRun.title }}</strong> est prête. Tu peux ouvrir le pilotage ou la landing.
+            </div>
+        {% endif %}
+
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-message flash-{{ type }}" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+
+        {% if runs is not empty %}
+            <section class="cards">
+                {% for run in runs %}
+                    {% set launched = run.startedAt is not null %}
+                    {% set gameTitle = run.escapeGame ? run.escapeGame.title : null %}
+                    <article class="card">
+                        <div class="meta">
+                            <h3 class="title">{{ run.title ?? 'Escape-team' }}</h3>
+                            <p class="desc muted">{{ gameTitle ?? 'Escape parent inconnu' }}</p>
+                        </div>
+
+                        <div class="badges">
+                            <span class="badge">Slug: {{ run.shareSlug }}</span>
+                            <span class="badge {{ launched ? 'badge-green' : '' }}">{{ run.status|default('draft') }}</span>
+                            <span class="badge">{{ run.teams|length }} équipes / {{ run.maxTeams }}</span>
+                        </div>
+
+                        <div class="quick">
+                            <a class="btn" href="{{ path('escape_team_admin_pilot', {slug: run.shareSlug}) }}">Piloter</a>
+                            <a class="btn btn-light" href="{{ path('escape_team_landing', {slug: run.shareSlug}) }}" target="_blank" rel="noopener">Landing</a>
+                            <a class="btn {{ launched ? 'disabled' : '' }}" href="{{ launched ? '#' : path('escape_team_admin_edit', {slug: run.shareSlug}) }}" {{ launched ? 'aria-disabled="true" tabindex="-1"' : '' }}>
+                                Éditer
+                            </a>
+                            <form method="post" action="{{ path('escape_team_admin_delete', {slug: run.shareSlug}) }}" onsubmit="return confirm('Supprimer définitivement cette session ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete_escape_team_' ~ run.id) }}">
+                                <button class="btn btn-danger" {{ launched ? 'disabled' }}>
+                                    🗑️ Supprimer
+                                </button>
+                            </form>
+                        </div>
+                    </article>
+                {% endfor %}
+            </section>
+        {% else %}
+            <section class="empty">
+                <h2>Tu n’as pas encore de session escape-team</h2>
+                <p>Crée une session « master » pour générer un slug unique et accueillir tes équipes.</p>
+                <a class="btn btn-primary" href="{{ path('escape_team_admin_create') }}">Créer une session</a>
+            </section>
+        {% endif %}
+    </section>
+{% endblock %}
