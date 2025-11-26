@@ -19,6 +19,11 @@ export default class extends Controller {
 
     static targets = ["feedback", "step"];
 
+    initialize() {
+        this.completedSteps = new Set();
+        this.state = {};
+    }
+
     connect() {
         this.state = this.stepStatesValue || {};
         this.currentStep = this.currentStepValue || 1;
