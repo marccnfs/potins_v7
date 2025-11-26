@@ -13,6 +13,7 @@ use App\Service\Games\EscapeTeamProgressService;
 use App\Service\Games\EscapeTeamRegistrationService;
 use App\Service\Games\EscapeTeamRunAdminService;
 use App\Service\MobileLinkManager;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,6 +37,8 @@ class EscapeTeamController extends AbstractController
         private readonly EscapeTeamRunAdminService $runAdminService,
         private readonly EscapeTeamAvatarCatalog $avatarCatalog,
         private readonly MobileLinkManager $mobileLinkManager,
+        #[Autowire('%kernel.secret%')]
+        private readonly string $appSecret,
     ) {
     }
 
@@ -210,30 +213,105 @@ class EscapeTeamController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}/team/{teamId}/qr-token', name: 'escape_team_qr_token', methods: ['POST'])]
-    public function qrToken(string $slug, int $teamId): JsonResponse
+    #[Route('/{slug}/qr/token', name: 'escape_team_hidden_qr_token', methods: ['POST'])]
+    public function hiddenQrToken(string $slug): JsonResponse
     {
         $run = $this->runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
-        $team = $this->teamRepository->find($teamId);
-        if (!$team || $team->getRun()?->getId() !== $run->getId()) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($run->getStatus() !== EscapeTeamRun::STATUS_RUNNING) {
-            return $this->json(['error' => 'Le jeu doit être lancé pour générer le QR.'], Response::HTTP_BAD_REQUEST);
-        }
-
-        $playUrl = $this->generateUrl('escape_team_play', ['slug' => $slug, 'teamId' => $teamId], UrlGeneratorInterface::ABSOLUTE_URL);
-
+        $token = $this->buildHiddenQrToken($run);
+        $scanUrl = $this->generateUrl('escape_team_qr_scan', ['slug' => $slug, 'token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
         return $this->json([
-            'qr' => $this->mobileLinkManager->buildQrForUrl($playUrl),
-            'token' => bin2hex(random_bytes(8)),
-            'directUrl' => $playUrl,
+            'qr' => $this->mobileLinkManager->buildQrForUrl($scanUrl),
+            'token' => $token,
+            'directUrl' => $scanUrl,
             'expiresAt' => null,
             'noExpiry' => true,
         ]);
     }
 
+    #[Route('/{slug}/qr/print/{token}', name: 'escape_team_hidden_qr_print', methods: ['GET'])]
+    public function hiddenQrPrint(string $slug, string $token): Response
+    {
+        $run = $this->runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
+        $expectedToken = $this->buildHiddenQrToken($run);
+        if (!hash_equals($expectedToken, $token)) {
+            throw $this->createNotFoundException();
+        }
+
+        $scanUrl = $this->generateUrl('escape_team_qr_scan', ['slug' => $slug, 'token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        return $this->render('pwa/escape/team/qr_print.html.twig', [
+            'payload' => [
+                'qr' => $this->mobileLinkManager->buildQrForUrl($scanUrl),
+                'directUrl' => $scanUrl,
+            ],
+            'run' => $run,
+            'token' => $token,
+        ]);
+    }
+
+    #[Route('/{slug}/qr/scan', name: 'escape_team_qr_scan', methods: ['GET', 'POST'])]
+    public function scanQr(Request $request, string $slug): Response
+    {
+        $run = $this->runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
+
+        $token = (string) $request->get('token', '');
+        $expectedToken = $this->buildHiddenQrToken($run);
+        if ($token === '' || !hash_equals($expectedToken, $token)) {
+            throw $this->createNotFoundException();
+        }
+
+        $teamId = $request->isMethod('POST')
+            ? (int) $request->request->get('teamId', 0)
+            : (int) $request->query->get('teamId', 0);
+
+        $team = $teamId ? $this->teamRepository->find($teamId) : null;
+        $error = null;
+        $success = false;
+
+        $scenario = $this->buildScenarioConfig($run);
+        $stepCount = max(1, count($scenario['steps'] ?? []));
+        $targetStep = 4;
+
+        if ($team !== null) {
+            if ($team->getRun()?->getId() !== $run->getId()) {
+                $error = 'Cette équipe n’appartient pas à ce run.';
+            } elseif ($run->getStatus() !== EscapeTeamRun::STATUS_RUNNING) {
+                $error = 'Le jeu doit être lancé pour valider cette étape.';
+            } else {
+                $session = $this->sessionRepository->findOneByTeam($team);
+                if ($session === null) {
+                    $error = 'Session introuvable pour cette équipe.';
+                } elseif (($session->getStepStates()[$targetStep]['completedAt'] ?? null) !== null) {
+                    $success = true; // déjà validé
+                } else {
+                    try {
+                        $this->progressService->recordStepCompletion(
+                            $session,
+                            $targetStep,
+                            totalSteps: $stepCount,
+                            metadata: ['qrToken' => $token],
+                        );
+                        $success = true;
+                    } catch (\Throwable $e) {
+                        $error = $e->getMessage();
+                    }
+                }
+            }
+        }
+
+        $teams = $this->teamRepository->findForRunOrdered($run);
+
+        return $this->render('pwa/escape/team/qr_scan.html.twig', [
+            'run' => $run,
+            'teams' => $teams,
+            'team' => $team,
+            'success' => $success,
+            'error' => $error,
+            'token' => $token,
+            'redirectUrl' => $team ? $this->generateUrl('escape_team_play', ['slug' => $slug, 'teamId' => $team->getId()]) : null,
+            'targetStep' => $targetStep,
+        ]);
+    }
 
     #[Route('/{slug}/team/{teamId}/step/{step}', name: 'escape_team_step_complete', methods: ['POST'])]
     public function completeStep(Request $request, string $slug, int $teamId, int $step): JsonResponse
@@ -399,9 +477,9 @@ class EscapeTeamController extends AbstractController
             ],
             4 => [
                 'type' => 'qr_print',
-                'title' => 'Étape 4 — QR à générer et scanner',
-                'prompt' => 'Génère le QR code d’équipe puis scanne-le.',
-                'hints' => ['Un seul QR suffit pour toute l’équipe.'],
+                'title' => 'Étape 4 — Trouve le QR caché',
+                'prompt' => 'Cherche le QR dissimulé par le maître du jeu et scanne-le pour valider.',
+                'hints' => ['Le QR a été imprimé et caché pendant la préparation.'],
             ],
             5 => [
                 'type' => 'cryptex',
@@ -427,6 +505,12 @@ class EscapeTeamController extends AbstractController
 
         return ['steps' => $steps];
     }
+
+    private function buildHiddenQrToken(EscapeTeamRun $run): string
+    {
+        return substr(hash_hmac('sha256', $run->getShareSlug() . '|escape-team-step4', $this->appSecret), 0, 16);
+    }
+
     private function isValidStepAnswer(array $stepConfig, array $metadata): bool
     {
         $type = $stepConfig['type'] ?? null;

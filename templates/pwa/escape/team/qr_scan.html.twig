@@ -1,0 +1,38 @@
+{% extends 'pwa/escape/basepublic.html.twig' %}
+
+{% block body %}
+    <section class="escape-team qr-scan">
+        <header class="escape-team__hero">
+            <p class="kicker">Étape {{ targetStep }} · {{ run.title }}</p>
+            <h1>QR caché</h1>
+            <p class="muted">Vous venez de scanner le QR caché. Choisissez votre équipe pour valider automatiquement l’étape.</p>
+        </header>
+
+        {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+
+        {% if success and team %}
+            <div class="alert alert-success">
+                Étape validée pour l’équipe {{ team.name }} !
+            </div>
+            {% if redirectUrl %}
+                <p><a class="btn btn-primary" href="{{ redirectUrl }}">Retour à la progression</a></p>
+            {% endif %}
+        {% endif %}
+
+        {% if not success %}
+            <form method="post" class="escape-team__form">
+                <label for="teamId">Sélectionne ton équipe</label>
+                <select id="teamId" name="teamId" class="form-control" required>
+                    <option value="">Choisis une équipe…</option>
+                    {% for selectable in teams %}
+                        <option value="{{ selectable.id }}" {% if team and team.id == selectable.id %}selected{% endif %}>{{ selectable.name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" name="token" value="{{ token }}">
+                <button class="btn btn-primary" type="submit">Valider l’étape</button>
+            </form>
+        {% endif %}
+    </section>
+{% endblock %}

@@ -82,15 +82,6 @@ export default class extends Controller {
         this._setFeedback(step, `Sous-épreuve ${partKey} validée ✔️`, true);
     }
 
-    onQrGenerated(event) {
-        const step = Number(event.currentTarget.dataset.step || 0);
-        if (!step || this.completedSteps.has(step)) return;
-
-        const token = event.detail?.token || null;
-        this.completeStep(step, { qrToken: token });
-        this._setFeedback(step, "QR généré et validé, passe à l’étape suivante !", true);
-    }
-
     consumeHint(event) {
         const step = Number(event.currentTarget.dataset.step || 0);
         if (!step) return;
@@ -139,11 +130,22 @@ export default class extends Controller {
             if (data?.stepStates) {
                 this.state = data.stepStates;
             }
-            this.completedSteps.add(step);
+            const stepState = this.state?.[step] || {};
+            const isStepCompleted = Boolean(stepState.completedAt) ||
+                (typeof data?.currentStep === "number" && data.currentStep > step) ||
+                Boolean(data?.completed);
+
+            if (isStepCompleted) {
+                this.completedSteps.add(step);
+            } else {
+                this.completedSteps.delete(step);
+            }
+
             if (typeof data?.currentStep === "number") {
                 this.currentStep = data.currentStep || this.totalSteps;
             }
             this._markCompletedSteps();
+            this._updateVisibleSteps();
         } catch (e) {
             const message = e?.message || "Impossible d’enregistrer l’étape. Vérifie que le jeu est lancé.";
             this._setFeedback(step, message, false);

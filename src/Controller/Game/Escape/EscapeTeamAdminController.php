@@ -33,6 +33,7 @@ class EscapeTeamAdminController extends AbstractController
         Participant $participant,
         EscapeWorkshopSessionRepository $workshopRepository,
         EscapeTeamRunAdminService $runAdminService,
+        EscapeTeamRunRepository $runRepository,
     ): Response {
         $workshop = $workshopRepository->findOneByCode($participant->getCodeAtelier());
         if (!$workshop || !$workshop->isMaster()) {
@@ -142,9 +143,12 @@ class EscapeTeamAdminController extends AbstractController
 
                 $this->addFlash('success', 'Session équipes créée : les inscriptions sont ouvertes.');
 
-                return $this->redirectToRoute('escape_team_landing', ['slug' => $run->getShareSlug()]);
+                return $this->redirectToRoute('escape_team_admin_create', ['created' => $run->getShareSlug()]);
             }
         }
+
+        $createdSlug = (string) $request->query->get('created', '');
+        $createdRun = $createdSlug !== '' ? $runRepository->findOneByShareSlug($createdSlug) : null;
 
         $vartwig=$this->menuNav->templatepotins(
             '_index',
@@ -159,6 +163,7 @@ class EscapeTeamAdminController extends AbstractController
             'vartwig'=>$vartwig,
             'title' =>"Créer une session escape par équipes",
             'participant'=>$participant,
+            'createdRun' => $createdRun,
         ]);
 
     }
@@ -308,11 +313,11 @@ class EscapeTeamAdminController extends AbstractController
                 ],
                 4 => [
                     'type' => 'qr_print',
-                    'title' => 'Étape 4 — QR à générer et scanner',
-                    'prompt' => 'Génère le QR code d’équipe puis scanne-le avec un smartphone pour découvrir l’indice.',
+                    'title' => 'Étape 4 — Trouve le QR caché',
+                    'prompt' => 'Repère le QR caché par le maître du jeu et scanne-le pour valider l’étape.',
                     'hints' => [
-                        'Un seul QR suffit pour toute l’équipe.',
-                        'Le QR mène vers la page de jeu de votre équipe : scannez-le puis validez.',
+                        'Le QR a été imprimé lors de la création et caché dans la zone de jeu.',
+                        'Une fois scanné, la validation est automatique pour l’équipe.',
                     ],
                 ],
                 5 => [

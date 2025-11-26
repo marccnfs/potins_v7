@@ -66,31 +66,8 @@
                             <p class="muted">Les trois mini-tests doivent être validés pour clôturer l'étape.</p>
                             </div>
                     {% elseif step.type == 'qr_print' %}
-                        <div class="escape-team__qr"
-                             data-step="{{ num }}"
-                             data-action="qr-print:generated->escape-team-play#onQrGenerated">
-                            <div data-controller="qr-print"
-                                 data-qr-print-fetch-url-value="{{ path('escape_team_qr_token', {slug: run.shareSlug, teamId: team.id}) }}"
-                                 data-qr-print-ready-message-value="Génère le QR puis scanne-le avec un smartphone"
-                                 data-qr-print-generated-message-value="QR prêt, scannez-le pour continuer"
-                                 data-qr-print-generating-message-value="Génération en cours..."
-                                 data-qr-print-error-message-value="Impossible de générer le QR"
-                                 data-qr-print-no-expiry-message-value="Pas d'expiration">
-                                <p class="muted" data-qr-print-target="placeholder">Clique sur « Générer » pour créer le QR d'équipe.</p>
-                                <div class="qr-print" data-qr-print-target="details" hidden>
-                                    <figure class="qr-print__figure">
-                                        <img data-qr-print-target="qrImage" alt="QR de validation" />
-                                        <figcaption class="muted" data-qr-print-target="expires" hidden></figcaption>
-                                    </figure>
-                                    <div class="qr-print__actions">
-                                        <button class="btn" data-qr-print-target="generateButton" data-action="qr-print#generate">Générer</button>
-                                        <button class="btn btn-light" data-qr-print-target="printButton" data-action="qr-print#print" disabled>Imprimer</button>
-                                    </div>
-                                    <p class="muted" data-qr-print-target="directWrapper" hidden>
-                                        <a data-qr-print-target="directLink" href="#" target="_blank" rel="noopener"></a>
-                                    </p>
-                                </div>
-                            </div>
+                        <div class="escape-team__qr" data-step="{{ num }}">
+                            <p class="muted">Le maître du jeu a caché un QR code dans la zone de jeu. Trouvez-le puis scannez-le avec votre appareil : l’étape sera validée automatiquement.</p>
                         </div>
                     {% elseif step.type == 'cryptex' %}
                         <div class="escape-team__cryptex" data-step="{{ num }}">

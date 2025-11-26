@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>QR caché · {{ run.title }}</title>
+    <style>
+        body { font-family: sans-serif; margin: 2rem; text-align: center; }
+        img { max-width: 280px; height: auto; }
+        .note { color: #666; }
+    </style>
+</head>
+<body>
+<h1>QR caché pour l’étape 4</h1>
+<p class="note">Imprime ce QR puis cache-le dans la zone de jeu. Le scan par une équipe valide automatiquement l’étape.</p>
+<figure>
+    <img src="{{ payload.qr }}" alt="QR de validation" width="280" height="280">
+    <figcaption class="note">Lien direct : {{ payload.directUrl }}</figcaption>
+</figure>
+</body>
+</html>
