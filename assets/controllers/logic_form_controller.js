@@ -69,6 +69,11 @@ export default class extends Controller {
         this.msgTarget.className = allGood ? "ok" : "fail";
 
         if (allGood) {
+            // Notifie le composant courant (utile pour les parcours en équipes)
+            this.element.dispatchEvent(new CustomEvent('logic-form:solved', {
+                bubbles: true,
+                detail: { element: this.element },
+            }));
             // Notifie le système (score, progression…)
             document.dispatchEvent(new CustomEvent('puzzle:solved', { bubbles:true, detail:{ type:'logic_form' }}));
         }

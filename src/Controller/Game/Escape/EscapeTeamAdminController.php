@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,6 +49,12 @@ class EscapeTeamAdminController extends AbstractController
         $form = $this->createFormBuilder([
             'title' => $defaultTitle,
             'maxTeams' => 10,
+            'step1Solution' => 'ORIGAMI',
+            'step1Hints' => "Observe les symboles communs.\nLe mot est en majuscules.",
+            'step2Solution' => 'GALAXIE',
+            'step2Hints' => "Complète les flèches les plus courtes en premier.\nLe mot code se lit verticalement.",
+            'cryptexSolution' => 'VICTOIRE',
+            'cryptexHints' => "Les lettres sont liées au thème de l\'atelier.\nLe mot final utilise 8 lettres.",
         ])
             ->add('escapeGame', ChoiceType::class, [
                 'choices' => $games,
@@ -74,6 +81,36 @@ class EscapeTeamAdminController extends AbstractController
                 'required' => false,
                 'attr' => ['min' => 0],
             ])
+            ->add('step1Solution', TextType::class, [
+                'label' => 'Solution étape 1 (mot ou phrase)',
+                'attr' => ['placeholder' => 'Mot attendu pour la première épreuve'],
+            ])
+            ->add('step1Hints', TextareaType::class, [
+                'label' => 'Indices étape 1',
+                'required' => false,
+                'attr' => ['rows' => 3],
+                'help' => 'Un indice par ligne, affichés aux joueurs sur demande.',
+            ])
+            ->add('step2Solution', TextType::class, [
+                'label' => 'Solution étape 2 (mot ou phrase)',
+                'attr' => ['placeholder' => 'Mot attendu pour la seconde épreuve'],
+            ])
+            ->add('step2Hints', TextareaType::class, [
+                'label' => 'Indices étape 2',
+                'required' => false,
+                'attr' => ['rows' => 3],
+                'help' => 'Un indice par ligne, affichés aux joueurs sur demande.',
+            ])
+            ->add('cryptexSolution', TextType::class, [
+                'label' => 'Solution finale (cryptex)',
+                'attr' => ['placeholder' => 'Mot final pour l’étape cryptex'],
+            ])
+            ->add('cryptexHints', TextareaType::class, [
+                'label' => 'Indices étape 5 (cryptex)',
+                'required' => false,
+                'attr' => ['rows' => 3],
+                'help' => 'Un indice par ligne, affichés aux joueurs sur demande.',
+            ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Créer et ouvrir les inscriptions',
                 'attr' => ['class' => 'btn btn-primary'],
@@ -98,6 +135,7 @@ class EscapeTeamAdminController extends AbstractController
                     heroImageUrl: $data['heroImageUrl'] ?? null,
                     maxTeams: (int) $data['maxTeams'],
                     timeLimitSeconds: $timeLimitSeconds,
+                    puzzleConfig: $this->buildPuzzleConfig($data),
                 );
 
                 $runAdminService->openRegistration($run);
@@ -192,5 +230,111 @@ class EscapeTeamAdminController extends AbstractController
             'vartwig'=>array_replace($vartwig, ['title' => sprintf('Pilotage · %s', $run->getTitle())]),
             'participant'=>$participant,
         ]);
+    }
+
+    /**
+     * Construit la configuration des 5 étapes (solutions + indices) pour le run.
+     * Les indices sont saisis en texte libre (un par ligne) et convertis en tableau.
+     */
+    private function buildPuzzleConfig(array $data): array
+    {
+        $logicQuestions = [
+            [
+                'label' => 'Épreuve logique 1 — Trouve l’intrus',
+                'options' => [
+                    ['id' => 'A', 'label' => 'Symbole cercle'],
+                    ['id' => 'B', 'label' => 'Symbole carré (intrus)'],
+                    ['id' => 'C', 'label' => 'Symbole triangle'],
+                ],
+                'solution' => ['must' => ['A', 'C'], 'mustNot' => ['B']],
+            ],
+            [
+                'label' => 'Épreuve logique 2 — Vrai ou faux ?',
+                'options' => [
+                    ['id' => 'A', 'label' => 'La clé est cachée au nord'],
+                    ['id' => 'B', 'label' => 'La clé est cachée au sud'],
+                ],
+                'solution' => ['must' => ['A'], 'mustNot' => ['B']],
+            ],
+            [
+                'label' => 'Épreuve logique 3 — Suite à compléter',
+                'options' => [
+                    ['id' => 'A', 'label' => 'Réponse attendue'],
+                    ['id' => 'B', 'label' => 'Fausses pistes'],
+                    ['id' => 'C', 'label' => 'Autre fausse piste'],
+                ],
+                'solution' => ['must' => ['A'], 'mustNot' => ['B', 'C']],
+            ],
+        ];
+
+        return [
+            'steps' => [
+                1 => [
+                    'type' => 'text',
+                    'title' => 'Étape 1 — Mot ou phrase',
+                    'prompt' => 'Résous le support papier (codes, acrostiche…) puis saisis le mot exact.',
+                    'solution' => trim((string) ($data['step1Solution'] ?? '')),
+                    'hints' => $this->splitHints($data['step1Hints'] ?? null, [
+                        'Observe les symboles communs : ils donnent l’ordre de lecture.',
+                        'Le mot attendu est en majuscules sans accents.',
+                    ]),
+                    'successMessage' => 'Bonne réponse, direction l’étape 2 !',
+                    'failMessage' => 'Mauvaise réponse, vérifie l’orthographe ou les accents.',
+                ],
+                2 => [
+                    'type' => 'text',
+                    'title' => 'Étape 2 — Mot ou phrase',
+                    'prompt' => 'Complète la grille papier et saisis le mot découvert (colonne ou diagonale).',
+                    'solution' => trim((string) ($data['step2Solution'] ?? '')),
+                    'hints' => $this->splitHints($data['step2Hints'] ?? null, [
+                        'Commence par les définitions les plus courtes pour débloquer la grille.',
+                        'Le mot code se lit surligné sur le support papier.',
+                    ]),
+                    'successMessage' => 'Validé ! Passe à la triple énigme logique.',
+                    'failMessage' => 'Le mot ne correspond pas. Essaie à nouveau.',
+                ],
+                3 => [
+                    'type' => 'logic',
+                    'title' => 'Étape 3 — Triple épreuve logique',
+                    'prompt' => 'Validez les trois mini-tests logiques pour débloquer le QR.',
+                    'questions' => $logicQuestions,
+                    'hints' => [
+                        'Chaque partie peut avoir plusieurs cases à cocher.',
+                        'L’intrus est l’option qui ne partage pas la même propriété.',
+                        'Relisez les énoncés : une seule combinaison valide les trois tests.',
+                    ],
+                    'okMessage' => '3/3 validés, rendez-vous à l’étape QR !',
+                    'failMessage' => 'Il reste une erreur dans l’une des parties.',
+                ],
+                4 => [
+                    'type' => 'qr_print',
+                    'title' => 'Étape 4 — QR à générer et scanner',
+                    'prompt' => 'Génère le QR code d’équipe puis scanne-le avec un smartphone pour découvrir l’indice.',
+                    'hints' => [
+                        'Un seul QR suffit pour toute l’équipe.',
+                        'Le QR mène vers la page de jeu de votre équipe : scannez-le puis validez.',
+                    ],
+                ],
+                5 => [
+                    'type' => 'cryptex',
+                    'title' => 'Étape 5 — Cryptex final',
+                    'prompt' => 'Tournez les anneaux pour former le mot secret et révéler la phrase finale.',
+                    'solution' => trim((string) ($data['cryptexSolution'] ?? '')),
+                    'hints' => $this->splitHints($data['cryptexHints'] ?? null, [
+                        'Le mot est lié au thème de la session.',
+                        'Utilise les fragments trouvés dans chaque étape pour reconstituer le mot.',
+                    ]),
+                    'alphabet' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                    'successMessage' => 'Cryptex ouvert ! Saisis la phrase finale auprès du maître du jeu.',
+                ],
+            ],
+        ];
+    }
+
+    private function splitHints(?string $raw, array $fallback = []): array
+    {
+        $items = array_values(array_filter(array_map(static fn (string $line): string => trim($line), explode("\n", (string) ($raw ?? '')))));
+
+        return $items !== [] ? $items : $fallback;
     }
 }

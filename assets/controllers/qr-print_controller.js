@@ -117,6 +117,10 @@ export default class extends Controller {
             if (this.hasToolbarPrintButtonTarget) {
                 this.enableButton(this.toolbarPrintButtonTarget);
             }
+            this.element.dispatchEvent(new CustomEvent("qr-print:generated", {
+                bubbles: true,
+                detail: { token: this.token, data }
+            }));
         } catch (error) {
             console.error(error);
             this.showMessage(this.errorMessageValue || "");

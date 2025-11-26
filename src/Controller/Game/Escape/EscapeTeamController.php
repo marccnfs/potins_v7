@@ -3,6 +3,7 @@
 namespace App\Controller\Game\Escape;
 
 use App\Classe\UserSessionTrait;
+use App\Entity\Games\EscapeTeamRun;
 use App\Lib\Links;
 use App\Repository\EscapeTeamRepository;
 use App\Repository\EscapeTeamRunRepository;
@@ -189,6 +190,7 @@ class EscapeTeamController extends AbstractController
         }
 
         $session = $this->sessionRepository->findOneByTeam($team) ?? null;
+        $scenario = $this->buildScenarioConfig($run);
 
         $vartwig=$this->menuNav->templatepotins(
             '_index',
@@ -198,10 +200,35 @@ class EscapeTeamController extends AbstractController
             'run' => $run,
             'team' => $team,
             'session' => $session,
+            'scenario' => $scenario,
             'directory'=>'team',
             'template'=>'team/play.html.twig',
             'vartwig'=>$vartwig,
             'title' => sprintf('Équipe %s · %s', $team->getName(), $run->getTitle()),
+        ]);
+    }
+
+    #[Route('/{slug}/team/{teamId}/qr-token', name: 'escape_team_qr_token', methods: ['POST'])]
+    public function qrToken(string $slug, int $teamId): JsonResponse
+    {
+        $run = $this->runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
+        $team = $this->teamRepository->find($teamId);
+        if (!$team || $team->getRun()?->getId() !== $run->getId()) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($run->getStatus() !== EscapeTeamRun::STATUS_RUNNING) {
+            return $this->json(['error' => 'Le jeu doit être lancé pour générer le QR.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $playUrl = $this->generateUrl('escape_team_play', ['slug' => $slug, 'teamId' => $teamId], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        return $this->json([
+            'qr' => $this->mobileLinkManager->buildQrForUrl($playUrl),
+            'token' => bin2hex(random_bytes(8)),
+            'directUrl' => $playUrl,
+            'expiresAt' => null,
+            'noExpiry' => true,
         ]);
     }
 
@@ -296,5 +323,69 @@ class EscapeTeamController extends AbstractController
             'finalAnswer' => $session->getFinalAnswer(),
             'endedAt' => $session->getEndedAt(),
         ]);
+    }
+
+    private function buildScenarioConfig(EscapeTeamRun $run): array
+    {
+        $config = $run->getPuzzleConfig();
+        $steps = is_array($config['steps'] ?? null) ? $config['steps'] : [];
+
+        $defaults = [
+            1 => [
+                'type' => 'text',
+                'title' => 'Étape 1 — Mot ou phrase',
+                'prompt' => 'Résous le support papier puis saisis le mot exact.',
+                'solution' => 'MOT_ETAPE_1',
+                'hints' => ['Observe les symboles communs.', 'Le mot est en majuscules sans accents.'],
+                'successMessage' => 'Bonne réponse, direction l’étape 2 !',
+                'failMessage' => 'Mauvaise réponse, vérifie l’orthographe.',
+            ],
+            2 => [
+                'type' => 'text',
+                'title' => 'Étape 2 — Mot ou phrase',
+                'prompt' => 'Complète la grille papier et saisis le mot découvert.',
+                'solution' => 'MOT_ETAPE_2',
+                'hints' => ['Commence par les indices les plus courts.', 'Le mot code est surligné.'],
+                'successMessage' => 'Validé ! Passe à la triple énigme logique.',
+                'failMessage' => 'Le mot ne correspond pas. Essaie encore.',
+            ],
+            3 => [
+                'type' => 'logic',
+                'title' => 'Étape 3 — Triple épreuve logique',
+                'prompt' => 'Validez les trois mini-tests logiques pour débloquer le QR.',
+                'questions' => [],
+                'hints' => ['Chaque partie peut avoir plusieurs cases à cocher.'],
+                'okMessage' => '3/3 validés, rendez-vous à l’étape QR !',
+                'failMessage' => 'Il reste une erreur dans l’une des parties.',
+            ],
+            4 => [
+                'type' => 'qr_print',
+                'title' => 'Étape 4 — QR à générer et scanner',
+                'prompt' => 'Génère le QR code d’équipe puis scanne-le.',
+                'hints' => ['Un seul QR suffit pour toute l’équipe.'],
+            ],
+            5 => [
+                'type' => 'cryptex',
+                'title' => 'Étape 5 — Cryptex final',
+                'prompt' => 'Tournez les anneaux pour former le mot secret.',
+                'solution' => 'FINALE',
+                'hints' => ['Le mot est lié au thème de la session.'],
+                'alphabet' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                'successMessage' => 'Cryptex ouvert !',
+            ],
+        ];
+
+        foreach ($defaults as $index => $default) {
+            $custom = $steps[$index] ?? [];
+            $merged = array_merge($default, is_array($custom) ? $custom : []);
+            if (!isset($merged['hints']) || !is_array($merged['hints'])) {
+                $merged['hints'] = $default['hints'];
+            }
+            $steps[$index] = $merged;
+        }
+
+        ksort($steps);
+
+        return ['steps' => $steps];
     }
 }

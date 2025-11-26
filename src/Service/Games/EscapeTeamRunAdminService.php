@@ -23,6 +23,7 @@ class EscapeTeamRunAdminService
         ?string $heroImageUrl,
         int $maxTeams = 10,
         ?int $timeLimitSeconds = null,
+        array $puzzleConfig = [],
     ): EscapeTeamRun {
         $run = (new EscapeTeamRun())
             ->setEscapeGame($escapeGame)
@@ -31,6 +32,7 @@ class EscapeTeamRunAdminService
             ->setHeroImageUrl($heroImageUrl)
             ->setMaxTeams($maxTeams)
             ->setTimeLimitSeconds($timeLimitSeconds)
+            ->setPuzzleConfig($puzzleConfig)
             ->setStatus(EscapeTeamRun::STATUS_DRAFT);
 
         $run->ensureShareSlug(fn (string $seed): string => $this->slugify($seed));

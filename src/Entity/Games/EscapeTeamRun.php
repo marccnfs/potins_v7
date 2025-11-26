@@ -7,6 +7,7 @@ use App\Repository\EscapeTeamRunRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EscapeTeamRunRepository::class)]
@@ -63,6 +64,9 @@ class EscapeTeamRun
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?DateTimeImmutable $updatedAt = null;
+
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private array $puzzleConfig = [];
 
     #[ORM\OneToMany(targetEntity: EscapeTeam::class, mappedBy: 'run', cascade: ['remove'], orphanRemoval: true)]
     private Collection $teams;
@@ -250,6 +254,19 @@ class EscapeTeamRun
 
         return $this;
     }
+
+    public function getPuzzleConfig(): array
+    {
+        return $this->puzzleConfig ?? [];
+    }
+
+    public function setPuzzleConfig(?array $puzzleConfig): static
+    {
+        $this->puzzleConfig = $puzzleConfig ?? [];
+
+        return $this;
+    }
+
 
     /** @return Collection<int, EscapeTeam> */
     public function getTeams(): Collection

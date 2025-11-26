@@ -1,121 +1,134 @@
 {% extends 'pwa/escape/basepublic.html.twig' %}
 
 {% block body %}
-    <section class="escape-team play">
+    {% set steps = scenario.steps|default({}) %}
+    {% set stepStates = session ? session.stepStates : {} %}
+
+    <section class="escape-team play"
+             data-controller="escape-team-play"
+             data-escape-team-play-complete-url-value="{{ path('escape_team_step_complete', {slug: run.shareSlug, teamId: team.id, step: '__STEP__'}) }}"
+             data-escape-team-play-hint-url-value="{{ path('escape_team_consume_hint', {slug: run.shareSlug, teamId: team.id}) }}"
+             data-escape-team-play-step-states-value='{{ stepStates|json_encode|e('html_attr') }}'
+             data-escape-team-play-expected-parts-value="3">
         <header class="escape-team__hero">
             <p class="kicker">Parcours équipe</p>
             <h1>{{ team.name }} · {{ run.title }}</h1>
-            <p class="muted">Suis les étapes, consomme des indices et soumets la phrase finale.</p>
+            <p class="muted">Suis les 5 étapes : deux mots clés, trois logiques, un QR et le cryptex final.</p>
+            {% if session %}
+                <p class="muted">Indices utilisés : {{ session.hintsUsed }} · Étape actuelle : {{ session.currentStep ?? 1 }}</p>
+            {% endif %}
+            {% if run.status != 'running' %}
+                <div class="alert alert-warning">Le jeu n'est pas encore lancé. Reste en attente du maître.</div>
+            {% endif %}
         </header>
 
-        {% if run.status != 'running' %}
-            <div class="alert alert-warning">Le jeu n'est pas encore lancé. Reste en attente du maître.</div>
-        {% endif %}
+        <div class="escape-team__grid steps">
+            {% for num, step in steps %}
+            {% set state = stepStates[num] ?? {} %}
+            <article class="escape-team__panel" data-escape-team-play-target="step" data-step="{{ num }}">
+                <header class="escape-team__step-head">
+                    <div>
+                        <p class="kicker">Étape {{ num }}</p>
+                        <h2>{{ step.title }}</h2>
+                        <p class="muted">{{ step.prompt }}</p>
+                    </div>
+                    <div class="escape-team__status {{ state.completedAt is defined ? 'done' : '' }}">
+                        {% if state.completedAt is defined %}
+                            <span class="badge">Validée</span>
+                            <small class="muted">{{ state.completedAt|date('H:i') }}</small>
+                        {% else %}
+                            <span class="badge badge-secondary">En cours</span>
+                        {% endif %}
+                    </div>
+                </header>
 
-        <div class="escape-team__grid">
-            <div class="escape-team__panel">
-                <h2>Progression</h2>
-                <ol class="escape-team__steps">
-                    {% for i in 1..5 %}
-                        {% set state = session ? (session.stepStates[i] ?? {}) : {} %}
-                        <li class="{% if state.completedAt is defined %}done{% endif %}">
-                            <div class="escape-team__step-head">
-                                <span>Étape {{ i }}</span>
-                                {% if state.completedAt is defined %}
-                                    <small>validée</small>
-                                {% else %}
-                                    <button class="btn btn-small" data-step="{{ i }}" data-action="complete">Marquer terminé</button>
-                                {% endif %}
+                <div class="escape-team__content">
+                    {% if step.type == 'text' %}
+                    <form class="escape-team__form" data-action="submit->escape-team-play#submitTextStep" data-step="{{ num }}" data-solution="{{ step.solution|lower }}">
+                        <label>Mot ou phrase attendu·e</label>
+                        <input type="text" name="answer" placeholder="Tape la réponse trouvée" {% if state.completedAt is defined %}disabled{% endif %} required>
+                        <p class="muted">Validation uniquement si le mot correspond exactement.</p>
+                        <button class="btn btn-primary" type="submit" {% if state.completedAt is defined %}disabled{% endif %}>Valider l'étape</button>
+                    </form>
+                    {% elseif step.type == 'logic' %}
+                        <div class="escape-team__logic" data-step="{{ num }}">
+                            {% for part in step.questions|default([]) %}
+                                <div class="escape-team__logic-part"
+                                     data-step="{{ num }}"
+                                     data-part-key="logic{{ loop.index }}"
+                                     data-action="logic-form:solved->escape-team-play#recordLogicPart">
+                                    {% include 'pwa/escape/puzzles/_logic_form.html.twig' with { cfg: { questions: [part], okMessage: step.okMessage|default('Bravo !'), failMessage: step.failMessage|default('Réessaie.') } } %}
+                                </div>
+                            {% endfor %}
+                            <p class="muted">Les trois mini-tests doivent être validés pour clôturer l'étape.</p>
                             </div>
-                            {% if state.partials is defined %}
-                                <p class="muted">Fragments : {{ state.partials|length }}/{{ state.partialCount ?? state.partials|length }}</p>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ol>
-                <div class="escape-team__controls">
-                    <button class="btn" data-action="hint">+1 indice</button>
-                    <button class="btn" data-action="penalty">+1 pénalité</button>
-                </div>
-            </div>
+                    {% elseif step.type == 'qr_print' %}
+                        <div class="escape-team__qr"
+                             data-step="{{ num }}"
+                             data-action="qr-print:generated->escape-team-play#onQrGenerated">
+                            <div data-controller="qr-print"
+                                 data-qr-print-fetch-url-value="{{ path('escape_team_qr_token', {slug: run.shareSlug, teamId: team.id}) }}"
+                                 data-qr-print-ready-message-value="Génère le QR puis scanne-le avec un smartphone"
+                                 data-qr-print-generated-message-value="QR prêt, scannez-le pour continuer"
+                                 data-qr-print-generating-message-value="Génération en cours..."
+                                 data-qr-print-error-message-value="Impossible de générer le QR"
+                                 data-qr-print-no-expiry-message-value="Pas d'expiration">
+                                <p class="muted" data-qr-print-target="placeholder">Clique sur « Générer » pour créer le QR d'équipe.</p>
+                                <div class="qr-print" data-qr-print-target="details" hidden>
+                                    <figure class="qr-print__figure">
+                                        <img data-qr-print-target="qrImage" alt="QR de validation" />
+                                        <figcaption class="muted" data-qr-print-target="expires" hidden></figcaption>
+                                    </figure>
+                                    <div class="qr-print__actions">
+                                        <button class="btn" data-qr-print-target="generateButton" data-action="qr-print#generate">Générer</button>
+                                        <button class="btn btn-light" data-qr-print-target="printButton" data-action="qr-print#print" disabled>Imprimer</button>
+                                    </div>
+                                    <p class="muted" data-qr-print-target="directWrapper" hidden>
+                                        <a data-qr-print-target="directLink" href="#" target="_blank" rel="noopener"></a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% elseif step.type == 'cryptex' %}
+                        <div class="escape-team__cryptex" data-step="{{ num }}">
+                            <div data-controller="cryptex"
+                                 data-cryptex-solution-value="{{ step.solution|upper }}"
+                                 data-cryptex-alphabet-value="{{ step.alphabet|default('ABCDEFGHIJKLMNOPQRSTUVWXYZ') }}"
+                                 data-cryptex-scramble-value="false"
+                                 data-cryptex-autocheck-value="true"
+                                 data-cryptex-success-message-value="{{ step.successMessage|default('Cryptex ouvert !') }}">
+                                <div data-cryptex-target="status" class="muted"></div>
+                                <div class="cryptex-rings" data-cryptex-target="rings"></div>
+                                <button class="btn btn-primary" type="button" data-cryptex-target="reveal" data-action="cryptex#reveal">Déverrouiller</button>
+                                <div data-cryptex-target="secret" class="muted" hidden>Bravo ! Note le mot final pour le maître du jeu.</div>
+                            </div>
+                        </div>
+                    {% endif %}
 
-            <div class="escape-team__panel">
-                <h2>Phrase finale</h2>
-                <form id="final-form">
-                    <label>Secret / code</label>
-                    <input type="text" name="secretCode" placeholder="Code secret" />
-                    <label>Phrase finale</label>
-                    <textarea name="finalAnswer" rows="3" placeholder="Votre réponse"></textarea>
-                    <button class="btn btn-primary" type="submit">Valider la fin</button>
-                </form>
-                <div id="final-result" class="muted"></div>
-            </div>
+                    {% if step.hints is defined and step.hints|length %}
+                        <div class="escape-team__hints"
+                             data-controller="hints"
+                             data-hints-slug-value="{{ run.shareSlug }}"
+                             data-hints-step-value="{{ num }}"
+                             data-hints-total-value="{{ step.hints|length }}">
+                            <h3>Indices</h3>
+                            <ol class="hints">
+                                {% for hint in step.hints %}
+                                    <li class="hint-item" data-hints-target="hint" hidden>{{ hint }}</li>
+                                {% endfor %}
+                            </ol>
+                            <div class="hints-actions">
+                                <button class="btn btn-light" data-action="click->hints#revealNext click->escape-team-play#consumeHint" data-step="{{ num }}">Afficher un indice</button>
+                                <span class="muted" data-hints-target="counter"></span>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="feedback" data-escape-team-play-target="feedback" data-step="{{ num }}"></div>
+            </article>
+            {% endfor %}
         </div>
     </section>
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        (function () {
-            const runSlug = '{{ run.shareSlug }}';
-            const teamId = {{ team.id }};
-            const stepButtons = document.querySelectorAll('[data-action="complete"]');
-            const hintBtn = document.querySelector('[data-action="hint"]');
-            const penaltyBtn = document.querySelector('[data-action="penalty"]');
-            const finalForm = document.getElementById('final-form');
-            const finalResult = document.getElementById('final-result');
 
-            const post = (url, payload) => fetch(url, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: new URLSearchParams(payload),
-            }).then((r) => r.json());
-
-            stepButtons.forEach((btn) => {
-                btn.addEventListener('click', () => {
-                    const step = btn.dataset.step;
-                    post(`{{ path('escape_team_step_complete', {slug: 'SLUG', teamId: 'TEAM', step: 'STEP'}) }}`
-                        .replace('SLUG', runSlug)
-                        .replace('TEAM', teamId)
-                        .replace('STEP', step), {})
-                        .then(() => btn.textContent = 'Validée')
-                        .catch(() => btn.textContent = 'Erreur');
-                });
-            });
-
-            if (hintBtn) {
-                hintBtn.addEventListener('click', () => {
-                    post(`{{ path('escape_team_consume_hint', {slug: 'SLUG', teamId: 'TEAM'}) }}`
-                        .replace('SLUG', runSlug)
-                        .replace('TEAM', teamId), {count: 1});
-                });
-            }
-
-            if (penaltyBtn) {
-                penaltyBtn.addEventListener('click', () => {
-                    post(`{{ path('escape_team_consume_hint', {slug: 'SLUG', teamId: 'TEAM'}) }}`
-                        .replace('SLUG', runSlug)
-                        .replace('TEAM', teamId), {count: 1, reason: 'penalty'});
-                });
-            }
-
-            if (finalForm) {
-                finalForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const data = new FormData(finalForm);
-                    post(`{{ path('escape_team_finalize', {slug: 'SLUG', teamId: 'TEAM'}) }}`
-                        .replace('SLUG', runSlug)
-                        .replace('TEAM', teamId), {
-                        finalAnswer: data.get('finalAnswer') || '',
-                        secretCode: data.get('secretCode') || '',
-                    }).then((res) => {
-                        if (finalResult) {
-                            finalResult.textContent = 'Fin validée !';
-                        }
-                    });
-                });
-            }
-        })();
-    </script>
-{% endblock %}
