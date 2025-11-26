@@ -10,7 +10,7 @@
              data-escape-team-play-hint-url-value="{{ path('escape_team_consume_hint', {slug: run.shareSlug, teamId: team.id}) }}"
              data-escape-team-play-current-step-value="{{ currentStep }}"
              data-escape-team-play-total-steps-value="{{ totalSteps }}"
-             data-escape-team-play-step-states-value='{{ stepStates|json_encode|e('html_attr') }}'
+             data-escape-team-play-step-states-value='{{ stepStates|default({})|json_encode(constant('JSON_FORCE_OBJECT'))|e('html_attr') }}'
              data-escape-team-play-expected-parts-value="3">
         <header class="escape-team__hero">
             <p class="kicker">Parcours équipe</p>
