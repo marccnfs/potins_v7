@@ -198,6 +198,7 @@ class EscapeTeamController extends AbstractController
             'run' => $run,
             'team' => $team,
             'session' => $session,
+            'directory'=>'team',
             'template'=>'team/play.html.twig',
             'vartwig'=>$vartwig,
             'title' => sprintf('Équipe %s · %s', $team->getName(), $run->getTitle()),

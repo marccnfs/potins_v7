@@ -21,7 +21,7 @@
 
         <div class="escape-team__panel">
             <div class="escape-team__live-meta">
-                <span>Temps restant : <strong id="live-remaining">{{ snapshot.remainingSeconds is not null ? (snapshot.remainingSeconds/60)|floor ~ 'm' : '--' }}</strong></span>
+                <span>Temps restant : <strong id="live-remaining">{{ snapshot.remainingSeconds is not null ? (snapshot.remainingSeconds/60)|round(0, 'floor') ~ 'm' : '--' }}</strong></span>
                 <span class="badge" id="live-status">{{ statusLabels[run.status]|default(run.status) }}</span>
             </div>
             <div id="live-board" class="escape-team__cards escape-team__cards--live">
