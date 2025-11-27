@@ -1,0 +1,39 @@
+{% extends 'pwa/escape/basepublic.html.twig' %}
+
+{% block body %}
+    <section class="escape-team waiting"
+             data-controller="escape-team-waiting"
+             data-escape-team-waiting-progress-url-value="{{ progressUrl }}"
+             data-escape-team-waiting-play-url-value="{{ playUrl }}"
+             data-escape-team-waiting-team-id-value="{{ team.id }}">
+        <header class="escape-team__hero">
+            <p class="kicker">En attente</p>
+            <h1>{{ run.title }}</h1>
+            <p class="muted">Ton équipe est prête. La partie démarre dès que le maître du jeu lance le run.</p>
+            {% if run.heroImageUrl %}
+                <img class="escape-team__hero-img" src="{{ run.heroImageUrl }}" alt="Visuel de l'univers">
+            {% endif %}
+        </header>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="escape-team__panel">
+            <div class="escape-team__card" style="--team-color: {{ team.color ?? '#4ecdc4' }}">
+                <div class="escape-team__card-head">
+                    <span class="escape-team__avatar">{{ team.avatarKey }}</span>
+                    <div>
+                        <strong>{{ team.name }}</strong>
+                        <p class="muted">{{ team.members|length }} joueur(s)</p>
+                    </div>
+                </div>
+                <p class="muted">Nous te redirigerons automatiquement vers le jeu quand il sera lancé.</p>
+            </div>
+
+            <div class="alert alert-info" data-escape-team-waiting-target="status">En attente du lancement…</div>
+        </div>
+    </section>
+{% endblock %}

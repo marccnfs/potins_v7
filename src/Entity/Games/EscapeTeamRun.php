@@ -20,6 +20,7 @@ class EscapeTeamRun
     public const STATUS_LOCKED = 'locked';
     public const STATUS_RUNNING = 'running';
     public const STATUS_ENDED = 'ended';
+    public const STATUS_STOPPED = 'stopped';
 
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     private ?int $id = null;

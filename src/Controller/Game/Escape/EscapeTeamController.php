@@ -87,10 +87,13 @@ class EscapeTeamController extends AbstractController
     }));
 
             try {
-                $this->registrationService->registerTeam($run, $teamName, $avatarKey, $members);
+                $team = $this->registrationService->registerTeam($run, $teamName, $avatarKey, $members);
                 $this->addFlash('success', 'Équipe inscrite, prête pour le départ !');
 
-                return $this->redirectToRoute('escape_team_register', ['slug' => $slug]);
+                return $this->redirectToRoute('escape_team_waiting', [
+                    'slug' => $slug,
+                    'teamId' => $team->getId(),
+                ]);
             } catch (\Throwable $e) {
                 $this->addFlash('danger', $e->getMessage());
             }
@@ -193,6 +196,9 @@ class EscapeTeamController extends AbstractController
         }
 
         $session = $this->sessionRepository->findOneByTeam($team) ?? null;
+        if ($run->getStatus() === EscapeTeamRun::STATUS_STOPPED && ($session === null || !$session->isCompleted())) {
+            return $this->redirectToRoute('escape_team_waiting', ['slug' => $slug, 'teamId' => $teamId]);
+        }
         $scenario = $this->buildScenarioConfig($run);
 
         $vartwig=$this->menuNav->templatepotins(
@@ -206,6 +212,7 @@ class EscapeTeamController extends AbstractController
             'scenario' => $scenario,
             'currentStep' => $session?->getCurrentStep() ?? 1,
             'totalSteps' => max(1, count($scenario['steps'] ?? [])),
+            'progressUrl' => $this->generateUrl('escape_team_progress', ['slug' => $slug]),
             'directory'=>'team',
             'template'=>'team/play.html.twig',
             'vartwig'=>$vartwig,
@@ -439,6 +446,34 @@ class EscapeTeamController extends AbstractController
             'secretCode' => $session->getSecretCode(),
             'finalAnswer' => $session->getFinalAnswer(),
             'endedAt' => $session->getEndedAt(),
+        ]);
+    }
+
+    #[Route('/{slug}/waiting/{teamId}', name: 'escape_team_waiting', methods: ['GET'])]
+    public function waiting(string $slug, int $teamId): Response
+    {
+        $run = $this->runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
+        $team = $this->teamRepository->find($teamId);
+        if (!$team || $team->getRun()?->getId() !== $run->getId()) {
+            throw $this->createNotFoundException();
+        }
+
+        $session = $this->sessionRepository->findOneByTeam($team);
+
+        $vartwig=$this->menuNav->templatepotins(
+            '_index',
+            Links::GAMES);
+
+        return $this->render('pwa/escape/home.html.twig',[
+            'run' => $run,
+            'team' => $team,
+            'session' => $session,
+            'progressUrl' => $this->generateUrl('escape_team_progress', ['slug' => $slug]),
+            'playUrl' => $this->generateUrl('escape_team_play', ['slug' => $slug, 'teamId' => $teamId]),
+            'directory'=>'team',
+            'template'=>'team/waiting.html.twig',
+            'vartwig'=>$vartwig,
+            'title' => sprintf('En attente · %s', $team->getName()),
         ]);
     }
 

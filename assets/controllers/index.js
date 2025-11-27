@@ -21,6 +21,7 @@ import FinaleController from "./finale_controller";
 import WizardHintsController from "./wizard_hints_controller";
 import BoardWeekController from "./board_week_controller";
 import EscapeTeamPlayController from "./escape_team_play_controller";
+import EscapeTeamWaitingController from "./escape_team_waiting_controller";
 import TelemetryController from "./telemetry_controller";
 
 
@@ -48,4 +49,5 @@ Stimulus.register("finale", FinaleController);
 Stimulus.register("wizard-hints", WizardHintsController);
 Stimulus.register("board-week", BoardWeekController);
 Stimulus.register("escape-team-play", EscapeTeamPlayController);
+Stimulus.register("escape-team-waiting", EscapeTeamWaitingController);
 

@@ -15,9 +15,12 @@ export default class extends Controller {
         expectedParts: { type: Number, default: 3 },
         currentStep: { type: Number, default: 1 },
         totalSteps: { type: Number, default: 5 },
+        progressUrl: String,
+        waitingUrl: String,
+        pollInterval: { type: Number, default: 5000 },
     };
 
-    static targets = ["feedback", "step"];
+    static targets = ["feedback", "step", "runAlert"];
 
     initialize() {
         this.completedSteps = new Set();
@@ -37,10 +40,14 @@ export default class extends Controller {
         this._markCompletedSteps();
         this._updateVisibleSteps();
         this._attachGlobalListeners();
+        this._startStatusPolling();
     }
 
     disconnect() {
         document.removeEventListener("cryptex:solved", this._onCryptexSolved);
+        if (this._pollTimer) {
+            clearInterval(this._pollTimer);
+        }
     }
 
     _attachGlobalListeners() {
@@ -51,6 +58,44 @@ export default class extends Controller {
             this.completeStep(step, { solution: event.detail?.solution || null });
         };
         document.addEventListener("cryptex:solved", this._onCryptexSolved);
+    }
+
+    _startStatusPolling() {
+        if (!this.progressUrlValue || !this.waitingUrlValue || !this.teamIdValue) return;
+
+        this._pollTimer = setInterval(() => this._refreshStatus(), this.pollIntervalValue);
+        this._refreshStatus();
+    }
+
+    async _refreshStatus() {
+        if (!this.progressUrlValue || this._redirecting) return;
+
+        try {
+            const response = await fetch(this.progressUrlValue, { headers: { "X-Requested-With": "XMLHttpRequest" } });
+            const data = await response.json();
+
+            const status = data?.status || "";
+            const team = Array.isArray(data?.teams)
+                ? data.teams.find((t) => t.teamId === this.teamIdValue)
+                : null;
+
+            if (status === "stopped" && team && !team.isCompleted) {
+                this._showRunAlert("Le jeu est arrêté à la demande de l’admin, retour à l’attente.");
+                this._redirecting = true;
+                setTimeout(() => {
+                    window.location.href = this.waitingUrlValue;
+                }, 2000);
+            }
+        } catch (e) {
+            // ignore network errors
+        }
+    }
+
+    _showRunAlert(message) {
+        if (!this.hasRunAlertTarget) return;
+
+        this.runAlertTarget.textContent = message;
+        this.runAlertTarget.hidden = false;
     }
 
     submitTextStep(event) {

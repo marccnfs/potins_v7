@@ -45,8 +45,8 @@ class EscapeTeamRunAdminService
 
     public function openRegistration(EscapeTeamRun $run): EscapeTeamRun
     {
-        if ($run->getStatus() === EscapeTeamRun::STATUS_RUNNING) {
-            throw new RuntimeException('Le jeu est déjà lancé, impossible de rouvrir les inscriptions.');
+        if (in_array($run->getStatus(), [EscapeTeamRun::STATUS_RUNNING, EscapeTeamRun::STATUS_STOPPED, EscapeTeamRun::STATUS_ENDED], true)) {
+            throw new RuntimeException('Le jeu est déjà lancé ou terminé, impossible de rouvrir les inscriptions.');
         }
 
         $now = new DateTimeImmutable();
@@ -122,6 +122,33 @@ class EscapeTeamRunAdminService
 
         return $run;
     }
+
+    public function stop(EscapeTeamRun $run): EscapeTeamRun
+    {
+        if ($run->getStatus() !== EscapeTeamRun::STATUS_RUNNING) {
+            throw new RuntimeException('Seul un run en cours peut être arrêté.');
+        }
+
+        $now = new DateTimeImmutable();
+
+        $run->setStatus(EscapeTeamRun::STATUS_STOPPED);
+        $run->setUpdatedAt($now);
+        $run->setEndedAt($run->getEndedAt() ?? $now);
+
+        foreach ($run->getTeams() as $team) {
+            $session = $team->getSession();
+            if ($session === null) {
+                continue;
+            }
+
+            $session->setLastActivityAt($now);
+        }
+
+        $this->em->flush();
+
+        return $run;
+    }
+
 
     /**
      * Données prêtes à afficher sur la page d'accueil projetée (titre, image, lien d'inscription, compteur d'équipes, statut).

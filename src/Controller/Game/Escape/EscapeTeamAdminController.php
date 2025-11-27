@@ -442,6 +442,14 @@ class EscapeTeamAdminController extends AbstractController
                     $this->addFlash('danger', $e->getMessage());
                 }
             }
+            if ($request->request->has('action_stop')) {
+                try {
+                    $runAdminService->stop($run);
+                    $this->addFlash('warning', 'Le jeu a été stoppé. Les équipes actives sont renvoyées en attente.');
+                } catch (\Throwable $e) {
+                    $this->addFlash('danger', $e->getMessage());
+                }
+            }
             return $this->redirectToRoute('escape_team_admin_pilot', ['slug' => $slug]);
         }
 

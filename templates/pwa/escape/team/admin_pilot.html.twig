@@ -26,6 +26,7 @@
                         <button class="btn" type="submit" name="action_open" {% if run.status == 'running' %}disabled{% endif %}>Ouvrir inscriptions</button>
                         <button class="btn" type="submit" name="action_close" {% if run.status == 'running' %}disabled{% endif %}>Clôturer inscriptions</button>
                         <button class="btn btn-primary" type="submit" name="action_launch" {% if run.status == 'running' %}disabled{% endif %}>Lancer le jeu</button>
+                        <button class="btn btn-danger" type="submit" name="action_stop" onclick="return confirm('Arrêter le jeu en cours ? Les équipes seront renvoyées en attente.');" {% if run.status != 'running' %}disabled{% endif %}>Arrêter le jeu</button>
                     </div>
                 </form>
                 <p class="muted">Un lancement initialise les chronos d'équipe, ferme les inscriptions et redirige la projection vers le déroulement.</p>

@@ -385,7 +385,7 @@ class EscapeTeamProgressService
 
     private function closeRunIfNeeded(EscapeTeamRun $run): void
     {
-        if ($run->getStatus() === EscapeTeamRun::STATUS_ENDED) {
+        if (in_array($run->getStatus(), [EscapeTeamRun::STATUS_ENDED, EscapeTeamRun::STATUS_STOPPED], true)) {
             return;
         }
 

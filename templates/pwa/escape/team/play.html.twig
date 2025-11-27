@@ -11,6 +11,9 @@
              data-escape-team-play-current-step-value="{{ currentStep }}"
              data-escape-team-play-total-steps-value="{{ totalSteps }}"
              data-escape-team-play-step-states-value='{{ stepStates|default({})|json_encode(constant('JSON_FORCE_OBJECT'))|e('html_attr') }}'
+             data-escape-team-play-progress-url-value="{{ progressUrl }}"
+             data-escape-team-play-waiting-url-value="{{ path('escape_team_waiting', {slug: run.shareSlug, teamId: team.id}) }}"
+             data-escape-team-play-team-id-value="{{ team.id }}"
              data-escape-team-play-expected-parts-value="3">
         <header class="escape-team__hero">
             <p class="kicker">Parcours équipe</p>
@@ -23,6 +26,8 @@
                 <div class="alert alert-warning">Le jeu n'est pas encore lancé. Reste en attente du maître.</div>
             {% endif %}
         </header>
+
+        <div class="alert alert-warning" data-escape-team-play-target="runAlert" hidden></div>
 
         <div class="escape-team__grid steps">
             {% for num, step in steps %}
