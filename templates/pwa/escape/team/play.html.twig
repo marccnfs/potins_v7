@@ -15,7 +15,8 @@
              data-escape-team-play-qr-validate-url-value="{{ path('escape_team_qr_validate', {slug: run.shareSlug}) }}"
              data-escape-team-play-waiting-url-value="{{ path('escape_team_waiting', {slug: run.shareSlug, teamId: team.id}) }}"
              data-escape-team-play-team-id-value="{{ team.id }}"
-             data-escape-team-play-expected-parts-value="3">
+             data-escape-team-play-expected-parts-value="3"
+             data-escape-team-play-need-https-message-value="{{ (steps[4] is defined and steps[4].config is defined and steps[4].config.needHttpsMessage is defined) ? steps[4].config.needHttpsMessage : 'Activez HTTPS pour utiliser le scanner sécurisé.' }}">
         <header class="escape-team__hero">
             <p class="kicker">Parcours équipe</p>
             <h1>{{ team.name }} · {{ run.title }}</h1>

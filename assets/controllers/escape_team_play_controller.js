@@ -19,6 +19,7 @@ export default class extends Controller {
         qrValidateUrl: String,
         waitingUrl: String,
         pollInterval: { type: Number, default: 5000 },
+        needHttpsMessage: { type: String, default: "Activez HTTPS pour utiliser le scanner sécurisé." },
     };
 
     static targets = ["feedback", "step", "runAlert", "qrStatus", "qrVideo", "qrWrapper", "qrStop"];
@@ -194,6 +195,12 @@ export default class extends Controller {
     async startQrScan(event) {
         const step = Number(event?.currentTarget?.dataset?.step || 0);
         if (!step || this.completedSteps.has(step)) return;
+
+        if (!window.isSecureContext && window.location.hostname !== "localhost") {
+            this._setFeedback(step, this.needHttpsMessageValue, false);
+            this._setQrStatus("Connexion non sécurisée : impossible d’activer la caméra.", step);
+            return;
+        }
 
         if (!("BarcodeDetector" in window)) {
             this._setFeedback(step, "Scan QR non supporté sur cet appareil.", false);
