@@ -12,6 +12,7 @@
              data-escape-team-play-total-steps-value="{{ totalSteps }}"
              data-escape-team-play-step-states-value='{{ stepStates|default({})|json_encode(constant('JSON_FORCE_OBJECT'))|e('html_attr') }}'
              data-escape-team-play-progress-url-value="{{ progressUrl }}"
+             data-escape-team-play-qr-validate-url-value="{{ path('escape_team_qr_validate', {slug: run.shareSlug}) }}"
              data-escape-team-play-waiting-url-value="{{ path('escape_team_waiting', {slug: run.shareSlug, teamId: team.id}) }}"
              data-escape-team-play-team-id-value="{{ team.id }}"
              data-escape-team-play-expected-parts-value="3">
@@ -73,6 +74,14 @@
                     {% elseif step.type == 'qr_print' %}
                         <div class="escape-team__qr" data-step="{{ num }}">
                             <p class="muted">Le maître du jeu a caché un QR code dans la zone de jeu. Trouvez-le puis scannez-le avec votre appareil : l’étape sera validée automatiquement.</p>
+                            <div class="qr-actions">
+                                <button class="btn btn-primary" type="button" data-action="click->escape-team-play#startQrScan" data-step="{{ num }}">Scanner le QR caché</button>
+                                <button class="btn btn-light" type="button" data-action="click->escape-team-play#stopQrScan" data-step="{{ num }}" data-escape-team-play-target="qrStop" hidden>Arrêter le scan</button>
+                            </div>
+                            <div class="qr-scan" data-escape-team-play-target="qrWrapper" hidden>
+                                <video data-escape-team-play-target="qrVideo" playsinline muted hidden></video>
+                            </div>
+                            <div class="muted" data-escape-team-play-target="qrStatus"></div>
                         </div>
                     {% elseif step.type == 'cryptex' %}
                         <div class="escape-team__cryptex" data-step="{{ num }}">

@@ -145,7 +145,7 @@ class EscapeTeamAdminController extends AbstractController
 
                 $this->addFlash('success', 'Session équipes créée : les inscriptions sont ouvertes.');
 
-                return $this->redirectToRoute('escape_team_admin_list', ['created' => $run->getShareSlug()]);
+                return $this->redirectToRoute('escape_team_admin_create', ['created' => $run->getShareSlug()]);
             }
         }
 

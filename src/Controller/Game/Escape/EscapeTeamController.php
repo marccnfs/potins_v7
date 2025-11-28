@@ -3,6 +3,7 @@
 namespace App\Controller\Game\Escape;
 
 use App\Classe\UserSessionTrait;
+use App\Entity\Games\EscapeTeam;
 use App\Entity\Games\EscapeTeamRun;
 use App\Lib\Links;
 use App\Repository\EscapeTeamRepository;
@@ -280,30 +281,10 @@ class EscapeTeamController extends AbstractController
         $targetStep = 4;
 
         if ($team !== null) {
-            if ($team->getRun()?->getId() !== $run->getId()) {
-                $error = 'Cette équipe n’appartient pas à ce run.';
-            } elseif ($run->getStatus() !== EscapeTeamRun::STATUS_RUNNING) {
-                $error = 'Le jeu doit être lancé pour valider cette étape.';
-            } else {
-                $session = $this->sessionRepository->findOneByTeam($team);
-                if ($session === null) {
-                    $error = 'Session introuvable pour cette équipe.';
-                } elseif (($session->getStepStates()[$targetStep]['completedAt'] ?? null) !== null) {
-                    $success = true; // déjà validé
-                } else {
-                    try {
-                        $this->progressService->recordStepCompletion(
-                            $session,
-                            $targetStep,
-                            totalSteps: $stepCount,
-                            metadata: ['qrToken' => $token],
-                        );
-                        $success = true;
-                    } catch (\Throwable $e) {
-                        $error = $e->getMessage();
-                    }
-                }
-            }
+            $validation = $this->validateHiddenQrScan($run, $team, $token, $targetStep, $stepCount);
+            $error = $validation['error'];
+            $success = $validation['success'];
+            $session = $validation['session'];
         }
 
         $teams = $this->teamRepository->findForRunOrdered($run);
@@ -319,6 +300,45 @@ class EscapeTeamController extends AbstractController
             'targetStep' => $targetStep,
         ]);
     }
+
+    #[Route('/{slug}/qr/validate', name: 'escape_team_qr_validate', methods: ['POST'])]
+    public function validateQr(Request $request, string $slug): JsonResponse
+    {
+        $run = $this->runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
+
+        $token = (string) $request->request->get('token', '');
+        $teamId = (int) $request->request->get('teamId', 0);
+        $team = $teamId ? $this->teamRepository->find($teamId) : null;
+
+        if ($team === null) {
+            return $this->json(['error' => 'Équipe inconnue pour cette validation.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $scenario = $this->buildScenarioConfig($run);
+        $stepCount = max(1, count($scenario['steps'] ?? []));
+        $targetStep = 4;
+
+        $result = $this->validateHiddenQrScan($run, $team, $token, $targetStep, $stepCount);
+
+        if (!$result['success']) {
+            return $this->json([
+                'error' => $result['error'] ?? 'Impossible de valider le QR.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        /** @var \App\Entity\Games\EscapeTeamSession $session */
+        $session = $result['session'];
+
+        return $this->json([
+            'success' => true,
+            'teamId' => $team->getId(),
+            'stepStates' => $session->getStepStates(),
+            'currentStep' => $session->getCurrentStep(),
+            'completed' => $session->isCompleted(),
+            'message' => 'Étape validée via QR.',
+        ]);
+    }
+
 
     #[Route('/{slug}/team/{teamId}/step/{step}', name: 'escape_team_step_complete', methods: ['POST'])]
     public function completeStep(Request $request, string $slug, int $teamId, int $step): JsonResponse
@@ -544,6 +564,54 @@ class EscapeTeamController extends AbstractController
     private function buildHiddenQrToken(EscapeTeamRun $run): string
     {
         return substr(hash_hmac('sha256', $run->getShareSlug() . '|escape-team-step4', $this->appSecret), 0, 16);
+    }
+
+    private function validateHiddenQrScan(
+        EscapeTeamRun $run,
+        EscapeTeam $team,
+        string $token,
+        int $targetStep,
+        int $stepCount,
+    ): array {
+        $error = null;
+        $success = false;
+        $session = null;
+
+        $expectedToken = $this->buildHiddenQrToken($run);
+        if ($token === '' || !hash_equals($expectedToken, $token)) {
+            return ['success' => false, 'error' => 'QR invalide.', 'session' => null];
+        }
+
+        if ($team->getRun()?->getId() !== $run->getId()) {
+            $error = 'Cette équipe n’appartient pas à ce run.';
+        } elseif ($run->getStatus() !== EscapeTeamRun::STATUS_RUNNING) {
+            $error = 'Le jeu doit être lancé pour valider cette étape.';
+        } else {
+            $session = $this->sessionRepository->findOneByTeam($team);
+            if ($session === null) {
+                $error = 'Session introuvable pour cette équipe.';
+            } elseif (($session->getStepStates()[$targetStep]['completedAt'] ?? null) !== null) {
+                $success = true; // déjà validé
+            } else {
+                try {
+                    $this->progressService->recordStepCompletion(
+                        $session,
+                        $targetStep,
+                        totalSteps: $stepCount,
+                        metadata: ['qrToken' => $token],
+                    );
+                    $success = true;
+                } catch (\Throwable $e) {
+                    $error = $e->getMessage();
+                }
+            }
+        }
+
+        return [
+            'success' => $success,
+            'error' => $error,
+            'session' => $session,
+        ];
     }
 
     private function isValidStepAnswer(array $stepConfig, array $metadata): bool

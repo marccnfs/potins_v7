@@ -16,15 +16,20 @@ export default class extends Controller {
         currentStep: { type: Number, default: 1 },
         totalSteps: { type: Number, default: 5 },
         progressUrl: String,
+        qrValidateUrl: String,
         waitingUrl: String,
         pollInterval: { type: Number, default: 5000 },
     };
 
-    static targets = ["feedback", "step", "runAlert"];
+    static targets = ["feedback", "step", "runAlert", "qrStatus", "qrVideo", "qrWrapper", "qrStop"];
 
     initialize() {
         this.completedSteps = new Set();
         this.state = {};
+        this._scanActive = false;
+        this._qrDetector = null;
+        this._qrStream = null;
+        this._qrStep = null;
     }
 
     connect() {
@@ -48,6 +53,7 @@ export default class extends Controller {
         if (this._pollTimer) {
             clearInterval(this._pollTimer);
         }
+        this._stopQrScan();
     }
 
     _attachGlobalListeners() {
@@ -175,22 +181,7 @@ export default class extends Controller {
             if (data?.stepStates) {
                 this.state = data.stepStates;
             }
-            const stepState = this.state?.[step] || {};
-            const isStepCompleted = Boolean(stepState.completedAt) ||
-                (typeof data?.currentStep === "number" && data.currentStep > step) ||
-                Boolean(data?.completed);
-
-            if (isStepCompleted) {
-                this.completedSteps.add(step);
-            } else {
-                this.completedSteps.delete(step);
-            }
-
-            if (typeof data?.currentStep === "number") {
-                this.currentStep = data.currentStep || this.totalSteps;
-            }
-            this._markCompletedSteps();
-            this._updateVisibleSteps();
+            this._applyCompletionResponse(step, data);
         } catch (e) {
             const message = e?.message || "Impossible d’enregistrer l’étape. Vérifie que le jeu est lancé.";
             this._setFeedback(step, message, false);
@@ -200,11 +191,197 @@ export default class extends Controller {
         }
     }
 
+    async startQrScan(event) {
+        const step = Number(event?.currentTarget?.dataset?.step || 0);
+        if (!step || this.completedSteps.has(step)) return;
+
+        if (!("BarcodeDetector" in window)) {
+            this._setFeedback(step, "Scan QR non supporté sur cet appareil.", false);
+            return;
+        }
+        if (!navigator?.mediaDevices?.getUserMedia) {
+            this._setFeedback(step, "Accès caméra indisponible.", false);
+            return;
+        }
+
+        this._qrStep = step;
+        this._setQrStatus("Active la caméra pour repérer le QR caché…", step);
+
+        try {
+            if (!this._qrDetector) {
+                this._qrDetector = new BarcodeDetector({ formats: ["qr_code", "code_128", "code_39"] });
+            }
+        } catch (e) {
+            this._setFeedback(step, "Impossible d’initialiser le lecteur QR.", false);
+            return;
+        }
+
+        try {
+            this._qrStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+            if (this.hasQrVideoTarget) {
+                this.qrVideoTarget.srcObject = this._qrStream;
+                this.qrVideoTarget.hidden = false;
+                await this.qrVideoTarget.play().catch(() => {});
+            }
+            if (this.hasQrWrapperTarget) {
+                this.qrWrapperTarget.hidden = false;
+            }
+            if (this.hasQrStopTarget) {
+                this.qrStopTarget.hidden = false;
+            }
+            this._scanActive = true;
+            this._scanQrFrame();
+        } catch (e) {
+            this._setFeedback(step, "Caméra inaccessible pour le scan.", false);
+            this._stopQrScan();
+        }
+    }
+
+    stopQrScan(event) {
+        event?.preventDefault?.();
+        this._stopQrScan();
+    }
+
+    async _scanQrFrame() {
+        if (!this._scanActive || !this._qrDetector || !this.hasQrVideoTarget) return;
+
+        try {
+            const codes = await this._qrDetector.detect(this.qrVideoTarget);
+            const payload = codes?.[0]?.rawValue || null;
+            if (payload) {
+                this._scanActive = false;
+                this._setQrStatus("QR détecté, validation en cours…", this._qrStep);
+                this._stopQrScan(false);
+                const token = this._extractToken(payload);
+                if (token) {
+                    await this._submitQrToken(this._qrStep, token);
+                } else {
+                    this._setFeedback(this._qrStep, "QR détecté mais token introuvable.", false);
+                }
+                return;
+            }
+        } catch (e) {
+            // ignore frame errors
+        }
+
+        if (this._scanActive) {
+            requestAnimationFrame(() => this._scanQrFrame());
+        }
+    }
+
+    _stopQrScan(resetStatus = true) {
+        this._scanActive = false;
+        if (this._qrStream) {
+            this._qrStream.getTracks().forEach((t) => t.stop());
+            this._qrStream = null;
+        }
+        if (this.hasQrVideoTarget) {
+            this.qrVideoTarget.pause?.();
+            this.qrVideoTarget.srcObject = null;
+            this.qrVideoTarget.hidden = true;
+        }
+        if (this.hasQrWrapperTarget) {
+            this.qrWrapperTarget.hidden = true;
+        }
+        if (this.hasQrStopTarget) {
+            this.qrStopTarget.hidden = true;
+        }
+        if (resetStatus) {
+            this._clearQrStatus();
+        }
+    }
+
+    async _submitQrToken(step, token) {
+        if (!this.qrValidateUrlValue) {
+            this._setFeedback(step, "URL de validation indisponible.", false);
+            return;
+        }
+
+        const params = new URLSearchParams();
+        params.set("token", token);
+        if (this.teamIdValue) {
+            params.set("teamId", this.teamIdValue.toString());
+        }
+
+        try {
+            const response = await fetch(this.qrValidateUrlValue, {
+                method: "POST",
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+                body: params,
+            });
+
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data?.error || "Impossible de valider ce QR.");
+            }
+
+            this._applyCompletionResponse(step, data);
+            this._setFeedback(step, data?.message || "QR validé !", true);
+        } catch (e) {
+            const message = e?.message || "Validation impossible.";
+            this._setFeedback(step, message, false);
+        }
+    }
+
+    _extractToken(payload) {
+        if (!payload) return "";
+
+        try {
+            const url = new URL(payload, window.location.origin);
+            const t = url.searchParams.get("token");
+            if (t) return t;
+        } catch (e) {
+            // not a URL, fallback below
+        }
+
+        const match = /token=([^&]+)/i.exec(payload);
+        if (match && match[1]) {
+            return match[1];
+        }
+
+        return payload.trim();
+    }
+
+    _applyCompletionResponse(step, data = {}) {
+        if (data?.stepStates) {
+            this.state = data.stepStates;
+        }
+        const stepState = this.state?.[step] || {};
+        const isStepCompleted = Boolean(stepState.completedAt) ||
+            (typeof data?.currentStep === "number" && data.currentStep > step) ||
+            Boolean(data?.completed);
+
+        if (isStepCompleted) {
+            this.completedSteps.add(step);
+        } else {
+            this.completedSteps.delete(step);
+        }
+
+        if (typeof data?.currentStep === "number") {
+            this.currentStep = data.currentStep || this.totalSteps;
+        }
+        this._markCompletedSteps();
+        this._updateVisibleSteps();
+    }
+
+
     _setFeedback(step, message, isSuccess) {
         const target = this.feedbackTargets.find((t) => Number(t.dataset.step) === step);
         if (!target) return;
         target.textContent = message;
         target.className = isSuccess ? "feedback ok" : "feedback ko";
+    }
+    _setQrStatus(message) {
+        if (!this.hasQrStatusTarget) return;
+
+        this.qrStatusTarget.textContent = message || "";
+        this.qrStatusTarget.hidden = !message;
+    }
+
+    _clearQrStatus() {
+        if (!this.hasQrStatusTarget) return;
+        this.qrStatusTarget.textContent = "";
+        this.qrStatusTarget.hidden = true;
     }
     _flagWarning(step) {
         const target = this.stepTargets.find((t) => Number(t.dataset.step) === step);

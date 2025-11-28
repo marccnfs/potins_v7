@@ -8,6 +8,12 @@
             <p class="muted">Choisis l'escape de la session master {{ workshop.code }} et ouvre les inscriptions en une étape.</p>
         </header>
 
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-message flash-{{ type }}" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+
         {% if games is empty %}
             <div class="alert alert-warning">
                 Aucun escape n'est attaché à cette session master pour l'instant. Associe un escape depuis le back-office puis reviens ici.
