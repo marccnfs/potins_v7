@@ -65,6 +65,7 @@ class EscapeTeamController extends AbstractController
             'template'=>'team/landing.html.twig',
             'vartwig'=>$vartwig,
             'title' => sprintf('Escape par équipes · %s', $run->getTitle()),
+            'isMasterParticipant' => false,
         ]);
     }
 
@@ -113,6 +114,7 @@ class EscapeTeamController extends AbstractController
             'template'=>'team/register.html.twig',
             'vartwig'=>$vartwig,
             'title' => sprintf('Inscription équipes · %s', $run->getTitle()),
+            'isMasterParticipant' => false,
         ]);
 
     }
@@ -143,6 +145,7 @@ class EscapeTeamController extends AbstractController
             'template'=>'team/leaderboard.html.twig',
             'vartwig'=>$vartwig,
             'title' => sprintf('Classement · %s', $run->getTitle()),
+            'isMasterParticipant' => false,
         ]);
     }
 
@@ -162,6 +165,7 @@ class EscapeTeamController extends AbstractController
             'template'=>'team/live.html.twig',
             'vartwig'=>$vartwig,
             'title' => sprintf('Live · %s', $run->getTitle()),
+            'isMasterParticipant' => false,
         ]);
     }
 
@@ -184,6 +188,7 @@ class EscapeTeamController extends AbstractController
             'template'=>'team/winner.html.twig',
             'vartwig'=>$vartwig,
             'title' => sprintf('Gagnant · %s', $run->getTitle()),
+            'isMasterParticipant' => false,
         ]);
     }
 
@@ -218,6 +223,7 @@ class EscapeTeamController extends AbstractController
             'template'=>'team/play.html.twig',
             'vartwig'=>$vartwig,
             'title' => sprintf('Équipe %s · %s', $team->getName(), $run->getTitle()),
+            'isMasterParticipant' => false,
         ]);
     }
 
@@ -494,6 +500,7 @@ class EscapeTeamController extends AbstractController
             'template'=>'team/waiting.html.twig',
             'vartwig'=>$vartwig,
             'title' => sprintf('En attente · %s', $team->getName()),
+            'isMasterParticipant' => false,
         ]);
     }
 

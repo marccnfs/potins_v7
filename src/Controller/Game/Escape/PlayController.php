@@ -90,6 +90,7 @@ class PlayController extends AbstractController
             'recentSessions'=> $recentSessions,
             'bestSession'   => $bestSession,
             'unlockedStep'  => $unlockedStep,
+            'isMasterParticipant' => $this->isMasterParticipant($participant),
         ]);
     }
 
@@ -207,6 +208,7 @@ class PlayController extends AbstractController
             'resumeStep' => $resumeStep,
             'completedCount' => $completedCount,
             'unlockedStep' => $unlockedStep,
+            'isMasterParticipant' => $this->isMasterParticipant($participant),
         ]);
 
     }
@@ -447,6 +449,7 @@ class PlayController extends AbstractController
             ],
             'stepLabels'=>$stepLabels,
             'totalSteps'=>$total,
+            'isMasterParticipant' => $this->isMasterParticipant($participant),
         ]);
 
     }

@@ -6,6 +6,7 @@ namespace App\Classe;
 use App\Entity\Boards\Board;
 use App\Entity\Customer\Customers;
 use App\Entity\Member\Activmember;
+use App\Entity\Games\EscapeWorkshopSession;
 use App\Entity\Users\Participant;
 use App\Entity\Users\User;
 use App\Lib\Links;
@@ -13,6 +14,7 @@ use App\Repository\CustomersRepository;
 use App\Repository\BoardRepository;
 use App\Repository\BoardslistRepository;
 use App\Repository\ActivMemberRepository;
+use App\Repository\EscapeWorkshopSessionRepository;
 use App\Repository\UserRepository;
 use App\Repository\PostEventRepository;
 use App\Service\MenuNavigator;
@@ -210,6 +212,22 @@ trait UserSessionTrait
     {
         return $this->requestStack?->getSession();
     }
+
+    protected function isMasterParticipant(?Participant $participant, ?EscapeWorkshopSessionRepository $workshopRepository = null): bool
+    {
+        if (!$participant) {
+            return false;
+        }
+
+        $repository = $workshopRepository ?? ($this->em?->getRepository(EscapeWorkshopSession::class));
+
+        if (!$repository instanceof EscapeWorkshopSessionRepository) {
+            return false;
+        }
+
+        return (bool) $repository->findOneByCode($participant->getCodeAtelier())?->isMaster();
+    }
+
 
     /** Ajoute un flash (silencieux si pas de session). */
     protected function flash(string $type, string $message): void

@@ -184,7 +184,8 @@ class CatalogController extends AbstractController
             'difficultyLabels' => $difficultyLabels,
             'durationLabels'   => $durationLabels,
             'sortLabels'       => $sortLabels,
-            'participant'=>$participant
+            'participant'=>$participant,
+            'isMasterParticipant' => $this->isMasterParticipant($participant),
         ]);
 
     }

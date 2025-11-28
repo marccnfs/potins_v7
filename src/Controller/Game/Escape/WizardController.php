@@ -281,6 +281,7 @@ class WizardController extends AbstractController
             'total'   => 6,
             'readyMap'=> $readyMap,
             'participant'=>$participant,
+            'isMasterParticipant' => $this->isMasterParticipant($participant),
         ]);
     }
 
@@ -330,6 +331,7 @@ class WizardController extends AbstractController
             'completionRate'=>$completionRate,
             'nextStep'=>$eg->nextIncompleteStep(),
             'canPublish'=>$completedSteps === $totalSteps,
+            'isMasterParticipant' => $this->isMasterParticipant($participant),
         ]);
 
         // Empêcher Turbo/HTTP cache de réutiliser la page
@@ -408,6 +410,7 @@ class WizardController extends AbstractController
                         'form'        => $form,
                         'participant' => $participant,
                         'stape'       => $step,
+                        'isMasterParticipant' => $this->isMasterParticipant($participant),
                     ]);
                 }
 
@@ -444,7 +447,9 @@ class WizardController extends AbstractController
                                 'vartwig'=>$vartwig,
                                 'eg'=>$eg,
                                 'puzzle'=>$puzzle,
-                                'form'=>$form
+                                'form'=>$form,
+                                'participant' => $participant,
+                                'isMasterParticipant' => $this->isMasterParticipant($participant),
 
                             ]);
 
@@ -489,6 +494,7 @@ class WizardController extends AbstractController
                             'form'        => $form,
                             'participant' => $participant,
                             'stape'       => $step,
+                            'isMasterParticipant' => $this->isMasterParticipant($participant),
                         ]);
                     }
                     // Fusion propre
@@ -582,6 +588,7 @@ class WizardController extends AbstractController
                             'form'=>$form,
                             'participant'=>$participant,
                             'stape'       => $step,
+                            'isMasterParticipant' => $this->isMasterParticipant($participant),
 
                         ]);
 
@@ -605,6 +612,7 @@ class WizardController extends AbstractController
                             'form'        => $form,
                             'participant' => $participant,
                             'stape'       => $step,
+                            'isMasterParticipant' => $this->isMasterParticipant($participant),
                         ]);
                     }
 
@@ -656,6 +664,7 @@ class WizardController extends AbstractController
                             'puzzle'=>$puzzle,
                             'form'=>$form,
                             'participant'=>$participant??null,
+                            'isMasterParticipant' => $this->isMasterParticipant($participant),
                         ]);
                     }
 
@@ -678,6 +687,7 @@ class WizardController extends AbstractController
                             'form'=>$form,
                             'participant'=>$participant,
                             'stape'=>$step,
+                            'isMasterParticipant' => $this->isMasterParticipant($participant),
                         ]);
                     }
 
@@ -699,6 +709,7 @@ class WizardController extends AbstractController
                             'form'        => $form,
                             'participant' => $participant,
                             'stape'       => $step,
+                            'isMasterParticipant' => $this->isMasterParticipant($participant),
                         ]);
                     }
 
@@ -764,6 +775,7 @@ class WizardController extends AbstractController
                             'puzzle'=>$puzzle,
                             'form'=>$form,
                             'participant'=>$participant,
+                            'isMasterParticipant' => $this->isMasterParticipant($participant),
                         ]);
 
                     }
@@ -783,6 +795,7 @@ class WizardController extends AbstractController
                             'form'        => $form,
                             'participant' => $participant,
                             'stape'       => $step,
+                            'isMasterParticipant' => $this->isMasterParticipant($participant),
                         ]);
                     }
                     // Fusion propre
@@ -829,6 +842,7 @@ class WizardController extends AbstractController
                             'form'        => $form,
                             'participant' => $participant,
                             'stape'       => $step,
+                            'isMasterParticipant' => $this->isMasterParticipant($participant),
                         ]);
                     }
 
@@ -882,6 +896,7 @@ class WizardController extends AbstractController
             'step'=>$step,
             'qrOnlyOptions' => $qrOnlyOptions,
              '_t' => time(),         // bust cache
+            'isMasterParticipant' => $this->isMasterParticipant($participant),
             ]);
 
     }
@@ -955,6 +970,7 @@ class WizardController extends AbstractController
             'step'   => $step,
             'extras' => $extras,
             'participant'=>$participant,
+            'isMasterParticipant' => $this->isMasterParticipant($participant),
         ]);
 
     }

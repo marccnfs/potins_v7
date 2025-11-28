@@ -30,7 +30,8 @@ class ParticipantController extends AbstractController
         return $this->render('pwa/escape/home.html.twig', [
             'replacejs'=>false,
             'directory'=>'security',
-            'vartwig'=>$vartwig
+            'vartwig'=>$vartwig,
+            'isMasterParticipant' => false,
         ]);
 
     }
@@ -148,6 +149,7 @@ class ParticipantController extends AbstractController
             'vartwig'=>$vartwig,
             'participant' => $participant,
             'form' => $form,
+            'isMasterParticipant' => $this->isMasterParticipant($participant),
         ]);
     }
 

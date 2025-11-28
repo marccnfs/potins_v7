@@ -48,6 +48,7 @@ class EscapeGameController extends AbstractController
             'directory'=>'landing',
             'vartwig'=>$vartwig,
             'participant'=>$participant,
+            'isMasterParticipant' => $this->isMasterParticipant($participant),
         ]);
 
     }
@@ -64,7 +65,8 @@ class EscapeGameController extends AbstractController
             'replacejs' => false,
             'directory' => 'dashboard',
             'vartwig' => $vartwig,
-            'participant' => $participant,
+            'participant'=>$participant,
+            'isMasterParticipant' => $this->isMasterParticipant($participant),
         ]);
     }
 
@@ -83,7 +85,8 @@ class EscapeGameController extends AbstractController
             'replacejs'=>false,
             'vartwig'=>$vartwig,
             'directory'=>'docs',
-            'participant' => $participant
+            'participant'=>$participant,
+            'isMasterParticipant' => $this->isMasterParticipant($participant),
         ]);
 
     }
@@ -102,7 +105,8 @@ class EscapeGameController extends AbstractController
             'replacejs'=>false,
             'vartwig'=>$vartwig,
             'directory'=>'docs',
-            'participant' => $participant
+            'participant'=>$participant,
+            'isMasterParticipant' => $this->isMasterParticipant($participant),
         ]);
 
     }
@@ -121,7 +125,8 @@ class EscapeGameController extends AbstractController
             'replacejs'=>false,
             'vartwig'=>$vartwig,
             'directory'=>'docs',
-            'participant' => $participant
+            'participant'=>$participant,
+            'isMasterParticipant' => $this->isMasterParticipant($participant),
         ]);
 
     }
