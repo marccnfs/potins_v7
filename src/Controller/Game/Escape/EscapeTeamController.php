@@ -283,8 +283,10 @@ class EscapeTeamController extends AbstractController
         $success = false;
 
         $scenario = $this->buildScenarioConfig($run);
-        $stepCount = max(1, count($scenario['steps'] ?? []));
+        $steps = $scenario [ 'steps' ] ?? [];
+        $stepCount = max ( 1 , count ( $steps ));
         $targetStep = 4;
+        $stepConfig = $steps [ $targetStep ] ?? [];
 
         if ($team !== null) {
             $validation = $this->validateHiddenQrScan($run, $team, $token, $targetStep, $stepCount, $stepConfig, autoComplete: false);
@@ -322,8 +324,10 @@ class EscapeTeamController extends AbstractController
         }
 
         $scenario = $this->buildScenarioConfig($run);
-        $stepCount = max(1, count($scenario['steps'] ?? []));
+        $steps = $scenario [ 'steps' ] ?? [];
+        $stepCount = max ( 1 , count ( $steps ));
         $targetStep = 4;
+        $stepConfig = $steps [ $targetStep ] ?? [];
 
         $result = $this->validateHiddenQrScan($run, $team, $token, $targetStep, $stepCount, $stepConfig, autoComplete: true);
 
