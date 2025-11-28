@@ -330,7 +330,6 @@ class WizardController extends AbstractController
             'completionRate'=>$completionRate,
             'nextStep'=>$eg->nextIncompleteStep(),
             'canPublish'=>$completedSteps === $totalSteps,
-
         ]);
 
         // Empêcher Turbo/HTTP cache de réutiliser la page

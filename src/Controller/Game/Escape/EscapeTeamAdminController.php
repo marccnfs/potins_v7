@@ -450,6 +450,15 @@ class EscapeTeamAdminController extends AbstractController
                     $this->addFlash('danger', $e->getMessage());
                 }
             }
+            if ($request->request->has('action_reset')) {
+                try {
+                    $runAdminService->reset($run);
+                    $this->addFlash('success', 'La session a été réinitialisée : toutes les équipes ont été supprimées.');
+                } catch (\Throwable $e) {
+                    $this->addFlash('danger', $e->getMessage());
+                }
+            }
+
             return $this->redirectToRoute('escape_team_admin_pilot', ['slug' => $slug]);
         }
 

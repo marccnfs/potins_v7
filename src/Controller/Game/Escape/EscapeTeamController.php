@@ -49,12 +49,12 @@ class EscapeTeamController extends AbstractController
         $run = $this->runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
 
         $vartwig=$this->menuNav->templatepotins(
-            '_index',
+            '_index_mob',
             Links::GAMES);
 
         $registrationUrl = $this->generateUrl('escape_team_register', ['slug' => $run->getShareSlug()], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        return $this->render('pwa/escape/home.html.twig',[
+        return $this->render('pwa/escape/home_mob.html.twig',[
             'run' => $run,
             'landing' => $this->runAdminService->buildLandingContext($run),
             'teams' => $this->teamRepository->findForRunOrdered($run),

@@ -149,6 +149,30 @@ class EscapeTeamRunAdminService
         return $run;
     }
 
+    public function reset(EscapeTeamRun $run): EscapeTeamRun
+    {
+        if ($run->getStatus() !== EscapeTeamRun::STATUS_STOPPED) {
+            throw new RuntimeException('Seul un run stoppé peut être réinitialisé.');
+        }
+
+        $now = new DateTimeImmutable();
+
+        foreach ($run->getTeams()->toArray() as $team) {
+            $this->em->remove($team);
+            $run->getTeams()->removeElement($team);
+        }
+
+        $run->setStatus(EscapeTeamRun::STATUS_DRAFT);
+        $run->setStartedAt(null);
+        $run->setEndedAt(null);
+        $run->setRegistrationOpenedAt(null);
+        $run->setUpdatedAt($now);
+
+        $this->em->flush();
+
+        return $run;
+    }
+
 
     /**
      * Données prêtes à afficher sur la page d'accueil projetée (titre, image, lien d'inscription, compteur d'équipes, statut).
