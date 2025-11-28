@@ -203,7 +203,8 @@ export default class extends Controller {
         }
 
         if (!("BarcodeDetector" in window)) {
-            this._setFeedback(step, "Scan QR non supporté sur cet appareil.", false);
+            this._setFeedback(step, "Scan QR non supporté sur cet appareil. Scanne le QR avec un autre téléphone puis saisis le mot secret.", false);
+            this._setQrStatus("Utilise un autre appareil pour scanner le QR et reporte le mot secret dans le champ ci-dessous.", step);
             return;
         }
         if (!navigator?.mediaDevices?.getUserMedia) {

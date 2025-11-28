@@ -5,7 +5,7 @@
         <header class="escape-team__hero">
             <p class="kicker">Étape {{ targetStep }} · {{ run.title }}</p>
             <h1>QR caché</h1>
-            <p class="muted">Vous venez de scanner le QR caché. Choisissez votre équipe pour valider automatiquement l’étape.</p>
+            <p class="muted">Vous venez de scanner le QR caché. Choisissez votre équipe pour révéler le mot secret à reporter dans l’étape 4.</p>
         </header>
 
         {% if error %}
@@ -14,10 +14,14 @@
 
         {% if success and team %}
             <div class="alert alert-success">
-                Étape validée pour l’équipe {{ team.name }} !
+                QR scanné pour l’équipe <strong>{{ team.name }}</strong>.
+                {% if secretWord %}
+                    <p class="mt">Mot secret à saisir dans la page de jeu : <strong>{{ secretWord }}</strong></p>
+                {% endif %}
+                <p class="muted">Ce mot doit être indiqué par l’équipe dans l’étape 4 pour valider.</p>
             </div>
             {% if redirectUrl %}
-                <p><a class="btn btn-primary" href="{{ redirectUrl }}">Retour à la progression</a></p>
+                <p><a class="btn btn-primary" href="{{ redirectUrl }}">Retourner au parcours</a></p>
             {% endif %}
         {% endif %}
 

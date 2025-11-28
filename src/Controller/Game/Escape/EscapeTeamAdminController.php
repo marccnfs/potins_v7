@@ -56,6 +56,7 @@ class EscapeTeamAdminController extends AbstractController
             'step1Hints' => "Observe les symboles communs.\nLe mot est en majuscules.",
             'step2Solution' => 'GALAXIE',
             'step2Hints' => "Complète les flèches les plus courtes en premier.\nLe mot code se lit verticalement.",
+            'qrSecretWord' => 'MYSTÈRE',
             'cryptexSolution' => 'VICTOIRE',
             'cryptexHints' => "Les lettres sont liées au thème de l\'atelier.\nLe mot final utilise 8 lettres.",
         ])
@@ -103,6 +104,12 @@ class EscapeTeamAdminController extends AbstractController
                 'required' => false,
                 'attr' => ['rows' => 3],
                 'help' => 'Un indice par ligne, affichés aux joueurs sur demande.',
+            ])
+            ->add('qrSecretWord', TextType::class, [
+                'label' => 'Mot secret affiché après scan',
+                'required' => true,
+                'attr' => ['placeholder' => 'Mot secret révélé par le QR caché'],
+                'help' => 'Ce mot sera affiché sur l’appareil qui scanne le QR caché. Les joueurs devront le saisir dans l’étape 4.',
             ])
             ->add('cryptexSolution', TextType::class, [
                 'label' => 'Solution finale (cryptex)',
@@ -588,6 +595,7 @@ class EscapeTeamAdminController extends AbstractController
                         'Le QR a été imprimé lors de la création et caché dans la zone de jeu.',
                         'Une fois scanné, la validation est automatique pour l’équipe.',
                     ],
+                    'secretWord' => trim((string) ($data['qrSecretWord'] ?? '')),
                 ],
                 5 => [
                     'type' => 'cryptex',

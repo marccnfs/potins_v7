@@ -287,7 +287,7 @@ class EscapeTeamController extends AbstractController
         $targetStep = 4;
 
         if ($team !== null) {
-            $validation = $this->validateHiddenQrScan($run, $team, $token, $targetStep, $stepCount);
+            $validation = $this->validateHiddenQrScan($run, $team, $token, $targetStep, $stepCount, $stepConfig, autoComplete: false);
             $error = $validation['error'];
             $success = $validation['success'];
             $session = $validation['session'];
@@ -304,6 +304,7 @@ class EscapeTeamController extends AbstractController
             'token' => $token,
             'redirectUrl' => $team ? $this->generateUrl('escape_team_play', ['slug' => $slug, 'teamId' => $team->getId()]) : null,
             'targetStep' => $targetStep,
+            'secretWord' => $stepConfig['secretWord'] ?? null,
         ]);
     }
 
@@ -324,7 +325,7 @@ class EscapeTeamController extends AbstractController
         $stepCount = max(1, count($scenario['steps'] ?? []));
         $targetStep = 4;
 
-        $result = $this->validateHiddenQrScan($run, $team, $token, $targetStep, $stepCount);
+        $result = $this->validateHiddenQrScan($run, $team, $token, $targetStep, $stepCount, $stepConfig, autoComplete: true);
 
         if (!$result['success']) {
             return $this->json([
@@ -540,8 +541,9 @@ class EscapeTeamController extends AbstractController
             4 => [
                 'type' => 'qr_print',
                 'title' => 'Étape 4 — Trouve le QR caché',
-                'prompt' => 'Cherche le QR dissimulé par le maître du jeu et scanne-le pour valider.',
-                'hints' => ['Le QR a été imprimé et caché pendant la préparation.'],
+                'prompt' => 'Cherche le QR dissimulé par le maître du jeu et scanne-le pour obtenir le mot secret.',
+                'hints' => ['Le QR a été imprimé et caché pendant la préparation.', 'Le mot révélé doit être saisi dans la page de jeu pour valider.'],
+                'secretWord' => 'MYSTERE',
             ],
             5 => [
                 'type' => 'cryptex',
@@ -579,10 +581,14 @@ class EscapeTeamController extends AbstractController
         string $token,
         int $targetStep,
         int $stepCount,
+        array $stepConfig = [],
+        bool $autoComplete = true,
     ): array {
         $error = null;
         $success = false;
         $session = null;
+        $secretWord = trim((string) ($stepConfig['secretWord'] ?? ''));
+        $normalizedSecret = $this->normalizeAnswer($secretWord);
 
         $expectedToken = $this->buildHiddenQrToken($run);
         if ($token === '' || !hash_equals($expectedToken, $token)) {
@@ -597,19 +603,30 @@ class EscapeTeamController extends AbstractController
             $session = $this->sessionRepository->findOneByTeam($team);
             if ($session === null) {
                 $error = 'Session introuvable pour cette équipe.';
+            } elseif ($session->isCompleted()) {
+                $error = 'Le jeu est terminé pour cette équipe.';
             } elseif (($session->getStepStates()[$targetStep]['completedAt'] ?? null) !== null) {
                 $success = true; // déjà validé
             } else {
-                try {
-                    $this->progressService->recordStepCompletion(
-                        $session,
-                        $targetStep,
-                        totalSteps: $stepCount,
-                        metadata: ['qrToken' => $token],
-                    );
+                if ($autoComplete) {
+                    try {
+                        $metadata = ['qrToken' => $token];
+                        if ($normalizedSecret !== '') {
+                            $metadata['secretWord'] = $normalizedSecret;
+                        }
+
+                        $this->progressService->recordStepCompletion(
+                            $session,
+                            $targetStep,
+                            totalSteps: $stepCount,
+                            metadata: $metadata,
+                        );
+                        $success = true;
+                    } catch (\Throwable $e) {
+                        $error = $e->getMessage();
+                    }
+                } else {
                     $success = true;
-                } catch (\Throwable $e) {
-                    $error = $e->getMessage();
                 }
             }
         }
@@ -618,6 +635,7 @@ class EscapeTeamController extends AbstractController
             'success' => $success,
             'error' => $error,
             'session' => $session,
+            'secretWord' => $secretWord,
         ];
     }
 
@@ -625,11 +643,24 @@ class EscapeTeamController extends AbstractController
     {
         $type = $stepConfig['type'] ?? null;
 
-        if (in_array($type, ['qr_print', 'logic'], true)) {
+        if ($type === 'logic') {
             return true;
         }
 
         $expected = $this->normalizeAnswer($stepConfig['solution'] ?? null);
+
+        if ($type === 'qr_print') {
+            $expectedSecret = $this->normalizeAnswer($stepConfig['secretWord'] ?? '');
+            // si aucun mot secret configuré, pas de vérification supplémentaire
+            if ($expectedSecret === '') {
+                return true;
+            }
+
+            $provided = $this->normalizeAnswer($metadata['answer'] ?? $metadata['secretWord'] ?? null);
+
+            return $provided !== '' && $provided === $expectedSecret;
+        }
+
 
         if ($type === 'text') {
             $provided = $this->normalizeAnswer($metadata['answer'] ?? null);
