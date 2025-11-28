@@ -101,10 +101,10 @@ class EscapeTeamController extends AbstractController
         }
 
         $vartwig=$this->menuNav->templatepotins(
-            '_index',
+            '_index_mob',
             Links::GAMES);
 
-        return $this->render('pwa/escape/home.html.twig',[
+        return $this->render('pwa/escape/home_mob.html.twig',[
             'run' => $run,
             'teams' => $this->teamRepository->findForRunOrdered($run),
             'avatars' => $this->avatarCatalog->all(),
@@ -203,10 +203,10 @@ class EscapeTeamController extends AbstractController
         $scenario = $this->buildScenarioConfig($run);
 
         $vartwig=$this->menuNav->templatepotins(
-            '_index',
+            '_index_mob',
             Links::GAMES);
 
-        return $this->render('pwa/escape/home.html.twig',[
+        return $this->render('pwa/escape/home_mob.html.twig',[
             'run' => $run,
             'team' => $team,
             'session' => $session,
@@ -481,10 +481,10 @@ class EscapeTeamController extends AbstractController
         $session = $this->sessionRepository->findOneByTeam($team);
 
         $vartwig=$this->menuNav->templatepotins(
-            '_index',
+            '_index_mob',
             Links::GAMES);
 
-        return $this->render('pwa/escape/home.html.twig',[
+        return $this->render('pwa/escape/home_mob.html.twig',[
             'run' => $run,
             'team' => $team,
             'session' => $session,

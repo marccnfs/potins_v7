@@ -1,7 +1,7 @@
 {% block menu %}
     <div class="nav_game">
             {# >>> Passe les variables dont le sous-menu a besoin #}
-            {{ include('pwa/escape/' ~ directory ~ '/menu.html.twig', {
+            {{ include('pwa/escape/menus/menu.html.twig', {
                 participant: participant|default(null),
                 brand_route: brand_route|default('home'),
                 active: active|default(''),
