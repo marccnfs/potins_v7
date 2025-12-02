@@ -4,7 +4,7 @@
     <section class="escape-team admin">
         <header class="escape-team__hero">
             <p class="kicker">Escape game par équipes</p>
-            <h1>Mes escapes-team</h1>
+            <h1>Mes sessions escape-team</h1>
             <p class="muted">Retrouve tes sessions « master », édite-les ou pilote-les en direct.</p>
             <div class="escape-team__actions">
                 <a class="btn btn-primary" href="{{ path('escape_team_admin_create') }}">+ Nouvelle session</a>
@@ -56,6 +56,9 @@
                     </article>
                 {% endfor %}
             </section>
+            <div class="escape-team__actions escape-team__actions--bottom">
+                <a class="btn btn-primary" href="{{ path('escape_team_admin_create') }}">+ Créer une nouvelle session</a>
+            </div>
         {% else %}
             <section class="empty">
                 <h2>Tu n’as pas encore de session escape-team</h2>

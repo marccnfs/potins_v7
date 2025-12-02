@@ -5,11 +5,17 @@
         <header class="escape-team__hero">
             <p class="kicker">Escape game par équipes</p>
             <h1>Modifier la session « {{ run.title }} »</h1>
-            <p class="muted">Met à jour le slug, le visuel et les solutions avant de lancer la partie.</p>
+            <p class="muted">Met à jour le visuel, les solutions et les limites d’équipes avant de lancer la partie.</p>
             <div class="escape-team__actions">
                 <a class="btn btn-light" href="{{ path('escape_team_admin_list') }}">← Retour à mes escapes-team</a>
             </div>
         </header>
+
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-message flash-{{ type }}" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
 
         <div class="escape-team__grid">
             <div>
@@ -20,8 +26,13 @@
                     {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
                 </div>
                 <div class="form-group">
-                    {{ form_label(form.heroImageUrl) }}
-                    {{ form_widget(form.heroImageUrl, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_label(form.heroImageFile) }}
+                    {{ form_widget(form.heroImageFile, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_help(form.heroImageFile) }}
+                    {% if run.heroImageUrl %}
+                        <p class="muted">Visuel actuel :</p>
+                        <img class="escape-team__hero-img" src="{{ run.heroImageUrl }}" alt="Visuel actuel" />
+                    {% endif %}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.maxTeams) }}
@@ -50,6 +61,34 @@
                     <a class="btn" href="{{ path('escape_team_admin_pilot', {slug: run.shareSlug}) }}">Ouvrir le pilotage</a>
                     <a class="btn btn-light" href="{{ path('escape_team_landing', {slug: run.shareSlug}) }}" target="_blank" rel="noopener">Voir la landing</a>
                 </div>
+{#
+                <hr>
+                <h3>QR caché de l’étape 4</h3>
+                <p class="muted">Génère et imprime le QR à cacher dans la zone de jeu. Le scan par une équipe valide automatiquement l’étape.</p>
+                <div data-controller="qr-print"
+                     data-qr-print-fetch-url-value="{{ path('escape_team_hidden_qr_token', {slug: run.shareSlug}) }}"
+                     data-qr-print-print-url-value="{{ path('escape_team_hidden_qr_print', {slug: run.shareSlug, token: '__TOKEN__'}) }}"
+                     data-qr-print-ready-message-value="Clique sur générer pour créer le QR caché"
+                     data-qr-print-generated-message-value="QR prêt : imprime-le et cache-le"
+                     data-qr-print-generating-message-value="Génération en cours..."
+                     data-qr-print-error-message-value="Impossible de générer le QR"
+                     data-qr-print-no-expiry-message-value="Permanent">
+                    <p class="muted" data-qr-print-target="placeholder">Le QR caché sera unique pour le run « {{ run.title }} ».</p>
+                    <div class="qr-print" data-qr-print-target="details" hidden>
+                        <figure class="qr-print__figure">
+                            <img data-qr-print-target="qrImage" alt="QR caché" />
+                            <figcaption class="muted" data-qr-print-target="expires" hidden></figcaption>
+                        </figure>
+                        <div class="qr-print__actions">
+                            <button class="btn" data-qr-print-target="generateButton" data-action="qr-print#generate">Générer</button>
+                            <button class="btn btn-light" data-qr-print-target="printButton" data-action="qr-print#print" disabled>Imprimer</button>
+                        </div>
+                        <p class="muted" data-qr-print-target="directWrapper" hidden>
+                            <a data-qr-print-target="directLink" href="#" target="_blank" rel="noopener"></a>
+                        </p>
+                    </div>
+                </div>
+#}
             </div>
         </div>
     </section>

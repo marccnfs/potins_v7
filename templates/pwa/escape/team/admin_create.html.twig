@@ -4,8 +4,11 @@
     <section class="escape-team admin">
         <header class="escape-team__hero">
             <p class="kicker">Escape game par équipes</p>
-            <h1>Préparer une session « master »</h1>
-            <p class="muted">Configure directement le run de la session master {{ workshop.code }} et ouvre les inscriptions en une étape.</p>
+            <h1>Créer une session « master »</h1>
+            <p class="muted">Configure la session {{ workshop.code }}, ajoute un visuel et ouvre les inscriptions en une étape.</p>
+            <div class="escape-team__actions">
+                <a class="btn btn-light" href="{{ path('escape_team_admin_list') }}">← Retour à mes sessions</a>
+            </div>
         </header>
 
         {% for type, messages in app.flashes %}
@@ -23,8 +26,9 @@
                     {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
                 </div>
                 <div class="form-group">
-                    {{ form_label(form.heroImageUrl) }}
-                    {{ form_widget(form.heroImageUrl, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_label(form.heroImageFile) }}
+                    {{ form_widget(form.heroImageFile, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_help(form.heroImageFile) }}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.maxTeams) }}

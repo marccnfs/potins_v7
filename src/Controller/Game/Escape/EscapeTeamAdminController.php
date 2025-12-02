@@ -13,10 +13,12 @@ use App\Service\Games\EscapeTeamProgressService;
 use App\Service\Games\EscapeTeamRunAdminService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -59,10 +61,12 @@ class EscapeTeamAdminController extends AbstractController
                 'label' => 'Titre projeté',
                 'attr' => ['placeholder' => 'Escape par équipes'],
             ])
-            ->add('heroImageUrl', TextType::class, [
-                'label' => 'Image de l\'univers (URL)',
+            ->add('heroImageFile', FileType::class, [
+                'label' => 'Image de l\'univers',
                 'required' => false,
-                'attr' => ['placeholder' => 'https://.../visuel.jpg'],
+                'mapped' => false,
+                'help' => 'Téléverse un visuel (JPEG ou PNG) qui sera affiché sur la landing et l’attente.',
+                'attr' => ['accept' => 'image/*'],
             ])
             ->add('maxTeams', IntegerType::class, [
                 'label' => 'Nombre maximum d\'équipes',
@@ -120,13 +124,14 @@ class EscapeTeamAdminController extends AbstractController
             $data = $form->getData();
             $timeLimitMinutes = $data['timeLimitMinutes'] ?? null;
             $timeLimitSeconds = $timeLimitMinutes !== null ? (int) $timeLimitMinutes * 60 : null;
+            $heroImagePath = $this->handleHeroUpload($form->get('heroImageFile')->getData());
 
 
             $run = $runAdminService->prepareRun(
                 escapeGame: null,
                 owner: $participant,
                 title: (string) $data['title'],
-                heroImageUrl: $data['heroImageUrl'] ?? null,
+                heroImageUrl: $heroImagePath,
                 maxTeams: (int) $data['maxTeams'],
                 timeLimitSeconds: $timeLimitSeconds,
                 puzzleConfig: $this->buildPuzzleConfig($data),
@@ -230,10 +235,12 @@ class EscapeTeamAdminController extends AbstractController
                 'label' => 'Titre projeté',
                 'attr' => ['placeholder' => 'Escape par équipes'],
             ])
-            ->add('heroImageUrl', TextType::class, [
-                'label' => 'Image de l\'univers (URL)',
+            ->add('heroImageFile', FileType::class, [
+                'label' => 'Image de l\'univers',
                 'required' => false,
-                'attr' => ['placeholder' => 'https://.../visuel.jpg'],
+                'mapped' => false,
+                'help' => 'Remplace le visuel projeté en téléversant une nouvelle image.',
+                'attr' => ['accept' => 'image/*'],
             ])
             ->add('maxTeams', IntegerType::class, [
                 'label' => 'Nombre maximum d\'équipes',
@@ -264,6 +271,12 @@ class EscapeTeamAdminController extends AbstractController
                 'attr' => ['rows' => 3],
                 'help' => 'Un indice par ligne, affichés aux joueurs sur demande.',
             ])
+            ->add('qrSecretWord', TextType::class, [
+                'label' => 'Mot secret affiché après scan',
+                'required' => true,
+                'attr' => ['placeholder' => 'Mot secret révélé par le QR caché'],
+                'help' => 'Ce mot sera affiché sur l’appareil qui scanne le QR caché. Les joueurs devront le saisir dans l’étape 4.',
+            ])
             ->add('cryptexSolution', TextType::class, [
                 'label' => 'Solution finale (cryptex)',
                 'attr' => ['placeholder' => 'Mot final pour l’étape cryptex'],
@@ -286,9 +299,10 @@ class EscapeTeamAdminController extends AbstractController
             $timeLimitMinutes = $data['timeLimitMinutes'] ?? null;
             $timeLimitSeconds = $timeLimitMinutes !== null ? (int) $timeLimitMinutes * 60 : null;
             $now = new DateTimeImmutable();
+            $heroImagePath = $this->handleHeroUpload($form->get('heroImageFile')->getData(), $run->getHeroImageUrl());
 
             $run->setTitle((string) $data['title'])
-                ->setHeroImageUrl($data['heroImageUrl'] ?? null)
+                ->setHeroImageUrl($heroImagePath)
                 ->setMaxTeams((int) $data['maxTeams'])
                 ->setTimeLimitSeconds($timeLimitSeconds)
                 ->setPuzzleConfig($this->buildPuzzleConfig($data))
@@ -459,7 +473,6 @@ class EscapeTeamAdminController extends AbstractController
 
         return [
             'title' => $run->getTitle(),
-            'heroImageUrl' => $run->getHeroImageUrl(),
             'maxTeams' => $run->getMaxTeams(),
             'timeLimitMinutes' => $run->getTimeLimitSeconds() !== null ? (int) ceil($run->getTimeLimitSeconds() / 60) : null,
             'step1Solution' => $step1['solution'] ?? '',
@@ -581,5 +594,35 @@ class EscapeTeamAdminController extends AbstractController
         $items = array_values(array_filter(array_map(static fn (string $line): string => trim($line), explode("\n", (string) ($raw ?? '')))));
 
         return $items !== [] ? $items : $fallback;
+    }
+
+
+    private function handleHeroUpload(?UploadedFile $file, ?string $previousPath = null): ?string
+    {
+        if (!$file instanceof UploadedFile) {
+            return $previousPath;
+        }
+
+        $uploadDir = (string) $this->getParameter('escape_team_hero_dir');
+        $publicBase = rtrim((string) $this->getParameter('escape_team_hero_public'), '/');
+
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0775, true);
+        }
+
+        $extension = $file->guessExtension() ?: $file->getClientOriginalExtension() ?: 'jpg';
+        $filename = sprintf('escape-team-%s.%s', bin2hex(random_bytes(4)), $extension);
+        $file->move($uploadDir, $filename);
+
+        $publicPath = $publicBase . '/' . $filename;
+
+        if ($previousPath && str_starts_with($previousPath, '/')) {
+            $absolutePrevious = rtrim((string) $this->getParameter('kernel.project_dir'), '/') . '/public' . $previousPath;
+            if (is_file($absolutePrevious) && $previousPath !== $publicPath) {
+                @unlink($absolutePrevious);
+            }
+        }
+
+        return $publicPath;
     }
 }

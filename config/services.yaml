@@ -35,6 +35,8 @@ parameters:
     puzzle_images_public: '/uploads/puzzles'
     puzzle_videos_dir: '%kernel.project_dir%/public/uploads/videos'
     puzzle_videos_public: '/uploads/videos'
+    escape_team_hero_dir: '%kernel.project_dir%/public/uploads/escape-team'
+    escape_team_hero_public: '/uploads/escape-team'
     agenda.cnfs_participant_code: 'CNFS'
 
 services:
