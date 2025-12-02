@@ -65,6 +65,34 @@
         </div>
 
         <div class="escape-team__panel">
+            <h2>QR caché · étape 4</h2>
+            <p class="muted">Génère et imprime le QR code à cacher dans l’espace de jeu. Son scan valide automatiquement l’étape 4 pour l’équipe.</p>
+            <div data-controller="qr-print"
+                 data-qr-print-fetch-url-value="{{ path('escape_team_hidden_qr_token', {slug: run.shareSlug}) }}"
+                 data-qr-print-print-url-value="{{ path('escape_team_hidden_qr_print', {slug: run.shareSlug, token: '__TOKEN__'}) }}"
+                 data-qr-print-ready-message-value="Clique sur générer pour créer le QR caché"
+                 data-qr-print-generated-message-value="QR prêt : imprime-le et cache-le"
+                 data-qr-print-generating-message-value="Génération en cours..."
+                 data-qr-print-error-message-value="Impossible de générer le QR"
+                 data-qr-print-no-expiry-message-value="Permanent">
+                <p class="muted" data-qr-print-target="placeholder">Le QR caché sera unique pour « {{ run.title }} ».</p>
+                <div class="qr-print" data-qr-print-target="details" hidden>
+                    <figure class="qr-print__figure">
+                        <img data-qr-print-target="qrImage" alt="QR caché" />
+                        <figcaption class="muted" data-qr-print-target="expires" hidden></figcaption>
+                    </figure>
+                    <div class="qr-print__actions">
+                        <button class="btn" data-qr-print-target="generateButton" data-action="qr-print#generate">Générer</button>
+                        <button class="btn btn-light" data-qr-print-target="printButton" data-action="qr-print#print" disabled>Imprimer</button>
+                    </div>
+                    <p class="muted" data-qr-print-target="directWrapper" hidden>
+                        <a data-qr-print-target="directLink" href="#" target="_blank" rel="noopener"></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="escape-team__panel">
             <h2>Live</h2>
             <div id="pilot-live" data-endpoint="{{ path('escape_team_progress', {slug: run.shareSlug}) }}"></div>
         </div>

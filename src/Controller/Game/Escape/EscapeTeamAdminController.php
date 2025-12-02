@@ -4,7 +4,6 @@ namespace App\Controller\Game\Escape;
 
 use App\Attribute\RequireParticipant;
 use App\Classe\UserSessionTrait;
-use App\Entity\Games\EscapeGame;
 use App\Entity\Games\EscapeTeamRun;
 use App\Entity\Users\Participant;
 use App\Lib\Links;
@@ -14,7 +13,6 @@ use App\Service\Games\EscapeTeamProgressService;
 use App\Service\Games\EscapeTeamRunAdminService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -44,10 +42,7 @@ class EscapeTeamAdminController extends AbstractController
             return $this->redirectToRoute('dashboard_my_escapes');
         }
 
-        $games = $workshop->getEscapeGames()->toArray();
-        usort($games, static fn (EscapeGame $a, EscapeGame $b): int => strcmp($a->getTitle() ?? '', $b->getTitle() ?? ''));
-
-        $defaultTitle = $games !== [] ? ($games[0]->getTitle() ?? 'Escape par équipes') : 'Escape par équipes';
+        $defaultTitle = 'Escape par équipes';
 
         $form = $this->createFormBuilder([
             'title' => $defaultTitle,
@@ -60,13 +55,6 @@ class EscapeTeamAdminController extends AbstractController
             'cryptexSolution' => 'VICTOIRE',
             'cryptexHints' => "Les lettres sont liées au thème de l\'atelier.\nLe mot final utilise 8 lettres.",
         ])
-            ->add('escapeGame', ChoiceType::class, [
-                'choices' => $games,
-                'choice_value' => 'id',
-                'choice_label' => static fn (EscapeGame $game): string => $game->getTitle() ?? sprintf('Escape #%d', $game->getId()),
-                'placeholder' => $games === [] ? 'Aucun escape attaché à cette session' : 'Choisis l\'escape à projeter',
-                'required' => true,
-            ])
             ->add('title', TextType::class, [
                 'label' => 'Titre projeté',
                 'attr' => ['placeholder' => 'Escape par équipes'],
@@ -130,30 +118,25 @@ class EscapeTeamAdminController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $escapeGame = $data['escapeGame'] instanceof EscapeGame ? $data['escapeGame'] : null;
+            $timeLimitMinutes = $data['timeLimitMinutes'] ?? null;
+            $timeLimitSeconds = $timeLimitMinutes !== null ? (int) $timeLimitMinutes * 60 : null;
 
-            if ($escapeGame === null) {
-                $this->addFlash('danger', 'Sélectionne un escape game pour préparer la session.');
-            } else {
-                $timeLimitMinutes = $data['timeLimitMinutes'] ?? null;
-                $timeLimitSeconds = $timeLimitMinutes !== null ? (int) $timeLimitMinutes * 60 : null;
 
-                $run = $runAdminService->prepareRun(
-                    escapeGame: $escapeGame,
-                    owner: $participant,
-                    title: (string) $data['title'],
-                    heroImageUrl: $data['heroImageUrl'] ?? null,
-                    maxTeams: (int) $data['maxTeams'],
-                    timeLimitSeconds: $timeLimitSeconds,
-                    puzzleConfig: $this->buildPuzzleConfig($data),
-                );
+            $run = $runAdminService->prepareRun(
+                escapeGame: null,
+                owner: $participant,
+                title: (string) $data['title'],
+                heroImageUrl: $data['heroImageUrl'] ?? null,
+                maxTeams: (int) $data['maxTeams'],
+                timeLimitSeconds: $timeLimitSeconds,
+                puzzleConfig: $this->buildPuzzleConfig($data),
+            );
 
-                $runAdminService->openRegistration($run);
+            $runAdminService->openRegistration($run);
 
-                $this->addFlash('success', 'Session équipes créée : les inscriptions sont ouvertes.');
+            $this->addFlash('success', 'Session équipes créée : les inscriptions sont ouvertes.');
 
-                return $this->redirectToRoute('escape_team_admin_create', ['created' => $run->getShareSlug()]);
-            }
+            return $this->redirectToRoute('escape_team_admin_create', ['created' => $run->getShareSlug()]);
         }
 
         $createdSlug = (string) $request->query->get('created', '');
@@ -165,7 +148,6 @@ class EscapeTeamAdminController extends AbstractController
 
         return $this->render('pwa/escape/home.html.twig',[
             'workshop' => $workshop,
-            'games' => $games,
             'form' => $form->createView(),
             'directory'=>'team',
             'template'=>'team/admin_create.html.twig',
@@ -243,17 +225,7 @@ class EscapeTeamAdminController extends AbstractController
             return $this->redirectToRoute('escape_team_admin_list');
         }
 
-        $games = $workshop->getEscapeGames()->toArray();
-        usort($games, static fn (EscapeGame $a, EscapeGame $b): int => strcmp($a->getTitle() ?? '', $b->getTitle() ?? ''));
-
         $form = $this->createFormBuilder($this->buildFormDataFromRun($run))
-            ->add('escapeGame', ChoiceType::class, [
-                'choices' => $games,
-                'choice_value' => 'id',
-                'choice_label' => static fn (EscapeGame $game): string => $game->getTitle() ?? sprintf('Escape #%d', $game->getId()),
-                'placeholder' => $games === [] ? 'Aucun escape attaché à cette session' : 'Choisis l\'escape à projeter',
-                'required' => true,
-            ])
             ->add('title', TextType::class, [
                 'label' => 'Titre projeté',
                 'attr' => ['placeholder' => 'Escape par équipes'],
@@ -311,29 +283,22 @@ class EscapeTeamAdminController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $escapeGame = $data['escapeGame'] instanceof EscapeGame ? $data['escapeGame'] : null;
+            $timeLimitMinutes = $data['timeLimitMinutes'] ?? null;
+            $timeLimitSeconds = $timeLimitMinutes !== null ? (int) $timeLimitMinutes * 60 : null;
+            $now = new DateTimeImmutable();
 
-            if ($escapeGame === null) {
-                $this->addFlash('danger', 'Sélectionne un escape game pour préparer la session.');
-            } else {
-                $timeLimitMinutes = $data['timeLimitMinutes'] ?? null;
-                $timeLimitSeconds = $timeLimitMinutes !== null ? (int) $timeLimitMinutes * 60 : null;
-                $now = new DateTimeImmutable();
+            $run->setTitle((string) $data['title'])
+                ->setHeroImageUrl($data['heroImageUrl'] ?? null)
+                ->setMaxTeams((int) $data['maxTeams'])
+                ->setTimeLimitSeconds($timeLimitSeconds)
+                ->setPuzzleConfig($this->buildPuzzleConfig($data))
+                ->setUpdatedAt($now);
 
-                $run->setEscapeGame($escapeGame)
-                    ->setTitle((string) $data['title'])
-                    ->setHeroImageUrl($data['heroImageUrl'] ?? null)
-                    ->setMaxTeams((int) $data['maxTeams'])
-                    ->setTimeLimitSeconds($timeLimitSeconds)
-                    ->setPuzzleConfig($this->buildPuzzleConfig($data))
-                    ->setUpdatedAt($now);
+            $runAdminService->openRegistration($run);
 
-                $runAdminService->openRegistration($run);
+            $this->addFlash('success', 'Session mise à jour.');
 
-                $this->addFlash('success', 'Session mise à jour.');
-
-                return $this->redirectToRoute('escape_team_admin_list');
-            }
+            return $this->redirectToRoute('escape_team_admin_list');
         }
 
         $vartwig=$this->menuNav->templatepotins(
@@ -342,7 +307,6 @@ class EscapeTeamAdminController extends AbstractController
 
         return $this->render('pwa/escape/home.html.twig',[
             'workshop' => $workshop,
-            'games' => $games,
             'form' => $form->createView(),
             'directory'=>'team',
             'template'=>'team/admin_edit.html.twig',
@@ -494,7 +458,6 @@ class EscapeTeamAdminController extends AbstractController
         $cryptex = $puzzleConfig[5] ?? [];
 
         return [
-            'escapeGame' => $run->getEscapeGame(),
             'title' => $run->getTitle(),
             'heroImageUrl' => $run->getHeroImageUrl(),
             'maxTeams' => $run->getMaxTeams(),

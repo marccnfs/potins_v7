@@ -16,10 +16,6 @@
                 <h2>Paramétrage du run</h2>
                 {{ form_start(form) }}
                 <div class="form-group">
-                    {{ form_label(form.escapeGame) }}
-                    {{ form_widget(form.escapeGame, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <div class="form-group">
                     {{ form_label(form.title) }}
                     {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
                 </div>
@@ -46,6 +42,7 @@
                 <ol class="escape-team__bullets">
                     <li>Projette la landing pour recueillir les équipes.</li>
                     <li>Vérifie les solutions et indices avant lancement.</li>
+                    <li>Génère le QR caché (étape 4) puis prépare son impression.</li>
                     <li>Lance la session depuis le pilotage quand tout le monde est prêt.</li>
                 </ol>
                 <p class="muted">Slug : <code>{{ run.shareSlug }}</code></p>

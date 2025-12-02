@@ -17,7 +17,7 @@ class EscapeTeamRunAdminService
     }
 
     public function prepareRun(
-        EscapeGame $escapeGame,
+        ?EscapeGame $escapeGame,
         ?Participant $owner,
         string $title,
         ?string $heroImageUrl,
@@ -28,7 +28,7 @@ class EscapeTeamRunAdminService
         $run = (new EscapeTeamRun())
             ->setEscapeGame($escapeGame)
             ->setOwner($owner)
-            ->setTitle(trim($title) !== '' ? trim($title) : ($escapeGame->getTitle() ?? 'Escape par équipes'))
+            ->setTitle(trim($title) !== '' ? trim($title) : ($escapeGame?->getTitle() ?? 'Escape par équipes'))
             ->setHeroImageUrl($heroImageUrl)
             ->setMaxTeams($maxTeams)
             ->setTimeLimitSeconds($timeLimitSeconds)

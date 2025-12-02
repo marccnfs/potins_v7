@@ -26,7 +26,7 @@ class EscapeTeamRun
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: EscapeGame::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?EscapeGame $escapeGame = null;
 
     #[ORM\ManyToOne(targetEntity: Participant::class)]
@@ -89,7 +89,7 @@ class EscapeTeamRun
         return $this->escapeGame;
     }
 
-    public function setEscapeGame(EscapeGame $escapeGame): static
+    public function setEscapeGame(?EscapeGame $escapeGame): static
     {
         $this->escapeGame = $escapeGame;
 
