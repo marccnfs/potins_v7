@@ -239,7 +239,7 @@ class EscapeTeamAdminController extends AbstractController
             throw $this->createAccessDeniedException("Tu n'es pas autorisé à supprimer cette session.");
         }
 
-        if ($run->getStartedAt() !== null) {
+        if ($run->getStartedAt() !== null && $run->getStatus() !== EscapeTeamRun::STATUS_STOPPED) {
             $this->addFlash('danger', 'Impossible de supprimer : la session a déjà été lancée.');
 
             return $this->redirectToRoute('escape_team_admin_list');

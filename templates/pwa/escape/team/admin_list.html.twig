@@ -27,6 +27,7 @@
             <section class="cards">
                 {% for run in runs %}
                     {% set launched = run.startedAt is not null %}
+                    {% set canDelete = run.status == constant('App\\Entity\\Games\\EscapeTeamRun::STATUS_STOPPED') or not launched %}
                     {% set gameTitle = run.escapeGame ? run.escapeGame.title : null %}
                     <article class="card">
                         <div class="meta">
@@ -48,7 +49,7 @@
                             </a>
                             <form method="post" action="{{ path('escape_team_admin_delete', {slug: run.shareSlug}) }}" onsubmit="return confirm('Supprimer définitivement cette session ?');">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete_escape_team_' ~ run.id) }}">
-                                <button class="btn btn-danger" {{ launched ? 'disabled' }}>
+                                <button class="btn btn-danger" {{ canDelete ? '' : 'disabled' }}>
                                     🗑️ Supprimer
                                 </button>
                             </form>
