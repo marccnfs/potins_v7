@@ -36,6 +36,7 @@ class EscapeTeamRunAdminService
             ->setStatus(EscapeTeamRun::STATUS_DRAFT);
 
         $run->ensureShareSlug(fn (string $seed): string => $this->slugify($seed));
+        $run->ensureRegistrationCode(fn (): string => $this->generateAccessCode());
 
         $this->em->persist($run);
         $this->em->flush();
@@ -52,6 +53,7 @@ class EscapeTeamRunAdminService
         $now = new DateTimeImmutable();
 
         $run->ensureShareSlug(fn (string $seed): string => $this->slugify($seed));
+        $run->ensureRegistrationCode(fn (): string => $this->generateAccessCode());
         $run->setStatus(EscapeTeamRun::STATUS_REGISTRATION);
         $run->setRegistrationOpenedAt($run->getRegistrationOpenedAt() ?? $now);
         $run->setUpdatedAt($now);
@@ -207,5 +209,18 @@ class EscapeTeamRunAdminService
         $slug = strtolower(trim(preg_replace('/[^a-z0-9]+/i', '-', $seed) ?? '', '-'));
 
         return $slug !== '' ? $slug : 'escape-team-run';
+    }
+
+    private function generateAccessCode(): string
+    {
+        $alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        $length = 6;
+        $code = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $code .= $alphabet[random_int(0, strlen($alphabet) - 1)];
+        }
+
+        return $code;
     }
 }

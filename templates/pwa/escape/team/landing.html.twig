@@ -13,16 +13,21 @@
         <header class="escape-team__hero">
             <p class="kicker">Escape game par équipes</p>
             <h1>{{ run.title }}</h1>
-            <p class="muted">Projette cette page : le lien et le QR code permettent aux équipes de s'inscrire en direct.</p>
+           {#  <p class="muted">Projette cette page : le lien et le QR code permettent aux équipes de s'inscrire en direct.</p> #}
             {% if run.heroImageUrl %}
                 <img class="escape-team__hero-img" src="{{ run.heroImageUrl }}" alt="Visuel de l'univers">
             {% endif %}
 
             <div class="escape-team__share">
                 <div class="escape-team__share-link">
+                    <p class="muted">Code d'accès</p>
+                    <code class="escape-team__slug">{{ run.registrationCode ?? '—' }}</code>
+                    <p class="muted">Partage ce code pour une saisie rapide depuis nomdedomaine/escape-team.</p>
+                </div>
+                <div class="escape-team__share-link">
                     <p class="muted">Lien d'inscription</p>
                     <code class="escape-team__slug" id="escape-team-link">{{ registrationUrl }}</code>
-                    <a class="btn" href="{{ registrationUrl }}" target="_blank">Ouvrir la page d'inscription</a>
+                   {#  <a class="btn" href="{{ registrationUrl }}" target="_blank">Ouvrir la page d'inscription</a> #}
                 </div>
                 <div class="escape-team__share-qr">
                     <img src="{{ registrationQr }}" alt="QR code d'inscription" />

@@ -13,6 +13,7 @@
 !/public/.htaccess
 !/public/robots.txt
 !/public/audio
+!/public/escape
 !/public/mindar/*
 /templates/svg/
 ###< symfony/framework-bundle ###

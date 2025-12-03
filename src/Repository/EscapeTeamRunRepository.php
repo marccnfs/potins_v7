@@ -27,6 +27,16 @@ class EscapeTeamRunRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function findOneByRegistrationCode(string $code): ?EscapeTeamRun
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.registrationCode = :code')
+            ->setParameter('code', strtoupper($code))
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     /**
      * @return array<int, EscapeTeamRun>
      */

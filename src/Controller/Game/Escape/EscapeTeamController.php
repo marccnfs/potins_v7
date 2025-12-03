@@ -43,6 +43,41 @@ class EscapeTeamController extends AbstractController
     ) {
     }
 
+    #[Route('', name: 'escape_team_access', methods: ['GET', 'POST'])]
+    public function access(Request $request): Response
+    {
+        $code = strtoupper(trim((string) $request->request->get('code', '')));
+        $error = null;
+
+        if ($request->isMethod('POST')) {
+            if ($code === '') {
+                $error = 'Merci de saisir un code d\'accès valide.';
+            } else {
+                $run = $this->runRepository->findOneByRegistrationCode($code);
+                if ($run !== null && $run->getRegistrationCode()) {
+                    return $this->redirectToRoute('escape_team_register', ['slug' => $run->getShareSlug()]);
+                }
+
+                $error = 'Ce code ne correspond à aucune session en cours.';
+            }
+        }
+
+        $vartwig=$this->menuNav->templatepotins(
+            '_index_mob',
+            Links::GAMES);
+
+        return $this->render('pwa/escape/home_mob.html.twig',[
+            'code' => $code,
+            'error' => $error,
+            'directory'=>'team',
+            'template'=>'team/access.html.twig',
+            'vartwig'=>array_replace($vartwig, ['title' => 'Rejoindre un escape par équipes']),
+            'title' => 'Rejoindre un escape par équipes',
+            'isMasterParticipant' => false,
+            'isnomenu'=>false
+        ]);
+    }
+
     #[Route('/{slug}', name: 'escape_team_landing', methods: ['GET'])]
     public function landing(string $slug): Response
     {
@@ -66,6 +101,7 @@ class EscapeTeamController extends AbstractController
             'vartwig'=>$vartwig,
             'title' => sprintf('Escape par équipes · %s', $run->getTitle()),
             'isMasterParticipant' => false,
+            'isnomenu'=>false
         ]);
     }
 
@@ -154,6 +190,7 @@ class EscapeTeamController extends AbstractController
             'vartwig'=>$vartwig,
             'title' => sprintf('Classement · %s', $run->getTitle()),
             'isMasterParticipant' => false,
+            'isnomenu'=>false
         ]);
     }
 
@@ -174,6 +211,7 @@ class EscapeTeamController extends AbstractController
             'vartwig'=>$vartwig,
             'title' => sprintf('Live · %s', $run->getTitle()),
             'isMasterParticipant' => false,
+            'isnomenu'=>false
         ]);
     }
 
@@ -197,6 +235,7 @@ class EscapeTeamController extends AbstractController
             'vartwig'=>$vartwig,
             'title' => sprintf('Gagnant · %s', $run->getTitle()),
             'isMasterParticipant' => false,
+            'isnomenu'=>false
         ]);
     }
 
@@ -232,6 +271,7 @@ class EscapeTeamController extends AbstractController
             'vartwig'=>$vartwig,
             'title' => sprintf('Équipe %s · %s', $team->getName(), $run->getTitle()),
             'isMasterParticipant' => false,
+            'isnomenu'=>false
         ]);
     }
 
@@ -305,7 +345,14 @@ class EscapeTeamController extends AbstractController
 
         $teams = $this->teamRepository->findForRunOrdered($run);
 
-        return $this->render('pwa/escape/team/qr_scan.html.twig', [
+        $vartwig=$this->menuNav->templatepotins(
+            '_index_mob',
+            Links::GAMES);
+
+        return $this->render('pwa/escape/home_mob.html.twig',[
+            'directory'=>'team',
+            'template'=>'team/qr_scan.html.twig',
+            'vartwig'=>$vartwig,
             'run' => $run,
             'teams' => $teams,
             'team' => $team,
@@ -315,6 +362,7 @@ class EscapeTeamController extends AbstractController
             'redirectUrl' => $team ? $this->generateUrl('escape_team_play', ['slug' => $slug, 'teamId' => $team->getId()]) : null,
             'targetStep' => $targetStep,
             'secretWord' => $stepConfig['secretWord'] ?? null,
+            'isnomenu'=>false
         ]);
     }
 
@@ -514,6 +562,7 @@ class EscapeTeamController extends AbstractController
             'vartwig'=>$vartwig,
             'title' => sprintf('En attente · %s', $team->getName()),
             'isMasterParticipant' => false,
+            'isnomenu'=>false
         ]);
     }
 

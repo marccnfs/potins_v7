@@ -1,0 +1,20 @@
+<section class="escape-team access">
+    <header class="escape-team__hero">
+        <p class="kicker">Escape game par équipes</p>
+        <h1>Rejoindre une session</h1>
+        <p class="muted">Renseigne le code partagé par l'animateur pour accéder directement aux inscriptions.</p>
+    </header>
+
+    <div class="escape-team__grid escape-team__grid--landing">
+        <div class="escape-team__panel">
+            <form method="post" class="escape-team__form">
+                <label for="registration-code" class="escape-team__label">Code d'accès</label>
+                <input id="registration-code" name="code" value="{{ code }}" class="form-control" placeholder="Exemple : ABC123" required>
+                {% if error %}
+                    <p class="alert alert-danger" style="margin-top: 0.75rem;">{{ error }}</p>
+                {% endif %}
+                <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Ouvrir la page d'inscription</button>
+            </form>
+        </div>
+    </div>
+</section>

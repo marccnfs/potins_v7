@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: EscapeTeamRunRepository::class)]
 #[ORM\Table(name: 'aff_escape_team_run')]
 #[ORM\UniqueConstraint(name: 'uniq_escape_team_run_slug', columns: ['share_slug'])]
+#[ORM\UniqueConstraint(name: 'uniq_escape_team_run_registration_code', columns: ['registration_code'])]
 class EscapeTeamRun
 {
     public const STATUS_DRAFT = 'draft';
@@ -41,6 +42,9 @@ class EscapeTeamRun
 
     #[ORM\Column(length: 120)]
     private string $shareSlug = '';
+
+    #[ORM\Column(length: 32, nullable: true)]
+    private ?string $registrationCode = null;
 
     #[ORM\Column(length: 24)]
     private string $status = 'draft';
@@ -144,6 +148,19 @@ class EscapeTeamRun
         return $this;
     }
 
+    public function getRegistrationCode(): ?string
+    {
+        return $this->registrationCode;
+    }
+
+    public function setRegistrationCode(?string $registrationCode): static
+    {
+        $normalized = $registrationCode !== null ? strtoupper(trim($registrationCode)) : null;
+        $this->registrationCode = $normalized !== '' ? $normalized : null;
+
+        return $this;
+    }
+
     /** Génère un slug de partage si absent (ex: page d'accueil projetée). */
     public function ensureShareSlug(callable $slugger): void
     {
@@ -153,6 +170,15 @@ class EscapeTeamRun
 
         $seed = ($this->getTitle() ?: 'escape-team') . '-' . bin2hex(random_bytes(4));
         $this->shareSlug = $slugger($seed);
+    }
+
+    public function ensureRegistrationCode(callable $generator): void
+    {
+        if ($this->registrationCode !== null && $this->registrationCode !== '') {
+            return;
+        }
+
+        $this->setRegistrationCode($generator());
     }
 
     public function getStatus(): string

@@ -5951,6 +5951,10 @@ html.is-locked, body.is-locked {
     min-width: 260px;
     text-align: left;
 }
+.escape-team__slug{
+    font-size: 20px;
+    color: black;
+}
 
 .escape-team__share-qr {
     background: #fff;
