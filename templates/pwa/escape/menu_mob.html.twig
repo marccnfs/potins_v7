@@ -1,5 +1,7 @@
 {% block menu %}
+    {% if isnomenu %}
     <div class="nav_game_mob">
             {{ include('pwa/escape/menus/menu_mob.html.twig' )}}
         </div>
+    {% endif %}
 {% endblock %}

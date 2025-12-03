@@ -75,7 +75,8 @@ class EscapeTeamController extends AbstractController
         $run = $this->runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
         $teams = $this->teamRepository->findForRunOrdered($run);
         $usedTeamAvatars = array_map(static fn (EscapeTeam $team): string => $team->getAvatarKey(), $teams);
-        $availableTeamAvatars = array_values(array_diff($this->avatarCatalog->getTeamAvatars(), $usedTeamAvatars));
+        $availableTeamAvatarKeys = array_values(array_diff($this->avatarCatalog->getTeamAvatars(), $usedTeamAvatars));
+        $availableTeamAvatars = $this->avatarCatalog->getTeamAvatarDetails($availableTeamAvatarKeys);
 
         if ($request->isMethod('POST')) {
             $teamName = trim((string) $request->request->get('teamName', ''));
@@ -114,12 +115,14 @@ class EscapeTeamController extends AbstractController
                 'teams' => $availableTeamAvatars,
             ],
             'isRegistrationOpen' => $run->isRegistrationOpen(),
-            'isAvatarUnavailable' => count($availableTeamAvatars) === 0,
+            'isAvatarUnavailable' => count($availableTeamAvatarKeys) === 0,
+            'avatarImages' => $this->avatarCatalog->getImages(),
             'directory'=>'team',
             'template'=>'team/register.html.twig',
             'vartwig'=>$vartwig,
             'title' => sprintf('Inscription équipes · %s', $run->getTitle()),
             'isMasterParticipant' => false,
+            'isnomenu'=>false
         ]);
 
     }

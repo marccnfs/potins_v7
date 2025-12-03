@@ -7,6 +7,24 @@ namespace App\Service\Games;
  */
 class EscapeTeamAvatarCatalog
 {
+    private const AVATAR_IMAGES = [
+        'astronaut' => 'escape/astronaut.svg',
+        'dragon' => 'escape/dragon.svg',
+        'robot' => 'escape/robot.svg',
+        'unicorn' => 'escape/unicorn.svg',
+        'penguin' => 'escape/penguin.svg',
+        'ninja' => 'escape/ninja.svg',
+        'pirate' => 'escape/pirate.svg',
+        'octopus' => 'escape/octopus.svg',
+        'koala' => 'escape/koala.svg',
+        'alien' => 'escape/alien.svg',
+        'rocket' => 'escape/rocket.svg',
+        't-rex' => 'escape/t-rex.svg',
+        'owl' => 'escape/owl.svg',
+        'fox' => 'escape/fox.svg',
+        'cat' => 'escape/cat.svg',
+        'dog' => 'escape/dog.svg',
+    ];
     private const TEAM_AVATARS = [
         'astronaut',
         'dragon',
@@ -53,6 +71,30 @@ class EscapeTeamAvatarCatalog
         return self::MEMBER_AVATARS;
     }
 
+    /**
+     * @param string[]|null $avatarKeys
+     *
+     * @return array<int, array{key:string, image:string}>
+     */
+    public function getTeamAvatarDetails(?array $avatarKeys = null): array
+    {
+        $keys = $avatarKeys ?? $this->getTeamAvatars();
+
+        return $this->buildAvatarDetails($keys);
+    }
+
+    /**
+     * @param string[]|null $avatarKeys
+     *
+     * @return array<int, array{key:string, image:string}>
+     */
+    public function getMemberAvatarDetails(?array $avatarKeys = null): array
+    {
+        $keys = $avatarKeys ?? $this->getMemberAvatars();
+
+        return $this->buildAvatarDetails($keys);
+    }
+
     public function isValidTeamAvatar(string $avatarKey): bool
     {
         return in_array($avatarKey, self::TEAM_AVATARS, true);
@@ -68,8 +110,31 @@ class EscapeTeamAvatarCatalog
     public function all(): array
     {
         return [
-            'teams' => $this->getTeamAvatars(),
-            'members' => $this->getMemberAvatars(),
+            'teams' => $this->getTeamAvatarDetails(),
+            'members' => $this->getMemberAvatarDetails(),
         ];
+    }
+
+    /** @return array<string, string> */
+    public function getImages(): array
+    {
+        return self::AVATAR_IMAGES;
+    }
+
+    /**
+     * @param string[] $avatarKeys
+     *
+     * @return array<int, array{key:string, image:string}>
+     */
+    private function buildAvatarDetails(array $avatarKeys): array
+    {
+        $knownKeys = array_intersect($avatarKeys, array_keys(self::AVATAR_IMAGES));
+
+        return array_values(array_map(function (string $key): array {
+            return [
+                'key' => $key,
+                'image' => self::AVATAR_IMAGES[$key],
+            ];
+        }, $knownKeys));
     }
 }

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="astronaut avatar">
+    <defs>
+        <linearGradient id="grad-astronaut" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#2a2f4f" />
+            <stop offset="100%" stop-color="#4f46e5" />
+        </linearGradient>
+    </defs>
+    <rect width="200" height="200" rx="24" fill="url(#grad-astronaut)"/>
+    <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="54" fill="#ffffff" font-weight="700">a</text>
+    <text x="50%" y="78%" dominant-baseline="middle" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="18" fill="#e0e7ff" font-weight="600">astronaut</text>
+</svg>

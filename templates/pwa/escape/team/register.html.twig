@@ -3,6 +3,9 @@
 {% block body %}
     <section class="escape-team register">
         <header class="escape-team__hero">
+            <div class="nav_lite" >
+                <div class="navlogo-svg">{{ include('svg/potins/logopotins_svg_small.html.twig') }}</div>
+            </div>
             <p class="kicker">Inscription des équipes</p>
             <h1>{{ run.title }}</h1>
             <p class="muted">Choisissez un avatar, un nom d'équipe et ajoutez vos membres. Maximum {{ run.maxTeams }} équipes.</p>
@@ -35,10 +38,13 @@
 
                         <label>Avatar d'équipe</label>
                         <div class="escape-team__avatars">
-                            {% for key in avatars.teams %}
+                            {% for avatar in avatars.teams %}
                                 <label class="escape-team__avatar-tile">
-                                    <input type="radio" name="avatarKey" value="{{ key }}" {% if loop.first %}checked{% endif %}>
-                                    <span class="escape-team__avatar">{{ key }}</span>
+                                    <input type="radio" name="avatarKey" value="{{ avatar.key }}" {% if loop.first %}checked{% endif %}>
+                                    <span class="escape-team__avatar escape-team__avatar--with-image">
+                                        <img src="{{ asset(avatar.image) }}" alt="Avatar {{ avatar.key }}" loading="lazy">
+                                        <strong>{{ avatar.key }}</strong>
+                                    </span>
                                 </label>
                             {% endfor %}
                         </div>
@@ -46,7 +52,7 @@
                         <div class="escape-team__members" data-prototype-index="{{ 0 }}">
                             <div class="escape-team__member-row">
                                 <div>
-                                    <label>Pseudo</label>
+                                    <label>Pseudo/prénom membre de l'equipe :</label>
                                     <input type="text" name="members[0][nickname]" required placeholder="Capitaine" />
                                 </div>
                             </div>
@@ -65,8 +71,13 @@
                 {% else %}
                     <ul class="escape-team__list">
                         {% for team in teams %}
+                            {% set teamAvatarImage = avatarImages[team.avatarKey] ?? null %}
                             <li class="escape-team__card">
-                                <span class="escape-team__avatar">{{ team.avatarKey }}</span>
+                                {% if teamAvatarImage %}
+                                    <img class="escape-team__avatar escape-team__avatar-img" src="{{ asset(teamAvatarImage) }}" alt="Avatar {{ team.avatarKey }}" loading="lazy">
+                                {% else %}
+                                    <span class="escape-team__avatar">{{ team.avatarKey }}</span>
+                                {% endif %}
                                 <div>
                                     <strong>{{ team.name }}</strong>
                                     <p class="muted">{{ team.members|length }} joueur(s)</p>
