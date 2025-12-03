@@ -5929,7 +5929,6 @@ html.is-locked, body.is-locked {
 
 .escape-team__hero-img {
     max-width: 420px;
-    width: 100%;
     margin: 1rem auto 0;
     display: block;
     border-radius: 10px;
@@ -6101,4 +6100,18 @@ html.is-locked, body.is-locked {
         "duration hints penalties";
         row-gap: 0.35rem;
     }
+}
+.escape-team__avatars{
+    display: flex;
+    flex-wrap: wrap;
+}
+.escape-team__avatar-tile{
+    display: flex;
+    height: 150px;
+    width: 150px;
+    padding: 15px;
+    margin: 15px;
+    border: solid 0.5px grey;
+    justify-content: center;
+    align-items: center;
 }

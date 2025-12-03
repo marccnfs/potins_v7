@@ -35,7 +35,7 @@ class EscapeTeamRegistrationService
     }
 
     /**
-     * @param array<int, array{nickname:string, avatarKey:string}> $members
+     * @param array<int, array{nickname:string}> $members
      */
     public function registerTeam(EscapeTeamRun $run, string $teamName, string $avatarKey, array $members): EscapeTeam
     {
@@ -44,6 +44,7 @@ class EscapeTeamRegistrationService
         $this->assertNameIsAvailable($run, $normalizedName);
         $this->assertTeamLimit($run);
         $this->assertAvatar($avatarKey, true);
+        $this->assertTeamAvatarAvailable($run, $avatarKey);
         $this->assertMembers($members);
 
         $team = (new EscapeTeam())
@@ -53,7 +54,7 @@ class EscapeTeamRegistrationService
             ->setColor($this->pickColor($run));
 
         foreach ($members as $payload) {
-            $team->addMember($this->buildMember($payload['nickname'], $payload['avatarKey']));
+            $team->addMember($this->buildMember($payload['nickname'], $avatarKey));
         }
 
         $session = (new EscapeTeamSession())
@@ -70,7 +71,7 @@ class EscapeTeamRegistrationService
     }
 
     /**
-     * @param array<int, array{nickname:string, avatarKey:string}> $members
+     * @param array<int, array{nickname:string}> $members
      */
     public function updateTeam(EscapeTeam $team, string $teamName, string $avatarKey, array $members): EscapeTeam
     {
@@ -83,6 +84,7 @@ class EscapeTeamRegistrationService
         $normalizedName = $this->normalizeName($teamName);
         $this->assertNameIsAvailable($run, $normalizedName, $team->getId());
         $this->assertAvatar($avatarKey, true);
+        $this->assertTeamAvatarAvailable($run, $avatarKey, $team->getId());
         $this->assertMembers($members);
 
         $team->setName($normalizedName);
@@ -94,7 +96,7 @@ class EscapeTeamRegistrationService
         }
 
         foreach ($members as $payload) {
-            $team->addMember($this->buildMember($payload['nickname'], $payload['avatarKey']));
+            $team->addMember($this->buildMember($payload['nickname'], $avatarKey));
         }
 
         $this->em->flush();
@@ -147,7 +149,7 @@ class EscapeTeamRegistrationService
     }
 
     /**
-     * @param array<int, array{nickname:string, avatarKey:string}> $members
+     * @param array<int, array{nickname:string}> $members
      */
     private function assertMembers(array $members): void
     {
@@ -157,13 +159,11 @@ class EscapeTeamRegistrationService
 
         foreach ($members as $member) {
             $nickname = $this->normalizeName($member['nickname'] ?? '');
-            $avatar = $member['avatarKey'] ?? '';
 
             if ($nickname === '') {
                 throw new InvalidArgumentException('Chaque membre doit avoir un pseudo.');
             }
 
-            $this->assertAvatar($avatar, false);
         }
     }
 
@@ -175,6 +175,18 @@ class EscapeTeamRegistrationService
 
         if (!$isValid) {
             throw new InvalidArgumentException('Avatar non autorisé.');
+        }
+    }
+
+    private function assertTeamAvatarAvailable(EscapeTeamRun $run, string $avatarKey, ?int $ignoreId = null): void
+    {
+        $existing = $this->teamRepository->findOneBy([
+            'run' => $run,
+            'avatarKey' => $avatarKey,
+        ]);
+
+        if ($existing && $existing->getId() !== $ignoreId) {
+            throw new InvalidArgumentException('Cet avatar est déjà pris par une autre équipe.');
         }
     }
 

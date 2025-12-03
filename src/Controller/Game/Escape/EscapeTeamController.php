@@ -73,6 +73,9 @@ class EscapeTeamController extends AbstractController
     public function register(Request $request, string $slug): Response
     {
         $run = $this->runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
+        $teams = $this->teamRepository->findForRunOrdered($run);
+        $usedTeamAvatars = array_map(static fn (EscapeTeam $team): string => $team->getAvatarKey(), $teams);
+        $availableTeamAvatars = array_values(array_diff($this->avatarCatalog->getTeamAvatars(), $usedTeamAvatars));
 
         if ($request->isMethod('POST')) {
             $teamName = trim((string) $request->request->get('teamName', ''));
@@ -81,7 +84,6 @@ class EscapeTeamController extends AbstractController
             $members = array_values(array_filter(array_map(static function ($row): array {
                 return [
                     'nickname' => trim((string) ($row['nickname'] ?? '')),
-                    'avatarKey' => (string) ($row['avatarKey'] ?? ''),
                 ];
 
              }, is_array($membersPayload) ? $membersPayload : []), static function (array $member): bool {
@@ -107,9 +109,12 @@ class EscapeTeamController extends AbstractController
 
         return $this->render('pwa/escape/home_mob.html.twig',[
             'run' => $run,
-            'teams' => $this->teamRepository->findForRunOrdered($run),
-            'avatars' => $this->avatarCatalog->all(),
+            'teams' => $teams,
+            'avatars' => [
+                'teams' => $availableTeamAvatars,
+            ],
             'isRegistrationOpen' => $run->isRegistrationOpen(),
+            'isAvatarUnavailable' => count($availableTeamAvatars) === 0,
             'directory'=>'team',
             'template'=>'team/register.html.twig',
             'vartwig'=>$vartwig,

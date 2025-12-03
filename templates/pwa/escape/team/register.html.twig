@@ -26,6 +26,8 @@
                     <p class="muted">Les inscriptions sont fermées pour ce run.</p>
                 {% elseif isFull %}
                     <p class="muted">Capacité atteinte ({{ run.maxTeams }} équipes). Demandez au maître du jeu.</p>
+                {% elseif isAvatarUnavailable %}
+                    <p class="muted">Tous les avatars d'équipe ont été choisis. Contactez le maître du jeu.</p>
                 {% else %}
                     <form method="post" class="escape-team__form" id="team-register-form">
                         <label>Nom d'équipe</label>
@@ -46,14 +48,6 @@
                                 <div>
                                     <label>Pseudo</label>
                                     <input type="text" name="members[0][nickname]" required placeholder="Capitaine" />
-                                </div>
-                                <div>
-                                    <label>Avatar</label>
-                                    <select name="members[0][avatarKey]">
-                                        {% for key in avatars.members %}
-                                            <option value="{{ key }}">{{ key }}</option>
-                                        {% endfor %}
-                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -103,14 +97,6 @@
                     <div>
                         <label>Pseudo</label>
                         <input type="text" name="members[${nextIndex}][nickname]" required placeholder="Joueur ${nextIndex + 1}" />
-                    </div>
-                    <div>
-                        <label>Avatar</label>
-                        <select name="members[${nextIndex}][avatarKey]">
-                            {% for key in avatars.members %}
-                                <option value="{{ key }}">{{ key }}</option>
-                            {% endfor %}
-                        </select>
                     </div>
                 `;
                 container.appendChild(row);
