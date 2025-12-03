@@ -7,17 +7,13 @@ use App\Classe\UserSessionTrait;
 use App\Entity\Games\EscapeTeamRun;
 use App\Entity\Users\Participant;
 use App\Lib\Links;
+use App\Form\EscapeTeamRunType;
 use App\Repository\EscapeWorkshopSessionRepository;
 use App\Repository\EscapeTeamRunRepository;
 use App\Service\Games\EscapeTeamProgressService;
 use App\Service\Games\EscapeTeamRunAdminService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,78 +42,22 @@ class EscapeTeamAdminController extends AbstractController
 
         $defaultTitle = 'Escape par équipes';
 
-        $form = $this->createFormBuilder([
-            'title' => $defaultTitle,
-            'maxTeams' => 10,
-            'step1Solution' => 'ORIGAMI',
-            'step1Hints' => "Observe les symboles communs.\nLe mot est en majuscules.",
-            'step2Solution' => 'GALAXIE',
-            'step2Hints' => "Complète les flèches les plus courtes en premier.\nLe mot code se lit verticalement.",
-            'qrSecretWord' => 'MYSTÈRE',
-            'cryptexSolution' => 'VICTOIRE',
-            'cryptexHints' => "Les lettres sont liées au thème de l\'atelier.\nLe mot final utilise 8 lettres.",
-        ])
-            ->add('title', TextType::class, [
-                'label' => 'Titre projeté',
-                'attr' => ['placeholder' => 'Escape par équipes'],
-            ])
-            ->add('heroImageFile', FileType::class, [
-                'label' => 'Image de l\'univers',
-                'required' => false,
-                'mapped' => false,
-                'help' => 'Téléverse un visuel (JPEG ou PNG) qui sera affiché sur la landing et l’attente.',
-                'attr' => ['accept' => 'image/*'],
-            ])
-            ->add('maxTeams', IntegerType::class, [
-                'label' => 'Nombre maximum d\'équipes',
-                'attr' => ['min' => 1, 'max' => 10],
-            ])
-            ->add('timeLimitMinutes', IntegerType::class, [
-                'label' => 'Temps limite (minutes)',
-                'required' => false,
-                'attr' => ['min' => 0],
-            ])
-            ->add('step1Solution', TextType::class, [
-                'label' => 'Solution étape 1 (mot ou phrase)',
-                'attr' => ['placeholder' => 'Mot attendu pour la première épreuve'],
-            ])
-            ->add('step1Hints', TextareaType::class, [
-                'label' => 'Indices étape 1',
-                'required' => false,
-                'attr' => ['rows' => 3],
-                'help' => 'Un indice par ligne, affichés aux joueurs sur demande.',
-            ])
-            ->add('step2Solution', TextType::class, [
-                'label' => 'Solution étape 2 (mot ou phrase)',
-                'attr' => ['placeholder' => 'Mot attendu pour la seconde épreuve'],
-            ])
-            ->add('step2Hints', TextareaType::class, [
-                'label' => 'Indices étape 2',
-                'required' => false,
-                'attr' => ['rows' => 3],
-                'help' => 'Un indice par ligne, affichés aux joueurs sur demande.',
-            ])
-            ->add('qrSecretWord', TextType::class, [
-                'label' => 'Mot secret affiché après scan',
-                'required' => true,
-                'attr' => ['placeholder' => 'Mot secret révélé par le QR caché'],
-                'help' => 'Ce mot sera affiché sur l’appareil qui scanne le QR caché. Les joueurs devront le saisir dans l’étape 4.',
-            ])
-            ->add('cryptexSolution', TextType::class, [
-                'label' => 'Solution finale (cryptex)',
-                'attr' => ['placeholder' => 'Mot final pour l’étape cryptex'],
-            ])
-            ->add('cryptexHints', TextareaType::class, [
-                'label' => 'Indices étape 5 (cryptex)',
-                'required' => false,
-                'attr' => ['rows' => 3],
-                'help' => 'Un indice par ligne, affichés aux joueurs sur demande.',
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Créer et ouvrir les inscriptions',
-                'attr' => ['class' => 'btn btn-primary'],
-            ])
-            ->getForm();
+        $form = $this->createForm(
+            EscapeTeamRunType::class,
+            [
+                'title' => $defaultTitle,
+                'maxTeams' => 10,
+                'step1Solution' => 'ORIGAMI',
+                'step1Hints' => "Observe les symboles communs.\nLe mot est en majuscules.",
+                'step2Solution' => 'GALAXIE',
+                'step2Hints' => "Complète les flèches les plus courtes en premier.\nLe mot code se lit verticalement.",
+                'qrSecretWord' => 'MYSTÈRE',
+                'cryptexSolution' => 'VICTOIRE',
+                'cryptexHints' => "Les lettres sont liées au thème de l\'atelier.\nLe mot final utilise 8 lettres.",
+            ],
+            ['submit_label' => 'Créer et ouvrir les inscriptions'],
+        );
+
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -230,68 +170,12 @@ class EscapeTeamAdminController extends AbstractController
             return $this->redirectToRoute('escape_team_admin_list');
         }
 
-        $form = $this->createFormBuilder($this->buildFormDataFromRun($run))
-            ->add('title', TextType::class, [
-                'label' => 'Titre projeté',
-                'attr' => ['placeholder' => 'Escape par équipes'],
-            ])
-            ->add('heroImageFile', FileType::class, [
-                'label' => 'Image de l\'univers',
-                'required' => false,
-                'mapped' => false,
-                'help' => 'Remplace le visuel projeté en téléversant une nouvelle image.',
-                'attr' => ['accept' => 'image/*'],
-            ])
-            ->add('maxTeams', IntegerType::class, [
-                'label' => 'Nombre maximum d\'équipes',
-                'attr' => ['min' => 1, 'max' => 10],
-            ])
-            ->add('timeLimitMinutes', IntegerType::class, [
-                'label' => 'Temps limite (minutes)',
-                'required' => false,
-                'attr' => ['min' => 0],
-            ])
-            ->add('step1Solution', TextType::class, [
-                'label' => 'Solution étape 1 (mot ou phrase)',
-                'attr' => ['placeholder' => 'Mot attendu pour la première épreuve'],
-            ])
-            ->add('step1Hints', TextareaType::class, [
-                'label' => 'Indices étape 1',
-                'required' => false,
-                'attr' => ['rows' => 3],
-                'help' => 'Un indice par ligne, affichés aux joueurs sur demande.',
-            ])
-            ->add('step2Solution', TextType::class, [
-                'label' => 'Solution étape 2 (mot ou phrase)',
-                'attr' => ['placeholder' => 'Mot attendu pour la seconde épreuve'],
-            ])
-            ->add('step2Hints', TextareaType::class, [
-                'label' => 'Indices étape 2',
-                'required' => false,
-                'attr' => ['rows' => 3],
-                'help' => 'Un indice par ligne, affichés aux joueurs sur demande.',
-            ])
-            ->add('qrSecretWord', TextType::class, [
-                'label' => 'Mot secret affiché après scan',
-                'required' => true,
-                'attr' => ['placeholder' => 'Mot secret révélé par le QR caché'],
-                'help' => 'Ce mot sera affiché sur l’appareil qui scanne le QR caché. Les joueurs devront le saisir dans l’étape 4.',
-            ])
-            ->add('cryptexSolution', TextType::class, [
-                'label' => 'Solution finale (cryptex)',
-                'attr' => ['placeholder' => 'Mot final pour l’étape cryptex'],
-            ])
-            ->add('cryptexHints', TextareaType::class, [
-                'label' => 'Indices étape 5 (cryptex)',
-                'required' => false,
-                'attr' => ['rows' => 3],
-                'help' => 'Un indice par ligne, affichés aux joueurs sur demande.',
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Enregistrer les modifications',
-                'attr' => ['class' => 'btn btn-primary'],
-            ])
-            ->getForm();
+        $form = $this->createForm(
+            EscapeTeamRunType::class,
+            $this->buildFormDataFromRun($run),
+            ['submit_label' => 'Enregistrer les modifications'],
+        );
+
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
