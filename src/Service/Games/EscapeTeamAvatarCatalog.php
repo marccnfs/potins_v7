@@ -73,7 +73,7 @@ class EscapeTeamAvatarCatalog
     /**
      * @param string[]|null $avatarKeys
      *
-     * @return array<int, array{key:string, image:string}>
+     * @return array<int, array{key:string, image:string, background:string}>
      */
     public function getTeamAvatarDetails(?array $avatarKeys = null): array
     {
@@ -85,7 +85,7 @@ class EscapeTeamAvatarCatalog
     /**
      * @param string[]|null $avatarKeys
      *
-     * @return array<int, array{key:string, image:string}>
+     * @return array<int, array{key:string, image:string, background:string}>
      */
     public function getMemberAvatarDetails(?array $avatarKeys = null): array
     {
@@ -120,10 +120,16 @@ class EscapeTeamAvatarCatalog
         return self::AVATAR_IMAGES;
     }
 
+    /** @return array<string, string> */
+    public function getBackgroundImages(): array
+    {
+        return self::AVATAR_BACKGROUND_IMAGES;
+    }
+
     /**
      * @param string[] $avatarKeys
      *
-     * @return array<int, array{key:string, image:string}>
+     * @return array<int, array{key:string, image:string, background:string}>
      */
     private function buildAvatarDetails(array $avatarKeys): array
     {
@@ -133,6 +139,7 @@ class EscapeTeamAvatarCatalog
             return [
                 'key' => $key,
                 'image' => self::AVATAR_IMAGES[$key],
+                'background' => self::AVATAR_BACKGROUND_IMAGES[$key],
             ];
         }, $knownKeys));
     }

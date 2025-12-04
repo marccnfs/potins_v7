@@ -37,15 +37,20 @@
                         <input type="text" name="teamName" required maxlength="80" placeholder="Les explorateurs" />
 
                         <label>Avatar d'équipe</label>
-                        <div class="escape-team__avatars">
+                        <input type="hidden" name="avatarKey" id="team-avatar-key" value="{{ avatars.teams|first.key ?? '' }}">
+                        <div class="escape-team__avatars" id="team-avatar-choices">
                             {% for avatar in avatars.teams %}
-                                <label class="escape-team__avatar-tile">
-                                    <input type="radio" name="avatarKey" value="{{ avatar.key }}" {% if loop.first %}checked{% endif %}>
+                            <button
+                                type="button"
+                                class="escape-team__avatar-tile{% if loop.first %} is-selected{% endif %}"
+                                data-avatar-key="{{ avatar.key }}"
+                                style="background-image: url('{{ asset(avatar.background) }}');"
+                            >
                                     <span class="escape-team__avatar escape-team__avatar--with-image">
                                         <img src="{{ asset(avatar.image) }}" alt="Avatar {{ avatar.key }}" loading="lazy">
-                                        <strong>{{ avatar.key }}</strong>
                                     </span>
-                                </label>
+                                <strong>{{ avatar.key }}</strong>
+                            </button>
                             {% endfor %}
                         </div>
 
@@ -111,6 +116,20 @@
                     </div>
                 `;
                 container.appendChild(row);
+            });
+
+            const avatarInput = document.getElementById('team-avatar-key');
+            const avatarButtons = document.querySelectorAll('#team-avatar-choices .escape-team__avatar-tile');
+
+            avatarButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    avatarButtons.forEach((btn) => btn.classList.remove('is-selected'));
+                    button.classList.add('is-selected');
+
+                    if (avatarInput) {
+                        avatarInput.value = button.dataset.avatarKey ?? '';
+                    }
+                });
             });
         })();
     </script>

@@ -6158,16 +6158,64 @@ html.is-locked, body.is-locked {
     }
 }
 .escape-team__avatars{
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
 }
 .escape-team__avatar-tile{
+    position: relative;
     display: flex;
-    height: 150px;
-    width: 150px;
-    padding: 15px;
-    margin: 15px;
-    border: solid 0.5px grey;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-end;
     align-items: center;
+    height: 180px;
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid transparent;
+    border-radius: 18px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    color: #fff;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25), 0 8px 18px rgba(0,0,0,0.12);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    overflow: hidden;
+}
+.escape-team__avatar-tile::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.0) 20%, rgba(0, 0, 0, 0.45) 100%);
+    z-index: 0;
+}
+.escape-team__avatar-tile strong {
+    position: relative;
+    z-index: 1;
+    margin-top: 0.5rem;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+}
+.escape-team__avatar-tile .escape-team__avatar {
+    position: relative;
+    z-index: 1;
+    background: rgba(255,255,255,0.92);
+    color: #0f172a;
+    width: 68px;
+    height: 68px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.18);
+}
+.escape-team__avatar-tile .escape-team__avatar img {
+    width: 38px;
+    height: 38px;
+}
+.escape-team__avatar-tile.is-selected {
+    border-color: #fff;
+    transform: translateY(-2px);
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,0.8), 0 16px 30px rgba(0,0,0,0.22);
+}
+.escape-team__avatar-tile:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 3px;
 }
