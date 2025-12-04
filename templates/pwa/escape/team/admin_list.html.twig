@@ -26,7 +26,7 @@
         {% if runs is not empty %}
             <section class="cards">
                 {% for run in runs %}
-                    {% set launched = run.startedAt is not null %}
+                    {% set launched = run.status == constant('App\\Entity\\Games\\EscapeTeamRun::STATUS_RUNNING') %}
                     {% set canDelete = run.status == constant('App\\Entity\\Games\\EscapeTeamRun::STATUS_STOPPED') or not launched %}
                     {% set gameTitle = run.escapeGame ? run.escapeGame.title : null %}
                     <article class="card">

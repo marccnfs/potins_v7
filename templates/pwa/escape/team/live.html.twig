@@ -10,16 +10,16 @@
 
 {% block body %}
     <section class="escape-team live" data-progress-endpoint="{{ path('escape_team_progress', {slug: run.shareSlug}) }}" data-winner-url="{{ path('escape_team_winner', {slug: run.shareSlug}) }}">
-        <header class="escape-team__hero">
-            <p class="kicker">Déroulement en direct</p>
+        <header class="escape-team__hero_live">
+            <p class="kicker">Direct</p>
             <h1>{{ run.title }}</h1>
-            <p class="muted">Projection des progressions par équipe. La page bascule sur le gagnant dès qu'une équipe termine.</p>
+          {#   <p class="muted">Projection des progressions par équipe. La page bascule sur le gagnant dès qu'une équipe termine.</p> #}
             {% if run.heroImageUrl %}
-                <img class="escape-team__hero-img" src="{{ run.heroImageUrl }}" alt="Visuel de l'univers">
+                <img class="escape-team__hero_live-img" src="{{ run.heroImageUrl }}" alt="Visuel de l'univers">
             {% endif %}
         </header>
 
-        <div class="escape-team__panel">
+        <div class="escape-team__panel_live">
             <div class="escape-team__live-meta">
                 <span>Temps restant : <strong id="live-remaining">{{ snapshot.remainingSeconds is not null ? (snapshot.remainingSeconds/60)|round(0, 'floor') ~ 'm' : '--' }}</strong></span>
                 <span class="badge" id="live-status">{{ statusLabels[run.status]|default(run.status) }}</span>

@@ -200,10 +200,10 @@ class EscapeTeamController extends AbstractController
         $run = $this->runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
 
         $vartwig=$this->menuNav->templatepotins(
-            '_index',
+            '_index_mob',
             Links::GAMES);
 
-        return $this->render('pwa/escape/home.html.twig',[
+        return $this->render('pwa/escape/home_mob.html.twig',[
             'run' => $run,
             'snapshot' => $this->progressService->buildLiveProgress($run),
             'directory'=>'team',

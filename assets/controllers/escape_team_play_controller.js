@@ -18,11 +18,13 @@ export default class extends Controller {
         progressUrl: String,
         qrValidateUrl: String,
         waitingUrl: String,
+        winnerUrl: String,
         pollInterval: { type: Number, default: 5000 },
         needHttpsMessage: { type: String, default: "Activez HTTPS pour utiliser le scanner sécurisé." },
+        hintsUsed: { type: Number, default: 0 },
     };
 
-    static targets = ["feedback", "step", "runAlert", "qrStatus", "qrVideo", "qrWrapper", "qrStop"];
+    static targets = ["feedback", "step", "runAlert", "qrStatus", "qrVideo", "qrWrapper", "qrStop", "hintsCounter"];
 
     initialize() {
         this.completedSteps = new Set();
@@ -31,6 +33,7 @@ export default class extends Controller {
         this._qrDetector = null;
         this._qrStream = null;
         this._qrStep = null;
+        this.hintsUsed = this.hintsUsedValue || 0;
     }
 
     connect() {
@@ -43,6 +46,7 @@ export default class extends Controller {
                 .map(([idx]) => Number(idx))
         );
 
+        this._updateHintsUsed(this.hintsUsed);
         this._markCompletedSteps();
         this._updateVisibleSteps();
         this._attachGlobalListeners();
@@ -145,7 +149,14 @@ export default class extends Controller {
             method: "POST",
             headers: { "X-Requested-With": "XMLHttpRequest" },
             body: new URLSearchParams({ count: 1, step }),
-        }).catch(() => {});
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (typeof data?.hintsUsed === "number") {
+                    this._updateHintsUsed(data.hintsUsed);
+                }
+            })
+            .catch(() => {});
     }
 
     async completeStep(step, metadata = {}, partialKey = null) {
@@ -368,8 +379,19 @@ export default class extends Controller {
         if (typeof data?.currentStep === "number") {
             this.currentStep = data.currentStep || this.totalSteps;
         }
+        if (typeof data?.hintsUsed === "number") {
+            this._updateHintsUsed(data.hintsUsed);
+        }
         this._markCompletedSteps();
         this._updateVisibleSteps();
+
+
+        if (data?.completed && this.winnerUrlValue && !this._redirecting) {
+            this._redirecting = true;
+            setTimeout(() => {
+                window.location.href = this.winnerUrlValue;
+            }, 800);
+        }
     }
 
 
@@ -422,5 +444,13 @@ export default class extends Controller {
     _closestStep(el) {
         const node = el?.closest?.("[data-step]");
         return node ? Number(node.dataset.step || 0) : null;
+    }
+
+    _updateHintsUsed(count) {
+        if (typeof count !== "number" || Number.isNaN(count)) return;
+        this.hintsUsed = Math.max(0, count);
+        if (this.hasHintsCounterTarget) {
+            this.hintsCounterTarget.textContent = this.hintsUsed.toString();
+        }
     }
 }

@@ -3,6 +3,7 @@
 {% block body %}
     {% set steps = scenario.steps|default({}) %}
     {% set stepStates = session ? session.stepStates : {} %}
+    {% set hintsUsed = session ? session.hintsUsed : 0 %}
 
     <section class="escape-team play"
              data-controller="escape-team-play"
@@ -16,13 +17,15 @@
              data-escape-team-play-waiting-url-value="{{ path('escape_team_waiting', {slug: run.shareSlug, teamId: team.id}) }}"
              data-escape-team-play-team-id-value="{{ team.id }}"
              data-escape-team-play-expected-parts-value="3"
+             data-escape-team-play-winner-url-value="{{ path('escape_team_winner', {slug: run.shareSlug}) }}"
+             data-escape-team-play-hints-used-value="{{ hintsUsed }}"
              data-escape-team-play-need-https-message-value="{{ (steps[4] is defined and steps[4].config is defined and steps[4].config.needHttpsMessage is defined) ? steps[4].config.needHttpsMessage : 'Activez HTTPS pour utiliser le scanner sécurisé.' }}">
         <header class="escape-team__hero">
             <p class="kicker">Parcours équipe</p>
             <h1>{{ team.name }} · {{ run.title }}</h1>
             <p class="muted">Suis les 5 étapes : deux mots clés, trois logiques, un QR et le cryptex final.</p>
             {% if session %}
-                <p class="muted">Indices utilisés : {{ session.hintsUsed }} · Étape actuelle : {{ session.currentStep ?? 1 }}</p>
+                <p class="muted">Indices utilisés : <span data-escape-team-play-target="hintsCounter">{{ hintsUsed }}</span> · Étape actuelle : {{ session.currentStep ?? 1 }}</p>
             {% endif %}
             {% if run.status != 'running' %}
                 <div class="alert alert-warning">Le jeu n'est pas encore lancé. Reste en attente du maître.</div>
@@ -96,7 +99,7 @@
                             <div data-controller="cryptex"
                                  data-cryptex-solution-value="{{ step.solution|upper }}"
                                  data-cryptex-alphabet-value="{{ step.alphabet|default('ABCDEFGHIJKLMNOPQRSTUVWXYZ') }}"
-                                 data-cryptex-scramble-value="false"
+                                 data-cryptex-scramble-value="true"
                                  data-cryptex-autocheck-value="true"
                                  data-cryptex-success-message-value="{{ step.successMessage|default('Cryptex ouvert !') }}">
                                 <div data-cryptex-target="status" class="muted"></div>
