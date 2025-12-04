@@ -353,6 +353,7 @@ class EscapeTeamAdminController extends AbstractController
         $puzzleConfig = $run->getPuzzleConfig()['steps'] ?? [];
         $step1 = $puzzleConfig[1] ?? [];
         $step2 = $puzzleConfig[2] ?? [];
+        $qrStep = $puzzleConfig[4] ?? [];
         $cryptex = $puzzleConfig[5] ?? [];
 
         return [
@@ -363,6 +364,7 @@ class EscapeTeamAdminController extends AbstractController
             'step1Hints' => $this->implodeHints($step1['hints'] ?? []),
             'step2Solution' => $step2['solution'] ?? '',
             'step2Hints' => $this->implodeHints($step2['hints'] ?? []),
+            'qrSecretWord' => $qrStep['secretWord'] ?? '',
             'cryptexSolution' => $cryptex['solution'] ?? '',
             'cryptexHints' => $this->implodeHints($cryptex['hints'] ?? []),
         ];

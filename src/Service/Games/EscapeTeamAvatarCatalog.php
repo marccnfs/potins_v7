@@ -8,25 +8,33 @@ namespace App\Service\Games;
 class EscapeTeamAvatarCatalog
 {
     private const AVATAR_IMAGES = [
-        'astronaut' => 'escape/astronaut.svg',
-        'dragon' => 'escape/dragon.svg',
-        'robot' => 'escape/robot.svg',
-        'unicorn' => 'escape/unicorn.svg',
-        'penguin' => 'escape/penguin.svg',
-        'ninja' => 'escape/ninja.svg',
-        'pirate' => 'escape/pirate.svg',
-        'octopus' => 'escape/octopus.svg',
-        'koala' => 'escape/koala.svg',
+        'Loupe' => 'escape/icône_les_boises_temoins.svg',
+        'Aureo' => 'escape/icône_les_saints_jean_foutistes.svg',
+        'Bidon' => 'escape/icône_les_bidons_de_boiseau.svg',
+        'Agent' => 'escape/icône_les_agents_tres_speciaux.svg',
+        'Radeau' => 'escape/icône_les_naufrages_villa_cheminée.svg',
+        'Bulle' => 'escape/icône_les_elus_sans_filtre.svg',
+        'Vœux' => 'escape/icône_la_brigade_voeux_mystérieux.svg',
+        'Erreur' => 'escape/icône_404_communaux.svg',
+       /* 'koala' => 'escape/koala.svg',
         'alien' => 'escape/alien.svg',
         'rocket' => 'escape/rocket.svg',
         't-rex' => 'escape/t-rex.svg',
         'owl' => 'escape/owl.svg',
         'fox' => 'escape/fox.svg',
         'cat' => 'escape/cat.svg',
-        'dog' => 'escape/dog.svg',
+        'dog' => 'escape/dog.svg',*/
     ];
     private const TEAM_AVATARS = [
-        'astronaut',
+        'Loupe',
+        'Aureo',
+        'Bidon',
+        'Agent',
+        'Radeau',
+        'Bulle',
+        'Vœux',
+        'Erreur',
+      /*  'astronaut',
         'dragon',
         'robot',
         'unicorn',
@@ -37,7 +45,7 @@ class EscapeTeamAvatarCatalog
         'koala',
         'alien',
         'rocket',
-        't-rex',
+        't-rex',*/
     ];
 
     private const MEMBER_AVATARS = [

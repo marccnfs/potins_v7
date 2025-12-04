@@ -1,0 +1,7 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="100" r="90" fill="#FECACA"/>
+    <rect x="70" y="60" width="60" height="90" stroke="#DC2626" stroke-width="4" fill="none"/>
+    <path d="M70 60 Q100 40 130 60" stroke="#DC2626" stroke-width="4" fill="none"/>
+    <path d="M100 150 Q95 160 100 170 Q105 160 100 150 Z" fill="#DC2626"/>
+    <path d="M90 150 Q85 155 90 160 Q95 155 90 150 Z" fill="#DC2626"/>
+</svg>
