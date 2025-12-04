@@ -9,7 +9,7 @@
 } %}
 
 {% block body %}
-    <section class="escape-team landing" data-progress-endpoint="{{ path('escape_team_progress', {slug: run.shareSlug}) }}" data-run-url="{{ path('escape_team_live', {slug: run.shareSlug}) }}" data-winner-url="{{ path('escape_team_winner', {slug: run.shareSlug}) }}">
+    <section class="escape-team landing" data-progress-endpoint="{{ path('escape_team_progress', {slug: run.shareSlug}) }}" data-run-url="{{ path('escape_team_live', {slug: run.shareSlug}) }}" data-winner-url="{{ path('escape_team_winner', {slug: run.shareSlug}) }}" data-avatar-images='{{ avatarImageUrls|json_encode|e('html_attr') }}'>
         <header class="escape-team__hero">
             <p class="kicker">Escape game par équipes</p>
             <h1>{{ run.title }}</h1>
@@ -68,7 +68,7 @@
                         {% for team in teams %}
                     <div class="escape-team__card" style="--team-color: {{ team.color ?? '#4ecdc4' }}">
                         <div class="escape-team__card-head">
-                            <span class="escape-team__avatar">{{ team.avatarKey }}</span>
+                            {{ include('pwa/escape/team/_avatar.html.twig', { avatarKey: team.avatarKey, avatarImages: avatarImages|default({}) }) }}
                             <div>
                                 <strong>{{ team.name }}</strong>
                                 <p class="muted">{{ team.members|length }} joueur(s)</p>
@@ -94,7 +94,20 @@
             const cards = document.getElementById('landing-teams');
             const counter = document.getElementById('landing-counter');
             const palette = ['#ff6b6b','#4ecdc4','#ffd166','#cdb4db','#6c5ce7','#00a8e8','#f4a261','#2ec4b6','#e76f51','#ff8fa3'];
+            const avatarImages = JSON.parse(section.dataset.avatarImages || '{}');
             let redirecting = false;
+
+            const renderAvatar = (key) => {
+                const url = avatarImages[key];
+                if (!url) {
+                    return `<span class="escape-team__avatar">${key}</span>`;
+                }
+
+                return `
+                    <span class="escape-team__avatar escape-team__avatar--image">
+                        <img src="${url}" alt="Avatar ${key}" loading="lazy" />
+                    </span>`;
+            };
 
             const renderTeams = (data) => {
                 if (!cards || !data) return;
@@ -113,7 +126,7 @@
                     return `
                         <div class="escape-team__card" style="--team-color:${color}">
                             <div class="escape-team__card-head">
-                                <span class="escape-team__avatar">${team.avatarKey}</span>
+                                 ${renderAvatar(team.avatarKey)}
                                 <div>
                                     <strong>${team.teamName}</strong>
                                     <p class="muted">${sizeLabel}</p>

@@ -20,7 +20,7 @@
             {% for entry in leaderboard.entries %}
                 <div class="escape-team__table-row">
                     <span>{{ loop.index }}</span>
-                    <span class="escape-team__team">{{ entry.avatarKey }} {{ entry.teamName }}</span>
+                    <span class="escape-team__team">{{ include('pwa/escape/team/_avatar.html.twig', { avatarKey: entry.avatarKey, avatarImages: avatarImages|default({}) }) }} {{ entry.teamName }}</span>
                     <span>
                     {% if entry.isCompleted %}✅ Terminé{% else %}Étape {{ entry.completedSteps + 1 }} / {{ leaderboard.stepCount }}{% endif %}
                 </span>

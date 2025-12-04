@@ -21,10 +21,10 @@
             {% endfor %}
         {% endfor %}
 
-        <div class="escape-team__panel">
+            <div class="escape-team__panel">
             <div class="escape-team__card" style="--team-color: {{ team.color ?? '#4ecdc4' }}">
                 <div class="escape-team__card-head">
-                    <span class="escape-team__avatar">{{ team.avatarKey }}</span>
+                    <span class="escape-team__avatar">{{ team.avatarKey }}</span> {{ include('pwa/escape/team/_avatar.html.twig', { avatarKey: team.avatarKey, avatarImages: avatarImages|default({}) }) }}
                     <div>
                         <strong>{{ team.name }}</strong>
                         <p class="muted">{{ team.members|length }} joueur(s)</p>

@@ -4,9 +4,11 @@
     {% set steps = scenario.steps|default({}) %}
     {% set stepStates = session ? session.stepStates : {} %}
     {% set hintsUsed = session ? session.hintsUsed : 0 %}
+    {% set teamBackground = avatarBackgroundImages[team.avatarKey] ?? null %}
 
     <section class="escape-team play"
              data-controller="escape-team-play"
+             {% if teamBackground %}style="--team-background: url('{{ asset(teamBackground) }}')"{% endif %}
              data-escape-team-play-complete-url-value="{{ path('escape_team_step_complete', {slug: run.shareSlug, teamId: team.id, step: '__STEP__'}) }}"
              data-escape-team-play-hint-url-value="{{ path('escape_team_consume_hint', {slug: run.shareSlug, teamId: team.id}) }}"
              data-escape-team-play-current-step-value="{{ currentStep }}"

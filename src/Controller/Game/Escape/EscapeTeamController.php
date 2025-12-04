@@ -101,7 +101,8 @@ class EscapeTeamController extends AbstractController
             'vartwig'=>$vartwig,
             'title' => sprintf('Escape par équipes · %s', $run->getTitle()),
             'isMasterParticipant' => false,
-            'isnomenu'=>false
+            'isnomenu'=>false,
+            ...$this->buildAvatarAssets(),
         ]);
     }
 
@@ -158,7 +159,8 @@ class EscapeTeamController extends AbstractController
             'vartwig'=>$vartwig,
             'title' => sprintf('Inscription équipes · %s', $run->getTitle()),
             'isMasterParticipant' => false,
-            'isnomenu'=>false
+            'isnomenu'=>false,
+            ...$this->buildAvatarAssets(),
         ]);
 
     }
@@ -190,7 +192,8 @@ class EscapeTeamController extends AbstractController
             'vartwig'=>$vartwig,
             'title' => sprintf('Classement · %s', $run->getTitle()),
             'isMasterParticipant' => false,
-            'isnomenu'=>false
+            'isnomenu'=>false,
+            ...$this->buildAvatarAssets(),
         ]);
     }
 
@@ -211,7 +214,8 @@ class EscapeTeamController extends AbstractController
             'vartwig'=>$vartwig,
             'title' => sprintf('Live · %s', $run->getTitle()),
             'isMasterParticipant' => false,
-            'isnomenu'=>false
+            'isnomenu'=>false,
+            ...$this->buildAvatarAssets(),
         ]);
     }
 
@@ -235,7 +239,8 @@ class EscapeTeamController extends AbstractController
             'vartwig'=>$vartwig,
             'title' => sprintf('Gagnant · %s', $run->getTitle()),
             'isMasterParticipant' => false,
-            'isnomenu'=>false
+            'isnomenu'=>false,
+            ...$this->buildAvatarAssets(),
         ]);
     }
 
@@ -271,7 +276,8 @@ class EscapeTeamController extends AbstractController
             'vartwig'=>$vartwig,
             'title' => sprintf('Équipe %s · %s', $team->getName(), $run->getTitle()),
             'isMasterParticipant' => false,
-            'isnomenu'=>false
+            'isnomenu'=>false,
+            ...$this->buildAvatarAssets(),
         ]);
     }
 
@@ -562,9 +568,22 @@ class EscapeTeamController extends AbstractController
             'vartwig'=>$vartwig,
             'title' => sprintf('En attente · %s', $team->getName()),
             'isMasterParticipant' => false,
-            'isnomenu'=>false
+            'isnomenu'=>false,
+            ...$this->buildAvatarAssets(),
         ]);
     }
+
+    /**
+     * @return array{avatarImages: array<string, string>, avatarBackgroundImages: array<string, string>}
+     */
+    private function buildAvatarAssets(): array
+    {
+        return [
+            'avatarImages' => $this->avatarCatalog->getImages(),
+            'avatarBackgroundImages' => $this->avatarCatalog->getBackgroundImages(),
+        ];
+    }
+
 
     private function buildScenarioConfig(EscapeTeamRun $run): array
     {

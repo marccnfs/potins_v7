@@ -8,8 +8,13 @@
     'ended': 'Partie terminée'
 } %}
 
+{% set avatarImageUrls = {} %}
+{% for key, path in avatarImages|default({}) %}
+    {% set avatarImageUrls = avatarImageUrls|merge({ (key): asset(path) }) %}
+{% endfor %}
+
 {% block body %}
-    <section class="escape-team live" data-progress-endpoint="{{ path('escape_team_progress', {slug: run.shareSlug}) }}" data-winner-url="{{ path('escape_team_winner', {slug: run.shareSlug}) }}">
+    <section class="escape-team live" data-progress-endpoint="{{ path('escape_team_progress', {slug: run.shareSlug}) }}" data-winner-url="{{ path('escape_team_winner', {slug: run.shareSlug}) }}" data-avatar-images='{{ avatarImageUrls|json_encode|e('html_attr') }}'>
         <header class="escape-team__hero_live">
             <p class="kicker">Direct</p>
             <h1>{{ run.title }}</h1>
@@ -43,7 +48,20 @@
             const remaining = document.getElementById('live-remaining');
             const statusEl = document.getElementById('live-status');
             const palette = ['#ff6b6b','#4ecdc4','#ffd166','#cdb4db','#6c5ce7','#00a8e8','#f4a261','#2ec4b6','#e76f51','#ff8fa3'];
+            const avatarImages = JSON.parse(section.dataset.avatarImages || '{}');
             let redirecting = false;
+
+            const renderAvatar = (key) => {
+                const url = avatarImages[key];
+                if (!url) {
+                    return `<span class="escape-team__avatar">${key}</span>`;
+                }
+
+                return `
+                    <span class="escape-team__avatar escape-team__avatar--image">
+                        <img src="${url}" alt="Avatar ${key}" loading="lazy" />
+                    </span>`;
+            };
 
             const formatDuration = (seconds) => {
                 if (seconds === null || seconds === undefined) return '--';
@@ -73,7 +91,7 @@
                     return `
                         <div class="escape-team__card" style="--team-color:${color}">
                             <div class="escape-team__card-head">
-                                <span class="escape-team__avatar">${team.avatarKey}</span>
+                                 ${renderAvatar(team.avatarKey)}
                                 <div>
                                     <strong>${team.teamName}</strong>
                                     <p class="muted">${label} · indices ${team.hintsUsed}</p>

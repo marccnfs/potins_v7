@@ -10,6 +10,7 @@ use App\Lib\Links;
 use App\Form\EscapeTeamRunType;
 use App\Repository\EscapeWorkshopSessionRepository;
 use App\Repository\EscapeTeamRunRepository;
+use App\Service\Games\EscapeTeamAvatarCatalog;
 use App\Service\Games\EscapeTeamProgressService;
 use App\Service\Games\EscapeTeamRunAdminService;
 use DateTimeImmutable;
@@ -23,6 +24,10 @@ use Symfony\Component\Routing\Attribute\Route;
 class EscapeTeamAdminController extends AbstractController
 {
     use UserSessionTrait;
+
+    public function __construct(private readonly EscapeTeamAvatarCatalog $avatarCatalog)
+    {
+    }
 
     #[Route('/new', name: 'escape_team_admin_create', methods: ['GET', 'POST'])]
     #[RequireParticipant]
@@ -345,6 +350,7 @@ class EscapeTeamAdminController extends AbstractController
             'participant'=>$participant,
             'isMasterParticipant' => true,
             'active' => 'escape-team',
+            'avatarImages' => $this->avatarCatalog->getImages(),
         ]);
     }
 

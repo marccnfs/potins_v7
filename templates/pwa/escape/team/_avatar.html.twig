@@ -1,0 +1,8 @@
+{% set avatarImage = avatarImages[avatarKey] ?? null %}
+{% if avatarImage %}
+    <span class="escape-team__avatar escape-team__avatar--image">
+        <img src="{{ asset(avatarImage) }}" alt="Avatar {{ avatarKey }}" loading="lazy">
+    </span>
+{% else %}
+    <span class="escape-team__avatar">{{ avatarKey }}</span>
+{% endif %}

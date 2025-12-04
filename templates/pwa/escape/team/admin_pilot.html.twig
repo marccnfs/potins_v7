@@ -1,5 +1,10 @@
 {% extends 'pwa/escape/basepublic.html.twig' %}
 
+{% set avatarImageUrls = {} %}
+{% for key, path in avatarImages|default({}) %}
+    {% set avatarImageUrls = avatarImageUrls|merge({ (key): asset(path) }) %}
+{% endfor %}
+
 {% block body %}
     <section class="escape-team pilot">
         <header class="escape-team__hero">
@@ -49,7 +54,7 @@
                     <ul class="escape-team__list">
                         {% for team in teams %}
                             <li class="escape-team__card">
-                                <span class="escape-team__avatar">{{ team.avatarKey }}</span>
+                                {{ include('pwa/escape/team/_avatar.html.twig', { avatarKey: team.avatarKey, avatarImages: avatarImages|default({}) }) }}
                                 <div>
                                     <strong>{{ team.name }}</strong>
                                     <p class="muted">{{ team.members|length }} joueur(s)</p>
@@ -94,7 +99,7 @@
 
         <div class="escape-team__panel">
             <h2>Live</h2>
-            <div id="pilot-live" data-endpoint="{{ path('escape_team_progress', {slug: run.shareSlug}) }}"></div>
+            <div id="pilot-live" data-endpoint="{{ path('escape_team_progress', {slug: run.shareSlug}) }}" data-avatar-images='{{ avatarImageUrls|json_encode|e('html_attr') }}'></div>
         </div>
     </section>
 {% endblock %}
@@ -106,14 +111,26 @@
             const target = document.getElementById('pilot-live');
             if (!target) return;
             const endpoint = target.dataset.endpoint;
+            const avatarImages = JSON.parse(target.dataset.avatarImages || '{}');
 
+            const renderAvatar = (key) => {
+                const url = avatarImages[key];
+                if (!url) {
+                    return `<span class="escape-team__avatar">${key}</span>`;
+                }
+
+                return `
+                    <span class="escape-team__avatar escape-team__avatar--image">
+                        <img src="${url}" alt="Avatar ${key}" loading="lazy" />
+                    </span>`;
+            };
             const render = (data) => {
                 if (!data) return;
                 let html = '<ul class="escape-team__list">';
                 data.teams.forEach((team) => {
                     html += `
                         <li class="escape-team__card">
-                            <span class="escape-team__avatar">${team.avatarKey}</span>
+                             ${renderAvatar(team.avatarKey)}
                             <div>
                                 <strong>${team.teamName}</strong>
                                 <p class="muted">Progression : ${team.completedSteps}/${data.stepCount} · indices ${team.hintsUsed}</p>

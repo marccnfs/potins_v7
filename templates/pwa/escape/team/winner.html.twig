@@ -11,7 +11,7 @@
         {% if winner %}
             <div class="escape-team__card escape-team__card--winner" style="--team-color: {{ winner.color ?? '#ffd166' }}">
                 <div class="escape-team__card-head">
-                    <span class="escape-team__avatar">{{ winner.avatarKey }}</span>
+                    {{ include('pwa/escape/team/_avatar.html.twig', { avatarKey: winner.avatarKey, avatarImages: avatarImages|default({}) }) }}
                     <div>
                         <p class="kicker">Gagnant</p>
                         <h2>{{ winner.teamName }}</h2>
@@ -40,7 +40,7 @@
                 {% for entry in leaderboard.entries %}
                     <div class="escape-team__table-row">
                         <span>{{ loop.index }}</span>
-                        <span class="escape-team__team">{{ entry.avatarKey }} {{ entry.teamName }}</span>
+                        <span class="escape-team__team">{{ include('pwa/escape/team/_avatar.html.twig', { avatarKey: entry.avatarKey, avatarImages: avatarImages|default({}) }) }} {{ entry.teamName }}</span>
                         <span>
                             {% if entry.isCompleted %}✅ Terminé{% else %}Étape {{ entry.completedSteps + 1 }} / {{ leaderboard.stepCount }}{% endif %}
                         </span>

@@ -76,13 +76,8 @@
                 {% else %}
                     <ul class="escape-team__list">
                         {% for team in teams %}
-                            {% set teamAvatarImage = avatarImages[team.avatarKey] ?? null %}
                             <li class="escape-team__card">
-                                {% if teamAvatarImage %}
-                                    <img class="escape-team__avatar escape-team__avatar-img" src="{{ asset(teamAvatarImage) }}" alt="Avatar {{ team.avatarKey }}" loading="lazy">
-                                {% else %}
-                                    <span class="escape-team__avatar">{{ team.avatarKey }}</span>
-                                {% endif %}
+                                {{ include('pwa/escape/team/_avatar.html.twig', { avatarKey: team.avatarKey, avatarImages: avatarImages|default({}) }) }}
                                 <div>
                                     <strong>{{ team.name }}</strong>
                                     <p class="muted">{{ team.members|length }} joueur(s)</p>
