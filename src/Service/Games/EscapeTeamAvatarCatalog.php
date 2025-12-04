@@ -16,14 +16,17 @@ class EscapeTeamAvatarCatalog
         'Bulle' => 'escape/icône_les_elus_sans_filtre.svg',
         'Vœux' => 'escape/icône_la_brigade_voeux_mystérieux.svg',
         'Erreur' => 'escape/icône_404_communaux.svg',
-       /* 'koala' => 'escape/koala.svg',
-        'alien' => 'escape/alien.svg',
-        'rocket' => 'escape/rocket.svg',
-        't-rex' => 'escape/t-rex.svg',
-        'owl' => 'escape/owl.svg',
-        'fox' => 'escape/fox.svg',
-        'cat' => 'escape/cat.svg',
-        'dog' => 'escape/dog.svg',*/
+    ];
+
+    private const AVATAR_BACKGROUND_IMAGES = [
+        'Loupe' => 'escape/lesboisestemoins.png',
+        'Aureo' => 'escape/lessaintjeanfoutistes.png',
+        'Bidon' => 'escape/lesbidonsdeboiseau.png',
+        'Agent' => 'escape/lesagnetstresspeciauxdeboiseau.png',
+        'Radeau' => 'escape/lesnaufragesdelavillacheminee.png',
+        'Bulle' => 'escape/leselussansfiltre.png',
+        'Vœux' => 'escape/labrigadedesvoeuxmysterieux.png',
+        'Erreur' => 'escape/les404communaux.png',
     ];
     private const TEAM_AVATARS = [
         'Loupe',
@@ -34,18 +37,6 @@ class EscapeTeamAvatarCatalog
         'Bulle',
         'Vœux',
         'Erreur',
-      /*  'astronaut',
-        'dragon',
-        'robot',
-        'unicorn',
-        'penguin',
-        'ninja',
-        'pirate',
-        'octopus',
-        'koala',
-        'alien',
-        'rocket',
-        't-rex',*/
     ];
 
     private const MEMBER_AVATARS = [
