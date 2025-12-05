@@ -44,9 +44,7 @@
                         <div class="quick">
                             <a class="btn" href="{{ path('escape_team_admin_pilot', {slug: run.shareSlug}) }}">Piloter</a>
                             <a class="btn btn-light" href="{{ path('escape_team_landing', {slug: run.shareSlug}) }}" target="_blank" rel="noopener">Landing</a>
-                            <a class="btn {{ launched ? 'disabled' : '' }}" href="{{ launched ? '#' : path('escape_team_admin_edit', {slug: run.shareSlug}) }}" {{ launched ? 'aria-disabled="true" tabindex="-1"' : '' }}>
-                                Éditer
-                            </a>
+                            <a class="btn" href="{{ path('escape_team_admin_edit', {slug: run.shareSlug}) }}">Éditer</a>
                             <form method="post" action="{{ path('escape_team_admin_delete', {slug: run.shareSlug}) }}" onsubmit="return confirm('Supprimer définitivement cette session ?');">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete_escape_team_' ~ run.id) }}">
                                 <button class="btn btn-danger" {{ canDelete ? '' : 'disabled' }}>

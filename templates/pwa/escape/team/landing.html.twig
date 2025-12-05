@@ -8,6 +8,11 @@
     'ended': 'Partie terminée'
 } %}
 
+{% set avatarImageUrls = {} %}
+{% for key, path in avatarImages|default({}) %}
+    {% set avatarImageUrls = avatarImageUrls|merge({ (key): asset(path) }) %}
+{% endfor %}
+
 {% block body %}
     <section class="escape-team landing" data-progress-endpoint="{{ path('escape_team_progress', {slug: run.shareSlug}) }}" data-run-url="{{ path('escape_team_live', {slug: run.shareSlug}) }}" data-winner-url="{{ path('escape_team_winner', {slug: run.shareSlug}) }}" data-avatar-images='{{ avatarImageUrls|json_encode|e('html_attr') }}'>
         <header class="escape-team__hero">
