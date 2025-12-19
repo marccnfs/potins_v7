@@ -42,11 +42,8 @@ class EscapeTeamQrAdminController extends AbstractController
         EntityManagerInterface $em,
         string $slug,
     ): Response {
-        $workshop = $workshopRepository->findOneByCode($participant->getCodeAtelier());
-        if (!$workshop || !$workshop->isMaster()) {
-            $this->addFlash('danger', 'Cette page est réservée au maître du jeu (session « master »).');
-
-            return $this->redirectToRoute('dashboard_my_escapes');
+        if ($redirect = $this->guardMasterAccess($participant, $workshopRepository)) {
+            return $redirect;
         }
 
         $run = $runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
@@ -82,7 +79,7 @@ class EscapeTeamQrAdminController extends AbstractController
             'directory' => 'team',
             'template' => 'team/qr_group_create.html.twig',
             'vartwig' => $vartwig,
-            'isMasterParticipant' => true,
+            'isMasterParticipant' => $this->isMasterParticipant($participant, $workshopRepository),
             'title' => 'Nouveau groupe QR',
             'participant' => $participant,
             'active' => 'escape-team',
@@ -101,11 +98,8 @@ class EscapeTeamQrAdminController extends AbstractController
         string $slug,
         int $id,
     ): Response {
-        $workshop = $workshopRepository->findOneByCode($participant->getCodeAtelier());
-        if (!$workshop || !$workshop->isMaster()) {
-            $this->addFlash('danger', 'Cette page est réservée au maître du jeu (session « master »).');
-
-            return $this->redirectToRoute('dashboard_my_escapes');
+        if ($redirect = $this->guardMasterAccess($participant, $workshopRepository)) {
+            return $redirect;
         }
 
         $run = $runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
@@ -147,7 +141,7 @@ class EscapeTeamQrAdminController extends AbstractController
             'directory' => 'team',
             'template' => 'team/qr_group_edit.html.twig',
             'vartwig' => $vartwig,
-            'isMasterParticipant' => true,
+            'isMasterParticipant' => $this->isMasterParticipant($participant, $workshopRepository),
             'title' => sprintf('Modifier · %s', $group->getName()),
             'participant' => $participant,
             'active' => 'escape-team',
@@ -167,11 +161,8 @@ class EscapeTeamQrAdminController extends AbstractController
         string $slug,
         int $id,
     ): Response {
-        $workshop = $workshopRepository->findOneByCode($participant->getCodeAtelier());
-        if (!$workshop || !$workshop->isMaster()) {
-            $this->addFlash('danger', 'Cette page est réservée au maître du jeu (session « master »).');
-
-            return $this->redirectToRoute('dashboard_my_escapes');
+        if ($redirect = $this->guardMasterAccess($participant, $workshopRepository)) {
+            return $redirect;
         }
 
         $run = $runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
@@ -235,11 +226,8 @@ class EscapeTeamQrAdminController extends AbstractController
         int $groupId,
         int $pageId,
     ): Response {
-        $workshop = $workshopRepository->findOneByCode($participant->getCodeAtelier());
-        if (!$workshop || !$workshop->isMaster()) {
-            $this->addFlash('danger', 'Cette page est réservée au maître du jeu (session « master »).');
-
-            return $this->redirectToRoute('dashboard_my_escapes');
+        if ($redirect = $this->guardMasterAccess($participant, $workshopRepository)) {
+            return $redirect;
         }
 
         $run = $runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
@@ -287,6 +275,20 @@ class EscapeTeamQrAdminController extends AbstractController
             'isnomenu' => false,
         ]);
     }
+
+    private function guardMasterAccess(
+        Participant $participant,
+        EscapeWorkshopSessionRepository $workshopRepository,
+    ): ?Response {
+        if ($this->isMasterParticipant($participant, $workshopRepository)) {
+            return null;
+        }
+
+        $this->addFlash('danger', 'Cette page est réservée au maître du jeu (session « master »).');
+
+        return $this->redirectToRoute('dashboard_my_escapes');
+    }
+
 
     private function generateIdentificationCode(): string
     {
