@@ -15,14 +15,8 @@
 <div class="pwa-inner-post">
     <div class="pwa-post-content">
         <div class="pwa-article-content">
-            {{ content|raw }}
+            {{ article.contenu|markdown_to_html }}
         </div>
     </div>
 </div>
 {% endif %}
-
-
-
-
-
-

@@ -19,7 +19,7 @@
             <div class="article-block">
                 <h2>{{ article.titre }}</h2>
                 <div class="article-content">
-                    {{ article.contenu|raw }}
+                    {{ article.contenu|markdown_to_html }}
                 </div>
 
                 {% if article.mediaName is not null %}

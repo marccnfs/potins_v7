@@ -227,10 +227,10 @@ class EscapeTeamController extends AbstractController
         $winner = $this->progressService->findWinner($run);
 
         $vartwig=$this->menuNav->templatepotins(
-            '_index',
+            '_index_mob',
             Links::GAMES);
 
-        return $this->render('pwa/escape/home.html.twig',[
+        return $this->render('pwa/escape/home_mob.html.twig',[
             'run' => $run,
             'winner' => $winner,
             'leaderboard' => $this->progressService->computeLeaderboard($run),

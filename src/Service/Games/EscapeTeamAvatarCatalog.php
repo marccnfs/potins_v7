@@ -19,14 +19,14 @@ class EscapeTeamAvatarCatalog
     ];
 
     private const AVATAR_BACKGROUND_IMAGES = [
-        'Loupe' => 'escape/lesboisestemoins.png',
-        'Aureo' => 'escape/lessaintjeanfoutistes.png',
-        'Bidon' => 'escape/lesbidonsdeboiseau.png',
-        'Agent' => 'escape/lesagnetstresspeciauxdeboiseau.png',
-        'Radeau' => 'escape/lesnaufragesdelavillacheminee.png',
-        'Bulle' => 'escape/leselussansfiltre.png',
-        'Vœux' => 'escape/labrigadedesvoeuxmysterieux.png',
-        'Erreur' => 'escape/les404communaux.png',
+        'Loupe' => 'escape/lesboisestemoins.jpg',
+        'Aureo' => 'escape/lessaintjeanfoutistes.jpg',
+        'Bidon' => 'escape/lesbidonsdeboiseau.jpg',
+        'Agent' => 'escape/lesagnetstresspeciauxdeboiseau.jpg',
+        'Radeau' => 'escape/lesnaufragesdelavillacheminee.jpg',
+        'Bulle' => 'escape/leselussansfiltre.jpg',
+        'Vœux' => 'escape/labrigadedesvoeuxmysterieux.jpg',
+        'Erreur' => 'escape/les404communaux.jpg',
     ];
     private const TEAM_AVATARS = [
         'Loupe',

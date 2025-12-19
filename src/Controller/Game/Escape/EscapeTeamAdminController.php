@@ -389,28 +389,28 @@ class EscapeTeamAdminController extends AbstractController
     {
         $logicQuestions = [
             [
-                'label' => 'Épreuve logique 1 — Trouve l’intrus',
+                'label' => 'Combien de repas sont servis chaque années ?',
                 'options' => [
-                    ['id' => 'A', 'label' => 'Symbole cercle'],
-                    ['id' => 'B', 'label' => 'Symbole carré (intrus)'],
-                    ['id' => 'C', 'label' => 'Symbole triangle'],
+                    ['id' => 'A', 'label' => '500'],
+                    ['id' => 'B', 'label' => '5 000'],
+                    ['id' => 'C', 'label' => '500 000'],
                 ],
-                'solution' => ['must' => ['A', 'C'], 'mustNot' => ['B']],
+                'solution' => ['must' => ['B'], 'mustNot' => ['A', 'C']],
             ],
             [
-                'label' => 'Épreuve logique 2 — Vrai ou faux ?',
+                'label' => 'Vrai ou faux ?',
                 'options' => [
-                    ['id' => 'A', 'label' => 'La clé est cachée au nord'],
-                    ['id' => 'B', 'label' => 'La clé est cachée au sud'],
+                    ['id' => 'A', 'label' => 'Le chef de cuisine est belge'],
+                    ['id' => 'B', 'label' => 'Le chef de cuisine est vendéen'],
                 ],
                 'solution' => ['must' => ['A'], 'mustNot' => ['B']],
             ],
             [
-                'label' => 'Épreuve logique 3 — Suite à compléter',
+                'label' => 'une seule bonne réponse, mais laquelle ?',
                 'options' => [
-                    ['id' => 'A', 'label' => 'Réponse attendue'],
-                    ['id' => 'B', 'label' => 'Fausses pistes'],
-                    ['id' => 'C', 'label' => 'Autre fausse piste'],
+                    ['id' => 'A', 'label' => 'Le vendredi c\'est poisson'],
+                    ['id' => 'B', 'label' => 'le lundi, des patates'],
+                    ['id' => 'C', 'label' => 'le jeudi, des oignons'],
                 ],
                 'solution' => ['must' => ['A'], 'mustNot' => ['B', 'C']],
             ],

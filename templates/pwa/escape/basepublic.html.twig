@@ -1,4 +1,3 @@
-{# version mobile #}
 <!DOCTYPE html>
 <html lang="FR">
 <head>
@@ -13,9 +12,6 @@
     {% endblock %}
         {{ encore_entry_link_tags('app') }}
 </head>
-{%  set agent = app.session.get('agent') %}
-<body class="wbesitemob">
-<div class="wb-inf-" data-agent="{{ agent }}" data-replacejs="no"></div>
 {% block menu %}
 {% endblock menu %}
 {% block core %}
@@ -26,5 +22,4 @@
 {% endblock core %}
 {% block javascripts %}
 {% endblock %}
-</body>
 </html>
