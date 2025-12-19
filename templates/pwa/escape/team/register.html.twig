@@ -36,6 +36,17 @@
                         <label>Nom d'équipe</label>
                         <input type="text" name="teamName" required maxlength="80" placeholder="Les explorateurs" />
 
+                        {% if qrGroups is not empty %}
+                            <label>Groupe QR code</label>
+                            <select name="qrGroup">
+                                <option value="">Sans groupe</option>
+                                {% for group in qrGroups %}
+                                    <option value="{{ group.id }}">{{ group.name }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
+
+
                         <label>Avatar d'équipe</label>
                         <input type="hidden" name="avatarKey" id="team-avatar-key" value="{{ avatars.teams|first.key ?? '' }}">
                         <div class="escape-team__avatars" id="team-avatar-choices">

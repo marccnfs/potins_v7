@@ -6,6 +6,7 @@ use App\Entity\Games\EscapeTeam;
 use App\Entity\Games\EscapeTeamMember;
 use App\Entity\Games\EscapeTeamRun;
 use App\Entity\Games\EscapeTeamSession;
+use App\Entity\Games\EscapeTeamQrGroup;
 use App\Repository\EscapeTeamRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -37,7 +38,7 @@ class EscapeTeamRegistrationService
     /**
      * @param array<int, array{nickname:string}> $members
      */
-    public function registerTeam(EscapeTeamRun $run, string $teamName, string $avatarKey, array $members): EscapeTeam
+    public function registerTeam(EscapeTeamRun $run, string $teamName, string $avatarKey, array $members, ?EscapeTeamQrGroup $qrGroup = null): EscapeTeam
     {
         $this->assertRegistrationOpen($run);
         $normalizedName = $this->normalizeName($teamName);
@@ -51,7 +52,8 @@ class EscapeTeamRegistrationService
             ->setRun($run)
             ->setName($normalizedName)
             ->setAvatarKey($avatarKey)
-            ->setColor($this->pickColor($run));
+            ->setColor($this->pickColor($run))
+            ->setQrGroup($qrGroup);
 
         foreach ($members as $payload) {
             $team->addMember($this->buildMember($payload['nickname'], $avatarKey));

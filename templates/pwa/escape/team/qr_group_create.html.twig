@@ -1,0 +1,24 @@
+{% extends 'pwa/escape/basepublic.html.twig' %}
+
+{% block body %}
+    <section class="escape-team admin">
+        <header class="escape-team__hero">
+            <p class="kicker">Groupe QR équipes</p>
+            <h1>Créer un groupe de QR</h1>
+            <p class="muted">Regroupe des pages QR à associer aux équipes de la session « {{ run.title }} ».</p>
+        </header>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="escape-team__panel">
+            {{ form_start(form) }}
+            {{ form_row(form.name) }}
+            {{ form_row(form.submit) }}
+            {{ form_end(form) }}
+        </div>
+    </section>
+{% endblock %}

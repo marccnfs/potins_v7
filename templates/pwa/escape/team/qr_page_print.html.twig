@@ -1,0 +1,19 @@
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>QR équipe · {{ page.teamName }}</title>
+    <style>
+        body { font-family: sans-serif; margin: 2rem; text-align: center; }
+        img { max-width: 280px; height: auto; }
+        .note { color: #666; }
+    </style>
+</head>
+<body>
+<h1>QR équipe : {{ page.teamName }}</h1>
+<p class="note">Scan affiche le message choisi pour cette équipe. Code {{ page.identificationCode }}.</p>
+<figure>
+    <img src="{{ payload.qr }}" alt="QR équipe" width="280" height="280">
+    <figcaption class="note">Lien direct : {{ payload.directUrl }}</figcaption>
+</figure>
+</body>
+</html>

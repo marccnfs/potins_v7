@@ -1,0 +1,19 @@
+{% extends 'pwa/escape/basepublic.html.twig' %}
+
+{% block body %}
+    <section class="escape-team register">
+        <header class="escape-team__hero">
+            <p class="kicker">QR équipe</p>
+            <h1>{{ page.teamName }}</h1>
+            <p class="muted">Code {{ page.identificationCode }}{% if run %} · {{ run.title }}{% endif %}</p>
+        </header>
+
+        <div class="escape-team__panel">
+            <p class="muted">Message associé :</p>
+            <h2>{{ page.message }}</h2>
+            {% if group %}
+                <p class="muted">Groupe : {{ group.name }}</p>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

@@ -9,6 +9,7 @@ use App\Lib\Links;
 use App\Repository\EscapeTeamRepository;
 use App\Repository\EscapeTeamRunRepository;
 use App\Repository\EscapeTeamSessionRepository;
+use App\Repository\EscapeTeamQrGroupRepository;
 use App\Service\Games\EscapeTeamAvatarCatalog;
 use App\Service\Games\EscapeTeamProgressService;
 use App\Service\Games\EscapeTeamRegistrationService;
@@ -33,6 +34,7 @@ class EscapeTeamController extends AbstractController
         private readonly EscapeTeamRunRepository $runRepository,
         private readonly EscapeTeamRepository $teamRepository,
         private readonly EscapeTeamSessionRepository $sessionRepository,
+        private readonly EscapeTeamQrGroupRepository $qrGroupRepository,
         private readonly EscapeTeamRegistrationService $registrationService,
         private readonly EscapeTeamProgressService $progressService,
         private readonly EscapeTeamRunAdminService $runAdminService,
@@ -114,10 +116,16 @@ class EscapeTeamController extends AbstractController
         $usedTeamAvatars = array_map(static fn (EscapeTeam $team): string => $team->getAvatarKey(), $teams);
         $availableTeamAvatarKeys = array_values(array_diff($this->avatarCatalog->getTeamAvatars(), $usedTeamAvatars));
         $availableTeamAvatars = $this->avatarCatalog->getTeamAvatarDetails($availableTeamAvatarKeys);
+        $qrGroups = $this->qrGroupRepository->findForRun($run);
 
         if ($request->isMethod('POST')) {
             $teamName = trim((string) $request->request->get('teamName', ''));
             $avatarKey = (string) $request->request->get('avatarKey', '');
+            $qrGroupId = (int) $request->request->get('qrGroup', 0);
+            $qrGroup = $qrGroupId ? $this->qrGroupRepository->find($qrGroupId) : null;
+            if ($qrGroup !== null && $qrGroup->getRun()?->getId() !== $run->getId()) {
+                $qrGroup = null;
+            }
             $membersPayload = $request->request->all('members');
             $members = array_values(array_filter(array_map(static function ($row): array {
                 return [
@@ -129,7 +137,7 @@ class EscapeTeamController extends AbstractController
     }));
 
             try {
-                $team = $this->registrationService->registerTeam($run, $teamName, $avatarKey, $members);
+                $team = $this->registrationService->registerTeam($run, $teamName, $avatarKey, $members, $qrGroup);
                 $this->addFlash('success', 'Équipe inscrite, prête pour le départ !');
 
                 return $this->redirectToRoute('escape_team_waiting', [
@@ -151,6 +159,7 @@ class EscapeTeamController extends AbstractController
             'avatars' => [
                 'teams' => $availableTeamAvatars,
             ],
+            'qrGroups' => $qrGroups,
             'isRegistrationOpen' => $run->isRegistrationOpen(),
             'isAvatarUnavailable' => count($availableTeamAvatarKeys) === 0,
             'avatarImages' => $this->avatarCatalog->getImages(),

@@ -1,0 +1,52 @@
+{% extends 'pwa/escape/basepublic.html.twig' %}
+
+{% block body %}
+    <section class="escape-team admin">
+        <header class="escape-team__hero">
+            <p class="kicker">Groupe QR équipes</p>
+            <h1>{{ group.name }}</h1>
+            <p class="muted">Session : {{ run.title }} · Créé le {{ group.createdAt|date('d/m/Y') }}</p>
+            <div class="escape-team__actions">
+                <a class="btn" href="{{ path('escape_team_admin_pilot', {slug: run.shareSlug}) }}">← Retour pilotage</a>
+            </div>
+        </header>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="escape-team__grid">
+            <div class="escape-team__panel">
+                <h2>Ajouter une page QR</h2>
+                <p class="muted">Chaque page correspond à un QR unique qui affichera le message choisi.</p>
+                {{ form_start(pageForm) }}
+                {{ form_row(pageForm.teamName) }}
+                {{ form_row(pageForm.identificationCode) }}
+                {{ form_row(pageForm.message) }}
+                {{ form_row(pageForm.submit) }}
+                {{ form_end(pageForm) }}
+            </div>
+
+            <div class="escape-team__panel">
+                <h2>Pages du groupe ({{ pages|length }})</h2>
+                {% if pages is empty %}
+                    <p class="muted">Aucune page QR pour le moment.</p>
+                {% else %}
+                    <ul class="escape-team__list">
+                        {% for page in pages %}
+                            <li class="escape-team__card">
+                                <div>
+                                    <strong>{{ page.teamName }}</strong>
+                                    <p class="muted">Code {{ page.identificationCode }} · {{ page.message }}</p>
+                                </div>
+                                <a class="btn" href="{{ path('escape_team_qr_page_print', {slug: run.shareSlug, groupId: group.id, pageId: page.id}) }}" target="_blank" rel="noopener">Imprimer le QR</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

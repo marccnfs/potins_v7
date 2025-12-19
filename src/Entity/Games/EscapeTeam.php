@@ -3,6 +3,7 @@
 namespace App\Entity\Games;
 
 use App\Repository\EscapeTeamRepository;
+use App\Entity\Games\EscapeTeamQrGroup;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -32,11 +33,14 @@ class EscapeTeam
     #[ORM\Column(type: 'datetime_immutable')]
     private DateTimeImmutable $createdAt;
 
-    #[ORM\OneToMany(mappedBy: 'team', targetEntity: EscapeTeamMember::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: EscapeTeamMember::class, mappedBy: 'team', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $members;
 
-    #[ORM\OneToOne(mappedBy: 'team', targetEntity: EscapeTeamSession::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: EscapeTeamSession::class, mappedBy: 'team', cascade: ['persist', 'remove'])]
     private ?EscapeTeamSession $session = null;
+
+    #[ORM\ManyToOne(targetEntity: EscapeTeamQrGroup::class)]
+    private ?EscapeTeamQrGroup $qrGroup = null;
 
     public function __construct()
     {
@@ -147,6 +151,19 @@ class EscapeTeam
         if ($session !== null && $session->getTeam() !== $this) {
             $session->setTeam($this);
         }
+
+        return $this;
+    }
+
+
+    public function getQrGroup(): ?EscapeTeamQrGroup
+    {
+        return $this->qrGroup;
+    }
+
+    public function setQrGroup(?EscapeTeamQrGroup $qrGroup): static
+    {
+        $this->qrGroup = $qrGroup;
 
         return $this;
     }
