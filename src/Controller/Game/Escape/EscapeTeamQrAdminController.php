@@ -69,10 +69,7 @@ class EscapeTeamQrAdminController extends AbstractController
 
             $this->addFlash('success', 'Groupe QR code créé. Ajoute maintenant des pages QR.');
 
-            return $this->redirectToRoute('escape_team_qr_group_show', [
-                'slug' => $slug,
-                'id' => $group->getId(),
-            ]);
+            return $this->redirectToRoute('escape_team_admin_pilot', ['slug' => $slug]);
         }
 
         $vartwig=$this->menuNav->templatepotins(
@@ -87,6 +84,71 @@ class EscapeTeamQrAdminController extends AbstractController
             'vartwig' => $vartwig,
             'isMasterParticipant' => true,
             'title' => 'Nouveau groupe QR',
+            'participant' => $participant,
+            'active' => 'escape-team',
+        ]);
+    }
+
+    #[Route('/escape-team/admin/{slug}/qr-groups/{id}/edit', name: 'escape_team_qr_group_edit', methods: ['GET', 'POST'])]
+    #[RequireParticipant]
+    public function editGroup(
+        Request $request,
+        Participant $participant,
+        EscapeWorkshopSessionRepository $workshopRepository,
+        EscapeTeamRunRepository $runRepository,
+        EscapeTeamQrGroupRepository $qrGroupRepository,
+        EntityManagerInterface $em,
+        string $slug,
+        int $id,
+    ): Response {
+        $workshop = $workshopRepository->findOneByCode($participant->getCodeAtelier());
+        if (!$workshop || !$workshop->isMaster()) {
+            $this->addFlash('danger', 'Cette page est réservée au maître du jeu (session « master »).');
+
+            return $this->redirectToRoute('dashboard_my_escapes');
+        }
+
+        $run = $runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
+        $group = $qrGroupRepository->find($id) ?? throw $this->createNotFoundException();
+
+        if ($group->getRun()?->getId() !== $run->getId()) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($run->getOwner()?->getId() !== $participant->getId()) {
+            throw $this->createAccessDeniedException('Tu ne peux gérer que tes propres sessions.');
+        }
+
+        $form = $this->createForm(EscapeTeamQrGroupType::class, $group, [
+            'submit_label' => 'Mettre à jour le groupe QR',
+        ]);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $group->setUpdatedAt(new DateTimeImmutable());
+            $em->flush();
+
+            $this->addFlash('success', 'Groupe QR mis à jour.');
+
+
+            return $this->redirectToRoute('escape_team_qr_group_show', [
+                'slug' => $slug,
+                'id' => $group->getId(),
+            ]);
+        }
+
+        $vartwig=$this->menuNav->templatepotins(
+            '_index',
+            Links::GAMES);
+
+        return $this->render('pwa/escape/home.html.twig', [
+            'run' => $run,
+            'form' => $form->createView(),
+            'directory' => 'team',
+            'template' => 'team/qr_group_edit.html.twig',
+            'vartwig' => $vartwig,
+            'isMasterParticipant' => true,
+            'title' => sprintf('Modifier · %s', $group->getName()),
             'participant' => $participant,
             'active' => 'escape-team',
         ]);

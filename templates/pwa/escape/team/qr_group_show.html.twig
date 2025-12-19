@@ -8,6 +8,8 @@
             <p class="muted">Session : {{ run.title }} · Créé le {{ group.createdAt|date('d/m/Y') }}</p>
             <div class="escape-team__actions">
                 <a class="btn" href="{{ path('escape_team_admin_pilot', {slug: run.shareSlug}) }}">← Retour pilotage</a>
+                <a class="btn btn-primary" href="#qr-page-form">Ajouter une page QR</a>
+                <a class="btn btn-light" href="{{ path('escape_team_qr_group_edit', {slug: run.shareSlug, id: group.id}) }}">Éditer le groupe</a>
             </div>
         </header>
 
@@ -18,7 +20,7 @@
         {% endfor %}
 
         <div class="escape-team__grid">
-            <div class="escape-team__panel">
+            <div id="qr-page-form" class="escape-team__panel">
                 <h2>Ajouter une page QR</h2>
                 <p class="muted">Chaque page correspond à un QR unique qui affichera le message choisi.</p>
                 {{ form_start(pageForm) }}

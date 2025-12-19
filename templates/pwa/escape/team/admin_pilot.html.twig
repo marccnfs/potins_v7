@@ -43,6 +43,7 @@
                 <div class="escape-team__actions">
                     <a class="btn" href="{{ path('escape_team_landing', {slug: run.shareSlug}) }}" target="_blank">Projeter les inscriptions</a>
                     <a class="btn" href="{{ path('escape_team_live', {slug: run.shareSlug}) }}" target="_blank">Projeter le déroulement</a>
+                    <a class="btn" href="#qr-groups">Afficher les groupes QR</a>
                     <a class="btn btn-light" href="{{ path('escape_team_qr_group_new', {slug: run.shareSlug}) }}">Créer un groupe QR</a>
                 </div>
             </div>
@@ -98,6 +99,27 @@
             </div>
         </div>
 
+        <div id="qr-groups" class="escape-team__panel">
+            <h2>Groupes QR</h2>
+            <p class="muted">Organise les pages QR des équipes pour cette session.</p>
+            {% if qrGroups is empty %}
+                <p class="muted">Aucun groupe QR créé pour le moment.</p>
+                <a class="btn btn-light" href="{{ path('escape_team_qr_group_new', {slug: run.shareSlug}) }}">Créer un premier groupe QR</a>
+            {% else %}
+                <ul class="escape-team__list">
+                    {% for group in qrGroups %}
+                        <li class="escape-team__card">
+                            <div>
+                                <strong>{{ group.name }}</strong>
+                                <p class="muted">Créé le {{ group.createdAt|date('d/m/Y') }} · {{ group.pages|length }} page(s) QR</p>
+                            </div>
+                            <a class="btn" href="{{ path('escape_team_qr_group_show', {slug: run.shareSlug, id: group.id}) }}">Voir le groupe</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
         <div class="escape-team__panel">
             <h2>Live</h2>
             <div id="pilot-live" data-endpoint="{{ path('escape_team_progress', {slug: run.shareSlug}) }}" data-avatar-images='{{ avatarImageUrls|json_encode|e('html_attr') }}'></div>
@@ -105,6 +127,7 @@
     </section>
 {% endblock %}
 
+{% use "js/js_escape.html.twig" %}
 {% block javascripts %}
     {{ parent() }}
     <script>

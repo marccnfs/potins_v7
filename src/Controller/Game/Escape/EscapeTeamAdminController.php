@@ -6,8 +6,9 @@ use App\Attribute\RequireParticipant;
 use App\Classe\UserSessionTrait;
 use App\Entity\Games\EscapeTeamRun;
 use App\Entity\Users\Participant;
-use App\Lib\Links;
 use App\Form\EscapeTeamRunType;
+use App\Lib\Links;
+use App\Repository\EscapeTeamQrGroupRepository;
 use App\Repository\EscapeWorkshopSessionRepository;
 use App\Repository\EscapeTeamRunRepository;
 use App\Service\Games\EscapeTeamAvatarCatalog;
@@ -274,6 +275,7 @@ class EscapeTeamAdminController extends AbstractController
         EscapeTeamRunRepository $runRepository,
         EscapeTeamRunAdminService $runAdminService,
         EscapeTeamProgressService $progressService,
+        EscapeTeamQrGroupRepository $qrGroupRepository,
         string $slug,
     ): Response {
         $workshop = $workshopRepository->findOneByCode($participant->getCodeAtelier());
@@ -340,10 +342,13 @@ class EscapeTeamAdminController extends AbstractController
             '_index',
             Links::GAMES);
 
+        $qrGroups = $qrGroupRepository->findForRun($run);
+
         return $this->render('pwa/escape/home.html.twig',[
             'run' => $run,
             'snapshot' => $progressService->buildLiveProgress($run),
             'teams' => $run->getTeams(),
+            'qrGroups' => $qrGroups,
             'directory'=>'team',
             'template'=>'team/admin_pilot.html.twig',
             'vartwig'=>array_replace($vartwig, ['title' => sprintf('Pilotage · %s', $run->getTitle())]),
