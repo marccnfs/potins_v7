@@ -12,14 +12,16 @@
     {% endblock %}
         {{ encore_entry_link_tags('app') }}
 </head>
+<body>
 {% block menu %}
 {% endblock menu %}
 {% block core %}
-        {% block body %}
-        {% endblock body %}
-        {% block footer %}
-        {% endblock footer %}
+    {% block body %}
+    {% endblock body %}
+    {% block footer %}
+    {% endblock footer %}
 {% endblock core %}
 {% block javascripts %}
 {% endblock %}
+</body>
 </html>

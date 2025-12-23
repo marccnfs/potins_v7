@@ -6,6 +6,7 @@ use App\Attribute\RequireParticipant;
 use App\Classe\UserSessionTrait;
 use App\Entity\Games\EscapeTeamQrGroup;
 use App\Entity\Games\EscapeTeamQrPage;
+use App\Entity\Games\EscapeTeamRun;
 use App\Entity\Users\Participant;
 use App\Form\EscapeTeamQrGroupType;
 use App\Form\EscapeTeamQrPageType;
@@ -42,13 +43,9 @@ class EscapeTeamQrAdminController extends AbstractController
         EntityManagerInterface $em,
         string $slug,
     ): Response {
-        if ($redirect = $this->guardMasterAccess($participant, $workshopRepository)) {
-            return $redirect;
-        }
-
         $run = $runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
-        if ($run->getOwner()?->getId() !== $participant->getId()) {
-            throw $this->createAccessDeniedException('Tu ne peux gérer que tes propres sessions.');
+        if ($redirect = $this->guardMasterAccess($participant, $workshopRepository, $run)) {
+            return $redirect;
         }
 
         $group = (new EscapeTeamQrGroup())
@@ -98,10 +95,6 @@ class EscapeTeamQrAdminController extends AbstractController
         string $slug,
         int $id,
     ): Response {
-        if ($redirect = $this->guardMasterAccess($participant, $workshopRepository)) {
-            return $redirect;
-        }
-
         $run = $runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
         $group = $qrGroupRepository->find($id) ?? throw $this->createNotFoundException();
 
@@ -109,8 +102,8 @@ class EscapeTeamQrAdminController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        if ($run->getOwner()?->getId() !== $participant->getId()) {
-            throw $this->createAccessDeniedException('Tu ne peux gérer que tes propres sessions.');
+        if ($redirect = $this->guardMasterAccess($participant, $workshopRepository, $run)) {
+            return $redirect;
         }
 
         $form = $this->createForm(EscapeTeamQrGroupType::class, $group, [
@@ -161,9 +154,6 @@ class EscapeTeamQrAdminController extends AbstractController
         string $slug,
         int $id,
     ): Response {
-        if ($redirect = $this->guardMasterAccess($participant, $workshopRepository)) {
-            return $redirect;
-        }
 
         $run = $runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
         $group = $qrGroupRepository->find($id) ?? throw $this->createNotFoundException();
@@ -171,10 +161,12 @@ class EscapeTeamQrAdminController extends AbstractController
         if ($group->getRun()?->getId() !== $run->getId()) {
             throw $this->createNotFoundException();
         }
+        dump($run,$group);
 
-        if ($run->getOwner()?->getId() !== $participant->getId()) {
-            throw $this->createAccessDeniedException('Tu ne peux gérer que tes propres sessions.');
+     /*   if ($redirect = $this->guardMasterAccess($participant, $workshopRepository, $run)) {
+            return $redirect;
         }
+     */
 
         $page = (new EscapeTeamQrPage())
             ->setIdentificationCode($this->generateIdentificationCode());
@@ -210,6 +202,7 @@ class EscapeTeamQrAdminController extends AbstractController
             'vartwig' => $vartwig,
             'title' => sprintf('QR groupe · %s', $group->getName()),
             'participant' => $participant,
+            'isMasterParticipant' => $this->isMasterParticipant($participant, $workshopRepository),
             'active' => 'escape-team',
         ]);
     }
@@ -226,10 +219,6 @@ class EscapeTeamQrAdminController extends AbstractController
         int $groupId,
         int $pageId,
     ): Response {
-        if ($redirect = $this->guardMasterAccess($participant, $workshopRepository)) {
-            return $redirect;
-        }
-
         $run = $runRepository->findOneByShareSlug($slug) ?? throw $this->createNotFoundException();
         $group = $qrGroupRepository->find($groupId) ?? throw $this->createNotFoundException();
         $page = $qrPageRepository->find($pageId) ?? throw $this->createNotFoundException();
@@ -238,8 +227,8 @@ class EscapeTeamQrAdminController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        if ($run->getOwner()?->getId() !== $participant->getId()) {
-            throw $this->createAccessDeniedException('Tu ne peux gérer que tes propres sessions.');
+        if ($redirect = $this->guardMasterAccess($participant, $workshopRepository, $run)) {
+            return $redirect;
         }
 
         $scanUrl = $this->generateUrl('escape_team_qr_page_view', ['token' => $page->getToken()], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -279,8 +268,9 @@ class EscapeTeamQrAdminController extends AbstractController
     private function guardMasterAccess(
         Participant $participant,
         EscapeWorkshopSessionRepository $workshopRepository,
+        ?EscapeTeamRun $run = null,
     ): ?Response {
-        if ($this->isMasterParticipant($participant, $workshopRepository)) {
+        if ($this->isMasterParticipant($participant, $workshopRepository) || $run?->getOwner()?->getId() === $participant->getId()) {
             return null;
         }
 
